@@ -1,0 +1,123 @@
+{
+  /* <div
+              ref={(el) => {
+                inputRefs.current["courseId"] = el;
+              }}
+            >
+              <Label>Select Course</Label>
+              <div className="relative" data-master="course">
+                <Select
+                  tabIndex={10}
+                  options={courseList.map((course) => ({
+                    label: course.name,
+                    value: course.id.toString(),
+                  }))}
+                  placeholder="Select a course"
+                  onChange={(value) => handleChangeNew("courseId", value)}
+                  className="dark:bg-dark-900"
+                />
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+              {errors.courseId && (
+                <p className="text-sm text-red-500">{errors.courseId}</p>
+              )}
+            </div>
+            <div
+              ref={(el) => {
+                inputRefs.current["courseId"] = el;
+              }}
+            >
+              <Label>Select Payment Type</Label>
+              <div className="relative" data-master="course">
+                <Select
+                  tabIndex={10}
+                  options={paymentTypeOption.map((course: any) => ({
+                    label: course,
+                    value: course,
+                  }))}
+                  placeholder="Select a course"
+                  onChange={(value) => handleChange("paymentType", value)}
+                  value={filledEnquiryData.paymentType} // just the courseId string
+                  className="dark:bg-dark-900"
+                />
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+              {errors.paymentType && (
+                <p className="text-sm text-red-500">{errors.paymentType}</p>
+              )}
+            </div>
+            {filledEnquiryData.paymentType === "INSTALLMENT" &&
+              installmentTypeOption.length > 0 && (
+                <div
+                  ref={(el) => {
+                    inputRefs.current["courseId"] = el;
+                  }}
+                >
+                  <Label>Select Installment Type</Label>
+                  <div className="relative" data-master="course">
+                    <Select
+                      tabIndex={10}
+                      options={installmentTypeOption.map(
+                        (ins: { id: number; number: any; amount: any }) => ({
+                          label: `${ins.number} Installments - ₹${ins.amount}`,
+                          value: ins.id, // <-- important
+                        }),
+                      )}
+                      placeholder="Select a course"
+                      onChange={(value) =>
+                        handleChange("installmentTypeId", value)
+                      }
+                      value={filledEnquiryData.installmentTypeId} // just the courseId string
+                      className="dark:bg-dark-900"
+                    />
+                    <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                      <ChevronDownIcon />
+                    </span>
+                  </div>
+                  {errors.installmentTypeId && (
+                    <p className="text-sm text-red-500">
+                      {errors.installmentTypeId}
+                    </p>
+                  )}
+                </div>
+              )}
+            <div>
+              <Label>Fee Amount</Label>
+              <Input
+                type="text"
+                disabled
+                placeholder="Ex. Mumbai, Maharashtra"
+                value={filledEnquiryData.feeAmount}
+                onChange={(e) => handleChange("feeAmount", e.target.value)}
+              />
+              {errors.feeAmount && (
+                <p className="text-sm text-red-500">{errors.feeAmount}</p>
+              )}
+            </div>
+            <div
+              ref={(el) => {
+                inputRefs.current["batchId"] = el;
+              }}
+            >
+              <Label>Select Batch</Label>
+              <div className="relative" data-master="lab">
+                <Select
+                  tabIndex={11}
+                  options={batchOptions}
+                  placeholder="Select an option"
+                  onChange={(value) => handleChange("batchId", value)}
+                  className="dark:bg-dark-900"
+                />
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+              {errors.batchId && (
+                <p className="text-sm text-red-500">{errors.batchId}</p>
+              )}
+            </div> */
+}

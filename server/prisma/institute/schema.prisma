@@ -1,0 +1,634 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../prisma-client/generated/tenant"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")  // Will be overridden dynamically
+}
+
+model ClientAdmin {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password      String
+  instituteName String
+  slug          String   @unique  // 👈 REQUIRED
+  fullAddress   String
+  logo            String?
+  certificateName String?
+  stamp          String?
+  sign           String?
+  contact   String
+  position  String
+  country   String
+  state     String
+  city      String
+  zipCode   String
+  createdAt     DateTime @default(now())
+  role          UserRole @default(ADMIN) // 👈 Add this
+
+  currentSessionToken String?
+  lastLoginAt   DateTime?
+
+  // 👇 Relations
+  roleUsers     RoleUser[]       // All sub-admins under this institute
+  faculties     Faculty[]        // All faculty of this institute
+  batches Batch[]
+
+  courses           Course[]
+  enquiryCourse EnquiryCourse[]
+  labs              Lab[]   // ← Add this
+  labTimeSlots      LabTimeSlot[]   // ← Add this
+  labAllocations    LabAllocation[]  // ← Add this
+  students          Student[]
+  activities        ActivityLog[]
+  studentCourses    StudentCourse[]
+  feeStructures     FeeStructure[]
+  studentFees       StudentFee[]
+  stationeryIssues  StationeryIssue[]
+  attendanceRecords AttendanceRecord[]
+  studentTasks      StudentTask[] 
+  studentTests      StudentTest[]
+  courseCompletions CourseCompletion[]
+  certificates      Certificate[]
+  financialRecords FinancialRecord[]
+  enquiries Enquiry[] @relation("AdminToEnquiries")
+  notifications Notification[] // ✅ Reverse relation
+  // 👇 Add this line to fix the missing relation
+  courseFeeStructures CourseFeeStructure[]
+}
+
+model RoleUser {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          UserRole  // FRONT_DESK, ACCOUNTANT, etc.
+  createdAt     DateTime  @default(now())
+  country   String
+  state     String
+  city      String
+  zipCode   String
+
+  currentSessionToken String?
+  lastLoginAt   DateTime?
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  entity    String   // e.g. "Student", "Fee", "Course"
+  entityId  String
+  action    String   // "CREATE", "UPDATE", "DELETE"
+  message   String?
+  createdAt DateTime @default(now())
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model Enquiry {
+  id           String      @id @default(uuid())
+  name         String
+  contact      String
+  email        String?
+  course       String?
+  source       String?
+  leadStatus   LeadStatus  @default(WARM)
+  followUps    FollowUp[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  isConverted  Boolean     @default(false)       
+  student      Student?    @relation("EnquiryToStudent", fields: [studentId], references: [id])
+  studentId    Int?        @unique   // Converted to student
+  enquiryCourse EnquiryCourse[]
+
+  // ✅ Reverse relation only — no fields/references here
+  notification    Notification?
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation("AdminToEnquiries", fields: [clientAdminId], references: [id])
+}
+
+model EnquiryCourse {
+  id         Int     @id @default(autoincrement())
+  enquiryId  String
+  courseId   Int
+  enquiry    Enquiry @relation(fields: [enquiryId], references: [id])
+  course     Course  @relation(fields: [courseId], references: [id])
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+
+  @@unique([enquiryId, courseId])
+}
+
+model FollowUp {
+  id              String          @id @default(uuid())
+  enquiry         Enquiry         @relation(fields: [enquiryId], references: [id])
+  enquiryId       String
+  scheduledAt     DateTime?
+  doneAt          DateTime?
+  remark          String
+  createdAt       DateTime        @default(now())
+  followUpStatus  FollowUpStatus  @default(PENDING)
+
+  // ✅ Reverse relation only — no fields/references here
+  notification    Notification?
+}
+
+model Notification {
+  id             String      @id @default(uuid())
+  message        String
+  seen           Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+
+  followUpId     String?     @unique
+  followUp       FollowUp?   @relation(fields: [followUpId], references: [id])
+
+  enquiryId     String?     @unique
+  enquiry       Enquiry?   @relation(fields: [enquiryId], references: [id])
+
+  paymentId      Int?        @unique
+  payment        StudentFee? @relation(fields: [paymentId], references: [id])
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model Student {
+  id            Int             @id @default(autoincrement())
+  serialNumber     Int          @unique // ✅ New field
+  studentCode   String          @unique
+  fullName      String
+  fatherName    String
+  motherName    String
+  photoUrl      String?
+  contact       String
+  parentsContact String
+  email         String?
+  residentialAddress       String?
+  permenantAddress String?
+  dob           String
+  gender        String
+  religion      String?
+  idProofType   String?
+  idProofNumber String?
+  admissionDate DateTime
+  enquiry       Enquiry?         @relation("EnquiryToStudent")  // This is the back-relation, optional
+  labAllocations LabAllocation[]  // ← Add this
+  studentCourses StudentCourse[]
+  feeStructures FeeStructure[]
+  feeRecords    StudentFee[]
+  attendance    AttendanceRecord[]
+  tasks         StudentTask[]
+  tests         StudentTest[]
+  completions   CourseCompletion[]
+  stationery    StationeryIssue[]
+  certificates  Certificate[]
+  financialRecords FinancialRecord[]
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model Course {
+  id             Int              @id @default(autoincrement())
+  name           String
+  durationWeeks  Int
+  description    String?
+  courseFeeStructure CourseFeeStructure? // 👈 added
+  studentCourses StudentCourse[]
+  enquiryCourse EnquiryCourse[]
+  feeStructures  FeeStructure[]
+  stationery     StationeryIssue[]
+  studentFees       StudentFee[]
+  attendanceRecords AttendanceRecord[]
+  studentTasks      StudentTask[]
+  studentTests      StudentTest[]
+  certificates      Certificate[]
+  financialRecords FinancialRecord[]
+
+  // ✅ Many courses in many batches
+  batchCourses BatchCourse[]
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model CourseFeeStructure {
+  id             Int          @id @default(autoincrement())
+  course         Course       @relation(fields: [courseId], references: [id])
+  courseId       Int          @unique // one fee structure per course
+  totalAmount    Float
+  paymentType    String[]    // <-- now supports multiple values // ONE_TIME or INSTALLMENT
+  installments     InstallmentDetail[]
+
+  clientAdminId  String
+  clientAdmin    ClientAdmin  @relation(fields: [clientAdminId], references: [id])
+}
+
+model Batch {
+  id        Int       @id @default(autoincrement())
+  name      String
+
+  // ✅ One batch can contain multiple courses
+
+  // ✅ One batch → One faculty assigned for supervision
+  faculty   Faculty? @relation(fields: [facultyId], references: [id])
+  facultyId Int?
+
+  labTimeSlot   LabTimeSlot @relation(fields: [labTimeSlotId], references: [id])
+  labTimeSlotId Int
+
+  // ✅ Students in a batch through StudentCourse
+  studentCourses StudentCourse[]
+
+   // ✅ Multiple courses linked later
+  batchCourses BatchCourse[]
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+
+  @@unique([labTimeSlotId, clientAdminId]) // ✅ Only one batch per time slot per institute
+}
+
+model BatchCourse {
+  id       Int @id @default(autoincrement())
+
+  batchId  Int
+  batch    Batch @relation(fields: [batchId], references: [id])
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  // ✅ Optional per-course PC limits if needed later
+  pcsReserved Int? @default(0)
+
+  @@unique([batchId, courseId]) // No duplicate mapping
+}
+
+
+model Faculty {
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String    @unique
+  password      String    // ✅ for login
+  contact       String
+  joiningDate   DateTime
+  specialization String?
+  role          UserRole  @default(FACULTY) // 👈 clearly marked
+  country   String
+  state     String
+  city      String
+  zipCode   String
+
+  currentSessionToken String?
+  lastLoginAt   DateTime?
+
+  batches        Batch[]
+  attendance     AttendanceRecord[]
+  tasks          StudentTask[] @relation("FacultyTasks")
+  financialRecords FinancialRecord[]
+
+  // ✅ Relation to main admin (institute)
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model Lab {
+  id          Int        @id @default(autoincrement())
+  name        String     // e.g. "LAB-01"
+  location    String?    // optional (e.g. "Building A, 2nd floor")
+  totalPCs    Int        // total available PCs in lab
+  isActive    Boolean    @default(true)
+
+  // ✅ Relations
+  timeSlots   LabTimeSlot[]
+  financialRecords FinancialRecord[]
+  
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model LabTimeSlot {
+  id          Int       @id @default(autoincrement())
+  startTime   String    // "08:00 am"
+  endTime     String    // "09:00 am"
+  day         String    // "Monday" or "Daily"
+  lab         Lab       @relation(fields: [labId], references: [id])
+  labId       Int
+
+  // ✅ A batch picks one timeslot
+  batches  Batch[]
+
+  availablePCs Int      // Number of PCs in this time slot (usually = lab.totalPCs)
+
+  // ✅ Each slot will have student allocations
+  allocations LabAllocation[]
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model PaymentStructureType {
+  id               Int                @id @default(autoincrement())
+  name             PaymentType  // ONE_TIME or INSTALLMENT
+  installmentCount Int?               // Only for INSTALLMENT
+}
+
+model InstallmentDetail {
+  id            Int         @id @default(autoincrement())
+  CourseFeeStructureId Int
+  number        Int         // installment number: 1, 2, 3, ...
+  amount        Float       // amount for this installment
+  feeStructures  FeeStructure[]
+
+  CourseFeeStructure   CourseFeeStructure @relation(fields: [CourseFeeStructureId], references: [id])
+}
+
+model LabAllocation {
+  id            Int        @id @default(autoincrement())
+  labTimeSlot   LabTimeSlot @relation(fields: [labTimeSlotId], references: [id])
+  labTimeSlotId Int
+
+  student       Student     @relation(fields: [studentId], references: [id])
+  studentId     Int
+
+  pcNumber      Int         // which PC this student occupies (1 to availablePCs)
+  assignedAt    DateTime    @default(now())
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+
+  @@unique([labTimeSlotId, pcNumber])  // only one student per PC per slot
+  @@unique([labTimeSlotId, studentId]) // student cannot appear twice in same slot
+}
+
+model StudentCourse {
+  id           Int       @id @default(autoincrement())
+  student      Student   @relation(fields: [studentId], references: [id])
+  studentId    Int
+  course       Course    @relation(fields: [courseId], references: [id])
+  courseId     Int
+  startDate    DateTime
+  endDate      DateTime
+  studentCode   String
+  batch        Batch?    @relation(fields: [batchId], references: [id])
+  batchId      Int?
+  internalNotes String?
+  status       String
+  certificate  Certificate?    // ✅ one-to-one with certificate
+  completions CourseCompletion[]
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model FeeStructure {
+  id           Int         @id @default(autoincrement())
+  student      Student     @relation(fields: [studentId], references: [id])
+  studentId    Int
+  course       Course      @relation(fields: [courseId], references: [id])
+  courseId     Int
+  totalAmount  Float
+  paymentType  PaymentType
+  installmentCount Int?    
+  installmentTypeId Int? 
+  installment        InstallmentDetail?    @relation(fields: [installmentTypeId], references: [id])
+
+
+  studentFees StudentFee[] @relation("StudentFeeToFeeStructure")
+
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+  
+  @@unique([studentId, courseId])  // ensure one FeeStructure per student-course combo
+}
+
+model StudentFeeLog {
+  id            Int           @id @default(autoincrement())
+  studentFee    StudentFee    @relation(fields: [studentFeeId], references: [id])
+  studentFeeId  Int
+
+  amountPaid    Float
+  paymentDate   DateTime
+  paymentMode   PaymentMode
+  receiptNo     String        @unique
+}
+
+
+model StudentFee {
+  id              Int       @id @default(autoincrement())
+  student         Student   @relation(fields: [studentId], references: [id])
+  studentId       Int
+  course          Course    @relation(fields: [courseId], references: [id])
+  courseId        Int
+  dueDate         DateTime
+  amountDue       Float
+  amountPaid      Float
+  paymentDate     DateTime?
+  paymentMode     PaymentMode
+  receiptNo       String    @unique
+  paymentStatus   PaymentStatus @default(PENDING)
+
+  // New logs relation
+  feeLogs       StudentFeeLog[]
+
+  feeStructure  FeeStructure? @relation("StudentFeeToFeeStructure", fields: [studentId, courseId], references: [studentId, courseId])
+
+  // ✅ Reverse relation only — no fields/references here
+  notification    Notification?
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model StationeryItem {
+  id                Int              @id @default(autoincrement())
+  name              String
+  quantityAvailable Int
+  stationeryIssues StationeryIssue[]
+}
+
+model StationeryIssue {
+  id          Int             @id @default(autoincrement())
+  student     Student         @relation(fields: [studentId], references: [id])
+  studentId   Int
+  course      Course          @relation(fields: [courseId], references: [id])
+  courseId    Int
+  item        StationeryItem  @relation(fields: [itemId], references: [id])
+  itemId      Int
+  issueDate   DateTime
+  quantity    Int
+  remarks     String?
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model AttendanceRecord {
+  id         Int       @id @default(autoincrement())
+  student    Student   @relation(fields: [studentId], references: [id])
+  studentId  Int
+  course     Course    @relation(fields: [courseId], references: [id])
+  courseId   Int
+  date       DateTime
+  present    Boolean
+  markedBy   Faculty   @relation(fields: [facultyId], references: [id])
+  facultyId  Int
+
+  // ✅ Add this line
+  batchId        Int?
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model StudentTask {
+  id            Int       @id @default(autoincrement())
+  student       Student   @relation(fields: [studentId], references: [id])
+  studentId     Int
+  course        Course    @relation(fields: [courseId], references: [id])
+  courseId      Int
+  assignedDate  DateTime
+  dueDate       DateTime
+  description   String
+  status        String
+  facultyRemarks String?
+  grade         String?
+
+  faculty Faculty? @relation("FacultyTasks", fields: [facultyId], references: [id])
+  facultyId Int?
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model StudentTest {
+  id            Int       @id @default(autoincrement())
+  student       Student   @relation(fields: [studentId], references: [id])
+  studentId     Int
+  course        Course    @relation(fields: [courseId], references: [id])
+  courseId      Int
+  testName      String
+  testDate      DateTime
+  totalMarks    Int
+  marksObtained Int
+  grade         String
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model CourseCompletion {
+  id              Int           @id @default(autoincrement())
+  studentCourse   StudentCourse @relation(fields: [studentCourseId], references: [id])
+  studentCourseId Int
+  student Student @relation(fields: [studentId], references: [id])
+  studentId Int
+  completionDate  DateTime
+  feedback        String?
+  remarks         String?
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model Certificate {
+  id              Int           @id @default(autoincrement())
+  student         Student       @relation(fields: [studentId], references: [id])
+  studentId       Int
+  course          Course        @relation(fields: [courseId], references: [id])
+  courseId        Int
+  studentCourse   StudentCourse @relation(fields: [studentCourseId], references: [id])
+  studentCourseId Int           @unique // each studentCourse has only one certificate
+  issueDate       DateTime
+  certificateUrl  String
+
+  // ✅ Required relation to ClientAdmin
+  clientAdminId  String
+  clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model FinancialRecord {
+  id             String   @id @default(cuid())
+  clientAdminId  String
+  recordType     RecordType  // 'INCOME' or 'EXPENSE'
+  amount         Float
+  description    String?
+  date           DateTime @default(now())
+  paymentMode    PaymentMode?   // optional: CASH, UPI, etc.
+
+  // Optional relations
+  studentId      Int?
+  courseId       Int?
+  facultyId      Int?
+  labId          Int?
+
+  student        Student?     @relation(fields: [studentId], references: [id])
+  course         Course?      @relation(fields: [courseId], references: [id])
+  faculty        Faculty?     @relation(fields: [facultyId], references: [id])
+  lab            Lab?         @relation(fields: [labId], references: [id])
+  clientAdmin    ClientAdmin  @relation(fields: [clientAdminId], references: [id])
+}
+
+enum RecordType {
+  INCOME
+  EXPENSE
+}
+
+enum LeadStatus {
+  COLD
+  WARM
+  HOT
+  WON
+  LOST
+  HOLD
+}
+
+enum FollowUpStatus {
+  PENDING
+  COMPLETED
+  MISSED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+enum PaymentType {
+  ONE_TIME
+  INSTALLMENT
+}
+
+enum PaymentMode {
+  CASH
+  UPI
+  CARD
+  BANK_TRANSFER
+  CHEQUE
+}
+
+enum UserRole {
+  ADMIN
+  FRONT_DESK
+  FACULTY
+  ACCOUNTANT
+  VIEW_ONLY
+}

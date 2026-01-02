@@ -1,0 +1,40 @@
+// src/store/slices/enquirySlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface EnquiryState {
+  students: any[];
+  loading: boolean;
+  error: string | null;
+  total: number; // ✅ New field
+}
+
+// 🟢 Initial state must match the shape of EnquiryState
+const initialState: EnquiryState = {
+  students: [],
+  loading: false,
+  error: null,
+  total: 0,
+};
+
+const studentSlice = createSlice({
+  name: 'student',
+  initialState,
+  reducers: {
+    setStudents(state, action: PayloadAction<any[]>) {
+    state.students = action.payload;
+    },
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.loading = action.payload;
+    },
+    setError(state, action: PayloadAction<string | null>) {
+      state.error = action.payload;
+    },
+    setTotal(state, action: PayloadAction<number>) {
+      state.total = action.payload;
+    }
+  },
+});
+
+// Export actions and reducer
+export const { setStudents, setLoading, setError, setTotal } = studentSlice.actions;
+export default studentSlice.reducer;

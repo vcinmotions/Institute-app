@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "public"."SuperAdmin" ADD COLUMN     "fullAddress" TEXT,
+ALTER COLUMN "city" DROP NOT NULL,
+ALTER COLUMN "contact" DROP NOT NULL,
+ALTER COLUMN "country" DROP NOT NULL,
+ALTER COLUMN "state" DROP NOT NULL,
+ALTER COLUMN "zipCode" DROP NOT NULL;

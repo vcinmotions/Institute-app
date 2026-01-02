@@ -1,0 +1,122 @@
+import { getTenantPrisma } from "../prisma-client/tenant-client";
+import dayjs from "dayjs";
+import { io } from "../utils/socket"; // Reference to your Socket.IO server
+
+export async function processDuePayments(dbUrl: string) {
+  const tenantPrisma = getTenantPrisma(dbUrl);
+  console.log(`get dburl in Payments: ${dbUrl}`);
+
+  const now = dayjs();
+  const reminderWindowEnd = now.add(1, "day").endOf("day").toDate();
+
+  const duePayments = await tenantPrisma.studentFee.findMany({
+    where: {
+      paymentDate: null,
+      paymentStatus: {
+        in: ["PENDING"],
+      },
+    
+    },
+    include: {
+      student: true,
+      course: true,
+    },
+  });
+
+  console.log("get Due Payments", duePayments);
+
+  for (const payment of duePayments) {
+    try {
+      const notificationMessage = `${payment.student.fullName} Payments due for course ${payment.course.name} amount (${payment.amountDue}) (${payment.student.contact})`;
+
+      console.log("notificationMessage", notificationMessage);
+
+      io.to(payment.student.clientAdminId).emit("payments-notification", {
+        notificationMessage,
+        createdAt: new Date().toISOString(),
+      });
+
+      const existingNotification = await tenantPrisma.notification.findUnique({
+        where: { paymentId: payment.id },
+      });
+
+      if (existingNotification) {
+        console.log(
+          `⚠️ Notification already exists for Payments ${payment.id}`
+        );
+        console.log("🧪 Youll ALWAYS see this log"); // this line always runs
+        continue;
+        console.log("🧪 Youll NEVER see this log"); // this line never runs
+      }
+
+      const message = `${payment.student.fullName} Payments due for course ${payment.course.name} amount (${payment.amountDue}) (${payment.student.contact})`;
+
+      const notification = await tenantPrisma.notification.create({
+        data: {
+          message,
+          clientAdminId: payment.student.clientAdminId,
+          paymentId: payment.id,
+        },
+      });
+
+      console.log("Notification Created", notification);
+
+      io.to(payment.student.clientAdminId).emit("new-payment-notification", {
+        message,
+        createdAt: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error(`Error processing Payments ${payment.id}:`, err);
+    }
+  }
+}
+
+// export async function processDuePayments(dbUrl: string) {
+//   const tenantPrisma = getTenantPrisma(dbUrl);
+
+//   const now = dayjs();
+//   const reminderWindowEnd = now.add(1, "day").endOf("day").toDate();
+
+//   const duePayments = await tenantPrisma.studentFee.findMany({
+//     where: {
+//       paymentDate: null,
+//       paymentStatus: "PENDING",
+//       dueDate: {
+//         lte: reminderWindowEnd, // 🔥 ONLY close or overdue
+//       },
+//     },
+//     include: {
+//       student: true,
+//       course: true,
+//     },
+//   });
+
+//   for (const payment of duePayments) {
+//     try {
+//       const existingNotification = await tenantPrisma.notification.findUnique({
+//         where: { paymentId: payment.id },
+//       });
+//       if (existingNotification) continue;
+
+//       const message = `${payment.student.fullName} payment due for ${payment.course.name} amount (${payment.amountDue}) (${payment.student.contact})`;
+
+//       await tenantPrisma.notification.create({
+//         data: {
+//           message,
+//           clientAdminId: payment.student.clientAdminId,
+//           paymentId: payment.id,
+//         },
+//       });
+
+//       io.to(payment.student.clientAdminId).emit(
+//         "new-payment-notification",
+//         {
+//           message,
+//           createdAt: new Date().toISOString(),
+//         }
+//       );
+//     } catch (err) {
+//       console.error(`❌ Error processing payment ${payment.id}`, err);
+//     }
+//   }
+// }

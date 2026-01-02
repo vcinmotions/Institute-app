@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../prisma-client/generated/central"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SuperAdmin {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  contact   String?
+  position  String
+  country   String?
+  state     String?
+  city      String?
+  zipCode   String?
+  fullAddress   String?
+  createdAt DateTime @default(now())
+
+  currentSessionToken String?
+  lastLoginAt   DateTime?
+  
+  role      Role   @default(MASTER_ADMIN)
+
+   // 🆕 ADD THESE
+  basicComplete   Boolean @default(false)
+  addressComplete Boolean @default(false)
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  contact   String
+  fullAddress   String
+  logo            String?
+  certificateName String?
+  stamp          String?
+  sign           String?
+  position  String
+  country   String
+  state     String
+  city      String
+  zipCode   String
+  instituteName   String      @unique
+  tenantId  String   @unique
+  slug      String   @unique  // 👈 REQUIRED
+  email     String?   @unique   // add this line
+  password  String?
+  encryptedPassword  String
+  dbUrl     String
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  MASTER_ADMIN
+}
