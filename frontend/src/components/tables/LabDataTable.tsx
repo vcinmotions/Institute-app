@@ -17,7 +17,7 @@ import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 
 import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
 
-import CreateFollowUpModal from "../form/form-elements/CreateFollowUpModal";
+
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
 import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
@@ -502,9 +502,9 @@ export default function LabDataTable({
           onClose={handleCloseModal} // Function to close timeline modal
           followUpData={followupDetails} // Pass follow-up data fetched from API
           enquiryId={selectedId} // Pass current enquiry ID (number, not null)
-          onCreateFollowUpForEnquiry={handleCreateFollowUpForEnquiry}
+ 
           onCreateFollowUpForFollowUp={handleCreateFollowUpForFollowUp}
-          onCompleteFollowUp={handleCompleteFollowUpHandler}
+        
         />
       )}
 
@@ -515,17 +515,6 @@ export default function LabDataTable({
           onClose={() => setModalType(null)}
         />
       )}
-
-      {modalType === "update" &&
-        selectedFollowUpId !== null &&
-        selectedEnquiryId !== null && (
-          <CreateFollowUpModal
-            enquiryId={selectedEnquiryId}
-            followUpId={selectedFollowUpId}
-            title="Update Follow-Up"
-            onClose={() => setModalType(null)}
-          />
-        )}
 
       {modalType === "complete" && selectedEnquiryId !== null && (
         <CompleteFollowUpModal

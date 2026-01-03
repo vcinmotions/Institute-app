@@ -15,8 +15,6 @@ import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
 import TimelineDatatable from "@/app/(admin)/(ui-elements)/timeline/TimelineComponent";
 import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 
-import { PencilIcon, TaskIcon, TrashBinIcon } from "@/icons";
-import CreateFollowUpModal from "../form/form-elements/CreateFollowUpModal";
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
 import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
@@ -710,17 +708,6 @@ export default function EnquiryDataTable({
           courses={[]}
         />
       )}
-{/* 
-      {showCreateNextModal &&
-        selectedFollowUpId !== null &&
-        selectedEnquiryId !== null && (
-          <CreateFollowUpModal
-            enquiryId={selectedEnquiryId}
-            followUpId={selectedFollowUpId}
-            title="Create Next Follow-Up"
-            onClose={() => setShowCreateNextModal(false)} // only closes child
-          />
-        )} */}
 
       {modalType === "complete" && selectedEnquiryId !== null && (
         <CompleteFollowUpModal

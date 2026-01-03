@@ -20,7 +20,6 @@ import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 
 import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
 
-import CreateFollowUpModal from "../form/form-elements/CreateFollowUpModal";
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 
 import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
@@ -485,17 +484,6 @@ export default function StudentDataTable({
         </div>
       </div>
 
-      {/* === Follow-Up Timeline modal === */}
-      {showForm && followUpData && selectedId !== null && (
-        <TimelineDatatable
-          onClose={handleCloseModal} // Function to close timeline modal
-          followUpData={followUpData} // Pass follow-up data fetched from API
-          enquiryId={selectedId} // Pass current enquiry ID (number, not null)
-          onCreateFollowUpForEnquiry={handleCreateFollowUpForEnquiry}
-          onCreateFollowUpForFollowUp={handleCreateFollowUpForFollowUp}
-          onCompleteFollowUp={handleCompleteFollowUpHandler}
-        />
-      )}
 
       {/* === Follow-Up Timeline modal === */}
       {showAdmissionForm && studentDetails && studentId !== null && (
@@ -524,17 +512,6 @@ export default function StudentDataTable({
           onClose={() => setModalType(null)}
         />
       )}
-
-      {modalType === "update" &&
-        selectedFollowUpId !== null &&
-        selectedEnquiryId !== null && (
-          <CreateFollowUpModal
-            enquiryId={selectedEnquiryId}
-            followUpId={selectedFollowUpId}
-            title="Update Follow-Up"
-            onClose={() => setModalType(null)}
-          />
-        )}
 
       {selectedId !== null && enquiryDetail === true && (
         <EnquiryDetails onClose={handleCloseModal} enquiryId={selectedId} />

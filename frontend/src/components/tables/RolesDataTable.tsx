@@ -16,7 +16,6 @@ import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 
 import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
 
-import CreateFollowUpModal from "../form/form-elements/CreateFollowUpModal";
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
 
@@ -348,15 +347,6 @@ export default function RolesDataTable({
 
       {/* === Follow-Up Timeline modal === */}
 
-      {/* === Follow-Up Timeline modal === */}
-      {/* {showAdmissionForm && selectedEnquiryData && selectedEnquiryId !== null && (
-        <AdmissionForm
-          onCloseModal={handleCloseAdmissionModal} // Function to close timeline modal
-          enquiryData={selectedEnquiryData} // Pass follow-up data fetched from API
-          enquiryId={selectedEnquiryId} // Pass current enquiry ID (number, not null)
-         />
-      )} */}
-
       {modalType === "createNew" && selectedEnquiryId !== null && (
         <CreateNewFollowUpOnEnquiryModal
           enquiryId={selectedEnquiryId}
@@ -365,16 +355,6 @@ export default function RolesDataTable({
         />
       )}
 
-      {modalType === "update" &&
-        selectedFollowUpId !== null &&
-        selectedEnquiryId !== null && (
-          <CreateFollowUpModal
-            enquiryId={selectedEnquiryId}
-            followUpId={selectedFollowUpId}
-            title="Update Follow-Up"
-            onClose={() => setModalType(null)}
-          />
-        )}
 
       {modalType === "complete" &&
         selectedFollowUpId !== null &&

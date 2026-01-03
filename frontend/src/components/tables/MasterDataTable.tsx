@@ -21,7 +21,7 @@ import { useCreateEnquiry } from "@/hooks/useCreateEnquiry";
 import { TrashBinIcon } from "@/icons";
 import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
 import ConfirmDeleteModal from "../common/ConfirmDeleteModal";
-import CreateFollowUpModal from "../form/form-elements/CreateFollowUpModal";
+
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
 import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
@@ -625,9 +625,9 @@ export default function MasterDataTable({
           onClose={handleCloseModal} // Function to close timeline modal
           followUpData={followupDetails} // Pass follow-up data fetched from API
           enquiryId={selectedId} // Pass current enquiry ID (number, not null)
-          onCreateFollowUpForEnquiry={handleCreateFollowUpForEnquiry}
+       
           onCreateFollowUpForFollowUp={handleCreateFollowUpForFollowUp}
-          onCompleteFollowUp={handleCompleteFollowUpHandler}
+ 
         />
       )}
 
@@ -638,17 +638,6 @@ export default function MasterDataTable({
           onClose={() => setModalType(null)}
         />
       )}
-
-      {modalType === "update" &&
-        selectedFollowUpId !== null &&
-        selectedEnquiryId !== null && (
-          <CreateFollowUpModal
-            enquiryId={selectedEnquiryId}
-            followUpId={selectedFollowUpId}
-            title="Update Follow-Up"
-            onClose={() => setModalType(null)}
-          />
-        )}
 
       {selectedId !== null && enquiryDetail === true && (
         <EnquiryDetails onClose={handleCloseModal} enquiryId={selectedId} />

@@ -428,17 +428,6 @@ export default function CourseDataTable({
         />
       )}
 
-      {modalType === "update" &&
-        selectedFollowUpId !== null &&
-        selectedEnquiryId !== null && (
-          <CreateFollowUpModal
-            enquiryId={selectedEnquiryId}
-            followUpId={selectedFollowUpId}
-            title="Update Follow-Up"
-            onClose={() => setModalType(null)}
-          />
-        )}
-
       {modalType === "complete" &&
         selectedFollowUpId !== null &&
         selectedEnquiryId !== null && (
