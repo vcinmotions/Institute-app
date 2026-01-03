@@ -157,14 +157,14 @@ export default function CreateNewFollowUpOnEnquiryModal({
             Schedule At
           </label>
           <div className="relative w-full">
-            {/* <input
+            <input
               tabIndex={2}
               type="datetime-local"
               value={scheduledAt}
               onChange={(e) => setScheduledAt(e.target.value)}
               className="w-full appearance-none rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-400"
-            /> */}
-            <DatePicker 
+            />
+            {/* <DatePicker 
              mode="single"
              id={"date"} 
              tabIndex={2}
@@ -173,7 +173,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
               onChange={(_, dateStr) => {
                 setScheduledAt(dateStr);
               }}
-            />
+            /> */}
             {errors.scheduledAt && (
               <p className="pt-2 text-sm text-red-500">{errors.scheduledAt}</p>
             )}
