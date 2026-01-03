@@ -826,6 +826,20 @@ export const createNextFolowUpAPI = async (
 };
 
 // 🔧 FIXED getUser API with token header
+export const editNextFolowUpAPI = async (
+  token: string,
+  newFollowUpData: any,
+  id: any,
+) => {
+  const response = await apiClient.put(`/followup-edit/${id}`, newFollowUpData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🔧 FIXED getUser API with token header
 export const createCompleteFolowUpAPI = async (
   token: string,
   newFollowUpData: any,

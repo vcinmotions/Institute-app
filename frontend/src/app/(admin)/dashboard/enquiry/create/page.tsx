@@ -319,7 +319,7 @@ export default function EnquiryForm() {
 
         setTimeout(() => {
           router.back();
-        }, 500);
+        }, 300);
       },
 
       onError: () => {

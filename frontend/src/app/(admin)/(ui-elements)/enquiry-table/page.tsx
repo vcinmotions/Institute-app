@@ -15,6 +15,8 @@ import {
 } from "@/store/slices/enquirySlice";
 import React, { ChangeEvent, FormEvent, useState, useEffect, useRef } from "react";
 import StudentCard from "@/components/common/StudentCard";
+import { PencilIcon } from "@/icons";
+import Button from "@/components/ui/button/Button";
 
 export default function EnquiryTable() {
   const [showForm, setShowForm] = useState(false);
@@ -136,6 +138,8 @@ export default function EnquiryTable() {
           leadStatus, // 👈 Add this
         });
 
+        console.log("TOTAL PAGES IN GET ENQUIRY IN ENQUIRY TABLE:", response);
+
         dispatch(setEnquiries(response.enquiry || []));
         dispatch(setFilteredEnquiries(response.filteredEnquiries)); // filtered ones
         setTotalPages(response.totalPages || 1);
@@ -186,6 +190,32 @@ export default function EnquiryTable() {
     setCurrentPage(1); // Reset pagination on status change
   };
 
+   const loadEnquiry = async () => {
+      const token = sessionStorage.getItem("token");
+
+      if (!token) {
+        console.error("Token missing from sessionStorage");
+        return;
+      }
+
+      try {
+        const data = await getEnquiry({
+          token,
+          page: 1,
+          limit: 5,
+        });
+
+        console.log("RELOAD ENQUIRY DATA:", data);
+
+        dispatch(setEnquiries(data.enquiry || []));
+        dispatch(setFilteredEnquiries(data.filteredEnquiries)); // filtered ones
+        setTotalPages(data.totalPages || 1);
+        dispatch(setCurrentPage(1)); // reset page when search changes
+      } catch (error) {
+        console.error("Error fetching enquiries:", error);
+      }
+    };
+
   console.log("GET ENQUIRY SERACH INPUT:", searchInput, searchQuery);
   console.log("GET ENQUIRY CURRENT PAAGE:", currentPage);
 
@@ -193,12 +223,32 @@ export default function EnquiryTable() {
     <div>
       <div className="space-y-6">
         <StudentCard title="Enquiry Lists" onCreateClick={handleCreateClick}>
+          <div className="flex justify-between w-full items-center">
           <Search
             ref={searchRef}
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+          
+          <span
+            className="cursor-pointer"
+            onClick={() => {
+              dispatch(setCurrentPage(1));       // 👈 reset to page 1
+            }}
+          >
+            <svg
+              className="dark:text-gray-300"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path d="M2 10C2 10 4.00498 7.26822 5.63384 5.63824C7.26269 4.00827 9.5136 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.89691 21 4.43511 18.2543 3.35177 14.5M2 10V4M2 10H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+
+          </span>
+          </div>
 
           <EnquiryDataTable
             enquiries={enquiries}

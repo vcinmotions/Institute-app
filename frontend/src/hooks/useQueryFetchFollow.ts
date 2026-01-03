@@ -4,11 +4,25 @@ import { RootState } from '@/store';
 import { apiClient } from '@/lib/apiClient';
 
 // Define the expected type for the fetched data
-interface FollowUpData {
+// interface FollowUpData {
+//   id: string;
+//   status: string;
+//   message: string;
+//   // ✅ Add more fields as needed
+// }
+
+interface FollowUpItem {
   id: string;
-  status: string;
+  remark: string;
+  followUpStatus: "PENDING" | "COMPLETED" | "MISSED";
+  scheduledAt: string;
+  doneAt: string | null;
+  createdAt: string; // used for sorting
+}
+
+interface FollowUpData {
   message: string;
-  // ✅ Add more fields as needed
+  followup: FollowUpItem[];   // ✅ include this
 }
 
 // Custom Hook for fetching Follow-Up Data using React Query
@@ -16,7 +30,7 @@ export const useFollowUp = (enquiryId: string | null) => {
   const token = useSelector((state: RootState) => state.auth.token);
 
   const {
-    data: followupDetails = [], //array
+     data: followupDetails = { message: '', followup: [] } as FollowUpData,
     isLoading,
     isError,
     refetch,
@@ -30,6 +44,8 @@ export const useFollowUp = (enquiryId: string | null) => {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      console.log("GET FOLLOW_UP DATA IN QUERY", response.data);
 
       return response.data;
     },

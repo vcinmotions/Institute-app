@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
-import { useCreateNextFollowUp } from "@/hooks/useCreateNextFollowUp";
+import { useCreateNextFollowUp, useEditNextFollowUp } from "@/hooks/useCreateNextFollowUp";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useFollowUp } from "@/hooks/useQueryFetchFollow";
 import TextArea from "../input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
 
-interface CreateFollowUpModalProps {
+interface EditFollowUpModalProps {
   onClose: () => void;
   onSuccess: () => void;
   followUpId: string;
@@ -21,15 +21,15 @@ interface FollowUpData {
   scheduledAt: string;
 }
 
-export default function CreateFollowUpModal({
+export default function EditFollowUpModal({
   onClose,
   followUpId,
   enquiryId,
   title,
   onSuccess
-}: CreateFollowUpModalProps) {
+}: EditFollowUpModalProps) {
   const [remark, setRemark] = useState("");
-  const { refetch } = useFollowUp(enquiryId);
+  const { followupDetails , refetch } = useFollowUp(enquiryId);
   const [scheduledAt, setScheduledAt] = useState<string>("");
   const [errors, setErrors] = useState<Partial<FollowUpData>>({});
   // New state for alert
@@ -46,9 +46,19 @@ export default function CreateFollowUpModal({
     });
     const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
 
-  const { mutate: createnextFollowUp } = useCreateNextFollowUp();
+  const { mutate: editFollowUp } = useEditNextFollowUp();
 
   const firstInputRef = useRef<HTMLInputElement>(null);
+
+  // Prefill existing data when modal opens
+  useEffect(() => {
+    const followUp = followupDetails?.followup?.find(f => f.id === followUpId);
+    if (followUp) {
+      setRemark(followUp.remark || "");
+      setScheduledAt(new Date(followUp.scheduledAt).toISOString().slice(0, 16));
+    }
+    firstInputRef.current?.focus();
+  }, [followUpId, followupDetails]);
 
   useEffect(() => {
     firstInputRef.current?.focus();
@@ -63,59 +73,8 @@ export default function CreateFollowUpModal({
   return Object.keys(validationErrors).length === 0;
 };
 
-//   const handleSubmit = async () => {
-//     const validationErrors: Partial<FollowUpData> = {};
-
-//     if (!remark.trim()) validationErrors.remark = "Remark is required.";
-//     if (!scheduledAt)
-//       validationErrors.scheduledAt = "Schedule time is required.";
-
-//     if (Object.keys(validationErrors).length > 0) {
-//       setErrors(validationErrors);
-//  setAlert({
-//         show: true,
-//         title: "Validation Error",
-//         message: "Please enter all inputs.",
-//         variant: "error",
-//       });
-//       // Optional: clear validation errors after 3 seconds
-//        // ✅ FIXED setTimeout
-//     setTimeout(() => {
-//       setErrors({});
-//       setAlert({ show: false, title: "", message: "", variant: "" });
-//     }, 2000); 
-//       return;
-//     }
-
-//     try {
-//       const isoScheduledAt = new Date(scheduledAt).toISOString();
-
-//       console.log("Creating follow-up for Follow Up ID:", followUpId);
-//       console.log("get Enquiry Id:", enquiryId);
-//       console.log("Remark:", remark);
-//       console.log("Scheduled At (ISO):", isoScheduledAt);
-
-//       await createnextFollowUp({
-//         enquiryId,
-//         followUpId,
-//         remark,
-//         scheduledAt: isoScheduledAt,
-//         currentPage,
-//       });
-
-//          // ✅ Trigger parent refetch
-//          onSuccess(); 
-
-//       // Reset form and close modal
-//       setRemark("");
-//       setScheduledAt("");
-//       setErrors({});
-//       onClose();
-//     } catch (error) {
-//       console.error("Failed to create follow-up:", error);
-//       setErrors({ remark: "Failed to create follow-up. Please try again." });
-//     }
-//   };
+console.log("folow-up id in edit folow-up modal:", followUpId);
+console.log("enquiry id in edit folow-up modal:", enquiryId);
 
 const handleSubmit = async () => {
   if (!validate()) {
@@ -135,7 +94,7 @@ const handleSubmit = async () => {
 
   const isoScheduledAt = new Date(scheduledAt).toISOString();
 
-  createnextFollowUp(
+  editFollowUp(
     {
       enquiryId,
       followUpId,

@@ -82,7 +82,7 @@ export default function EnquiryDataTable({
   );
 
   const [showTimelineModal, setShowTimelineModal] = useState(false);
-const [showCreateNextModal, setShowCreateNextModal] = useState(false);
+  const [showCreateNextModal, setShowCreateNextModal] = useState(false);
 
 
   const { mutate: fetchEnquiries, data } = useFetchEnquiry();
@@ -254,6 +254,12 @@ const [showCreateNextModal, setShowCreateNextModal] = useState(false);
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
+                  Created At
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                >
                   <button
                     type="button"
                     className="flex items-center gap-1"
@@ -310,22 +316,22 @@ const [showCreateNextModal, setShowCreateNextModal] = useState(false);
               {enquiries && enquiries.length > 0 ? (
                 enquiries.map((item: any) => (
                   <TableRow key={item.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
+                    <TableCell className="px-5 py-2 text-start sm:px-6">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 overflow-hidden rounded-full">
+                        <div className="overflow-hidden rounded-full">
                           {/* <Image
                             width={40}
                             height={40}
                             src="/images/user/user-21.jpg"
                             alt="/images/user/user-21.jpg"
                           /> */}
-                          <Avatar name={item.name} size={38} />
+                          <Avatar name={item.name} size={30} />
                         </div>
                         <div>
                           <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
                             {item.name}
                           </span>
-                          <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
+                          {/* <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
                             {new Date(item.createdAt).toLocaleDateString(
                               "en-US",
                               {
@@ -334,7 +340,7 @@ const [showCreateNextModal, setShowCreateNextModal] = useState(false);
                                 day: "numeric",
                               },
                             )}
-                          </span>
+                          </span> */}
                         </div>
                       </div>
                     </TableCell>
@@ -346,6 +352,18 @@ const [showCreateNextModal, setShowCreateNextModal] = useState(false);
                         {item.enquiryCourse.map((c: any, index: any) => (
                           <div key={index}>{c.course.name}</div>
                         ))}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+                      <span>
+                        {new Date(item.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              },
+                            )}
                       </span>
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">

@@ -183,6 +183,46 @@ export async function getFollowUpController(req: Request, res: Response) {
   }
 }
 
+
+export async function editFollowUpController(req: Request, res: Response) {
+  const { id } = req.params;
+  const { scheduledAt, remark, followUpStatus } = req.body;
+
+  console.log("Editing FollowUp Id:", id);
+  console.log("Request Body:", scheduledAt, remark, followUpStatus);
+
+  // Basic validation
+  if (!id || !scheduledAt || !remark) {
+    return res.status(400).json({ error: 'Missing required fields for follow-up edit.' });
+  }
+
+  try {
+    const tenantPrisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!tenantPrisma || !user || typeof user === 'string') {
+      return res.status(401).json({ error: 'Unauthorized request' });
+    }
+
+    // Update the existing follow-up
+    const updatedFollowUp = await tenantPrisma.followUp.update({
+      where: { id },
+      data: {
+        scheduledAt: new Date(scheduledAt),
+        remark,
+        ...(followUpStatus ? { followUpStatus } : {}), // Optional: allow status change
+      },
+    });
+
+    console.log("Follow-up edited successfully:", updatedFollowUp);
+
+    return res.status(200).json({ message: 'Follow-up updated successfully', followUp: updatedFollowUp });
+  } catch (err) {
+    console.error('Error editing follow-up:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 export async function completeFollowUpController(req: Request, res: Response) {
     const { remark, enquiryId } = req.body;
 

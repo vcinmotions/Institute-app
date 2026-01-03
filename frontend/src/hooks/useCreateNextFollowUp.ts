@@ -43,7 +43,7 @@
 
 // src/hooks/useCreateNextFollowUp.ts
 import { useMutation } from "@tanstack/react-query";
-import { createNextFolowUpAPI, getFollowUp } from "@/lib/api";
+import { createNextFolowUpAPI, editNextFolowUpAPI, getFollowUp } from "@/lib/api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setFollowUps, setLoading, setError } from "@/store/slices/followUpSlice";
@@ -64,6 +64,58 @@ export const useCreateNextFollowUp = () => {
 
       dispatch(setLoading(true));
       await createNextFolowUpAPI(token, newFollowUpData, newFollowUpData.followUpId);
+
+      // Return payload for onSuccess
+      return { token, enquiryId: newFollowUpData.enquiryId, currentPage: newFollowUpData.currentPage };
+    },
+
+    onSuccess: async ({ token, enquiryId, currentPage }) => {
+      try {
+        if (!enquiryId) throw new Error("Enquiry ID missing");
+
+        // Fetch updated follow-ups for this enquiry
+        const updated = await getFollowUp(token, enquiryId);
+
+        console.log("Updated follow-ups:", updated.followup);
+
+        // Update Redux state
+        dispatch(setFollowUps(updated.followup));
+        dispatch(setError(null));
+      } catch (err: any) {
+        dispatch(setError(err.message || "Failed to fetch updated follow-ups"));
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+
+    onError: (error: any) => {
+      const backend = error?.response?.data?.error || "Failed to create next follow-up";
+      dispatch(setError(backend));
+      dispatch(setLoading(false));
+    },
+  });
+};
+
+
+
+// src/hooks/useEditNextFollowUp.ts
+
+export const useEditNextFollowUp = () => {
+  const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.auth.token);
+
+  return useMutation({
+    mutationFn: async (newFollowUpData: {
+      followUpId: string;
+      remark: string;
+      scheduledAt: string;
+      enquiryId: string | null;
+      currentPage: number
+    }) => {
+      if (!token) throw new Error("Missing token for create next follow-up");
+
+      dispatch(setLoading(true));
+      await editNextFolowUpAPI(token, newFollowUpData, newFollowUpData.followUpId);
 
       // Return payload for onSuccess
       return { token, enquiryId: newFollowUpData.enquiryId, currentPage: newFollowUpData.currentPage };

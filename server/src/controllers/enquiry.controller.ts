@@ -39,7 +39,7 @@ export async function addEnquiryController(req: Request, res: Response) {
 
     // ✅ Check if enquiry email already exists in this tenant
     const existingEnquiry = await tenantPrisma.enquiry.findFirst({
-      where: { email: enquiryEmail },
+      where: { email: enquiryEmail, contact },
     });
 
     if (existingEnquiry) {
@@ -151,6 +151,19 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
     }
     }
 
+    // 1️⃣ Check for duplicate email
+    if(contact) {
+    const existingContact = await tenantPrisma.enquiry.findFirst({
+      where: { contact },
+    });
+
+    
+    if (existingContact) {
+      return res.status(409).json({
+        error: "Contact already exists in enquiries",
+      });
+    }
+    }
 
     // 2️⃣ Create enquiry
     const enquiry = await tenantPrisma.enquiry.create({
@@ -210,7 +223,7 @@ export async function editEnquiryController(req: Request, res: Response) {
 
   console.log("get Edit Enquiry data", req.body);
 
-  if (!id || !name || !contact || !courseId || !source) {
+  if (!id || !name || !contact || !courseId ) {
     return res.status(400).json({ error: "Missing required enquiry details" });
   }
 

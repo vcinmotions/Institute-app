@@ -203,9 +203,9 @@ export default function EditEnquiryForm({
     //   newErrors.courseId = "Course is required.";
     // }
 
-    if (!newEnquiry.source.trim()) {
-      newErrors.source = "Source is required.";
-    }
+    // if (!newEnquiry.source.trim()) {
+    //   newErrors.source = "Source is required.";
+    // }
 
     setErrors(newErrors);
 
@@ -236,7 +236,7 @@ export default function EditEnquiryForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 1000);
 
       return;
     }
@@ -252,7 +252,7 @@ export default function EditEnquiryForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 1000);
 
       return;
     }
@@ -277,7 +277,7 @@ export default function EditEnquiryForm({
 
         setTimeout(() => {
           onCloseModal();
-        }, 3000);
+        }, 500);
       },
 
       onError: () => {

@@ -670,14 +670,15 @@ useEffect(() => {
     const target = e.target as HTMLElement;
 
     // ✅ DO NOT hijack keyboard when user is typing
-    // if (
-    //   target.tagName === "INPUT" ||
-    //   target.tagName === "TEXTAREA" ||
-    //   target.tagName === "SELECT" ||
-    //   target.isContentEditable
-    // ) {
-    //   return;
-    // }
+    if (
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.tagName === "SELECT" ||
+      target.tagName === "MultiSelect" ||
+      target.isContentEditable
+    ) {
+      return;
+    }
 
     const currentItem = filteredNavItems[index];
 

@@ -5,6 +5,8 @@ import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { useFollowUp } from "@/hooks/useQueryFetchFollow";
 import CreateFollowUpModal from "@/components/form/form-elements/CreateFollowUpModal";
+import { PencilIcon } from "@/icons";
+import EditFollowUpModal from "@/components/form/form-elements/EditFollowUpModal";
 interface TimelineDatatableProps {
   onClose: () => void;
   followUpData: any;
@@ -35,9 +37,14 @@ export default function TimelineDatatable({
       null,
     );
     const [showCreateNextModal, setShowCreateNextModal] = useState(false);
+    const [showEditNextModal, setShowEditNextModal] = useState(false);
     
   //const followups = followUpsByEnquiry[enquiryId] || [];
   const { followupDetails, isLoading, refetch } = useFollowUp(enquiryId);
+
+  const refetchFollowup = () => {
+    refetch();
+  }
 
   console.log("get Enquiry data in tmeline", enquiries);
   const fineEnquiryById = enquiries.find(
@@ -66,11 +73,17 @@ export default function TimelineDatatable({
     setSelectedFollowUpId(followUpId);
     setSelectedEnquiryId(enquiryId)
     setShowCreateNextModal(true)
-    refetch();
     console.log(
       "GetTing Follow Up Details After Creating Follow-Up Component Logic:",
       followupDetails,
     );
+  };
+
+    const handleEditFollowUpForFollowUp = (followUpId: string) => {
+    setSelectedFollowUpId(followUpId);
+    setSelectedEnquiryId(enquiryId)
+    setShowEditNextModal(true)
+
   };
 
   console.log("get Folow Up data in tmeline", followupDetails);
@@ -85,7 +98,7 @@ export default function TimelineDatatable({
   //   (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   // );
 
-  const followups = [...(followUpData?.followup || [])].sort(
+  const followups = [...(followupDetails?.followup || [])].sort(
     (a: any, b: any) =>
       new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
@@ -107,6 +120,19 @@ export default function TimelineDatatable({
   const firstItem = followups[0];
   const lastItem = followups[followups.length - 1];
   const middleItems = followups.slice(1, -1);
+
+  const formatDate = (date: string | null) => {
+    if (!date) return "—";
+    return new Date(date).toLocaleString("en-US", {
+      weekday: "short",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
 
   console.log("get middle follow up", middleItems);
   console.log("get last follow up", lastItem?.id);
@@ -225,9 +251,17 @@ export default function TimelineDatatable({
                 {/* <div className="timeline-end timeline-box">First Macintosh computer</div> */}
                 <div className="timeline-end flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
                   {/* Remark / Title */}
-                  <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
+                  {/* <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
                     {firstItem.remark}
-                  </p>
+                  </p> */}
+
+                  <div className="flex justify-between gap-4">
+                      <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
+                        {firstItem.remark}
+                      </p>
+
+                      <button className="mb-2"><PencilIcon onClick={() => handleEditFollowUpForFollowUp(firstItem.id)} /></button>
+                      </div>
 
                   {/* Status Badge */}
                   <div className="mt-1 flex items-center gap-2">
@@ -267,16 +301,8 @@ export default function TimelineDatatable({
 
                   {/* Scheduled At */}
                   <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                    <span className="font-semibold">Dont at:</span>{" "}
-                    {new Date(firstItem.doneAt).toLocaleString("en-US", {
-                      weekday: "short",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "numeric",
-                      minute: "2-digit",
-                      hour12: true,
-                    })}
+                    <span className="font-semibold">Done at:</span>{" "}
+                    {formatDate(firstItem.doneAt)}
                   </div>
                 </div>
 
@@ -323,9 +349,13 @@ export default function TimelineDatatable({
                     </div>
                     <div className="timeline-end flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
                       {/* Remark / Title */}
+                      <div className="flex justify-between gap-4">
                       <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
                         {item.remark}
                       </p>
+
+                      <button className="mb-2"><PencilIcon onClick={() => handleEditFollowUpForFollowUp(item.id)} /></button>
+                      </div>
 
                       {/* Status Badge */}
                       <div className="mt-1 flex items-center gap-2">
@@ -363,15 +393,8 @@ export default function TimelineDatatable({
                       {/* Scheduled At */}
                       <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
                         <span className="font-semibold">Done at:</span>{" "}
-                        {new Date(item.doneAt).toLocaleString("en-US", {
-                          weekday: "short",
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
+                                            {formatDate(item.doneAt)}
+
                       </div>
                     </div>
 
@@ -419,9 +442,13 @@ export default function TimelineDatatable({
                   </div>
                   <div className="timeline-end flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
                     {/* Remark / Title */}
+                    <div className="flex justify-between items-centre gap-4">
                     <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
                       {lastItem.remark}
                     </p>
+
+                    <button className="mb-2"><PencilIcon onClick={() => handleEditFollowUpForFollowUp(lastItem.id)} /></button>
+                    </div>
 
                     {/* Status Badge */}
                     <div className="mt-1 flex items-center gap-2">
@@ -464,17 +491,8 @@ export default function TimelineDatatable({
                     {/* Done At */}
                     <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
                       <span className="font-semibold">Done at:</span>{" "}
-                      {lastItem.doneAt
-                        ? new Date(lastItem.doneAt).toLocaleString("en-US", {
-                            weekday: "short",
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "2-digit",
-                            hour12: true,
-                          })
-                        : "—"}
+                                                                  {formatDate(lastItem.doneAt)}
+
                     </div>
                   </div>
                 </li>
@@ -507,7 +525,25 @@ export default function TimelineDatatable({
                     followUpId={selectedFollowUpId}
                     title="Create Next Follow-Up"
                     onClose={() => setShowCreateNextModal(false)} // only closes child
-                    onSuccess={() => refetch()}  // ✅ call refetch after creating follow-up
+                    onSuccess={async () => {
+                      refetchFollowup(); // wait for new follow-ups
+                      console.log("Updated follow-ups after refetch:", followupDetails);
+                    }}
+                  />
+                )}
+
+                 {showEditNextModal &&
+                selectedFollowUpId !== null &&
+                selectedEnquiryId !== null && (
+                  <EditFollowUpModal
+                    enquiryId={selectedEnquiryId}
+                    followUpId={selectedFollowUpId}
+                    title="Edit Follow-Up"
+                    onClose={() => setShowEditNextModal(false)} // only closes child
+                    onSuccess={async () => {
+                      refetchFollowup(); // wait for new follow-ups
+                      console.log("Updated follow-ups after refetch:", followupDetails);
+                    }}
                   />
                 )}
       </div>
