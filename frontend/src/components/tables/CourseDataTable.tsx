@@ -16,7 +16,7 @@ import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 
 import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
 
-import CreateFollowUpModal from "../form/form-elements/CreateFollowUpModal";
+
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
 import EnquiryDetails from "../ui/enquiry/EnquiryDetails";

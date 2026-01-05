@@ -416,8 +416,8 @@ export async function getEnquiryController(req: Request, res: Response) {
       ...(search
         ? {
             OR: [
-              { name: { contains: search as string, mode: "insensitive" } },
-              { email: { contains: search as string, mode: "insensitive" } },
+              { name: { contains: search as string } },
+              { email: { contains: search as string } },
             ],
           }
         : {}),

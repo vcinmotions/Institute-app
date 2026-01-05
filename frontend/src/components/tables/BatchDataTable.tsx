@@ -10,7 +10,6 @@ import { useState } from "react";
 
 import { useDispatch } from "react-redux";
 
-import CreateFollowUpModal from "../form/form-elements/CreateFollowUpModal";
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
 import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
