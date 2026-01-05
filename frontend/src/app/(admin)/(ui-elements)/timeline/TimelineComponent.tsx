@@ -170,7 +170,7 @@ export default function TimelineDatatable({
                       Email Address
                     </td>
                     <td className="py-2 pr-4 font-medium">
-                      {fineEnquiryById?.email}
+                      {fineEnquiryById?.email ? fineEnquiryById?.email : "-"}
                     </td>
                     <td className="py-2 pr-2 text-xs text-gray-500 dark:text-gray-400">
                       Phone
@@ -186,13 +186,15 @@ export default function TimelineDatatable({
                       Course
                     </td>
                     <td className="py-2 pr-4 font-medium">
-                      {fineEnquiryById?.course}
+                      {fineEnquiryById?.enquiryCourse.map((cr: any, index: number) => (
+                        <span key={index}>{cr.course?.name}</span>
+                      ))}
                     </td>
                     <td className="py-2 pr-2 text-xs text-gray-500 dark:text-gray-400">
                       Source
                     </td>
                     <td className="py-2 font-medium">
-                      {fineEnquiryById?.source}
+                      {fineEnquiryById?.source ? fineEnquiryById?.source : "-"}
                     </td>
                   </tr>
                 </tbody>
