@@ -99,7 +99,7 @@ export default function UserInfoCard() {
           </div>
         </div>
 
-        <ShowForRoles allowedRoles={[]}>
+        <ShowForRoles allowedRoles={["MASTER_ADMIN"]}>
           <button
             onClick={openModal}
             className="shadow-theme-xs flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 lg:inline-flex lg:w-auto dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
