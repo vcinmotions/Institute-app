@@ -360,6 +360,9 @@ export async function getEnquiryController(req: Request, res: Response) {
       sortField, // default sort by created date
       sortOrder, // default descending
       leadStatus, // 👈 Add this
+      courseId,
+      fromDate,
+      toDate,
     } = req.query;
 
     console.log("get ALl Params:", sortField, sortOrder);
@@ -393,19 +396,58 @@ export async function getEnquiryController(req: Request, res: Response) {
     //     { contact: { contains: search, mode: "insensitive" } },
     //     // Add more searchable fields as needed
     //   ];
-    // }
+    // } // for prisma search filter
 
     // ✅ Build search filter
-    const where = {
+    // const where = {
+    //   clientAdminId,
+    //   ...(search
+    //     ? {
+    //         OR: [
+    //           { name: { contains: search as string } },
+    //           { email: { contains: search as string } },
+    //         ],
+    //       }
+    //     : {}),
+    // };
+
+    const where: any = {
       clientAdminId,
       ...(search
         ? {
             OR: [
-              { name: { contains: search as string } },
-              { email: { contains: search as string } },
+              { name: { contains: search as string, mode: "insensitive" } },
+              { email: { contains: search as string, mode: "insensitive" } },
             ],
           }
         : {}),
+      ...(leadStatus
+        ? {
+            leadStatus: leadStatus as string,
+          }
+        : {}),
+        // ✅ Apply optional filters
+        // ...(courseId && { courseId: courseId }),
+      ...(courseId
+        ? {
+            enquiryCourse: {
+              some: {
+                courseId: Number(courseId),
+              },
+            },
+          }
+        : {}),
+      ...(fromDate &&
+        toDate && {
+          paymentDate: {
+            gte: new Date(fromDate as string),
+            lte: new Date(toDate as string),
+          },
+        }),
+      ...(fromDate &&
+        !toDate && { paymentDate: { gte: new Date(fromDate as string) } }),
+      ...(!fromDate &&
+        toDate && { paymentDate: { lte: new Date(toDate as string) } }),
     };
 
     // if (leadStatus && typeof leadStatus === "string") {

@@ -45,7 +45,7 @@ export default function UserDropdown() {
             
             alt="user"
           /> */}
-          <Avatar name="Test Institute" size={42} />
+          <Avatar name={user?.name} size={42} />
         </span>
 
         <span className="text-theme-sm mr-1 block font-medium">

@@ -229,6 +229,7 @@ export const useCreateCompleteFollowUp = () => {
 
 export const useCreateHoldEnquiry = () => {
   const dispatch = useDispatch();
+  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const token = useSelector((state: RootState) => state.auth.token);
 
   return useMutation({
@@ -249,7 +250,7 @@ export const useCreateHoldEnquiry = () => {
 
       const updatedEnquiry = await getEnquiry({
         token,
-        page: 1,
+        page: currentPage,
         limit: 5,
         sortField: "createdAt",
       });
@@ -271,6 +272,7 @@ export const useCreateHoldEnquiry = () => {
 
 export const useCreateLostEnquiry = () => {
   const dispatch = useDispatch();
+  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const token = useSelector((state: RootState) => state.auth.token);
 
   return useMutation({
@@ -291,7 +293,7 @@ export const useCreateLostEnquiry = () => {
 
       const updatedEnquiry = await getEnquiry({
         token,
-        page: 1,
+        page: currentPage,
         limit: 5,
         sortField: "createdAt",
       });

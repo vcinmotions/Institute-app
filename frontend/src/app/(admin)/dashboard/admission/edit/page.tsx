@@ -831,7 +831,7 @@ export default function AdmissionForm() {
                 type="text"
                 ref={firstInputRef}
                 tabIndex={1}
-                placeholder="Info Demo"
+                placeholder="Enter Student Name"
                 value={newEnquiry.name}
                 onChange={(e) => handleChangeNew("name", e.target.value)}
               />
@@ -848,7 +848,7 @@ export default function AdmissionForm() {
               <Input
                 type="text"
                 tabIndex={2}
-                placeholder="Ex. Mumbai, Maharashtra"
+                placeholder="Enter Father Name"
                 value={filledEnquiryData.fatherName}
                 onChange={(e) => handleChange("fatherName", e.target.value)}
               />
@@ -865,7 +865,7 @@ export default function AdmissionForm() {
               <Input
                 type="text"
                 tabIndex={3}
-                placeholder="Ex. Mumbai, Maharashtra"
+                placeholder="Enter Mother Name"
                 value={filledEnquiryData.motherName}
                 onChange={(e) => handleChange("motherName", e.target.value)}
               />
@@ -882,7 +882,7 @@ export default function AdmissionForm() {
               <div className="relative">
                 <Input
                   tabIndex={4}
-                  placeholder="info@gmail.com"
+                  placeholder="Enter Student Email"
                   type="text"
                   className="pl-[62px]"
                   value={newEnquiry.email}
@@ -902,7 +902,7 @@ export default function AdmissionForm() {
                 tabIndex={5}
                 selectPosition="start"
                 countries={countries}
-                placeholder="+910000000000"
+                placeholder="Enter Student Contact"
                 value={newEnquiry.contact}
                 onChange={handlePhoneNumberChange}
               />
@@ -911,12 +911,12 @@ export default function AdmissionForm() {
               )}
             </div>
             <div>
-              <Label>Parents Contact</Label>
+              <Label>Alternate Contact</Label>
               <PhoneInput
                 tabIndex={6}
                 selectPosition="start"
                 countries={countries}
-                placeholder="+91 55555 00000"
+                placeholder="Enter Alternate Contact no."
                 onChange={handlePhoneNumberChange}
               />
               {errors.parentsContact && (
@@ -928,7 +928,7 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={7}
                 type="text"
-                placeholder="30-02-2002"
+                placeholder="Enter DOB"
                 //maxLength={10} // e.g. 12:30 PM
                 value={filledEnquiryData.dob}
                 onChange={(e) => handleDateChange("dob", e.target.value)}
@@ -965,7 +965,7 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={9}
                 type="text"
-                placeholder="Ex. Mumbai, Maharashtra"
+                placeholder="Enter Student Religion"
                 value={filledEnquiryData.religion}
                 onChange={(e) => handleChange("religion", e.target.value)}
               />
@@ -1025,7 +1025,7 @@ export default function AdmissionForm() {
                           handleCourseRowChange(index, "paymentType", value)
                         }
                         value={row.paymentType}
-                        placeholder="Select payment type"
+                        placeholder="Select Payment Type"
                       />
                       <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
                         <ChevronDownIcon />
@@ -1052,7 +1052,7 @@ export default function AdmissionForm() {
                               )
                             }
                             value={row.installmentTypeId}
-                            placeholder="Select installment"
+                            placeholder="Select Installment"
                           />
                           <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
                             <ChevronDownIcon />
@@ -1096,7 +1096,7 @@ export default function AdmissionForm() {
                           handleCourseRowChange(index, "batchId", value)
                         }
                         value={row.batchId}
-                        placeholder="Select batch"
+                        placeholder="Select Batch"
                       />
                       <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
                         <ChevronDownIcon />
@@ -1112,7 +1112,7 @@ export default function AdmissionForm() {
                 <Select
                   tabIndex={12}
                   options={options}
-                  placeholder="Select an option"
+                  placeholder="Select Id Proof"
                   onChange={(value) => handleChange("idProofType", value)}
                   className="dark:bg-dark-900"
                 />
@@ -1137,7 +1137,7 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={13}
                 type="text"
-                placeholder="Info Demo"
+                placeholder="Enter Id No."
                 onChange={(e) => handleChange("idProofNumber", e.target.value)}
                 value={filledEnquiryData.idProofNumber}
               />
@@ -1150,7 +1150,7 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={14}
                 type="text"
-                placeholder="Ex. Mumbai, Maharashtra"
+                placeholder="Enter Student Residential Address"
                 value={filledEnquiryData.residentialAddress}
                 onChange={(e) =>
                   handleChange("residentialAddress", e.target.value)
@@ -1168,7 +1168,7 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={15}
                 type="text"
-                placeholder="Ex. Mumbai, Maharashtra"
+                placeholder="Enter Student Permenant Address"
                 value={filledEnquiryData.permenantAddress}
                 onChange={(e) =>
                   handleChange("permenantAddress", e.target.value)
@@ -1187,7 +1187,7 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={16}
                 type="datetime-local"
-                placeholder="Ex. Mumbai, Maharashtra"
+                placeholder="Enter Admission Date"
                 value={filledEnquiryData.admissionDate}
                 onChange={(e) => handleChange("admissionDate", e.target.value)}
               />
@@ -1198,7 +1198,7 @@ export default function AdmissionForm() {
             <div>
               <DropzonBoxComponent
                 tabIndex={17}
-                title="Profile Picture"
+                title="Student Photo"
                 selectedFile={selectedProfilePicture}
                 setSelectedFile={setSelectedProfilePicture}
               />

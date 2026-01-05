@@ -75,7 +75,7 @@ export default function UserMetaCard() {
                 }
                 alt="user"
               /> */}
-              <Avatar name="Test Institute" size={80} />
+              <Avatar name={user?.name} size={80} />
             </div>
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-center text-lg font-semibold text-gray-800 xl:text-left dark:text-white/90">

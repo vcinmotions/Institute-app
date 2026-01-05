@@ -378,7 +378,7 @@ export default function EnquiryDataTable({
                                   ? "success"
                                   : item.leadStatus === "HOLD"
                                     ? "info"
-                                    : "error"
+                                    : "lost"
                         }
                       >
                         {item.leadStatus}

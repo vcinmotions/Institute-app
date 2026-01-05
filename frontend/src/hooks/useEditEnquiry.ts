@@ -7,6 +7,7 @@ import { setEnquiries, setError, setFilteredEnquiries } from "@/store/slices/enq
 
 export const useEditEnquiry = () => {
   const dispatch = useDispatch();
+  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const token = useSelector((state: RootState) => state.auth.token);
 
   return useMutation({
@@ -23,7 +24,7 @@ export const useEditEnquiry = () => {
       // Refetch latest enquiries
       const updated = await getEnquiry({
         token,
-        page: 1,
+        page: currentPage,
         limit: 5,
         sortField: "createdAt",
       });

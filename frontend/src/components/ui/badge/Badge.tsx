@@ -9,6 +9,7 @@ type BadgeColor =
   | "warning"
   | "info"
   | "light"
+  | "lost"
   | "dark";
 
 interface BadgeProps {
@@ -44,6 +45,8 @@ const Badge: React.FC<BadgeProps> = ({
         "bg-brand-50 text-brand-500 dark:bg-brand-500/15 dark:text-brand-400",
       success:
         "bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500",
+      lost:
+        "bg-pink-50 text-pink-600 dark:bg-pink-500/15 dark:text-pink-500",
       error:
         "bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500",
       warning:
@@ -55,6 +58,7 @@ const Badge: React.FC<BadgeProps> = ({
     solid: {
       primary: "bg-brand-500 text-white dark:text-white",
       success: "bg-success-500 text-white dark:text-white",
+      lost: "bg-pink-500 text-white dark:text-white",
       error: "bg-error-500 text-white dark:text-white",
       warning: "bg-warning-500 text-white dark:text-white",
       info: "bg-blue-light-500 text-white dark:text-white",

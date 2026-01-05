@@ -9,7 +9,7 @@ interface GetEnquiryParams {
   search?: string;
   sortField?: string;
   sortOrder?: "asc" | "desc";
-  leadStatus?: "HOT" | "WARM" | "COLD" | null;
+  leadStatus?: "HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null;
 }
 
 interface GetStudentCourseParams {
@@ -464,6 +464,7 @@ export const getEnquiry = async ({
   sortField,
   sortOrder,
   leadStatus,
+  ...filters
 }: GetEnquiryParams) => {
   const response = await apiClient.get("/enquiry", {
     headers: {
@@ -476,6 +477,7 @@ export const getEnquiry = async ({
       sortField,
       sortOrder,
       leadStatus,
+      ...filters, // ✅ send filters to backend
     },
   });
 
