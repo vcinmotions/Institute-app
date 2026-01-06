@@ -1,4 +1,5 @@
 "use client"
+import { Tooltip } from "@heroui/react";
 import React, { useEffect, useRef, useState } from "react";
 
 interface Option {
@@ -16,6 +17,8 @@ interface MultiSelectProps {
   disabled?: boolean;
   tabIndex?: number;
   ref?: any;
+  tooltip?: boolean
+  content?: string;
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -27,6 +30,8 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   onChange,
   disabled = false,
   tabIndex,
+  tooltip = false,
+  content
 }) => {
   // const [selectedOptions, setSelectedOptions] =
   //   useState<string[]>(defaultSelected);
@@ -94,9 +99,19 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
   return (
     <div className="w-full" ref={containerRef}>
+      <div className="flex gap-2 items-center">
       <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
         {label}
       </label>
+
+{tooltip === true && <Tooltip
+                className="rounded bg-gray-200 text-[10px] mb-1.5"
+                content={content}
+              ><span className="mb-1.5 cursor-pointer text-xl text-gray-600">
+                    🛈
+                  </span></Tooltip>}
+              </div>
+      
 
       <div className="relative z-20 inline-block w-full">
         <div className="relative flex flex-col items-center">
@@ -139,7 +154,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                 ) : (
                   <input
                     placeholder="Select option"
-                    tabIndex={tabIndex}
+                  
                     ref={ref}
                     className="h-full w-full appearance-none border-0 bg-transparent p-1 pr-2 text-sm outline-hidden placeholder:text-gray-800 focus:border-0 focus:ring-0 focus:outline-hidden dark:placeholder:text-white/90"
                     readOnly
@@ -160,6 +175,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                     viewBox="0 0 20 20"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    onClick={toggleDropdown}
                   >
                     <path
                       d="M4.79175 7.39551L10.0001 12.6038L15.2084 7.39551"

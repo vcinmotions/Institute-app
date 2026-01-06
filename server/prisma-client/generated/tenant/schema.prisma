@@ -91,20 +91,26 @@ model ActivityLog {
 }
 
 model Enquiry {
-  id            String          @id @default(uuid())
-  name          String
-  contact       String
-  email         String?
-  course        String?
-  source        String?
-  leadStatus    LeadStatus      @default(WARM)
-  followUps     FollowUp[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  isConverted   Boolean         @default(false)
-  student       Student?        @relation("EnquiryToStudent", fields: [studentId], references: [id])
-  studentId     Int?            @unique // Converted to student
-  enquiryCourse EnquiryCourse[]
+  id               String          @id @default(uuid())
+  name             String
+  contact          String
+  alternateContact String?
+  email            String?
+  age              Int?
+  location         String?
+  course           String?
+  gender           String?
+  dob              DateTime?
+  source           String?
+  referedBy        String?
+  leadStatus       LeadStatus      @default(WARM)
+  followUps        FollowUp[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  isConverted      Boolean         @default(false)
+  student          Student?        @relation("EnquiryToStudent", fields: [studentId], references: [id])
+  studentId        Int?            @unique // Converted to student
+  enquiryCourse    EnquiryCourse[]
 
   // ✅ Reverse relation only — no fields/references here
   notification Notification?

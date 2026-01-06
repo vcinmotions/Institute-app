@@ -46,7 +46,7 @@ export default function SignInForm() {
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.toLocaleLowerCase();
     setEmail(value);
   };
 

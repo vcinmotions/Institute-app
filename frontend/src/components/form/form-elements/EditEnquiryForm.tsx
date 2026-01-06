@@ -31,6 +31,12 @@ interface EnquiryData {
   name: string;
   email: string;
   courseId: string[];
+  alternateContact: string,
+  age: string,
+  location: string,
+  gender: string,
+  dob: string,
+  referedBy: string,
   source: string;
   contact: string;
 }
@@ -45,6 +51,12 @@ export default function EditEnquiryForm({
     name: "",
     email: "",
     courseId: [],
+    alternateContact: "",
+    age: "",
+    location: "",
+    gender: "",
+    dob: "",
+    referedBy: "",
     source: "",
     contact: "",
   });
@@ -107,6 +119,12 @@ export default function EditEnquiryForm({
   //   }
   // }, [enquiryData]);
 
+    const genders = [
+    { value: "female", label: "Female" },
+    { value: "male", label: "Male" },
+    { value: "other", label: "Other" },
+  ];
+
   useEffect(() => {
     if (enquiryData && Object.keys(enquiryData).length > 0) {
       console.log("🔥 Setting enquiry data to form:", enquiryData);
@@ -121,6 +139,14 @@ export default function EditEnquiryForm({
         name: enquiryData.name || "",
         email: enquiryData.email || "",
         courseId: courseIds, // ✅ set extracted course IDs
+        alternateContact: enquiryData.alternateContact || "",
+        age: enquiryData.age || "",
+        location: enquiryData.location || "",
+        gender: enquiryData.gender || "",
+        dob: enquiryData.dob
+        ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+        : "",
+        referedBy: enquiryData.referedBy || "",
         source: enquiryData.source || "",
         contact: enquiryData.contact || "",
       });
@@ -264,6 +290,12 @@ export default function EditEnquiryForm({
           name: "",
           email: "",
           courseId: [],
+          alternateContact: "",
+          age: "",
+          location: "",
+          gender: "",
+          dob: "",
+          referedBy: "",
           source: "",
           contact: "",
         });
@@ -336,7 +368,7 @@ export default function EditEnquiryForm({
           </div>
         </div>
         <div>
-          <Label>Phone</Label>
+          <Label>Contact Nu.</Label>
           <PhoneInput
             selectPosition="start"
             countries={countries}
@@ -348,6 +380,78 @@ export default function EditEnquiryForm({
             <p className="text-sm text-red-500">{errors.contact}</p>
           )}
         </div>{" "}
+
+        
+          <div>
+          <Label>Alternate Conatct No.</Label>
+          <Input
+           tabIndex={4}
+           value={newEnquiry.alternateContact} // ← fixed // <-- THIS FIXES IT
+           placeholder="Enter alternate Contact" 
+           onChange={(e) => handleChange("alternateContact", e.target.value)}
+          />
+           {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
+        </div>{" "}
+
+        <div>
+          <Label>Age</Label>
+          <Input
+            type="text"
+            placeholder="Enter Age"
+            value={newEnquiry.age}
+            tabIndex={5}
+            onChange={(e) => handleChange("age", e.target.value)}         />
+            {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
+        </div>
+
+       <div>
+          <Label>Gender</Label>
+
+          <div className="relative">
+            <Select
+              tabIndex={6}
+              options={genders.map((item) => ({
+                label: item.label,
+                value: item.value,
+              }))}
+              placeholder="Select Gender"
+              onChange={(value) => handleChange("gender", value)}
+              value={newEnquiry.gender} // just the courseId string
+              className="dark:bg-dark-900"
+            />
+            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+              <ChevronDownIcon />
+            </span>
+          </div>
+          {errors.gender && (
+            <p className="text-sm text-red-500">{errors.gender}</p>
+          )}
+        </div>
+
+        <div>
+          <Label>Location</Label>
+          <Input
+            type="text"
+            placeholder="Enter Location"
+            value={newEnquiry.location}
+            tabIndex={7}
+            onChange={(e) => handleChange("location", e.target.value)}         />
+            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
+        </div>
+
+        <div>
+          <Label>Date Of Birth</Label>
+          <Input
+            tabIndex={9}
+            type="date"
+            placeholder="30-02-2002"
+            //maxLength={10} // e.g. 12:30 PM
+            value={newEnquiry.dob}
+            onChange={(e) => handleChange("dob", e.target.value)}
+          />
+          {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
+        </div>
+
         <div>
           <div className="relative">
             <MultiSelect
@@ -382,6 +486,18 @@ export default function EditEnquiryForm({
             <p className="text-sm text-red-500">{errors.source}</p>
           )}
         </div>
+
+         <div>
+          <Label>Refered By</Label>
+          <Input
+            type="text"
+            placeholder="Enter Age"
+            value={newEnquiry.referedBy}
+            tabIndex={11}
+            onChange={(e) => handleChange("referedBy", e.target.value)}         />
+            {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
+        </div>
+
         <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
           <Button size="sm" variant="outline" onClick={onCloseModal}>
             Close

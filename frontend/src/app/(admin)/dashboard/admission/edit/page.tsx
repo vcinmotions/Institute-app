@@ -27,6 +27,12 @@ interface EnquiryData {
   name: string;
   email: string;
   courseId: string[];
+  alternateContact: string,
+  age: string,
+  location: string,
+  gender: string,
+  dob: string,
+  referedBy: string,
   contact: string;
 }
 
@@ -35,6 +41,12 @@ interface EnquiryDataNew {
   name: string;
   email: string;
   courseId: string[];
+   alternateContact: string,
+  age: string,
+  location: string,
+  gender: string,
+  dob: string,
+  referedBy: string,
   contact: string;
   enquiryCourse: any[];
 }
@@ -87,6 +99,12 @@ export default function AdmissionForm() {
     name: "",
     email: "",
     courseId: [],
+    alternateContact: "",
+    age: "",
+    location: "",
+    gender: "",
+    dob: "",
+    referedBy: "",
     contact: "",
     enquiryCourse: [],
   });
@@ -114,6 +132,12 @@ export default function AdmissionForm() {
     name: "",
     email: "",
     courseId: [],
+    alternateContact: "",
+    age: "",
+    location: "",
+    gender: "",
+    dob: "",
+    referedBy: "",
     contact: "",
   });
 
@@ -289,6 +313,14 @@ export default function AdmissionForm() {
       name: enquiryData.name || "",
       email: enquiryData.email || "",
       contact: enquiryData.contact || "",
+      alternateContact: enquiryData.alternateContact || "",
+      age: enquiryData.age || "",
+      location: enquiryData.location || "",
+      gender: enquiryData.gender || "",
+      dob: enquiryData.dob
+      ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+      : "",
+      referedBy: enquiryData.referedBy || "",
       courseId: courseIds, // -------------------------- FIXED
     });
   }, [enquiryData]);
@@ -311,6 +343,14 @@ export default function AdmissionForm() {
         name: enquiryData.name || "",
         email: enquiryData.email || "",
         courseId: courseIds, // ✅ set extracted course IDs
+         alternateContact: enquiryData.alternateContact || "",
+        age: enquiryData.age || "",
+        location: enquiryData.location || "",
+        gender: enquiryData.gender || "",
+        dob: enquiryData.dob
+        ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+        : "",
+        referedBy: enquiryData.referedBy || "",
         contact: enquiryData.contact || "",
       });
     }
@@ -374,14 +414,14 @@ export default function AdmissionForm() {
       formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
     }
 
-    setFilledEnquiryData((prev) => ({
+    setNewEnquiry((prev) => ({
       ...prev,
-      parentsContact: formattedNumber,
+      alternateContact: formattedNumber,
     }));
 
     setErrors((prev) => ({
       ...prev,
-      parentsContact: "",
+      alternateContact: "",
     }));
   };
 
@@ -930,7 +970,7 @@ export default function AdmissionForm() {
                 type="text"
                 placeholder="Enter DOB"
                 //maxLength={10} // e.g. 12:30 PM
-                value={filledEnquiryData.dob}
+                value={newEnquiry.dob}
                 onChange={(e) => handleDateChange("dob", e.target.value)}
               />
               {errors.dob && (
@@ -949,7 +989,7 @@ export default function AdmissionForm() {
                   }))}
                   placeholder="Select Gender"
                   onChange={(value) => handleChange("gender", value)}
-                  defaultValue={filledEnquiryData.gender} // just the courseId string
+                  value={newEnquiry.gender} // just the courseId string
                   className="dark:bg-dark-900"
                 />
                 <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">

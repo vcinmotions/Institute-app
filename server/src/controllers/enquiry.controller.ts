@@ -4,12 +4,12 @@ import { logActivity } from "../utils/activityLogger";
 import redis from "../redis/redis";
 
 export async function addEnquiryController(req: Request, res: Response) {
-  const { name, contact, course, source, email: enquiryEmail } = req.body;
+  const { name, contact, course, source, email: enquiryEmail, alternateContact, age, location, gender, dob, referedBy } = req.body;
 
   if (!name || !contact) {
     return res
       .status(400)
-      .json({ error: "Missing tenant email or Enquiry details" });
+      .json({ error: "Missing tenant Email or Contact Enquiry details" });
   }
 
   console.log("Enquiry data", name, contact, course, source);
@@ -119,7 +119,8 @@ export async function addEnquiryController(req: Request, res: Response) {
 }
 
 export async function addEnquiryControllerNew(req: Request, res: Response) {
-  const { name, contact, email, source, courseId } = req.body;
+  // const { name, contact, email, source, courseId } = req.body;
+  const { name, contact, courseId, source, email, alternateContact, age, location, gender, dob, referedBy } = req.body;
 
   if (!name || !contact) {
     return res.status(400).json({ error: "Missing required enquiry details" });
@@ -171,7 +172,13 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
         name,
         contact,
         email,
-        source,
+        source: source || null,
+        alternateContact: alternateContact || null,
+        age: age ? Number(age) : null,
+        location: location || null,
+        gender: gender || null,
+        dob: dob ? new Date(dob) : null,
+        referedBy: referedBy || null,
         clientAdminId,
       },
     });
@@ -219,7 +226,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
 }
 
 export async function editEnquiryController(req: Request, res: Response) {
-  const { id, name, contact, courseId, source, email: enquiryEmail } = req.body;
+  const { id, name, contact, courseId, source, email: enquiryEmail, alternateContact, age, dob, gender, location, referedBy } = req.body;
 
   console.log("get Edit Enquiry data", req.body);
 
@@ -259,7 +266,13 @@ export async function editEnquiryController(req: Request, res: Response) {
         name,
         contact,
         email: enquiryEmail,
-        source,
+        source: source || null,
+        alternateContact: alternateContact || null,
+        age: age ? Number(age) : null,
+        location: location || null,
+        gender: gender || null,
+        dob: dob ? new Date(dob) : null,
+        referedBy: referedBy || null,
         clientAdminId: clientAdminId,
       },
     });
@@ -361,8 +374,7 @@ export async function getEnquiryController(req: Request, res: Response) {
       sortOrder, // default descending
       leadStatus, // 👈 Add this
       courseId,
-      fromDate,
-      toDate,
+      createDate,
     } = req.query;
 
     console.log("get ALl Params:", sortField, sortOrder);
@@ -437,17 +449,21 @@ export async function getEnquiryController(req: Request, res: Response) {
             },
           }
         : {}),
-      ...(fromDate &&
-        toDate && {
-          paymentDate: {
-            gte: new Date(fromDate as string),
-            lte: new Date(toDate as string),
-          },
-        }),
-      ...(fromDate &&
-        !toDate && { paymentDate: { gte: new Date(fromDate as string) } }),
-      ...(!fromDate &&
-        toDate && { paymentDate: { lte: new Date(toDate as string) } }),
+      // ...(createDate && { createdAt: { gte: new Date(createDate as string) } }),
+        ...(createDate && (() => {
+    const start = new Date(createDate as string);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(createDate as string);
+    end.setHours(23, 59, 59, 999);
+
+    return {
+      createdAt: {
+        gte: start,
+        lte: end,
+      },
+    };
+  })()),
     };
 
     // if (leadStatus && typeof leadStatus === "string") {
@@ -534,6 +550,7 @@ export async function getEnquiryController(req: Request, res: Response) {
       totalPages,
       pageNum,
       limitNum,
+      totalCount,
       convertedCount,
       notConvertedCount,
       filteredEnquiries
@@ -544,6 +561,7 @@ export async function getEnquiryController(req: Request, res: Response) {
       enquiry,
       filteredEnquiries,
       totalPages,
+      totalCount,
       page: pageNum,
       limit: limitNum,
       convertedCount,

@@ -741,8 +741,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.19.1
-   * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+   * Prisma Client JS version: 6.16.2
+   * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
    */
   export type PrismaVersion = {
     client: string
@@ -755,7 +755,6 @@ export namespace Prisma {
    */
 
 
-  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -8629,10 +8628,12 @@ export namespace Prisma {
   }
 
   export type EnquiryAvgAggregateOutputType = {
+    age: number | null
     studentId: number | null
   }
 
   export type EnquirySumAggregateOutputType = {
+    age: number | null
     studentId: number | null
   }
 
@@ -8640,9 +8641,15 @@ export namespace Prisma {
     id: string | null
     name: string | null
     contact: string | null
+    alternateContact: string | null
     email: string | null
+    age: number | null
+    location: string | null
     course: string | null
+    gender: string | null
+    dob: Date | null
     source: string | null
+    referedBy: string | null
     leadStatus: $Enums.LeadStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8655,9 +8662,15 @@ export namespace Prisma {
     id: string | null
     name: string | null
     contact: string | null
+    alternateContact: string | null
     email: string | null
+    age: number | null
+    location: string | null
     course: string | null
+    gender: string | null
+    dob: Date | null
     source: string | null
+    referedBy: string | null
     leadStatus: $Enums.LeadStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8670,9 +8683,15 @@ export namespace Prisma {
     id: number
     name: number
     contact: number
+    alternateContact: number
     email: number
+    age: number
+    location: number
     course: number
+    gender: number
+    dob: number
     source: number
+    referedBy: number
     leadStatus: number
     createdAt: number
     updatedAt: number
@@ -8684,10 +8703,12 @@ export namespace Prisma {
 
 
   export type EnquiryAvgAggregateInputType = {
+    age?: true
     studentId?: true
   }
 
   export type EnquirySumAggregateInputType = {
+    age?: true
     studentId?: true
   }
 
@@ -8695,9 +8716,15 @@ export namespace Prisma {
     id?: true
     name?: true
     contact?: true
+    alternateContact?: true
     email?: true
+    age?: true
+    location?: true
     course?: true
+    gender?: true
+    dob?: true
     source?: true
+    referedBy?: true
     leadStatus?: true
     createdAt?: true
     updatedAt?: true
@@ -8710,9 +8737,15 @@ export namespace Prisma {
     id?: true
     name?: true
     contact?: true
+    alternateContact?: true
     email?: true
+    age?: true
+    location?: true
     course?: true
+    gender?: true
+    dob?: true
     source?: true
+    referedBy?: true
     leadStatus?: true
     createdAt?: true
     updatedAt?: true
@@ -8725,9 +8758,15 @@ export namespace Prisma {
     id?: true
     name?: true
     contact?: true
+    alternateContact?: true
     email?: true
+    age?: true
+    location?: true
     course?: true
+    gender?: true
+    dob?: true
     source?: true
+    referedBy?: true
     leadStatus?: true
     createdAt?: true
     updatedAt?: true
@@ -8827,9 +8866,15 @@ export namespace Prisma {
     id: string
     name: string
     contact: string
+    alternateContact: string | null
     email: string | null
+    age: number | null
+    location: string | null
     course: string | null
+    gender: string | null
+    dob: Date | null
     source: string | null
+    referedBy: string | null
     leadStatus: $Enums.LeadStatus
     createdAt: Date
     updatedAt: Date
@@ -8861,9 +8906,15 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     contact?: boolean
+    alternateContact?: boolean
     email?: boolean
+    age?: boolean
+    location?: boolean
     course?: boolean
+    gender?: boolean
+    dob?: boolean
     source?: boolean
+    referedBy?: boolean
     leadStatus?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8882,9 +8933,15 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     contact?: boolean
+    alternateContact?: boolean
     email?: boolean
+    age?: boolean
+    location?: boolean
     course?: boolean
+    gender?: boolean
+    dob?: boolean
     source?: boolean
+    referedBy?: boolean
     leadStatus?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8899,9 +8956,15 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     contact?: boolean
+    alternateContact?: boolean
     email?: boolean
+    age?: boolean
+    location?: boolean
     course?: boolean
+    gender?: boolean
+    dob?: boolean
     source?: boolean
+    referedBy?: boolean
     leadStatus?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8916,9 +8979,15 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     contact?: boolean
+    alternateContact?: boolean
     email?: boolean
+    age?: boolean
+    location?: boolean
     course?: boolean
+    gender?: boolean
+    dob?: boolean
     source?: boolean
+    referedBy?: boolean
     leadStatus?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8927,7 +8996,7 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "email" | "course" | "source" | "leadStatus" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
+  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "course" | "gender" | "dob" | "source" | "referedBy" | "leadStatus" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
   export type EnquiryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     followUps?: boolean | Enquiry$followUpsArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
@@ -8958,9 +9027,15 @@ export namespace Prisma {
       id: string
       name: string
       contact: string
+      alternateContact: string | null
       email: string | null
+      age: number | null
+      location: string | null
       course: string | null
+      gender: string | null
+      dob: Date | null
       source: string | null
+      referedBy: string | null
       leadStatus: $Enums.LeadStatus
       createdAt: Date
       updatedAt: Date
@@ -9398,9 +9473,15 @@ export namespace Prisma {
     readonly id: FieldRef<"Enquiry", 'String'>
     readonly name: FieldRef<"Enquiry", 'String'>
     readonly contact: FieldRef<"Enquiry", 'String'>
+    readonly alternateContact: FieldRef<"Enquiry", 'String'>
     readonly email: FieldRef<"Enquiry", 'String'>
+    readonly age: FieldRef<"Enquiry", 'Int'>
+    readonly location: FieldRef<"Enquiry", 'String'>
     readonly course: FieldRef<"Enquiry", 'String'>
+    readonly gender: FieldRef<"Enquiry", 'String'>
+    readonly dob: FieldRef<"Enquiry", 'DateTime'>
     readonly source: FieldRef<"Enquiry", 'String'>
+    readonly referedBy: FieldRef<"Enquiry", 'String'>
     readonly leadStatus: FieldRef<"Enquiry", 'LeadStatus'>
     readonly createdAt: FieldRef<"Enquiry", 'DateTime'>
     readonly updatedAt: FieldRef<"Enquiry", 'DateTime'>
@@ -41123,9 +41204,15 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     contact: 'contact',
+    alternateContact: 'alternateContact',
     email: 'email',
+    age: 'age',
+    location: 'location',
     course: 'course',
+    gender: 'gender',
+    dob: 'dob',
     source: 'source',
+    referedBy: 'referedBy',
     leadStatus: 'leadStatus',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -41562,6 +41649,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'LeadStatus'
    */
   export type EnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus'>
@@ -41579,20 +41680,6 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -42051,9 +42138,15 @@ export namespace Prisma {
     id?: StringFilter<"Enquiry"> | string
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
+    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     email?: StringNullableFilter<"Enquiry"> | string | null
+    age?: IntNullableFilter<"Enquiry"> | number | null
+    location?: StringNullableFilter<"Enquiry"> | string | null
     course?: StringNullableFilter<"Enquiry"> | string | null
+    gender?: StringNullableFilter<"Enquiry"> | string | null
+    dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
     source?: StringNullableFilter<"Enquiry"> | string | null
+    referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
     createdAt?: DateTimeFilter<"Enquiry"> | Date | string
     updatedAt?: DateTimeFilter<"Enquiry"> | Date | string
@@ -42071,9 +42164,15 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     contact?: SortOrder
+    alternateContact?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    age?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
     course?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
     source?: SortOrderInput | SortOrder
+    referedBy?: SortOrderInput | SortOrder
     leadStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -42095,9 +42194,15 @@ export namespace Prisma {
     NOT?: EnquiryWhereInput | EnquiryWhereInput[]
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
+    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     email?: StringNullableFilter<"Enquiry"> | string | null
+    age?: IntNullableFilter<"Enquiry"> | number | null
+    location?: StringNullableFilter<"Enquiry"> | string | null
     course?: StringNullableFilter<"Enquiry"> | string | null
+    gender?: StringNullableFilter<"Enquiry"> | string | null
+    dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
     source?: StringNullableFilter<"Enquiry"> | string | null
+    referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
     createdAt?: DateTimeFilter<"Enquiry"> | Date | string
     updatedAt?: DateTimeFilter<"Enquiry"> | Date | string
@@ -42114,9 +42219,15 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     contact?: SortOrder
+    alternateContact?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    age?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
     course?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
     source?: SortOrderInput | SortOrder
+    referedBy?: SortOrderInput | SortOrder
     leadStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -42137,9 +42248,15 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Enquiry"> | string
     name?: StringWithAggregatesFilter<"Enquiry"> | string
     contact?: StringWithAggregatesFilter<"Enquiry"> | string
+    alternateContact?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     email?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    age?: IntNullableWithAggregatesFilter<"Enquiry"> | number | null
+    location?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     course?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    gender?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    dob?: DateTimeNullableWithAggregatesFilter<"Enquiry"> | Date | string | null
     source?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    referedBy?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusWithAggregatesFilter<"Enquiry"> | $Enums.LeadStatus
     createdAt?: DateTimeWithAggregatesFilter<"Enquiry"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Enquiry"> | Date | string
@@ -44659,9 +44776,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44677,9 +44800,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44695,9 +44824,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44713,9 +44848,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44731,9 +44872,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44746,9 +44893,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44759,9 +44912,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47260,6 +47419,17 @@ export namespace Prisma {
     clientAdminId?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type EnumLeadStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
@@ -47270,17 +47440,6 @@ export namespace Prisma {
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type FollowUpListRelationFilter = {
@@ -47307,9 +47466,15 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     contact?: SortOrder
+    alternateContact?: SortOrder
     email?: SortOrder
+    age?: SortOrder
+    location?: SortOrder
     course?: SortOrder
+    gender?: SortOrder
+    dob?: SortOrder
     source?: SortOrder
+    referedBy?: SortOrder
     leadStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -47319,6 +47484,7 @@ export namespace Prisma {
   }
 
   export type EnquiryAvgOrderByAggregateInput = {
+    age?: SortOrder
     studentId?: SortOrder
   }
 
@@ -47326,9 +47492,15 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     contact?: SortOrder
+    alternateContact?: SortOrder
     email?: SortOrder
+    age?: SortOrder
+    location?: SortOrder
     course?: SortOrder
+    gender?: SortOrder
+    dob?: SortOrder
     source?: SortOrder
+    referedBy?: SortOrder
     leadStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -47341,9 +47513,15 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     contact?: SortOrder
+    alternateContact?: SortOrder
     email?: SortOrder
+    age?: SortOrder
+    location?: SortOrder
     course?: SortOrder
+    gender?: SortOrder
+    dob?: SortOrder
     source?: SortOrder
+    referedBy?: SortOrder
     leadStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -47353,7 +47531,24 @@ export namespace Prisma {
   }
 
   export type EnquirySumOrderByAggregateInput = {
+    age?: SortOrder
     studentId?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -47372,22 +47567,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -49931,6 +50110,14 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EnumLeadStatusFieldUpdateOperationsInput = {
     set?: $Enums.LeadStatus
   }
@@ -49993,14 +50180,6 @@ export namespace Prisma {
     upsert?: ClientAdminUpsertWithoutEnquiriesInput
     connect?: ClientAdminWhereUniqueInput
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutEnquiriesInput, ClientAdminUpdateWithoutEnquiriesInput>, ClientAdminUncheckedUpdateWithoutEnquiriesInput>
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type FollowUpUncheckedUpdateManyWithoutEnquiryNestedInput = {
@@ -52943,24 +53122,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumLeadStatusFilter<$PrismaModel>
-    _max?: NestedEnumLeadStatusFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -52986,6 +53147,24 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLeadStatusFilter<$PrismaModel>
+    _max?: NestedEnumLeadStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -53833,9 +54012,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53850,9 +54035,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -54568,9 +54759,15 @@ export namespace Prisma {
     id?: StringFilter<"Enquiry"> | string
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
+    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     email?: StringNullableFilter<"Enquiry"> | string | null
+    age?: IntNullableFilter<"Enquiry"> | number | null
+    location?: StringNullableFilter<"Enquiry"> | string | null
     course?: StringNullableFilter<"Enquiry"> | string | null
+    gender?: StringNullableFilter<"Enquiry"> | string | null
+    dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
     source?: StringNullableFilter<"Enquiry"> | string | null
+    referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
     createdAt?: DateTimeFilter<"Enquiry"> | Date | string
     updatedAt?: DateTimeFilter<"Enquiry"> | Date | string
@@ -55538,9 +55735,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55555,9 +55758,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55727,9 +55936,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55744,9 +55959,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55912,9 +56133,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55929,9 +56156,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55987,9 +56220,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56004,9 +56243,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56077,9 +56322,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56094,9 +56345,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56290,9 +56547,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56307,9 +56570,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56468,9 +56737,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56485,9 +56760,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56962,9 +57243,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56979,9 +57266,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66035,9 +66328,15 @@ export namespace Prisma {
     id?: string
     name: string
     contact: string
+    alternateContact?: string | null
     email?: string | null
+    age?: number | null
+    location?: string | null
     course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
     source?: string | null
+    referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -66779,9 +67078,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66796,9 +67101,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66813,9 +67124,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

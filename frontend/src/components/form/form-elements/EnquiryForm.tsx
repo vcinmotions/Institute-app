@@ -29,6 +29,12 @@ interface EnquiryData {
   name: string;
   email: string;
   course: string;
+  alternateContact: string,
+  age: number | null,
+  location: string,
+  gender: string,
+  dob: string,
+  referedBy: string,
   source: string;
   contact: string;
 }
@@ -38,6 +44,12 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
     name: "",
     email: "",
     course: "",
+    alternateContact: "",
+    age: null,
+    location: "",
+    gender: "",
+    dob: "",
+    referedBy: "",
     source: "",
     contact: "",
   });
@@ -70,6 +82,12 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
       }, []);
 
   console.log("Get Courses Name in Enquiry Form:", courses);
+
+   const genders = [
+    { value: "female", label: "Female" },
+    { value: "male", label: "Male" },
+    { value: "other", label: "Other" },
+  ];
 
   const {
     data: courseData,
@@ -119,6 +137,24 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
   }));
 };
 
+ const handleAlternatePhoneNumberChange = (phoneNumber: string, countryCode = "+91") => {
+  // If phoneNumber doesn't start with +, prepend selected country code
+  let formattedNumber = phoneNumber;
+  if (!phoneNumber.startsWith("+")) {
+    formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
+  }
+
+  setNewEnquiry((prev) => ({
+    ...prev,
+    alternateContact: formattedNumber,
+  }));
+
+  setErrors((prev) => ({
+    ...prev,
+    contact: "",
+  }));
+};
+
 
   const options = [
     { value: "linkedin", label: "LinkedIn" },
@@ -160,7 +196,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (field: keyof EnquiryData, value: string) => {
+  const handleChange = (field: keyof EnquiryData, value: string | number | null) => {
     setNewEnquiry((prev) => ({
       ...prev,
       [field]: value,
@@ -238,7 +274,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
 
   createEnquiry(newEnquiry, {
     onSuccess: () => {
-      setNewEnquiry({ name: "", email: "", course: "", source: "", contact: "" });
+      setNewEnquiry({ name: "", email: "", course: "", source: "", alternateContact: "", age: null, location: "", gender: "", dob: "", referedBy: "", contact: "" });
 
       setAlert({
         show: true,
@@ -276,7 +312,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             showLink={false}
           />)}
         <div>
-          <Label>Name</Label>
+          <Label>Name *</Label>
           <Input
           ref={firstInputRef}
             type="text"
@@ -304,7 +340,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
           </div>
         </div>
         <div>
-          <Label>Phone</Label>
+          <Label>Conatct No. *</Label>
           <PhoneInput
            tabIndex={3}
             selectPosition="start"
@@ -315,6 +351,69 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
           />
            {errors.contact && <p className="text-red-500 text-sm">{errors.contact}</p>}
         </div>{" "}
+
+       <div>
+          <Label>Alternate Conatct No.</Label>
+          <PhoneInput
+           tabIndex={3}
+            selectPosition="start"
+            countries={countries}
+            placeholder="+91 55555 00000"
+            
+            onChange={handleAlternatePhoneNumberChange}
+          />
+           {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
+        </div>{" "}
+
+        <div>
+          <Label>Age</Label>
+          <Input
+            type="number"
+            placeholder="Enter Age"
+            value={newEnquiry.age as number}
+            tabIndex={1}
+            onChange={(e) => handleChange("age", e.target.value)}         />
+            {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
+        </div>
+
+        <div className="relative">
+            <Select
+              tabIndex={8}
+              options={genders.map((item) => ({
+                label: item.label,
+                value: item.value,
+              }))}
+              placeholder="Select Gender"
+              onChange={(value) => handleChange("gender", value)}
+              defaultValue={newEnquiry.gender} // just the courseId string
+              className="dark:bg-dark-900"
+            />
+            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+              <ChevronDownIcon />
+            </span>
+          </div>
+
+        <div>
+          <Label>Location</Label>
+          <Input
+            type="text"
+            placeholder="Enter Age"
+            value={newEnquiry.location}
+            tabIndex={1}
+            onChange={(e) => handleChange("location", e.target.value)}         />
+            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
+        </div>
+
+        <div>
+          <Label>DoB</Label>
+          <Input
+            type="text"
+            placeholder="Enter Age"
+            value={newEnquiry.dob}
+            tabIndex={1}
+            onChange={(e) => handleChange("dob", e.target.value)}         />
+            {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
+        </div>
 
         {/* <div>
           <Label>Email</Label>
@@ -367,6 +466,17 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             </span>
           </div>
           {errors.course && <p className="text-red-500 text-sm">{errors.course}</p>}
+        </div>
+
+        <div>
+          <Label>Refered By</Label>
+          <Input
+            type="text"
+            placeholder="Enter Age"
+            value={newEnquiry.referedBy}
+            tabIndex={1}
+            onChange={(e) => handleChange("referedBy", e.target.value)}         />
+            {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
         </div>
 
         <div>

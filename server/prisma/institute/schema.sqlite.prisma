@@ -97,6 +97,12 @@ model Enquiry {
   email        String?
   course       String?
   source       String?
+  alternateContact      String?
+  age          Int?
+  location     String?
+  gender       String?
+  dob          DateTime?
+  referedBy    String?
   leadStatus   LeadStatus  @default(WARM)
   followUps    FollowUp[]
   createdAt    DateTime    @default(now())

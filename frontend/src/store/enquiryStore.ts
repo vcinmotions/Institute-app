@@ -2,10 +2,16 @@ import { create } from "zustand";
 
 interface EnquiryFormData {
   name: string;
-  course: string;
+  courseId: string[];
   email: string;
   source: string;
   contact: string;
+  alternateContact: string,
+  age: string,
+  location: string,
+  gender: string,
+  dob: string,
+  referedBy: string,
   // ---- add your fields here ----
 }
 

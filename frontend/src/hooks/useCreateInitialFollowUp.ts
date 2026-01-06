@@ -15,6 +15,7 @@ export const useCreateInitialFollowUp = () => {
       enquiryId: string;
       remark: string;
       scheduledAt: string;
+      searchQuery: string;
       currentPage: number
     }) => {
       if (!token) throw new Error("No token in useCreateInitialFollowUp");
@@ -23,16 +24,17 @@ export const useCreateInitialFollowUp = () => {
       await createInitialFolowUpAPI(token, newFollowUpData);
 
       // Return payload for use in onSuccess
-      return { token, enquiryId: newFollowUpData.enquiryId, currentPage: newFollowUpData.currentPage };
+      return { token, enquiryId: newFollowUpData.enquiryId, currentPage: newFollowUpData.currentPage, searchQuery: newFollowUpData.searchQuery };
     },
 
-    onSuccess: async ({ token, enquiryId, currentPage }) => {
+    onSuccess: async ({ token, enquiryId, currentPage, searchQuery }) => {
       try {
         // Fetch updated enquiry list
         const updatedEnquiry = await getEnquiry({
           token,
           page: currentPage,
           limit: 5,
+          search: searchQuery,
           sortField: "createdAt",
         });
 

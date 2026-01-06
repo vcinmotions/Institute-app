@@ -5,6 +5,7 @@ interface EnquiryState {
   enquiries: any[];
   filteredEnquiries: any[]; // 🆕 Add this
   loading: boolean;
+  searchQuery: string,
   error: string | null;
   total: number; // ✅ New field
   currentPage: number; // ✅ New field
@@ -18,6 +19,7 @@ const initialState: EnquiryState = {
   filteredEnquiries: [], // 🆕 Initialize it
   loading: false,
   error: null,
+  searchQuery: "",
   total: 0,
   currentPage: 1,
   totalConverted: 0,
@@ -43,6 +45,9 @@ const enquirySlice = createSlice({
     setTotal(state, action: PayloadAction<number>) {
       state.total = action.payload;
     },
+    setSearchQuery(state, action: PayloadAction<string>) {
+      state.searchQuery = action.payload;
+    },
     setCurrentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
     },
@@ -56,5 +61,5 @@ const enquirySlice = createSlice({
 });
 
 // Export actions and reducer
-export const { setEnquiries, setLoading, setError, setTotal, setTotalNotConverted, setTotalConverted, setFilteredEnquiries, setCurrentPage } = enquirySlice.actions;
+export const { setEnquiries, setLoading, setError, setTotal, setSearchQuery, setTotalNotConverted, setTotalConverted, setFilteredEnquiries, setCurrentPage } = enquirySlice.actions;
 export default enquirySlice.reducer;

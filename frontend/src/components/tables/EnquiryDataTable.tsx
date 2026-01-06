@@ -258,7 +258,9 @@ export default function EnquiryDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                  <button
+                  <span className="flex items-center gap-1">
+                  Status
+                  {/* <button
                     type="button"
                     className="flex items-center gap-1"
                     onClick={() => onLeadStatus("leadStatus")}
@@ -269,7 +271,16 @@ export default function EnquiryDataTable({
                         ? "▲"
                         : "▼"}
                     </span>
-                  </button>
+                  </button> */}
+                  <Tooltip
+                    className="rounded bg-gray-200 text-[10px] mb-1.5"
+                    content="WARM: Create Initial Follow-Up"
+                  >
+                    <span className="cursor-pointer text-xl text-gray-600">
+                      🛈
+                    </span>
+                  </Tooltip>
+                  </span>
                 </TableCell>
                 {/* <TableCell
                   isHeader

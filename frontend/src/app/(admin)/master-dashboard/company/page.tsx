@@ -235,25 +235,35 @@ export default function Company() {
 
   const handleChange = (field: keyof CompanyData, value: string) => {
     if (field === "instituteName") {
-      // const cleaned = value
-      //   .toLowerCase()
-      //   .replace(/[^a-z0-9]/gi, "")
-      //   .substring(0, 20);
+      const cleaned = value
+        .toLowerCase()
+
+      setNewCompany((prev) => ({
+        ...prev,
+        name: cleaned,
+        instituteName: cleaned,
+      }));
+      setField("instituteName", cleaned);
+      return;
+    }
+
+    if (field === "email") {
+      const cleaned = value
+        .toLowerCase()
 
       setNewCompany((prev) => ({
         ...prev,
         name: value,
-        instituteName: value,
+        email: cleaned,
       }));
-      setField("name", value);
-      setField("instituteName", value);
+      setField("email", cleaned);
       return;
     }
 
     if (field === "password") {
       setNewCompany((prev) => ({
         ...prev,
-        password: value.trim().toLowerCase(),
+        password: value,
       }));
 
       setField("password", value);
@@ -389,6 +399,7 @@ export default function Company() {
     selectedStamp,
   );
   console.log("get all data Company Store adat:", form);
+  console.log("get all data Company:", newCompany);
 
   return (
     <div>
@@ -435,6 +446,7 @@ export default function Company() {
                 type="text"
                 placeholder="Enter Institute Name"
                 value={newCompany.instituteName}
+                className="capitalize"
                 onChange={(e) => handleChange("instituteName", e.target.value)}
               />
               {errors.instituteName && (
@@ -449,6 +461,7 @@ export default function Company() {
                 type="text"
                 placeholder="Enter Display Name"
                 value={newCompany.name}
+                className="capitalize"
                 onChange={(e) => handleChange("name", e.target.value)}
               />
               {errors.name && (
@@ -463,6 +476,7 @@ export default function Company() {
                 type="text"
                 placeholder="Enter Username"
                 value={newCompany.email}
+                className="capitalize"
                 onChange={(e) => handleChange("email", e.target.value)}
               />
               {errors.email && (

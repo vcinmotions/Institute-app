@@ -30,6 +30,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
   const [scheduledAt, setScheduledAt] = useState<string>("");
   const [errors, setErrors] = useState<Partial<FollowUpData>>({});
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
 
   const dispatch = useDispatch();
   
@@ -50,6 +51,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
   const { mutate: createInitialFollowUp } = useCreateInitialFollowUp();
   console.log("Creating follow-up for Enquiry ID:", enquiryId);
   console.log("CURRENTTTT PAGE IN CREATE NEW FOLLOW_UP:", currentPage);
+  console.log("searchQuery PAGE IN CREATE NEW FOLLOW_UP:", searchQuery);
 
   const error = useSelector((state: RootState) => state.enquiry.error);
 
@@ -108,6 +110,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
         remark,
         currentPage,
         scheduledAt: isoScheduledAt,
+        searchQuery
       });
 
       // Reset form and close modal

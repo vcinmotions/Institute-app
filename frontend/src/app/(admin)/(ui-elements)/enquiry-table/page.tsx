@@ -12,6 +12,8 @@ import {
   setCurrentPage,
   setEnquiries,
   setFilteredEnquiries,
+  setSearchQuery,
+  setTotal,
 } from "@/store/slices/enquirySlice";
 import React, { ChangeEvent, FormEvent, useState, useEffect, useRef } from "react";
 import StudentCard from "@/components/common/StudentCard";
@@ -24,12 +26,14 @@ import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
 
 export default function EnquiryTable() {
   const [showForm, setShowForm] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const enquiries = useSelector((state: RootState) => state.enquiry.enquiries);
   const courses = useSelector((state: RootState) => state.course.courses);
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const totalCount = useSelector((state: RootState) => state.enquiry.total);
+  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
   const [loading, setLoading] = useState<boolean>(false);
   const [sortField, setSortField] = useState("createdAt");
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null>(
@@ -114,7 +118,8 @@ export default function EnquiryTable() {
   // Debounce effect: update searchQuery 1 second after user stops typing
   useEffect(() => {
     const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
+      // setSearchQuery(searchInput);
+      dispatch(setSearchQuery(searchInput));
       dispatch(setCurrentPage(1)); // reset page when search changes
     }, 300);
 
@@ -164,6 +169,7 @@ export default function EnquiryTable() {
         dispatch(setEnquiries(response.enquiry || []));
         dispatch(setFilteredEnquiries(response.filteredEnquiries)); // filtered ones
         setTotalPages(response.totalPages || 1);
+        dispatch(setTotal(response.totalCount || 0));
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       } finally {
@@ -261,8 +267,7 @@ export default function EnquiryTable() {
                   type: "select",
                   options: courseOptions,
                 },
-                { label: "From Date", key: "fromDate", type: "date" },
-                { label: "To Date", key: "toDate", type: "date" },
+                { label: "Create Date", key: "createDate", type: "date" },
               ]}
             />
 
@@ -305,6 +310,8 @@ export default function EnquiryTable() {
 
           <Pagination
             currentPage={currentPage}
+            totalCount={totalCount}
+            title="Enquiries"
             totalPages={totalPages}
             onPageChange={handlePagination}
           />

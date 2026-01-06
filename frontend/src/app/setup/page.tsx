@@ -26,6 +26,11 @@ export default function SetupPage() {
     const form = new FormData(e.target);
     const data = Object.fromEntries(form.entries());
 
+    // 🔹 force email to lowercase
+    if (typeof data.email === "string") {
+      data.email = data.email.toLowerCase();
+    }
+
     try {
       const res = await fetch("http://localhost:5001/api/setup", {
         method: "POST",
@@ -78,7 +83,7 @@ export default function SetupPage() {
 
           <div>
             <Label>Institite Name</Label>
-            <Input name="name" placeholder="Enter Institute Name" />
+            <Input name="name" className="captalize" placeholder="Enter Institute Name" />
           </div>
 
           <div>

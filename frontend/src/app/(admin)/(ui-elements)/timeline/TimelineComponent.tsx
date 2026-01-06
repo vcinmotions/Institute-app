@@ -177,7 +177,7 @@ export default function TimelineDatatable({
                     </td>
                     <td className="py-2 font-medium">
                       {" "}
-                      {fineEnquiryById?.contact}
+                      +91 {fineEnquiryById?.contact}
                     </td>
                   </tr>
 
