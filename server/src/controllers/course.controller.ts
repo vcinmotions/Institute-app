@@ -46,8 +46,7 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
     !admissionDate ||
     !batchId ||
     !feeAmount ||
-    !paymentType ||
-    !installmentTypeId
+    !paymentType
   ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -176,20 +175,37 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
       });
     }
 
-    const courseFeeStructure = await tenantPrisma.courseFeeStructure.findUnique(
-      {
-        where: {
-          id: Number(courseId),
-        },
-        include: {
-          installments: {
-            where: {
-              id: Number(installmentTypeId),
+    // const courseFeeStructure = await tenantPrisma.courseFeeStructure.findUnique(
+    //   {
+    //     where: {
+    //       id: Number(courseId),
+    //     },
+    //     include: {
+    //       installments: {
+    //         where: {
+    //           id: Number(installmentTypeId),
+    //         },
+    //       },
+    //     },
+    //   }
+    // );
+
+    // 🔍 Fetch course fee structure
+    // 🔍 Fetch course fee structure
+    const courseFeeStructure = await tenantPrisma.courseFeeStructure.findUnique({
+      where: {
+        id: Number(courseId),
+      },
+      include: paymentType === "INSTALLMENT"
+        ? {
+            installments: {
+              where: {
+                id: Number(installmentTypeId),
+              },
             },
-          },
-        },
-      }
-    );
+          }
+        : undefined, // ✅ Use undefined instead of false
+    });
 
     console.log(
       "GET CPURSE FEE STURCURE FOR STUDENT INPORTANT:",
@@ -227,7 +243,13 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
         paymentType, // from req.body ('ONE_TIME' or 'INSTALLMENT')
         clientAdminId,
 
-        installmentTypeId: Number(installmentTypeId || null),
+        // installmentTypeId: Number(installmentTypeId || null),
+
+        // Only set installmentTypeId if payment type is INSTALLMENT
+        installmentTypeId:
+          paymentType === "INSTALLMENT" && installmentTypeId
+            ? Number(installmentTypeId)
+            : null,
       },
     });
 

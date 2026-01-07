@@ -687,6 +687,8 @@ export async function createTenant(
     throw new Error("All required tenant fields must be provided");
   }
 
+  console.log("GET ALL CREATE TENANT DATA HERE :::::::::", name, instituteName, email);
+
   const tenantId = Math.floor(100000000 + Math.random() * 900000000);
   const dbName = `tenant_${tenantId}`;
 

@@ -114,7 +114,7 @@ export default function CompleteFollowUpModal({
             ref={firstInputRef}
             tabIndex={1}
             value={remark}
-            className="w-full rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            className="w-full capitalize rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
             onChange={(value) => setRemark(value)}
             rows={6}
             placeholder="Interview Follow-Up Schedule"

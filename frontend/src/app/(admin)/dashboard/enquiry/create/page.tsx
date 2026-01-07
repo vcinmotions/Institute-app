@@ -40,7 +40,6 @@ interface EnquiryData {
   email: string;
   courseId: string[];
   alternateContact: string,
-  age: string,
   location: string,
   gender: string,
   dob: string,
@@ -56,7 +55,6 @@ export default function EnquiryForm() {
     email: "",
     courseId: [],
     alternateContact: "",
-    age: "",
     location: "",
     gender: "",
     dob: "",
@@ -229,10 +227,19 @@ export default function EnquiryForm() {
   };
 
   const handleChange = (field: keyof EnquiryData, value: string | string[]) => {
+  
     setNewEnquiry((prev) => ({
       ...prev,
-      [field]: value,
+      [field]:
+        field === "name" && typeof value === "string"
+          ? value.toLowerCase()
+          : value,
     }));
+
+    // setNewEnquiry((prev) => ({
+    //   ...prev,
+    //   [field]: value,
+    // }));
 
     setField(field, value); // <-- IMPORTANT
 
@@ -284,7 +291,7 @@ export default function EnquiryForm() {
     //   source: "",
     //   contact: "",
     // });
-    setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", age: "", location: "", gender: "", dob: "", referedBy: "", contact: "" });
+    setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", gender: "", dob: "", referedBy: "", contact: "" });
 
     firstInputRef.current?.focus();
   };
@@ -376,7 +383,7 @@ export default function EnquiryForm() {
         //   source: "",
         //   contact: "",
         // });
-        setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", age: "", location: "", gender: "", dob: "", referedBy: "", contact: "" });
+        setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", gender: "", dob: "", referedBy: "", contact: "" });
 
         setAlert({
           show: true,
@@ -429,6 +436,7 @@ export default function EnquiryForm() {
             <Input
               ref={firstInputRef}
               type="text"
+              className="capitalize"
               placeholder="Info Demo"
               value={newEnquiry.name}
               tabIndex={1}
@@ -482,17 +490,6 @@ export default function EnquiryForm() {
           />
            {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}
-
-        <div>
-          <Label>Age</Label>
-          <Input
-            type="text"
-            placeholder="Enter Age"
-            value={newEnquiry.age}
-            tabIndex={5}
-            onChange={(e) => handleChange("age", e.target.value)}         />
-            {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
-        </div>
 
        <div>
           <Label>Gender</Label>

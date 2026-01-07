@@ -304,6 +304,15 @@ export default function AdmissionForm() {
   useEffect(() => {
     if (!enquiryData || !enquiryData.enquiryCourse) return;
 
+      let dobValue = "";
+    if (enquiryData.dob) {
+      const date = new Date(enquiryData.dob);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      dobValue = `${day}-${month}-${year}`; // DD-MM-YYYY
+    }
+
     const courseIds = enquiryData.enquiryCourse.map((c: any) =>
       String(c.courseId),
     );
@@ -324,6 +333,33 @@ export default function AdmissionForm() {
       courseId: courseIds, // -------------------------- FIXED
     });
   }, [enquiryData]);
+
+  useEffect(() => {
+  if (!enquiryData) return;
+
+  let dobValue = "";
+  if (enquiryData.dob) {
+    const date = new Date(enquiryData.dob);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
+  }
+
+  setFilledEnquiryData((prev) => ({
+    ...prev,
+    dob: dobValue,
+    gender: enquiryData.gender || "",
+    parentsContact: enquiryData.alternateContact || "", // default to ""
+  }));
+
+  // Also set in newEnquiry if needed for internal use
+  setNewEnquiry((prev) => ({
+    ...prev,
+    dob: dobValue,
+  }));
+}, [enquiryData]);
+
 
   useEffect(() => {
     if (
@@ -414,14 +450,14 @@ export default function AdmissionForm() {
       formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
     }
 
-    setNewEnquiry((prev) => ({
+    setFilledEnquiryData((prev) => ({
       ...prev,
-      alternateContact: formattedNumber,
+      parentsContact: formattedNumber,
     }));
 
     setErrors((prev) => ({
       ...prev,
-      alternateContact: "",
+      parentsContact: "",
     }));
   };
 
@@ -956,6 +992,7 @@ export default function AdmissionForm() {
                 tabIndex={6}
                 selectPosition="start"
                 countries={countries}
+                value={filledEnquiryData.parentsContact}
                 placeholder="Enter Alternate Contact no."
                 onChange={handlePhoneNumberChange}
               />
@@ -970,7 +1007,7 @@ export default function AdmissionForm() {
                 type="text"
                 placeholder="Enter DOB"
                 //maxLength={10} // e.g. 12:30 PM
-                value={newEnquiry.dob}
+                value={filledEnquiryData.dob}
                 onChange={(e) => handleDateChange("dob", e.target.value)}
               />
               {errors.dob && (
@@ -989,7 +1026,7 @@ export default function AdmissionForm() {
                   }))}
                   placeholder="Select Gender"
                   onChange={(value) => handleChange("gender", value)}
-                  value={newEnquiry.gender} // just the courseId string
+                  value={filledEnquiryData.gender} // just the courseId string
                   className="dark:bg-dark-900"
                 />
                 <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">

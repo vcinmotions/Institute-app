@@ -32,7 +32,6 @@ interface EnquiryData {
   email: string;
   courseId: string[];
   alternateContact: string,
-  age: string,
   location: string,
   gender: string,
   dob: string,
@@ -52,7 +51,6 @@ export default function EditEnquiryForm({
     email: "",
     courseId: [],
     alternateContact: "",
-    age: "",
     location: "",
     gender: "",
     dob: "",
@@ -140,7 +138,6 @@ export default function EditEnquiryForm({
         email: enquiryData.email || "",
         courseId: courseIds, // ✅ set extracted course IDs
         alternateContact: enquiryData.alternateContact || "",
-        age: enquiryData.age || "",
         location: enquiryData.location || "",
         gender: enquiryData.gender || "",
         dob: enquiryData.dob
@@ -291,7 +288,6 @@ export default function EditEnquiryForm({
           email: "",
           courseId: [],
           alternateContact: "",
-          age: "",
           location: "",
           gender: "",
           dob: "",
@@ -341,6 +337,7 @@ export default function EditEnquiryForm({
           <Input
             ref={firstInputRef}
             type="text"
+            className="capitalize"
             placeholder="Info Demo"
             value={newEnquiry.name}
             tabIndex={1}
@@ -392,17 +389,6 @@ export default function EditEnquiryForm({
           />
            {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}
-
-        <div>
-          <Label>Age</Label>
-          <Input
-            type="text"
-            placeholder="Enter Age"
-            value={newEnquiry.age}
-            tabIndex={5}
-            onChange={(e) => handleChange("age", e.target.value)}         />
-            {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
-        </div>
 
        <div>
           <Label>Gender</Label>

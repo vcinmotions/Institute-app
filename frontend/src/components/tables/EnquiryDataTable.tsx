@@ -337,7 +337,7 @@ export default function EnquiryDataTable({
                           <Avatar name={item.name} size={30} />
                         </div>
                         <div>
-                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90 capitalize">
                             {item.name}
                           </span>
                           {/* <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
@@ -359,7 +359,7 @@ export default function EnquiryDataTable({
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       <span>
                         {item.enquiryCourse.map((c: any, index: any) => (
-                          <div key={index}>{c.course.name}</div>
+                          <div className="capitalize" key={index}>{c.course.name}</div>
                         ))}
                       </span>
                     </TableCell>

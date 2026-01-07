@@ -233,19 +233,39 @@ export default function Company() {
     setNewCompany((prev) => ({ ...prev, password: password.join("") }));
   };
 
+  const capitalizeWords = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+
   const handleChange = (field: keyof CompanyData, value: string) => {
     if (field === "instituteName") {
       const cleaned = value
         .toLowerCase()
 
+      const displayName = capitalizeWords(value);
+
       setNewCompany((prev) => ({
         ...prev,
-        name: cleaned,
+        name: displayName,
         instituteName: cleaned,
       }));
       setField("instituteName", cleaned);
+      setField("name", displayName);
       return;
     }
+
+    if (field === "name") {
+    const displayName = capitalizeWords(value);
+
+    setNewCompany((prev) => ({
+      ...prev,
+      name: displayName,
+    }));
+
+    setField("name", displayName);
+    return;
+  }
 
     if (field === "email") {
       const cleaned = value
@@ -253,7 +273,6 @@ export default function Company() {
 
       setNewCompany((prev) => ({
         ...prev,
-        name: value,
         email: cleaned,
       }));
       setField("email", cleaned);
@@ -476,7 +495,6 @@ export default function Company() {
                 type="text"
                 placeholder="Enter Username"
                 value={newCompany.email}
-                className="capitalize"
                 onChange={(e) => handleChange("email", e.target.value)}
               />
               {errors.email && (

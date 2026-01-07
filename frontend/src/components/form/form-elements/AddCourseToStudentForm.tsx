@@ -418,7 +418,7 @@ export default function CourseForm({
       });
 
       // optional: close modal
-      // setTimeout(() => onCloseModal(), 3000);
+      setTimeout(() => onCloseModal(), 2000);
     } catch (error: any) {
       console.error("Error creating course:", error);
       setAlert({

@@ -141,7 +141,7 @@ export default function TimelineDatatable({
     <ModalCard title="Follow-Up " oncloseModal={onClose}>
       <div>
         {/* <PageBreadcrumb pageTitle="Blank Page" /> */}
-        <div className="mb-4 h-max rounded-2xl border border-gray-200 bg-white px-5 py-7 xl:px-10 xl:py-12 dark:border-gray-800 dark:bg-white/[0.03]">
+        {/* <div className="mb-4 h-max rounded-2xl border border-gray-200 bg-white px-5 py-7 xl:px-10 xl:py-12 dark:border-gray-800 dark:bg-white/[0.03]">
           <div className="mx-auto w-full max-w-[900px] text-center">
             <h4 className="mb-6 text-lg font-semibold text-gray-800 dark:text-white/90">
               Enquiry Details
@@ -201,7 +201,123 @@ export default function TimelineDatatable({
               </table>
             </div>
           </div>
+        </div> */}
+
+        <div className="mb-4 rounded-2xl border border-gray-200 bg-white px-6 py-8 dark:border-gray-800 dark:bg-white/[0.03]">
+          <h4 className="mb-10 text-center text-lg font-semibold text-gray-800 dark:text-white/90">
+            Enquiry Details
+          </h4>
+
+          <div className="relative mx-auto max-w-4xl">
+            {/* Vertical Line */}
+            <div className="absolute left-3.5 top-0 h-full w-px bg-gray-200 dark:bg-gray-700" />
+
+            {/* ===== BASIC DETAILS ===== */}
+            <div className="relative mb-10 flex gap-6">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white font-semibold">
+                1
+              </div>
+
+              <div className="w-full rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
+                <h5 className="mb-4 font-semibold text-gray-800 dark:text-white">
+                  Basic Details
+                </h5>
+
+                <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 lg:grid-cols-2">
+                  <p><span className="text-gray-500">Enquiry ID:</span> {fineEnquiryById?._id}</p>
+                  <p className="capitalize"><span className="text-gray-500">Name:</span> {fineEnquiryById?.name}</p>
+                  <p><span className="text-gray-500">Email:</span> {fineEnquiryById?.email || "-"}</p>
+                  <p><span className="text-gray-500">Dob:</span> { " " }{fineEnquiryById?.dob?.split('T')[0]}</p>
+                  <p><span className="text-gray-500">Contact:</span> +91 {fineEnquiryById?.contact}</p>
+                  <p><span className="text-gray-500">Alternate:</span> +91 {fineEnquiryById?.alternateContact}</p>
+                  <p className="capitalize"><span className="text-gray-500">Gender:</span> {fineEnquiryById?.gender || "-"}</p>
+                  <p className="capitalize"><span className="text-gray-500">Location:</span> {fineEnquiryById?.location || "-"}</p>
+                  <p className="capitalize"><span className="text-gray-500">Sourse:</span> {fineEnquiryById?.source || "-"}</p>
+                  <p className="capitalize"><span className="text-gray-500">Refered By:</span> {fineEnquiryById?.referedBy || "-"}</p>
+                  <p>
+                    <span className="text-gray-500">Follow-Up Status:</span>{" "}
+                    <span className={`font-medium ${
+                      fineEnquiryById?.leadStatus === "WON" ? "text-green-600" : "text-red-500"
+                    }`}>
+                      {fineEnquiryById?.leadStatus === "WON" ? "Completed" : "Pending"}
+                    </span>
+                  </p>
+                  <p>
+                    <span className="text-gray-500">Status:</span>{" "}
+                    <span className={`font-medium ${
+                      fineEnquiryById?.isConverted ? "text-green-600" : "text-red-500"
+                    }`}>
+                      {fineEnquiryById?.isConverted === false ? "Nil" : "Done"}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ===== COURSE DETAILS ===== */}
+            <div className="relative mb-10 flex gap-6">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white font-semibold">
+                2
+              </div>
+
+              <div className="w-full rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
+                <h5 className="mb-4 font-semibold text-gray-800 dark:text-white">
+                  Course Interested
+                </h5>
+
+                <ul className="list-inside list-disc text-sm">
+                  {fineEnquiryById?.enquiryCourse?.length ? (
+                    fineEnquiryById.enquiryCourse.map((cr: any, index: number) => (
+                      <li className="capitalize" key={index}>{cr.course?.name}</li>
+                    ))
+                  ) : (
+                    <li>-</li>
+                  )}
+                </ul>
+              </div>
+            </div>
+
+            {/* ===== FOLLOW-UP & ASSIGNMENT ===== */}
+            {/* <div className="relative mb-10 flex gap-6">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white font-semibold">
+                3
+              </div>
+
+              <div className="w-full rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
+                <h5 className="mb-4 font-semibold text-gray-800 dark:text-white">
+                  Follow-up & Assignment
+                </h5>
+
+                <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
+                  <p><span className="text-gray-500">Assigned To:</span> {fineEnquiryById?.assignedTo?.name || "-"}</p>
+                  <p><span className="text-gray-500">Follow-up Date:</span> {fineEnquiryById?.followUpDate
+                    ? new Date(fineEnquiryById.followUpDate).toLocaleDateString()
+                    : "-"}</p>
+                  <p><span className="text-gray-500">Created At:</span> {new Date(fineEnquiryById?.createdAt).toLocaleString()}</p>
+                  <p><span className="text-gray-500">Last Updated:</span> {new Date(fineEnquiryById?.updatedAt).toLocaleString()}</p>
+                </div>
+              </div>
+            </div> */}
+
+            {/* ===== REMARKS ===== */}
+            {/* <div className="relative flex gap-6">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white font-semibold">
+                4
+              </div>
+
+              <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
+                <h5 className="mb-4 font-semibold text-gray-800 dark:text-white">
+                  Remarks / Notes
+                </h5>
+
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  {fineEnquiryById?.remarks || "No remarks added."}
+                </p>
+              </div>
+            </div> */}
+          </div>
         </div>
+
 
         {/* <path
   fillRule="evenodd"
@@ -214,7 +330,7 @@ export default function TimelineDatatable({
             <h4 className="text-lg font-semibold text-gray-800 lg:mb-6 dark:text-white/90">
               Follow-Up Timeline
             </h4>
-            <ul className="timeline timeline-vertical sm:ml-[-160px] lg:ml-[-200px]">
+            <ul className="timeline timeline-vertical w-full sm:ml-[-160px] lg:ml-[-150px]">
               <li>
                 <div className="timeline-middle">
                   <svg
@@ -251,14 +367,14 @@ export default function TimelineDatatable({
                   </svg>
                 </div>
                 {/* <div className="timeline-end timeline-box">First Macintosh computer</div> */}
-                <div className="timeline-end flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                 <div className="timeline-end w-full max-w-none flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
                   {/* Remark / Title */}
                   {/* <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
                     {firstItem.remark}
                   </p> */}
 
-                  <div className="flex justify-between gap-4">
-                      <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
+                  <div className="flex w-full items-start justify-between gap-4">
+                      <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white capitalize">
                         {firstItem.remark}
                       </p>
 
@@ -349,10 +465,10 @@ export default function TimelineDatatable({
                         )}
                       </svg>
                     </div>
-                    <div className="timeline-end flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                     <div className="timeline-end w-full max-w-none flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
                       {/* Remark / Title */}
-                      <div className="flex justify-between gap-4">
-                      <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
+                      <div className="flex w-full items-start justify-between gap-4">
+                      <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white capitalize">
                         {item.remark}
                       </p>
 
@@ -442,10 +558,10 @@ export default function TimelineDatatable({
                       )}
                     </svg>
                   </div>
-                  <div className="timeline-end flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                   <div className="timeline-end w-full max-w-none flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
                     {/* Remark / Title */}
-                    <div className="flex justify-between items-centre gap-4">
-                    <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
+                    <div className="flex w-full items-start justify-between gap-4">
+                    <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white capitalize">
                       {lastItem.remark}
                     </p>
 
