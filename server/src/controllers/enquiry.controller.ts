@@ -48,9 +48,18 @@ export async function addEnquiryController(req: Request, res: Response) {
       });
     }
 
+     const last = await tenantPrisma.enquiry.findFirst({
+      where: { clientAdminId },
+      orderBy: { srNo: "desc" },
+      select: { srNo: true },
+    });
+
+    const nextSrNo = (last?.srNo ?? 0) + 1;
+
     // 3. Create student under that admin
     const enquiry = await tenantPrisma.enquiry.create({
       data: {
+        srNo: nextSrNo,
         name: name,
         contact: contact,
         email: enquiryEmail,
@@ -182,9 +191,18 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
       }
     }
 
+    const last = await tenantPrisma.enquiry.findFirst({
+      where: { clientAdminId },
+      orderBy: { srNo: "desc" },
+      select: { srNo: true },
+    });
+
+    const nextSrNo = (last?.srNo ?? 0) + 1;
+
     // 2️⃣ Create enquiry
     const enquiry = await tenantPrisma.enquiry.create({
       data: {
+        srNo: nextSrNo,
         name,
         contact,
         email,
@@ -430,6 +448,13 @@ export async function getEnquiryController(req: Request, res: Response) {
       return res.status(200).json(JSON.parse(cachedData));
     }
 
+    const rawSearch =
+      typeof search === "string" ? search.trim() : "";
+
+    const searchNumber = Number(rawSearch);
+    const isNumberSearch = !isNaN(searchNumber);
+
+
     // ✅ Build search filter
     // const where: any = {};
     // if (search) {
@@ -462,6 +487,10 @@ export async function getEnquiryController(req: Request, res: Response) {
             OR: [
               { name: { contains: search as string } },
               { email: { contains: search as string } },
+              // ✅ ONLY apply srNo filter if search is numeric
+              ...(isNumberSearch
+                ? [{ srNo: { equals: searchNumber } }]
+                : []),
             ],
           }
         : {}),
@@ -520,9 +549,9 @@ export async function getEnquiryController(req: Request, res: Response) {
         },
       },
       orderBy:
-        sortField && sortField !== "leadStatus"
-          ? { [sortField as string]: sortOrder === "asc" ? "asc" : "desc" }
-          : undefined,
+      sortField === "srNo"
+        ? { srNo: sortOrder === "asc" ? "asc" : "desc" }
+        : { createdAt: "desc" },
       skip,
       take: limitNum,
     });

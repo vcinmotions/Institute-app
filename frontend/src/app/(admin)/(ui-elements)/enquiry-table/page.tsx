@@ -35,7 +35,7 @@ export default function EnquiryTable() {
   const totalCount = useSelector((state: RootState) => state.enquiry.total);
   const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
   const [loading, setLoading] = useState<boolean>(false);
-  const [sortField, setSortField] = useState("createdAt");
+  const [sortField, setSortField] = useState("srNo");
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null>(
     null,
   );
@@ -43,9 +43,11 @@ export default function EnquiryTable() {
   const [filters, setFilters] = useState<Record<string, string | null>>({});
 
   const searchRef = useRef<HTMLInputElement>(null);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
+
   const dispatch = useDispatch();
   const leadStatusOptions = [null, "HOT", "WARM", "COLD", "LOST", "HOLD"] as const;
 
@@ -178,7 +180,7 @@ export default function EnquiryTable() {
     };
 
     fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, leadStatus, filters]);
+  }, [currentPage, searchQuery, sortField, sortOrder, leadStatus, filters, reloadKey]);
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(e.target.value);
   // };
@@ -275,6 +277,7 @@ export default function EnquiryTable() {
               className="cursor-pointer"
               onClick={() => {
                 dispatch(setCurrentPage(1));       // 👈 reset to page 1
+                setReloadKey(prev => prev + 1); // 👈 force reload
               }}
             >
               <Tooltip

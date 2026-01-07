@@ -209,6 +209,11 @@ export default function AdmissionForm() {
   console.log("GET ID BY PARAMS IN URL:", enquiryId);
   console.log("courseRows:", courseRows);
 
+  const stripCountryCode = (phone?: string) => {
+    if (!phone) return "";
+    return phone.replace(/^\+91/, "");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const token = sessionStorage.getItem("token");
@@ -983,7 +988,7 @@ export default function AdmissionForm() {
                 selectPosition="start"
                 countries={countries}
                 placeholder="Enter Student Contact"
-                value={newEnquiry.contact}
+                value={stripCountryCode(newEnquiry.contact)} // 👈 IMPORTANT
                 onChange={(value) => handlePhoneNumberChange("contact", value)}
               />
               {errors.contact && (
@@ -996,7 +1001,7 @@ export default function AdmissionForm() {
                 tabIndex={6}
                 selectPosition="start"
                 countries={countries}
-                value={filledEnquiryData.parentsContact}
+                value={stripCountryCode(filledEnquiryData.parentsContact)} // 👈 IMPORTANT
                 placeholder="Enter Alternate Contact no."
                 onChange={(value) => handlePhoneNumberChange("parentsContact", value)}
               />

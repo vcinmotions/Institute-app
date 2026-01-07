@@ -211,7 +211,8 @@ export const useCreateCompleteFollowUp = () => {
         token,
         page: currentPage,
         limit: 5,
-        sortField: "createdAt",
+        sortField: "srNo",
+        sortOrder: "asc"
       });
       dispatch(setEnquiries(updatedEnquiry.enquiry));
 
@@ -252,7 +253,8 @@ export const useCreateHoldEnquiry = () => {
         token,
         page: currentPage,
         limit: 5,
-        sortField: "createdAt",
+        sortField: "srNo",
+        sortOrder: "asc"
       });
       dispatch(setEnquiries(updatedEnquiry.enquiry));
 
@@ -295,7 +297,8 @@ export const useCreateLostEnquiry = () => {
         token,
         page: currentPage,
         limit: 5,
-        sortField: "createdAt",
+        sortField: "srNo",
+        sortOrder: "asc"
       });
       dispatch(setEnquiries(updatedEnquiry.enquiry));
 

@@ -233,6 +233,13 @@ export default function EnquiryDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
+                  Sr No.
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                >
                   Enquires
                 </TableCell>
 
@@ -325,8 +332,11 @@ export default function EnquiryDataTable({
               {enquiries && enquiries.length > 0 ? (
                 enquiries.map((item: any) => (
                   <TableRow key={item.id}>
+                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+                      {item.srNo}
+                    </TableCell>
                     <TableCell className="px-5 py-2 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center">
                         <div className="overflow-hidden rounded-full">
                           {/* <Image
                             width={40}
@@ -334,7 +344,7 @@ export default function EnquiryDataTable({
                             src="/images/user/user-21.jpg"
                             alt="/images/user/user-21.jpg"
                           /> */}
-                          <Avatar name={item.name} size={30} />
+                          {/* <Avatar name={item.name} size={30} /> */}
                         </div>
                         <div>
                           <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90 capitalize">

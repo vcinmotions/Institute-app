@@ -8628,17 +8628,20 @@ export namespace Prisma {
   }
 
   export type EnquiryAvgAggregateOutputType = {
+    srNo: number | null
     age: number | null
     studentId: number | null
   }
 
   export type EnquirySumAggregateOutputType = {
+    srNo: number | null
     age: number | null
     studentId: number | null
   }
 
   export type EnquiryMinAggregateOutputType = {
     id: string | null
+    srNo: number | null
     name: string | null
     contact: string | null
     alternateContact: string | null
@@ -8660,6 +8663,7 @@ export namespace Prisma {
 
   export type EnquiryMaxAggregateOutputType = {
     id: string | null
+    srNo: number | null
     name: string | null
     contact: string | null
     alternateContact: string | null
@@ -8681,6 +8685,7 @@ export namespace Prisma {
 
   export type EnquiryCountAggregateOutputType = {
     id: number
+    srNo: number
     name: number
     contact: number
     alternateContact: number
@@ -8703,17 +8708,20 @@ export namespace Prisma {
 
 
   export type EnquiryAvgAggregateInputType = {
+    srNo?: true
     age?: true
     studentId?: true
   }
 
   export type EnquirySumAggregateInputType = {
+    srNo?: true
     age?: true
     studentId?: true
   }
 
   export type EnquiryMinAggregateInputType = {
     id?: true
+    srNo?: true
     name?: true
     contact?: true
     alternateContact?: true
@@ -8735,6 +8743,7 @@ export namespace Prisma {
 
   export type EnquiryMaxAggregateInputType = {
     id?: true
+    srNo?: true
     name?: true
     contact?: true
     alternateContact?: true
@@ -8756,6 +8765,7 @@ export namespace Prisma {
 
   export type EnquiryCountAggregateInputType = {
     id?: true
+    srNo?: true
     name?: true
     contact?: true
     alternateContact?: true
@@ -8864,6 +8874,7 @@ export namespace Prisma {
 
   export type EnquiryGroupByOutputType = {
     id: string
+    srNo: number
     name: string
     contact: string
     alternateContact: string | null
@@ -8904,6 +8915,7 @@ export namespace Prisma {
 
   export type EnquirySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    srNo?: boolean
     name?: boolean
     contact?: boolean
     alternateContact?: boolean
@@ -8931,6 +8943,7 @@ export namespace Prisma {
 
   export type EnquirySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    srNo?: boolean
     name?: boolean
     contact?: boolean
     alternateContact?: boolean
@@ -8954,6 +8967,7 @@ export namespace Prisma {
 
   export type EnquirySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    srNo?: boolean
     name?: boolean
     contact?: boolean
     alternateContact?: boolean
@@ -8977,6 +8991,7 @@ export namespace Prisma {
 
   export type EnquirySelectScalar = {
     id?: boolean
+    srNo?: boolean
     name?: boolean
     contact?: boolean
     alternateContact?: boolean
@@ -8996,7 +9011,7 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "course" | "gender" | "dob" | "source" | "referedBy" | "leadStatus" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
+  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "course" | "gender" | "dob" | "source" | "referedBy" | "leadStatus" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
   export type EnquiryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     followUps?: boolean | Enquiry$followUpsArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
@@ -9025,6 +9040,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      srNo: number
       name: string
       contact: string
       alternateContact: string | null
@@ -9471,6 +9487,7 @@ export namespace Prisma {
    */
   interface EnquiryFieldRefs {
     readonly id: FieldRef<"Enquiry", 'String'>
+    readonly srNo: FieldRef<"Enquiry", 'Int'>
     readonly name: FieldRef<"Enquiry", 'String'>
     readonly contact: FieldRef<"Enquiry", 'String'>
     readonly alternateContact: FieldRef<"Enquiry", 'String'>
@@ -41202,6 +41219,7 @@ export namespace Prisma {
 
   export const EnquiryScalarFieldEnum: {
     id: 'id',
+    srNo: 'srNo',
     name: 'name',
     contact: 'contact',
     alternateContact: 'alternateContact',
@@ -42136,6 +42154,7 @@ export namespace Prisma {
     OR?: EnquiryWhereInput[]
     NOT?: EnquiryWhereInput | EnquiryWhereInput[]
     id?: StringFilter<"Enquiry"> | string
+    srNo?: IntFilter<"Enquiry"> | number
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
     alternateContact?: StringNullableFilter<"Enquiry"> | string | null
@@ -42162,6 +42181,7 @@ export namespace Prisma {
 
   export type EnquiryOrderByWithRelationInput = {
     id?: SortOrder
+    srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
     alternateContact?: SortOrderInput | SortOrder
@@ -42188,6 +42208,7 @@ export namespace Prisma {
 
   export type EnquiryWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    srNo?: number
     studentId?: number
     AND?: EnquiryWhereInput | EnquiryWhereInput[]
     OR?: EnquiryWhereInput[]
@@ -42213,10 +42234,11 @@ export namespace Prisma {
     enquiryCourse?: EnquiryCourseListRelationFilter
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
-  }, "id" | "studentId">
+  }, "id" | "srNo" | "studentId">
 
   export type EnquiryOrderByWithAggregationInput = {
     id?: SortOrder
+    srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
     alternateContact?: SortOrderInput | SortOrder
@@ -42246,6 +42268,7 @@ export namespace Prisma {
     OR?: EnquiryScalarWhereWithAggregatesInput[]
     NOT?: EnquiryScalarWhereWithAggregatesInput | EnquiryScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Enquiry"> | string
+    srNo?: IntWithAggregatesFilter<"Enquiry"> | number
     name?: StringWithAggregatesFilter<"Enquiry"> | string
     contact?: StringWithAggregatesFilter<"Enquiry"> | string
     alternateContact?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
@@ -44774,6 +44797,7 @@ export namespace Prisma {
 
   export type EnquiryCreateInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -44798,6 +44822,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedCreateInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -44822,6 +44847,7 @@ export namespace Prisma {
 
   export type EnquiryUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44846,6 +44872,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44870,6 +44897,7 @@ export namespace Prisma {
 
   export type EnquiryCreateManyInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -44891,6 +44919,7 @@ export namespace Prisma {
 
   export type EnquiryUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44910,6 +44939,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47419,6 +47449,17 @@ export namespace Prisma {
     clientAdminId?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -47464,6 +47505,7 @@ export namespace Prisma {
 
   export type EnquiryCountOrderByAggregateInput = {
     id?: SortOrder
+    srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
     alternateContact?: SortOrder
@@ -47484,12 +47526,14 @@ export namespace Prisma {
   }
 
   export type EnquiryAvgOrderByAggregateInput = {
+    srNo?: SortOrder
     age?: SortOrder
     studentId?: SortOrder
   }
 
   export type EnquiryMaxOrderByAggregateInput = {
     id?: SortOrder
+    srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
     alternateContact?: SortOrder
@@ -47511,6 +47555,7 @@ export namespace Prisma {
 
   export type EnquiryMinOrderByAggregateInput = {
     id?: SortOrder
+    srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
     alternateContact?: SortOrder
@@ -47531,8 +47576,25 @@ export namespace Prisma {
   }
 
   export type EnquirySumOrderByAggregateInput = {
+    srNo?: SortOrder
     age?: SortOrder
     studentId?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -47567,17 +47629,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type EnquiryScalarRelationFilter = {
@@ -47624,22 +47675,6 @@ export namespace Prisma {
   export type EnquiryCourseSumOrderByAggregateInput = {
     id?: SortOrder
     courseId?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumFollowUpStatusFilter<$PrismaModel = never> = {
@@ -50110,6 +50145,14 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -50260,14 +50303,6 @@ export namespace Prisma {
     upsert?: ClientAdminUpsertWithoutEnquiryCourseInput
     connect?: ClientAdminWhereUniqueInput
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutEnquiryCourseInput, ClientAdminUpdateWithoutEnquiryCourseInput>, ClientAdminUncheckedUpdateWithoutEnquiryCourseInput>
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnquiryCreateNestedOneWithoutFollowUpsInput = {
@@ -53122,6 +53157,33 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -53165,33 +53227,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumFollowUpStatusFilter<$PrismaModel = never> = {
@@ -54010,6 +54045,7 @@ export namespace Prisma {
 
   export type EnquiryCreateWithoutClientAdminInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -54033,6 +54069,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedCreateWithoutClientAdminInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -54757,6 +54794,7 @@ export namespace Prisma {
     OR?: EnquiryScalarWhereInput[]
     NOT?: EnquiryScalarWhereInput | EnquiryScalarWhereInput[]
     id?: StringFilter<"Enquiry"> | string
+    srNo?: IntFilter<"Enquiry"> | number
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
     alternateContact?: StringNullableFilter<"Enquiry"> | string | null
@@ -55733,6 +55771,7 @@ export namespace Prisma {
 
   export type EnquiryCreateWithoutEnquiryCourseInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -55756,6 +55795,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedCreateWithoutEnquiryCourseInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -55934,6 +55974,7 @@ export namespace Prisma {
 
   export type EnquiryUpdateWithoutEnquiryCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55957,6 +55998,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedUpdateWithoutEnquiryCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56131,6 +56173,7 @@ export namespace Prisma {
 
   export type EnquiryCreateWithoutFollowUpsInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -56154,6 +56197,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedCreateWithoutFollowUpsInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -56218,6 +56262,7 @@ export namespace Prisma {
 
   export type EnquiryUpdateWithoutFollowUpsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56241,6 +56286,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedUpdateWithoutFollowUpsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56320,6 +56366,7 @@ export namespace Prisma {
 
   export type EnquiryCreateWithoutNotificationInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -56343,6 +56390,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedCreateWithoutNotificationInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -56545,6 +56593,7 @@ export namespace Prisma {
 
   export type EnquiryUpdateWithoutNotificationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56568,6 +56617,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedUpdateWithoutNotificationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56735,6 +56785,7 @@ export namespace Prisma {
 
   export type EnquiryCreateWithoutStudentInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -56758,6 +56809,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedCreateWithoutStudentInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -57241,6 +57293,7 @@ export namespace Prisma {
 
   export type EnquiryUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57264,6 +57317,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66326,6 +66380,7 @@ export namespace Prisma {
 
   export type EnquiryCreateManyClientAdminInput = {
     id?: string
+    srNo: number
     name: string
     contact: string
     alternateContact?: string | null
@@ -67076,6 +67131,7 @@ export namespace Prisma {
 
   export type EnquiryUpdateWithoutClientAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67099,6 +67155,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedUpdateWithoutClientAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67122,6 +67179,7 @@ export namespace Prisma {
 
   export type EnquiryUncheckedUpdateManyWithoutClientAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     alternateContact?: NullableStringFieldUpdateOperationsInput | string | null

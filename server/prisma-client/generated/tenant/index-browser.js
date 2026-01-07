@@ -172,6 +172,7 @@ exports.Prisma.ActivityLogScalarFieldEnum = {
 
 exports.Prisma.EnquiryScalarFieldEnum = {
   id: 'id',
+  srNo: 'srNo',
   name: 'name',
   contact: 'contact',
   alternateContact: 'alternateContact',

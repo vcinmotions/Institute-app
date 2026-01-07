@@ -35,7 +35,8 @@ export const useCreateInitialFollowUp = () => {
           page: currentPage,
           limit: 5,
           search: searchQuery,
-          sortField: "createdAt",
+          sortField: "srNo",
+          sortOrder: "asc"
         });
 
         // Fetch follow-ups for this enquiry

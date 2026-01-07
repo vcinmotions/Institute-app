@@ -92,6 +92,7 @@ model ActivityLog {
 
 model Enquiry {
   id           String      @id @default(uuid())
+  srNo         Int         @unique
   name         String
   contact      String
   email        String?

@@ -26,7 +26,8 @@ export const useEditEnquiry = () => {
         token,
         page: currentPage,
         limit: 5,
-        sortField: "createdAt",
+        sortField: "srNo",
+        sortOrder: "asc"
       });
 
       dispatch(setEnquiries(updated.enquiry));
