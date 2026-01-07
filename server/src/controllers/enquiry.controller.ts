@@ -120,7 +120,7 @@ export async function addEnquiryController(req: Request, res: Response) {
 
 export async function addEnquiryControllerNew(req: Request, res: Response) {
   // const { name, contact, email, source, courseId } = req.body;
-  const { name, contact, courseId, source, email, alternateContact, age, location, gender, dob, referedBy } = req.body;
+  const { name, contact, courseId, source, email, alternateContact, location, gender, dob, referedBy } = req.body;
 
   if (!name || !contact) {
     return res.status(400).json({ error: "Missing required enquiry details" });
@@ -164,6 +164,22 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
         error: "Contact already exists in enquiries",
       });
     }
+    }
+
+    // 2️⃣ Calculate age from DOB
+    let age: number | null = null;
+    if (dob) {
+      const birthDate = new Date(dob);
+      const today = new Date();
+
+      age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+
+      // If birthday hasn't occurred yet this year, subtract 1
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age -= 1;
+      }
     }
 
     // 2️⃣ Create enquiry
@@ -226,7 +242,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
 }
 
 export async function editEnquiryController(req: Request, res: Response) {
-  const { id, name, contact, courseId, source, email: enquiryEmail, alternateContact, age, dob, gender, location, referedBy } = req.body;
+  const { id, name, contact, courseId, source, email: enquiryEmail, alternateContact, dob, gender, location, referedBy } = req.body;
 
   console.log("get Edit Enquiry data", req.body);
 
@@ -258,6 +274,22 @@ export async function editEnquiryController(req: Request, res: Response) {
       return res
         .status(409)
         .json({ error: "Enquiry has already been converted to admission" });
+    }
+
+    // 2️⃣ Calculate age from DOB
+    let age: number | null = null;
+    if (dob) {
+      const birthDate = new Date(dob);
+      const today = new Date();
+
+      age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+
+      // If birthday hasn't occurred yet this year, subtract 1
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age -= 1;
+      }
     }
 
     const updatedEnquiry = await tenantPrisma.enquiry.update({

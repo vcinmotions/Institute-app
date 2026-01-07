@@ -441,25 +441,29 @@ export default function AdmissionForm() {
   }, [courses, newEnquiry.courseId]);
 
   const handlePhoneNumberChange = (
-    phoneNumber: string,
-    countryCode = "+91",
-  ) => {
-    // If phoneNumber doesn't start with +, prepend selected country code
-    let formattedNumber = phoneNumber;
-    if (!phoneNumber.startsWith("+")) {
-      formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
-    }
+  field: "contact" | "parentsContact",
+  phoneNumber: string,
+  countryCode = "+91"
+) => {
+  let formattedNumber = phoneNumber;
+  if (!phoneNumber.startsWith("+")) {
+    formattedNumber = countryCode + phoneNumber.replace(/^0+/, "");
+  }
 
+  if (field === "contact") {
+    setNewEnquiry((prev) => ({
+      ...prev,
+      contact: formattedNumber,
+    }));
+    setErrors((prev) => ({ ...prev, contact: "" }));
+  } else {
     setFilledEnquiryData((prev) => ({
       ...prev,
       parentsContact: formattedNumber,
     }));
-
-    setErrors((prev) => ({
-      ...prev,
-      parentsContact: "",
-    }));
-  };
+    setErrors((prev) => ({ ...prev, parentsContact: "" }));
+  }
+};
 
   // useEffect(() => {
   //   if (!newEnquiry.courseId.length) return;
@@ -980,7 +984,7 @@ export default function AdmissionForm() {
                 countries={countries}
                 placeholder="Enter Student Contact"
                 value={newEnquiry.contact}
-                onChange={handlePhoneNumberChange}
+                onChange={(value) => handlePhoneNumberChange("contact", value)}
               />
               {errors.contact && (
                 <p className="text-sm text-red-500">{errors.contact}</p>
@@ -994,7 +998,7 @@ export default function AdmissionForm() {
                 countries={countries}
                 value={filledEnquiryData.parentsContact}
                 placeholder="Enter Alternate Contact no."
-                onChange={handlePhoneNumberChange}
+                onChange={(value) => handlePhoneNumberChange("parentsContact", value)}
               />
               {errors.parentsContact && (
                 <p className="text-sm text-red-500">{errors.parentsContact}</p>

@@ -8,7 +8,7 @@ export default function Avatar({ name, size = 40 }: AvatarProps) {
   const letter = name?.charAt(0).toUpperCase() || "?";
 
   const colors = ["#1976d2", "#388e3c", "#f57c00", "#7b1fa2"];
-  const bgColor = colors[name.length % colors.length];
+  const bgColor = colors[name?.length % colors.length];
 
   return (
     <div
