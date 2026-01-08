@@ -120,7 +120,7 @@ export default function RolesForm() {
       // Update local state
       setFormData((prev) => ({
         ...prev,
-        name: value,
+        name: value.toLocaleLowerCase(),
         email,
       }));
 
@@ -241,6 +241,7 @@ export default function RolesForm() {
               ref={firstInputRef}
               tabIndex={1}
               type="text"
+              className="capitalize"
               placeholder="Ex. John Doe"
               value={formData.name}
               onChange={(e) => handleChange("name", e.target.value)}

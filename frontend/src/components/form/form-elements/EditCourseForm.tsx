@@ -324,16 +324,25 @@ export default function EditCourseForm({
   };
 
   const handleChange = (field: keyof CourseData, value: string) => {
-    setNewCourse((prev) => {
-      const updated = {
-        ...prev,
-        [field]: value,
-      };
+    // setNewCourse((prev) => {
+    //   const updated = {
+    //     ...prev,
+    //     [field]: value,
+    //   };
+      
 
-      // if payment type changed to ONE_TIME → reset installmentCount
+    //   // if payment type changed to ONE_TIME → reset installmentCount
 
-      return updated;
-    });
+    //   return updated;
+    // });
+
+    setNewCourse((prev) => ({
+      ...prev,
+      [field]:
+        field === "name" && typeof value === "string"
+          ? value.toLowerCase()
+          : value,
+    }));
 
     // clear error for that field
     setErrors((prev) => ({
@@ -355,7 +364,7 @@ export default function EditCourseForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 2000);
 
       return;
     }
@@ -369,9 +378,13 @@ export default function EditCourseForm({
         variant: "error",
       });
 
+       window.scrollTo({
+            top: 0, behavior: "smooth"
+          })
+
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 2000);
 
       return;
     }
@@ -399,9 +412,13 @@ export default function EditCourseForm({
             variant: "success",
           });
 
+          window.scrollTo({
+            top: 0, behavior: "smooth"
+          })
+
           setTimeout(() => {
             onCloseModal();
-          }, 3000);
+          }, 1000);
         },
 
         onError: () => {
@@ -431,6 +448,7 @@ export default function EditCourseForm({
             ref={firstInputRef}
             tabIndex={1}
             type="text"
+            className="capitalize"
             placeholder="Ex. Full Stack Developer"
             value={newCourse.name}
             onChange={(e) => handleChange("name", e.target.value)}

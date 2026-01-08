@@ -2,6 +2,7 @@
 import express from "express";
 import {
   getClientAdmin,
+  getTenantAdmin,
   updateMasterAdmin,
 } from "../controllers//master.dashboard.controller";
 import { masterAuthMiddleware } from "../middlewares/master.auth.middleware";
@@ -17,6 +18,7 @@ router.post("/setup", setupCentralController);
 router.post("/setup/address", createMasterAddressController);
 
 router.get("/master-user", masterAuthMiddleware, getClientAdmin);
+router.get("/master-tenant", masterAuthMiddleware, getTenantAdmin);
 
 router.put("/master-user", masterAuthMiddleware, updateMasterAdmin);
 

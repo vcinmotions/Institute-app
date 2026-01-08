@@ -336,7 +336,7 @@ export default function CourseDataTable({
                           />
                         </div> */}
                         <div>
-                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                             {item.name}
                           </span>
                         </div>

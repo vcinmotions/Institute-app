@@ -821,6 +821,7 @@ export async function getStudentController(req: Request, res: Response) {
       message: "Students fetched successfully",
       student,
       totalPages,
+      totalCount,
       page: pageNum,
       limit: limitNum,
     });

@@ -26,6 +26,8 @@ export async function getClientAdmin(req: Request, res: Response) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
+   
+
     // Stats
 
     const tenant = await centralPrisma.tenant.findMany({});
@@ -55,6 +57,67 @@ export async function getClientAdmin(req: Request, res: Response) {
     console.log("GET ALL TENANTS IN MASTER USER CONTROLLER:", tenant);
 
     return res.status(200).json({ userdata: clientAdmin, tenant: safeTenants });
+  } catch (err) {
+    console.error("Error fetching follow-up stats:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function getTenantAdmin(req: Request, res: Response) {
+  try {
+    const centralPrisma = getCentralPrisma();
+
+    const user = req.user;
+
+    if (!user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized request" });
+    }
+
+    const email = user.email;
+
+    // Get client admin for this user
+    const clientAdmin = await centralPrisma.superAdmin.findUnique({
+      where: { email },
+    });
+
+    if (!clientAdmin) {
+      return res.status(404).json({ error: "Client admin not found" });
+    }
+
+    // 2.1 ✅ Extract query params
+    const {
+      page,
+      limit,
+      search,
+    } = req.query;
+
+    const pageNum = parseInt(page as string, 10);
+    const limitNum = parseInt(limit as string, 10);
+    const skip = (pageNum - 1) * limitNum;
+
+    console.log("GET MASTER TENANT PARAMS:", req.params);
+
+     // ✅ Build search filter
+    const where: any = {};
+    if (search) {
+      where.OR = [
+        { name: { contains: search } },
+        { email: { contains: search } },
+        // Add more searchable fields as needed
+      ];
+    }
+
+    // Stats
+
+    const tenant = await centralPrisma.tenant.findMany({where});
+    //const originalPassword = decrypt(tenant.encryptedPassword);
+
+    console.log("GET ALL TENANTS IN MASTER USER CONTROLLER:", tenant);
+
+    const totalCount = await centralPrisma.tenant.count({});
+    const totalPages = Math.ceil(totalCount / limitNum);
+
+    return res.status(200).json({ tenant: tenant, totalCount, totalPages });
   } catch (err) {
     console.error("Error fetching follow-up stats:", err);
     return res.status(500).json({ error: "Internal server error" });

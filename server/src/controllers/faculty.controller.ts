@@ -186,9 +186,9 @@ export async function getFacultyController(req: Request, res: Response) {
     const where: any = {};
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: "insensitive" } },
-        { email: { contains: search, mode: "insensitive" } },
-        { contact: { contains: search, mode: "insensitive" } },
+        { name: { contains: search } },
+        { email: { contains: search } },
+        { contact: { contains: search } },
         // Add more searchable fields as needed
       ];
     }
@@ -211,12 +211,14 @@ export async function getFacultyController(req: Request, res: Response) {
     });
 
     // ✅ Total count (for frontend pagination)
-    const totalPages = await tenantPrisma.faculty.count({ where });
+    const totalCount = await tenantPrisma.faculty.count({ where });
+    const totalPages = Math.ceil(totalCount / limitNum);
 
     console.log(
       "Faculty Fetched Successfully",
       faculty,
       totalPages,
+      totalCount,
       pageNum,
       limitNum
     );
@@ -225,6 +227,7 @@ export async function getFacultyController(req: Request, res: Response) {
       message: "Faculty fetched successfully",
       faculty,
       totalPages,
+      totalCount,
       page: pageNum,
       limit: limitNum,
     });

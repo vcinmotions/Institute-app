@@ -12,6 +12,8 @@ import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourses } from "@/store/slices/courseSlice";
 import { RootState } from "@/store";
+import { setBatches } from "@/store/slices/batchSlice";
+import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -34,13 +36,12 @@ export default function CourseForm({
   onCloseModal,
   studentId,
   studentDetails,
-  batch,
   course,
 }: DefaultInputsProps) {
   console.log("get Student Id is Add course Form:", studentId);
-  console.log("get Batch is Add course Form:", batch);
   console.log("get course is Add course Form:", course);
 
+  const batch = useSelector((state: RootState) => state.batch.batches);
   const [filledCoursedata, setFilledCourseData] = useState<NewCourseData>({
     courseId: "",
     batchId: "",
@@ -82,6 +83,12 @@ export default function CourseForm({
   ];
   console.log("useEffect triggered — studentDetails:", studentDetails);
 
+  const {
+      data: batchData,
+      isLoading: batchLoading,
+      isError: batchError,
+    } = useFetchAllBatches();
+
   const [paymentTypeOption, setpaymentTypeOption] = useState<any>([]);
   const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
 
@@ -107,6 +114,15 @@ export default function CourseForm({
 
   console.log("Get Courses Name in Add course to student Form:", courseList);
 
+  useEffect(() => {
+      console.log("get all batches data;", batchData);
+      if (batchData?.batch) { 
+        dispatch(setBatches(batchData.batch));
+      }
+      setBatches;
+    }, [batchData, dispatch]);
+    console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
+
   const enrolledCourseIds =
     studentDetails?.studentCourses?.map(
       (sc: { courseId: any }) => sc.courseId,
@@ -114,6 +130,11 @@ export default function CourseForm({
   const enrolledBatchIds =
     studentDetails?.studentCourses?.map((sc: { batchId: any }) => sc.batchId) ||
     [];
+
+  const batchOptions = batch.map((b: any) => ({
+    value: b.id.toString(),
+    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+  }));
 
   console.log(
     "Get ENROLLED COURseID in Add course to student Form:",
@@ -161,6 +182,9 @@ export default function CourseForm({
     (course) => !enrolledCourseIds.includes(course.id),
   );
 
+  console.log("enrolledCourseIds:", enrolledCourseIds);
+  console.log("FILTERED COURSE:", filteredCourses);
+
   const filteredBatches = batch.filter((b) => !enrolledBatchIds.includes(b.id));
   // Filter batches to remove those with same time ranges
   const filteredTimeSlots = batch.filter((b) => {
@@ -168,6 +192,7 @@ export default function CourseForm({
     return !enrolledTimeRanges.includes(timeRange);
   });
 
+  console.log("GET filteredBatches in Add course form;", filteredBatches);
   console.log("GET FilteredTimeSots in Add course form;", filteredTimeSlots);
 
   const validate = () => {
@@ -407,34 +432,69 @@ export default function CourseForm({
       installmentTypeId: filledCoursedata.installmentTypeId,
     };
 
-    try {
-      await createCourseMutation(admissionPayload);
+    // try {
+    //   await createCourseMutation(admissionPayload);
 
-      setAlert({
-        show: true,
-        title: "Course Assigned",
-        message: "Student course was successfully created.",
-        variant: "success",
-      });
+    //   setAlert({
+    //     show: true,
+    //     title: "Course Assigned",
+    //     message: "Student course was successfully created.",
+    //     variant: "success",
+    //   });
 
-      // optional: close modal
-      setTimeout(() => onCloseModal(), 2000);
-    } catch (error: any) {
-      console.error("Error creating course:", error);
-      setAlert({
-        show: true,
-        title: "Failed to Assign Course",
-        message:
-          error?.response?.data?.error ||
-          "Something went wrong. Please try again.",
-        variant: "error",
-      });
+    //   // optional: close modal
+    //   setTimeout(() => onCloseModal(), 2000);
+    // } catch (error: any) {
+    //   console.error("Error creating course:", error);
+    //   setAlert({
+    //     show: true,
+    //     title: "Failed to Assign Course",
+    //     message:
+    //       error?.response?.data?.error ||
+    //       "Something went wrong. Please try again.",
+    //     variant: "error",
+    //   });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-        onCloseModal();
-      }, 2000);
-    }
+    //   setTimeout(() => {
+    //     setAlert({ show: false, title: "", message: "", variant: "" });
+    //     onCloseModal();
+    //   }, 2000);
+    // }
+
+    createCourseMutation(
+      admissionPayload,
+      {
+        onSuccess: () => {
+          setFilledCourseData({
+            courseId: "",
+            batchId: "",
+            admissionDate: "",
+            feeAmount: "",
+            paymentType: "",
+            installmentTypeId: "",
+          });
+
+          setAlert({
+            show: true,
+            title: "Course Assigned",
+            message: "New Course has been successfully Assigned.",
+            variant: "success",
+          });
+
+          window.scrollTo({
+            top: 0, behavior: "smooth"
+          })
+
+          setTimeout(() => {
+            onCloseModal();
+          }, 1000);
+        },
+
+        onError: () => {
+          // You already handle error via redux + toast
+        },
+      },
+    );
   };
 
   console.log(
@@ -483,7 +543,7 @@ export default function CourseForm({
           <div className="relative" data-master="batch">
             <Select
               tabIndex={2}
-              options={filteredTimeSlots.map((batch) => ({
+              options={filteredBatches.map((batch) => ({
                 label: batch.name,
                 value: batch.id,
               }))}

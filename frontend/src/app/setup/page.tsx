@@ -83,7 +83,7 @@ export default function SetupPage() {
 
           <div>
             <Label>Institite Name</Label>
-            <Input name="name" className="captalize" placeholder="Enter Institute Name" />
+            <Input name="name" className="capitalize" placeholder="Enter Institute Name" />
           </div>
 
           <div>

@@ -312,7 +312,7 @@ export default function PaymentDataTable({
                         />
                           </div>
                           <div>
-                            <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                            <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                               {item?.student?.fullName || "N/A"}
                             </span>
                             <span className="text-theme-xs block text-gray-500 dark:text-gray-400">

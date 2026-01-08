@@ -49,7 +49,7 @@ export default function PaymentTable() {
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
+    setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
   // Debounce effect: update searchQuery 1 second after user stops typing

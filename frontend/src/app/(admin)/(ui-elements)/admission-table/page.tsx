@@ -41,7 +41,7 @@ export default function AdmissionTable() {
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
+    setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
   // Debounce effect: update searchQuery 1 second after user stops typing
@@ -77,9 +77,11 @@ export default function AdmissionTable() {
           leadStatus, // 👈 Add this
         });
 
+        console.log("RESPONSE IN ENQUIRY USEEFFECT:", response);
+
         dispatch(setEnquiries(response.enquiry || []));
         dispatch(setFilteredEnquiries(response.filteredEnquiries || []));
-        setTotalPages(response.totalPages || 1);
+        setTotalPages(response.filteredEnquiriesPages || 0);
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       } finally {
@@ -127,7 +129,8 @@ export default function AdmissionTable() {
     fetchData();
   }, [totalPages]);
 
-  console.log("Enquiry Query data:", currentPage, searchQuery, totalPages);
+  console.log("Enquiry Query data:", currentPage, searchQuery, totalPages, filteredEnquiries);
+  console.log("Enquiry currentPage, totalPages:", currentPage, totalPages);
 
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(e.target.value);
@@ -182,6 +185,8 @@ export default function AdmissionTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            title="Pending Admissions"
+            totalCount={filteredEnquiries.length}
             onPageChange={handlePagination}
           />
         </StudentCard>

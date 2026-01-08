@@ -2,13 +2,13 @@
 import EnquiryCard from "@/components/common/EnquiryCard";
 import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
-import { getMasterUser } from "@/lib/api";
+import { getMasterUser, getTenant } from "@/lib/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import CompanyDataTable from "@/components/tables/CompanyDataTable";
-import { setTenant } from "@/store/slices/authSlice";
+import { setTenant, setToken } from "@/store/slices/authSlice";
 import CompanyForm from "@/components/form/form-elements/CompanyCreateForm";
 import StudentCard from "@/components/common/StudentCard";
 
@@ -17,8 +17,10 @@ export default function CompanyTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const company = useSelector((state: RootState) => state.auth.tenant);
+  
   const [loading, setLoading] = useState<boolean>(false);
   const [sortField, setSortField] = useState("createdAt");
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(
@@ -79,17 +81,19 @@ export default function CompanyTable() {
       }
 
       try {
-        const data = await getMasterUser(token);
+        const data = await getTenant({token, page: currentPage, search: searchInput});
         setLoading(false); // ✅ All good, show dashboard
         console.log("👤 Get Master User Data in CompanyTable:", data);
         dispatch(setTenant(data.tenant));
+        setTotalPages(data.totalPages);
+        setTotalCount(data.totalCount || 0);
       } catch (err) {
         console.error("❌ Error fetching user:", err);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [searchInput, currentPage]);
 
   const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -124,6 +128,8 @@ export default function CompanyTable() {
     setCurrentPage(1); // Reset pagination on status change
   };
 
+  console.log("Get Searcj iNput in mater-table", searchInput);
+
   return (
     <div>
       <div className="space-y-6">
@@ -146,6 +152,8 @@ export default function CompanyTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            title="Companies"
+            totalCount={totalCount}
             onPageChange={handlePagination}
           />
         </StudentCard>

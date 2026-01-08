@@ -605,6 +605,18 @@ export async function getEnquiryController(req: Request, res: Response) {
       take: limitNum,
     });
 
+    const filteredEnquiriesCount = await tenantPrisma.enquiry.count({
+      where: {
+        ...where,
+        isConverted: true,
+        studentId: null,
+      },
+      skip,
+      take: limitNum,
+    });
+    const filteredEnquiriesPages = Math.ceil(filteredEnquiriesCount / limitNum);
+
+
     console.log(
       "Enquiry Fetched Successfully",
       enquiry,
@@ -614,7 +626,15 @@ export async function getEnquiryController(req: Request, res: Response) {
       totalCount,
       convertedCount,
       notConvertedCount,
-      filteredEnquiries
+      filteredEnquiries,
+      filteredEnquiriesCount,
+      filteredEnquiriesPages
+    );
+    console.log(
+      "filteredEnquiriesPages",
+      filteredEnquiries,
+      filteredEnquiriesCount,
+      filteredEnquiriesPages
     );
 
     return res.status(200).json({
@@ -627,6 +647,8 @@ export async function getEnquiryController(req: Request, res: Response) {
       limit: limitNum,
       convertedCount,
       notConvertedCount,
+      filteredEnquiriesCount,
+      filteredEnquiriesPages
     });
 
     //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });

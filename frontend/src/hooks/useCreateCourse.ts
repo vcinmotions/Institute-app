@@ -51,7 +51,7 @@ export const useCreateCourse = () => {
     onSuccess: (data) => {
       console.log("✅ Admission Created Successfully:", data);
       // router.push("/dashboard");
-      //dispatch(setStudents(data.getAllStudent))
+      dispatch(setStudents(data.getStudents))
     },
     onError: (error) => {
       console.error("❌ Error Creating Admission:", error);

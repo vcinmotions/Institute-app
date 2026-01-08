@@ -12,6 +12,15 @@ interface GetEnquiryParams {
   leadStatus?: "HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null;
 }
 
+interface GetMasterParams {
+  token: string;
+  page?: number;
+  limit?: number;
+  search?: string;
+  sortField?: string;
+  sortOrder?: "asc" | "desc";
+}
+
 interface GetStudentCourseParams {
   token: string;
   page?: number;
@@ -107,6 +116,30 @@ export const getMasterUser = async (token: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response.data;
+};
+
+export const getTenant = async ({
+  token,
+  page = 1,
+  limit = 5,
+  search = "",
+  sortField,
+  sortOrder,
+}: GetMasterParams) => {
+  const response = await apiClient.get("/master-tenant", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page,
+      limit,
+      search,
+      sortField,
+      sortOrder,
+    },
+  });
+
   return response.data;
 };
 

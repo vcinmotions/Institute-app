@@ -222,6 +222,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
             ref={firstInputRef}
             tabIndex={1}
             type="text"
+            className="capitalize"
             placeholder="Ex. LAB-06"
             value={lab.name}
             onChange={(e) => handleChange("name", e.target.value)}
@@ -235,6 +236,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
           <Input
             type="text"
             tabIndex={2}
+            className="capitalize"
             placeholder="Ex. Building D - Floor 1"
             value={lab.location}
             onChange={(e) => handleChange("location", e.target.value)}

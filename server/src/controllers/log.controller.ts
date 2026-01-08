@@ -56,9 +56,9 @@ export async function getLogController(req: Request, res: Response) {
     const where: any = {};
     if (search) {
       where.OR = [
-        { action: { contains: search, mode: "insensitive" } },
-        { entity: { contains: search, mode: "insensitive" } },
-        { message: { contains: search, mode: "insensitive" } },
+        { action: { contains: search } },
+        { entity: { contains: search } },
+        { message: { contains: search } },
         // Add more searchable fields as needed
       ];
     }
@@ -78,7 +78,8 @@ export async function getLogController(req: Request, res: Response) {
     });
 
     // ✅ Total count (for frontend pagination)
-    const totalPages = await tenantPrisma.activityLog.count({ where });
+    const totalCount = await tenantPrisma.activityLog.count({ where });
+    const totalPages = Math.ceil(totalCount / limitNum);
 
     console.log("logs Fetched Successfully", log, totalPages, pageNum, limitNum);
 
@@ -86,6 +87,7 @@ export async function getLogController(req: Request, res: Response) {
       message: "log fetched successfully",
       log,
       totalPages,
+      totalCount,
       page: pageNum,
       limit: limitNum,
     });

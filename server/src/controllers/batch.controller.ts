@@ -56,6 +56,8 @@ export async function addBatchController(req: Request, res: Response) {
       },
     });
 
+    
+
     return res.status(201).json({
       message: "Batch created successfully ✅",
       batch,
@@ -176,12 +178,16 @@ export async function getBatchController(req: Request, res: Response) {
     });
 
     // ✅ Total count (for frontend pagination)
-    const totalPages = await tenantPrisma.batch.count({ where });
+    const totalCount = await tenantPrisma.batch.count({ where });
+    const totalPages = Math.ceil(totalCount / limitNum);
+
+    console.log("GET BATCH DATA IN GET BATCH CONTROLLER:", batch);
 
     console.log(
       "Faculty Fetched Successfully",
       batch,
       totalPages,
+      totalCount,
       pageNum,
       limitNum
     );
@@ -190,6 +196,7 @@ export async function getBatchController(req: Request, res: Response) {
       message: "Faculty fetched successfully",
       batch,
       totalPages,
+      totalCount,
       page: pageNum,
       limit: limitNum,
     });

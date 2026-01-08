@@ -348,11 +348,27 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
       });
     }
 
+    // ✅ Fetch paginated, sorted, and filtered enquiries
+    const getStudents = await tenantPrisma.student.findMany({
+      where: {
+          clientAdminId
+      },
+      // orderBy:
+      // sortField && sortField !== "leadStatus"
+      //   ? { [sortField as string]: sortOrder === "asc" ? "asc" : "desc" }
+      //   : undefined,
+      include: {
+        labAllocations: true,
+        studentCourses: true,
+      },
+    });
+
     return res.status(201).json({
       message: `Course "${courseExists.name}" added to student successfully`,
       studentCourse,
       feeStructure,
       studentFee,
+      getStudents
     });
   } catch (err) {
     console.error("❌ Error adding course to student:", err);

@@ -225,7 +225,7 @@ export default function CourseForm() {
   const handleChange = (field: keyof CourseData, value: string) => {
     setNewCourse((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: value.toLocaleLowerCase(),
       ...(field === "paymentType" && value === "ONE_TIME"
         ? { installmentCount: "" }
         : {}),
@@ -355,6 +355,7 @@ export default function CourseForm() {
               ref={firstInputRef}
               tabIndex={1}
               type="text"
+              className="capitalize"
               placeholder="Ex. Full Stack Developer"
               value={newCourse.name}
               onChange={(e) => handleChange("name", e.target.value)}

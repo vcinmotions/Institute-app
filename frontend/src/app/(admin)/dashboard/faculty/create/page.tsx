@@ -19,6 +19,8 @@ import { getBatch, getCourse } from "@/lib/api";
 import { setBatches } from "@/store/slices/batchSlice";
 import { setCourses } from "@/store/slices/courseSlice";
 import { useFacultyStore } from "@/store/facultyStore";
+import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
+import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
 
 interface CourseData {
   email: string;
@@ -70,11 +72,35 @@ export default function FacultyForm() {
   ];
   const firstInputRef = useRef<HTMLInputElement>(null);
 
+   const {
+      data: courseData,
+      isLoading: courseLoading,
+      isError: courseError,
+    } = useFetchCourse();
+  
+    const {
+      data: batchData,
+      isLoading: batchLoading,
+      isError: batchError,
+    } = useFetchAllBatches();
+
+    useEffect(() => {
+      if (courseData?.course) {
+        dispatch(setCourses(courseData.course));
+      };
+    }, [courseData, dispatch]);
+  
+    useEffect(() => {
+      console.log("get all batches data;", batchData);
+      if (batchData?.batch) { 
+        dispatch(setBatches(batchData.batch));
+      };
+    }, [batchData, dispatch]);
+    console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
+
   useEffect(() => {
     firstInputRef.current?.focus();
   }, []);
-
-  const [batchList, setBatchList] = useState([]);
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
@@ -106,26 +132,6 @@ export default function FacultyForm() {
     }));
   }, [form]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("Token missing from sessionStorage");
-      return;
-    }
-
-    try {
-      const responseCourse = await getCourse({ token });
-      const responseBatch = await getBatch({ token });
-      dispatch(setCourses(responseCourse.course));
-      dispatch(setBatches(responseBatch.batch));
-    } catch (error) {
-      console.error("Error fetching enquiries:", error);
-    }
-  };
 
   const handleDateChange = (field: keyof CourseData, value: string) => {
     // Allow only digits
@@ -249,28 +255,57 @@ export default function FacultyForm() {
   // };
 
   const handleChange = (field: keyof CourseData, value: string) => {
-    // 1️⃣ Update local UI state
-    setNewFaculty((prev) => {
-      let updated = { ...prev, [field]: value };
+  // Ensure value is always lowercase if it's the name
+  let processedValue = field === "name" ? value.toLowerCase() : value;
 
-      if (field === "name" && user?.instituteName) {
-        const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
-        const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-        updated.email = `${formattedName}@${institute}`;
-      }
+  // 1️⃣ Update local UI state
+  setNewFaculty((prev) => {
+    const updated = { ...prev, [field]: processedValue };
 
-      return updated;
-    });
+    // Update email automatically when name changes
+    if (field === "name" && user?.slug) {
+      const formattedName = processedValue.trim().replace(/\s+/g, "");
+      const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
+      updated.email = `${formattedName}@${institute}`;
+    }
 
-    // 2️⃣ Update ZUSTAND (outside render cycle)
-    setField(field as string, value);
+    return updated;
+  });
 
-    // 3️⃣ Clear validation
-    setErrors((prev) => ({
-      ...prev,
-      [field]: "",
-    }));
-  };
+  // 2️⃣ Update ZUSTAND (outside render cycle)
+  setField(field as string, processedValue);
+
+  // 3️⃣ Clear validation errors
+  setErrors((prev) => ({
+    ...prev,
+    [field]: "",
+  }));
+};
+
+
+  // const handleChange = (field: keyof CourseData, value: string) => {
+  //   // 1️⃣ Update local UI state
+  //   setNewFaculty((prev) => {
+  //     let updated = { ...prev, [field]: value };
+
+  //     if (field === "name" && user?.instituteName) {
+  //       const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
+  //       const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
+  //       updated.email = `${formattedName}@${institute}`;
+  //     }
+
+  //     return updated;
+  //   });
+
+  //   // 2️⃣ Update ZUSTAND (outside render cycle)
+  //   setField(field as string, value);
+
+  //   // 3️⃣ Clear validation
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     [field]: "",
+  //   }));
+  // };
 
   const courseOptions = courses.map((course: any) => ({
     value: course.id.toString(),
@@ -373,6 +408,7 @@ export default function FacultyForm() {
             <Input
               ref={firstInputRef}
               tabIndex={1}
+              className="capitalize"
               type="text"
               placeholder="Ex. Full Stack Developer"
               value={newFaculty.name}

@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import StudentCard from "@/components/common/StudentCard";
 import StudentDataTable from "@/components/tables/StudentDataTable";
-import { setStudents } from "@/store/slices/studentSlice";
+import { setStudents, setTotal } from "@/store/slices/studentSlice";
 import { setBatches } from "@/store/slices/batchSlice";
 import { setCourses } from "@/store/slices/courseSlice";
 import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
@@ -21,6 +21,7 @@ export default function StudentTable() {
   const [totalPages, setTotalPages] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const { students, error } = useSelector((state: RootState) => state.student);
+  const totalCount = useSelector((state: RootState) => state.student.total);
   const batch = useSelector((state: RootState) => state.batch.batches);
   const course = useSelector((state: RootState) => state.course.courses);
   const [loading, setLoading] = useState<boolean>(false);
@@ -39,7 +40,7 @@ export default function StudentTable() {
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
+    setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
   const {
@@ -123,6 +124,7 @@ export default function StudentTable() {
 
         dispatch(setStudents(response.student || []));
         setTotalPages(response.totalPages || 1);
+        dispatch(setTotal(response.totalCount || 0));
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       } finally {
@@ -179,6 +181,7 @@ export default function StudentTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            totalCount={totalCount}
             onPageChange={handlePagination}
           />
         </StudentCard>

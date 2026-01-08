@@ -118,7 +118,7 @@ export default function BatchDataTable({
                 batch.map((item: any) => (
                   <TableRow key={item.id}>
                     <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                      <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                         {item.name}
                       </span>
                     </TableCell>

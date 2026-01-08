@@ -189,7 +189,7 @@ export default function AttendanceDataTable({
                           }
                         />
                         <div>
-                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                             {record.student?.fullName || "N/A"}
                           </span>
                           <span className="text-sm text-gray-500">
@@ -199,10 +199,10 @@ export default function AttendanceDataTable({
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-theme-sm font-medium text-gray-800 dark:text-white/90">
+                    <TableCell className="text-theme-sm capitalize font-medium text-gray-800 dark:text-white/90">
                       {record.course?.name || "N/A"}
                     </TableCell>
-                    <TableCell className="text-theme-sm font-medium text-gray-800 dark:text-white/90">
+                    <TableCell className="text-theme-sm capitalize font-medium text-gray-800 dark:text-white/90">
                       {record.batch?.name || "N/A"}
                     </TableCell>
                     <TableCell className="text-theme-sm font-medium text-gray-800 dark:text-white/90">

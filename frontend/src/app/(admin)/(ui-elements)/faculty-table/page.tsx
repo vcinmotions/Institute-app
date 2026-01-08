@@ -10,7 +10,7 @@ import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { setCourses } from "@/store/slices/courseSlice";
 import FacultyForm from "@/components/form/form-elements/FacultyCreateForm";
 import FacultyDataTable from "@/components/tables/FacultyDataTable";
-import { setFaculties } from "@/store/slices/facultySlice";
+import { setFaculties, setTotal } from "@/store/slices/facultySlice";
 import { setBatches } from "@/store/slices/batchSlice";
 import StudentCard from "@/components/common/StudentCard";
 
@@ -21,6 +21,7 @@ export default function FacultyTable() {
   const [totalPages, setTotalPages] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const faculties = useSelector((state: RootState) => state.faculty.faculties);
+  const totalCount = useSelector((state: RootState) => state.faculty.total);
   const courses = useSelector((state: RootState) => state.course.courses);
   const batch = useSelector((state: RootState) => state.batch.batches);
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,7 +38,7 @@ export default function FacultyTable() {
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
+    setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
   // useEffect(() => {
@@ -118,6 +119,7 @@ export default function FacultyTable() {
 
         dispatch(setFaculties(response.faculty || []));
         setTotalPages(response.totalPages || 1);
+        dispatch(setTotal(response.totalCount || 0));
       } catch (error) {
         console.error("Error fetching faculty:", error);
       } finally {
@@ -191,6 +193,8 @@ export default function FacultyTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            title="Faculties"
+            totalCount={totalCount}
             onPageChange={handlePagination}
           />
         </StudentCard>

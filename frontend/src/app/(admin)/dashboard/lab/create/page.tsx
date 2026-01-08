@@ -67,9 +67,18 @@ export default function LabForm() {
 
   // 🔹 Handle input change
   const handleChange = (field: keyof LabData, value: string | number) => {
-    setLab((prev) => ({ ...prev, [field]: value }));
+    // setLab((prev) => ({ ...prev, [field]: value }));
     setField(field, value); // <-- IMPORTANT
     setErrors((prev) => ({ ...prev, [field]: "" }));
+
+    setLab((prev) => ({
+      ...prev,
+      [field]:
+        field === "name" && typeof value === "string"
+          ? value.toLowerCase()
+          : value,
+    }));
+
   };
 
   // 🔹 Handle time slot changes
@@ -243,6 +252,7 @@ export default function LabForm() {
             <Input
               ref={firstInputRef}
               type="text"
+              className="capitalize"
               placeholder="Ex. LAB-06"
               value={lab.name}
               onChange={(e) => handleChange("name", e.target.value)}
@@ -259,6 +269,7 @@ export default function LabForm() {
               type="text"
               placeholder="Ex. Building D - Floor 1"
               value={lab.location}
+              className="capitalize"
               onChange={(e) => handleChange("location", e.target.value)}
             />
             {errors.location && (

@@ -390,6 +390,27 @@ export async function updateLabController(req: Request, res: Response) {
       }
     }
 
+    
+    /* =====================================================
+      🔥 ADD THIS BLOCK RIGHT HERE (VERY IMPORTANT)
+      ===================================================== */
+
+    const slots = await tenantPrisma.labTimeSlot.findMany({
+      where: { labId: Number(id) },
+      include: { allocations: true },
+    });
+
+    for (const slot of slots) {
+      const allocated = slot.allocations.length;
+
+      await tenantPrisma.labTimeSlot.update({
+        where: { id: slot.id },
+        data: {
+          availablePCs: totalPCs - allocated,
+        },
+      });
+    }
+
     res.json({
       message: "Lab updated successfully with student safety rules.",
     });
@@ -419,7 +440,7 @@ export async function getLabController(req: Request, res: Response) {
     // 🔍 Build filters
     const where: any = { clientAdminId };
     if (search) {
-      where.name = { contains: search, mode: "insensitive" };
+      where.name = { contains: search };
     }
 
     // 🧩 Fetch labs with relations

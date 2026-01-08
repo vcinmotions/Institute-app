@@ -214,24 +214,24 @@ export default function AdmissionForm() {
     return phone.replace(/^\+91/, "");
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        console.error("Token missing from sessionStorage");
-        return;
-      }
-      try {
-        const responseBatch = await getBatch({
-          token,
-        });
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const token = sessionStorage.getItem("token");
+  //     if (!token) {
+  //       console.error("Token missing from sessionStorage");
+  //       return;
+  //     }
+  //     try {
+  //       const responseBatch = await getBatch({
+  //         token,
+  //       });
 
-        dispatch(setBatches(responseBatch.batch));
-      } catch (error) {}
-    };
+  //       dispatch(setBatches(responseBatch.batch));
+  //     } catch (error) {}
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     if (data?.enquiry) {
@@ -512,8 +512,7 @@ export default function AdmissionForm() {
   useEffect(() => {
     if (courseData?.course) {
       dispatch(setCourses(courseData.course));
-    }
-    setCourses;
+    };
   }, [courseData, dispatch]);
 
 
@@ -521,9 +520,8 @@ export default function AdmissionForm() {
     console.log("get all batches data;", batchData);
     if (batchData?.batch) { 
       dispatch(setBatches(batchData.batch));
-    }
-    setBatches;
-  }, [batchData, dispatch]);
+    };
+  }, [batchData, dispatch, id]);
   console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
 
   const courseList = useSelector((state: RootState) => state.course.courses);
@@ -808,9 +806,13 @@ export default function AdmissionForm() {
         variant: "error",
       });
 
+      window.scrollTo({
+        top: 0, behavior: "smooth"
+      })
+
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 2000);
 
       return;
     }
@@ -824,9 +826,13 @@ export default function AdmissionForm() {
         variant: "error",
       });
 
+      window.scrollTo({
+        top: 0, behavior: "smooth"
+      })
+
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 2000);
 
       return;
     }
@@ -862,6 +868,8 @@ export default function AdmissionForm() {
       await createAdmission(admissionPayload);
       // reset form and show success alert as before
 
+      
+
       // Wait 3 seconds before showing alert
       setAlert({
         show: true,
@@ -870,10 +878,14 @@ export default function AdmissionForm() {
         variant: "success",
       });
 
+      window.scrollTo({
+        top: 0, behavior: "smooth"
+      })
+
       // Close modal after showing alert for 2 seconds (for example)
       setTimeout(() => {
         router.back();
-      }, 3000);
+      }, 1000);
     } catch (error) {
       // handle error
     }
@@ -918,6 +930,7 @@ export default function AdmissionForm() {
                 tabIndex={1}
                 placeholder="Enter Student Name"
                 value={newEnquiry.name}
+                className="capitalize"
                 onChange={(e) => handleChangeNew("name", e.target.value)}
               />
               {errors.name && (
@@ -933,6 +946,7 @@ export default function AdmissionForm() {
               <Input
                 type="text"
                 tabIndex={2}
+                className="capitalize"
                 placeholder="Enter Father Name"
                 value={filledEnquiryData.fatherName}
                 onChange={(e) => handleChange("fatherName", e.target.value)}
@@ -950,6 +964,7 @@ export default function AdmissionForm() {
               <Input
                 type="text"
                 tabIndex={3}
+                className="capitalize"
                 placeholder="Enter Mother Name"
                 value={filledEnquiryData.motherName}
                 onChange={(e) => handleChange("motherName", e.target.value)}
@@ -1051,6 +1066,7 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={9}
                 type="text"
+                className="capitalize"
                 placeholder="Enter Student Religion"
                 value={filledEnquiryData.religion}
                 onChange={(e) => handleChange("religion", e.target.value)}

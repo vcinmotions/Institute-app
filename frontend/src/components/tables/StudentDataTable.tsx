@@ -412,7 +412,7 @@ export default function StudentDataTable({
                         />
                         </div>
                         <div>
-                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                             {item.fullName}
                           </span>
                           <span className="text-theme-xs block text-gray-500 dark:text-gray-400">

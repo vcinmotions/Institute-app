@@ -198,7 +198,7 @@ export default function CourseCompletionForm({
           value={formData.feedback}
           ref={firstInputRef}
           tabIndex={1}
-          className="w-full rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+          className="w-full capitalize rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           onChange={(value) => handleChange("feedback", value)}
           rows={4}
           placeholder="Interview Follow-Up Schedule"
@@ -223,7 +223,7 @@ export default function CourseCompletionForm({
         <TextArea
           tabIndex={2}
           value={formData.remark}
-          className="w-full rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+          className="w-full capitalize rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           onChange={(value) => handleChange("remark", value)}
           rows={4}
           placeholder="Interview Follow-Up Schedule"

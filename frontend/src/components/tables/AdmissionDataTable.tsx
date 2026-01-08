@@ -232,7 +232,7 @@ export default function AdmissionDataTable({
                           
                         </div>
                         <div>
-                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                             {item.name}
                           </span>
                           <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
@@ -252,7 +252,9 @@ export default function AdmissionDataTable({
                       {item.email ? item.email : "-"}
                     </TableCell>
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.course ? item.course : "-"}
+                      {item.enquiryCourse.map((cr: any, index: number) => (
+                        <span key={index}>{cr.course.name}</span>
+                      ))}
                     </TableCell>
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       <Badge

@@ -191,7 +191,7 @@ export default function FacultyDataTable({
                     <TableCell className="px-5 py-4 text-start sm:px-6">
                       <div className="flex items-center gap-3">
                         <div>
-                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                             {item.name}
                           </span>
                           <span className="block text-xs text-gray-500 dark:text-gray-400">

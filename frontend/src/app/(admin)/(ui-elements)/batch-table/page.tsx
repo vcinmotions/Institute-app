@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import BatchDataTable from "@/components/tables/BatchDataTable";
 import BatchForm from "@/components/form/form-elements/BatchCreateForm";
-import { setBatches } from "@/store/slices/batchSlice";
+import { setBatches, setTotal } from "@/store/slices/batchSlice";
 import { setLab } from "@/store/slices/labSlice";
 import StudentCard from "@/components/common/StudentCard";
 
@@ -23,6 +23,7 @@ export default function BatchTable() {
   const [totalPages, setTotalPages] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const batch = useSelector((state: RootState) => state.batch.batches);
+  const totalCount = useSelector((state: RootState) => state.batch.total);
   const labs = useSelector((state: RootState) => state.lab.labs);
   const [loading, setLoading] = useState<boolean>(false);
   const [sortField, setSortField] = useState("createdAt");
@@ -38,7 +39,7 @@ export default function BatchTable() {
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
+    setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
   // useEffect(() => {
@@ -122,6 +123,7 @@ export default function BatchTable() {
 
         dispatch(setBatches(response.batch || []));
         setTotalPages(response.totalPages || 1);
+        dispatch(setTotal(response.totalCount || 0));
       } catch (error) {
         console.error("Error fetching batch:", error);
       } finally {
@@ -222,6 +224,8 @@ export default function BatchTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            title="Bathes"
+            totalCount={totalCount}
             onPageChange={handlePagination}
           />
         </StudentCard>

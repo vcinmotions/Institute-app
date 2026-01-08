@@ -352,7 +352,7 @@ export default function LabDataTable({
                       <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                         <div className="flex items-center gap-3">
                           <div>
-                            <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
+                            <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                               {item.name}
                             </span>
                             <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
