@@ -21,6 +21,7 @@ import { setBatches } from "@/store/slices/batchSlice";
 import { getBatch, getCourse } from "@/lib/api";
 import MultiSelect from "@/components/form/MultiSelect";
 import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
+import { capitalizeWords } from "@/components/common/ToCapitalize";
 
 interface EnquiryData {
   id: string;
@@ -531,7 +532,7 @@ export default function AdmissionForm() {
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: `${capitalizeWords(b.name)} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
   }));
 
   const options = [
@@ -1082,7 +1083,7 @@ export default function AdmissionForm() {
                   tabIndex={10}
                   options={courseList.map((course) => ({
                     value: String(course.id),
-                    text: course.name,
+                    text: capitalizeWords(course.name),
                     selected: newEnquiry.courseId.includes(String(course.id)),
                   }))}
                   label="Select Courses"

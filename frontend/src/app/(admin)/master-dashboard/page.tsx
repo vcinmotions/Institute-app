@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 //import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 //import CompanyTable from "../(ui-elements)/company-table/page";
-import { setUser } from "@/store/slices/authSlice";
+import { setCountry, setStateLocation, setUser } from "@/store/slices/authSlice";
 import RoleProtected from "@/components/auth/RoleProtected";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import CompanyTable from "../(ui-elements)/company-table/page";
@@ -36,6 +36,8 @@ export default function MasterDashboard() {
         const data = await getMasterUser(token);
         setLoading(false); // ✅ All good, show dashboard
         dispatch(setUser(data.userdata));
+        dispatch(setCountry(data.userdata));
+        dispatch(setStateLocation(data.userdata));
         console.log("👤 Get Master User Data in Master Admin Layout:", data);
       } catch (err) {
         console.error("❌ Error fetching user:", err);

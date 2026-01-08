@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useSidebar } from "@/context/SidebarContext";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/slices/authSlice";
+import { setCountry, setStateLocation, setUser } from "@/store/slices/authSlice";
 import { socket } from "@/app/utils/socket";
 
 import AppHeader from "@/layout/AppHeader";
@@ -26,6 +26,8 @@ export default function ClientAdminLayout({
 
   useEffect(() => {
     dispatch(setUser(user));
+    dispatch(setCountry(user.country));
+    dispatch(setStateLocation(user.state));
   }, [user]);
 
   useEffect(() => {

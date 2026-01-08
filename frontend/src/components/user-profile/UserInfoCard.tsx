@@ -10,6 +10,7 @@ import { RootState } from "@/store";
 import { useEditClient } from "@/hooks/useEditClient";
 import { useEditMaster } from "@/hooks/useEditMaster";
 import ShowForRoles from "@/app/utils/ShowForRoles";
+import { capitalizeWords } from "../common/ToCapitalize";
 
 export default function UserInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -57,7 +58,7 @@ export default function UserInfoCard() {
                 Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {user?.name}
+                {capitalizeWords(user?.name)}
               </p>
             </div>
 

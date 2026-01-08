@@ -99,6 +99,7 @@ model Enquiry {
   email        String?
   age          Int?
   location     String?
+  city         String?
   course       String?
   gender       String?
   dob          DateTime?

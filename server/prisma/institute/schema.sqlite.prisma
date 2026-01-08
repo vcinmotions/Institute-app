@@ -101,6 +101,7 @@ model Enquiry {
   alternateContact      String?
   age          Int?
   location     String?
+  city         String?
   gender       String?
   dob          DateTime?
   referedBy    String?

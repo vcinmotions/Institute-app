@@ -26,6 +26,15 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { focusNextInput } from "@/app/utils/focusNext";
 import MultiSelect from "@/components/form/MultiSelect";
 import { Tooltip } from "@heroui/react";
+import { capitalizeWords } from "@/components/common/ToCapitalize";
+import {
+  City,
+  Country,
+  ICity,
+  ICountry,
+  IState,
+  State,
+} from "country-state-city";
 
 // interface EnquiryData {
 //   name: string;
@@ -41,6 +50,7 @@ interface EnquiryData {
   courseId: string[];
   alternateContact: string,
   location: string,
+  city: string,
   gender: string,
   dob: string,
   referedBy: string,
@@ -56,12 +66,17 @@ export default function EnquiryForm() {
     courseId: [],
     alternateContact: "",
     location: "",
+    city: "",
     gender: "",
     dob: "",
     referedBy: "",
     source: "",
     contact: "",
   });
+  const branchState = useSelector((state: RootState) => state.auth.statelocation);
+  const branchCountry = useSelector((state: RootState) => state.auth.country);
+   const [state, setState] = useState<IState[]>([]);
+    const [city, setCity] = useState<ICity[]>([]);
   const courses = useSelector((state: RootState) => state.course.courses);
 
   const dispatch = useDispatch();
@@ -102,6 +117,13 @@ export default function EnquiryForm() {
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const firstInputRef = useRef<HTMLInputElement>(null);
   const jumpInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setState(State.getStatesOfCountry(branchCountry));
+    const countryIso = branchCountry;
+    const cities = City.getCitiesOfState(countryIso, branchState);
+    setCity(cities);
+  }, [])
 
   // 🟢 Restore data from Zustand when page opens
   useEffect(() => {
@@ -227,14 +249,32 @@ export default function EnquiryForm() {
   };
 
   const handleChange = (field: keyof EnquiryData, value: string | string[]) => {
-  
+    // if (field === "city") {
+    //   setNewEnquiry((prev) => ({
+    //     ...prev,
+    //     city: value,
+    //   }));
+    //   setField("city", value);
+    //   return;
+    // }
+
     setNewEnquiry((prev) => ({
       ...prev,
       [field]:
-        field === "name" && typeof value === "string"
+        (field === "name" || field === "location") && typeof value === "string"
           ? value.toLowerCase()
           : value,
     }));
+
+  
+    // setNewEnquiry((prev) => ({
+    //   ...prev,
+    //   [field]:
+    //     field === "name" && typeof value === "string"
+    //       ? value.toLowerCase()
+    //       : value,
+          
+    // }));
 
     // setNewEnquiry((prev) => ({
     //   ...prev,
@@ -291,7 +331,7 @@ export default function EnquiryForm() {
     //   source: "",
     //   contact: "",
     // });
-    setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", gender: "", dob: "", referedBy: "", contact: "" });
+    setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
 
     firstInputRef.current?.focus();
   };
@@ -351,6 +391,10 @@ export default function EnquiryForm() {
         variant: "error",
       });
 
+       window.scrollTo({
+          top: 0, behavior: "smooth"
+        })
+
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 2000);
@@ -366,6 +410,10 @@ export default function EnquiryForm() {
         message: "Token not found. Please log in again.",
         variant: "error",
       });
+
+       window.scrollTo({
+          top: 0, behavior: "smooth"
+        })
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
@@ -383,7 +431,11 @@ export default function EnquiryForm() {
         //   source: "",
         //   contact: "",
         // });
-        setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", gender: "", dob: "", referedBy: "", contact: "" });
+        setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
+
+        window.scrollTo({
+          top: 0, behavior: "smooth"
+        })
 
         setAlert({
           show: true,
@@ -516,15 +568,33 @@ export default function EnquiryForm() {
         </div>
 
         <div>
-          <Label>Location</Label>
+          <Label>Area</Label>
           <Input
             type="text"
-            placeholder="Enter Location"
+            placeholder="Enter Area"
+            className="capitalize"
             value={newEnquiry.location}
             tabIndex={7}
             onChange={(e) => handleChange("location", e.target.value)}         />
             {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
+
+         {/* CITY */}
+          <div>
+            <Label>City *</Label>
+            <Select
+              options={city.map((c) => ({
+                label: c.name,
+                value: c.name, // city name is fine
+              }))}
+              placeholder="Select City"
+              onChange={(value) => handleChange("city", value)}
+              value={newEnquiry.city}
+            />
+            {errors.city && (
+              <p className="text-sm text-red-500">{errors.city}</p>
+            )}
+          </div>
 
         {/* <div>
           <Label>DoB</Label>
@@ -590,7 +660,7 @@ export default function EnquiryForm() {
                 label="Select Courses *"
                 options={courseList.map((course) => ({
                   value: String(course.id),
-                  text: course.name,
+                  text: capitalizeWords(course.name),
                   selected: newEnquiry.courseId.includes(String(course.id)),
                 }))}
                 value={newEnquiry.courseId}

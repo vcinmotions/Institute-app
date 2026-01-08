@@ -11,6 +11,7 @@ import { RootState } from "@/store";
 import { useEditClient } from "@/hooks/useEditClient";
 import { useEditMaster } from "@/hooks/useEditMaster";
 import Avatar from "../common/Avatar";
+import { capitalizeWords } from "../common/ToCapitalize";
 
 export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -79,7 +80,7 @@ export default function UserMetaCard() {
             </div>
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-center text-lg font-semibold text-gray-800 xl:text-left dark:text-white/90">
-                {user?.name}
+                {capitalizeWords(user?.name)}
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                 <p className="text-sm text-gray-500 dark:text-gray-400">

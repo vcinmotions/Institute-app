@@ -129,7 +129,7 @@ export async function addEnquiryController(req: Request, res: Response) {
 
 export async function addEnquiryControllerNew(req: Request, res: Response) {
   // const { name, contact, email, source, courseId } = req.body;
-  const { name, contact, courseId, source, email, alternateContact, location, gender, dob, referedBy } = req.body;
+  const { name, contact, courseId, source, email, alternateContact, location, city, gender, dob, referedBy } = req.body;
 
   if (!name || !contact) {
     return res.status(400).json({ error: "Missing required enquiry details" });
@@ -210,6 +210,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
         alternateContact: alternateContact || null,
         age: age ? Number(age) : null,
         location: location || null,
+        city: city || null,
         gender: gender || null,
         dob: dob ? new Date(dob) : null,
         referedBy: referedBy || null,
@@ -260,7 +261,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
 }
 
 export async function editEnquiryController(req: Request, res: Response) {
-  const { id, name, contact, courseId, source, email: enquiryEmail, alternateContact, dob, gender, location, referedBy } = req.body;
+  const { id, name, contact, courseId, source, email: enquiryEmail, alternateContact, dob, gender, location, city, referedBy } = req.body;
 
   console.log("get Edit Enquiry data", req.body);
 
@@ -320,6 +321,7 @@ export async function editEnquiryController(req: Request, res: Response) {
         alternateContact: alternateContact || null,
         age: age ? Number(age) : null,
         location: location || null,
+        city: city || null,
         gender: gender || null,
         dob: dob ? new Date(dob) : null,
         referedBy: referedBy || null,
@@ -487,6 +489,8 @@ export async function getEnquiryController(req: Request, res: Response) {
             OR: [
               { name: { contains: search as string } },
               { email: { contains: search as string } },
+              { city: { contains: search as string } },
+              { location: { contains: search as string } },
               // ✅ ONLY apply srNo filter if search is numeric
               ...(isNumberSearch
                 ? [{ srNo: { equals: searchNumber } }]

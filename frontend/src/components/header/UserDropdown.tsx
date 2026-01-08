@@ -8,6 +8,7 @@ import { useLogout } from "@/hooks/useLogout";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import Avatar from "../common/Avatar";
+import { capitalizeWords } from "../common/ToCapitalize";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +50,7 @@ export default function UserDropdown() {
         </span>
 
         <span className="text-theme-sm mr-1 block font-medium">
-          {user?.name}
+          {capitalizeWords(user?.name)}
         </span>
 
         <svg
@@ -79,7 +80,7 @@ export default function UserDropdown() {
       >
         <div>
           <span className="text-theme-sm block font-medium text-gray-700 dark:text-gray-400">
-            {user?.name}
+            {capitalizeWords(user?.name)}
           </span>
           <span className="text-theme-xs mt-0.5 block text-gray-500 dark:text-gray-400">
             {user?.email}

@@ -179,6 +179,7 @@ exports.Prisma.EnquiryScalarFieldEnum = {
   email: 'email',
   age: 'age',
   location: 'location',
+  city: 'city',
   course: 'course',
   gender: 'gender',
   dob: 'dob',

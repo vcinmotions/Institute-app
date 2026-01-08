@@ -8648,6 +8648,7 @@ export namespace Prisma {
     email: string | null
     age: number | null
     location: string | null
+    city: string | null
     course: string | null
     gender: string | null
     dob: Date | null
@@ -8670,6 +8671,7 @@ export namespace Prisma {
     email: string | null
     age: number | null
     location: string | null
+    city: string | null
     course: string | null
     gender: string | null
     dob: Date | null
@@ -8692,6 +8694,7 @@ export namespace Prisma {
     email: number
     age: number
     location: number
+    city: number
     course: number
     gender: number
     dob: number
@@ -8728,6 +8731,7 @@ export namespace Prisma {
     email?: true
     age?: true
     location?: true
+    city?: true
     course?: true
     gender?: true
     dob?: true
@@ -8750,6 +8754,7 @@ export namespace Prisma {
     email?: true
     age?: true
     location?: true
+    city?: true
     course?: true
     gender?: true
     dob?: true
@@ -8772,6 +8777,7 @@ export namespace Prisma {
     email?: true
     age?: true
     location?: true
+    city?: true
     course?: true
     gender?: true
     dob?: true
@@ -8881,6 +8887,7 @@ export namespace Prisma {
     email: string | null
     age: number | null
     location: string | null
+    city: string | null
     course: string | null
     gender: string | null
     dob: Date | null
@@ -8922,6 +8929,7 @@ export namespace Prisma {
     email?: boolean
     age?: boolean
     location?: boolean
+    city?: boolean
     course?: boolean
     gender?: boolean
     dob?: boolean
@@ -8950,6 +8958,7 @@ export namespace Prisma {
     email?: boolean
     age?: boolean
     location?: boolean
+    city?: boolean
     course?: boolean
     gender?: boolean
     dob?: boolean
@@ -8974,6 +8983,7 @@ export namespace Prisma {
     email?: boolean
     age?: boolean
     location?: boolean
+    city?: boolean
     course?: boolean
     gender?: boolean
     dob?: boolean
@@ -8998,6 +9008,7 @@ export namespace Prisma {
     email?: boolean
     age?: boolean
     location?: boolean
+    city?: boolean
     course?: boolean
     gender?: boolean
     dob?: boolean
@@ -9011,7 +9022,7 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "course" | "gender" | "dob" | "source" | "referedBy" | "leadStatus" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
+  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "city" | "course" | "gender" | "dob" | "source" | "referedBy" | "leadStatus" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
   export type EnquiryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     followUps?: boolean | Enquiry$followUpsArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
@@ -9047,6 +9058,7 @@ export namespace Prisma {
       email: string | null
       age: number | null
       location: string | null
+      city: string | null
       course: string | null
       gender: string | null
       dob: Date | null
@@ -9494,6 +9506,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Enquiry", 'String'>
     readonly age: FieldRef<"Enquiry", 'Int'>
     readonly location: FieldRef<"Enquiry", 'String'>
+    readonly city: FieldRef<"Enquiry", 'String'>
     readonly course: FieldRef<"Enquiry", 'String'>
     readonly gender: FieldRef<"Enquiry", 'String'>
     readonly dob: FieldRef<"Enquiry", 'DateTime'>
@@ -41226,6 +41239,7 @@ export namespace Prisma {
     email: 'email',
     age: 'age',
     location: 'location',
+    city: 'city',
     course: 'course',
     gender: 'gender',
     dob: 'dob',
@@ -42161,6 +42175,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Enquiry"> | string | null
     age?: IntNullableFilter<"Enquiry"> | number | null
     location?: StringNullableFilter<"Enquiry"> | string | null
+    city?: StringNullableFilter<"Enquiry"> | string | null
     course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
@@ -42188,6 +42203,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     age?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
     course?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
@@ -42219,6 +42235,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Enquiry"> | string | null
     age?: IntNullableFilter<"Enquiry"> | number | null
     location?: StringNullableFilter<"Enquiry"> | string | null
+    city?: StringNullableFilter<"Enquiry"> | string | null
     course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
@@ -42245,6 +42262,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     age?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
     course?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
@@ -42275,6 +42293,7 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     age?: IntNullableWithAggregatesFilter<"Enquiry"> | number | null
     location?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    city?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     course?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     gender?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"Enquiry"> | Date | string | null
@@ -44804,6 +44823,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -44829,6 +44849,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -44854,6 +44875,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44879,6 +44901,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44904,6 +44927,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -44926,6 +44950,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44946,6 +44971,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -47512,6 +47538,7 @@ export namespace Prisma {
     email?: SortOrder
     age?: SortOrder
     location?: SortOrder
+    city?: SortOrder
     course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
@@ -47540,6 +47567,7 @@ export namespace Prisma {
     email?: SortOrder
     age?: SortOrder
     location?: SortOrder
+    city?: SortOrder
     course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
@@ -47562,6 +47590,7 @@ export namespace Prisma {
     email?: SortOrder
     age?: SortOrder
     location?: SortOrder
+    city?: SortOrder
     course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
@@ -54052,6 +54081,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -54076,6 +54106,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -54801,6 +54832,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Enquiry"> | string | null
     age?: IntNullableFilter<"Enquiry"> | number | null
     location?: StringNullableFilter<"Enquiry"> | string | null
+    city?: StringNullableFilter<"Enquiry"> | string | null
     course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
@@ -55778,6 +55810,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -55802,6 +55835,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -55981,6 +56015,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56005,6 +56040,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56180,6 +56216,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -56204,6 +56241,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -56269,6 +56307,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56293,6 +56332,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56373,6 +56413,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -56397,6 +56438,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -56600,6 +56642,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56624,6 +56667,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56792,6 +56836,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -56816,6 +56861,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -57300,6 +57346,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57324,6 +57371,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -66387,6 +66435,7 @@ export namespace Prisma {
     email?: string | null
     age?: number | null
     location?: string | null
+    city?: string | null
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
@@ -67138,6 +67187,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -67162,6 +67212,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -67186,6 +67237,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

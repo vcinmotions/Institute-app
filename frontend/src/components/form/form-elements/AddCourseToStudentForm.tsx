@@ -14,6 +14,7 @@ import { setCourses } from "@/store/slices/courseSlice";
 import { RootState } from "@/store";
 import { setBatches } from "@/store/slices/batchSlice";
 import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
+import { capitalizeWords } from "@/components/common/ToCapitalize";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -521,7 +522,7 @@ export default function CourseForm({
               ref={firstInputRef}
               tabIndex={1}
               options={filteredCourses.map((course) => ({
-                label: course.name,
+                label: capitalizeWords(course.name),
                 value: course.id,
               }))}
               placeholder="Select a course"
@@ -544,7 +545,7 @@ export default function CourseForm({
             <Select
               tabIndex={2}
               options={filteredBatches.map((batch) => ({
-                label: batch.name,
+                label: capitalizeWords(batch.name),
                 value: batch.id,
               }))}
               placeholder="Select an option"

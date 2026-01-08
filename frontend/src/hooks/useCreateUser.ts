@@ -31,19 +31,17 @@ export const useCreateUser = () => {
 
       dispatch(setToken(data.token));
 
+      dispatch(setToken(data.token));
 
-  // ✅ PERSIST LOGIN (THIS IS THE KEY)
-  window.localStorage.setItem("auth", JSON.stringify({
-    token: data.token,
-    email: data.email,
-    role: data.role,
-    userType: data.userType,
-    dbUrl: data.dbUrl,
-    loggedAt: Date.now(),
-  }));
-
- 
-
+      // ✅ PERSIST LOGIN (THIS IS THE KEY)
+      window.localStorage.setItem("auth", JSON.stringify({
+        token: data.token,
+        email: data.email,
+        role: data.role,
+        userType: data.userType,
+        dbUrl: data.dbUrl,
+        loggedAt: Date.now(),
+      }));
 
       console.log("Get User Data in Login and Saved in Redux:", data);
 

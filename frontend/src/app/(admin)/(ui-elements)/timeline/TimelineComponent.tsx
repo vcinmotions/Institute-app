@@ -591,7 +591,7 @@ export default function TimelineDatatable({
                     {lastItem.followUpStatus !== "COMPLETED" && (
                       <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
                         <span className="font-semibold">scheduled at:</span>{" "}
-                        {new Date(lastItem.scheduledAt).toLocaleString(
+                        {/* {new Date(lastItem.scheduledAt).toLocaleString(
                           "en-US",
                           {
                             weekday: "short",
@@ -601,8 +601,9 @@ export default function TimelineDatatable({
                             hour: "numeric",
                             minute: "2-digit",
                             hour12: true,
-                          },
-                        )}
+                          },  
+                        )} */}
+                        {formatDate(lastItem.scheduledAt)}
                       </div>
                     )}
 
@@ -616,7 +617,7 @@ export default function TimelineDatatable({
                 </li>
               )}
               {/* 🎯 Render buttons only if follow-up is NOT completed */}
-              {lastItem.followUpStatus !== "COMPLETED" && (
+              {/* {lastItem.followUpStatus !== "COMPLETED" && (
                 <div className="mt-6 flex justify-end gap-4">
                   <button
                     className="rounded border border-gray-300 bg-white px-4 py-2 text-sm text-black transition hover:bg-gray-100"
@@ -624,14 +625,20 @@ export default function TimelineDatatable({
                   >
                     Create Next Follow-Up
                   </button>
-                  {/* <button
-                    className="rounded bg-gray-800 px-4 py-2 text-white text-sm hover:bg-gray-900 transition"
-                    onClick={() => onCompleteFollowUp(lastItem.id)}
-                    >
-                    Complete Follow-Up
-                    </button> */}
                 </div>
-              )}
+              )} */}
+              {/* 🎯 Render button only if follow-up is NOT completed AND enquiry is NOT LOST */}
+              {lastItem.followUpStatus !== "COMPLETED" &&
+                fineEnquiryById?.leadStatus !== "LOST" && (
+                  <div className="mt-6 flex justify-end gap-4">
+                    <button
+                      className="rounded border border-gray-300 bg-white px-4 py-2 text-sm text-black transition hover:bg-gray-100"
+                      onClick={() => handleCreateFollowUpForFollowUp(lastItem.id)}
+                    >
+                      Create Next Follow-Up
+                    </button>
+                  </div>
+              )}          
             </ul>
           </div>
         </div>

@@ -4,6 +4,8 @@ interface AuthState {
   token: string | null;
   user: any | null;
   tenant: any | null,
+  country: any | null,
+  statelocation: any | null,
   loading: boolean;
   error: any | null;
 }
@@ -12,6 +14,8 @@ const initialState: AuthState = {
   token: typeof window !== 'undefined' ? sessionStorage.getItem('token') : null,
   user: null,
   tenant: null,
+  country: null,
+  statelocation: null,
   loading: false,
   error: null,
 };
@@ -33,6 +37,12 @@ const authSlice = createSlice({
     setUser(state, action: PayloadAction<any | null>) {
       state.user = action.payload;
     },
+    setCountry(state, action: PayloadAction<any | null>) {
+      state.country = action.payload;
+    },
+    setStateLocation(state, action: PayloadAction<any | null>) {
+      state.statelocation = action.payload;
+    },
     setTenant(state, action: PayloadAction<any | null>) {
       state.tenant = action.payload;
     },
@@ -52,6 +62,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setToken, setUser, setTenant, setLoading, logout, setError } = authSlice.actions;
+export const { setToken, setUser, setTenant, setLoading, setCountry, setStateLocation, logout, setError } = authSlice.actions;
 
 export default authSlice.reducer;
