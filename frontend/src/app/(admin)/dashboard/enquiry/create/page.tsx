@@ -469,7 +469,7 @@ export default function EnquiryForm() {
         </h3> */}
 
         <div className="space-y-8">
-          <h2 className="border-b pb-6">Enquiry Infomation</h2>
+          <h2 className="border-b pb-6 dark:text-gray-50 dark:border-gray-700">Enquiry Infomation</h2>
           {error && (
             <div className="rounded-md border border-red-300 bg-red-100 p-3 text-sm text-red-700">
               {error}

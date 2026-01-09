@@ -13,7 +13,7 @@ export interface UseFetchEnquiryParams {
 
 export const useFetchEnquiry = ({
   token,
-  page = 1,
+  page,
   limit = 5,
   search = "",
   sortField,

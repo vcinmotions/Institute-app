@@ -43,14 +43,17 @@
 
 // src/hooks/useCreateNextFollowUp.ts
 import { useMutation } from "@tanstack/react-query";
-import { createNextFolowUpAPI, editNextFolowUpAPI, getFollowUp } from "@/lib/api";
+import { createNextFolowUpAPI, editNextFolowUpAPI, getEnquiry, getFollowUp } from "@/lib/api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setFollowUps, setLoading, setError } from "@/store/slices/followUpSlice";
+import { setEnquiries } from "@/store/slices/enquirySlice";
 
 export const useCreateNextFollowUp = () => {
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.token);
+  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
 
   return useMutation({
     mutationFn: async (newFollowUpData: {
@@ -75,11 +78,14 @@ export const useCreateNextFollowUp = () => {
 
         // Fetch updated follow-ups for this enquiry
         const updated = await getFollowUp(token, enquiryId);
+        const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: "srNo", sortOrder: "asc"});
 
         console.log("Updated follow-ups:", updated.followup);
+        console.log("Updated Enquiry:", updatedEnquiry);
 
         // Update Redux state
         dispatch(setFollowUps(updated.followup));
+        dispatch(setEnquiries(updatedEnquiry.enquiry));
         dispatch(setError(null));
       } catch (err: any) {
         dispatch(setError(err.message || "Failed to fetch updated follow-ups"));

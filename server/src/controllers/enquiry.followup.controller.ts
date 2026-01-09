@@ -74,7 +74,7 @@ export async function updateFollowUpController(req: Request, res: Response) {
 
     // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
     //   where: { email },
-    // });
+    // });s
 
     // if (!clientAdmin) {
     //   return res.status(404).json({ error: 'Client admin not found' });
@@ -110,6 +110,14 @@ export async function updateFollowUpController(req: Request, res: Response) {
       });
       console.log("🔥 Enquiry lead status updated from HOLD → HOT");
     }
+
+    const getEnquiryUpdate = await tenantPrisma.enquiry.findUnique({
+      where: {
+        id: enquiryId
+      }
+    })
+
+    console.log("📌 GET UPDATIND ENQUIRY AFTER CREATING NEXT FOLLOW_UP", getEnquiryUpdate);
 
      // ✅ 4️⃣ Create a new PENDING follow-up
     const createNewFollowUp = await tenantPrisma.followUp.create({

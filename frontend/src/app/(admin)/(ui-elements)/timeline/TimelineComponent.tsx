@@ -47,8 +47,13 @@ export default function TimelineDatatable({
   }
 
   console.log("get Enquiry data in tmeline", enquiries);
-  const fineEnquiryById = enquiries.find(
-    (data: { id: any | null }) => data.id === enquiryId,
+  // const fineEnquiryById = enquiries.find(
+  //   (data: { id: any | null }) => data.id === enquiryId,
+  // );
+
+  const fineEnquiryById = React.useMemo(
+    () => enquiries.find(e => e.id === enquiryId),
+    [enquiries, enquiryId]
   );
 
   console.log("get Enquiry data in tmeline bt Id", fineEnquiryById);
@@ -203,79 +208,115 @@ export default function TimelineDatatable({
           </div>
         </div> */}
 
-        <div className="mb-4 rounded-2xl border border-gray-200 bg-white px-6 py-8 dark:border-gray-800 dark:bg-white/[0.03]">
-          <h4 className="mb-10 text-center text-lg font-semibold text-gray-800 dark:text-white/90">
-            Enquiry Details
-          </h4>
+       <div className="mb-6 rounded-3xl border border-gray-200/60 bg-white px-8 py-10 shadow-sm dark:border-gray-800/60 dark:bg-white/[0.02]">
+        <h4 className="mb-6 text-center text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+          Enquiry Details
+        </h4>
 
-          <div className="relative mx-auto max-w-4xl">
-            {/* Vertical Line */}
-            <div className="absolute left-3.5 top-0 h-full w-px bg-gray-200 dark:bg-gray-700" />
+        <div className="relative mx-auto max-w-4xl">
+          {/* Vertical Timeline Line */}
+          <div className="absolute left-4 top-0 h-full w-px bg-gradient-to-b from-gray-200 via-gray-200 to-transparent dark:from-gray-700 dark:via-gray-700" />
 
-            {/* ===== BASIC DETAILS ===== */}
-            <div className="relative mb-10 flex gap-6">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white font-semibold">
-                1
-              </div>
+          {/* ===== BASIC DETAILS ===== */}
+          <div className="relative mb-14 flex gap-8">
+            {/* Step Indicator */}
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
+              1
+            </div>
 
-              <div className="w-full rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
-                <h5 className="mb-4 font-semibold text-gray-800 dark:text-white">
-                  Basic Details
-                </h5>
+            {/* Card */}
+            <div className="w-full rounded-3xl bg-gray-50/80 p-7 ring-1 ring-gray-200/60 dark:bg-gray-900/40 dark:ring-gray-700/60">
+              <h5 className="mb-6 text-base font-semibold text-gray-900 dark:text-white">
+                Basic Details
+              </h5>
 
-                <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 lg:grid-cols-2">
-                  <p><span className="text-gray-500">Enquiry ID:</span> {fineEnquiryById?._id}</p>
-                  <p className="capitalize"><span className="text-gray-500">Name:</span> {fineEnquiryById?.name}</p>
-                  <p><span className="text-gray-500">Email:</span> {fineEnquiryById?.email || "-"}</p>
-                  <p><span className="text-gray-500">Dob:</span> { " " }{fineEnquiryById?.dob?.split('T')[0]}</p>
-                  <p><span className="text-gray-500">Contact:</span> +91 {fineEnquiryById?.contact}</p>
-                  <p><span className="text-gray-500">Alternate:</span> +91 {fineEnquiryById?.alternateContact}</p>
-                  <p className="capitalize"><span className="text-gray-500">Gender:</span> {fineEnquiryById?.gender || "-"}</p>
-                  <p className="capitalize"><span className="text-gray-500">Location:</span> {fineEnquiryById?.location || "-"}</p>
-                  <p className="capitalize"><span className="text-gray-500">Sourse:</span> {fineEnquiryById?.source || "-"}</p>
-                  <p className="capitalize"><span className="text-gray-500">Refered By:</span> {fineEnquiryById?.referedBy || "-"}</p>
-                  <p>
-                    <span className="text-gray-500">Follow-Up Status:</span>{" "}
-                    <span className={`font-medium ${
-                      fineEnquiryById?.leadStatus === "WON" ? "text-green-600" : "text-red-500"
-                    }`}>
-                      {fineEnquiryById?.leadStatus === "WON" ? "Completed" : "Pending"}
+              <div className="grid grid-cols-1 gap-x-10 gap-y-4 text-sm sm:grid-cols-2">
+                {[
+                  ["Enquiry ID", fineEnquiryById?.srNo],
+                  ["Name", fineEnquiryById?.name],
+                  ["Email", fineEnquiryById?.email || "-"],
+                  ["DOB", fineEnquiryById?.dob?.split("T")[0]],
+                  ["Contact", `+91 ${fineEnquiryById?.contact}`],
+                  ["Alternate", `+91 ${fineEnquiryById?.alternateContact}`],
+                  ["Gender", fineEnquiryById?.gender || "-"],
+                  ["Location", fineEnquiryById?.location || "-"],
+                  ["Source", fineEnquiryById?.source || "-"],
+                  ["Referred By", fineEnquiryById?.referedBy || "-"],
+                ].map(([label, value], idx) => (
+                  <div key={idx} className="flex flex-col">
+                    <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                      {label}
                     </span>
-                  </p>
-                  <p>
-                    <span className="text-gray-500">Status:</span>{" "}
-                    <span className={`font-medium ${
-                      fineEnquiryById?.isConverted ? "text-green-600" : "text-red-500"
-                    }`}>
-                      {fineEnquiryById?.isConverted === false ? "Nil" : "Done"}
+                    <span className="mt-0.5 font-medium text-gray-900 dark:text-gray-100 capitalize">
+                      {value}
                     </span>
-                  </p>
+                  </div>
+                ))}
+
+                {/* Follow-up Status */}
+                <div className="flex flex-col">
+                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                    Follow-Up Status
+                  </span>
+                  <span
+                    className={`mt-1 inline-flex w-fit rounded-full px-3 py-1 text-xs font-medium ${
+                      fineEnquiryById?.leadStatus === "WON"
+                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                        : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                    }`}
+                  >
+                    {fineEnquiryById?.leadStatus === "WON" ? "Completed" : "Pending"}
+                  </span>
+                </div>
+
+                {/* Conversion Status */}
+                <div className="flex flex-col">
+                  <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                    Conversion Status
+                  </span>
+                  <span
+                    className={`mt-1 inline-flex w-fit rounded-full px-3 py-1 text-xs font-medium ${
+                      fineEnquiryById?.isConverted
+                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                        : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                    }`}
+                  >
+                    {fineEnquiryById?.isConverted ? "Done" : "Nil"}
+                  </span>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* ===== COURSE DETAILS ===== */}
-            <div className="relative mb-10 flex gap-6">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white font-semibold">
-                2
-              </div>
+          {/* ===== COURSE DETAILS ===== */}
+          <div className="relative flex gap-8">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
+              2
+            </div>
 
-              <div className="w-full rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
-                <h5 className="mb-4 font-semibold text-gray-800 dark:text-white">
-                  Course Interested
-                </h5>
+            <div className="w-full rounded-3xl bg-gray-50/80 p-7 ring-1 ring-gray-200/60 dark:bg-gray-900/40 dark:ring-gray-700/60">
+              <h5 className="mb-5 text-base font-semibold text-gray-900 dark:text-white">
+                Courses Interested
+              </h5>
 
-                <ul className="list-inside list-disc text-sm">
-                  {fineEnquiryById?.enquiryCourse?.length ? (
-                    fineEnquiryById.enquiryCourse.map((cr: any, index: number) => (
-                      <li className="capitalize" key={index}>{cr.course?.name}</li>
-                    ))
-                  ) : (
-                    <li>-</li>
-                  )}
-                </ul>
+              <div className="flex flex-wrap gap-2">
+                {fineEnquiryById?.enquiryCourse?.length ? (
+                  fineEnquiryById.enquiryCourse.map((cr: any, index: number) => (
+                    <span
+                      key={index}
+                      className="rounded-full bg-gray-900 px-4 py-1.5 text-xs font-medium text-white dark:bg-white dark:text-gray-900 capitalize"
+                    >
+                      {cr.course?.name}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-sm text-gray-500">—</span>
+                )}
               </div>
             </div>
+          </div>
+        </div>
+      </div>
 
             {/* ===== FOLLOW-UP & ASSIGNMENT ===== */}
             {/* <div className="relative mb-10 flex gap-6">
@@ -315,8 +356,8 @@ export default function TimelineDatatable({
                 </p>
               </div>
             </div> */}
-          </div>
-        </div>
+          {/* </div>
+        </div> */}
 
 
         {/* <path
@@ -336,7 +377,7 @@ export default function TimelineDatatable({
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
-                    className="h-5 w-5 fill-gray-700 dark:fill-white"
+                    className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
                   >
                     {firstItem.followUpStatus === "PENDING" && (
                       // ⏳ Pending Icon (Inverted i)
@@ -367,75 +408,73 @@ export default function TimelineDatatable({
                   </svg>
                 </div>
                 {/* <div className="timeline-end timeline-box">First Macintosh computer</div> */}
-                 <div className="timeline-end w-full max-w-none flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                  {/* Remark / Title */}
-                  {/* <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white">
-                    {firstItem.remark}
-                  </p> */}
+                 <div className="timeline-end w-full max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
+                  {/* Header */}
+                  <div className="mb-2 flex w-full items-center justify-between gap-4">
+                    <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
+                      {firstItem.remark}
+                    </h4>
 
-                  <div className="flex w-full items-start justify-between gap-4">
-                      <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white capitalize">
-                        {firstItem.remark}
-                      </p>
+                    <button
+                      onClick={() => handleEditFollowUpForFollowUp(firstItem.id)}
+                      className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
+                      aria-label="Edit follow-up"
+                    >
+                      <PencilIcon className="h-5 w-5" />
+                    </button>
+                  </div>
 
-                      <button className="mb-2"><PencilIcon onClick={() => handleEditFollowUpForFollowUp(firstItem.id)} /></button>
-                      </div>
-
-                  {/* Status Badge */}
-                  <div className="mt-1 flex items-center gap-2">
-                    <span className="font-semibold text-gray-700 dark:text-gray-300">
-                      Status:
+                  {/* Status */}
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                      Status
                     </span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">:</span>
+
                     <span
-                      className={`rounded-full px-2 py-1 text-xs font-medium ${
+                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
                         firstItem.followUpStatus.toLowerCase() === "pending"
-                          ? "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-300"
-                          : firstItem.followUpStatus.toLowerCase() ===
-                              "completed"
-                            ? "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300"
-                            : firstItem.followUpStatus.toLowerCase() ===
-                                "missed"
-                              ? "bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300"
-                              : ""
+                          ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                          : firstItem.followUpStatus.toLowerCase() === "completed"
+                          ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                          : firstItem.followUpStatus.toLowerCase() === "missed"
+                          ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
+                          : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
                       }`}
                     >
                       {firstItem.followUpStatus}
                     </span>
                   </div>
 
-                  {/* Scheduled At */}
-                  <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                    <span className="font-semibold">Scheduled at:</span>{" "}
-                    {new Date(firstItem.scheduledAt).toLocaleString("en-US", {
-                      weekday: "short",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "numeric",
-                      minute: "2-digit",
-                      hour12: true,
-                    })}
-                  </div>
+                  {/* Meta Info */}
+                  <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-500">Scheduled</span>
+                      <span>:</span>
+                      <span>
+                        {formatDate(firstItem.scheduledAt) || "—"}
+                      </span>
+                    </div>
 
-                  {/* Scheduled At */}
-                  <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                    <span className="font-semibold">Done at:</span>{" "}
-                    {formatDate(firstItem.doneAt)}
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-500">Completed</span>
+                      <span>:</span>
+                      <span>{formatDate(firstItem.doneAt) || "—"}</span>
+                    </div>
                   </div>
                 </div>
-
-                <hr />
+                <hr className="dark:bg-gray-400" />
               </li>
 
               {middleItems.map((item: any, index: number) => {
                 return (
                   <li key={item.id || index}>
-                    <hr />
+                    <hr className="dark:bg-gray-400" />
                     <div className="timeline-middle">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
-                        className="h-5 w-5 fill-gray-700 dark:fill-white"
+                        className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
                       >
                         {item.followUpStatus === "PENDING" && (
                           // ⏳ Pending Icon (Inverted i)
@@ -465,70 +504,73 @@ export default function TimelineDatatable({
                         )}
                       </svg>
                     </div>
-                     <div className="timeline-end w-full max-w-none flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                      {/* Remark / Title */}
-                      <div className="flex w-full items-start justify-between gap-4">
-                      <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white capitalize">
-                        {item.remark}
-                      </p>
+                     <div className="timeline-end w-full max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
+                        {/* Header */}
+                        <div className="mb-2 flex w-full items-center justify-between gap-4">
+                          <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
+                            {item.remark}
+                          </h4>
 
-                      <button className="mb-2"><PencilIcon onClick={() => handleEditFollowUpForFollowUp(item.id)} /></button>
+                          <button
+                            onClick={() => handleEditFollowUpForFollowUp(item.id)}
+                            className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
+                            aria-label="Edit follow-up"
+                          >
+                            <PencilIcon className="h-5 w-5" />
+                          </button>
+                        </div>
+
+                        {/* Status */}
+                        <div className="mb-2 flex items-center gap-2">
+                          <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                            Status
+                          </span>
+                          <span className="text-xs text-gray-600 dark:text-gray-400">:</span>
+
+                          <span
+                            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                              item.followUpStatus.toLowerCase() === "pending"
+                                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                : item.followUpStatus.toLowerCase() === "completed"
+                                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                                : item.followUpStatus.toLowerCase() === "missed"
+                                ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
+                                : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                            }`}
+                          >
+                            {item.followUpStatus}
+                          </span>
+                        </div>
+
+                        {/* Meta Info */}
+                        <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-gray-500">Scheduled</span>
+                            <span>:</span>
+                            <span>{formatDate(item.scheduledAt) || "—"}</span>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-gray-500">Completed</span>
+                            <span>:</span>
+                            <span>{formatDate(item.doneAt) || "—"}</span>
+                          </div>
+                        </div>
                       </div>
 
-                      {/* Status Badge */}
-                      <div className="mt-1 flex items-center gap-2">
-                        <span className="font-semibold text-gray-700 dark:text-gray-300">
-                          Status:
-                        </span>
-                        <span
-                          className={`rounded-full px-2 py-1 text-xs font-medium ${
-                            item.followUpStatus.toLowerCase() === "pending"
-                              ? "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-300"
-                              : item.followUpStatus.toLowerCase() ===
-                                  "completed"
-                                ? "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300"
-                                : "bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300"
-                          }`}
-                        >
-                          {item.followUpStatus}
-                        </span>
-                      </div>
-
-                      {/* Scheduled At */}
-                      <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                        <span className="font-semibold">Scheduled at:</span>{" "}
-                        {new Date(item.scheduledAt).toLocaleString("en-US", {
-                          weekday: "short",
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
-                      </div>
-
-                      {/* Scheduled At */}
-                      <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                        <span className="font-semibold">Done at:</span>{" "}
-                                            {formatDate(item.doneAt)}
-
-                      </div>
-                    </div>
-
-                    <hr />
+                    <hr className="dark:bg-gray-400" />
                   </li>
                 );
               })}
 
               {followups.length > 1 && (
                 <li>
-                  <hr />
+                  <hr className="dark:bg-gray-400" />
                   <div className="timeline-middle">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
-                      className="h-5 w-5 fill-gray-700 dark:fill-white"
+                      className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
                     >
                       {lastItem.followUpStatus === "PENDING" && (
                         // ⏳ Pending Icon (Inverted i)
@@ -558,62 +600,61 @@ export default function TimelineDatatable({
                       )}
                     </svg>
                   </div>
-                   <div className="timeline-end w-full max-w-none flex flex-col items-start justify-center rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                    {/* Remark / Title */}
-                    <div className="flex w-full items-start justify-between gap-4">
-                    <p className="mb-2 text-base font-semibold text-gray-800 dark:text-white capitalize">
-                      {lastItem.remark}
-                    </p>
+                   <div className="timeline-end w-full max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
+                      {/* Header */}
+                      <div className="mb-2 flex w-full items-center justify-between gap-4">
+                        <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
+                          {lastItem.remark}
+                        </h4>
 
-                    <button className="mb-2"><PencilIcon onClick={() => handleEditFollowUpForFollowUp(lastItem.id)} /></button>
-                    </div>
-
-                    {/* Status Badge */}
-                    <div className="mt-1 flex items-center gap-2">
-                      <span className="font-semibold text-gray-700 dark:text-gray-300">
-                        Status:
-                      </span>
-                      <span
-                        className={`rounded-full px-2 py-1 text-xs font-medium ${
-                          lastItem.followUpStatus.toLowerCase() === "pending"
-                            ? "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-300"
-                            : lastItem.followUpStatus.toLowerCase() ===
-                                "completed"
-                              ? "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300"
-                              : "bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300"
-                        }`}
-                      >
-                        {lastItem.followUpStatus}
-                      </span>
-                    </div>
-
-                    {/* Done At */}
-                    {lastItem.followUpStatus !== "COMPLETED" && (
-                      <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                        <span className="font-semibold">scheduled at:</span>{" "}
-                        {/* {new Date(lastItem.scheduledAt).toLocaleString(
-                          "en-US",
-                          {
-                            weekday: "short",
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "2-digit",
-                            hour12: true,
-                          },  
-                        )} */}
-                        {formatDate(lastItem.scheduledAt)}
+                        <button
+                          onClick={() => handleEditFollowUpForFollowUp(lastItem.id)}
+                          className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
+                          aria-label="Edit follow-up"
+                        >
+                          <PencilIcon className="h-5 w-5" />
+                        </button>
                       </div>
-                    )}
 
-                    {/* Done At */}
-                    <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                      <span className="font-semibold">Done at:</span>{" "}
-                                                                  {formatDate(lastItem.doneAt)}
+                      {/* Status */}
+                      <div className="mb-2 flex items-center gap-2">
+                        <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                          Status
+                        </span>
+                        <span className="text-xs text-gray-600 dark:text-gray-400">:</span>
 
+                        <span
+                          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                            lastItem.followUpStatus.toLowerCase() === "pending"
+                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                              : lastItem.followUpStatus.toLowerCase() === "completed"
+                              ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                              : lastItem.followUpStatus.toLowerCase() === "missed"
+                              ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
+                              : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                          }`}
+                        >
+                          {lastItem.followUpStatus}
+                        </span>
+                      </div>
+
+                      {/* Meta Info */}
+                      <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
+                        {lastItem.followUpStatus !== "COMPLETED" && (
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-gray-500">Scheduled</span>
+                            <span>:</span>
+                            <span>{formatDate(lastItem.scheduledAt) || "—"}</span>
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-gray-500">Completed</span>
+                          <span>:</span>
+                          <span>{formatDate(lastItem.doneAt) || "—"}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
                 </li>
               )}
               {/* 🎯 Render buttons only if follow-up is NOT completed */}

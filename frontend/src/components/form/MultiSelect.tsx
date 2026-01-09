@@ -104,15 +104,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         {label}
       </label>
 
-{tooltip === true && <Tooltip
-                className="rounded bg-gray-200 text-[10px] mb-1.5"
-                content={content}
-              ><span className="mb-1.5 cursor-pointer text-xl text-gray-600">
-                    🛈
-                  </span></Tooltip>}
-              </div>
+      {tooltip === true && <Tooltip
+        className="rounded bg-gray-200 text-[10px] mb-1.5"
+        content={content}
+      >
+        <span className="mb-1.5 cursor-pointer text-xl text-gray-600">
+            🛈
+        </span></Tooltip>}
+      </div>
       
-
       <div className="relative z-20 inline-block w-full">
         <div className="relative flex flex-col items-center">
           <div onClick={toggleDropdown} className="w-full">
@@ -158,7 +158,8 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                     ref={ref}
                     className="h-full w-full appearance-none border-0 bg-transparent p-1 pr-2 text-sm outline-hidden placeholder:text-gray-800 focus:border-0 focus:ring-0 focus:outline-hidden dark:placeholder:text-white/90"
                     readOnly
-                    value="Select option"
+                    
+                    value={value}
                   />
                 )}
               </div>

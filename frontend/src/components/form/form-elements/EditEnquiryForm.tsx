@@ -77,6 +77,7 @@ export default function EditEnquiryForm({
     variant: "",
   });
   const error = useSelector((state: RootState) => state.enquiry.error);
+  const modalBodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!error) return;
@@ -99,6 +100,13 @@ export default function EditEnquiryForm({
     { code: "CA", label: "+1" },
     { code: "AU", label: "+61" },
   ];
+
+  const scrollModalToTop = () => {
+    modalBodyRef.current?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   console.log("Get Courses Name in Enquiry Form:", courses);
 
@@ -257,6 +265,8 @@ export default function EditEnquiryForm({
         variant: "error",
       });
 
+      scrollModalToTop();
+
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 1000);
@@ -272,6 +282,8 @@ export default function EditEnquiryForm({
         message: "Token not found. Please log in again.",
         variant: "error",
       });
+
+      scrollModalToTop();
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
@@ -296,6 +308,8 @@ export default function EditEnquiryForm({
           contact: "",
         });
 
+        scrollModalToTop();
+
         setAlert({
           show: true,
           title: "Enquiry Updated",
@@ -317,7 +331,7 @@ export default function EditEnquiryForm({
   console.log("GET ENQUIRY FORM DATA", newEnquiry);
 
   return (
-    <ModalCard title="Edit Enquiry" oncloseModal={onCloseModal}>
+    <ModalCard title="Edit Enquiry" oncloseModal={onCloseModal} onBodyRef={(el) => (modalBodyRef.current = el)}>
       <div className="space-y-6">
         {error && (
           <div className="rounded-md border border-red-300 bg-red-100 p-3 text-sm text-red-700">

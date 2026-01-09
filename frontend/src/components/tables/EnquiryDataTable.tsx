@@ -620,8 +620,8 @@ export default function EnquiryDataTable({
                         content="Edit Enquiry"
                       >
                         <span
-                          className={`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${
-                            item.leadStatus === "WON"
+                          className = {`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${
+                            item.leadStatus === "WON" || item.leadStatus === "LOST"
                               ? "pointer-events-none cursor-not-allowed opacity-50"
                               : "cursor-pointer"
                           }`}

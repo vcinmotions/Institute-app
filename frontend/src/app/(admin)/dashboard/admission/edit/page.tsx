@@ -18,7 +18,6 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useParams } from "next/navigation";
 import { useFetchEnquiryById } from "@/hooks/useQueryFetchEnquiry";
 import { setBatches } from "@/store/slices/batchSlice";
-import { getBatch, getCourse } from "@/lib/api";
 import MultiSelect from "@/components/form/MultiSelect";
 import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
 import { capitalizeWords } from "@/components/common/ToCapitalize";
@@ -195,8 +194,6 @@ export default function AdmissionForm() {
     { code: "CA", label: "+1" },
     { code: "AU", label: "+61" },
   ];
-
-  const [facultyList, setFacultyList] = useState([]);
 
   const [batchList, setBatchList] = useState([]);
   console.log("useEffect triggered — enquiryData:", enquiryData);
@@ -795,8 +792,8 @@ export default function AdmissionForm() {
     }));
   };
 
-  console.log("GET BATCH LIOST DETAILS:", batchList);
-  console.log("GET BATCH LIOST DETAILS:", batchOptions);
+  console.log("GET BATCH LIST DETAILS:", batchList);
+  console.log("GET BATCH LIST DETAILS:", batchOptions);
 
   const handleSubmit = async () => {
     if (!validate()) {
@@ -906,7 +903,7 @@ export default function AdmissionForm() {
         </h3> */}
 
         <div className="space-y-8">
-          <h2 className="border-b pb-6">Student Infomation</h2>
+          <h2 className="border-b pb-6 dark:text-gray-50 dark:border-gray-700">Student Infomation</h2>
 
           <div className="space-y-6">
             {alert.show && (
@@ -1109,9 +1106,9 @@ export default function AdmissionForm() {
               return (
                 <div
                   key={index}
-                  className="mb-4 rounded-xl border bg-gray-50 p-4"
+                  className="mb-4 rounded-xl border dark:border-gray-500 bg-gray-50 p-4 dark:bg-white/3"
                 >
-                  <h3 className="mb-3 font-semibold">
+                  <h3 className="mb-3 font-semibold dark:text-gray-300">
                     Course #{index + 1}: {selectedCourse?.name}
                   </h3>
 
