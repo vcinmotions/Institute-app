@@ -267,7 +267,7 @@ const AdmissionForm: React.FC<Props> = ({
               </tr>
               <tr className="border">
                 <td className="border p-2">
-                  <strong>Contact:</strong> +91{student.contact}
+                  <strong>Contact:</strong> {student.contact}
                 </td>
                 <td className="border p-2">
                   <strong>Parent Contact:</strong> {student.parentsContact}

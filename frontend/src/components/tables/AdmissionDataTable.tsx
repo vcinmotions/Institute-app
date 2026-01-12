@@ -167,6 +167,13 @@ export default function AdmissionDataTable({
                 >
                   Email
                 </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                >
+                  Contact
+                </TableCell>
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
@@ -250,6 +257,9 @@ export default function AdmissionDataTable({
                     </TableCell>
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.email ? item.email : "-"}
+                    </TableCell>
+                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                      {item.contact ? item.contact.split('+91')[1] : "-"}
                     </TableCell>
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.enquiryCourse.map((cr: any, index: number) => (

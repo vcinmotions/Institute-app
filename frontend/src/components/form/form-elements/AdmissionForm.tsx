@@ -369,24 +369,88 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
     // }
   }, [courses, newEnquiry.courseId]);
 
+  // const handlePhoneNumberChange = (
+  //   phoneNumber: string,
+  //   countryCode = "+91",
+  // ) => {
+  //   // If phoneNumber doesn't start with +, prepend selected country code
+  //   let formattedNumber = phoneNumber;
+  //   if (!phoneNumber.startsWith("+")) {
+  //     formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
+  //   }
+
+  //   setFilledEnquiryData((prev) => ({
+  //     ...prev,
+  //     parentsContact: formattedNumber,
+  //   }));
+
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     parentsContact: "",
+  //   }));
+  // };
+
+  // const handlePhoneNumberChange = (
+  //   phoneNumber: string,
+  //   countryCode = "+91",
+  // ) => {
+  //   // Remove non-numeric characters
+  //   const digitsOnly = phoneNumber.replace(/\D/g, "").replace(/^0+/, "");
+
+  //   // Validate 10 digits
+  //   if (digitsOnly.length !== 10) {
+  //     setErrors((prev) => ({
+  //       ...prev,
+  //       parentsContact: "Phone number must be 10 digits",
+  //     }));
+  //     return;
+  //   }
+
+  //   const formattedNumber = countryCode + digitsOnly;
+
+  //   setFilledEnquiryData((prev) => ({
+  //     ...prev,
+  //     parentsContact: formattedNumber,
+  //   }));
+
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     parentsContact: "",
+  //   }));
+  // };
+
   const handlePhoneNumberChange = (
     phoneNumber: string,
+    field: "contact" | "parentsContact",
     countryCode = "+91",
   ) => {
-    // If phoneNumber doesn't start with +, prepend selected country code
-    let formattedNumber = phoneNumber;
-    if (!phoneNumber.startsWith("+")) {
-      formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
+    const digitsOnly = phoneNumber.replace(/\D/g, "").replace(/^0+/, "");
+
+    if (digitsOnly.length !== 10) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "Phone number must be 10 digits",
+      }));
+      return;
     }
 
+    const formattedNumber = countryCode + digitsOnly;
+
+    if(field == "contact"){
+    setEnquiryData((prev) => ({
+      ...prev,
+      [field]: formattedNumber,
+    }));}
+
+    if(field == "contact"){
     setFilledEnquiryData((prev) => ({
       ...prev,
-      parentsContact: formattedNumber,
-    }));
+      [field]: formattedNumber,
+    }));}
 
     setErrors((prev) => ({
       ...prev,
-      parentsContact: "",
+      [field]: "",
     }));
   };
 
@@ -876,7 +940,7 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
             countries={countries}
             placeholder="+910000000000"
             value={newEnquiry.contact}
-            onChange={handlePhoneNumberChange}
+            onChange={(value) => handlePhoneNumberChange(value, "contact")}
           />
           {errors.contact && (
             <p className="text-sm text-red-500">{errors.contact}</p>
@@ -889,7 +953,7 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
             selectPosition="start"
             countries={countries}
             placeholder="+91 55555 00000"
-            onChange={handlePhoneNumberChange}
+            onChange={(value) => handlePhoneNumberChange(value, "parentsContact")}
           />
           {errors.parentsContact && (
             <p className="text-sm text-red-500">{errors.parentsContact}</p>

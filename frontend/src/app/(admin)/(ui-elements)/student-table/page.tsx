@@ -182,6 +182,7 @@ export default function StudentTable() {
             currentPage={currentPage}
             totalPages={totalPages}
             totalCount={totalCount}
+            title="Students"
             onPageChange={handlePagination}
           />
         </StudentCard>

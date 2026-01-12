@@ -95,7 +95,7 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Dashboard",
     path: "/dashboard",
-    roles: ["ADMIN", "FRONT_DESK", "ACCOUNTANT", "FACULTY"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "ACCOUNTANT", "FACULTY", "VIEW_ONLY"], // allowed roles
     // subItems: [{ name: "Ecommerce", path: "/dashboard", pro: false }],
   },
   {
@@ -108,13 +108,13 @@ const navItems: NavItem[] = [
     icon: <EnvelopeIcon />,
     name: "Profile",
     path: "/dashboard/profile",
-    roles: ["ADMIN", "FRONT_DESK", "ACCOUNTANT", "FACULTY"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "ACCOUNTANT", "FACULTY", "VIEW_ONLY"], // allowed roles
   },
   {
     icon: <UserIcon />,
     name: "Enquiry",
     path: "/dashboard/enquiry",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
     subItems: [
       { name: "Enquiry List", path: "/dashboard/enquiry" },
       { name: "Create Enquiry", path: "/dashboard/enquiry/create" },
@@ -130,13 +130,13 @@ const navItems: NavItem[] = [
     icon: <DocsIcon />,
     name: "Students",
     path: "/dashboard/student",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
   },
   {
     icon: <ShootingStarIcon />,
     name: "Student Course",
     path: "/dashboard/student-course",
-    roles: ["ADMIN", "FRONT_DESK", "FACULTY"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "FACULTY", "VIEW_ONLY"], // allowed roles
   },
   {
     icon: <BoltIcon />,
@@ -148,7 +148,7 @@ const navItems: NavItem[] = [
     icon: <TaskIcon />,
     name: "Batch",
     path: "/dashboard/batch",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
     // subItems: [
     //   { name: "Batch List", path: "/dashboard/batch" },
     //   { name: "Create Batch", path: "/dashboard/batch/create" },
@@ -159,7 +159,7 @@ const navItems: NavItem[] = [
     icon: <LockIcon />,
     name: "Course",
     path: "/dashboard/course",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
     subItems: [
       { name: "Course List", path: "/dashboard/course" },
       { name: "Create Course", path: "/dashboard/course/create" },
@@ -169,7 +169,7 @@ const navItems: NavItem[] = [
     icon: <LockIcon />,
     name: "Lab",
     path: "/dashboard/lab",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
     subItems: [
       { name: "Lab List", path: "/dashboard/lab" },
       { name: "Create Lab", path: "/dashboard/lab/create" },
@@ -179,7 +179,7 @@ const navItems: NavItem[] = [
     icon: <PaperPlaneIcon />,
     name: "Faculty",
     path: "/dashboard/faculty",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
     subItems: [
       { name: "Faculty List", path: "/dashboard/faculty" },
       { name: "Create Faculty", path: "/dashboard/faculty/create" },
@@ -189,13 +189,13 @@ const navItems: NavItem[] = [
     icon: <LockIcon />,
     name: "Activity Logs",
     path: "/dashboard/activity",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
   },
   {
     icon: <LockIcon />,
     name: "Roles",
     path: "/dashboard/roles",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
     subItems: [
       { name: "Roles List", path: "/dashboard/roles" },
       { name: "Create Roles", path: "/dashboard/roles/create" },
@@ -205,13 +205,13 @@ const navItems: NavItem[] = [
     icon: <LockIcon />,
     name: "Attendance",
     path: "/dashboard/attendance",
-    roles: ["ADMIN", "FACULTY"], // allowed roles
+    roles: ["ADMIN", "FACULTY", "VIEW_ONLY"], // allowed roles
   },
   {
     icon: <LockIcon />,
     name: "Notification",
     path: "/dashboard/notification",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
   },
   {
     name: "Forms",

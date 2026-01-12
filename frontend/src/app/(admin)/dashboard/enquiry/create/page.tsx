@@ -195,28 +195,6 @@ export default function EnquiryForm() {
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
-  const handlePhoneNumberChange = (
-    phoneNumber: string,
-    countryCode = "+91",
-  ) => {
-    // If phoneNumber doesn't start with +, prepend selected country code
-    let formattedNumber = phoneNumber;
-    if (!phoneNumber.startsWith("+")) {
-      formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
-    }
-
-    setNewEnquiry((prev) => ({
-      ...prev,
-      contact: formattedNumber,
-    }));
-
-    setField("contact", formattedNumber); // <-- ADD THIS
-
-    setErrors((prev) => ({
-      ...prev,
-      contact: "",
-    }));
-  };
   const validate = () => {
     const newErrors: Partial<EnquiryData> = {};
 
@@ -246,6 +224,52 @@ export default function EnquiryForm() {
 
     setTimeout(() => setErrors({}), 3000);
     return Object.keys(newErrors).length === 0;
+  };
+
+ const handlePhoneNumberChange = (phoneNumber: string) => {
+    // Extract digits only
+    const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+
+    const formattedNumber = "+91" + digitsOnly;
+
+    // Update input value (NO +91 here)
+    setNewEnquiry((prev) => ({
+      ...prev,
+      contact: formattedNumber,
+    }));
+
+    // Validation
+    if (digitsOnly.length === 10) {
+      setErrors((prev) => ({ ...prev, contact: "" }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        contact: "Phone number must be 10 digits",
+      }));
+    }
+  };
+
+  const handleAlternatePhoneNumberChange = (phoneNumber: string) => {
+    // Extract digits only
+    const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+
+    const formattedNumber = "+91" + digitsOnly;
+
+    // Update input value (NO +91 here)
+    setNewEnquiry((prev) => ({
+      ...prev,
+      alternateContact: formattedNumber,
+    }));
+
+    // Validation
+    if (digitsOnly.length === 10) {
+      setErrors((prev) => ({ ...prev, alternateContact: "" }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        alternateContact: "Phone number must be 10 digits",
+      }));
+    }
   };
 
   const handleChange = (field: keyof EnquiryData, value: string | string[]) => {
@@ -520,11 +544,12 @@ export default function EnquiryForm() {
           <div>
             <Label>Contact No. *</Label>
             <div className="relative">
-              <Input
+              <PhoneInput
+                selectPosition="start"
+                countries={countries}
                 tabIndex={3}
-                value={newEnquiry.contact} // ← fixed // <-- THIS FIXES IT
                 placeholder="Enter Contact"
-                onChange={(e) => handleChange("contact", e.target.value)}
+                onChange={handlePhoneNumberChange}
               />
               {errors.contact && (
                 <p className="text-sm text-red-500">{errors.contact}</p>
@@ -534,11 +559,12 @@ export default function EnquiryForm() {
 
           <div>
           <Label>Alternate Conatct No.</Label>
-          <Input
-           tabIndex={4}
-           value={newEnquiry.alternateContact} // ← fixed // <-- THIS FIXES IT
-           placeholder="Enter alternate Contact" 
-           onChange={(e) => handleChange("alternateContact", e.target.value)}
+          <PhoneInput
+           selectPosition="start"
+                countries={countries}
+                tabIndex={4}
+                placeholder="Enter Alternate Conatct"
+           onChange={handleAlternatePhoneNumberChange}
           />
            {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}
@@ -548,7 +574,7 @@ export default function EnquiryForm() {
 
           <div className="relative">
             <Select
-              tabIndex={6}
+              tabIndex={5}
               options={genders.map((item) => ({
                 label: item.label,
                 value: item.value,
@@ -574,7 +600,7 @@ export default function EnquiryForm() {
             placeholder="Enter Area"
             className="capitalize"
             value={newEnquiry.location}
-            tabIndex={7}
+            tabIndex={6}
             onChange={(e) => handleChange("location", e.target.value)}         />
             {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
@@ -587,6 +613,7 @@ export default function EnquiryForm() {
                 label: c.name,
                 value: c.name, // city name is fine
               }))}
+              tabIndex={7}
               placeholder="Select City"
               onChange={(value) => handleChange("city", value)}
               value={newEnquiry.city}
@@ -610,7 +637,7 @@ export default function EnquiryForm() {
         <div>
           <Label>Date Of Birth</Label>
           <Input
-            tabIndex={9}
+            tabIndex={8}
             type="date"
             placeholder="30-02-2002"
             //maxLength={10} // e.g. 12:30 PM
@@ -678,7 +705,7 @@ export default function EnquiryForm() {
               <Input
                 placeholder="Enter Source"
                 onChange={(e) => handleChange("source", e.target.value)}
-                className="dark:bg-dark-900"
+                className="dark:bg-dark-900 capitalize"
                 value={newEnquiry.source} // Bind selected course
                 tabIndex={10}
               />
@@ -695,6 +722,7 @@ export default function EnquiryForm() {
           <Label>Refered By</Label>
           <Input
             type="text"
+            className="capitalize"
             placeholder="Enter Age"
             value={newEnquiry.referedBy}
             tabIndex={11}

@@ -192,7 +192,7 @@ export default function EnquiryTable() {
 
   const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
+    dispatch(setCurrentPage(1)); // Reset to first page when searching
   };
 
   const handlePagination = (page: number) => {
@@ -219,7 +219,7 @@ export default function EnquiryTable() {
   const handleFilters = (selectedFilters: Record<string, string | null>) => {
     console.log("Selected filters:", selectedFilters);
     setFilters(selectedFilters);
-    setCurrentPage(1);
+    dispatch(setCurrentPage(1));
   };
 
   const handleLeadStatus = (field: string) => {

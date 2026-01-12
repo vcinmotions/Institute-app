@@ -109,12 +109,12 @@ export async function getTenantAdmin(req: Request, res: Response) {
 
     // Stats
 
-    const tenant = await centralPrisma.tenant.findMany({where});
+    const tenant = await centralPrisma.tenant.findMany({where, skip, take: limitNum});
     //const originalPassword = decrypt(tenant.encryptedPassword);
 
     console.log("GET ALL TENANTS IN MASTER USER CONTROLLER:", tenant);
 
-    const totalCount = await centralPrisma.tenant.count({});
+    const totalCount = await centralPrisma.tenant.count({where});
     const totalPages = Math.ceil(totalCount / limitNum);
 
     return res.status(200).json({ tenant: tenant, totalCount, totalPages });

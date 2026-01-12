@@ -55,17 +55,17 @@ export default function CompanyTable() {
   //         return () => window.removeEventListener("keydown", handleKeyDown);
   //       }, []);
 
-  // Debounce effect: update searchQuery 1 second after user stops typing
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
-    }, 300);
+    // Debounce effect: update searchQuery 1 second after user stops typing
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setSearchQuery(searchInput);
+        setCurrentPage(1); // reset page when search changes
+      }, 300);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchInput]);
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [searchInput]);
 
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(e.target.value);
@@ -93,7 +93,7 @@ export default function CompanyTable() {
     };
 
     fetchUser();
-  }, [searchInput, currentPage]);
+  }, [searchQuery, currentPage]);
 
   const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -128,7 +128,7 @@ export default function CompanyTable() {
     setCurrentPage(1); // Reset pagination on status change
   };
 
-  console.log("Get Searcj iNput in mater-table", searchInput);
+  console.log("Get Search Input in mater-table", searchInput);
 
   return (
     <div>

@@ -8,7 +8,6 @@ import {
 } from "../ui/table";
 import { useState } from "react";
 import Badge from "../ui/badge/Badge";
-import Image from "next/image";
 import { useDispatch } from "react-redux";
 import Button from "../ui/button/Button";
 import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
@@ -21,6 +20,7 @@ import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
 import { addFollowUpsForEnquiry } from "@/store/slices/followUpSlice";
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
 
+import { FileIcon } from "@/icons";
 import { useFollowUp } from "@/hooks/useQueryFetchFollow";
 import HoldEnquiryModal from "../form/form-elements/HoldEnquiryForm";
 import LostEnquiryModal from "../form/form-elements/LostEnquiryForm";
@@ -28,7 +28,6 @@ import LostEnquiryModal from "../form/form-elements/LostEnquiryForm";
 import EditEnquiryForm from "../form/form-elements/EditEnquiryForm";
 import { Tooltip } from "@heroui/react";
 import ShowForRoles from "@/app/utils/ShowForRoles";
-import Avatar from "../common/Avatar";
 
 type FollowUpModalType =
   | "createNew"
@@ -88,6 +87,7 @@ export default function EnquiryDataTable({
     useFollowUp(selectedId);
 
   console.log("get All Query To search:", enquiries);
+  console.log("show timeline modal:", showTimelineModal);
   console.log(
     "Get New UPDATED DETAILS Follow-Up data to Update Timeline COMPONENT:",
     followupDetails,
@@ -174,7 +174,7 @@ export default function EnquiryDataTable({
 
     setSelectedId(enquiryId);
     setSelectedEnquiryId(enquiryId);
-    setShowTimelineModal(true)
+    
 
     followUp(
       { token, id: enquiryId },
@@ -196,6 +196,7 @@ export default function EnquiryDataTable({
             // Show the Timeline Modal if follow-ups exist
             setFollowUpData(followupDetails);
             setShowForm(true); // This triggers TimelineDatatable
+            setShowTimelineModal(true)
             setModalType(null);
           } else {
             // Show Create Follow-Up Modal if no follow-ups
@@ -243,12 +244,12 @@ export default function EnquiryDataTable({
                   Enquires
                 </TableCell>
 
-                <TableCell
+                {/* <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
                   Email
-                </TableCell>
+                </TableCell> */}
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
@@ -350,22 +351,15 @@ export default function EnquiryDataTable({
                           <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90 capitalize">
                             {item.name}
                           </span>
-                          {/* <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
-                            {new Date(item.createdAt).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              },
-                            )}
-                          </span> */}
+                          <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
+                            {item.email ? item.email : ""}
+                          </span>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+                    {/* <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.email ? item.email : "-"}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       <span>
                         {item.enquiryCourse.map((c: any, index: any) => (
@@ -418,10 +412,13 @@ export default function EnquiryDataTable({
                         <Button
                           onClick={() => handleFollowUp(item.id)}
                           size="sm"
+                          variant="nobg"
                           allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]} // 👈 hide for others
-                          className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                          className="rounded  px-5 py-2 text-sm text-white "
                         >
-                          Follow-Up
+                          
+                          <FileIcon className="text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"/>
+                    
                         </Button>
                       </TableCell>
                     </ShowForRoles>
@@ -461,7 +458,8 @@ export default function EnquiryDataTable({
                         <Tooltip
                           isDisabled={
                             item.leadStatus === "WON" ||
-                            item.leadStatus === "WARM"
+                            item.leadStatus === "WARM" ||
+                            item.leadStatus === "LOST"
                           }
                           className="rounded bg-gray-200 text-[10px]"
                           content="WON"
@@ -469,21 +467,24 @@ export default function EnquiryDataTable({
                           <span
                             className={`text-lg text-green-800 active:opacity-50 dark:text-green-200 ${
                               item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM"
+                              item.leadStatus === "WARM" ||
+                              item.leadStatus === "LOST"
                                 ? "pointer-events-none cursor-not-allowed opacity-50"
                                 : "cursor-pointer"
                             }`}
                             onClick={() => {
                               if (
                                 item.leadStatus === "WON" ||
-                                item.leadStatus === "WARM"
+                                item.leadStatus === "WARM" || 
+                                item.leadStatus === "LOST"
                               )
                                 return;
                               handleCompleteFollowUpHandler(item.id);
                             }}
                             aria-disabled={
                               item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM"
+                              item.leadStatus === "WARM" ||
+                              item.leadStatus === "LOST"
                             }
                           >
                             {/* <TaskIcon /> */}
@@ -524,7 +525,8 @@ export default function EnquiryDataTable({
                         <Tooltip
                           isDisabled={
                             item.leadStatus === "WON" ||
-                            item.leadStatus === "WARM"
+                            item.leadStatus === "WARM" || 
+                            item.leadStatus === "LOST"
                           }
                           className="rounded bg-gray-200 text-[10px]"
                           color="danger"
@@ -533,21 +535,24 @@ export default function EnquiryDataTable({
                           <span
                             className={`text-lg text-yellow-400 active:opacity-50 dark:text-yellow-200 ${
                               item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM"
+                              item.leadStatus === "WARM" || 
+                              item.leadStatus === "LOST"
                                 ? "pointer-events-none cursor-not-allowed opacity-50"
                                 : "cursor-pointer"
                             }`}
                             onClick={() => {
                               if (
                                 item.leadStatus === "WON" ||
-                                item.leadStatus === "WARM"
+                                item.leadStatus === "WARM" || 
+                                item.leadStatus === "LOST"
                               )
                                 return;
                               handleHoldEnquiryHandler(item.id);
                             }}
                             aria-disabled={
                               item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM"
+                              item.leadStatus === "WARM" || 
+                                item.leadStatus === "LOST"
                             }
                           >
                             {/* <TrashBinIcon /> */}
@@ -572,7 +577,8 @@ export default function EnquiryDataTable({
                         <Tooltip
                           isDisabled={
                             item.leadStatus === "WON" ||
-                            item.leadStatus === "WARM"
+                            item.leadStatus === "WARM" || 
+                                item.leadStatus === "LOST"
                           }
                           className="rounded bg-gray-200 text-[10px]"
                           content="LOST"
@@ -580,14 +586,16 @@ export default function EnquiryDataTable({
                           <span
                             className={`text-lg text-red-600 active:opacity-50 dark:text-red-200 ${
                               item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM"
+                              item.leadStatus === "WARM" || 
+                                item.leadStatus === "LOST"
                                 ? "pointer-events-none cursor-not-allowed opacity-50"
                                 : "cursor-pointer"
                             }`}
                             onClick={() => {
                               if (
                                 item.leadStatus === "WON" ||
-                                item.leadStatus === "WARM"
+                                item.leadStatus === "WARM" || 
+                                item.leadStatus === "LOST"
                               )
                                 return;
                               handleLostEnquiryHandler(item.id);
@@ -621,13 +629,15 @@ export default function EnquiryDataTable({
                       >
                         <span
                           className = {`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${
-                            item.leadStatus === "WON" || item.leadStatus === "LOST"
+                            item.leadStatus === "WON" || item.leadStatus === "LOST"  || 
+                            item.leadStatus === "LOST"
                               ? "pointer-events-none cursor-not-allowed opacity-50"
                               : "cursor-pointer"
                           }`}
                           onClick={() => {
                             if (
                               item.leadStatus === "WON" ||
+                              item.leadStatus === "LOST" || 
                               item.leadStatus === "LOST"
                             )
                               return;
@@ -635,7 +645,8 @@ export default function EnquiryDataTable({
                           }}
                           aria-disabled={
                             item.leadStatus === "WON" ||
-                            item.leadStatus === "WARM"
+                            item.leadStatus === "WARM" || 
+                            item.leadStatus === "LOST"
                           }
                         >
                           {/* <PencilIcon /> */}
@@ -708,7 +719,6 @@ export default function EnquiryDataTable({
           onClose={() => setShowTimelineModal(false)}
           followUpData={followupDetails} // Pass follow-up data fetched from API
           enquiryId={selectedId} // Pass current enquiry ID (number, not null)
-
           onCreateFollowUpForFollowUp={handleCreateFollowUpForFollowUp}
         
         />

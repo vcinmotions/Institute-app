@@ -53,6 +53,7 @@ const defaultFilters = [
 const FilterBox: FC<FilterBoxProps> = ({ className, onFilterChange, filterFields = defaultFilters }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filters, setFilters] = useState<Record<string, string | null>>({});
+  const [isFilter, setIsFilter] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // toggle dropdown visibility
@@ -77,6 +78,7 @@ const FilterBox: FC<FilterBoxProps> = ({ className, onFilterChange, filterFields
   // apply filters to parent
   const applyFilters = () => {
     setIsOpen(false);
+    setIsFilter(true);
     onFilterChange?.(filters);
   };
 
@@ -85,6 +87,7 @@ const FilterBox: FC<FilterBoxProps> = ({ className, onFilterChange, filterFields
     const cleared: Record<string, string | null> = {};
     filterFields.forEach((f) => (cleared[f.key] = null));
     setFilters(cleared);
+    setIsFilter(false);
     onFilterChange?.(cleared);
   };
 
@@ -96,6 +99,15 @@ const FilterBox: FC<FilterBoxProps> = ({ className, onFilterChange, filterFields
           onClick={toggleDropdown}
           className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
         >
+
+        {isFilter === true && <span
+          className={`absolute right-24.5 top-0 z-10 h-2 w-2 rounded-full bg-orange-400 ${
+             !isFilter ? "hidden" : "flex"
+          }`}
+        >
+          <span className="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 animate-ping"></span>
+        </span>}
+          
           <svg
             className="stroke-current fill-white dark:fill-gray-800"
             width="20"

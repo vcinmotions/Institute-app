@@ -20,6 +20,15 @@ import { toast } from "sonner";
 import { setError } from "@/store/slices/enquirySlice";
 import MultiSelect from "../MultiSelect";
 
+import {
+  City,
+  Country,
+  ICity,
+  ICountry,
+  IState,
+  State,
+} from "country-state-city";
+
 interface DefaultInputsProps {
   onCloseModal: () => void;
   courses: any[];
@@ -33,6 +42,7 @@ interface EnquiryData {
   courseId: string[];
   alternateContact: string,
   location: string,
+  city: string,
   gender: string,
   dob: string,
   referedBy: string,
@@ -52,6 +62,7 @@ export default function EditEnquiryForm({
     courseId: [],
     alternateContact: "",
     location: "",
+    city: "",
     gender: "",
     dob: "",
     referedBy: "",
@@ -78,6 +89,11 @@ export default function EditEnquiryForm({
   });
   const error = useSelector((state: RootState) => state.enquiry.error);
   const modalBodyRef = useRef<HTMLDivElement>(null);
+
+  const branchState = useSelector((state: RootState) => state.auth.statelocation);
+    const branchCountry = useSelector((state: RootState) => state.auth.country);
+     const [state, setState] = useState<IState[]>([]);
+      const [city, setCity] = useState<ICity[]>([]);
 
   useEffect(() => {
     if (!error) return;
@@ -147,6 +163,7 @@ export default function EditEnquiryForm({
         courseId: courseIds, // ✅ set extracted course IDs
         alternateContact: enquiryData.alternateContact || "",
         location: enquiryData.location || "",
+        city: enquiryData.city || "",
         gender: enquiryData.gender || "",
         dob: enquiryData.dob
         ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
@@ -163,6 +180,13 @@ export default function EditEnquiryForm({
     isLoading: courseLoading,
     isError: courseError,
   } = useFetchCourse();
+
+  useEffect(() => {
+      setState(State.getStatesOfCountry(branchCountry));
+      const countryIso = branchCountry;
+      const cities = City.getCitiesOfState(countryIso, branchState);
+      setCity(cities);
+    }, [])
 
   useEffect(() => {
     if (courseData?.course) {
@@ -301,6 +325,7 @@ export default function EditEnquiryForm({
           courseId: [],
           alternateContact: "",
           location: "",
+          city: "",
           gender: "",
           dob: "",
           referedBy: "",
@@ -383,6 +408,7 @@ export default function EditEnquiryForm({
           <PhoneInput
             selectPosition="start"
             countries={countries}
+             tabIndex={3}
             value={newEnquiry.contact}
             placeholder="+91 55555 00000"
             onChange={handlePhoneNumberChange}
@@ -409,7 +435,7 @@ export default function EditEnquiryForm({
 
           <div className="relative">
             <Select
-              tabIndex={6}
+              tabIndex={5}
               options={genders.map((item) => ({
                 label: item.label,
                 value: item.value,
@@ -434,15 +460,34 @@ export default function EditEnquiryForm({
             type="text"
             placeholder="Enter Location"
             value={newEnquiry.location}
-            tabIndex={7}
+            tabIndex={6}
+             className="capitalize"
             onChange={(e) => handleChange("location", e.target.value)}         />
             {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
 
+        {/* CITY */}
+          <div>
+            <Label>City *</Label>
+            <Select
+              options={city.map((c) => ({
+                label: c.name,
+                value: c.name, // city name is fine
+              }))}
+               tabIndex={7}
+              placeholder="Select City"
+              onChange={(value) => handleChange("city", value)}
+              value={newEnquiry.city}
+            />
+            {errors.city && (
+              <p className="text-sm text-red-500">{errors.city}</p>
+            )}
+          </div>
+
         <div>
           <Label>Date Of Birth</Label>
           <Input
-            tabIndex={9}
+            tabIndex={8}
             type="date"
             placeholder="30-02-2002"
             //maxLength={10} // e.g. 12:30 PM
@@ -455,7 +500,7 @@ export default function EditEnquiryForm({
         <div>
           <div className="relative">
             <MultiSelect
-              tabIndex={4}
+              tabIndex={9}
               label="Select Courses"
               options={courseList.map((course) => ({
                 value: String(course.id),
@@ -475,11 +520,12 @@ export default function EditEnquiryForm({
           <Label>Select Source</Label>
           <div className="relative">
             <Input
+              tabIndex={10}
               type="text"
               placeholder="Select an option"
               value={newEnquiry.source} // Bind selected course
               onChange={(e) => handleChange("source", e.target.value)}
-              className="dark:bg-dark-900"
+              className="dark:bg-dark-900 capitalize"
             />
           </div>
           {errors.source && (
@@ -492,6 +538,7 @@ export default function EditEnquiryForm({
           <Input
             type="text"
             placeholder="Enter Age"
+            className="capitalize"
             value={newEnquiry.referedBy}
             tabIndex={11}
             onChange={(e) => handleChange("referedBy", e.target.value)}         />
@@ -499,10 +546,10 @@ export default function EditEnquiryForm({
         </div>
 
         <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-          <Button size="sm" variant="outline" onClick={onCloseModal}>
+          <Button size="sm" variant="outline" tabIndex={12} onClick={onCloseModal}>
             Close
           </Button>
-          <Button size="sm" onClick={handleSubmit}>
+          <Button size="sm" tabIndex={13} onClick={handleSubmit}>
             Save
           </Button>
         </div>

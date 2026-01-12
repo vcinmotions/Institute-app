@@ -236,18 +236,18 @@ export default function TimelineDatatable({
                   ["Name", fineEnquiryById?.name],
                   ["Email", fineEnquiryById?.email || "-"],
                   ["DOB", fineEnquiryById?.dob?.split("T")[0]],
-                  ["Contact", `+91 ${fineEnquiryById?.contact}`],
-                  ["Alternate", `+91 ${fineEnquiryById?.alternateContact}`],
+                  ["Contact", ` ${fineEnquiryById?.contact}`],
+                  ["Alternate", ` ${fineEnquiryById?.alternateContact}`],
                   ["Gender", fineEnquiryById?.gender || "-"],
                   ["Location", fineEnquiryById?.location || "-"],
                   ["Source", fineEnquiryById?.source || "-"],
                   ["Referred By", fineEnquiryById?.referedBy || "-"],
                 ].map(([label, value], idx) => (
                   <div key={idx} className="flex flex-col">
-                    <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                    <span className="text-xs font-medium tracking-wide text-gray-500">
                       {label}
                     </span>
-                    <span className="mt-0.5 font-medium text-gray-900 dark:text-gray-100 capitalize">
+                    <span className="mt-0.5 font-medium text-gray-900 dark:text-gray-100">
                       {value}
                     </span>
                   </div>
@@ -415,13 +415,13 @@ export default function TimelineDatatable({
                       {firstItem.remark}
                     </h4>
 
-                    <button
+                    {fineEnquiryById.leadStatus !== "WON" && fineEnquiryById.leadStatus !== "LOST" && <button
                       onClick={() => handleEditFollowUpForFollowUp(firstItem.id)}
                       className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
                       aria-label="Edit follow-up"
                     >
                       <PencilIcon className="h-5 w-5" />
-                    </button>
+                    </button>}
                   </div>
 
                   {/* Status */}
@@ -511,6 +511,7 @@ export default function TimelineDatatable({
                             {item.remark}
                           </h4>
 
+                        {fineEnquiryById.leadStatus !== "WON" && fineEnquiryById.leadStatus !== "LOST" &&
                           <button
                             onClick={() => handleEditFollowUpForFollowUp(item.id)}
                             className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
@@ -518,6 +519,7 @@ export default function TimelineDatatable({
                           >
                             <PencilIcon className="h-5 w-5" />
                           </button>
+                        }
                         </div>
 
                         {/* Status */}
@@ -607,6 +609,7 @@ export default function TimelineDatatable({
                           {lastItem.remark}
                         </h4>
 
+                      {fineEnquiryById.leadStatus !== "WON" && fineEnquiryById.leadStatus !== "LOST" &&
                         <button
                           onClick={() => handleEditFollowUpForFollowUp(lastItem.id)}
                           className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
@@ -614,6 +617,7 @@ export default function TimelineDatatable({
                         >
                           <PencilIcon className="h-5 w-5" />
                         </button>
+                      }
                       </div>
 
                       {/* Status */}

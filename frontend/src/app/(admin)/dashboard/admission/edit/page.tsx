@@ -27,12 +27,12 @@ interface EnquiryData {
   name: string;
   email: string;
   courseId: string[];
-  alternateContact: string,
-  age: string,
-  location: string,
-  gender: string,
-  dob: string,
-  referedBy: string,
+  alternateContact?: string;
+  age: string;
+  location: string;
+  gender: string;
+  dob: string;
+  referedBy: string;
   contact: string;
 }
 
@@ -41,12 +41,12 @@ interface EnquiryDataNew {
   name: string;
   email: string;
   courseId: string[];
-   alternateContact: string,
-  age: string,
-  location: string,
-  gender: string,
-  dob: string,
-  referedBy: string,
+  alternateContact?: string;
+  age: string;
+  location: string;
+  gender: string;
+  dob: string;
+  referedBy: string;
   contact: string;
   enquiryCourse: any[];
 }
@@ -197,12 +197,6 @@ export default function AdmissionForm() {
 
   const [batchList, setBatchList] = useState([]);
   console.log("useEffect triggered — enquiryData:", enquiryData);
-  // console.log("useEffect triggered — batch:", batch);
-
-  // const batchOptions = batch.map((b: any) => ({
-  //   value: b.id.toString(),
-  //   label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
-  // }));
 
   console.log("GET ID BY PARAMS IN URL:", enquiryId);
   console.log("courseRows:", courseRows);
@@ -211,25 +205,6 @@ export default function AdmissionForm() {
     if (!phone) return "";
     return phone.replace(/^\+91/, "");
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const token = sessionStorage.getItem("token");
-  //     if (!token) {
-  //       console.error("Token missing from sessionStorage");
-  //       return;
-  //     }
-  //     try {
-  //       const responseBatch = await getBatch({
-  //         token,
-  //       });
-
-  //       dispatch(setBatches(responseBatch.batch));
-  //     } catch (error) {}
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     if (data?.enquiry) {
@@ -250,15 +225,6 @@ export default function AdmissionForm() {
 
     setCourseRows(rows);
   }, [newEnquiry.courseId]);
-
-  // const handleCourseRowChange = (index: any, field: string, value: any) => {
-  //   setCourseRows((prev) => {
-  //     const updated = [...prev];
-  //     updated[index] = { ...updated[index], [field]: value };
-  //     return updated;
-  //   });
-
-  // };
 
   const handleCourseRowChange = (index: number, field: string, value: any) => {
     setCourseRows((prev) => {
@@ -307,7 +273,7 @@ export default function AdmissionForm() {
   useEffect(() => {
     if (!enquiryData || !enquiryData.enquiryCourse) return;
 
-      let dobValue = "";
+    let dobValue = "";
     if (enquiryData.dob) {
       const date = new Date(enquiryData.dob);
       const day = String(date.getDate()).padStart(2, "0");
@@ -338,30 +304,30 @@ export default function AdmissionForm() {
   }, [enquiryData]);
 
   useEffect(() => {
-  if (!enquiryData) return;
+      if (!enquiryData) return;
 
-  let dobValue = "";
-  if (enquiryData.dob) {
-    const date = new Date(enquiryData.dob);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
-  }
+      let dobValue = "";
+      if (enquiryData.dob) {
+        const date = new Date(enquiryData.dob);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
+      }
 
-  setFilledEnquiryData((prev) => ({
-    ...prev,
-    dob: dobValue,
-    gender: enquiryData.gender || "",
-    parentsContact: enquiryData.alternateContact || "", // default to ""
-  }));
+      setFilledEnquiryData((prev) => ({
+        ...prev,
+        dob: dobValue,
+        gender: enquiryData.gender || "",
+        parentsContact: enquiryData.alternateContact || "", // default to ""
+      }));
 
-  // Also set in newEnquiry if needed for internal use
-  setNewEnquiry((prev) => ({
-    ...prev,
-    dob: dobValue,
-  }));
-}, [enquiryData]);
+      // Also set in newEnquiry if needed for internal use
+      setNewEnquiry((prev) => ({
+        ...prev,
+        dob: dobValue,
+      }));
+    }, [enquiryData]);
 
 
   useEffect(() => {
@@ -402,92 +368,48 @@ export default function AdmissionForm() {
   console.log("GET newEnquiry FRON USEEFFECT:", newEnquiry);
 
   useEffect(() => {
-    if (!newEnquiry.courseId) return;
-    if (!courses || courses.length === 0) return;
+      if (!newEnquiry.courseId) return;
+      if (!courses || courses.length === 0) return;
 
-    const selectedCourse = courses.find(
-      (c) => c.id.toString() === newEnquiry.courseId,
-    );
+      const selectedCourse = courses.find(
+        (c) => c.id.toString() === newEnquiry.courseId,
+      );
 
-    if (!selectedCourse?.courseFeeStructure) return;
+      if (!selectedCourse?.courseFeeStructure) return;
 
-    // PAYMENT TYPE OPTIONS
-    setpaymentTypeOption(selectedCourse.courseFeeStructure.paymentType);
+      // PAYMENT TYPE OPTIONS
+      setpaymentTypeOption(selectedCourse.courseFeeStructure.paymentType);
 
-    // INSTALLMENT OPTIONS
-    const inst = selectedCourse.courseFeeStructure.installments || [];
-    setInstallmentTypeOption(inst);
+      // INSTALLMENT OPTIONS
+      const inst = selectedCourse.courseFeeStructure.installments || [];
+      setInstallmentTypeOption(inst);
 
-    // UPDATE FEE AMOUNT FOR INSTALLMENT
-    // if (filledEnquiryData.paymentType === "INSTALLMENT") {
-    //   const selectedInstallment = inst.find(
-    //     (i: any) =>
-    //       i.id.toString() === filledEnquiryData.installmentTypeId?.toString(),
-    //   );
-
-    //   setFilledEnquiryData((prev) => ({
-    //     ...prev,
-    //     feeAmount: selectedInstallment
-    //       ? selectedInstallment.amount.toString()
-    //       : "",
-    //   }));
-    // }
-
-    // UPDATE FEE AMOUNT FOR ONE_TIME
-    // if (filledEnquiryData.paymentType === "ONE_TIME") {
-    //   setFilledEnquiryData((prev) => ({
-    //     ...prev,
-    //     feeAmount:
-    //       selectedCourse.courseFeeStructure.totalAmount?.toString() || "",
-    //   }));
-    // }
-  }, [courses, newEnquiry.courseId]);
+    }, [courses, newEnquiry.courseId]);
 
   const handlePhoneNumberChange = (
-  field: "contact" | "parentsContact",
-  phoneNumber: string,
-  countryCode = "+91"
-) => {
-  let formattedNumber = phoneNumber;
-  if (!phoneNumber.startsWith("+")) {
-    formattedNumber = countryCode + phoneNumber.replace(/^0+/, "");
-  }
+    field: "contact" | "parentsContact",
+    phoneNumber: string,
+    countryCode = "+91"
+  ) => {
+    let formattedNumber = phoneNumber;
+    if (!phoneNumber.startsWith("+")) {
+      formattedNumber = countryCode + phoneNumber.replace(/^0+/, "");
+    }
 
-  if (field === "contact") {
-    setNewEnquiry((prev) => ({
-      ...prev,
-      contact: formattedNumber,
-    }));
-    setErrors((prev) => ({ ...prev, contact: "" }));
-  } else {
-    setFilledEnquiryData((prev) => ({
-      ...prev,
-      parentsContact: formattedNumber,
-    }));
-    setErrors((prev) => ({ ...prev, parentsContact: "" }));
-  }
-};
-
-  // useEffect(() => {
-  //   if (!newEnquiry.courseId.length) return;
-
-  //   const selectedCourses = courses.filter((c) =>
-  //     newEnquiry.courseId.includes(c.id.toString()),
-  //   );
-
-  //   // For ONE TIME: sum total amounts
-  //   if (filledEnquiryData.paymentType === "ONE_TIME") {
-  //     const total = selectedCourses.reduce(
-  //       (sum, c: any) => sum + Number(c.courseFeeStructure?.totalAmount || 0),
-  //       0,
-  //     );
-
-  //     setFilledEnquiryData((prev) => ({
-  //       ...prev,
-  //       feeAmount: total.toString(),
-  //     }));
-  //   }
-  // }, [newEnquiry.courseId, filledEnquiryData.paymentType]);
+    if (field === "contact") {
+      setNewEnquiry((prev) => ({
+        ...prev,
+        contact: formattedNumber,
+      }));
+      setErrors((prev) => ({ ...prev, contact: "" }));
+    } else {
+      setFilledEnquiryData((prev) => ({
+        ...prev,
+        parentsContact: formattedNumber,
+      }));
+      setErrors((prev) => ({ ...prev, parentsContact: "" }));
+    }
+  };
 
   const {
     data: courseData,
@@ -865,9 +787,6 @@ export default function AdmissionForm() {
     try {
       await createAdmission(admissionPayload);
       // reset form and show success alert as before
-
-      
-
       // Wait 3 seconds before showing alert
       setAlert({
         show: true,
