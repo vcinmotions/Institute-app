@@ -88,7 +88,7 @@ export default function CourseForm({
       data: batchData,
       isLoading: batchLoading,
       isError: batchError,
-    } = useFetchAllBatches();
+    } = useFetchAllBatches({ onlyAvailable: true });
 
   const [paymentTypeOption, setpaymentTypeOption] = useState<any>([]);
   const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
@@ -186,7 +186,13 @@ export default function CourseForm({
   console.log("enrolledCourseIds:", enrolledCourseIds);
   console.log("FILTERED COURSE:", filteredCourses);
 
-  const filteredBatches = batch.filter((b) => !enrolledBatchIds.includes(b.id));
+  const filteredBatches = batch.filter((b) => !enrolledBatchIds.includes(b.id)).map((b: any) => ({
+    value: b.id.toString(),
+    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+  }));
+
+  // const filteredBatches = batch.filter((b) => !enrolledBatchIds.includes(b.id)); // for raw batch names.
+
   // Filter batches to remove those with same time ranges
   const filteredTimeSlots = batch.filter((b) => {
     const timeRange = `${b.labTimeSlot.startTime}-${b.labTimeSlot.endTime}`;
@@ -545,8 +551,8 @@ export default function CourseForm({
             <Select
               tabIndex={2}
               options={filteredBatches.map((batch) => ({
-                label: capitalizeWords(batch.name),
-                value: batch.id,
+                label: capitalizeWords(batch.label),
+                value: batch.value,
               }))}
               placeholder="Select an option"
               onChange={(value) => handleChange("batchId", value)}

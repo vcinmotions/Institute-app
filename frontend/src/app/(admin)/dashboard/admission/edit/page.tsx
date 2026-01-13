@@ -421,7 +421,7 @@ export default function AdmissionForm() {
     data: batchData,
     isLoading: batchLoading,
     isError: batchError,
-  } = useFetchAllBatches();
+  } = useFetchAllBatches({ onlyAvailable: true });
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 

@@ -18,7 +18,7 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const { mutate, error, isSuccess, isPending } = useCreateUser();
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const firstInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   console.log("GET TOKEN IN SIGN IN:", token);

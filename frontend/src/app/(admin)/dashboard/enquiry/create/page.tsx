@@ -36,14 +36,6 @@ import {
   State,
 } from "country-state-city";
 
-// interface EnquiryData {
-//   name: string;
-//   email: string;
-//   courseId: string[];
-//   source: string;
-//   contact: string;
-// }
-
 interface EnquiryData {
   name: string;
   email: string;
@@ -273,6 +265,7 @@ export default function EnquiryForm() {
   };
 
   const handleChange = (field: keyof EnquiryData, value: string | string[]) => {
+
     // if (field === "city") {
     //   setNewEnquiry((prev) => ({
     //     ...prev,
@@ -348,13 +341,7 @@ export default function EnquiryForm() {
 
   const handleClearForm = () => {
     reset();
-    // setNewEnquiry({
-    //   name: "",
-    //   email: "",
-    //   courseId: [],
-    //   source: "",
-    //   contact: "",
-    // });
+ 
     setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
 
     firstInputRef.current?.focus();
@@ -448,13 +435,7 @@ export default function EnquiryForm() {
 
     createEnquiry(newEnquiry, {
       onSuccess: () => {
-        // setNewEnquiry({
-        //   name: "",
-        //   email: "",
-        //   courseId: [],
-        //   source: "",
-        //   contact: "",
-        // });
+
         setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
 
         window.scrollTo({
@@ -477,6 +458,9 @@ export default function EnquiryForm() {
 
       onError: () => {
         // You already handle error via redux + toast
+        window.scrollTo({
+          top: 0, behavior: "smooth"
+        })
       },
     });
   };
@@ -488,16 +472,16 @@ export default function EnquiryForm() {
     <div>
       <PageBreadcrumb pageTitle="Create Enquiry" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3">
-        {/* <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-          Profile
-        </h3> */}
 
         <div className="space-y-8">
           <h2 className="border-b pb-6 dark:text-gray-50 dark:border-gray-700">Enquiry Infomation</h2>
           {error && (
-            <div className="rounded-md border border-red-300 bg-red-100 p-3 text-sm text-red-700">
-              {error}
-            </div>
+            <Alert
+              variant={"error"}
+              title={""}
+              message={error}
+              showLink={false}
+            />
           )}
           {alert.show && (
             <Alert
@@ -560,21 +544,57 @@ export default function EnquiryForm() {
           <div>
           <Label>Alternate Conatct No.</Label>
           <PhoneInput
-           selectPosition="start"
-                countries={countries}
-                tabIndex={4}
-                placeholder="Enter Alternate Conatct"
-           onChange={handleAlternatePhoneNumberChange}
+            selectPosition="start"
+            countries={countries}
+            tabIndex={4}
+            placeholder="Enter Alternate Conatct"
+            onChange={handleAlternatePhoneNumberChange}
           />
            {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}
+
+         <div>
+            <div className="relative" data-master="course">
+              <MultiSelect
+                ref={jumpInputRef}
+                tabIndex={5}
+                tooltip={true}
+                content="Create Course if not in list."
+                label="Select Courses *"
+                options={courseList.map((course) => ({
+                  value: String(course.id),
+                  text: capitalizeWords(course.name),
+                  selected: newEnquiry.courseId.includes(String(course.id)),
+                }))}
+                value={newEnquiry.courseId}
+                onChange={(value) => handleChange("courseId", value)}
+              />
+              
+            </div>
+            {errors.courseId && (
+              <p className="text-sm text-red-500">{errors.courseId}</p>
+            )}
+          </div>
+
+          <div>
+          <Label>Date Of Birth</Label>
+          <Input
+            tabIndex={6}
+            type="date"
+            placeholder="30-02-2002"
+            //maxLength={10} // e.g. 12:30 PM
+            value={newEnquiry.dob}
+            onChange={(e) => handleChange("dob", e.target.value)}
+          />
+          {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
+        </div>
 
        <div>
           <Label>Gender</Label>
 
           <div className="relative">
             <Select
-              tabIndex={5}
+              tabIndex={7}
               options={genders.map((item) => ({
                 label: item.label,
                 value: item.value,
@@ -593,27 +613,15 @@ export default function EnquiryForm() {
           )}
         </div>
 
-        <div>
-          <Label>Area</Label>
-          <Input
-            type="text"
-            placeholder="Enter Area"
-            className="capitalize"
-            value={newEnquiry.location}
-            tabIndex={6}
-            onChange={(e) => handleChange("location", e.target.value)}         />
-            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
-        </div>
-
-         {/* CITY */}
+        {/* CITY */}
           <div>
-            <Label>City *</Label>
+            <Label>City </Label>
             <Select
               options={city.map((c) => ({
                 label: c.name,
                 value: c.name, // city name is fine
               }))}
-              tabIndex={7}
+              tabIndex={8}
               placeholder="Select City"
               onChange={(value) => handleChange("city", value)}
               value={newEnquiry.city}
@@ -623,100 +631,33 @@ export default function EnquiryForm() {
             )}
           </div>
 
-        {/* <div>
-          <Label>DoB</Label>
-          <Input
-            type="text"
-            placeholder="Enter Date of Birth"
-            value={newEnquiry.dob}
-            tabIndex={8}
-            onChange={(e) => handleChange("dob", e.target.value)}         />
-            {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
-        </div> */}
-
         <div>
-          <Label>Date Of Birth</Label>
+          <Label>Locality</Label>
           <Input
-            tabIndex={8}
-            type="date"
-            placeholder="30-02-2002"
-            //maxLength={10} // e.g. 12:30 PM
-            value={newEnquiry.dob}
-            onChange={(e) => handleChange("dob", e.target.value)}
-          />
-          {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
+            type="text"
+            placeholder="Enter Locality"
+            className="capitalize"
+            value={newEnquiry.location}
+            tabIndex={9}
+            onChange={(e) => handleChange("location", e.target.value)}         />
+            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
-
-          {/* <div>
-          <Label>Email</Label>
-          <Input
-            type="email"
-            placeholder="info@gmail.com"
-            value={newEnquiry.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-          />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-        </div>
-
+         
         <div>
-          <Label>Contact No.</Label>
-          <Input
-            type="text"
-            placeholder="99999 99999"
-            value={newEnquiry.contact}
-            onChange={(e) => handleChange("contact", e.target.value)}
-          />
-          {errors.contact && <p className="text-red-500 text-sm">{errors.contact}</p>}
-        </div> */}
-          {/* <div>
-          <Label>Course</Label>
-          <Input
-            type="text"
-            placeholder="Ex. Full Stack Developer"
-            value={newEnquiry.course}
-            onChange={(e) => handleChange("course", e.target.value)}        />
-          {errors.course && <p className="text-red-500 text-sm">{errors.course}</p>}
-        </div> */}
-          <div>
-            <div className="relative" data-master="course">
-              <MultiSelect
-                ref={jumpInputRef}
-                tabIndex={9}
-                tooltip={true}
-                content="Create Course if not in list."
-                label="Select Courses *"
-                options={courseList.map((course) => ({
-                  value: String(course.id),
-                  text: capitalizeWords(course.name),
-                  selected: newEnquiry.courseId.includes(String(course.id)),
-                }))}
-                value={newEnquiry.courseId}
-                onChange={(value) => handleChange("courseId", value)}
-              />
-              
-            </div>
-            {errors.courseId && (
-              <p className="text-sm text-red-500">{errors.courseId}</p>
-            )}
+          <Label>Source </Label>
+          <div className="relative">
+            <Input
+              placeholder="Enter Source"
+              onChange={(e) => handleChange("source", e.target.value)}
+              className="dark:bg-dark-900 capitalize"
+              value={newEnquiry.source} // Bind selected course
+              tabIndex={10}
+            />
           </div>
-          <div>
-            <Label>Source </Label>
-            <div className="relative">
-              <Input
-                placeholder="Enter Source"
-                onChange={(e) => handleChange("source", e.target.value)}
-                className="dark:bg-dark-900 capitalize"
-                value={newEnquiry.source} // Bind selected course
-                tabIndex={10}
-              />
-              {/* <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                <ChevronDownIcon />
-              </span> */}
-            </div>
-            {errors.source && (
-              <p className="text-sm text-red-500">{errors.source}</p>
-            )}
-          </div>
+          {errors.source && (
+            <p className="text-sm text-red-500">{errors.source}</p>
+          )}
+        </div>
 
          <div>
           <Label>Refered By</Label>
@@ -739,7 +680,7 @@ export default function EnquiryForm() {
             >
               Clear
             </Button>
-            <Button size="sm" tabIndex={13} onClick={handleSubmit}>
+            <Button size="sm" tabIndex={13} variant="primary"  className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>

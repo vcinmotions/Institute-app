@@ -18,6 +18,8 @@ import { setCourses } from "@/store/slices/courseSlice";
 import FilterBox from "@/components/form/input/FilterBox";
 import StudentCard from "@/components/common/StudentCard";
 import Alert from "@/components/ui/alert/Alert";
+import { useFetchAllCourses } from "@/hooks/useQueryFetchCourseData";
+import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
 
 export default function AttendanceTable() {
   const [filters, setFilters] = useState<Record<string, string | null>>({});
@@ -32,6 +34,7 @@ export default function AttendanceTable() {
   const user = useSelector((state: RootState) => state.auth.user);
   const token = useSelector((state: RootState) => state.auth.token);
   const batch = useSelector((state: RootState) => state.batch.batches);
+  const course = useSelector((state: RootState) => state.course.courses);
 
   const [alert, setAlert] = useState<{ show: boolean; title: string; message: string; variant: string }>({
       show: false,
@@ -41,6 +44,40 @@ export default function AttendanceTable() {
     });
 
   // const facultyBatch = batch.filter((item) => item.facultyId === user.id);
+  const {
+        data: courseData,
+        isLoading: courseLoading,
+        isError: courseError,
+      } = useFetchAllCourses();
+    
+      const {
+        data: batchData,
+        isLoading: batchLoading,
+        isError: batchError,
+      } = useFetchAllBatches();
+  
+      useEffect(() => {
+        if (courseData?.course) {
+          dispatch(setCourses(courseData.course));
+        };
+      }, [courseData, dispatch]);
+    
+      useEffect(() => {
+        console.log("get all batches data;", batchData);
+        if (batchData?.batch) { 
+          dispatch(setBatches(batchData.batch));
+        };
+      }, [batchData, dispatch]);
+      console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
+  
+    const batchOptions = batch.map((b: any) => ({
+      value: b.id.toString(),
+      label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    }));
+  
+    console.log("get Course Info In Faculty Create Form Modal;", course);
+  
+    console.log("get batch Info In Faculty Create Form Modal;", batch);
 
   // ✅ Determine batch list based on role
   const facultyBatch =
@@ -53,28 +90,6 @@ export default function AttendanceTable() {
   console.log("GET FACULTY BATCH DATA:", facultyBatch);
 
   console.log("GET USER IN ATTENDANCE DATA TABLE:", user);
-
-  // 🔹 Load all batches + courses once
-  useEffect(() => {
-    const fetchBatchCourse = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) return;
-      setLoading(true);
-      try {
-        const [responseBatch, responseCourse] = await Promise.all([
-          getBatch({ token }),
-          getCourse({ token }),
-        ]);
-        dispatch(setBatches(responseBatch.batch || []));
-        dispatch(setCourses(responseCourse.course || []));
-      } catch (err) {
-        console.error("Error fetching filters data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBatchCourse();
-  }, []);
 
   // 🔹 Handle filters (Course, Batch, Date)
   // const handleFilters = (selectedFilters: Record<string, string | null>) => {
@@ -194,6 +209,7 @@ export default function AttendanceTable() {
                     value: b.id.toString(),
                   })),
                 },
+
                 { label: "Date", key: "date", type: "date" },
               ]}
             />
@@ -233,7 +249,7 @@ export default function AttendanceTable() {
           )}
 
           {/* 📄 Pagination (optional) */}
-          {filters.batchId && (
+          {filters.batchId && filters.courseId && (
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

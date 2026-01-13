@@ -156,7 +156,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
     
     if (existing) {
       return res.status(409).json({
-        error: "Email already exists in enquiries",
+        error: "Email already exists in Enquiries. Use different Email!",
       });
     }
     }
@@ -170,7 +170,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
     
     if (existingContact) {
       return res.status(409).json({
-        error: "Contact already exists in enquiries",
+        error: "Contact Already exists in Enquiries. Use different Contact details!",
       });
     }
     }
@@ -615,8 +615,6 @@ export async function getEnquiryController(req: Request, res: Response) {
         isConverted: true,
         studentId: null,
       },
-      skip,
-      take: limitNum,
     });
     const filteredEnquiriesPages = Math.ceil(filteredEnquiriesCount / limitNum);
 

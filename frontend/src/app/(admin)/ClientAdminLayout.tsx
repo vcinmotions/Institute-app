@@ -26,8 +26,8 @@ export default function ClientAdminLayout({
 
   useEffect(() => {
     dispatch(setUser(user));
-    dispatch(setCountry(user.country));
-    dispatch(setStateLocation(user.state));
+    dispatch(setCountry(user?.country));
+    dispatch(setStateLocation(user?.state));
   }, [user]);
 
   useEffect(() => {

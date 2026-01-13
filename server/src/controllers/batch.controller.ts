@@ -214,11 +214,15 @@ export async function getAllBatchController(req: Request, res: Response) {
     const tenantPrisma = req.tenantPrisma;
     const user = req.user;
 
-    console.log("Get tenant user in getFacultyController", user);
+    console.log("Get tenant user in BATCHES", user);
 
     if (!tenantPrisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized request" });
     }
+
+     const onlyAvailable = req.params.onlyAvailable === "true"; // path param as boolean
+
+     console.log("available pc query:", onlyAvailable);
 
     const email = user.email;
 
@@ -236,10 +240,30 @@ export async function getAllBatchController(req: Request, res: Response) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
-    console.log("get allClientAdmin in getFacultyController:", allClientAdmin);
+    console.log("get allClientAdmin in BATCHES:", allClientAdmin);
   
     // ✅ Fetch paginated, sorted, and filtered enquiries
-    const batch = await tenantPrisma.batch.findMany({
+    // const batch = await tenantPrisma.batch.findMany({
+    //   include: {
+    //     faculty: true,
+    //     studentCourses: {
+    //       include: {
+    //         student: true,
+    //         course: true,
+    //       },
+    //     },
+    //     batchCourses: {
+    //       include: {
+    //         course: true,
+    //         batch: true,
+    //       },
+    //     },
+    //     labTimeSlot: true,
+    //   },
+    // });
+
+    // Fetch all batches
+    const batches = await tenantPrisma.batch.findMany({
       include: {
         faculty: true,
         studentCourses: {
@@ -258,19 +282,42 @@ export async function getAllBatchController(req: Request, res: Response) {
       },
     });
 
+    if(onlyAvailable === true) {
+     // Filter batches where availablePCs > 0
+    const availableBatches = batches.filter((batch) => {
+      const lab = batch.labTimeSlot;
+      if (!lab) return false; // skip batches without lab info
+      const totalAllocated = batch.studentCourses.length; // students already enrolled
+      const remainingPCs = lab.availablePCs - totalAllocated;
+      return remainingPCs > 0;
+    });
+
     console.log(
-      "Faculty Fetched Successfully",
-      batch,
+      "BATCHES Fetched Successfully",
+      availableBatches,
     );
 
     return res.status(200).json({
-      message: "Faculty fetched successfully",
-      batch,
+      message: "BATCHES fetched successfully",
+      batch: availableBatches,
+    });
+
+    }
+
+
+    console.log(
+      "BATCHES Fetched Successfully",
+      batches,
+    );
+
+    return res.status(200).json({
+      message: "BATCHES fetched successfully",
+      batch: batches,
     });
 
     //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
   } catch (err) {
-    console.error("Error Fetched Faculty:", err);
+    console.error("Error Fetched BATCHES:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

@@ -412,12 +412,12 @@ export default function EnquiryDataTable({
                         <Button
                           onClick={() => handleFollowUp(item.id)}
                           size="sm"
-                          variant="nobg"
-                          allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]} // 👈 hide for others
-                          className="rounded  px-5 py-2 text-sm text-white "
+                          variant="primary"
+                          allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]} // hide for others
+                          className="rounded bg-gray-100 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
                         >
                           
-                          <FileIcon className="text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"/>
+                          Follow-up
                     
                         </Button>
                       </TableCell>

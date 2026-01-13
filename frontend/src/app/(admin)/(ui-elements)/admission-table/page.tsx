@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import {
   setEnquiries,
   setFilteredEnquiries,
+  setTotal,
+  setTotalFiltered,
 } from "@/store/slices/enquirySlice";
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import AdmissionDataTable from "@/components/tables/AdmissionDataTable";
@@ -27,6 +29,7 @@ export default function AdmissionTable() {
   );
   const courses = useSelector((state: RootState) => state.course.courses);
   const batch = useSelector((state: RootState) => state.batch.batches);
+  const total = useSelector((state: RootState) => state.enquiry.totalFiltered);
   const [loading, setLoading] = useState<boolean>(false);
   const [sortField, setSortField] = useState("createdAt");
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(
@@ -82,6 +85,7 @@ export default function AdmissionTable() {
         dispatch(setEnquiries(response.enquiry || []));
         dispatch(setFilteredEnquiries(response.filteredEnquiries || []));
         setTotalPages(response.filteredEnquiriesPages || 0);
+        dispatch(setTotalFiltered(response.filteredEnquiriesCount || 0))
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       } finally {
@@ -130,7 +134,7 @@ export default function AdmissionTable() {
   }, [totalPages]);
 
   console.log("Enquiry Query data:", currentPage, searchQuery, totalPages, filteredEnquiries);
-  console.log("Enquiry currentPage, totalPages:", currentPage, totalPages);
+  console.log("ADMISSION currentPage, totalPages:", currentPage, totalPages);
 
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(e.target.value);
@@ -186,7 +190,7 @@ export default function AdmissionTable() {
             currentPage={currentPage}
             totalPages={totalPages}
             title="Pending Admissions"
-            totalCount={filteredEnquiries.length}
+            totalCount={total}
             onPageChange={handlePagination}
           />
         </StudentCard>

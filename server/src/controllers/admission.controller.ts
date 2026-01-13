@@ -726,7 +726,7 @@ export async function getStudentController(req: Request, res: Response) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
-    console.log("get ClientAdmin in getEnquiryController:", clientAdmin);
+    console.log("🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂get ClientAdmin in getEnquiryController:", clientAdmin);
 
     // 2. Get client admin (we assume there's only one per tenant for now)
     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
@@ -745,9 +745,15 @@ export async function getStudentController(req: Request, res: Response) {
       search,
       sortField, // default sort by created date
       sortOrder, // default descending
+      courseId,
+      admissionDate
     } = req.query;
 
-    console.log("get ALl Params:", sortField, sortOrder);
+    console.log("get ALl Params in get student:", page, limit,
+      search,
+      sortField, // default sort by created date
+      sortOrder, 
+      courseId);
 
     const pageNum = parseInt(page as string, 10);
     const limitNum = parseInt(limit as string, 10);
@@ -778,6 +784,32 @@ export async function getStudentController(req: Request, res: Response) {
             ],
           }
         : {}),
+        // ✅ Apply optional filters
+        // ...(courseId && { courseId: courseId }),
+      ...(courseId
+        ? {
+            studentCourses: {
+              some: {
+                courseId: Number(courseId),
+              },
+            },
+          }
+        : {}),
+         // ...(createDate && { createdAt: { gte: new Date(createDate as string) } }),
+        ...(admissionDate && (() => {
+          const start = new Date(admissionDate as string);
+          start.setHours(0, 0, 0, 0);
+
+          const end = new Date(admissionDate as string);
+          end.setHours(23, 59, 59, 999);
+
+          return {
+            admissionDate: {
+              gte: start,
+              lte: end,
+            },
+          };
+        })()),
     };
 
     // 3. Create student under that admin
@@ -809,7 +841,7 @@ export async function getStudentController(req: Request, res: Response) {
     const totalPages = Math.ceil(totalCount / limitNum);
 
     console.log(
-      "Students Fetched Successfully",
+      "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 Students Fetched Successfully",
       student,
       totalCount,
       totalPages,

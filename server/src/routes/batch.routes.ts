@@ -8,6 +8,6 @@ router.post('/create-batch', addBatchController);
 
 router.get('/batch', getBatchController);
 
-router.get('/batch/all', getAllBatchController);
+router.get('/batch/all/:onlyAvailable', getAllBatchController);
 
 export default router;

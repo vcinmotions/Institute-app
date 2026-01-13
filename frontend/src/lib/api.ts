@@ -371,6 +371,17 @@ export const getAttendanceByBatch = async (
   });
   return response.data;
 };
+export const getAttendanceByCourse = async (
+  token: string,
+  courseId: number,
+  date: string,
+) => {
+  const response = await apiClient.get(`/attendance/${courseId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    params: { date },
+  });
+  return response.data;
+};
 
 export const markAttendance = async (data: {
   date: string;
@@ -519,11 +530,12 @@ export const getEnquiry = async ({
 
 export const getStudent = async ({
   token,
-  page = 1,
+  page,
   limit = 5,
   search = "",
   sortField,
   sortOrder,
+  ...filters
 }: GetEnquiryParams) => {
   const response = await apiClient.get("/student", {
     headers: {
@@ -535,6 +547,7 @@ export const getStudent = async ({
       search,
       sortField,
       sortOrder,
+      ...filters
     },
   });
 

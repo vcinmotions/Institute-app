@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { createCourse } from "@/lib/api";
+import { createCourse, getStudent } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { setStudents } from "@/store/slices/studentSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 type AdmissionPayload = {
   token: string;
@@ -17,6 +18,8 @@ type AdmissionPayload = {
 export const useCreateCourse = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const currentPage = useSelector((state: RootState) => state.student.currentPage);
+  const token = useSelector((state: RootState) => state.auth.token);
 
   return useMutation({
     mutationFn: async (payload: AdmissionPayload) => {
@@ -45,13 +48,29 @@ export const useCreateCourse = () => {
       }
 
       // Call your API
-      return await createCourse(token, formData);
+      await createCourse(token, formData);
+
+      return { token };
     },
 
-    onSuccess: (data) => {
-      console.log("✅ Admission Created Successfully:", data);
+    onSuccess: async ({ token }) => {
+      console.log("✅ Admission Created Successfully");
+
+      console.log("CUrrent page of student in Add course to student murtation:", currentPage);
       // router.push("/dashboard");
-      dispatch(setStudents(data.getStudents))
+
+       const response = await getStudent({
+                token,
+                page: currentPage,
+                limit: 5,
+                search: "",
+                sortField: "admissionDate",
+                sortOrder: "desc",
+              });
+      
+              dispatch(setStudents(response.student || []));
+
+      dispatch(setStudents(response.student))
     },
     onError: (error) => {
       console.error("❌ Error Creating Admission:", error);

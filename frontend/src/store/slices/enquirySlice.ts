@@ -8,6 +8,7 @@ interface EnquiryState {
   searchQuery: string,
   error: string | null;
   total: number; // ✅ New field
+  totalFiltered: number; // ✅ New field
   currentPage: number; // ✅ New field
   totalConverted: number; // ✅ New field
   totalNotConverted: number; // ✅ New field
@@ -21,6 +22,7 @@ const initialState: EnquiryState = {
   error: null,
   searchQuery: "",
   total: 0,
+  totalFiltered: 0,
   currentPage: 1,
   totalConverted: 0,
   totalNotConverted: 0,
@@ -45,6 +47,9 @@ const enquirySlice = createSlice({
     setTotal(state, action: PayloadAction<number>) {
       state.total = action.payload;
     },
+    setTotalFiltered(state, action: PayloadAction<number>) {
+      state.totalFiltered = action.payload;
+    },
     setSearchQuery(state, action: PayloadAction<string>) {
       state.searchQuery = action.payload;
     },
@@ -61,5 +66,5 @@ const enquirySlice = createSlice({
 });
 
 // Export actions and reducer
-export const { setEnquiries, setLoading, setError, setTotal, setSearchQuery, setTotalNotConverted, setTotalConverted, setFilteredEnquiries, setCurrentPage } = enquirySlice.actions;
+export const { setEnquiries, setLoading, setError, setTotal, setSearchQuery, setTotalFiltered, setTotalNotConverted, setTotalConverted, setFilteredEnquiries, setCurrentPage } = enquirySlice.actions;
 export default enquirySlice.reducer;

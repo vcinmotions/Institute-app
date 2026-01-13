@@ -9,15 +9,17 @@ import { useDispatch } from "react-redux";
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import StudentCard from "@/components/common/StudentCard";
 import StudentDataTable from "@/components/tables/StudentDataTable";
-import { setStudents, setTotal } from "@/store/slices/studentSlice";
+import { setCurrentPage, setStudents, setTotal } from "@/store/slices/studentSlice";
 import { setBatches } from "@/store/slices/batchSlice";
 import { setCourses } from "@/store/slices/courseSlice";
 import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
+import FilterBox from "@/components/form/input/FilterBox";
 
 export default function StudentTable() {
   const [showForm, setShowForm] = useState(false);
+  const [filters, setFilters] = useState<Record<string, string | null>>({});
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPage = useSelector((state: RootState) => state.student.currentPage);
   const [totalPages, setTotalPages] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const { students, error } = useSelector((state: RootState) => state.student);
@@ -53,15 +55,20 @@ export default function StudentTable() {
       if (courseData?.course) {
         dispatch(setCourses(courseData.course));
       }
-    }, [courseData, dispatch]);
+    }, [currentPage, courseData, dispatch]);
 
     console.log("GET COURSE DATA in Add Course To Studemt:", course);
+
+    const courseOptions = course.map(course => ({
+    label: course.name,   // what user sees
+    value: course.id,     // what backend uses
+  }));
 
   // Debounce effect: update searchQuery 1 second after user stops typing
   useEffect(() => {
     const handler = setTimeout(() => {
       setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
+      dispatch(setCurrentPage(1)); // reset page when search changes
     }, 300);
 
     return () => {
@@ -71,7 +78,7 @@ export default function StudentTable() {
 
   useEffect(() => {
     fetchBatch();
-  }, []);
+  }, [currentPage]);
 
   const fetchBatch = async () => {
     const token = sessionStorage.getItem("token");
@@ -93,7 +100,6 @@ export default function StudentTable() {
       });
 
       dispatch(setBatches(response.batch || []));
-      setTotalPages(response.totalPages || 1);
     } catch (error) {
       console.error("Error fetching Courses:", error);
     } finally {
@@ -120,10 +126,12 @@ export default function StudentTable() {
           sortField,
           sortOrder,
           leadStatus, // 👈 Add this
+          ...filters
         });
 
         dispatch(setStudents(response.student || []));
         setTotalPages(response.totalPages || 1);
+        dispatch(setCurrentPage(currentPage)); // reset page when search changes
         dispatch(setTotal(response.totalCount || 0));
       } catch (error) {
         console.error("Error fetching enquiries:", error);
@@ -133,7 +141,7 @@ export default function StudentTable() {
     };
 
     fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, leadStatus]);
+  }, [currentPage, searchQuery, sortField, sortOrder, leadStatus, filters]);
 
   console.log("Query data:", currentPage, searchQuery, totalPages);
 
@@ -141,14 +149,21 @@ export default function StudentTable() {
   //   setSearchQuery(e.target.value);
   // };
 
+  // called when filters applied
+  const handleFilters = (selectedFilters: Record<string, string | null>) => {
+    console.log("Selected filters:", selectedFilters);
+    setFilters(selectedFilters);
+    dispatch(setCurrentPage(1));
+  };
+
   const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
+    dispatch(setCurrentPage(1)); // Reset to first page when searching
   };
 
   const handlePagination = (page: number) => {
     if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
+    dispatch(setCurrentPage(page));
   };
 
   const handleSort = (field: string) => {
@@ -158,15 +173,32 @@ export default function StudentTable() {
     setLeadStatus(leadStatus);
   };
 
+  console.log("CUrrent page in student table:", currentPage);
+
   return (
     <div>
       <div className="space-y-6">
         <StudentCard title="Students Lists">
+          <div className="flex justify-between w-full items-end">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+
+          <FilterBox
+              onFilterChange={handleFilters}
+              filterFields={[
+                {
+                  label: "Course",
+                  key: "courseId", // 🔑 important
+                  type: "select",
+                  options: courseOptions,
+                },
+                { label: "Admission Date", key: "admissionDate", type: "date" },
+              ]}
+            />
+            </div>
 
           <StudentDataTable
             students={students}

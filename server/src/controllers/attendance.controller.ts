@@ -213,6 +213,100 @@ export async function getAttendanceByBatch(req: Request, res: Response) {
   }
 }
 
+// ✅ getAttendanceByBatch Controller
+export async function getAttendanceByCourse(req: Request, res: Response) {
+  const { courseId } = req.params;
+  let { date } = req.query;
+
+  console.log("GEt Attendance body:", req.query);
+
+  if (!courseId) {
+    return res.status(400).json({ error: "Missing batchId" });
+  }
+
+  try {
+    const tenantPrisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!tenantPrisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    // ✅ Default date = today (midnight)
+    const targetDate = date
+      ? new Date(date as string)
+      : new Date(new Date().setHours(0, 0, 0, 0));
+
+    // ✅ Step 1: Get all ACTIVE students in this batch
+    const activeStudentCourses = await tenantPrisma.studentCourse.findMany({
+      where: {
+        courseId: Number(courseId),
+        status: "ACTIVE", // only active students
+      },
+      include: {
+        student: {
+          select: {
+            id: true,
+            fullName: true,
+            studentCode: true,
+            photoUrl: true,
+          },
+        },
+        course: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        batch: {
+          select: {
+            id: true,
+            name: true,
+            faculty: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    console.log("🎓 Active Students in Course:", activeStudentCourses);
+
+    // ✅ Step 2: Fetch attendance records (for the date)
+    const attendanceRecords = await tenantPrisma.attendanceRecord.findMany({
+      where: {
+        courseId: Number(courseId),
+        date: targetDate,
+      },
+    });
+
+    console.log("📅 Existing Attendance Records:", attendanceRecords);
+
+    // ✅ Step 3: Merge attendance with active students
+    const mergedData = activeStudentCourses.map((sc) => {
+      const existing = attendanceRecords.find(
+        (rec) => rec.studentId === sc.studentId
+      );
+      return {
+        id: sc.id,
+        student: sc.student,
+        course: sc.course,
+        batch: sc.batch,
+        present: existing ? existing.present : false, // default absent if not marked yet
+        date: targetDate,
+      };
+    });
+
+    return res.status(200).json(mergedData);
+  } catch (err) {
+    console.error("❌ Error fetching attendance:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 // export async function markAttendance(req: Request, res: Response) {
 //   const { name, date, batchId, courseId, attendance } = req.body;
 

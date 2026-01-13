@@ -6,6 +6,7 @@ interface EnquiryState {
   loading: boolean;
   error: string | null;
   total: number; // ✅ New field
+  currentPage: number; // ✅ New field
 }
 
 // 🟢 Initial state must match the shape of EnquiryState
@@ -14,6 +15,7 @@ const initialState: EnquiryState = {
   loading: false,
   error: null,
   total: 0,
+  currentPage: 1,
 };
 
 const studentSlice = createSlice({
@@ -31,10 +33,13 @@ const studentSlice = createSlice({
     },
     setTotal(state, action: PayloadAction<number>) {
       state.total = action.payload;
+    },
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.currentPage = action.payload;
     }
   },
 });
 
 // Export actions and reducer
-export const { setStudents, setLoading, setError, setTotal } = studentSlice.actions;
+export const { setStudents, setLoading, setError, setTotal, setCurrentPage } = studentSlice.actions;
 export default studentSlice.reducer;
