@@ -5,7 +5,11 @@ interface EnquiryState {
   students: any[];
   loading: boolean;
   error: string | null;
+  searchQuery: string | null;
   total: number; // ✅ New field
+  filters: Record<string, string | null>;
+  sortField: string;
+  sortOrder: "asc" | "desc";
   currentPage: number; // ✅ New field
 }
 
@@ -14,7 +18,11 @@ const initialState: EnquiryState = {
   students: [],
   loading: false,
   error: null,
+  searchQuery: null,
   total: 0,
+  filters: {},
+  sortField: "admissionDate",
+  sortOrder: "asc",
   currentPage: 1,
 };
 
@@ -31,15 +39,26 @@ const studentSlice = createSlice({
     setError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
     },
+    setSearchQuery(state, action: PayloadAction<string | null>) {
+      state.searchQuery = action.payload;
+    },
     setTotal(state, action: PayloadAction<number>) {
       state.total = action.payload;
     },
     setCurrentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
+    },
+    setFilters(state, action) {
+      state.filters = action.payload;
+      state.currentPage = 1; // reset ONLY when filters change
+    },
+    setSort(state, action) {
+      state.sortField = action.payload.field;
+      state.sortOrder = action.payload.order;
     }
   },
 });
 
 // Export actions and reducer
-export const { setStudents, setLoading, setError, setTotal, setCurrentPage } = studentSlice.actions;
+export const { setStudents, setLoading, setError, setTotal, setCurrentPage, setFilters, setSort, setSearchQuery } = studentSlice.actions;
 export default studentSlice.reducer;

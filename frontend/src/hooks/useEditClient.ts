@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { editClientAPI, editEnquiryAPI, editMasterAPI, getEnquiry, getMasterUser, getUser } from "@/lib/api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { setEnquiries, setError, setFilteredEnquiries } from "@/store/slices/enquirySlice";
+import { setEnquiries, setError } from "@/store/slices/enquirySlice";
 import { setUser } from "@/store/slices/authSlice";
 
 export const useEditClient = () => {

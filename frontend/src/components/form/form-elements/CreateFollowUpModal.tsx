@@ -4,7 +4,7 @@ import Button from "@/components/ui/button/Button";
 import { useCreateNextFollowUp } from "@/hooks/useCreateNextFollowUp";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { useFollowUp } from "@/hooks/useQueryFetchFollow";
+import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import TextArea from "../input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
 
@@ -245,7 +245,8 @@ const handleSubmit = async () => {
           </Button>
           <Button
             size="sm"
-            variant="primary"
+            variant="primary"  
+            className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
             tabIndex={4}
             onClick={handleSubmit}
           >

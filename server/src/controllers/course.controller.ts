@@ -1076,9 +1076,9 @@ export async function markCourseAsCompleted(req: Request, res: Response) {
       studentName: student.fullName,
       courseName: studentCourse.course.name,
       completionDate: new Date(),
-      ceoName: "lorem Ipsum",
+      ceoName: "lorem Ipsum", 
       headName: "lorem Ipsum",
-      certificateName: getClientAdminData.certificateName || "",
+      certificateName: getClientAdminData.certificateName || "certificate-template-1.png",
       outputDir: path.join(process.cwd(), "uploads/certificates"),
     });
 

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateHoldEnquiry } from "@/hooks/useCompleteFollowUp";
-import { useFollowUp } from "@/hooks/useQueryFetchFollow";
+import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import TextArea from "../input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
 
@@ -124,7 +124,8 @@ export default function HoldEnquiryModal({
           </Button>
           <Button
             size="sm"
-            variant="primary"
+            variant="primary"  
+            className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
             tabIndex={3}
             onClick={handleSubmit}
           >

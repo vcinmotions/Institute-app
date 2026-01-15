@@ -13,7 +13,7 @@ import { setCourses } from "@/store/slices/courseSlice";
 import {
   useFetchAllCourses,
   useFetchCourse,
-} from "@/hooks/useQueryFetchCourseData";
+} from "@/hooks/queries/useQueryFetchCourseData";
 import { toast } from "sonner";
 import { setError } from "@/store/slices/enquirySlice";
 import Select from "@/components/form/Select";

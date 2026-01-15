@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateStudentPayment } from "@/hooks/useCreateStudentPayment";
-import { useFetchPayment } from "@/hooks/useQueryFetchPayment";
+import { useFetchPayment } from "@/hooks/queries/useQueryFetchPayment";
 import { useDispatch } from "react-redux";
 import { setPayment } from "@/store/slices/paymentSlice";
 import { getPayment } from "@/lib/api";
@@ -236,7 +236,8 @@ export default function CreateStudentPaymentModal({
           </Button>
           <Button
             size="sm"
-            variant="primary"
+            variant="primary"  
+            className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
             tabIndex={5}
             onClick={handleSubmit}
           >

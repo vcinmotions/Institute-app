@@ -19,8 +19,8 @@ import { getBatch, getCourse } from "@/lib/api";
 import { setBatches } from "@/store/slices/batchSlice";
 import { setCourses } from "@/store/slices/courseSlice";
 import { useFacultyStore } from "@/store/facultyStore";
-import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
-import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
+import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 
 interface CourseData {
   email: string;
@@ -522,15 +522,10 @@ export default function FacultyForm() {
           </div>
 
           <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-            {/* <Button
-            size="sm"
-            variant="outline"
-            tabIndex={8}
-            onClick={onCloseModal}
-          >
-            Close
-          </Button> */}
-            <Button size="sm" tabIndex={9} variant="primary"  className="rounded bg-gray-100 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+            {/* <Button size="sm" variant="outline" onClick={handleResetForm}>
+              Clear
+            </Button> */}
+            <Button size="sm" tabIndex={9} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>

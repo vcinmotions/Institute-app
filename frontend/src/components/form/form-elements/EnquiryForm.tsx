@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useDispatch } from 'react-redux';
 import { setCourses } from '@/store/slices/courseSlice';
-import { useFetchCourse } from '@/hooks/useQueryFetchCourseData';
+import { useFetchCourse } from '@/hooks/queries/useQueryFetchCourseData';
 import { toast } from 'sonner';
 import { setError } from '@/store/slices/enquirySlice';
 import {Calendar} from "@heroui/react";

@@ -8,12 +8,12 @@ import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useCreateCourse } from "@/hooks/useCreateCourse";
-import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
+import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourses } from "@/store/slices/courseSlice";
 import { RootState } from "@/store";
 import { setBatches } from "@/store/slices/batchSlice";
-import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
+import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { capitalizeWords } from "@/components/common/ToCapitalize";
 
 interface DefaultInputsProps {
@@ -689,7 +689,7 @@ export default function CourseForm({
           >
             Close
           </Button>
-          <Button size="sm" tabIndex={7} onClick={handleSubmit}>
+          <Button size="sm" tabIndex={7} variant="primary"  className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

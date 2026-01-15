@@ -65,7 +65,8 @@ const PrintConfigModal: React.FC<Props> = ({
             Cancel
           </Button>
           <Button
-            className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          size="sm"
+             variant="primary"  className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
             onClick={() => onSave(config)}
           >
             Save

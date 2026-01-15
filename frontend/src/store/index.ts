@@ -13,6 +13,7 @@ import logReducer from './slices/logSlice';
 import analyticsReducer from './slices/analyticsSlice';
 import rolesReducer from './slices/rolesSlices';
 import notificationReducer from './slices/notificationSlice';
+import admissionReducer from './slices/admissionSlice'
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     analytic: analyticsReducer,
     role: rolesReducer,
     notification: notificationReducer,
+    admission: admissionReducer
     // add more reducers here (notifications, enquiry etc)
   },
 });

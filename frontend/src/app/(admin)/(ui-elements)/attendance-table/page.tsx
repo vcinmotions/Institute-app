@@ -18,8 +18,8 @@ import { setCourses } from "@/store/slices/courseSlice";
 import FilterBox from "@/components/form/input/FilterBox";
 import StudentCard from "@/components/common/StudentCard";
 import Alert from "@/components/ui/alert/Alert";
-import { useFetchAllCourses } from "@/hooks/useQueryFetchCourseData";
-import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
+import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 
 export default function AttendanceTable() {
   const [filters, setFilters] = useState<Record<string, string | null>>({});

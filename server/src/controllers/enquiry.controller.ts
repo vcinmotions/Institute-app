@@ -2,6 +2,9 @@
 import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
 import redis from "../redis/redis";
+import { getEnquiries } from "../services/enquiry.service";
+import { enquiryQuerySchema } from "../validators/enquiry.query";
+import { getWonEnquiries } from "../services/won.enquiry.service";
 
 export async function addEnquiryController(req: Request, res: Response) {
   const { name, contact, course, source, email: enquiryEmail, alternateContact, age, location, gender, dob, referedBy } = req.body;
@@ -373,289 +376,357 @@ export async function editEnquiryController(req: Request, res: Response) {
   }
 }
 
+// export async function getEnquiryController(req: Request, res: Response) {
+//   try {
+//     // 1. Use values injected by middleware
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+//     const tenant = req.tenantInfo;
+
+//     console.log("Get tenant user in getEnquiryController", user);
+
+//     console.log("Get tenant Info in getEnquiryController", tenant);
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
+
+//     const email = user.email;
+
+//     const leadStatusOrder = {
+//       HOT: 1,
+//       WARM: 2,
+//       COLD: 3,
+//       WON: 4,
+//       LOST: 5,
+//       HOLD: 6,
+//     };
+
+//     // 2. Get client admin (we assume there's only one per tenant for now)
+//     // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
+//     // if (!clientAdmin) {
+//     //   return res.status(404).json({ error: 'Client admin not found' });
+//     // }
+
+//     //console.log("get ClientAdmin in getEnquiryController:", clientAdmin);
+
+//     // 2. Get client admin (we assume there's only one per tenant for now)
+//     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
+//     if (!allClientAdmin) {
+//       return res.status(404).json({ error: "Client admin not found" });
+//     }
+
+//     const clientAdminId = user.clientAdminId;
+
+//     console.log("get allClientAdmin in getEnquiryController:", allClientAdmin);
+
+//     // 2.1 ✅ Extract query params
+//     const {
+//       page,
+//       limit,
+//       search,
+//       sortField, // default sort by created date
+//       sortOrder, // default descending
+//       leadStatus, // 👈 Add this
+//       courseId,
+//       createDate,
+//     } = req.query;
+
+//     console.log("get ALl Params:", sortField, sortOrder);
+//     console.log("get ALl Params for Enquiry:", req.query);
+
+//     const pageNum = parseInt(page as string, 10);
+//     const limitNum = parseInt(limit as string, 10);
+//     const skip = (pageNum - 1) * limitNum;
+    
+//     // 🔥 Redis cache key (tenant + pagination + filters)
+//     const cacheKey = `enquiry:${user.id}:${pageNum}:${limitNum}:${
+//       search || ""
+//     }:${sortField || ""}:${sortOrder || ""}:${leadStatus || ""}`;
+
+//     const cachedData = await redis.get(cacheKey);
+
+//     if (cachedData) {
+//       console.log(
+//         "⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡⚡ v v ⚡⚡ Enquiry served from Redis"
+//       );
+//       return res.status(200).json(JSON.parse(cachedData));
+//     }
+
+//     const rawSearch =
+//       typeof search === "string" ? search.trim() : "";
+
+//     const searchNumber = Number(rawSearch);
+//     const isNumberSearch = !isNaN(searchNumber);
+
+
+//     // ✅ Build search filter
+//     // const where: any = {};
+//     // if (search) {
+//     //   where.OR = [
+//     //     { name: { contains: search, mode: "insensitive" } },
+//     //     { email: { contains: search, mode: "insensitive" } },
+//     //     { course: { contains: search, mode: "insensitive" } },
+//     //     { contact: { contains: search, mode: "insensitive" } },
+//     //     // Add more searchable fields as needed
+//     //   ];
+//     // } // for prisma search filter
+
+//     // ✅ Build search filter
+//     // const where = {
+//     //   clientAdminId,
+//     //   ...(search
+//     //     ? {
+//     //         OR: [
+//     //           { name: { contains: search as string } },
+//     //           { email: { contains: search as string } },
+//     //         ],
+//     //       }
+//     //     : {}),
+//     // };
+
+//     const where: any = {
+//       clientAdminId,
+//       ...(search
+//         ? {
+//             OR: [
+//               { name: { contains: search as string } },
+//               { email: { contains: search as string } },
+//               { city: { contains: search as string } },
+//               { location: { contains: search as string } },
+//               // ✅ ONLY apply srNo filter if search is numeric
+//               ...(isNumberSearch
+//                 ? [{ srNo: { equals: searchNumber } }]
+//                 : []),
+//             ],
+//           }
+//         : {}),
+//       ...(leadStatus
+//         ? {
+//             leadStatus: leadStatus as string,
+//           }
+//         : {}),
+//         // ✅ Apply optional filters
+//         // ...(courseId && { courseId: courseId }),
+//       ...(courseId
+//         ? {
+//             enquiryCourse: {
+//               some: {
+//                 courseId: Number(courseId),
+//               },
+//             },
+//           }
+//         : {}),
+//       // ...(createDate && { createdAt: { gte: new Date(createDate as string) } }),
+//         ...(createDate && (() => {
+//     const start = new Date(createDate as string);
+//     start.setHours(0, 0, 0, 0);
+
+//     const end = new Date(createDate as string);
+//     end.setHours(23, 59, 59, 999);
+
+//     return {
+//       createdAt: {
+//         gte: start,
+//         lte: end,
+//       },
+//     };
+//   })()),
+//     };
+
+//     // if (leadStatus && typeof leadStatus === "string") {
+//     //   where.leadStatus = leadStatus;
+//     // }
+
+//     // 3. Create student under that admin
+//     // const enquiry = await tenantPrisma.enquiry.findMany({
+//     // });
+
+//     // ✅ Fetch paginated, sorted, and filtered enquiries
+//     const enquiry = await tenantPrisma.enquiry.findMany({
+//       where,
+//       // orderBy: {
+//       //   [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
+//       // },
+//       include: {
+//         enquiryCourse: {
+//           include: {
+//             course: true,
+//           },
+//         },
+//       },
+//       orderBy:
+//       sortField === "srNo"
+//         ? { srNo: sortOrder === "asc" ? "asc" : "desc" }
+//         : { createdAt: "desc" },
+//       skip,
+//       take: limitNum,
+//     });
+
+//     // Custom sort for leadStatus if requested
+//     if (sortField === "leadStatus") {
+//       enquiry.sort((a, b) => {
+//         if (sortOrder === "asc") {
+//           return leadStatusOrder[a.leadStatus] - leadStatusOrder[b.leadStatus];
+//         } else {
+//           return leadStatusOrder[b.leadStatus] - leadStatusOrder[a.leadStatus];
+//         }
+//       });
+//     }
+
+//     // ✅ Total count (for frontend pagination)
+//     //const totalPages = await tenantPrisma.enquiry.count({ where });
+//     const totalCount = await tenantPrisma.enquiry.count({ where });
+//     const totalPages = Math.ceil(totalCount / limitNum);
+//     // ✅ Additional counts
+//     const convertedCount = await tenantPrisma.enquiry.count({
+//       where: {
+//         ...where,
+//         isConverted: true,
+//         NOT: { studentId: null }, // ensures studentId exists
+//       },
+//     });
+
+//     const notConvertedCount = await tenantPrisma.enquiry.count({
+//       where: {
+//         ...where,
+//         OR: [{ isConverted: false }, { studentId: null }],
+//       },
+//     });
+
+//     // Fetch the data where isConverted = true and studentId = null
+//     const filteredEnquiries = await tenantPrisma.enquiry.findMany({
+//       where: {
+//         ...where,
+//         isConverted: true,
+//         studentId: null,
+//       },
+//       include: {
+//         enquiryCourse: {
+//           include: {
+//             course: true,
+//           },
+//         },
+//       },
+//       skip,
+//       take: limitNum,
+//     });
+
+//     const filteredEnquiriesCount = await tenantPrisma.enquiry.count({
+//       where: {
+//         ...where,
+//         isConverted: true,
+//         studentId: null,
+//       },
+//     });
+//     const filteredEnquiriesPages = Math.ceil(filteredEnquiriesCount / limitNum);
+
+
+//     console.log(
+//       "Enquiry Fetched Successfully",
+//       enquiry,
+//       totalPages,
+//       pageNum,
+//       limitNum,
+//       totalCount,
+//       convertedCount,
+//       notConvertedCount,
+//       filteredEnquiries,
+//       filteredEnquiriesCount,
+//       filteredEnquiriesPages
+//     );
+//     console.log(
+//       "filteredEnquiriesPages",
+//       filteredEnquiries,
+//       filteredEnquiriesCount,
+//       filteredEnquiriesPages
+//     );
+
+//     return res.status(200).json({
+//       message: "Enquiry fetched successfully",
+//       enquiry,
+//       filteredEnquiries,
+//       totalPages,
+//       totalCount,
+//       page: pageNum,
+//       limit: limitNum,
+//       convertedCount,
+//       notConvertedCount,
+//       filteredEnquiriesCount,
+//       filteredEnquiriesPages
+//     });
+
+//     //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
+//   } catch (err) {
+//     console.error("Error Fetched Enquiry:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
+
 export async function getEnquiryController(req: Request, res: Response) {
   try {
-    // 1. Use values injected by middleware
-    const tenantPrisma = req.tenantPrisma;
+    const prisma = req.tenantPrisma;
     const user = req.user;
-    const tenant = req.tenantInfo;
 
-    console.log("Get tenant user in getEnquiryController", user);
-
-    console.log("Get tenant Info in getEnquiryController", tenant);
-
-    if (!tenantPrisma || !user || typeof user === "string") {
-      return res.status(401).json({ error: "Unauthorized request" });
+    if (!prisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const email = user.email;
+    const query = enquiryQuerySchema.parse(req.query);
 
-    const leadStatusOrder = {
-      HOT: 1,
-      WARM: 2,
-      COLD: 3,
-      WON: 4,
-      LOST: 5,
-      HOLD: 6,
-    };
+    const result = await getEnquiries({
+      prisma,
+      clientAdminId: user.clientAdminId,
+      query,
+    });
 
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
+    return res.json({
+      message: "Enquiries fetched successfully",
+      ...result,
+      page: query.page,
+      limit: query.limit,
+    });
 
-    //console.log("get ClientAdmin in getEnquiryController:", clientAdmin);
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
-    if (!allClientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
+  } catch (err: any) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({ error: err.errors });
     }
 
-    const clientAdminId = user.clientAdminId;
+    console.error(err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
 
-    console.log("get allClientAdmin in getEnquiryController:", allClientAdmin);
+export async function getWonEnquiryController(req: Request, res: Response) {
+  try {
+    const prisma = req.tenantPrisma;
+    const user = req.user;
 
-    // 2.1 ✅ Extract query params
-    const {
-      page,
-      limit,
-      search,
-      sortField, // default sort by created date
-      sortOrder, // default descending
-      leadStatus, // 👈 Add this
-      courseId,
-      createDate,
-    } = req.query;
-
-    console.log("get ALl Params:", sortField, sortOrder);
-    console.log("get ALl Params for Enquiry:", req.query);
-
-    const pageNum = parseInt(page as string, 10);
-    const limitNum = parseInt(limit as string, 10);
-    const skip = (pageNum - 1) * limitNum;
-    
-    // 🔥 Redis cache key (tenant + pagination + filters)
-    const cacheKey = `enquiry:${user.id}:${pageNum}:${limitNum}:${
-      search || ""
-    }:${sortField || ""}:${sortOrder || ""}:${leadStatus || ""}`;
-
-    const cachedData = await redis.get(cacheKey);
-
-    if (cachedData) {
-      console.log(
-        "⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ ⚡⚡ v v ⚡⚡ Enquiry served from Redis"
-      );
-      return res.status(200).json(JSON.parse(cachedData));
+    if (!prisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const rawSearch =
-      typeof search === "string" ? search.trim() : "";
+    const query = enquiryQuerySchema.parse(req.query);
 
-    const searchNumber = Number(rawSearch);
-    const isNumberSearch = !isNaN(searchNumber);
-
-
-    // ✅ Build search filter
-    // const where: any = {};
-    // if (search) {
-    //   where.OR = [
-    //     { name: { contains: search, mode: "insensitive" } },
-    //     { email: { contains: search, mode: "insensitive" } },
-    //     { course: { contains: search, mode: "insensitive" } },
-    //     { contact: { contains: search, mode: "insensitive" } },
-    //     // Add more searchable fields as needed
-    //   ];
-    // } // for prisma search filter
-
-    // ✅ Build search filter
-    // const where = {
-    //   clientAdminId,
-    //   ...(search
-    //     ? {
-    //         OR: [
-    //           { name: { contains: search as string } },
-    //           { email: { contains: search as string } },
-    //         ],
-    //       }
-    //     : {}),
-    // };
-
-    const where: any = {
-      clientAdminId,
-      ...(search
-        ? {
-            OR: [
-              { name: { contains: search as string } },
-              { email: { contains: search as string } },
-              { city: { contains: search as string } },
-              { location: { contains: search as string } },
-              // ✅ ONLY apply srNo filter if search is numeric
-              ...(isNumberSearch
-                ? [{ srNo: { equals: searchNumber } }]
-                : []),
-            ],
-          }
-        : {}),
-      ...(leadStatus
-        ? {
-            leadStatus: leadStatus as string,
-          }
-        : {}),
-        // ✅ Apply optional filters
-        // ...(courseId && { courseId: courseId }),
-      ...(courseId
-        ? {
-            enquiryCourse: {
-              some: {
-                courseId: Number(courseId),
-              },
-            },
-          }
-        : {}),
-      // ...(createDate && { createdAt: { gte: new Date(createDate as string) } }),
-        ...(createDate && (() => {
-    const start = new Date(createDate as string);
-    start.setHours(0, 0, 0, 0);
-
-    const end = new Date(createDate as string);
-    end.setHours(23, 59, 59, 999);
-
-    return {
-      createdAt: {
-        gte: start,
-        lte: end,
-      },
-    };
-  })()),
-    };
-
-    // if (leadStatus && typeof leadStatus === "string") {
-    //   where.leadStatus = leadStatus;
-    // }
-
-    // 3. Create student under that admin
-    // const enquiry = await tenantPrisma.enquiry.findMany({
-    // });
-
-    // ✅ Fetch paginated, sorted, and filtered enquiries
-    const enquiry = await tenantPrisma.enquiry.findMany({
-      where,
-      // orderBy: {
-      //   [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
-      // },
-      include: {
-        enquiryCourse: {
-          include: {
-            course: true,
-          },
-        },
-      },
-      orderBy:
-      sortField === "srNo"
-        ? { srNo: sortOrder === "asc" ? "asc" : "desc" }
-        : { createdAt: "desc" },
-      skip,
-      take: limitNum,
+    const result = await getWonEnquiries({
+      prisma,
+      clientAdminId: user.clientAdminId,
+      query,
     });
 
-    // Custom sort for leadStatus if requested
-    if (sortField === "leadStatus") {
-      enquiry.sort((a, b) => {
-        if (sortOrder === "asc") {
-          return leadStatusOrder[a.leadStatus] - leadStatusOrder[b.leadStatus];
-        } else {
-          return leadStatusOrder[b.leadStatus] - leadStatusOrder[a.leadStatus];
-        }
-      });
+    return res.json({
+      message: "Won Enquiries fetched successfully",
+      ...result,
+      page: query.page,
+      limit: query.limit,
+    });
+
+  } catch (err: any) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({ error: err.errors });
     }
 
-    // ✅ Total count (for frontend pagination)
-    //const totalPages = await tenantPrisma.enquiry.count({ where });
-    const totalCount = await tenantPrisma.enquiry.count({ where });
-    const totalPages = Math.ceil(totalCount / limitNum);
-    // ✅ Additional counts
-    const convertedCount = await tenantPrisma.enquiry.count({
-      where: {
-        ...where,
-        isConverted: true,
-        NOT: { studentId: null }, // ensures studentId exists
-      },
-    });
-
-    const notConvertedCount = await tenantPrisma.enquiry.count({
-      where: {
-        ...where,
-        OR: [{ isConverted: false }, { studentId: null }],
-      },
-    });
-
-    // Fetch the data where isConverted = true and studentId = null
-    const filteredEnquiries = await tenantPrisma.enquiry.findMany({
-      where: {
-        ...where,
-        isConverted: true,
-        studentId: null,
-      },
-      include: {
-        enquiryCourse: {
-          include: {
-            course: true,
-          },
-        },
-      },
-      skip,
-      take: limitNum,
-    });
-
-    const filteredEnquiriesCount = await tenantPrisma.enquiry.count({
-      where: {
-        ...where,
-        isConverted: true,
-        studentId: null,
-      },
-    });
-    const filteredEnquiriesPages = Math.ceil(filteredEnquiriesCount / limitNum);
-
-
-    console.log(
-      "Enquiry Fetched Successfully",
-      enquiry,
-      totalPages,
-      pageNum,
-      limitNum,
-      totalCount,
-      convertedCount,
-      notConvertedCount,
-      filteredEnquiries,
-      filteredEnquiriesCount,
-      filteredEnquiriesPages
-    );
-    console.log(
-      "filteredEnquiriesPages",
-      filteredEnquiries,
-      filteredEnquiriesCount,
-      filteredEnquiriesPages
-    );
-
-    return res.status(200).json({
-      message: "Enquiry fetched successfully",
-      enquiry,
-      filteredEnquiries,
-      totalPages,
-      totalCount,
-      page: pageNum,
-      limit: limitNum,
-      convertedCount,
-      notConvertedCount,
-      filteredEnquiriesCount,
-      filteredEnquiriesPages
-    });
-
-    //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
-  } catch (err) {
-    console.error("Error Fetched Enquiry:", err);
+    console.error(err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

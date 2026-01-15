@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import React from "react";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import EnquiryTable from "../../(ui-elements)/enquiry-table/page";
 import RoleProtected from "@/components/auth/RoleProtected";
@@ -13,13 +12,8 @@ export const metadata: Metadata = {
 export default function Enquiry() {
   return (
     <RoleProtected allowedRoles={["ADMIN", "FRONT_DESK"]}>
-      <div>
-        <PageBreadcrumb pageTitle="Enquiry" />
-        
-            <EnquiryTable />
-          </div>
-    
-        
+      <PageBreadcrumb pageTitle="Enquiry" />
+      <EnquiryTable />
     </RoleProtected>
   );
 }

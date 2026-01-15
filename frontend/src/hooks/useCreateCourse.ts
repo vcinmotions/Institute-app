@@ -20,6 +20,12 @@ export const useCreateCourse = () => {
   const dispatch = useDispatch();
   const currentPage = useSelector((state: RootState) => state.student.currentPage);
   const token = useSelector((state: RootState) => state.auth.token);
+  const searchQuery = useSelector((state: RootState) => state.student.searchQuery);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+  } = useSelector((state: RootState) => state.student);
 
   return useMutation({
     mutationFn: async (payload: AdmissionPayload) => {
@@ -59,14 +65,7 @@ export const useCreateCourse = () => {
       console.log("CUrrent page of student in Add course to student murtation:", currentPage);
       // router.push("/dashboard");
 
-       const response = await getStudent({
-                token,
-                page: currentPage,
-                limit: 5,
-                search: "",
-                sortField: "admissionDate",
-                sortOrder: "desc",
-              });
+       const response = await getStudent({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
       
               dispatch(setStudents(response.student || []));
 

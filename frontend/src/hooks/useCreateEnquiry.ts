@@ -36,14 +36,16 @@
 // };
 
 // src/hooks/useCreateEnquiry.ts
-import { useMutation } from "@tanstack/react-query";
-import { createEnquiryAPI, getEnquiry } from "@/lib/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
+
 import { setEnquiries, setLoading, setError } from "@/store/slices/enquirySlice";
+import { createEnquiryAPI } from "@/lib/api/enquiry";
 
 export const useCreateEnquiry = () => {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const token = useSelector((state: RootState) => state.auth.token);
 
@@ -58,24 +60,11 @@ export const useCreateEnquiry = () => {
       return { token };
     },
 
-    onSuccess: async ({ token }) => {
-      try {
-        console.log("GET THE CURENT PAGE IN ENQUIYR CREATE MUTATION:", currentPage);
-        // Refetch latest enquiries
-        const updated = await getEnquiry({
-          page: currentPage,
-          token,
-          limit: 5,
-          sortField: "createdAt",
-        });
-
-        dispatch(setEnquiries(updated.enquiry));
-        dispatch(setError(null));
-      } catch (err: any) {
-        dispatch(setError(err.message || "Failed to fetch updated enquiries"));
-      } finally {
-        dispatch(setLoading(false));
-      }
+    onSuccess: () => {
+      // ✅ reload enquiry list (keeps current page automatically)
+      queryClient.invalidateQueries({
+        queryKey: ["enquiry"],
+      });
     },
 
     onError: (error: any) => {

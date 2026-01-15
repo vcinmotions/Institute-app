@@ -308,7 +308,7 @@ export default function RolesForm() {
             >
               Clear
             </Button>
-            <Button size="sm" tabIndex={6} onClick={handleSubmit}>
+            <Button size="sm" tabIndex={6} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>

@@ -153,12 +153,12 @@ export default function StudentCourseDataTable({
                 >
                   Batch
                 </TableCell>
-                <TableCell
+                {/* <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
                   Faculty
-                </TableCell>
+                </TableCell> */}
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
@@ -212,7 +212,7 @@ export default function StudentCourseDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                  Certificate Download
+                 Download
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -258,15 +258,15 @@ export default function StudentCourseDataTable({
                       {item.studentCourse?.batchId || "N/A"}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    {/* <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.studentCourse?.batch?.faculty?.name || "N/A"}
-                    </TableCell>
+                    </TableCell> */}
 
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       <Badge
                         size="sm"
                         color={
-                          item.studentCourse?.status === "COMPLETE"
+                          item.studentCourse?.status === "COMPLETED"
                             ? "success"
                             : item.studentCourse?.status === "ACTIVE"
                               ? "warning"
@@ -317,6 +317,7 @@ export default function StudentCourseDataTable({
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.studentCourse?.certificate?.certificateUrl ? (
                         <Button
+                        size="sm"
                           onClick={() =>
                             handleDownload(
                               item.studentCourse.certificate.certificateUrl,
@@ -324,7 +325,7 @@ export default function StudentCourseDataTable({
                           }
                           className="mt-2 bg-yellow-500 text-white hover:bg-yellow-600"
                         >
-                          Download Certificate 🏆
+                          Download
                         </Button>
                       ) : (
                         <span className="text-gray-400 italic">

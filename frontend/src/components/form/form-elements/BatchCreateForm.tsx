@@ -7,7 +7,7 @@ import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useCreateBatch } from "@/hooks/useCreateBatch";
-import { useFetchFaculty } from "@/hooks/useQueryFetchFaculty";
+import { useFetchFaculty } from "@/hooks/queries/useQueryFetchFaculty";
 import { ChevronDownIcon } from "@/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";

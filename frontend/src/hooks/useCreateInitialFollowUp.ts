@@ -9,6 +9,14 @@ import { setEnquiries } from "@/store/slices/enquirySlice";
 export const useCreateInitialFollowUp = () => {
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.token);
+  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+    leadStatus,
+  } = useSelector((state: RootState) => state.enquiry);
 
   return useMutation({
     mutationFn: async (newFollowUpData: {
@@ -24,20 +32,13 @@ export const useCreateInitialFollowUp = () => {
       await createInitialFolowUpAPI(token, newFollowUpData);
 
       // Return payload for use in onSuccess
-      return { token, enquiryId: newFollowUpData.enquiryId, currentPage: newFollowUpData.currentPage, searchQuery: newFollowUpData.searchQuery };
+      return { token, enquiryId: newFollowUpData.enquiryId};
     },
 
-    onSuccess: async ({ token, enquiryId, currentPage, searchQuery }) => {
+    onSuccess: async ({ token, enquiryId  }) => {
       try {
         // Fetch updated enquiry list
-        const updatedEnquiry = await getEnquiry({
-          token,
-          page: currentPage,
-          limit: 5,
-          search: searchQuery,
-          sortField: "srNo",
-          sortOrder: "asc"
-        });
+        const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
 
         // Fetch follow-ups for this enquiry
         const updatedFollowUps = await getFollowUp(token, enquiryId);

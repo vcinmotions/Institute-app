@@ -12,16 +12,14 @@ import { useDispatch } from "react-redux";
 import Button from "../ui/button/Button";
 import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
 import TimelineDatatable from "@/app/(admin)/(ui-elements)/timeline/TimelineComponent";
-import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
-import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
+
 import { addFollowUpsForEnquiry } from "@/store/slices/followUpSlice";
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
 
-import { FileIcon } from "@/icons";
-import { useFollowUp } from "@/hooks/useQueryFetchFollow";
+import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import HoldEnquiryModal from "../form/form-elements/HoldEnquiryForm";
 import LostEnquiryModal from "../form/form-elements/LostEnquiryForm";
 
@@ -81,17 +79,9 @@ export default function EnquiryDataTable({
   const [showTimelineModal, setShowTimelineModal] = useState(false);
   const [showCreateNextModal, setShowCreateNextModal] = useState(false);
 
-
   const { mutate: fetchEnquiries, data } = useFetchEnquiry();
   const { followupDetails, isLoading, isError, refetch } =
     useFollowUp(selectedId);
-
-  console.log("get All Query To search:", enquiries);
-  console.log("show timeline modal:", showTimelineModal);
-  console.log(
-    "Get New UPDATED DETAILS Follow-Up data to Update Timeline COMPONENT:",
-    followupDetails,
-  );
 
   // Dispatch server-side fetch
   const handleSort = (field: string) => {
@@ -106,18 +96,6 @@ export default function EnquiryDataTable({
       sortField: field,
       sortOrder: order,
     });
-  };
-
-  const handleReopenEnquiry = (enquiry: any, status: "LOST" | "HOLD") => {
-    setSelectedEnquiryId(enquiry.id);
-    setSelectedEnquiryData(enquiry);
-    setShowForm(true); // You can use this to show your EnquiryDetails or UpdateEnquiryModal
-    console.log(`Reopening enquiry ${enquiry.name} as ${status}`);
-  };
-
-  const handleCreateFollowUpForEnquiry = (enquiryId: string) => {
-    setSelectedEnquiryId(enquiryId);
-    setModalType("createNew");
   };
 
   const handleCreateFollowUpForFollowUp = (followUpId: string) => {
@@ -157,13 +135,7 @@ export default function EnquiryDataTable({
     );
   };
 
-  const handleCloseModal = () => {
-    setShowForm(false);
-    setEnquiryDetail(false);
-  };
-
   const { mutate: followUp, error, isSuccess, isPending } = useFetchFollowUps();
-  const { mutate: admissionStudent } = useCreateAdmission();
 
   const handleFollowUp = (enquiryId: string) => {
     const token = sessionStorage.getItem("token");
@@ -219,9 +191,6 @@ export default function EnquiryDataTable({
     setSelectedEnquiryId(item.id);
   };
 
-  console.log("get ModalType", modalType);
-  console.log("get selectedEnquiryId", selectedEnquiryId);
-  console.log("get selectedFollowUpId", selectedFollowUpId);
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -243,13 +212,6 @@ export default function EnquiryDataTable({
                 >
                   Enquires
                 </TableCell>
-
-                {/* <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Email
-                </TableCell> */}
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
@@ -257,40 +219,6 @@ export default function EnquiryDataTable({
                   Course
                 </TableCell>
                 <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Created At
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  <span className="flex items-center gap-1">
-                  Status
-                  {/* <button
-                    type="button"
-                    className="flex items-center gap-1"
-                    onClick={() => onLeadStatus("leadStatus")}
-                  >
-                    Status
-                    <span>
-                      {sortField === "leadStatus" && sortOrder === "asc"
-                        ? "▲"
-                        : "▼"}
-                    </span>
-                  </button> */}
-                  <Tooltip
-                    className="rounded bg-gray-200 text-[10px] mb-1.5"
-                    content="WARM: Create Initial Follow-Up"
-                  >
-                    <span className="cursor-pointer text-xl text-gray-600">
-                      🛈
-                    </span>
-                  </Tooltip>
-                  </span>
-                </TableCell>
-                {/* <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
@@ -306,7 +234,23 @@ export default function EnquiryDataTable({
                         : "▼"}
                     </span>
                   </button>
-                </TableCell> */}
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                >
+                  <span className="flex items-center gap-1">
+                   Status
+                  <Tooltip
+                    className="rounded bg-gray-200 text-[10px] mb-1.5"
+                    content="WARM: Create Initial Follow-Up"
+                  >
+                    <span className="cursor-pointer text-xl text-gray-600">
+                      🛈
+                    </span>
+                  </Tooltip>
+                  </span>
+                </TableCell>
                 <ShowForRoles allowedRoles={["ADMIN", "FACULTY"]}>
                   <TableCell
                     isHeader
@@ -339,12 +283,6 @@ export default function EnquiryDataTable({
                     <TableCell className="px-5 py-2 text-start sm:px-6">
                       <div className="flex items-center">
                         <div className="overflow-hidden rounded-full">
-                          {/* <Image
-                            width={40}
-                            height={40}
-                            src="/images/user/user-21.jpg"
-                            alt="/images/user/user-21.jpg"
-                          /> */}
                           {/* <Avatar name={item.name} size={30} /> */}
                         </div>
                         <div>
@@ -357,9 +295,6 @@ export default function EnquiryDataTable({
                         </div>
                       </div>
                     </TableCell>
-                    {/* <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.email ? item.email : "-"}
-                    </TableCell> */}
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       <span>
                         {item.enquiryCourse.map((c: any, index: any) => (
@@ -399,14 +334,6 @@ export default function EnquiryDataTable({
                         {item.leadStatus}
                       </Badge>
                     </TableCell>
-                    {/* <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {new Date(item.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </TableCell> */}
-
                     <ShowForRoles allowedRoles={["ADMIN", "FACULTY"]}>
                       <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
                         <Button
@@ -426,35 +353,6 @@ export default function EnquiryDataTable({
                     <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
                       <div className="flex gap-3">
                         {/* 🟢 WON Button */}
-                        {/* <Button
-                          size="sm"
-                          className="rounded bg-green-500 px-3 py-2 text-white text-sm hover:bg-success"
-                          disabled={item.leadStatus === "WON" || item.leadStatus === "WARM"}
-                          onClick={() => handleCompleteFollowUpHandler(item.id)}
-                        >
-                          Won
-                        </Button>
-
-                        
-                        <Button
-                          size="sm"
-                          className="rounded bg-red-500 px-3 py-2 text-white text-sm hover:bg-error"
-                          disabled={item.leadStatus === "WON" || item.leadStatus === "WARM"}
-                          onClick={() => handleLostEnquiryHandler(item.id)}
-                        >
-                          Lost
-                        </Button>
-
-                        
-                        <Button
-                          size="sm"
-                          className="rounded bg-warning px-3 py-2 text-white text-sm hover:bg-yellow-400"
-                          disabled={item.leadStatus === "WON" || item.leadStatus === "WARM"}
-                          onClick={() => handleHoldEnquiryHandler(item.id)}
-                        >
-                          Hold
-                        </Button> */}
-
                         <Tooltip
                           isDisabled={
                             item.leadStatus === "WON" ||
@@ -668,34 +566,6 @@ export default function EnquiryDataTable({
                         </span>
                       </Tooltip>
                     </TableCell>
-
-                    {/* <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                      {item.leadStatus === "HOT" || item.leadStatus === "WARM" ? (
-                        <Button
-                          size="sm"
-                          disabled={true}
-                          className="rounded bg-yellow-600 px-4 py-2 text-white text-sm cursor-not-allowed"
-                        >
-                          Pending Follow-Up
-                        </Button>
-                      ) : item.isConverted === true ? (
-                        <Button
-                          size="sm"
-                          disabled={true}
-                          className="rounded bg-green-700 px-4 py-2 text-white text-sm cursor-not-allowed"
-                        >
-                          Admission Done
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={() => handleAdmission(item.id)}
-                          size="sm"
-                          className="rounded bg-gray-800 px-4 py-2 text-white text-sm hover:bg-gray-900 transition"
-                        >
-                          Admission
-                        </Button>
-                      )}
-                    </TableCell> */}
                   </TableRow>
                 ))
               ) : (
@@ -762,10 +632,6 @@ export default function EnquiryDataTable({
           title="Lost Follow-Up"
           onClose={() => setModalType(null)}
         />
-      )}
-
-      {selectedId !== null && enquiryDetail === true && (
-        <EnquiryDetails onClose={handleCloseModal} enquiryId={selectedId} />
       )}
     </div>
   );

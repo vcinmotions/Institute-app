@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useDispatch } from "react-redux";
 import { setCourses } from "@/store/slices/courseSlice";
-import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
+import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useEditEnquiry } from "@/hooks/useEditEnquiry";
 import { toast } from "sonner";
 import { setError } from "@/store/slices/enquirySlice";
@@ -549,7 +549,7 @@ export default function EditEnquiryForm({
           <Button size="sm" variant="outline" tabIndex={12} onClick={onCloseModal}>
             Close
           </Button>
-          <Button size="sm" tabIndex={13} onClick={handleSubmit}>
+          <Button size="sm" tabIndex={13} variant="primary"  className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

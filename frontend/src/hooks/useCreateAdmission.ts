@@ -5,8 +5,8 @@ import { setStudents } from "@/store/slices/studentSlice";
 import { useDispatch } from "react-redux";
 import {
   setEnquiries,
-  setFilteredEnquiries,
 } from "@/store/slices/enquirySlice";
+import { setAdmissions } from "@/store/slices/admissionSlice";
 
 type AdmissionPayload = {
   token: string;
@@ -96,7 +96,7 @@ export const useCreateAdmission = () => {
 
       console.log("📋 Updated Enquiries After New Admission:", updated);
       dispatch(setEnquiries(updated.enquiry));
-      dispatch(setFilteredEnquiries(updated.filteredEnquiries));
+      dispatch(setAdmissions(updated.filteredEnquiries));
     },
 
     onError: (error) => {

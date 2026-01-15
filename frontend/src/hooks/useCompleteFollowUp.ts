@@ -179,6 +179,14 @@ import { setEnquiries } from "@/store/slices/enquirySlice";
 export const useCreateCompleteFollowUp = () => {
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.token);
+  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+    leadStatus,
+  } = useSelector((state: RootState) => state.enquiry);
   
   return useMutation({
     mutationFn: async (data: {
@@ -207,13 +215,7 @@ export const useCreateCompleteFollowUp = () => {
       const followData = await getFollowUp(token, enquiryId);
       dispatch(setFollowUps(followData.followup));
 
-      const updatedEnquiry = await getEnquiry({
-        token,
-        page: currentPage,
-        limit: 5,
-        sortField: "srNo",
-        sortOrder: "asc"
-      });
+      const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
       dispatch(setEnquiries(updatedEnquiry.enquiry));
 
       dispatch(setError(null));
@@ -231,6 +233,13 @@ export const useCreateCompleteFollowUp = () => {
 export const useCreateHoldEnquiry = () => {
   const dispatch = useDispatch();
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+    leadStatus,
+  } = useSelector((state: RootState) => state.enquiry);
   const token = useSelector((state: RootState) => state.auth.token);
 
   return useMutation({
@@ -249,13 +258,7 @@ export const useCreateHoldEnquiry = () => {
       const followData = await getFollowUp(token, enquiryId);
       dispatch(setFollowUps(followData.followup));
 
-      const updatedEnquiry = await getEnquiry({
-        token,
-        page: currentPage,
-        limit: 5,
-        sortField: "srNo",
-        sortOrder: "asc"
-      });
+      const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
       dispatch(setEnquiries(updatedEnquiry.enquiry));
 
       dispatch(setError(null));
@@ -275,6 +278,13 @@ export const useCreateHoldEnquiry = () => {
 export const useCreateLostEnquiry = () => {
   const dispatch = useDispatch();
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+    leadStatus,
+  } = useSelector((state: RootState) => state.enquiry);
   const token = useSelector((state: RootState) => state.auth.token);
 
   return useMutation({
@@ -293,13 +303,7 @@ export const useCreateLostEnquiry = () => {
       const followData = await getFollowUp(token, enquiryId);
       dispatch(setFollowUps(followData.followup));
 
-      const updatedEnquiry = await getEnquiry({
-        token,
-        page: currentPage,
-        limit: 5,
-        sortField: "srNo",
-        sortOrder: "asc"
-      });
+      const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
       dispatch(setEnquiries(updatedEnquiry.enquiry));
 
       dispatch(setError(null));

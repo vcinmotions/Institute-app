@@ -29,7 +29,7 @@ import { addFollowUpsForEnquiry } from "@/store/slices/followUpSlice";
 import { getEnquiry } from "@/lib/api";
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
 import AdmissionForm from "../form/form-elements/AdmissionForm";
-import { useFollowUp } from "@/hooks/useQueryFetchFollow";
+import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
 

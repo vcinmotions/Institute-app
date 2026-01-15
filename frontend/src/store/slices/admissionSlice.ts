@@ -1,9 +1,8 @@
 // src/store/slices/enquirySlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface EnquiryState {
-  enquiries: any[];
-  filteredEnquiries: any[]; // 🆕 Add this
+interface AdmissionState {
+  admissions: any[]; // 🆕 Add this
   loading: boolean;
   searchQuery: string,
   error: string | null;
@@ -21,9 +20,8 @@ interface EnquiryState {
 }
 
 // 🟢 Initial state must match the shape of EnquiryState
-const initialState: EnquiryState = {
-  enquiries: [],
-  filteredEnquiries: [], // 🆕 Initialize it
+const initialState: AdmissionState = {
+  admissions: [], // 🆕 Initialize it
   loading: false,
   error: null,
   searchQuery: "",
@@ -39,12 +37,12 @@ const initialState: EnquiryState = {
   totalNotConverted: 0,
 };
 
-const enquirySlice = createSlice({
-  name: 'enquiry',
+const AdmissionSlice = createSlice({
+  name: 'admission',
   initialState,
   reducers: {
-    setEnquiries(state, action: PayloadAction<any[]>) {
-    state.enquiries = action.payload;
+    setAdmissions(state, action: PayloadAction<any[]>) { // 🆕 new action
+      state.admissions = action.payload;
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
@@ -76,15 +74,9 @@ const enquirySlice = createSlice({
       state.leadStatus = action.payload;
       state.currentPage = 1;
     },
-    setTotalConverted(state, action: PayloadAction<number>) {
-      state.totalConverted = action.payload;
-    },
-    setTotalNotConverted(state, action: PayloadAction<number>) {
-      state.totalNotConverted = action.payload;
-    }
   },
 });
 
 // Export actions and reducer
-export const { setEnquiries, setLoading, setTotalPages, setError, setTotal, setSearchQuery, setTotalNotConverted, setTotalConverted, setCurrentPage, setFilters, setLeadStatus, setSort } = enquirySlice.actions;
-export default enquirySlice.reducer;
+export const { setLoading, setTotalPages, setError, setTotal, setSearchQuery, setAdmissions, setCurrentPage, setFilters, setLeadStatus, setSort } = AdmissionSlice.actions;
+export default AdmissionSlice.reducer;

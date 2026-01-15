@@ -6,7 +6,7 @@ import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useCreateBatch } from "@/hooks/useCreateBatch";
-import { useFetchFaculty } from "@/hooks/useQueryFetchFaculty";
+import { useFetchFaculty } from "@/hooks/queries/useQueryFetchFaculty";
 import { ChevronDownIcon, CloseLineIcon } from "@/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";

@@ -1,35 +1,49 @@
 // useQueryFetchPayment.ts
 import { useQuery } from "@tanstack/react-query";
-import { getEnquiry } from "@/lib/api";
+
+// Define the type of your API response
+interface EnquiryApiResponse {
+  data: any[];
+  totalCount: number;
+  totalPages: number;
+}
 
 export interface UseFetchEnquiryParams {
   token: string;
-  page?: number;
+  currentPage?: number;
   limit?: number;
-  search?: string;
+  searchQuery?: string;
   sortField?: string;
   sortOrder?: "asc" | "desc";
+  leadStatus?: "HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null;
+  filters?: Record<string, string | number | null>;
 }
 
 export const useFetchEnquiry = ({
   token,
-  page,
+  currentPage,
+  searchQuery,
   limit = 5,
-  search = "",
   sortField,
   sortOrder,
+  leadStatus,
+  filters = {},
 }: UseFetchEnquiryParams) => {
-  return useQuery({
-    queryKey: ["enquiry", page, limit, search, sortField, sortOrder],
-    queryFn: async () => {
+  return useQuery<EnquiryApiResponse, Error>({
+    queryKey: ["enquiry", limit, currentPage, searchQuery, sortField, sortOrder, leadStatus],
+
+    queryFn: async ({ signal }) => {
       if (!token) throw new Error("Missing token");
+
+      console.log("ENQUIRY USE QUERY FETCHED:")
       const data = await getEnquiry({
         token,
-        page,
+        page: currentPage,
         limit,
-        search,
+        search: searchQuery,
         sortField,
         sortOrder,
+        ...filters,
       });
 
       if (!data) throw new Error("No data returned");
@@ -37,11 +51,14 @@ export const useFetchEnquiry = ({
       return data;
     },
     enabled: !!token,
+    // keepPreviousData: true, // ⭐ pagination UX
+    // staleTime: 30 * 1000,   // ⭐ caching (30s)
   });
 };
 
 // hooks/useFetchCourse.ts
 import { apiClient } from "@/lib/apiClient";
+import { getEnquiry } from "@/lib/api/enquiry";
 
 export interface Course {
   id: string;

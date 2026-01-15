@@ -1,41 +1,36 @@
 "use client";
 
 import Search from "@/components/form/input/Search";
-
 import Pagination from "@/components/tables/Pagination";
-import { getBatch, getCourse, getEnquiry } from "@/lib/api";
+import { getBatch, getCourse, getEnquiry, getWonEnquiry } from "@/lib/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
-import {
-  setEnquiries,
-  setFilteredEnquiries,
-  setTotal,
-  setTotalFiltered,
-} from "@/store/slices/enquirySlice";
-import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 import AdmissionDataTable from "@/components/tables/AdmissionDataTable";
 import StudentCard from "@/components/common/StudentCard";
 import { setCourses } from "@/store/slices/courseSlice";
 import { setBatches } from "@/store/slices/batchSlice";
+import { PAGE_SIZE } from "@/constants/pagination";
+import useDebounce from "@/hooks/useDebounce";
+import { setCurrentPage, setAdmissions, setFilters, setSearchQuery, setSort, setTotal, setTotalPages } from "@/store/slices/admissionSlice";
 
 export default function AdmissionTable() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
-  const filteredEnquiries = useSelector(
-    (state: RootState) => state.enquiry.filteredEnquiries,
-  );
-  const courses = useSelector((state: RootState) => state.course.courses);
-  const batch = useSelector((state: RootState) => state.batch.batches);
-  const total = useSelector((state: RootState) => state.enquiry.totalFiltered);
+  const admission = useSelector((state: RootState) => state.admission.admissions);
+  const total = useSelector((state: RootState) => state.admission.total);
+  const totalPages = useSelector((state: RootState) => state.admission.totalPages);
   const [loading, setLoading] = useState<boolean>(false);
-  const [sortField, setSortField] = useState("createdAt");
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(
     null,
   );
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const {
+      currentPage,
+      searchQuery,
+      sortOrder,
+      sortField,
+    } = useSelector((state: RootState) => state.admission);
+
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
@@ -48,16 +43,16 @@ export default function AdmissionTable() {
   };
 
   // Debounce effect: update searchQuery 1 second after user stops typing
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
-    }, 300);
+  // --- Debounced search and Set delay time according to your needs
+  const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchInput]);
+  // 2. sync debounced value to Redux
+    useEffect(() => {
+      if (debouncedSearchTerm !== searchQuery) {
+        dispatch(setSearchQuery(debouncedSearchTerm));
+        dispatch(setCurrentPage(1));
+      }
+    }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -70,22 +65,21 @@ export default function AdmissionTable() {
 
       setLoading(true);
       try {
-        const response = await getEnquiry({
+        const response = await getWonEnquiry({
           token,
           page: currentPage,
-          limit: 5,
+          limit: PAGE_SIZE,
           search: searchQuery,
           sortField,
           sortOrder,
           leadStatus, // 👈 Add this
         });
 
-        console.log("RESPONSE IN ENQUIRY USEEFFECT:", response);
+        console.log("RESPONSE IN Admission USEEFFECT:", response);
 
-        dispatch(setEnquiries(response.enquiry || []));
-        dispatch(setFilteredEnquiries(response.filteredEnquiries || []));
-        setTotalPages(response.filteredEnquiriesPages || 0);
-        dispatch(setTotalFiltered(response.filteredEnquiriesCount || 0))
+        dispatch(setAdmissions(response.data || []));
+        dispatch(setTotalPages(response.totalPages || 1));
+        dispatch(setTotal(response.total || 0))
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       } finally {
@@ -97,7 +91,7 @@ export default function AdmissionTable() {
   }, [currentPage, searchQuery, sortField, sortOrder, leadStatus]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMeta = async () => {
       const token = sessionStorage.getItem("token");
       if (!token) {
         console.error("Token missing from sessionStorage");
@@ -106,64 +100,40 @@ export default function AdmissionTable() {
       try {
         const responseCourse = await getCourse({
           token,
-          page: currentPage,
-          limit: 5,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-          leadStatus, // 👈 Add this
         });
 
         dispatch(setCourses(responseCourse.course));
 
         const responseBatch = await getBatch({
           token,
-          page: currentPage,
-          limit: 5,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-          leadStatus, // 👈 Add this
         });
 
         dispatch(setBatches(responseBatch.batch));
       } catch (error) {}
     };
 
-    fetchData();
-  }, [totalPages]);
+    fetchMeta();
+  }, []);
 
-  console.log("Enquiry Query data:", currentPage, searchQuery, totalPages, filteredEnquiries);
-  console.log("ADMISSION currentPage, totalPages:", currentPage, totalPages);
-
-  // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(e.target.value);
-  // };
-
-  const handleSearchSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
-  };
-
-  const handlePagination = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
-
-  const handleSort = (field: string) => {
-    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-    setSortField(field);
-    setSortOrder(order);
-    setLeadStatus(leadStatus);
-  };
-
-  const handleLeadStatus = (field: string) => {
-    const currentIndex = leadStatusOptions.indexOf(leadStatus);
-    const nextStatus =
-      leadStatusOptions[(currentIndex + 1) % leadStatusOptions.length];
-    setLeadStatus(nextStatus);
-    setCurrentPage(1); // Reset pagination on status change
-  };
+  // --- Handlers (memoized)
+  
+    const handleSearchSubmit = useCallback((e: React.FormEvent) => {
+      e.preventDefault();
+      dispatch(setCurrentPage(1));
+    }, [dispatch]);
+  
+    const handlePagination = useCallback((page: number) => {
+      if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+    }, [dispatch, totalPages]);
+  
+    const handleSort = useCallback((field: string) => {
+      const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
+      dispatch(setSort({ field, order }));
+    }, [dispatch, sortField, sortOrder]);
+  
+    const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
+      dispatch(setFilters(selectedFilters));
+    }, [dispatch]);
 
   return (
     <div>
@@ -176,12 +146,9 @@ export default function AdmissionTable() {
           />
 
           <AdmissionDataTable
-            enquiries={filteredEnquiries}
+            admissions={admission}
             loading={loading}
-            courses={courses}
-            batch={batch}
             onSort={handleSort}
-            onLeadStatus={handleLeadStatus}
             sortField={sortField}
             sortOrder={sortOrder}
           />

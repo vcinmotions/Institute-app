@@ -1,14 +1,23 @@
 // src/hooks/useEditEnquiry.ts
-import { useMutation } from "@tanstack/react-query";
-import { editEnquiryAPI, getEnquiry } from "@/lib/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { setEnquiries, setError, setFilteredEnquiries } from "@/store/slices/enquirySlice";
+import { setEnquiries, setError } from "@/store/slices/enquirySlice";
+import { editEnquiryAPI, getEnquiry } from "@/lib/api/enquiry";
+import { setAdmissions } from "@/store/slices/admissionSlice";
 
 export const useEditEnquiry = () => {
   const dispatch = useDispatch();
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const token = useSelector((state: RootState) => state.auth.token);
+  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+    leadStatus,
+  } = useSelector((state: RootState) => state.enquiry);
+   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: any) => {
@@ -21,18 +30,19 @@ export const useEditEnquiry = () => {
     },
 
     onSuccess: async ({ token }) => {
-      // Refetch latest enquiries
-      const updated = await getEnquiry({
-        token,
-        page: currentPage,
-        limit: 5,
-        sortField: "srNo",
-        sortOrder: "asc"
-      });
+      //Refetch latest enquiries
+      const updated = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
 
-      dispatch(setEnquiries(updated.enquiry));
-      dispatch(setFilteredEnquiries(updated.filteredEnquiries));
+      dispatch(setEnquiries(updated.data));
+      dispatch(setAdmissions(updated.data));
       dispatch(setError(null));
+
+
+      console.log("MUTATION SUCCESSFUL")
+      // ✅ reload enquiry list (keeps current page automatically)
+      // queryClient.invalidateQueries({
+      //   queryKey: ["enquiry"],
+      // });
     },
 
     onError: (error: any) => {

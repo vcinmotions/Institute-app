@@ -5,7 +5,7 @@ import Alert from "@/components/ui/alert/Alert";
 import { ChevronDownIcon, EnvelopeIcon } from "@/icons";
 import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 import { useDispatch, useSelector } from "react-redux";
-import { useFetchCourse } from "@/hooks/useQueryFetchCourseData";
+import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { setCourses } from "@/store/slices/courseSlice";
 import { RootState } from "@/store";
 import Label from "@/components/form/Label";
@@ -16,11 +16,12 @@ import DropzonBoxComponent from "@/components/form/form-elements/DropBox";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useParams } from "next/navigation";
-import { useFetchEnquiryById } from "@/hooks/useQueryFetchEnquiry";
+import { useFetchEnquiryById } from "@/hooks/queries/useQueryFetchEnquiry";
 import { setBatches } from "@/store/slices/batchSlice";
 import MultiSelect from "@/components/form/MultiSelect";
-import { useFetchAllBatches } from "@/hooks/useQueryFetchBatchData";
+import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { capitalizeWords } from "@/components/common/ToCapitalize";
+import TextArea from "@/components/form/input/TextArea";
 
 interface EnquiryData {
   id: string;
@@ -1166,13 +1167,12 @@ export default function AdmissionForm() {
             </div>
             <div>
               <Label>Residential Address</Label>
-              <Input
+              <TextArea
                 tabIndex={14}
-                type="text"
                 placeholder="Enter Student Residential Address"
                 value={filledEnquiryData.residentialAddress}
-                onChange={(e) =>
-                  handleChange("residentialAddress", e.target.value)
+                onChange={(value) =>
+                  handleChange("residentialAddress", value)
                 }
               />
               {errors.residentialAddress && (
@@ -1184,13 +1184,12 @@ export default function AdmissionForm() {
             <div>
               <Label>Permenant Address</Label>
 
-              <Input
+              <TextArea
                 tabIndex={15}
-                type="text"
                 placeholder="Enter Student Permenant Address"
                 value={filledEnquiryData.permenantAddress}
-                onChange={(e) =>
-                  handleChange("permenantAddress", e.target.value)
+                onChange={(value) =>
+                  handleChange("permenantAddress", value)
                 }
               />
               {errors.permenantAddress && (
@@ -1231,7 +1230,7 @@ export default function AdmissionForm() {
               <Button size="sm" variant="outline" tabIndex={18}>
                 Clear
               </Button>
-              <Button size="sm" tabIndex={19} onClick={handleSubmit}>
+              <Button size="sm" tabIndex={19} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
                 Save
               </Button>
             </div>

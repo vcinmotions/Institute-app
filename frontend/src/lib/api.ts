@@ -6,7 +6,7 @@ interface GetEnquiryParams {
   token: string;
   page?: number;
   limit?: number;
-  search?: string;
+  search?: string | null;
   sortField?: string;
   sortOrder?: "asc" | "desc";
   leadStatus?: "HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null;
@@ -511,6 +511,34 @@ export const getEnquiry = async ({
   ...filters
 }: GetEnquiryParams) => {
   const response = await apiClient.get("/enquiry", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page,
+      limit,
+      search,
+      sortField,
+      sortOrder,
+      leadStatus,
+      ...filters, // ✅ send filters to backend
+    },
+  });
+
+  return response.data;
+};
+
+export const getWonEnquiry = async ({
+  token,
+  page,
+  limit = 5,
+  search = "",
+  sortField,
+  sortOrder,
+  leadStatus,
+  ...filters
+}: GetEnquiryParams) => {
+  const response = await apiClient.get("/won-enquiry", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

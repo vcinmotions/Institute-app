@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import ModalCard from "@/components/common/ModalCard";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import { useFollowUp } from "@/hooks/useQueryFetchFollow";
+import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import CreateFollowUpModal from "@/components/form/form-elements/CreateFollowUpModal";
 import { PencilIcon } from "@/icons";
 import EditFollowUpModal from "@/components/form/form-elements/EditFollowUpModal";
@@ -415,7 +415,7 @@ export default function TimelineDatatable({
                       {firstItem.remark}
                     </h4>
 
-                    {fineEnquiryById.leadStatus !== "WON" && fineEnquiryById.leadStatus !== "LOST" && <button
+                    {fineEnquiryById?.leadStatus !== "WON" && fineEnquiryById?.leadStatus !== "LOST" && <button
                       onClick={() => handleEditFollowUpForFollowUp(firstItem.id)}
                       className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
                       aria-label="Edit follow-up"
@@ -511,7 +511,7 @@ export default function TimelineDatatable({
                             {item.remark}
                           </h4>
 
-                        {fineEnquiryById.leadStatus !== "WON" && fineEnquiryById.leadStatus !== "LOST" &&
+                        {fineEnquiryById?.leadStatus !== "WON" && fineEnquiryById?.leadStatus !== "LOST" &&
                           <button
                             onClick={() => handleEditFollowUpForFollowUp(item.id)}
                             className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
@@ -609,7 +609,7 @@ export default function TimelineDatatable({
                           {lastItem.remark}
                         </h4>
 
-                      {fineEnquiryById.leadStatus !== "WON" && fineEnquiryById.leadStatus !== "LOST" &&
+                      {fineEnquiryById?.leadStatus !== "WON" && fineEnquiryById?.leadStatus !== "LOST" &&
                         <button
                           onClick={() => handleEditFollowUpForFollowUp(lastItem.id)}
                           className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"

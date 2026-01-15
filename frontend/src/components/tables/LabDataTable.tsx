@@ -24,7 +24,7 @@ import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
 import { addFollowUpsForEnquiry } from "@/store/slices/followUpSlice";
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
 
-import { useFollowUp } from "@/hooks/useQueryFetchFollow";
+import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import HoldEnquiryModal from "../form/form-elements/HoldEnquiryForm";
 import LostEnquiryModal from "../form/form-elements/LostEnquiryForm";
 import { RootState } from "@/store";

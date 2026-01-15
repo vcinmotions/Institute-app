@@ -350,7 +350,7 @@ export default function StudentDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                  Address
+                  Contact
                 </TableCell>
 
                 <TableCell
@@ -429,16 +429,16 @@ export default function StudentDataTable({
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.email}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.studentCode}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.residentialAddress}
+                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+                      {item.contact}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       {/* {new Date(item.admissionDate).toISOString().split("T")[0]} */}
                       {new Date(item.admissionDate).toLocaleDateString(
                         "en-US",
@@ -449,20 +449,20 @@ export default function StudentDataTable({
                         },
                       )}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-gray-500 dark:text-gray-400">
+                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
                       <Button
                         onClick={() => handleCourseForm(item.id)}
                         size="sm"
-                        className="rounded bg-gray-800 px-4 py-2 text-sm text-white transition hover:bg-gray-900"
+                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
                       >
                         Add Course
                       </Button>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-gray-500 dark:text-gray-400">
+                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
                       <Button
                         onClick={() => handleAdmissionForm(item.id)}
                         size="sm"
-                        className="rounded bg-gray-800 px-4 py-2 text-sm text-white transition hover:bg-gray-900"
+                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
                       >
                         Admission
                       </Button>

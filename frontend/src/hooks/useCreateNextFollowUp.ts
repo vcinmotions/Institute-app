@@ -53,6 +53,12 @@ export const useCreateNextFollowUp = () => {
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.token);
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+    leadStatus,
+  } = useSelector((state: RootState) => state.enquiry);
   const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
 
   return useMutation({
@@ -78,7 +84,7 @@ export const useCreateNextFollowUp = () => {
 
         // Fetch updated follow-ups for this enquiry
         const updated = await getFollowUp(token, enquiryId);
-        const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: "srNo", sortOrder: "asc"});
+        const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
 
         console.log("Updated follow-ups:", updated.followup);
         console.log("Updated Enquiry:", updatedEnquiry);
