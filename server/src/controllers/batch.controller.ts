@@ -173,7 +173,11 @@ export async function getBatchController(req: Request, res: Response) {
             batch: true,
           },
         },
-        labTimeSlot: true,
+        labTimeSlot: {
+          include: {
+            lab: true
+          }
+        },
       },
     });
 
@@ -222,7 +226,7 @@ export async function getAllBatchController(req: Request, res: Response) {
 
      const onlyAvailable = req.params.onlyAvailable === "true"; // path param as boolean
 
-     console.log("available pc query:", onlyAvailable);
+     console.log("available pc query ONLYYYYYYYYYYYYYYYYYYYYYYYYYYYYY:", onlyAvailable);
 
     const email = user.email;
 
@@ -278,41 +282,33 @@ export async function getAllBatchController(req: Request, res: Response) {
             batch: true,
           },
         },
-        labTimeSlot: true,
+        labTimeSlot: {
+          include: {
+            lab: true
+          }
+        },
       },
     });
 
-    if(onlyAvailable === true) {
-     // Filter batches where availablePCs > 0
-    const availableBatches = batches.filter((batch) => {
-      const lab = batch.labTimeSlot;
-      if (!lab) return false; // skip batches without lab info
-      const totalAllocated = batch.studentCourses.length; // students already enrolled
-      const remainingPCs = lab.availablePCs - totalAllocated;
-      return remainingPCs > 0;
-    });
+    console.log("AL BATCHED ADAT:", batches);
 
-    console.log(
-      "BATCHES Fetched Successfully",
-      availableBatches,
-    );
+      const responseBatches = onlyAvailable
+      ? batches.filter((batch) => {
+          if (!batch.labTimeSlot) return false;
 
+          const totalPCs = batch.labTimeSlot.lab.totalPCs || 0;
+          const enrolled = batch.studentCourses?.length || 0;
+          const remainingPCs = totalPCs - enrolled;
+
+          return remainingPCs > 0;
+        })
+      : batches;
+
+
+      console.log("BATHCEDSSSSSSSSSSSSSSSSSSSSSSS:", responseBatches);
     return res.status(200).json({
       message: "BATCHES fetched successfully",
-      batch: availableBatches,
-    });
-
-    }
-
-
-    console.log(
-      "BATCHES Fetched Successfully",
-      batches,
-    );
-
-    return res.status(200).json({
-      message: "BATCHES fetched successfully",
-      batch: batches,
+      batch: responseBatches,
     });
 
     //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });

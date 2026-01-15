@@ -91,7 +91,7 @@ export const useCreateNextFollowUp = () => {
 
         // Update Redux state
         dispatch(setFollowUps(updated.followup));
-        dispatch(setEnquiries(updatedEnquiry.enquiry));
+        dispatch(setEnquiries(updatedEnquiry.data));
         dispatch(setError(null));
       } catch (err: any) {
         dispatch(setError(err.message || "Failed to fetch updated follow-ups"));

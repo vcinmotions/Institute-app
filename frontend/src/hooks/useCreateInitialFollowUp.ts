@@ -44,7 +44,7 @@ export const useCreateInitialFollowUp = () => {
         const updatedFollowUps = await getFollowUp(token, enquiryId);
 
         // Update Redux state
-        dispatch(setEnquiries(updatedEnquiry.enquiry));
+        dispatch(setEnquiries(updatedEnquiry.data));
         dispatch(setFollowUps(updatedFollowUps));
         dispatch(setError(null));
       } catch (err: any) {

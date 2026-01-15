@@ -2,7 +2,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { setEnquiries, setError } from "@/store/slices/enquirySlice";
+import { setEnquiries, setError, setTotal, setTotalPages } from "@/store/slices/enquirySlice";
 import { editEnquiryAPI, getEnquiry } from "@/lib/api/enquiry";
 import { setAdmissions } from "@/store/slices/admissionSlice";
 
@@ -34,7 +34,8 @@ export const useEditEnquiry = () => {
       const updated = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
 
       dispatch(setEnquiries(updated.data));
-      dispatch(setAdmissions(updated.data));
+      dispatch(setTotal(updated.total));
+      dispatch(setTotalPages(updated.totalPages));
       dispatch(setError(null));
 
 

@@ -174,7 +174,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setLoading, setError, setFollowUps } from "@/store/slices/followUpSlice";
-import { setEnquiries } from "@/store/slices/enquirySlice";
+import { setEnquiries, setTotal, setTotalPages } from "@/store/slices/enquirySlice";
 
 export const useCreateCompleteFollowUp = () => {
   const dispatch = useDispatch();
@@ -216,7 +216,10 @@ export const useCreateCompleteFollowUp = () => {
       dispatch(setFollowUps(followData.followup));
 
       const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
-      dispatch(setEnquiries(updatedEnquiry.enquiry));
+      console.log("ENQUIRY AFTER COMPLETE FOLOW_UP:", updatedEnquiry);
+      dispatch(setEnquiries(updatedEnquiry.data));
+      dispatch(setTotal(updatedEnquiry.total));
+      dispatch(setTotalPages(updatedEnquiry.totalPages));
 
       dispatch(setError(null));
       dispatch(setLoading(false));
@@ -259,7 +262,10 @@ export const useCreateHoldEnquiry = () => {
       dispatch(setFollowUps(followData.followup));
 
       const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
-      dispatch(setEnquiries(updatedEnquiry.enquiry));
+      console.log("ENQUURY DATA FOR HOLD FOLLOW_UP:", updatedEnquiry);
+      dispatch(setEnquiries(updatedEnquiry.data));
+      dispatch(setTotal(updatedEnquiry.total));
+      dispatch(setTotalPages(updatedEnquiry.totalPages));
 
       dispatch(setError(null));
       dispatch(setLoading(false));
@@ -304,7 +310,10 @@ export const useCreateLostEnquiry = () => {
       dispatch(setFollowUps(followData.followup));
 
       const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
-      dispatch(setEnquiries(updatedEnquiry.enquiry));
+      console.log("ENQUURY DATA FOR LOST FOLLOW_UP:", updatedEnquiry);
+      dispatch(setEnquiries(updatedEnquiry.data));
+      dispatch(setTotal(updatedEnquiry.total));
+      dispatch(setTotalPages(updatedEnquiry.totalPages));
 
       dispatch(setError(null));
       dispatch(setLoading(false));

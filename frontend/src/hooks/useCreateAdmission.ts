@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { createAdmission, getEnquiry } from "@/lib/api";
+import { createAdmission, getEnquiry, getWonEnquiry } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { setStudents } from "@/store/slices/studentSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setEnquiries,
 } from "@/store/slices/enquirySlice";
-import { setAdmissions } from "@/store/slices/admissionSlice";
+import { setAdmissions, setCurrentPage, setSearchQuery } from "@/store/slices/admissionSlice";
+import { RootState } from "@/store";
 
 type AdmissionPayload = {
   token: string;
@@ -32,6 +33,8 @@ type AdmissionPayload = {
 export const useCreateAdmission = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const admissionCurrentPage = useSelector((state: RootState) => state.admission.currentPage);
+  const enquiryCurrentPage = useSelector((state: RootState) => state.enquiry.currentPage);
 
   return useMutation({
     mutationFn: async (payload: AdmissionPayload) => {
@@ -87,16 +90,17 @@ export const useCreateAdmission = () => {
       dispatch(setStudents(data.getAllStudent));
 
       // Refetch updated enquiries
-      const updated = await getEnquiry({
+      const updatedWonEnquiry = await getWonEnquiry({
         token: variables.token,
-        page: 1,
+        page: admissionCurrentPage,
         limit: 5,
         sortField: "createdAt",
       });
 
-      console.log("📋 Updated Enquiries After New Admission:", updated);
-      dispatch(setEnquiries(updated.enquiry));
-      dispatch(setAdmissions(updated.filteredEnquiries));
+      console.log("📋 Updated Enquiries After New Admission:", updatedWonEnquiry);
+
+      dispatch(setAdmissions(updatedWonEnquiry.data));
+      dispatch(setSearchQuery(""));
     },
 
     onError: (error) => {
