@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setCourses, setLoading, setError } from "@/store/slices/courseSlice";
 import { useMutation } from "@tanstack/react-query";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export const useEditCourse = () => {
   const dispatch = useDispatch();
-
+  const { currentPage, sortField, searchQuery, sortOrder } = useSelector((state: RootState) => state.course); 
   const token = useSelector((state: RootState) => state.auth.token); // ✅ From Redux
   console.log("get Token in useEditCourse:", token);
 
@@ -25,7 +26,7 @@ export const useEditCourse = () => {
     onSuccess: async ({ token }) => {
       // ✅ Refetch updated list
       //const updated = await getEnquiry({ token, page: 1, limit: 5 });
-      const updated = await getCourse({ token, page: 1, limit: 5 });
+      const updated = await getCourse({ token, page: currentPage, limit: PAGE_SIZE, sortField, sortOrder, search: searchQuery });
       console.log(
         "get course List after create new course:",
         updated,
@@ -33,7 +34,7 @@ export const useEditCourse = () => {
       );
 
       // ✅ Only dispatch the array part
-      dispatch(setCourses(updated.course));
+      dispatch(setCourses(updated.data));
     },
 
     onError: (error: any) => {

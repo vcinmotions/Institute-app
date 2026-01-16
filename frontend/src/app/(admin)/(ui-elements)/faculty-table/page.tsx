@@ -13,6 +13,7 @@ import FacultyDataTable from "@/components/tables/FacultyDataTable";
 import { setFaculties, setTotal } from "@/store/slices/facultySlice";
 import { setBatches } from "@/store/slices/batchSlice";
 import StudentCard from "@/components/common/StudentCard";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function FacultyTable() {
   const [showForm, setShowForm] = useState(false);
@@ -108,7 +109,7 @@ export default function FacultyTable() {
         const responseLab = await getBatch({
           token,
           page: currentPage,
-          limit: 5,
+          limit: PAGE_SIZE,
           search: searchQuery,
           sortField,
           sortOrder,

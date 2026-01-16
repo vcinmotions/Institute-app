@@ -35,36 +35,11 @@ export default function StudentCourseDataTable({
   sortField,
   sortOrder,
 }: StudentCourseDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
-  const dispatch = useDispatch();
-  const [followUpData, setFollowUpData] = useState<any>(null);
-  const [showCreateFollowUp, setShowCreateFollowUp] = useState(false);
-  const [enquiryDetail, setEnquiryDetail] = useState(false);
-  const [selectedEnquiryData, setSelectedEnquiryData] = useState<any>(null); // You can strongly type this
-  const [newEnquiry, setNewEnquiry] = React.useState({
-    name: "",
-    email: "",
-    course: "",
-    source: "",
-    contact: "",
-  });
-  const [showModal, setShowModal] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [modalType, setModalType] = useState<FollowUpModalType>(null);
-  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(
-    null,
-  );
   const [selectedStudentCourseId, setSelectedStudentCourseId] =
     useState<string>("");
   const { mutate: fetchEnquiries, data } = useFetchEnquiry();
   const [studentId, setStudentId] = useState<string | null>(null);
-  const token = useSelector((state: RootState) => state.auth.token);
-  const [studentDetails, setStudentDetails] = useState<Student | null>(null);
-  //const { enquiries, loading } = useSelector((state: RootState) => state.enquiry);
-
-  // const [sortField, setSortField] = useState<string>("admissionDate");
-  // const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   console.log("get All Query To search:", studentCourse);
 
@@ -89,7 +64,6 @@ export default function StudentCourseDataTable({
     setModalType("completeCourse");
     setStudentId(item.studentCourse.student.id);
     setSelectedStudentCourseId(item.studentCourse.id);
-    console.log("get Studemnt datra in Course Completion:", item);
   };
 
   const handleDownload = async (url: string) => {
@@ -119,13 +93,6 @@ export default function StudentCourseDataTable({
     }
   };
 
-  console.log("get ModalType", modalType);
-  console.log("get selectedStudentId", selectedStudentId);
-  console.log("get selectedStudentCourseId", selectedStudentCourseId);
-  console.log(
-    ":Get STudent Course data in Student Course Table:",
-    studentCourse,
-  );
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -153,12 +120,6 @@ export default function StudentCourseDataTable({
                 >
                   Batch
                 </TableCell>
-                {/* <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Faculty
-                </TableCell> */}
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
@@ -257,10 +218,6 @@ export default function StudentCourseDataTable({
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.studentCourse?.batchId || "N/A"}
                     </TableCell>
-
-                    {/* <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.studentCourse?.batch?.faculty?.name || "N/A"}
-                    </TableCell> */}
 
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       <Badge

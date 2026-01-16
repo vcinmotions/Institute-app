@@ -11,6 +11,7 @@ import RolesDataTable from "@/components/tables/RolesDataTable";
 import { setRoles } from "@/store/slices/rolesSlices";
 import RolesForm from "@/components/form/form-elements/RolesForm";
 import StudentCard from "@/components/common/StudentCard";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function RolesTable() {
   const [showForm, setShowForm] = useState(false);
@@ -75,7 +76,7 @@ export default function RolesTable() {
          const response = await getRoles(
             token,
             currentPage,
-            5, // limit
+            PAGE_SIZE, // limit
             searchQuery
           );
 

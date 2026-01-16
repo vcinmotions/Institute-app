@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { createCourse, getStudent } from "@/lib/api";
-import { useRouter } from "next/navigation";
-import { setStudents } from "@/store/slices/studentSlice";
+import { setCurrentPage, setStudents, setTotal, setTotalPages } from "@/store/slices/studentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 
@@ -14,9 +13,7 @@ type AdmissionPayload = {
   paymentType: string;
 };
 
-
 export const useCreateCourse = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const currentPage = useSelector((state: RootState) => state.student.currentPage);
   const token = useSelector((state: RootState) => state.auth.token);
@@ -62,14 +59,12 @@ export const useCreateCourse = () => {
     onSuccess: async ({ token }) => {
       console.log("✅ Admission Created Successfully");
 
-      console.log("CUrrent page of student in Add course to student murtation:", currentPage);
-      // router.push("/dashboard");
-
-       const response = await getStudent({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
+      const response = await getStudent({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
       
-              dispatch(setStudents(response.student || []));
-
-      dispatch(setStudents(response.student))
+      dispatch(setStudents(response.data || []));
+      dispatch(setTotalPages(response.totalPages || 1));
+      dispatch(setCurrentPage(currentPage)); // reset page when search changes
+      dispatch(setTotal(response.total || 0));
     },
     onError: (error) => {
       console.error("❌ Error Creating Admission:", error);

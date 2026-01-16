@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+
 import {
   Table,
   TableBody,
@@ -6,21 +6,14 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
 import Badge from "../ui/badge/Badge";
 import { useSelector } from "react-redux";
 import Button from "../ui/button/Button";
 import { RootState } from "@/store";
 import { useRouter } from "next/navigation";
 import Avatar from "../common/Avatar";
+import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
 
-type FollowUpModalType =
-  | "createNew"
-  | "update"
-  | "complete"
-  | "hold"
-  | "lost"
-  | null;
 
 type AdmissionDataTableProps = {
   admissions: any[];
@@ -41,13 +34,6 @@ export default function AdmissionDataTable({
   // const [selectedId, setSelectedId] = useState<string | null>(null);
   const admission = useSelector(
     (state: RootState) => state.admission.admissions,
-  );
-  const [modalType, setModalType] = useState<FollowUpModalType>(null);
-  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
-    null,
-  );
-  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
-    null,
   );
 
   console.log(
@@ -89,9 +75,6 @@ export default function AdmissionDataTable({
   //   setShowAdmissionForm(true);
   // };
 
-  console.log("get ModalType", modalType);
-  console.log("get selectedEnquiryId", selectedEnquiryId);
-  console.log("get selectedFollowUpId", selectedFollowUpId);
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -197,19 +180,7 @@ export default function AdmissionDataTable({
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       <Badge
                         size="sm"
-                        color={
-                          item.leadStatus === "COLD"
-                            ? "primary"
-                            : item.leadStatus === "HOT"
-                              ? "error"
-                              : item.leadStatus === "WARM"
-                                ? "warning"
-                                : item.leadStatus === "WON"
-                                  ? "success"
-                                  : item.leadStatus === "HOLD"
-                                    ? "info"
-                                    : "error"
-                        }
+                        color={STATUS_COLOR_MAP[item.leadStatus] ?? "error"}
                       >
                         {item.leadStatus}
                       </Badge>

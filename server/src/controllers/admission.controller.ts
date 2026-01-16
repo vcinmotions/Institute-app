@@ -1,7 +1,8 @@
 // controllers/studentController.ts
 import { Request, Response } from "express";
-import path from "path";
 import { logActivity } from "../utils/activityLogger";
+import { studentQuerySchema } from "../validators/student.query";
+import { getStudents } from "../services/student.service";
 
 export async function addStudentController(req: Request, res: Response) {
   const {
@@ -701,166 +702,186 @@ export async function addStudentControllerNew(req: Request, res: Response) {
 //   }
 // }
 
+// export async function getStudentController(req: Request, res: Response) {
+//   try {
+//     // 1. Use values injected by middleware
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+//     const tenant = req.tenantInfo;
+
+//     console.log("Get tenant user in getEnquiryController", user);
+
+//     console.log("Get tenant Info in getEnquiryController", tenant);
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
+
+//     const email = user.email;
+
+//     // 2. Get client admin (we assume there's only one per tenant for now)
+//     const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
+//       where: { email: email },
+//     });
+//     if (!clientAdmin) {
+//       return res.status(404).json({ error: "Client admin not found" });
+//     }
+
+//     console.log("🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂get ClientAdmin in getEnquiryController:", clientAdmin);
+
+//     // 2. Get client admin (we assume there's only one per tenant for now)
+//     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
+//     if (!allClientAdmin) {
+//       return res.status(404).json({ error: "Client admin not found" });
+//     }
+
+//     const clientAdminId = user.clientAdminId;
+
+//     console.log("get allClientAdmin in getEnquiryController:", allClientAdmin);
+
+//     // 2.1 ✅ Extract query params
+//     const {
+//       page,
+//       limit,
+//       search,
+//       sortField, // default sort by created date
+//       sortOrder, // default descending
+//       courseId,
+//       admissionDate
+//     } = req.query;
+
+//     console.log("get ALl Params in get student:", page, limit,
+//       search,
+//       sortField, // default sort by created date
+//       sortOrder, 
+//       courseId);
+
+//     const pageNum = parseInt(page as string, 10);
+//     const limitNum = parseInt(limit as string, 10);
+//     const skip = (pageNum - 1) * limitNum;
+
+//      // ✅ Build search filter
+//     const where = {
+//       clientAdminId,
+//       ...(search
+//         ? {
+//             OR: [
+//               { fullName: { contains: search as string } },
+//               { email: { contains: search as string } },
+//               { studentCode: { contains: search as string } },
+//               { contact: { contains: search as string } },
+//             ],
+//           }
+//         : {}),
+//         // ✅ Apply optional filters
+//         // ...(courseId && { courseId: courseId }),
+//       ...(courseId
+//         ? {
+//             studentCourses: {
+//               some: {
+//                 courseId: Number(courseId),
+//               },
+//             },
+//           }
+//         : {}),
+//          // ...(createDate && { createdAt: { gte: new Date(createDate as string) } }),
+//         ...(admissionDate && (() => {
+//           const start = new Date(admissionDate as string);
+//           start.setHours(0, 0, 0, 0);
+
+//           const end = new Date(admissionDate as string);
+//           end.setHours(23, 59, 59, 999);
+
+//           return {
+//             admissionDate: {
+//               gte: start,
+//               lte: end,
+//             },
+//           };
+//         })()),
+//     };
+
+//     // ✅ Fetch paginated, sorted, and filtered enquiries
+//     const student = await tenantPrisma.student.findMany({
+//       where,
+//       orderBy: {
+//         [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
+//       },
+//       // orderBy:
+//       // sortField && sortField !== "leadStatus"
+//       //   ? { [sortField as string]: sortOrder === "asc" ? "asc" : "desc" }
+//       //   : undefined,
+//       skip,
+//       take: limitNum,
+//       include: {
+//         labAllocations: true,
+//         studentCourses: true,
+//       },
+//     });
+
+//     // ✅ Total count (for frontend pagination)
+//     //const totalPages = await tenantPrisma.student.count({ where });
+
+//     const totalCount = await tenantPrisma.student.count({ where });
+//     const totalPages = Math.ceil(totalCount / limitNum);
+
+//     console.log(
+//       "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 Students Fetched Successfully",
+//       student,
+//       totalCount,
+//       totalPages,
+//       pageNum,
+//       limitNum
+//     );
+
+//     return res.status(200).json({
+//       message: "Students fetched successfully",
+//       student,
+//       totalPages,
+//       totalCount,
+//       page: pageNum,
+//       limit: limitNum,
+//     });
+
+//     //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
+//   } catch (err) {
+//     console.error("Error Fetched Enquiry:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
+
 export async function getStudentController(req: Request, res: Response) {
   try {
-    // 1. Use values injected by middleware
-    const tenantPrisma = req.tenantPrisma;
+    const prisma = req.tenantPrisma;
     const user = req.user;
-    const tenant = req.tenantInfo;
 
-    console.log("Get tenant user in getEnquiryController", user);
-
-    console.log("Get tenant Info in getEnquiryController", tenant);
-
-    if (!tenantPrisma || !user || typeof user === "string") {
-      return res.status(401).json({ error: "Unauthorized request" });
+    if (!prisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const email = user.email;
+    const query = studentQuerySchema.parse(req.query);
 
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email: email },
-    });
-    if (!clientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
-    }
-
-    console.log("🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂🙂get ClientAdmin in getEnquiryController:", clientAdmin);
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
-    if (!allClientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
-    }
-
-    const clientAdminId = user.clientAdminId;
-
-    console.log("get allClientAdmin in getEnquiryController:", allClientAdmin);
-
-    // 2.1 ✅ Extract query params
-    const {
-      page,
-      limit,
-      search,
-      sortField, // default sort by created date
-      sortOrder, // default descending
-      courseId,
-      admissionDate
-    } = req.query;
-
-    console.log("get ALl Params in get student:", page, limit,
-      search,
-      sortField, // default sort by created date
-      sortOrder, 
-      courseId);
-
-    const pageNum = parseInt(page as string, 10);
-    const limitNum = parseInt(limit as string, 10);
-    const skip = (pageNum - 1) * limitNum;
-
-    // ✅ Build search filter
-    // const where: any = {};
-    // if (search) {
-    //   where.OR = [
-    //     { fullName: { contains: search, mode: "insensitive" } },
-    //     { email: { contains: search, mode: "insensitive" } },
-    //     { studentCode: { contains: search, mode: "insensitive" } },
-    //     { contact: { contains: search, mode: "insensitive" } },
-    //     // Add more searchable fields as needed
-    //   ];
-    // }
-
-     // ✅ Build search filter
-    const where = {
-      clientAdminId,
-      ...(search
-        ? {
-            OR: [
-              { fullName: { contains: search as string } },
-              { email: { contains: search as string } },
-              { studentCode: { contains: search as string } },
-              { contact: { contains: search as string } },
-            ],
-          }
-        : {}),
-        // ✅ Apply optional filters
-        // ...(courseId && { courseId: courseId }),
-      ...(courseId
-        ? {
-            studentCourses: {
-              some: {
-                courseId: Number(courseId),
-              },
-            },
-          }
-        : {}),
-         // ...(createDate && { createdAt: { gte: new Date(createDate as string) } }),
-        ...(admissionDate && (() => {
-          const start = new Date(admissionDate as string);
-          start.setHours(0, 0, 0, 0);
-
-          const end = new Date(admissionDate as string);
-          end.setHours(23, 59, 59, 999);
-
-          return {
-            admissionDate: {
-              gte: start,
-              lte: end,
-            },
-          };
-        })()),
-    };
-
-    // 3. Create student under that admin
-    // const enquiry = await tenantPrisma.enquiry.findMany({
-    // });
-
-    // ✅ Fetch paginated, sorted, and filtered enquiries
-    const student = await tenantPrisma.student.findMany({
-      where,
-      orderBy: {
-        [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
-      },
-      // orderBy:
-      // sortField && sortField !== "leadStatus"
-      //   ? { [sortField as string]: sortOrder === "asc" ? "asc" : "desc" }
-      //   : undefined,
-      skip,
-      take: limitNum,
-      include: {
-        labAllocations: true,
-        studentCourses: true,
-      },
+    const result = await getStudents({
+      prisma,
+      clientAdminId: user.clientAdminId,
+      query,
     });
 
-    // ✅ Total count (for frontend pagination)
-    //const totalPages = await tenantPrisma.student.count({ where });
+    console.log("Students:", result);
 
-    const totalCount = await tenantPrisma.student.count({ where });
-    const totalPages = Math.ceil(totalCount / limitNum);
-
-    console.log(
-      "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 Students Fetched Successfully",
-      student,
-      totalCount,
-      totalPages,
-      pageNum,
-      limitNum
-    );
-
-    return res.status(200).json({
+    return res.json({
       message: "Students fetched successfully",
-      student,
-      totalPages,
-      totalCount,
-      page: pageNum,
-      limit: limitNum,
+      ...result,
+      page: query.page,
+      limit: query.limit,
     });
 
-    //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
-  } catch (err) {
-    console.error("Error Fetched Enquiry:", err);
+  } catch (err: any) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({ error: err.errors });
+    }
+
+    console.error(err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -943,14 +964,6 @@ export async function getStudentCourseController(req: Request, res: Response) {
     }
 
     const email = user.email;
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
-
-    // console.log("get ClientAdmin in getEnquiryController:", clientAdmin);
 
     // 2. Get client admin (we assume there's only one per tenant for now)
     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();

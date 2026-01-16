@@ -1,5 +1,7 @@
 // controllers/studentController.ts
 import { Request, Response } from "express";
+import { getPayment } from "../services/payment.service";
+import { paymentQuerySchema } from "../validators/payment.query";
 
 export async function addStudentPaymentController(req: Request, res: Response) {
   const {
@@ -208,183 +210,216 @@ export async function addStudentPaymentController(req: Request, res: Response) {
   }
 }
 
-export async function getStudentPaymenController(req: Request, res: Response) {
+// export async function getStudentPaymenController(req: Request, res: Response) {
+//   try {
+//     // 1. Use values injected by middleware
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+
+//     console.log("Get tenant user in getEnquiryController", user);
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
+
+//     const email = user.email;
+
+//     const clientAdminId = user.clientAdminId
+
+//     // 2. Get client admin (we assume there's only one per tenant for now)
+//     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
+//     if (!allClientAdmin) {
+//       return res.status(404).json({ error: "Client admin not found" });
+//     }
+
+//     console.log("get allClientAdmin in getEnquiryController:", allClientAdmin);
+
+//     // 2.1 ✅ Extract query params
+//     const {
+//       page,
+//       limit,
+//       search,
+//       sortField = "paymentDate", // default sort by created date
+//       sortOrder = "desc", // default descending
+//       paymentStatus,
+//       paymentMode,
+//       fromDate,
+//       toDate,
+//     } = req.query;
+
+//     console.log(
+//       "get ALl Params:",
+//       sortField,
+//       sortOrder,
+//       paymentStatus,
+//       paymentMode,
+//       fromDate,
+//       toDate
+//     );
+
+//     const pageNum = parseInt(page as string, 10) || 1;
+//     const limitNum = parseInt(limit as string, 10) || 10;
+//     const skip = (pageNum - 1) * limitNum;
+
+//     // ✅ Build WHERE dynamically
+//     const where: any = {
+//       clientAdminId,
+//       ...(search && {
+//         OR: [
+//           { receiptNo: { contains: search } },
+//           {
+//             student: {
+//               OR: [
+//                 { fullName: { contains: search } },
+//                 { email: { contains: search } },
+//                 { studentCode: { contains: search } },
+//                 { contact: { contains: search } },
+//               ],
+//             },
+//           },
+//           {
+//             course: {
+//               OR: [
+//                 { name: { contains: search} },
+//                 { description: { contains: search} },
+//               ],
+//             },
+//           },
+//         ],
+//       }),
+
+//       // ✅ Apply optional filters
+//       ...(paymentStatus && { paymentStatus: paymentStatus }),
+//       ...(paymentMode && { paymentMode: paymentMode }),
+//       ...(fromDate &&
+//         toDate && {
+//           paymentDate: {
+//             gte: new Date(fromDate as string),
+//             lte: new Date(toDate as string),
+//           },
+//         }),
+//       ...(fromDate &&
+//         !toDate && { paymentDate: { gte: new Date(fromDate as string) } }),
+//       ...(!fromDate &&
+//         toDate && { paymentDate: { lte: new Date(toDate as string) } }),
+//     };
+
+//     // 3. Create student under that admin
+//     // const enquiry = await tenantPrisma.enquiry.findMany({
+//     // });
+
+//     // ✅ Fetch paginated, sorted, and filtered enquiries
+//     const studentPayment = await tenantPrisma.studentFee.findMany({
+//       where,
+//       orderBy: {
+//         [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
+//       },
+//       // orderBy:
+//       // sortField && sortField !== "leadStatus"
+//       //   ? { [sortField as string]: sortOrder === "asc" ? "asc" : "desc" }
+//       //   : undefined,
+//       skip,
+//       take: limitNum,
+//       include: {
+//         student: true, // 👈 includes related Student
+//         course: true, // 👈 includes related Course
+//         feeStructure: true,
+//         feeLogs: true,
+//       },
+//     });
+
+//     // ✅ Total count (for frontend pagination)
+//     const totalPages = await tenantPrisma.studentFee.count({ where });
+
+//     if (!studentPayment) {
+//       return res.status(404).json({ error: "studentPayment not found" });
+//     }
+
+//     const detailedCourses = await Promise.all(
+//       studentPayment.map(async (sc) => {
+//         const feeStructure = await tenantPrisma.feeStructure.findUnique({
+//           where: {
+//             studentId_courseId: {
+//               studentId: sc.studentId,
+//               courseId: sc.courseId,
+//             },
+//           },
+//         });
+
+//         const feeRecords = await tenantPrisma.studentFee.findMany({
+//           where: {
+//             studentId: sc.studentId,
+//             courseId: sc.courseId,
+//           },
+//         });
+
+//         return {
+//           studentPayment: sc,
+//           feeStructure,
+//           feeRecords,
+//         };
+//       })
+//     );
+
+//     console.log(
+//       "Student Course Fetched Successfully",
+//       studentPayment,
+//       detailedCourses,
+//       totalPages,
+//       pageNum,
+//       limitNum
+//     );
+
+//     return res.status(200).json({
+//       message: "Student Course fetched successfully",
+//       studentPayment,
+//       detailedCourses,
+//       totalPages,
+//       page: pageNum,
+//       limit: limitNum,
+//     });
+
+//     //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
+//   } catch (err) {
+//     console.error("Error Fetched Enquiry:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
+
+export async function getStudentPaymentController(
+  req: Request,
+  res: Response
+) {
   try {
-    // 1. Use values injected by middleware
-    const tenantPrisma = req.tenantPrisma;
+    const prisma = req.tenantPrisma;
     const user = req.user;
 
-    console.log("Get tenant user in getEnquiryController", user);
-
-    if (!tenantPrisma || !user || typeof user === "string") {
+    if (!prisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    const query = paymentQuerySchema.parse(req.query);
 
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
-
-    // console.log("get ClientAdmin in getEnquiryController:", clientAdmin);
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
-    if (!allClientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
-    }
-
-    console.log("get allClientAdmin in getEnquiryController:", allClientAdmin);
-
-    // 2.1 ✅ Extract query params
-    const {
-      page,
-      limit,
-      search,
-      sortField = "paymentDate", // default sort by created date
-      sortOrder = "desc", // default descending
-      paymentStatus,
-      paymentMode,
-      fromDate,
-      toDate,
-    } = req.query;
-
-    console.log(
-      "get ALl Params:",
-      sortField,
-      sortOrder,
-      paymentStatus,
-      paymentMode,
-      fromDate,
-      toDate
-    );
-
-    const pageNum = parseInt(page as string, 10) || 1;
-    const limitNum = parseInt(limit as string, 10) || 10;
-    const skip = (pageNum - 1) * limitNum;
-
-    // ✅ Build WHERE dynamically
-    const where: any = {
-      ...(search && {
-        OR: [
-          { receiptNo: { contains: search } },
-          {
-            student: {
-              OR: [
-                { fullName: { contains: search } },
-                { email: { contains: search } },
-                { studentCode: { contains: search } },
-                { contact: { contains: search } },
-              ],
-            },
-          },
-          {
-            course: {
-              OR: [
-                { name: { contains: search} },
-                { description: { contains: search} },
-              ],
-            },
-          },
-        ],
-      }),
-
-      // ✅ Apply optional filters
-      ...(paymentStatus && { paymentStatus: paymentStatus }),
-      ...(paymentMode && { paymentMode: paymentMode }),
-      ...(fromDate &&
-        toDate && {
-          paymentDate: {
-            gte: new Date(fromDate as string),
-            lte: new Date(toDate as string),
-          },
-        }),
-      ...(fromDate &&
-        !toDate && { paymentDate: { gte: new Date(fromDate as string) } }),
-      ...(!fromDate &&
-        toDate && { paymentDate: { lte: new Date(toDate as string) } }),
-    };
-
-    // 3. Create student under that admin
-    // const enquiry = await tenantPrisma.enquiry.findMany({
-    // });
-
-    // ✅ Fetch paginated, sorted, and filtered enquiries
-    const studentPayment = await tenantPrisma.studentFee.findMany({
-      where,
-      orderBy: {
-        [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
-      },
-      // orderBy:
-      // sortField && sortField !== "leadStatus"
-      //   ? { [sortField as string]: sortOrder === "asc" ? "asc" : "desc" }
-      //   : undefined,
-      skip,
-      take: limitNum,
-      include: {
-        student: true, // 👈 includes related Student
-        course: true, // 👈 includes related Course
-        feeStructure: true,
-        feeLogs: true,
-      },
+    const result = await getPayment({
+      prisma,
+      clientAdminId: user.clientAdminId,
+      query,
     });
 
-    // ✅ Total count (for frontend pagination)
-    const totalPages = await tenantPrisma.studentFee.count({ where });
+    console.log("Payments:", result);
 
-    if (!studentPayment) {
-      return res.status(404).json({ error: "studentPayment not found" });
+    return res.json({
+      message: "Payments fetched successfully",
+      ...result,
+      page: query.page,
+      limit: query.limit,
+    });
+  } catch (err: any) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({ error: err.errors });
     }
 
-    const detailedCourses = await Promise.all(
-      studentPayment.map(async (sc) => {
-        const feeStructure = await tenantPrisma.feeStructure.findUnique({
-          where: {
-            studentId_courseId: {
-              studentId: sc.studentId,
-              courseId: sc.courseId,
-            },
-          },
-        });
-
-        const feeRecords = await tenantPrisma.studentFee.findMany({
-          where: {
-            studentId: sc.studentId,
-            courseId: sc.courseId,
-          },
-        });
-
-        return {
-          studentPayment: sc,
-          feeStructure,
-          feeRecords,
-        };
-      })
-    );
-
-    console.log(
-      "Student Course Fetched Successfully",
-      studentPayment,
-      detailedCourses,
-      totalPages,
-      pageNum,
-      limitNum
-    );
-
-    return res.status(200).json({
-      message: "Student Course fetched successfully",
-      studentPayment,
-      detailedCourses,
-      totalPages,
-      page: pageNum,
-      limit: limitNum,
-    });
-
-    //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
-  } catch (err) {
-    console.error("Error Fetched Enquiry:", err);
+    console.error("Error fetching payments:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

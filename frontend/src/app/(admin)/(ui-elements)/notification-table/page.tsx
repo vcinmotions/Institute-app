@@ -12,6 +12,7 @@ import StudentCard from "@/components/common/StudentCard";
 
 import NotificaionDataTable from "@/components/tables/NotificationDataTable";
 import { setNotifications } from "@/store/slices/notificationSlice";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function NotificationTable() {
   const [showForm, setShowForm] = useState(false);
@@ -61,7 +62,7 @@ export default function NotificationTable() {
         const response = await getNotification({
           token,
           page: currentPage,
-          limit: 5,
+          limit: PAGE_SIZE,
           search: searchQuery,
           sortField,
           sortOrder,

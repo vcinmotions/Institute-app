@@ -1,4 +1,4 @@
-import React from "react";
+
 import {
   Table,
   TableBody,
@@ -6,66 +6,17 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
-
-import { useDispatch } from "react-redux";
-
-import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
-import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
-import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
-
-
-type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
 type CourseDataTableProps = {
   batch: any[];
-  labs: any[];
-  loading: boolean;
-  onSort: (field: string) => void;
-  sortField: string;
-  sortOrder: "asc" | "desc";
-  onLeadStatus: (field: string) => void;
 };
 
 export default function BatchDataTable({
   batch,
-  labs,
-  loading,
-  onSort,
-  onLeadStatus,
-  sortField,
-  sortOrder,
 }: CourseDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
-  const dispatch = useDispatch();
-  const [enquiryDetail, setEnquiryDetail] = useState(false);
-
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [modalType, setModalType] = useState<FollowUpModalType>(null);
-  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
-    null,
-  );
-  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
-    null,
-  );
-  //const { enquiries, loading } = useSelector((state: RootState) => state.enquiry);
-
-  // const [sortField, setSortField] = useState<string>("createdAt");
-  // const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   console.log("get All Query To search:", batch);
 
-  console.log("get All Query To search labs in Batch data Table:", labs);
-
-  const handleCloseModal = () => {
-    setShowForm(false);
-    setEnquiryDetail(false);
-  };
-
-  console.log("get ModalType", modalType);
-  console.log("get selectedEnquiryId", selectedEnquiryId);
-  console.log("get selectedFollowUpId", selectedFollowUpId);
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -151,29 +102,6 @@ export default function BatchDataTable({
           </Table>
         </div>
       </div>
-
-      {/* === Follow-Up Timeline modal === */}
-      {modalType === "createNew" && selectedEnquiryId !== null && (
-        <CreateNewFollowUpOnEnquiryModal
-          enquiryId={selectedEnquiryId}
-          title="Create Follow-Up"
-          onClose={() => setModalType(null)}
-        />
-      )}
-
-      {modalType === "complete" &&
-        selectedFollowUpId !== null &&
-        selectedEnquiryId !== null && (
-          <CompleteFollowUpModal
-            enquiryId={selectedEnquiryId}
-            title="Complete Follow-Up"
-            onClose={() => setModalType(null)}
-          />
-        )}
-
-      {selectedId !== null && enquiryDetail === true && (
-        <EnquiryDetails onClose={handleCloseModal} enquiryId={selectedId} />
-      )}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import CompanyDataTable from "@/components/tables/CompanyDataTable";
 import { setTenant, setToken } from "@/store/slices/authSlice";
 import CompanyForm from "@/components/form/form-elements/CompanyCreateForm";
 import StudentCard from "@/components/common/StudentCard";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function CompanyTable() {
   const [showForm, setShowForm] = useState(false);
@@ -81,7 +82,7 @@ export default function CompanyTable() {
       }
 
       try {
-        const data = await getTenant({token, page: currentPage, search: searchInput});
+        const data = await getTenant({token, page: currentPage, search: searchInput, limit: PAGE_SIZE});
         setLoading(false); // ✅ All good, show dashboard
         console.log("👤 Get Master User Data in CompanyTable:", data);
         dispatch(setTenant(data.tenant));

@@ -78,7 +78,7 @@ export default function CourseCompletionForm({
       });
       setTimeout(() => {
         onCloseModal();
-      }, 2500);
+      }, 2000);
     },
     onError: (error: any) => {
       setAlert({
@@ -135,7 +135,7 @@ export default function CourseCompletionForm({
       // ❌ Hide token error after 3 seconds
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 2000);
 
       return;
     }
@@ -160,7 +160,7 @@ export default function CourseCompletionForm({
       // ✅ Close modal after 3s
       setTimeout(() => {
         onCloseModal();
-      }, 3000);
+      }, 2000);
     } catch (error) {
       console.error("Error in Course Completion", error);
       setAlert({
@@ -173,7 +173,7 @@ export default function CourseCompletionForm({
       // ❌ Hide server error alert after 3 seconds
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 2000);
     }
   };
 

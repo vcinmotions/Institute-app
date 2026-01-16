@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Table,
   TableBody,
@@ -26,6 +26,7 @@ import LostEnquiryModal from "../form/form-elements/LostEnquiryForm";
 import EditEnquiryForm from "../form/form-elements/EditEnquiryForm";
 import { Tooltip } from "@heroui/react";
 import ShowForRoles from "@/app/utils/ShowForRoles";
+import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
 
 type FollowUpModalType =
   | "createNew"
@@ -54,19 +55,11 @@ export default function EnquiryDataTable({
   sortOrder,
 }: EnquiryDataTableProps) {
   const [showForm, setShowForm] = useState(false);
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
   const dispatch = useDispatch();
   const [followUpData, setFollowUpData] = useState<any>(null);
   const [enquiryDetail, setEnquiryDetail] = useState(false);
   const [selectedEnquiryData, setSelectedEnquiryData] = useState<any>(null); // You can strongly type this
-  const [newEnquiry, setNewEnquiry] = React.useState({
-    name: "",
-    email: "",
-    courseId: "",
-    source: "",
-    contact: "",
-  });
-  const [showModal, setShowModal] = useState(false);
+
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [modalType, setModalType] = useState<FollowUpModalType>(null);
   const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
@@ -75,6 +68,15 @@ export default function EnquiryDataTable({
   const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
     null,
   );
+
+  // const STATUS_COLOR_MAP: Record<string, any> = {
+  //   COLD: "primary",
+  //   HOT: "error",
+  //   WARM: "warning",
+  //   WON: "success",
+  //   HOLD: "info",
+  //   LOST: "lost"
+  // };
 
   const [showTimelineModal, setShowTimelineModal] = useState(false);
   const [showCreateNextModal, setShowCreateNextModal] = useState(false);
@@ -137,16 +139,54 @@ export default function EnquiryDataTable({
 
   const { mutate: followUp, error, isSuccess, isPending } = useFetchFollowUps();
 
-  const handleFollowUp = (enquiryId: string) => {
+  // const handleFollowUp = (enquiryId: string) => {
+  //   const token = sessionStorage.getItem("token");
+  //   if (!token) {
+  //     console.error("No token found in sessionStorage");
+  //     return;
+  //   }
+
+  //   setSelectedId(enquiryId);
+  //   setSelectedEnquiryId(enquiryId);
+    
+
+  //   followUp(
+  //     { token, id: enquiryId },
+  //     {
+  //       onSuccess: async (data) => {
+  //         const followUps = data.followup || [];
+
+  //         // Save to Redux
+  //         dispatch(
+  //           addFollowUpsForEnquiry({
+  //             enquiryId,
+  //             followUps,
+  //           }),
+  //         );
+
+  //         await refetch();
+
+  //         if (followUps.length > 0) {
+  //           // Show the Timeline Modal if follow-ups exist
+  //           setFollowUpData(followupDetails);
+  //           setShowForm(true); // This triggers TimelineDatatable
+  //           setShowTimelineModal(true)
+  //           setModalType(null);
+  //         } else {
+  //           // Show Create Follow-Up Modal if no follow-ups
+  //           setModalType("createNew");
+  //         }
+  //       },
+  //     },
+  //   );
+  // };
+
+  const handleFollowUp = useCallback((enquiryId: string) => {
     const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
+    if (!token) return;
 
     setSelectedId(enquiryId);
     setSelectedEnquiryId(enquiryId);
-    
 
     followUp(
       { token, id: enquiryId },
@@ -154,30 +194,30 @@ export default function EnquiryDataTable({
         onSuccess: async (data) => {
           const followUps = data.followup || [];
 
-          // Save to Redux
           dispatch(
             addFollowUpsForEnquiry({
               enquiryId,
-              followUps,
+              followUps: data.followup ?? [],
             }),
           );
 
-          await refetch();
+          console.log("FOLLOW_UP IN HANDLE FOLLOW UP HANDLER:", data);
 
+          await refetch();
           if (followUps.length > 0) {
-            // Show the Timeline Modal if follow-ups exist
-            setFollowUpData(followupDetails);
-            setShowForm(true); // This triggers TimelineDatatable
-            setShowTimelineModal(true)
-            setModalType(null);
-          } else {
-            // Show Create Follow-Up Modal if no follow-ups
-            setModalType("createNew");
-          }
+              // Show the Timeline Modal if follow-ups exist
+              setFollowUpData(followupDetails);
+              setShowForm(true); // This triggers TimelineDatatable
+              setShowTimelineModal(true)
+              setModalType(null);
+            } else {
+              // Show Create Follow-Up Modal if no follow-ups
+              setModalType("createNew");
+            }
         },
       },
     );
-  };
+  }, [dispatch, followUp, refetch]);
 
   const handleEditEnquiry = (item: any) => {
     const token = sessionStorage.getItem("token");
@@ -317,19 +357,7 @@ export default function EnquiryDataTable({
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       <Badge
                         size="sm"
-                        color={
-                          item.leadStatus === "COLD"
-                            ? "primary"
-                            : item.leadStatus === "HOT"
-                              ? "error"
-                              : item.leadStatus === "WARM"
-                                ? "warning"
-                                : item.leadStatus === "WON"
-                                  ? "success"
-                                  : item.leadStatus === "HOLD"
-                                    ? "info"
-                                    : "lost"
-                        }
+                        color={STATUS_COLOR_MAP[item.leadStatus] ?? "error"}
                       >
                         {item.leadStatus}
                       </Badge>
@@ -450,7 +478,7 @@ export default function EnquiryDataTable({
                             aria-disabled={
                               item.leadStatus === "WON" ||
                               item.leadStatus === "WARM" || 
-                                item.leadStatus === "LOST"
+                              item.leadStatus === "LOST"
                             }
                           >
                             {/* <TrashBinIcon /> */}

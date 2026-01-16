@@ -12,6 +12,7 @@ import { setLab } from "@/store/slices/labSlice";
 import LabForm from "@/components/form/form-elements/LabCreateForm";
 import dynamic from "next/dynamic";
 import StudentCard from "@/components/common/StudentCard";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 const LabDataTable = dynamic(
   () => import("@/components/tables/LabDataTable"),
@@ -101,7 +102,7 @@ export default function LabTable() {
         const response = await getLab({
           token,
           page: currentPage,
-          limit: 5,
+          limit: PAGE_SIZE,
           search: searchQuery,
           sortField,
           sortOrder,

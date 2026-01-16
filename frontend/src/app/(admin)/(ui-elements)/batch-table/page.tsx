@@ -1,5 +1,4 @@
 "use client";
-import EnquiryCard from "@/components/common/EnquiryCard";
 
 import Search from "@/components/form/input/Search";
 
@@ -9,32 +8,25 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
 
-import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
 import BatchDataTable from "@/components/tables/BatchDataTable";
 import BatchForm from "@/components/form/form-elements/BatchCreateForm";
-import { setBatches, setTotal } from "@/store/slices/batchSlice";
+import { setBatches, setCurrentPage, setSearchQuery, setTotal, setTotalPages, setSort, setFilters } from "@/store/slices/batchSlice";
 import { setLab } from "@/store/slices/labSlice";
 import StudentCard from "@/components/common/StudentCard";
+import { PAGE_SIZE } from "@/constants/pagination";
+import useDebounce from "@/hooks/useDebounce";
 
 export default function BatchTable() {
   const [showForm, setShowForm] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const { currentPage, total, totalPages, searchQuery, sortField, sortOrder,  } = useSelector((state: RootState) => state.batch)
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const batch = useSelector((state: RootState) => state.batch.batches);
-  const totalCount = useSelector((state: RootState) => state.batch.total);
   const labs = useSelector((state: RootState) => state.lab.labs);
   const [loading, setLoading] = useState<boolean>(false);
-  const [sortField, setSortField] = useState("createdAt");
-  const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(
-    null,
-  );
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
-  const leadStatusOptions = [null, "HOT", "WARM", "COLD"] as const;
 
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
@@ -42,63 +34,16 @@ export default function BatchTable() {
     setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
-  // useEffect(() => {
-  //     const handleKeyDown = (e: KeyboardEvent) => {
-  //       switch (e.key) {
-  //         case "F4":
-  //           e.preventDefault();
-  //           setShowForm(!showForm);
-  //           break;
+  // --- Debounced search and Set delay time according to your needs
+  const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-  //         // case "F4":
-  //         //   e.preventDefault();
-  //         //   router.push("/dashboard/batch");
-  //         //   break;
-
-  //         // case "F8":
-  //         //   e.preventDefault();
-  //         //   router.push("/dashboard/lab");
-  //         //   break;
-
-  //         // case "F9":
-  //         //   e.preventDefault();
-  //         //   router.push("/dashboard/course");
-  //         //   break;
-  //       }
-  //     };
-
-  //     window.addEventListener("keydown", handleKeyDown);
-  //     return () => window.removeEventListener("keydown", handleKeyDown);
-  //   }, []);
-
-  // useEffect(() => {
-  //       const handleKeyDown = (e: KeyboardEvent) => {
-  //         if (e.key === "F4") {
-  //           e.preventDefault();
-  //           setShowForm(prev => !prev); // ✅ FIXED toggle
-  //         }
-
-  //         if (e.key === "Escape") {
-  //         e.preventDefault();
-  //         setShowForm(false);
-  //       }
-  //       };
-
-  //       window.addEventListener("keydown", handleKeyDown);
-  //       return () => window.removeEventListener("keydown", handleKeyDown);
-  //     }, []);
-
-  // Debounce effect: update searchQuery 1 second after user stops typing
+  // 2. sync debounced value to Redux
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
-    }, 300);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchInput]);
+    if (debouncedSearchTerm !== searchQuery) {
+      dispatch(setSearchQuery(debouncedSearchTerm));
+      dispatch(setCurrentPage(1));
+    }
+  }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -114,16 +59,15 @@ export default function BatchTable() {
         const response = await getBatch({
           token,
           page: currentPage,
-          limit: 5,
+          limit: PAGE_SIZE,
           search: searchQuery,
           sortField,
           sortOrder,
-          leadStatus, // 👈 Add this
         });
 
-        dispatch(setBatches(response.batch || []));
-        setTotalPages(response.totalPages || 1);
-        dispatch(setTotal(response.totalCount || 0));
+        dispatch(setBatches(response.data || []));
+        dispatch(setTotalPages(response.totalPages || 1));
+        dispatch(setTotal(response.total || 0));
       } catch (error) {
         console.error("Error fetching batch:", error);
       } finally {
@@ -132,7 +76,7 @@ export default function BatchTable() {
     };
 
     fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, leadStatus]);
+  }, [currentPage, searchQuery, sortField, sortOrder]);
 
   useEffect(() => {
     const fetchLab = async () => {
@@ -147,11 +91,10 @@ export default function BatchTable() {
         const responseLab = await getLab({
           token,
           page: currentPage,
-          limit: 10,
+          limit: PAGE_SIZE,
           search: searchQuery,
           sortField,
           sortOrder,
-          leadStatus, // 👈 Add this
         });
 
         dispatch(setLab(responseLab.labs));
@@ -164,19 +107,21 @@ export default function BatchTable() {
 
   console.log("Query data:", currentPage, searchQuery, totalPages);
 
-  // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(e.target.value);
-  // };
-
-  const handleSearchSubmit = (e: FormEvent) => {
+  // --- Handlers (memoized)
+  
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
-  };
+    dispatch(setCurrentPage(1));
+  }, [dispatch]);
 
-  const handlePagination = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
+  const handlePagination = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+  }, [dispatch, totalPages]);
+
+  const handleSort = useCallback((field: string) => {
+    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
+    dispatch(setSort({ field, order }));
+  }, [dispatch, sortField, sortOrder]);
 
   const handleCreateClick = () => {
     setShowForm(!showForm);
@@ -184,21 +129,6 @@ export default function BatchTable() {
 
   const handleCloseModal = () => {
     setShowForm(false);
-  };
-
-  const handleSort = (field: string) => {
-    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-    setSortField(field);
-    setSortOrder(order);
-    setLeadStatus(leadStatus);
-  };
-
-  const handleLeadStatus = (field: string) => {
-    const currentIndex = leadStatusOptions.indexOf(leadStatus);
-    const nextStatus =
-      leadStatusOptions[(currentIndex + 1) % leadStatusOptions.length];
-    setLeadStatus(nextStatus);
-    setCurrentPage(1); // Reset pagination on status change
   };
 
   return (
@@ -213,19 +143,13 @@ export default function BatchTable() {
 
           <BatchDataTable
             batch={batch}
-            labs={labs}
-            loading={loading}
-            onSort={handleSort}
-            onLeadStatus={handleLeadStatus}
-            sortField={sortField}
-            sortOrder={sortOrder}
           />
 
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             title="Bathes"
-            totalCount={totalCount}
+            totalCount={total}
             onPageChange={handlePagination}
           />
         </StudentCard>

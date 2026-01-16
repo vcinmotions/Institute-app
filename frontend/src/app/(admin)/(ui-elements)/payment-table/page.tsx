@@ -5,42 +5,31 @@ import { getPayment } from "@/lib/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
-import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
 import StudentCard from "@/components/common/StudentCard";
-import { setPayment } from "@/store/slices/paymentSlice";
+import { setCurrentPage, setFilters, setPayment, setSearchQuery, setSort, setTotal, setTotalPages } from "@/store/slices/paymentSlice";
 import PaymentDataTable from "@/components/tables/PaymentDataTable";
 import FilterBox from "@/components/form/input/FilterBox";
+import { PAGE_SIZE } from "@/constants/pagination";
+import useDebounce from "@/hooks/useDebounce";
 
 export default function PaymentTable() {
-  const [showForm, setShowForm] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  //const [enquiries, setEnquiries] = useState<any[]>([]);
   const studentDetails = useSelector(
     (state: RootState) => state.studentCourse.studentDetails,
   );
-  const { payment } = useSelector((state: RootState) => state.payment);
-  useSelector((state: RootState) => state.student);
+  const { payment, searchQuery, sortField, sortOrder, currentPage, filters, total, totalPages } = useSelector((state: RootState) => state.payment);
   const [loading, setLoading] = useState<boolean>(false);
-  const [sortField, setSortField] = useState("paymentDate");
+
   const [paymentType, setPaymentType] = useState<
     "ONE_TIME" | "INSTALLMENT" | null
   >(null);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
-  const [filterInput, setFilterInput] = useState("");
   const dispatch = useDispatch();
   const paymentTypeOptions = [null, "ONE_TIME", "INSTALLMENT"] as const;
-  const [filters, setFilters] = useState<Record<string, string | null>>({});
 
   // called when filters applied
-  const handleFilters = (selectedFilters: Record<string, string | null>) => {
-    console.log("Selected filters:", selectedFilters);
-    setFilters(selectedFilters);
-    setCurrentPage(1);
-  };
 
   console.log("Get all payment:", payment);
 
@@ -52,17 +41,17 @@ export default function PaymentTable() {
     setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
-  // Debounce effect: update searchQuery 1 second after user stops typing
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
-    }, 300);
+   // --- Debounced search and Set delay time according to your needs
+  const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchInput]);
+  // 2. sync debounced value to Redux
+  useEffect(() => {
+    if (debouncedSearchTerm !== searchQuery) {
+      dispatch(setSearchQuery(debouncedSearchTerm));
+      dispatch(setCurrentPage(1));
+    }
+  }, [debouncedSearchTerm, searchQuery, dispatch]);
+
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -78,15 +67,16 @@ export default function PaymentTable() {
         const response = await getPayment({
           token,
           page: currentPage,
-          limit: 5,
+          limit: PAGE_SIZE,
           search: searchQuery,
           sortField,
           sortOrder,
           ...filters, // 👈 send filters to API
         });
 
-        dispatch(setPayment(response.studentPayment || []));
-        setTotalPages(response.totalPages || 1);
+        dispatch(setPayment(response.data || []));
+        dispatch(setTotalPages(response.totalPages || 1));
+        dispatch(setTotal(response.total || 1));
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       } finally {
@@ -97,28 +87,27 @@ export default function PaymentTable() {
     fetchData();
   }, [currentPage, searchQuery, sortField, sortOrder, filters]);
 
-  console.log("Query data:", currentPage, searchQuery, totalPages, filters);
 
-  // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(e.target.value);
-  // };
-
-  const handleSearchSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
-  };
-
-  const handlePagination = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
-
-  const handleSort = (field: string) => {
-    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-    setSortField(field);
-    setSortOrder(order);
-    setPaymentType(paymentType);
-  };
+   // --- Handlers (memoized)
+  
+    const handleSearchSubmit = useCallback((e: React.FormEvent) => {
+      e.preventDefault();
+      dispatch(setCurrentPage(1));
+    }, [dispatch]);
+  
+    const handlePagination = useCallback((page: number) => {
+      if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+    }, [dispatch, totalPages]);
+  
+    const handleSort = useCallback((field: string) => {
+      const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
+      dispatch(setSort({ field, order }));
+    }, [dispatch, sortField, sortOrder]);
+  
+    const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
+      dispatch(setFilters(selectedFilters));
+      dispatch(setCurrentPage(1));
+    }, [dispatch]);
 
   const handlePaymentType = (field: string) => {
     const currentIndex = paymentTypeOptions.indexOf(paymentType);
@@ -180,6 +169,8 @@ export default function PaymentTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            totalCount={total}
+            title="Student Payments"
             onPageChange={handlePagination}
           />
         </StudentCard>

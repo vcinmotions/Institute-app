@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
 import { getAnalytics, getEnquiry, getUser } from "@/lib/api";
 import {
+  setCurrentPage,
   setEnquiries,
   setError,
   setTotal,
@@ -27,6 +28,7 @@ import StatisticsChart from "@/components/ecommerce/StatisticsChart";
 import DemographicCard from "@/components/ecommerce/DemographicCard";
 import EnquiryTarget from "@/components/ecommerce/EnquiryPieChart";
 import RecentOrders from "@/components/ecommerce/RecentOrders";
+import { PAGE_SIZE } from "@/constants/pagination";
 //const EcommerceMetrics = dynamic(() => import("@/components/ecommerce/EcommerceMetrics"));
 
 export default function Ecommerce() {
@@ -36,6 +38,7 @@ export default function Ecommerce() {
   const [userRole, setUserRole] = useState<string | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
   const enquiries = useSelector((state: RootState) => state.enquiry.enquiries);
+  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const summary = useSelector((state: RootState) => state.analytic.summary);
   const breakdown = useSelector((state: RootState) => state.analytic.breakdown);
   const totalConverted = useSelector(
@@ -64,18 +67,18 @@ export default function Ecommerce() {
         if (role === "ADMIN") {
           const response = await getEnquiry({
             token,
-            page: 1,
-            limit: 5,
+            page: currentPage,
+            limit: PAGE_SIZE,
             search: "",
           });
           const responseAnalytics = await getAnalytics(token);
 
           dispatch(setAnalytics(responseAnalytics.summary || {}));
           dispatch(setAnalyticsBreakdown(responseAnalytics.breakdown || {}));
-          dispatch(setEnquiries(response.enquiry || []));
+          dispatch(setEnquiries(response.data || []));
           dispatch(setTotalConverted(response.convertedCount || 0));
           dispatch(setTotalNotConverted(response.notConvertedCount || 0));
-          dispatch(setTotal(response.totalPages * 5 || 0));
+          dispatch(setTotal(response.total));
         }
       } catch (err) {
         console.error("Error fetching data:", err);

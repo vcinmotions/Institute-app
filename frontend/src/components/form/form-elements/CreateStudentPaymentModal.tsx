@@ -53,7 +53,7 @@ export default function CreateStudentPaymentModal({
     variant: "",
   });
 
-  const { createStudentPayment } = useCreateStudentPayment();
+  const { mutate: createStudentPayment } = useCreateStudentPayment();
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -136,19 +136,6 @@ export default function CreateStudentPaymentModal({
         id,
       });
 
-      const refetchResult = await getPayment({
-        token,
-        page: 1,
-        limit: 5,
-        search: "",
-      });
-
-      if (!refetchResult || !refetchResult.studentPayment) {
-        throw new Error("Failed to fetch Payment Data");
-      }
-
-      dispatch(setPayment(refetchResult.studentPayment));
-
       // Reset form and close modal
       setAmountPaid("");
       setPaymentDate("");
@@ -162,6 +149,11 @@ export default function CreateStudentPaymentModal({
         message: "Enquiry has been Successfully Updated.",
         variant: "success",
       });
+
+      // ✅ Close modal after 3s
+      setTimeout(() => {
+        onCloseModal();
+      }, 2000);
     } catch (error) {
       console.error("Payment creation failed:", error);
       setErrors({ amountPaid: "Failed to create payment. Please try again." });

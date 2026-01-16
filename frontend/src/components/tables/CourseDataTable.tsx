@@ -8,24 +8,11 @@ import {
 } from "../ui/table";
 import { useState } from "react";
 
-import { useDispatch } from "react-redux";
-
-import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
-
-import { useCreateAdmission } from "@/hooks/useCreateAdmission";
-
-import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
-
-
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
-import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
 
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
-import Button from "../ui/button/Button";
 import EditCourseForm from "../form/form-elements/EditCourseForm";
-import { Tooltip } from "@heroui/react";
-import { PencilIcon } from "@/icons";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
@@ -36,7 +23,6 @@ type CourseDataTableProps = {
   onSort: (field: string) => void;
   sortField: string;
   sortOrder: "asc" | "desc";
-  onLeadStatus: (field: string) => void;
 };
 
 export default function CourseDataTable({
@@ -44,26 +30,9 @@ export default function CourseDataTable({
   batch,
   loading,
   onSort,
-  onLeadStatus,
   sortField,
   sortOrder,
 }: CourseDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
-  const dispatch = useDispatch();
-  const [followUpData, setFollowUpData] = useState<any>(null);
-  const [showCreateFollowUp, setShowCreateFollowUp] = useState(false);
-  const [enquiryDetail, setEnquiryDetail] = useState(false);
-
-  const [selectedEnquiryData, setSelectedEnquiryData] = useState<any>(null); // You can strongly type this
-  const [newEnquiry, setNewEnquiry] = React.useState({
-    name: "",
-    email: "",
-    course: "",
-    source: "",
-    contact: "",
-  });
-  const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [modalType, setModalType] = useState<FollowUpModalType>(null);
   const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
@@ -75,10 +44,6 @@ export default function CourseDataTable({
     null,
   );
   const { mutate: fetchEnquiries, data } = useFetchEnquiry();
-  //const { enquiries, loading } = useSelector((state: RootState) => state.enquiry);
-
-  // const [sortField, setSortField] = useState<string>("createdAt");
-  // const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   console.log("get All Query To search in Course DATA Table:", courses);
 
@@ -97,164 +62,11 @@ export default function CourseDataTable({
     });
   };
 
-  const openDeleteModal = (id: string) => {
-    setSelectedId(id);
-    setShowModal(true);
-  };
-
-  const closeDeleteModal = () => {
-    setSelectedId(null);
-    setShowModal(false);
-  };
-
-  const handleCreateClick = () => {
-    setShowForm(!showForm);
-  };
-
-  const handleCreateFollowUpForEnquiry = (enquiryId: string) => {
-    setSelectedEnquiryId(enquiryId);
-    setModalType("createNew");
-  };
-
-  const handleCreateFollowUpForFollowUp = (followUpId: string) => {
-    setSelectedFollowUpId(followUpId);
-    setModalType("update");
-  };
-
-  const handleCompleteFollowUpHandler = (followUpId: string) => {
-    setSelectedFollowUpId(followUpId);
-    setModalType("complete");
-  };
 
   const handleCloseModal = () => {
     setSelectedId(null);
     setBatchDetail(false);
     setBatchData(null);
-  };
-
-  const handleCloseAdmissionModal = () => {
-    setShowAdmissionForm(false);
-    setSelectedEnquiryData(null);
-  };
-
-  const { mutate: followUp, error, isSuccess, isPending } = useFetchFollowUps();
-  const { mutate: admissionStudent } = useCreateAdmission();
-  const { mutate: deleteEnquiry } = useDeleteEnquiry();
-
-  // if (!enquiries) {
-  //   return <div>Loading enquiries...</div>; // or a spinner
-  // }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEnquiry({ ...newEnquiry, [e.target.name]: e.target.value });
-  };
-
-  // const handleFollowUp = (id: any) => {
-  //   const token = sessionStorage.getItem("token");
-  //   if (!token) {
-  //       console.error("No token found in sessionStorage");
-  //       return;
-  //   }
-
-  //   console.log("Get EnquiryId to Fetch Follow Up", id);
-  //   setSelectedId(id);
-  //   setSelectedEnquiryId(id);
-  //   followUp(
-  //       { token, id },
-  //       {
-  //       onSuccess: (data) => {
-  //           //setFollowUpData(data);
-  //           console.log("Fetched follow-up data in hanldeFollowUp:", data);
-
-  //           // ✅ Save to Redux instead of useState
-  //           // ✅ Instead, save follow-ups keyed by enquiryId
-  //           dispatch(addFollowUpsForEnquiry({
-  //             enquiryId: id,
-  //             followUps: data.followup,
-  //           }));
-
-  //           setFollowUpData(data);   // ✅ Save follow-up data
-  //           setShowForm(true);       // ✅ Show the modal
-  //       },
-  //       }
-  //   );
-  // };
-
-  const handleAdmission = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
-
-    console.log("Get EnquiryId to Admission Handle:", id);
-
-    const enquiryData = courses.find((item) => item.id === id);
-
-    console.log("Get Enquity Data in Handle Admission:", enquiryData);
-
-    if (!enquiryData) {
-      console.error("No enquiry data found for this ID");
-      return;
-    }
-
-    const { name, email, contact, course } = enquiryData;
-
-    // ✅ Save ID and data to state
-    setSelectedEnquiryId(id);
-    setSelectedEnquiryData({ name, email, contact, course });
-
-    console.log("Get Enquiry Id in HandleAdmission:", selectedEnquiryId);
-    console.log("Get Enquiry DATA in HandleAdmission:", selectedEnquiryData);
-    setShowAdmissionForm(true);
-  };
-
-  // const handleDeleted = (id: any) => {
-  //   const token = sessionStorage.getItem("token");
-  //   if (!token) {
-  //       console.error("No token found in sessionStorage");
-  //       return;
-  //   }
-
-  //   console.log("Get EnquiryId to Deleted Enquiry", id);
-
-  //   deleteEnquiry(
-  //       { token, id },
-  //       {
-  //       onSuccess: (data) => {
-  //           console.log("Deleted Enquiry:", data);
-  //           setFollowUpData(data);   // ✅ Save follow-up data
-  //       },
-  //       }
-  //   );
-
-  //   setShowForm(false);
-  // }
-
-  const handleDeleted = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
-
-    console.log("Get EnquiryId to Deleted Enquiry", id);
-
-    deleteEnquiry(
-      { token, id },
-      {
-        onSuccess: (data) => {
-          console.log("Deleted Enquiry:", data);
-          setFollowUpData(null); // Optional: Clear data if needed
-          setShowModal(false); // ✅ Close the modal
-          setSelectedId(null); // ✅ Reset selectedId
-        },
-        onError: (err) => {
-          console.error("Delete failed:", err);
-          alert("Something went wrong while deleting");
-        },
-      },
-    );
   };
 
   const handleEditLab = (item: any) => {
@@ -265,9 +77,6 @@ export default function CourseDataTable({
     setBatchData(item);
   };
 
-  console.log("get ModalType", modalType);
-  console.log("get selectedEnquiryId", selectedEnquiryId);
-  console.log("get selectedFollowUpId", selectedFollowUpId);
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -282,18 +91,6 @@ export default function CourseDataTable({
                 >
                   Course Name
                 </TableCell>
-                {/* <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                  <button
-                    type="button"
-                    className="flex items-center gap-1"
-                    onClick={() => handleSort("name")}
-                  >
-                    User
-                    {sortField === "name" && (
-                      <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
-                    )}
-                  </button>
-                </TableCell> */}
 
                 <TableCell
                   isHeader
@@ -301,12 +98,7 @@ export default function CourseDataTable({
                 >
                   Duration Weeks
                 </TableCell>
-                {/* <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Description
-                </TableCell> */}
+
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
@@ -327,14 +119,7 @@ export default function CourseDataTable({
                   <TableRow key={item.id}>
                     <TableCell className="px-5 py-4 text-start sm:px-6">
                       <div className="flex items-center gap-3">
-                        {/* <div className="w-10 h-10 overflow-hidden rounded-full">
-                          <Image
-                            width={40}
-                            height={40}
-                            src="/images/user/user-21.jpg"
-                            alt="/images/user/user-21.jpg"
-                          />
-                        </div> */}
+
                         <div>
                           <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
                             {item.name}
@@ -345,30 +130,14 @@ export default function CourseDataTable({
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.durationWeeks} Weeks
                     </TableCell>
-                    {/* <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.description}
-                    </TableCell> */}
+    
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {/* {item.courseFeeStructure.totalAmount
-                        ? new Intl.NumberFormat("en-IN").format(
-                            item.courseFeeStructure.totalAmount,
-                          )
-                        : 0}{" "}
-                      INR */}
+    
                       {new Intl.NumberFormat("en-IN").format(
                         item.courseFeeStructure?.totalAmount ?? 0,
                       )}{" "}
                       INR
                     </TableCell>
-                    {/* <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      <Button
-                        onClick={() => handleEditLab(item)}
-                        size="sm"
-                        className="rounded bg-gray-800 px-4 py-2 text-sm text-white"
-                      >
-                        Edit Course
-                      </Button>
-                    </TableCell> */}
                     <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
                       <span
                         className={`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${"cursor-pointer"}`}
@@ -408,17 +177,6 @@ export default function CourseDataTable({
           </Table>
         </div>
       </div>
-
-      {/* === Follow-Up Timeline modal === */}
-
-      {/* === Follow-Up Timeline modal === */}
-      {/* {showAdmissionForm && selectedEnquiryData && selectedEnquiryId !== null && (
-        <AdmissionForm
-          onCloseModal={handleCloseAdmissionModal} // Function to close timeline modal
-          enquiryData={selectedEnquiryData} // Pass follow-up data fetched from API
-          enquiryId={selectedEnquiryId} // Pass current enquiry ID (number, not null)
-         />
-      )} */}
 
       {modalType === "createNew" && selectedEnquiryId !== null && (
         <CreateNewFollowUpOnEnquiryModal

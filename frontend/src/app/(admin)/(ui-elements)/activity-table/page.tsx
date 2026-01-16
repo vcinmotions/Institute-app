@@ -10,6 +10,7 @@ import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import StudentCard from "@/components/common/StudentCard";
 import ActivityDataTable from "@/components/tables/ActivityLogDataTable";
 import { setLogs } from "@/store/slices/logSlice";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function ActivityTable() {
   const [showForm, setShowForm] = useState(false);
@@ -61,7 +62,7 @@ export default function ActivityTable() {
         const response = await getLog({
           token,
           page: currentPage,
-          limit: 5,
+          limit: PAGE_SIZE,
           search: searchQuery,
           sortField,
           sortOrder,

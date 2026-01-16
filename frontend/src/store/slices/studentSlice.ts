@@ -1,12 +1,13 @@
 // src/store/slices/enquirySlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface EnquiryState {
+interface StudentState {
   students: any[];
   loading: boolean;
   error: string | null;
   searchQuery: string | null;
-  total: number; // ✅ New field
+  total: number; // ✅ New field 
+  totalPages: number; // ✅ New field 
   filters: Record<string, string | null>;
   sortField: string;
   sortOrder: "asc" | "desc";
@@ -14,12 +15,13 @@ interface EnquiryState {
 }
 
 // 🟢 Initial state must match the shape of EnquiryState
-const initialState: EnquiryState = {
+const initialState: StudentState = {
   students: [],
   loading: false,
   error: null,
   searchQuery: null,
   total: 0,
+  totalPages: 1,
   filters: {},
   sortField: "admissionDate",
   sortOrder: "asc",
@@ -45,6 +47,9 @@ const studentSlice = createSlice({
     setTotal(state, action: PayloadAction<number>) {
       state.total = action.payload;
     },
+    setTotalPages(state, action: PayloadAction<number>) {
+      state.totalPages = action.payload;
+    },
     setCurrentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
     },
@@ -60,5 +65,5 @@ const studentSlice = createSlice({
 });
 
 // Export actions and reducer
-export const { setStudents, setLoading, setError, setTotal, setCurrentPage, setFilters, setSort, setSearchQuery } = studentSlice.actions;
+export const { setStudents, setLoading, setError, setTotal, setTotalPages, setCurrentPage, setFilters, setSort, setSearchQuery } = studentSlice.actions;
 export default studentSlice.reducer;

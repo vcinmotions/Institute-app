@@ -7,19 +7,15 @@ import {
   TableRow,
 } from "../ui/table";
 import { useState } from "react";
-
 import Badge from "../ui/badge/Badge";
-import Image from "next/image";
 import { useDispatch } from "react-redux";
 import Button from "../ui/button/Button";
-import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
-import { useCreateAdmission } from "@/hooks/useCreateAdmission";
-import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
 import { Student } from "@/types/student";
 import CreateStudentPaymentModal from "../form/form-elements/CreateStudentPaymentModal";
 import { downloadReceipt } from "@/app/utils/ReceiptDownload";
 import { singleDownloadReceipt } from "@/app/utils/SingleReceiptDownload";
+import { PAYMENTSTATUS_COLOR_MAP, STATUS_COLOR_MAP } from "../common/BadgeStatus";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
@@ -40,32 +36,9 @@ export default function PaymentDataTable({
   sortField,
   sortOrder,
 }: StudentCourseDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
   const [showPaymentDetailsForm, setShowPaymentDetailsForm] = useState(false);
   const dispatch = useDispatch();
-  const [followUpData, setFollowUpData] = useState<any>(null);
-  const [showCreateFollowUp, setShowCreateFollowUp] = useState(false);
-  const [enquiryDetail, setEnquiryDetail] = useState(false);
   const [selectedPaymentData, setSelectedPaymentData] = useState<any>(null); // You can strongly type this
-  const [newEnquiry, setNewEnquiry] = React.useState({
-    name: "",
-    email: "",
-    course: "",
-    source: "",
-    contact: "",
-  });
-  const [showModal, setShowModal] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [modalType, setModalType] = useState<FollowUpModalType>(null);
-  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
-    null,
-  );
-  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
-    null,
-  );
-  const { mutate: fetchEnquiries, data } = useFetchEnquiry();
-  const [studentId, setStudentId] = useState<string | null>(null);
-  const [studentDetails, setStudentDetails] = useState<Student | null>(null);
 
   //const [expandedRows, setExpandedRows] = useState<number[]>([]);
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
@@ -82,10 +55,6 @@ export default function PaymentDataTable({
     setExpandedRowId((prev) => (prev === payment.id ? null : payment.id));
   };
 
-  //const { enquiries, loading } = useSelector((state: RootState) => state.enquiry);
-
-  // const [sortField, setSortField] = useState<string>("admissionDate");
-  // const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   console.log("get All Query To search:", payment);
 
@@ -94,15 +63,6 @@ export default function PaymentDataTable({
     setSelectedPaymentData(null);
   };
 
-  const { mutate: followUp, error, isSuccess, isPending } = useFetchFollowUps();
-  const { mutate: admissionStudent } = useCreateAdmission();
-  const { mutate: deleteEnquiry } = useDeleteEnquiry();
-
-  console.log("Get All Enquiry Details in Enquiry table", payment);
-
-  // if (!enquiries) {
-  //   return <div>Loading enquiries...</div>; // or a spinner
-  // }
 
   const handleEditClick = async (payment: any) => {
     setShowPaymentDetailsForm(true);
@@ -114,26 +74,8 @@ export default function PaymentDataTable({
       console.error("No token found in sessionStorage");
       return;
     }
-
-    //await refetch();
-    //  const refetchResult = await getPayment({
-    //          token,
-    //          page: 1,
-    //          limit: 5,
-    //          search: '',
-    //        });
-
-    //        if (!refetchResult || !refetchResult.studentPayment) {
-    //          throw new Error("Failed to fetch Payment Data");
-    //        }
-
-    //        dispatch(setPayment(refetchResult.studentPayment));
   };
 
-  console.log("get ModalType", modalType);
-  console.log("get selectedEnquiryId", selectedEnquiryId);
-  console.log("get selectedFollowUpId", selectedFollowUpId);
-  console.log(":Get STudent Course data in Student Course Table:", payment);
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
       <div className="max-w-full overflow-x-auto">
@@ -148,18 +90,6 @@ export default function PaymentDataTable({
                 >
                   Student Name
                 </TableCell>
-                {/* <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                  <button
-                    type="button"
-                    className="flex items-center gap-1"
-                    onClick={() => handleSort("name")}
-                  >
-                    User
-                    {sortField === "name" && (
-                      <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
-                    )}
-                  </button>
-                </TableCell> */}
 
                 <TableCell
                   isHeader
@@ -174,53 +104,6 @@ export default function PaymentDataTable({
                 >
                   Payment Status
                 </TableCell>
-                {/* <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                  <button
-                    type="button"
-                    className="flex items-center gap-1"
-                    onClick={() => onLeadStatus("leadStatus")}
-                  >
-                    Status
-                    
-                      <span>{sortField === "leadStatus" && sortOrder === "asc" ? "▲" : "▼"}</span>
-                    
-                  </button>
-                </TableCell> */}
-                {/* <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  <button
-                    type="button"
-                    className="flex items-center gap-1"
-                    onClick={() => onSort("paymentDate")}
-                  >
-                    Payment Date
-                    <span>
-                      {sortField === "paymentDate" && sortOrder === "asc"
-                        ? "▲"
-                        : "▼"}
-                    </span>
-                  </button>
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  <button
-                    type="button"
-                    className="flex items-center gap-1"
-                    onClick={() => onSort("paymentMode")}
-                  >
-                    Payment Method
-                    <span>
-                      {sortField === "paymentMode" && sortOrder === "asc"
-                        ? "▲"
-                        : "▼"}
-                    </span>
-                  </button>
-                </TableCell> */}
 
                 <TableCell
                   isHeader
@@ -329,30 +212,11 @@ export default function PaymentDataTable({
                       <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                         <Badge
                           size="sm"
-                          color={
-                            item?.paymentStatus === "SUCCESS"
-                              ? "success"
-                              : item?.paymentStatus === "PENDING"
-                                ? "warning"
-                                : item?.paymentStatus === "WARM"
-                                  ? "info" // or any color name you support
-                                  : "error"
-                          }
+                          color={PAYMENTSTATUS_COLOR_MAP[item.paymentStatus] ?? "error"}
                         >
                           {item?.paymentStatus}
                         </Badge>
                       </TableCell>
-
-                      {/* <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                        {item.paymentDate
-                          ? new Date(item.paymentDate)
-                              .toISOString()
-                              .split("T")[0]
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                        {item?.paymentMode}
-                      </TableCell> */}
 
                       <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                         {item?.feeStructure?.paymentType}
@@ -412,15 +276,6 @@ export default function PaymentDataTable({
                         >
                           {/* You can customize this area with more details */}
                           <div>
-                            {/* <div className="flex justify-between items-center mb-2 px-1">
-                          <h4 className="font-semibold mb-2">Payment Logs</h4>
-                          <Button size="sm" className="rounded bg-gray-800 px-4 py-2 text-white text-sm hover:bg-gray-900 transition" 
-                          disabled={item?.feeLogs.length === 0} 
-                          onClick={() => downloadReceipt(item)}>
-                            Download Receipt
-                          </Button>
-                          </div> */}
-
                             {item?.feeLogs?.length > 0 ? (
                               <table className="w-full border border-gray-200 text-left text-sm dark:border-white/10">
                                 <thead className="bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-white">

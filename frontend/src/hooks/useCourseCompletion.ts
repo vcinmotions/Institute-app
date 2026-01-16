@@ -2,8 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { courseCompletionAPI, createCourse, getStudentCourse } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { setStudents } from "@/store/slices/studentSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setStudentCourse, setStudentDetail } from "@/store/slices/studentCourseSlice";
+import { RootState } from "@/store";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 type Payload = {
   token: string;
@@ -15,7 +17,14 @@ type Payload = {
 
 
 export const useCourseCompletion = () => {
-  const router = useRouter();
+   const currentPage = useSelector((state: RootState) => state.studentCourse.currentPage);
+  const token = useSelector((state: RootState) => state.auth.token);
+  const searchQuery = useSelector((state: RootState) => state.studentCourse.searchQuery);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+  } = useSelector((state: RootState) => state.studentCourse);
   const dispatch = useDispatch();
 
   return useMutation({
@@ -50,19 +59,12 @@ export const useCourseCompletion = () => {
 
     onSuccess: async (data, variables) => {
       console.log("✅ Course Completion Successfully:", data);
-      // router.push("/dashboard");
-      //dispatch(setStudents(data.getAllStudent))
 
       // Refetch updated enquiries
-      const updated = await getStudentCourse({
-        token: variables.token,
-        page: 1,
-        limit: 5,
-        sortField: "createdAt",
-      });
+      const updated = await getStudentCourse({token: variables.token, page: currentPage, limit: PAGE_SIZE, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
 
       console.log("📋 Updated Student Course After New Course Completion:", updated);
-      dispatch(setStudentCourse(updated.studentCourse || []));
+      dispatch(setStudentCourse(updated.data || []));
       dispatch(setStudentDetail(updated.detailedCourses || []));
     },
     onError: (error) => {

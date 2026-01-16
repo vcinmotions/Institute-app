@@ -28,6 +28,9 @@ interface GetStudentCourseParams {
   search?: string;
   sortField?: string;
   sortOrder?: "asc" | "desc";
+  courseId?: string;
+  batchId?: string;
+  facultyId?: string;
 }
 
 const apiClient = axios.create({
@@ -585,8 +588,8 @@ export const getStudent = async ({
 // 🔧 FIXED getUser API with token header
 export const getStudentCourse = async ({
   token,
-  page = 1,
-  limit = 5,
+  page,
+  limit,
   search = "",
   sortField,
   sortOrder,

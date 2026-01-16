@@ -1,5 +1,7 @@
 // controllers/studentController.ts
 import { Request, Response } from 'express';
+import { studentCourseQuerySchema } from '../validators/student.course.query';
+import { getStudentsCourses } from '../services/student.course.service';
 
 export async function addStudentCourseController(req: Request, res: Response) {
   const {
@@ -363,179 +365,185 @@ export async function addStudentCourseController(req: Request, res: Response) {
 //   }
 // }
 
-export async function getStudentCourseController(req: Request, res: Response) {
+// export async function getStudentCourseController(req: Request, res: Response) {
+//   try {
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+
+//     if (!tenantPrisma || !user || typeof user === 'string') {
+//       return res.status(401).json({ error: 'Unauthorized request' });
+//     }
+
+//     const clientAdminId = user.clientAdminId;
+
+//     // ✅ Extract query params
+//     const {
+//       page = '1',
+//       limit = '10',
+//       search,
+//       sortField = 'startDate',
+//       sortOrder = 'desc',
+//       courseId,
+//       batchId,
+//       facultyId, // 👈 New filters
+//     } = req.query;
+
+//     const pageNum = parseInt(page as string, 10);
+//     const limitNum = parseInt(limit as string, 10);
+//     const skip = (pageNum - 1) * limitNum;
+
+//     // Build where clause
+//     const where: any = {
+//       clientAdminId,
+//       ...(search && {
+//         OR: [
+//           {
+//             student: {
+//               OR: [
+//                 { fullName: { contains: search } },
+//                 { email: { contains: search } },
+//                 { studentCode: { contains: search } },
+//                 { contact: { contains: search } },
+//               ],
+//             },
+//           },
+//           {
+//             course: {
+//               OR: [
+//                 { name: { contains: search } },
+//                 { description: { contains: search } },
+//               ],
+//             },
+//           },
+//         ],
+//       }),
+//       ...(courseId ? { courseId: Number(courseId) } : {}),
+//       ...(batchId ? { batchId: Number(batchId) } : {}),
+//       ...(facultyId
+//         ? {
+//             batch: {
+//               facultyId: Number(facultyId),
+//             },
+//           }
+//         : {}),
+//     };
+    
+//     const validSortFields = ["startDate", "endDate"];
+//     const orderByField = validSortFields.includes(sortField as string)
+//       ? (sortField as string)
+//       : "startDate"; // fallback if user sends invalid sortField
+
+//     // ✅ Fetch paginated data
+//     const studentCourse = await tenantPrisma.studentCourse.findMany({
+//       where,
+//       orderBy: { [orderByField as string]: sortOrder === "asc" ? "asc" : "desc" },
+//       skip,
+//       take: limitNum,
+//       include: {
+//         student: {
+//           include: {
+//             attendance: {
+//               include: {
+//                 course: true,
+//                 markedBy: true,
+//               }
+//             }
+//           }
+//         },
+//         course: true,
+//         certificate: true,
+//         completions: true,
+//         batch: {
+//           include: {
+            
+//             faculty: true,
+//             labTimeSlot: true,
+//           },
+//         },
+//       },
+//     });
+
+//     // ✅ Total count for pagination
+//     const totalPages = await tenantPrisma.studentCourse.count({ where });
+
+//     // ✅ Add fee details
+//     const detailedCourses = await Promise.all(
+//       studentCourse.map(async (sc) => {
+//         const feeStructure = await tenantPrisma.feeStructure.findUnique({
+//           where: {
+//             studentId_courseId: {
+//               studentId: sc.studentId,
+//               courseId: sc.courseId,
+//             },
+//           },
+//         });
+
+//         const feeRecords = await tenantPrisma.studentFee.findMany({
+//           where: {
+//             studentId: sc.studentId,
+//             courseId: sc.courseId,
+//           },
+//         });
+
+//         return {
+//           studentCourse: sc,
+//           feeStructure,
+//           feeRecords,
+//         };
+//       })
+//     );
+
+//     console.log("GET STUDENTS BASED ON COURSE BATCH AND FACUKTY:", studentCourse);
+
+//     return res.status(200).json({
+//       message: "Student Course fetched successfully ✅",
+//       studentCourse,
+//       detailedCourses,
+//       totalPages,
+//       page: pageNum,
+//       limit: limitNum,
+//     });
+//   } catch (err) {
+//     console.error("Error fetching studentCourse:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
+
+export async function getStudentCourseController(
+  req: Request,
+  res: Response
+) {
   try {
-    const tenantPrisma = req.tenantPrisma;
+    const prisma = req.tenantPrisma;
     const user = req.user;
 
-    if (!tenantPrisma || !user || typeof user === 'string') {
-      return res.status(401).json({ error: 'Unauthorized request' });
+    if (!prisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-    //   where: { email: user.email },
-    // });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
+    const query = studentCourseQuerySchema.parse(req.query);
 
-    const clientAdminId = user.clientAdminId;
-
-    // ✅ Extract query params
-    const {
-      page = '1',
-      limit = '10',
-      search,
-      sortField = 'startDate',
-      sortOrder = 'desc',
-      courseId,
-      batchId,
-      facultyId, // 👈 New filters
-    } = req.query;
-
-    const pageNum = parseInt(page as string, 10);
-    const limitNum = parseInt(limit as string, 10);
-    const skip = (pageNum - 1) * limitNum;
-
-    // ✅ Build dynamic filter
-
-    // const where: any = {};
-
-    // if (search) {
-    //   where.OR = [
-    //     {
-    //       student: {
-    //         OR: [
-    //           { fullName: { contains: search, mode: "insensitive" } },
-    //           { email: { contains: search, mode: "insensitive" } },
-    //           { studentCode: { contains: search, mode: "insensitive" } },
-    //           { contact: { contains: search, mode: "insensitive" } },
-    //         ],
-    //       },
-    //     },
-    //     {
-    //       course: {
-    //         OR: [
-    //           { name: { contains: search, mode: "insensitive" } },
-    //           { description: { contains: search, mode: "insensitive" } },
-    //         ],
-    //       },
-    //     },
-    //   ];
-    // }
-
-    // Build where clause
-    const where: any = {
-      ...(search && {
-        OR: [
-          {
-            student: {
-              OR: [
-                { fullName: { contains: search } },
-                { email: { contains: search } },
-                { studentCode: { contains: search } },
-                { contact: { contains: search } },
-              ],
-            },
-          },
-          {
-            course: {
-              OR: [
-                { name: { contains: search } },
-                { description: { contains: search } },
-              ],
-            },
-          },
-        ],
-      }),
-      ...(courseId ? { courseId: Number(courseId) } : {}),
-      ...(batchId ? { batchId: Number(batchId) } : {}),
-      ...(facultyId
-        ? {
-            batch: {
-              facultyId: Number(facultyId),
-            },
-          }
-        : {}),
-    };
-    
-    const validSortFields = ["startDate", "endDate"];
-    const orderByField = validSortFields.includes(sortField as string)
-      ? (sortField as string)
-      : "startDate"; // fallback if user sends invalid sortField
-
-    // ✅ Fetch paginated data
-    const studentCourse = await tenantPrisma.studentCourse.findMany({
-      where,
-      orderBy: { [orderByField as string]: sortOrder === "asc" ? "asc" : "desc" },
-      skip,
-      take: limitNum,
-      include: {
-        student: {
-          include: {
-            attendance: {
-              include: {
-                course: true,
-                markedBy: true,
-              }
-            }
-          }
-        },
-        course: true,
-        certificate: true,
-        completions: true,
-        batch: {
-          include: {
-            
-            faculty: true,
-            labTimeSlot: true,
-          },
-        },
-      },
+    const result = await getStudentsCourses({
+      prisma,
+      clientAdminId: user.clientAdminId,
+      query,
     });
 
-    // ✅ Total count for pagination
-    const totalPages = await tenantPrisma.studentCourse.count({ where });
+    console.log("Students Courses ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅:", result);
 
-    // ✅ Add fee details
-    const detailedCourses = await Promise.all(
-      studentCourse.map(async (sc) => {
-        const feeStructure = await tenantPrisma.feeStructure.findUnique({
-          where: {
-            studentId_courseId: {
-              studentId: sc.studentId,
-              courseId: sc.courseId,
-            },
-          },
-        });
-
-        const feeRecords = await tenantPrisma.studentFee.findMany({
-          where: {
-            studentId: sc.studentId,
-            courseId: sc.courseId,
-          },
-        });
-
-        return {
-          studentCourse: sc,
-          feeStructure,
-          feeRecords,
-        };
-      })
-    );
-
-    console.log("GET STUDENTS BASED ON COURSE BATCH AND FACUKTY:", studentCourse);
-
-    return res.status(200).json({
+    return res.json({
       message: "Student Course fetched successfully ✅",
-      studentCourse,
-      detailedCourses,
-      totalPages,
-      page: pageNum,
-      limit: limitNum,
+      ...result,
+      page: query.page,
+      limit: query.limit,
     });
-  } catch (err) {
-    console.error("Error fetching studentCourse:", err);
+
+  } catch (err: any) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({ error: err.errors });
+    }
+
+    console.error("Error fetching student course:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -560,14 +568,6 @@ export async function getStudentCoursebyIdController(req: Request, res: Response
     }
 
     const email = user.email;   
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
-
-    // console.log("get ClientAdmin in getEnquiryController:", clientAdmin);
 
     // 2. Get client admin (we assume there's only one per tenant for now)
     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
