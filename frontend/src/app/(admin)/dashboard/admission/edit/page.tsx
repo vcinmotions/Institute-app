@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { ChevronDownIcon, EnvelopeIcon } from "@/icons";
@@ -15,13 +15,14 @@ import Select from "@/components/form/Select";
 import DropzonBoxComponent from "@/components/form/form-elements/DropBox";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import { useParams } from "next/navigation";
 import { useFetchEnquiryById } from "@/hooks/queries/useQueryFetchEnquiry";
 import { setBatches } from "@/store/slices/batchSlice";
 import MultiSelect from "@/components/form/MultiSelect";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { capitalizeWords } from "@/components/common/ToCapitalize";
 import TextArea from "@/components/form/input/TextArea";
+import { countries } from "@/components/common/CountriesCode";
+import { genders, options } from "@/components/common/Options";
 
 interface EnquiryData {
   id: string;
@@ -57,7 +58,6 @@ interface NewEnquiryData {
   idProofNumber: string;
   address: string;
   admissionDate: any;
-
   gender: string;
   dob: string;
   facultyId: string;
@@ -109,6 +109,7 @@ export default function AdmissionForm() {
     contact: "",
     enquiryCourse: [],
   });
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [courseRows, setCourseRows] = useState([
     {
@@ -124,9 +125,6 @@ export default function AdmissionForm() {
   const id = searchParams.get("id");
 
   if (!id) return <p>Invalid admission</p>;
-
-  const courses = useSelector((state: RootState) => state.course.courses);
-  console.log("get Courses data in admission form:", courses);
 
   const [newEnquiry, setNewEnquiry] = useState<EnquiryData>({
     id: "",
@@ -163,7 +161,6 @@ export default function AdmissionForm() {
   console.log("Filled Data at Start of initialioze:", filledEnquiryData);
 
   const router = useRouter();
-  const { id: enquiryId } = useParams();
   const { data, isLoading } = useFetchEnquiryById(id as string);
   const [selectedProfilePicture, setSelectedProfilePicture] =
     useState<File | null>(null);
@@ -181,6 +178,9 @@ export default function AdmissionForm() {
     message: "",
     variant: "",
   });
+  const batch = useSelector((state: RootState) => state.batch.batches ?? []);
+
+  const courses = useSelector((state: RootState) => state.course.courses ?? []);
 
   const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
@@ -188,19 +188,19 @@ export default function AdmissionForm() {
   const [paymentTypeOption, setpaymentTypeOption] = useState<any>([]);
   const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
   const { mutate: createAdmission } = useCreateAdmission();
-  const countries = [
-    { code: "IN", label: "+91" },
-    { code: "US", label: "+1" },
-    { code: "GB", label: "+44" },
-    { code: "CA", label: "+1" },
-    { code: "AU", label: "+61" },
-  ];
 
-  const [batchList, setBatchList] = useState([]);
-  console.log("useEffect triggered — enquiryData:", enquiryData);
+  const getPaymentTypes = (courseId: string) => {
+    const course = courses.find(c => c.id.toString() === courseId);
+    return course?.courseFeeStructure?.paymentType || [];
+  };
 
-  console.log("GET ID BY PARAMS IN URL:", enquiryId);
-  console.log("courseRows:", courseRows);
+  const getInstallments = (courseId: string) => {
+    const course = courses.find(c => c.id.toString() === courseId);
+    return course?.courseFeeStructure?.installments || [];
+  };
+  
+
+  console.log("Redux state in edit:", useSelector(state => state));
 
   const stripCountryCode = (phone?: string) => {
     if (!phone) return "";
@@ -227,66 +227,200 @@ export default function AdmissionForm() {
     setCourseRows(rows);
   }, [newEnquiry.courseId]);
 
-  const handleCourseRowChange = (index: number, field: string, value: any) => {
-    setCourseRows((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
+  useEffect(() => {
+    if (!courses.length || !newEnquiry.courseId.length) return;
+  }, [courses, newEnquiry.courseId]);
 
-      const row = updated[index];
+  // const handleCourseRowChange = (index: number, field: string, value: any) => {
+  //   setCourseRows((prev) => {
+  //     const updated = [...prev];
+  //     updated[index] = { ...updated[index], [field]: value };
 
-      // Find selected course
-      const selectedCourse = courses.find(
-        (c) => c.id.toString() === row.courseId,
-      );
+  //     const row = updated[index];
 
-      const installmentTypes =
-        selectedCourse?.courseFeeStructure?.installments || [];
+  //     // Find selected course
+  //     const selectedCourse = courses.find(
+  //       (c) => c.id.toString() === row.courseId,
+  //     );
 
-      // Update feeAmount for ONE_TIME
-      if (field === "paymentType" && value === "ONE_TIME") {
-        updated[index].feeAmount =
-          selectedCourse?.courseFeeStructure?.totalAmount?.toString() || "";
-      }
+  //     const installmentTypes =
+  //       selectedCourse?.courseFeeStructure?.installments || [];
 
-      // Reset fee + installment if switching paymentType
-      if (field === "paymentType" && value !== "INSTALLMENT") {
-        updated[index].installmentTypeId = "";
-      }
+  //     // Update feeAmount for ONE_TIME
+  //     if (field === "paymentType" && value === "ONE_TIME") {
+  //       updated[index].feeAmount =
+  //         selectedCourse?.courseFeeStructure?.totalAmount?.toString() || "";
+  //     }
 
-      // Update feeAmount for INSTALLMENT
-      if (field === "installmentTypeId") {
-        const selectedInstallment = installmentTypes.find(
-          (i: any) => i.id.toString() === value.toString(),
+  //     // Reset fee + installment if switching paymentType
+  //     if (field === "paymentType" && value !== "INSTALLMENT") {
+  //       updated[index].installmentTypeId = "";
+  //     }
+
+  //     // Update feeAmount for INSTALLMENT
+  //     if (field === "installmentTypeId") {
+  //       const selectedInstallment = installmentTypes.find(
+  //         (i: any) => i.id.toString() === value.toString(),
+  //       );
+
+  //       updated[index].feeAmount = selectedInstallment
+  //         ? selectedInstallment.amount.toString()
+  //         : "";
+  //     }
+
+  //     return updated;
+  //   });
+  // };
+
+  const handleCourseRowChange = useCallback(
+    (index: number, field: string, value: any) => {
+      setCourseRows((prev) => {
+        const updated = [...prev];
+        updated[index] = { ...updated[index], [field]: value };
+
+        const course = courses.find(
+          (c) => c.id.toString() === updated[index].courseId
         );
 
-        updated[index].feeAmount = selectedInstallment
-          ? selectedInstallment.amount.toString()
-          : "";
-      }
+        if (!course?.courseFeeStructure) return updated;
 
-      return updated;
-    });
-  };
+        if (field === "paymentType" && value === "ONE_TIME") {
+          updated[index].feeAmount =
+            course.courseFeeStructure.totalAmount?.toString() || "";
+          updated[index].installmentTypeId = "";
+        }
 
-  console.log("GET ENQUIRYDATA FRON USEEFFECT:", enquiryData);
-  console.log("GET ENQUIRYDATA FRON USEEFFECT:", data);
+        if (field === "installmentTypeId") {
+          const inst = course.courseFeeStructure.installments?.find(
+            (i: any) => i.id.toString() === value
+          );
+          updated[index].feeAmount = inst?.amount?.toString() || "";
+        }
+
+        return updated;
+      });
+    },
+    [courses]
+  );
+  
+  // useEffect(() => {
+  //   if (!enquiryData || !enquiryData.enquiryCourse) return;
+
+  //   let dobValue = "";
+  //   if (enquiryData.dob) {
+  //     const date = new Date(enquiryData.dob);
+  //     const day = String(date.getDate()).padStart(2, "0");
+  //     const month = String(date.getMonth() + 1).padStart(2, "0");
+  //     const year = date.getFullYear();
+  //     dobValue = `${day}-${month}-${year}`; // DD-MM-YYYY
+  //   }
+
+  //   const courseIds = enquiryData.enquiryCourse.map((c: any) =>
+  //     String(c.courseId),
+  //   );
+
+  //   setNewEnquiry({
+  //     id: enquiryData.id,
+  //     name: enquiryData.name || "",
+  //     email: enquiryData.email || "",
+  //     contact: enquiryData.contact || "",
+  //     alternateContact: enquiryData.alternateContact || "",
+  //     age: enquiryData.age || "",
+  //     location: enquiryData.location || "",
+  //     gender: enquiryData.gender || "",
+  //     dob: enquiryData.dob
+  //     ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+  //     : "",
+  //     referedBy: enquiryData.referedBy || "",
+  //     courseId: courseIds, // -------------------------- FIXED
+  //   });
+  // }, [enquiryData]);
+
+  // useEffect(() => {
+  //     if (!enquiryData) return;
+
+  //     let dobValue = "";
+  //     if (enquiryData.dob) {
+  //       const date = new Date(enquiryData.dob);
+  //       const day = String(date.getDate()).padStart(2, "0");
+  //       const month = String(date.getMonth() + 1).padStart(2, "0");
+  //       const year = date.getFullYear();
+  //       dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
+  //     }
+
+  //     setFilledEnquiryData((prev) => ({
+  //       ...prev,
+  //       dob: dobValue,
+  //       gender: enquiryData.gender || "",
+  //       parentsContact: enquiryData.alternateContact || "", // default to ""
+  //     }));
+
+  //     // Also set in newEnquiry if needed for internal use
+  //     setNewEnquiry((prev) => ({
+  //       ...prev,
+  //       dob: dobValue,
+  //     }));
+  //   }, [enquiryData]);
+
+
+  // useEffect(() => {
+  //   if (
+  //     enquiryData &&
+  //     enquiryData?.enquiryCourse &&
+  //     Object.keys(enquiryData).length > 0
+  //   ) {
+  //     console.log("🔥 Setting enquiry data to form:", enquiryData);
+
+  //     // Extract course IDs from enquiryCourse array
+  //     const courseIds: string[] = enquiryData.enquiryCourse
+  //       ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
+  //       : [];
+
+  //     setNewEnquiry({
+  //       id: enquiryData.id,
+  //       name: enquiryData.name || "",
+  //       email: enquiryData.email || "",
+  //       courseId: courseIds, // ✅ set extracted course IDs
+  //        alternateContact: enquiryData.alternateContact || "",
+  //       age: enquiryData.age || "",
+  //       location: enquiryData.location || "",
+  //       gender: enquiryData.gender || "",
+  //       dob: enquiryData.dob
+  //       ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+  //       : "",
+  //       referedBy: enquiryData.referedBy || "",
+  //       contact: enquiryData.contact || "",
+  //     });
+  //   }
+  // }, [enquiryData]);
+
+  // useEffect(() => {
+  //   console.log("🎯 enquiryData changed:", enquiryData);
+  // }, [enquiryData, data]);
 
   useEffect(() => {
     if (!enquiryData || !enquiryData.enquiryCourse) return;
 
-    let dobValue = "";
+    // ----------------- Parse DOB -----------------
+    let dobForForm = "";
+    let dobForFilledData = "";
+
     if (enquiryData.dob) {
       const date = new Date(enquiryData.dob);
       const day = String(date.getDate()).padStart(2, "0");
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const year = date.getFullYear();
-      dobValue = `${day}-${month}-${year}`; // DD-MM-YYYY
+
+      dobForForm = enquiryData.dob.split("T")[0]; // YYYY-MM-DD for inputs
+      dobForFilledData = `${day}/${month}/${year}`; // DD/MM/YYYY for display
     }
 
-    const courseIds = enquiryData.enquiryCourse.map((c: any) =>
-      String(c.courseId),
+    // ----------------- Extract course IDs -----------------
+    const courseIds: string[] = enquiryData.enquiryCourse.map(
+      (c: any) => String(c.courseId)
     );
 
+    // ----------------- Set newEnquiry -----------------
     setNewEnquiry({
       id: enquiryData.id,
       name: enquiryData.name || "",
@@ -296,96 +430,108 @@ export default function AdmissionForm() {
       age: enquiryData.age || "",
       location: enquiryData.location || "",
       gender: enquiryData.gender || "",
-      dob: enquiryData.dob
-      ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
-      : "",
+      dob: dobForForm,
       referedBy: enquiryData.referedBy || "",
-      courseId: courseIds, // -------------------------- FIXED
+      courseId: courseIds,
     });
+
+    // ----------------- Set filledEnquiryData -----------------
+    setFilledEnquiryData((prev) => ({
+      ...prev,
+      dob: dobForFilledData,
+      gender: enquiryData.gender || "",
+      parentsContact: enquiryData.alternateContact || "",
+    }));
+
+    console.log("🎯 enquiryData initialized:", enquiryData);
   }, [enquiryData]);
 
   useEffect(() => {
-      if (!enquiryData) return;
+    if (!newEnquiry.courseId) return;
+    if (!courses || courses.length === 0) return;
 
-      let dobValue = "";
-      if (enquiryData.dob) {
-        const date = new Date(enquiryData.dob);
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = date.getFullYear();
-        dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
-      }
+    const selectedCourse = courses.find(
+      (c) => c.id.toString() === newEnquiry.courseId,
+    );
 
-      setFilledEnquiryData((prev) => ({
-        ...prev,
-        dob: dobValue,
-        gender: enquiryData.gender || "",
-        parentsContact: enquiryData.alternateContact || "", // default to ""
-      }));
+    if (!selectedCourse?.courseFeeStructure) return;
 
-      // Also set in newEnquiry if needed for internal use
-      setNewEnquiry((prev) => ({
-        ...prev,
-        dob: dobValue,
-      }));
-    }, [enquiryData]);
+    // PAYMENT TYPE OPTIONS
+    setpaymentTypeOption(selectedCourse.courseFeeStructure.paymentType);
+
+    // INSTALLMENT OPTIONS
+    const inst = selectedCourse.courseFeeStructure.installments || [];
+    setInstallmentTypeOption(inst);
+
+  }, [courses, newEnquiry.courseId]);
+
+  const {
+    data: courseData,
+    isLoading: courseLoading,
+    isError: courseError,
+  } = useFetchCourse();
+
+  const {
+    data: batchData,
+    isLoading: batchLoading,
+    isError: batchError,
+  } = useFetchAllBatches({ onlyAvailable: true });
+
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    firstInputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (courseData?.course) {
+      console.log("get all courses data;", courseData);
+      dispatch(setCourses(courseData.course || []));
+      setLoading(false);
+    };
+  }, [courseData, dispatch]);
 
 
   useEffect(() => {
-    if (
-      enquiryData &&
-      enquiryData?.enquiryCourse &&
-      Object.keys(enquiryData).length > 0
-    ) {
-      console.log("🔥 Setting enquiry data to form:", enquiryData);
+    console.log("get all batches data;", batchData);
+    if (batchData?.batch) { 
+      dispatch(setBatches(batchData.batch || []));
+      setLoading(false);
+    };
+  }, [batchData, dispatch]);
+  console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData)
+  console.log("get all courses data::::::::::::::::::::::::::::::::::::::::::::::::;", courseData)
 
-      // Extract course IDs from enquiryCourse array
-      const courseIds: string[] = enquiryData.enquiryCourse
-        ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
-        : [];
+  // const batchOptions = batch.map((b: any) => ({
+  //   value: b.id.toString(),
+  //   label: `${capitalizeWords(b.name)} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+  // }));
 
-      setNewEnquiry({
-        id: enquiryData.id,
-        name: enquiryData.name || "",
-        email: enquiryData.email || "",
-        courseId: courseIds, // ✅ set extracted course IDs
-         alternateContact: enquiryData.alternateContact || "",
-        age: enquiryData.age || "",
-        location: enquiryData.location || "",
-        gender: enquiryData.gender || "",
-        dob: enquiryData.dob
-        ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
-        : "",
-        referedBy: enquiryData.referedBy || "",
-        contact: enquiryData.contact || "",
-      });
+   const formatDOB = (dob: string) => {
+    if (!dob) return "";
+    const d = new Date(dob);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const batchOptions = React.useMemo(
+    () =>
+      batch.map((b: any) => ({
+        value: b.id.toString(),
+        label: `${capitalizeWords(b.name)} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+      })),
+    [batch]
+  );
+
+  useEffect(() => {
+    if (courseData?.course && batchData?.batch) {
+      dispatch(setCourses(courseData.course));
+      dispatch(setBatches(batchData.batch));
+      setLoading(false);
     }
-  }, [enquiryData]);
-
-  useEffect(() => {
-    console.log("🎯 enquiryData changed:", enquiryData);
-  }, [enquiryData, data]);
-
-  console.log("GET newEnquiry FRON USEEFFECT:", newEnquiry);
-
-  useEffect(() => {
-      if (!newEnquiry.courseId) return;
-      if (!courses || courses.length === 0) return;
-
-      const selectedCourse = courses.find(
-        (c) => c.id.toString() === newEnquiry.courseId,
-      );
-
-      if (!selectedCourse?.courseFeeStructure) return;
-
-      // PAYMENT TYPE OPTIONS
-      setpaymentTypeOption(selectedCourse.courseFeeStructure.paymentType);
-
-      // INSTALLMENT OPTIONS
-      const inst = selectedCourse.courseFeeStructure.installments || [];
-      setInstallmentTypeOption(inst);
-
-    }, [courses, newEnquiry.courseId]);
+  }, [courseData, batchData, dispatch]);
 
   const handlePhoneNumberChange = (
     field: "contact" | "parentsContact",
@@ -412,60 +558,7 @@ export default function AdmissionForm() {
     }
   };
 
-  const {
-    data: courseData,
-    isLoading: courseLoading,
-    isError: courseError,
-  } = useFetchCourse();
-
-  const {
-    data: batchData,
-    isLoading: batchLoading,
-    isError: batchError,
-  } = useFetchAllBatches({ onlyAvailable: true });
-
-  const firstInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    firstInputRef.current?.focus();
-  }, []);
-
-  useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
-    };
-  }, [courseData, dispatch]);
-
-
-  useEffect(() => {
-    console.log("get all batches data;", batchData);
-    if (batchData?.batch) { 
-      dispatch(setBatches(batchData.batch));
-    };
-  }, [batchData, dispatch, id]);
-  console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
-
-  const courseList = useSelector((state: RootState) => state.course.courses);
-  const batch = useSelector((state: RootState) => state.batch.batches);
-
-  console.log("useEffect triggered — batch:", batch);
-
-  const batchOptions = batch.map((b: any) => ({
-    value: b.id.toString(),
-    label: `${capitalizeWords(b.name)} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
-  }));
-
-  const options = [
-    { value: "aadhar card", label: "Aadhar Card" },
-    { value: "pan card", label: "Pan Card" },
-    { value: "other", label: "Other" },
-  ];
-
-  const genders = [
-    { value: "female", label: "Female" },
-    { value: "male", label: "Male" },
-    { value: "other", label: "Other" },
-  ];
+  if(loading === true) return null;
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -479,8 +572,6 @@ export default function AdmissionForm() {
 
     if (!newEnquiry.contact.trim())
       newErrors.contact = "Contact number is required.";
-    // else if (!/^\+\d{10,15}$/.test(newEnquiry.contact))
-    //   newErrors.contact = "Enter a valid phone number with country code.";
 
     if (!newEnquiry.courseId) newErrors.courseId = "Please select a course.";
 
@@ -510,9 +601,6 @@ export default function AdmissionForm() {
 
     if (!filledEnquiryData.parentsContact.trim())
       newErrors.parentsContact = "Parent's contact number is required.";
-    // else if (!/^\+\d{10,15}$/.test(filledEnquiryData.parentsContact))
-    //   newErrors.parentsContact =
-    //     "Enter a valid parent's phone number with country code.";
 
     if (!filledEnquiryData.religion.trim())
       newErrors.religion = "Religion is required.";
@@ -715,9 +803,6 @@ export default function AdmissionForm() {
     }));
   };
 
-  console.log("GET BATCH LIST DETAILS:", batchList);
-  console.log("GET BATCH LIST DETAILS:", batchOptions);
-
   const handleSubmit = async () => {
     if (!validate()) {
       setAlert({
@@ -809,18 +894,10 @@ export default function AdmissionForm() {
     }
   };
 
-  console.log("get All Admission form data:", newEnquiry);
-  console.log("get All Admission form editable data:", filledEnquiryData);
-  console.log("get All Admission form Course data:", courseRows);
-  console.log("get All PAYMENT TYPE OPTIONS::", paymentTypeOption);
-
   return (
     <div>
       <PageBreadcrumb pageTitle="Create Student Admission" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3">
-        {/* <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-          Profile
-        </h3> */}
 
         <div className="space-y-8">
           <h2 className="border-b pb-6 dark:text-gray-50 dark:border-gray-700">Student Infomation</h2>
@@ -998,7 +1075,7 @@ export default function AdmissionForm() {
               <div className="relative" data-master="course">
                 <MultiSelect
                   tabIndex={10}
-                  options={courseList.map((course) => ({
+                  options={courses.map((course) => ({
                     value: String(course.id),
                     text: capitalizeWords(course.name),
                     selected: newEnquiry.courseId.includes(String(course.id)),

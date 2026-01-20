@@ -1,6 +1,6 @@
 // src/hooks/useFetchFollowUps.ts
 import { useMutation } from "@tanstack/react-query";
-import { createUser, getFollowUp } from "@/lib/api";
+import { loginUser, getFollowUp } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { createCourse, getStudent } from "@/lib/api";
+import { assignCourseToStudent, getStudent } from "@/lib/api";
 import { setCurrentPage, setStudents, setTotal, setTotalPages } from "@/store/slices/studentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -13,7 +13,7 @@ type AdmissionPayload = {
   paymentType: string;
 };
 
-export const useCreateCourse = () => {
+export const useCourseToExistenceStudent = () => {
   const dispatch = useDispatch();
   const currentPage = useSelector((state: RootState) => state.student.currentPage);
   const token = useSelector((state: RootState) => state.auth.token);
@@ -51,7 +51,7 @@ export const useCreateCourse = () => {
       }
 
       // Call your API
-      await createCourse(token, formData);
+      await assignCourseToStudent(token, formData);
 
       return { token };
     },

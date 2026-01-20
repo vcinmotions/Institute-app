@@ -20,7 +20,7 @@ export default function CompanyTable() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
-  const company = useSelector((state: RootState) => state.auth.tenant);
+  const company = useSelector((state: RootState) => state.auth.tenant ?? []);
   
   const [loading, setLoading] = useState<boolean>(false);
   const [sortField, setSortField] = useState("createdAt");

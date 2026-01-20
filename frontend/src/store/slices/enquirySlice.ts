@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface EnquiryState {
   enquiries: any[];
-  filteredEnquiries: any[]; // 🆕 Add this
   loading: boolean;
   searchQuery: string,
   error: string | null;
@@ -23,7 +22,6 @@ interface EnquiryState {
 // 🟢 Initial state must match the shape of EnquiryState
 const initialState: EnquiryState = {
   enquiries: [],
-  filteredEnquiries: [], // 🆕 Initialize it
   loading: false,
   error: null,
   searchQuery: "",

@@ -124,9 +124,7 @@ export async function tenantResolverMiddleware(
 
 
 
-    const centralPrisma = getCentralPrisma(
-      
-    );
+    const centralPrisma = getCentralPrisma();
 
     // 1️⃣ Check master admin FIRST
     const masterAdmin = await centralPrisma.superAdmin.findUnique({

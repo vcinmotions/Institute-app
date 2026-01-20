@@ -8,7 +8,7 @@ import {
   getEnquiryByIdController,
   getEnquiryController,
   holdEnquiryController,
-  lostdEnquiryController,
+  lostEnquiryController,
   getWonEnquiryController
 } from "../controllers/enquiry.controller";
 
@@ -19,7 +19,7 @@ router.post("/enquiry-new", addEnquiryControllerNew);
 router.put("/edit-enquiry", editEnquiryController);
 router.get("/enquiry", getEnquiryController);
 router.get("/won-enquiry", getWonEnquiryController);
-router.post("/enquiry/lost", lostdEnquiryController);
+router.post("/enquiry/lost", lostEnquiryController);
 router.post("/enquiry/hold", holdEnquiryController);
 router.delete("/enquiry/:id", deleteEnquiryController);
 router.get("/enquiry/:id", getEnquiryByIdController);

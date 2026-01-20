@@ -104,14 +104,16 @@ interface CustomProps {
   defaultValue?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
-  min?: string;
-  max?: string;
+  // min?: string;
+  // max?: string;
   step?: number;
   disabled?: boolean;
   success?: boolean;
   error?: boolean;
   tabIndex?: number;
   hint?: string;
+  min?: string | number;  // ✅ allow number too
+  max?: string | number;  // ✅ allow number too
 }
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & CustomProps;

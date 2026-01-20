@@ -225,6 +225,27 @@ export default function EditEnquiryForm({
     }));
   };
 
+   const handleAlternatePhoneNumberChange = (
+    phoneNumber: string,
+    countryCode = "+91",
+  ) => {
+    // If phoneNumber doesn't start with +, prepend selected country code
+    let formattedNumber = phoneNumber;
+    if (!phoneNumber.startsWith("+")) {
+      formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
+    }
+
+    setNewEnquiry((prev) => ({
+      ...prev,
+      alternateContact: formattedNumber,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      alternateContact: "",
+    }));
+  };
+
   const options = [
     { value: "linkedin", label: "LinkedIn" },
     { value: "indeed", label: "Indeed" },
@@ -421,11 +442,12 @@ export default function EditEnquiryForm({
         
           <div>
           <Label>Alternate Conatct No.</Label>
-          <Input
+          <PhoneInput
            tabIndex={4}
+           countries={countries}
            value={newEnquiry.alternateContact} // ← fixed // <-- THIS FIXES IT
            placeholder="Enter alternate Contact" 
-           onChange={(e) => handleChange("alternateContact", e.target.value)}
+           onChange={handleAlternatePhoneNumberChange}
           />
            {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}

@@ -85,7 +85,7 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // app.use(express.json());
 
 // Schedule to run every 15 minutes
-cron.schedule("*/60 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
   console.log(`⏰ Cron Job Triggered at ${new Date().toLocaleString()}`);
   await runAllTenantFollowUps();
 });

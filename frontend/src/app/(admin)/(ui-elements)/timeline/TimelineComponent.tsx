@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import ModalCard from "@/components/common/ModalCard";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
@@ -7,6 +7,9 @@ import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import CreateFollowUpModal from "@/components/form/form-elements/CreateFollowUpModal";
 import { PencilIcon } from "@/icons";
 import EditFollowUpModal from "@/components/form/form-elements/EditFollowUpModal";
+import { canEditFollowUp } from "@/domain/enquiry/rules";
+import { showCompletedFollowUpIcon, showMissedFollowUpIcon, showPendingFollowUpIcon } from "@/domain/follow-up/rules";
+import { formatDate } from "@/components/common/Formatdate";
 interface TimelineDatatableProps {
   onClose: () => void;
   followUpData: any;
@@ -20,13 +23,7 @@ export default function TimelineDatatable({
   enquiryId,
   onCreateFollowUpForFollowUp,
 }: TimelineDatatableProps) {
-  const options = [
-    { value: "linkedin", label: "LinkedIn" },
-    { value: "indeed", label: "Indeed" },
-    { value: "instagram", label: "Instagram" },
-    { value: "other", label: "Other" },
-  ];
-  const [triggered, setTriggered] = useState(false);
+
   const { enquiries, loading } = useSelector(
     (state: RootState) => state.enquiry,
   );
@@ -45,26 +42,13 @@ export default function TimelineDatatable({
   const refetchFollowup = () => {
     refetch();
   }
-
-  console.log("get Enquiry data in tmeline", enquiries);
   // const fineEnquiryById = enquiries.find(
   //   (data: { id: any | null }) => data.id === enquiryId,
   // );
 
-  const fineEnquiryById = React.useMemo(
+  const fineEnquiryById = useMemo(
     () => enquiries.find(e => e.id === enquiryId),
     [enquiries, enquiryId]
-  );
-
-  console.log("get Enquiry data in tmeline bt Id", fineEnquiryById);
-  const handleSelectChange = (value: string) => {
-    console.log("Selected value:", value);
-  };
-
-  console.log("get UPDATED Folow Up data in tmeline", followUpData);
-  console.log(
-    "get UPDATED Folow Up data in tmeline by using UseQuery:",
-    followupDetails,
   );
 
   //   const followups = followUpData?.followup ?? [];
@@ -84,29 +68,24 @@ export default function TimelineDatatable({
     );
   };
 
-    const handleEditFollowUpForFollowUp = (followUpId: string) => {
+  const handleEditFollowUpForFollowUp = (followUpId: string) => {
     setSelectedFollowUpId(followUpId);
     setSelectedEnquiryId(enquiryId)
     setShowEditNextModal(true)
-
   };
 
-  console.log("get Folow Up data in tmeline", followupDetails);
-
-  // const followups = followUpData?.followup ?? [];
-
-  // const followups = (followUpData?.followup ?? []).sort(
-  //     (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt  ).getTime()
+  //IMPORTANT ONE
+  // const followups = [...(followupDetails?.followup || [])].sort(
+  //   (a: any, b: any) =>
+  //     new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   // );
 
-  // const followups = [...(followUpsByEnquiry[enquiryId] || [])].sort(
-  //   (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-  // );
-
-  const followups = [...(followupDetails?.followup || [])].sort(
-    (a: any, b: any) =>
-      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  );
+  const followups = useMemo(() => {
+    return [...(followupDetails?.followup || [])].sort(
+      (a: any, b: any) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+  }, [followupDetails]);
 
   // useEffect(() => {
   //   setTriggered(false)
@@ -126,88 +105,13 @@ export default function TimelineDatatable({
   const lastItem = followups[followups.length - 1];
   const middleItems = followups.slice(1, -1);
 
-  const formatDate = (date: string | null) => {
-    if (!date) return "—";
-    return new Date(date).toLocaleString("en-US", {
-      weekday: "short",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
   console.log("get middle follow up", middleItems);
   console.log("get last follow up", lastItem?.id);
+  console.log("canEditFollowUp(fineEnquiryById?.leadStatus)", canEditFollowUp(fineEnquiryById?.leadStatus));
 
   return (
     <ModalCard title="Follow-Up " oncloseModal={onClose}>
       <div>
-        {/* <PageBreadcrumb pageTitle="Blank Page" /> */}
-        {/* <div className="mb-4 h-max rounded-2xl border border-gray-200 bg-white px-5 py-7 xl:px-10 xl:py-12 dark:border-gray-800 dark:bg-white/[0.03]">
-          <div className="mx-auto w-full max-w-[900px] text-center">
-            <h4 className="mb-6 text-lg font-semibold text-gray-800 dark:text-white/90">
-              Enquiry Details
-            </h4>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-800 dark:text-white/90">
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  <tr>
-                    <td className="py-2 pr-2 text-xs text-gray-500 dark:text-gray-400">
-                      First Name
-                    </td>
-                    <td className="py-2 pr-4 font-medium">
-                      {fineEnquiryById?.name}
-                    </td>
-                    <td className="py-2 pr-2 text-xs text-gray-500 dark:text-gray-400">
-                      Admission
-                    </td>
-                    <td className="py-2 font-medium">
-                      {fineEnquiryById?.isConverted === false ? "Nil" : "Done"}
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td className="py-2 pr-2 text-xs text-gray-500 dark:text-gray-400">
-                      Email Address
-                    </td>
-                    <td className="py-2 pr-4 font-medium">
-                      {fineEnquiryById?.email ? fineEnquiryById?.email : "-"}
-                    </td>
-                    <td className="py-2 pr-2 text-xs text-gray-500 dark:text-gray-400">
-                      Phone
-                    </td>
-                    <td className="py-2 font-medium">
-                      {" "}
-                      +91 {fineEnquiryById?.contact}
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td className="py-2 pr-2 text-xs text-gray-500 dark:text-gray-400">
-                      Course
-                    </td>
-                    <td className="py-2 pr-4 font-medium">
-                      {fineEnquiryById?.enquiryCourse.map((cr: any, index: number) => (
-                        <span key={index}>{cr.course?.name}</span>
-                      ))}
-                    </td>
-                    <td className="py-2 pr-2 text-xs text-gray-500 dark:text-gray-400">
-                      Source
-                    </td>
-                    <td className="py-2 font-medium">
-                      {fineEnquiryById?.source ? fineEnquiryById?.source : "-"}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div> */}
-
        <div className="mb-6 rounded-3xl border border-gray-200/60 bg-white px-8 py-10 shadow-sm dark:border-gray-800/60 dark:bg-white/[0.02]">
         <h4 className="mb-6 text-center text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
           Enquiry Details
@@ -379,7 +283,7 @@ export default function TimelineDatatable({
                     viewBox="0 0 20 20"
                     className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
                   >
-                    {firstItem.followUpStatus === "PENDING" && (
+                    {showPendingFollowUpIcon(firstItem.followUpStatus) && (
                       // ⏳ Pending Icon (Inverted i)
                       <path
                         fillRule="evenodd"
@@ -388,7 +292,7 @@ export default function TimelineDatatable({
                       />
                     )}
 
-                    {firstItem.followUpStatus === "COMPLETED" && (
+                    {showCompletedFollowUpIcon(firstItem.followUpStatus) && (
                       // ✅ Complete Icon (Checkmark)
                       <path
                         fillRule="evenodd"
@@ -397,7 +301,7 @@ export default function TimelineDatatable({
                       />
                     )}
 
-                    {firstItem.followUpStatus === "MISSED" && (
+                    {showMissedFollowUpIcon(firstItem.followUpStatus) && (
                       // ❌ Missed Icon (X inside circle)
                       <path
                         fillRule="evenodd"
@@ -408,14 +312,14 @@ export default function TimelineDatatable({
                   </svg>
                 </div>
                 {/* <div className="timeline-end timeline-box">First Macintosh computer</div> */}
-                 <div className="timeline-end w-full max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
+                 <div className="timeline-end w-[400px] max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
                   {/* Header */}
                   <div className="mb-2 flex w-full items-center justify-between gap-4">
                     <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
                       {firstItem.remark}
                     </h4>
 
-                    {fineEnquiryById?.leadStatus !== "WON" && fineEnquiryById?.leadStatus !== "LOST" && <button
+                    {canEditFollowUp(fineEnquiryById?.leadStatus) && <button
                       onClick={() => handleEditFollowUpForFollowUp(firstItem.id)}
                       className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
                       aria-label="Edit follow-up"
@@ -476,7 +380,7 @@ export default function TimelineDatatable({
                         viewBox="0 0 20 20"
                         className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
                       >
-                        {item.followUpStatus === "PENDING" && (
+                        {showPendingFollowUpIcon(item.followUpStatus) && (
                           // ⏳ Pending Icon (Inverted i)
                           <path
                             fillRule="evenodd"
@@ -485,7 +389,7 @@ export default function TimelineDatatable({
                           />
                         )}
 
-                        {item.followUpStatus === "COMPLETED" && (
+                        {showCompletedFollowUpIcon(item.followUpStatus) && (
                           // ✅ Complete Icon (Checkmark)
                           <path
                             fillRule="evenodd"
@@ -494,7 +398,7 @@ export default function TimelineDatatable({
                           />
                         )}
 
-                        {item.followUpStatus === "MISSED" && (
+                        {showMissedFollowUpIcon(item.followUpStatus) && (
                           // ❌ Missed Icon (X inside circle)
                           <path
                             fillRule="evenodd"
@@ -504,14 +408,14 @@ export default function TimelineDatatable({
                         )}
                       </svg>
                     </div>
-                     <div className="timeline-end w-full max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
+                     <div className="timeline-end w-[400px] max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
                         {/* Header */}
                         <div className="mb-2 flex w-full items-center justify-between gap-4">
                           <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
                             {item.remark}
                           </h4>
 
-                        {fineEnquiryById?.leadStatus !== "WON" && fineEnquiryById?.leadStatus !== "LOST" &&
+                        {canEditFollowUp(fineEnquiryById?.leadStatus) &&
                           <button
                             onClick={() => handleEditFollowUpForFollowUp(item.id)}
                             className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
@@ -574,42 +478,42 @@ export default function TimelineDatatable({
                       viewBox="0 0 20 20"
                       className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
                     >
-                      {lastItem.followUpStatus === "PENDING" && (
-                        // ⏳ Pending Icon (Inverted i)
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-9.75a.75.75 0 01.75.75v4.25a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0-2.25a1 1 0 100 2 1 1 0 000-2z"
-                          clipRule="evenodd"
-                        />
-                      )}
+                      {showPendingFollowUpIcon(lastItem.followUpStatus) && (
+                          // ⏳ Pending Icon (Inverted i)
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-9.75a.75.75 0 01.75.75v4.25a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0-2.25a1 1 0 100 2 1 1 0 000-2z"
+                            clipRule="evenodd"
+                          />
+                        )}
 
-                      {lastItem.followUpStatus === "COMPLETED" && (
-                        // ✅ Complete Icon (Checkmark)
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                          clipRule="evenodd"
-                        />
-                      )}
+                        {showCompletedFollowUpIcon(lastItem.followUpStatus) && (
+                          // ✅ Complete Icon (Checkmark)
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                            clipRule="evenodd"
+                          />
+                        )}
 
-                      {lastItem.followUpStatus === "MISSED" && (
-                        // ❌ Missed Icon (X inside circle)
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm2.53-10.47a.75.75 0 00-1.06-1.06L10 8.94 8.53 7.47a.75.75 0 00-1.06 1.06L8.94 10l-1.47 1.47a.75.75 0 101.06 1.06L10 11.06l1.47 1.47a.75.75 0 101.06-1.06L11.06 10l1.47-1.47z"
-                          clipRule="evenodd"
-                        />
-                      )}
+                        {showMissedFollowUpIcon(lastItem.followUpStatus) && (
+                          // ❌ Missed Icon (X inside circle)
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm2.53-10.47a.75.75 0 00-1.06-1.06L10 8.94 8.53 7.47a.75.75 0 00-1.06 1.06L8.94 10l-1.47 1.47a.75.75 0 101.06 1.06L10 11.06l1.47 1.47a.75.75 0 101.06-1.06L11.06 10l1.47-1.47z"
+                            clipRule="evenodd"
+                          />
+                        )}
                     </svg>
                   </div>
-                   <div className="timeline-end w-full max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
+                   <div className="timeline-end sm:w-full md:w-[400px] max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
                       {/* Header */}
                       <div className="mb-2 flex w-full items-center justify-between gap-4">
                         <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
                           {lastItem.remark}
                         </h4>
 
-                      {fineEnquiryById?.leadStatus !== "WON" && fineEnquiryById?.leadStatus !== "LOST" &&
+                      {canEditFollowUp(fineEnquiryById?.leadStatus) &&
                         <button
                           onClick={() => handleEditFollowUpForFollowUp(lastItem.id)}
                           className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"

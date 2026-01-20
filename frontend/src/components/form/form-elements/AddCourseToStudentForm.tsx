@@ -7,7 +7,7 @@ import { ChevronDownIcon } from "../../../icons";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
-import { useCreateCourse } from "@/hooks/useCreateCourse";
+import { useCourseToExistenceStudent } from "@/hooks/useAssignCurseToExistemceStudent";
 import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourses } from "@/store/slices/courseSlice";
@@ -73,8 +73,7 @@ export default function CourseForm({
   });
 
   const [errors, setErrors] = useState<Partial<NewCourseData>>({});
-  const { mutate: createCourse } = useCreateCourse();
-  const { mutateAsync: createCourseMutation } = useCreateCourse();
+  const { mutateAsync: assignCourseToExistenceStudent } = useCourseToExistenceStudent();
   const countries = [
     { code: "IN", label: "+91" },
     { code: "US", label: "+1" },
@@ -226,22 +225,6 @@ export default function CourseForm({
       ...prev,
       [field]: value,
     }));
-
-    // if (field === "courseId") {
-    //   const selectedCourse = courseList.find((c) => c.id.toString() === value);
-
-    //   console.log("Selected Course:", selectedCourse);
-
-    //   // ✅ Always set Fee + Payment Type if courseFeeStructure exists
-    //   if (selectedCourse?.courseFeeStructure) {
-    //     setpaymentTypeOption(selectedCourse.courseFeeStructure.paymentType);
-    //     setFilledCourseData((prev) => ({
-    //       ...prev,
-
-    //       feeAmount: installmentTypeOption.amount?.toString() || "",
-    //     }));
-    //   }
-    // }
 
     if (field === "courseId") {
       const selectedCourse = courseList.find((c) => c.id.toString() === value);
@@ -468,7 +451,7 @@ export default function CourseForm({
     //   }, 2000);
     // }
 
-    createCourseMutation(
+    assignCourseToExistenceStudent(
       admissionPayload,
       {
         onSuccess: () => {

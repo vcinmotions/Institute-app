@@ -11,7 +11,7 @@ interface PhoneInputProps {
   placeholder?: string;
   value?: string;
   onKeyDown?: any | null;
-  onChange?: (phoneNumber: string) => void;
+  onChange?: (phoneNumber: string, countryCode: string) => void;
   selectPosition?: "start" | "end"; // New prop for dropdown position
   tabIndex?: number; // ⭐ ADD THIS
 }
@@ -37,18 +37,17 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
     const newCountry = e.target.value;
     setSelectedCountry(newCountry);
     setPhoneNumber(countryCodes[newCountry]);
-    if (onChange) {
-      onChange(countryCodes[newCountry]);
-    }
+
+    onChange?.(phoneNumber, countryCodes[newCountry]);
   };
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPhoneNumber = e.target.value;
     setPhoneNumber(newPhoneNumber);
-    if (onChange) {
-      onChange(newPhoneNumber);
-    }
+
+    onChange?.(newPhoneNumber, countryCodes[selectedCountry]);
   };
+
 
   return (
     <div className="relative flex">

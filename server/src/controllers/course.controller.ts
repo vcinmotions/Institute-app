@@ -193,7 +193,6 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
     // );
 
     // 🔍 Fetch course fee structure
-    // 🔍 Fetch course fee structure
     const courseFeeStructure = await tenantPrisma.courseFeeStructure.findUnique({
       where: {
         id: Number(courseId),
@@ -711,7 +710,8 @@ export async function updateCourseController(req: Request, res: Response) {
 //     });
 
 //     // ✅ Total count (for frontend pagination)
-//     const totalPages = await tenantPrisma.course.count({ where });
+//     const total = await tenantPrisma.course.count({ where });
+//     const totalPages = Math.ceil(total / limitNum);
 
 //     console.log(
 //       "Courses Fetched Successfully",
@@ -724,7 +724,7 @@ export async function updateCourseController(req: Request, res: Response) {
 //     return res.status(200).json({
 //       message: "Courses fetched successfully",
 //       course,
-//       totalPages,
+//       total,
 //       page: pageNum,
 //       limit: limitNum,
 //     });
@@ -753,9 +753,18 @@ export async function getCourseController(req: Request, res: Response) {
       query,
     });
 
-    return res.json({
+    // return res.json({
+    //   message: "Courses fetched successfully",
+    //   ...result,
+    //   page: query.page,
+    //   limit: query.limit,
+    // });
+
+    return res.status(200).json({
       message: "Courses fetched successfully",
-      ...result,
+      course: result.data,
+      total: result.total,
+      totalPages: result.totalPages,
       page: query.page,
       limit: query.limit,
     });

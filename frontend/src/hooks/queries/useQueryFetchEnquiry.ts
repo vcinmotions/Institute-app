@@ -1,15 +1,15 @@
-// useQueryFetchPayment.ts
+// useQueryFetchEnquiry.ts
 import { useQuery } from "@tanstack/react-query";
 
 // Define the type of your API response
 interface EnquiryApiResponse {
   data: any[];
-  totalCount: number;
+  total: number;
   totalPages: number;
 }
 
 export interface UseFetchEnquiryParams {
-  token: string;
+  token: string | null;
   currentPage?: number;
   limit?: number;
   searchQuery?: string;
@@ -35,7 +35,7 @@ export const useFetchEnquiry = ({
     queryFn: async ({ signal }) => {
       if (!token) throw new Error("Missing token");
 
-      console.log("ENQUIRY USE QUERY FETCHED:")
+      
       const data = await getEnquiry({
         token,
         page: currentPage,
@@ -45,14 +45,14 @@ export const useFetchEnquiry = ({
         sortOrder,
         ...filters,
       });
+      console.log("ENQUIRY USE QUERY FETCHED:", data)
 
       if (!data) throw new Error("No data returned");
 
       return data;
     },
     enabled: !!token,
-    // keepPreviousData: true, // ⭐ pagination UX
-    // staleTime: 30 * 1000,   // ⭐ caching (30s)
+    staleTime: 30 * 1000,   // ⭐ caching (30s)
   });
 };
 
@@ -60,15 +60,15 @@ export const useFetchEnquiry = ({
 import { apiClient } from "@/lib/apiClient";
 import { getEnquiry } from "@/lib/api/enquiry";
 
-export interface Course {
+export interface Enquiry {
   id: string;
   name: string;
   durationWeeks: string;
   description: string;
 }
 
-interface GetCourseResponse {
-  course: Course[];
+interface GetEnquiryResponse {
+  enquiry: Enquiry[];
 }
 
 export const useFetchEnquiryById = (id: string) => {

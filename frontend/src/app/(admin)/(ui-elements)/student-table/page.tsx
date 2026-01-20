@@ -4,7 +4,7 @@ import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
 import { getStudent } from "@/lib/api";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store"; // Adjust path if needed
+import { AppDispatch, RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
 import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 import StudentCard from "@/components/common/StudentCard";
@@ -25,9 +25,8 @@ export default function StudentTable() {
   const batch = useSelector((state: RootState) => state.batch.batches);
   const course = useSelector((state: RootState) => state.course.courses);
   const [loading, setLoading] = useState<boolean>(false);
-  const [reloadKey, setReloadKey] = useState(0);
   const [searchInput, setSearchInput] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     currentPage,
@@ -113,7 +112,7 @@ export default function StudentTable() {
 
         dispatch(setStudents(response.data || []));
         dispatch(setTotalPages(response.totalPages || 1));
-        dispatch(setCurrentPage(currentPage)); // reset page when search changes
+        dispatch(setCurrentPage(currentPage || 1)); // reset page when search changes
         dispatch(setTotal(response.total || 0));
       } catch (error) {
         console.error("Error fetching students:", error);
@@ -123,7 +122,7 @@ export default function StudentTable() {
     };
 
     fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, filters, reloadKey]);
+  }, [currentPage, searchQuery, sortField, sortOrder, filters]);
 
   // --- Handlers (memoized)
     
@@ -144,6 +143,8 @@ export default function StudentTable() {
   const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
     dispatch(setFilters(selectedFilters));
   }, [dispatch]);
+
+  console.log("student redux data:", currentPage, searchQuery, totalPages, totalCount);
 
   return (
     <div>
@@ -173,7 +174,7 @@ export default function StudentTable() {
               className="cursor-pointer"
               onClick={() => {
                 dispatch(setCurrentPage(1));       // 👈 reset to page 1
-                setReloadKey(prev => prev + 1); // 👈 force reload
+                dispatch(setSearchQuery(searchQuery)); 
               }}
             >
               <Tooltip

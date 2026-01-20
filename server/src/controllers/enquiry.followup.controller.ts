@@ -251,20 +251,6 @@ export async function completeFollowUpController(req: Request, res: Response) {
       return res.status(401).json({ error: 'Unauthorized request' });
     }
 
-    const email = user.email;   
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
-
-    // const updateEnquiryLeadStatus = await tenantPrisma.enquiry.update({
-    //   where: { id: enquiryId },
-    //   data: 
-    //   { leadStatus: "COLD"}
-    // })
-
     // ✅ 1. Update the enquiry’s lead status to WON (or COLD if you prefer)
     const updatedEnquiry = await tenantPrisma.enquiry.update({
       where: { id: enquiryId },
@@ -274,19 +260,6 @@ export async function completeFollowUpController(req: Request, res: Response) {
       },
     });
 
-    //const updateEnquiryLeadStatus = await tenantPrisma.enquiry.update({ where: { id: enquiryId}, data: { leadStatus: "HOT"}});
-
-    console.log("Updated Lead Status to WON", updatedEnquiry);
-
-    // 3. Update student under that admin
-    // const followUp = await tenantPrisma.followUp.update({
-    //     where: { id },
-    //     data: {
-    //     doneAt: new Date(),
-    //     followUpStatus: 'COMPLETED',
-    //     },
-    // });
-
     // ✅ 2. Mark all previous follow-ups for this enquiry as COMPLETED
     const completeOldFollowUps = await tenantPrisma.followUp.updateMany({
       where: { enquiryId },
@@ -294,15 +267,6 @@ export async function completeFollowUpController(req: Request, res: Response) {
     });
 
     console.log("followUp Updated Created Successfully", completeOldFollowUps);
-
-    // const createNewFollowUp = await tenantPrisma.followUp.create({
-    //   data: {
-    //     enquiry: { connect: { id: enquiryId } },
-    //     remark,
-    //     doneAt: new Date(),
-    //     followUpStatus: "COMPLETED"
-    //   },
-    // });
 
      // ✅ 3. Create one final completed follow-up with the user remark
     const finalFollowUp = await tenantPrisma.followUp.create({

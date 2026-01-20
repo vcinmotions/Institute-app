@@ -176,8 +176,6 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
     { code: "AU", label: "+61" },
   ];
 
-  const [facultyList, setFacultyList] = useState([]);
-
   const [batchList, setBatchList] = useState([]);
   console.log("useEffect triggered — enquiryData:", enquiryData);
   console.log("useEffect triggered — batch:", batch);

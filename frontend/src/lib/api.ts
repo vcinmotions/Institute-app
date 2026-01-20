@@ -1,6 +1,6 @@
 // src/lib/api.ts
 import axios from "axios";
-import { apiClientNew } from "./apiClient";
+import { apiClient, apiClientNew } from "./apiClient";
 
 interface GetEnquiryParams {
   token: string;
@@ -33,13 +33,6 @@ interface GetStudentCourseParams {
   facultyId?: string;
 }
 
-const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5001/api",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
 // apiClient.interceptors.response.use(
 //   (response) => response,
 //   (error) => {
@@ -54,7 +47,7 @@ const apiClient = axios.create({
 // );
 
 // Example POST request
-export const createUser = async (userData: {
+export const loginUser = async (userData: {
   email: string;
   password: string;
 }) => {
@@ -969,7 +962,7 @@ export const createAdmission = async (token: string, formData: FormData) => {
 };
 
 // 🔧 FIXED getUser API with token header
-export const createCourse = async (token: string, formData: FormData) => {
+export const assignCourseToStudent = async (token: string, formData: FormData) => {
   const response = await apiClient.post(`/add-course`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,

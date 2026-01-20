@@ -33,11 +33,11 @@ export const useCreateCourse = () => {
       console.log(
         "get course List after create new course:",
         updated,
-        updated.data,
+        updated.course,
       );
 
       // ✅ Only dispatch the array part
-      dispatch(setCourses(updated.data));
+      dispatch(setCourses(updated.course));
     },
 
     onError: (error: any) => {

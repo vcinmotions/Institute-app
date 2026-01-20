@@ -27,6 +27,7 @@ import EditEnquiryForm from "../form/form-elements/EditEnquiryForm";
 import { Tooltip } from "@heroui/react";
 import ShowForRoles from "@/app/utils/ShowForRoles";
 import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
+import { canEditEnquiry, canHoldEnquiry, canMarkLost, canMarkWon } from "@/domain/enquiry/rules";
 
 type FollowUpModalType =
   | "createNew"
@@ -57,7 +58,6 @@ export default function EnquiryDataTable({
   const [showForm, setShowForm] = useState(false);
   const dispatch = useDispatch();
   const [followUpData, setFollowUpData] = useState<any>(null);
-  const [enquiryDetail, setEnquiryDetail] = useState(false);
   const [selectedEnquiryData, setSelectedEnquiryData] = useState<any>(null); // You can strongly type this
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -68,16 +68,6 @@ export default function EnquiryDataTable({
   const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
     null,
   );
-
-  // const STATUS_COLOR_MAP: Record<string, any> = {
-  //   COLD: "primary",
-  //   HOT: "error",
-  //   WARM: "warning",
-  //   WON: "success",
-  //   HOLD: "info",
-  //   LOST: "lost"
-  // };
-
   const [showTimelineModal, setShowTimelineModal] = useState(false);
   const [showCreateNextModal, setShowCreateNextModal] = useState(false);
 
@@ -268,11 +258,13 @@ export default function EnquiryDataTable({
                     onClick={() => onSort("createdAt")}
                   >
                     Created At
-                    <span>
-                      {sortField === "createdAt" && sortOrder === "asc"
-                        ? "▲"
-                        : "▼"}
-                    </span>
+                   <span>
+                    {sortField !== "createdAt"
+                      ? "↑↓"       // neutral
+                      : sortOrder === "asc"
+                      ? "↑"
+                      : "↓"}
+                  </span>
                   </button>
                 </TableCell>
                 <TableCell
@@ -315,7 +307,14 @@ export default function EnquiryDataTable({
             </TableHeader>
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {enquiries && enquiries.length > 0 ? (
-                enquiries.map((item: any) => (
+                enquiries.map((item: any) => {
+                  // ✅ DOMAIN RULES – ONE PLACE
+                  const canWon = canMarkWon(item.leadStatus);
+                  const canHold = canHoldEnquiry(item.leadStatus);
+                  const canLost = canMarkLost(item.leadStatus);
+                  const canEdit = canEditEnquiry(item.leadStatus);
+                
+                  return (
                   <TableRow key={item.id}>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.srNo}
@@ -371,9 +370,7 @@ export default function EnquiryDataTable({
                           allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]} // hide for others
                           className="rounded bg-gray-100 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
                         >
-                          
                           Follow-up
-                    
                         </Button>
                       </TableCell>
                     </ShowForRoles>
@@ -382,36 +379,20 @@ export default function EnquiryDataTable({
                       <div className="flex gap-3">
                         {/* 🟢 WON Button */}
                         <Tooltip
-                          isDisabled={
-                            item.leadStatus === "WON" ||
-                            item.leadStatus === "WARM" ||
-                            item.leadStatus === "LOST"
-                          }
+                          isDisabled={!canWon}
                           className="rounded bg-gray-200 text-[10px]"
                           content="WON"
                         >
                           <span
-                            className={`text-lg text-green-800 active:opacity-50 dark:text-green-200 ${
-                              item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM" ||
-                              item.leadStatus === "LOST"
+                            className={`text-lg text-green-800 active:opacity-50 dark:text-green-200 ${!canWon
                                 ? "pointer-events-none cursor-not-allowed opacity-50"
                                 : "cursor-pointer"
                             }`}
                             onClick={() => {
-                              if (
-                                item.leadStatus === "WON" ||
-                                item.leadStatus === "WARM" || 
-                                item.leadStatus === "LOST"
-                              )
-                                return;
+                              if (!canMarkWon(item.leadStatus)) return;
                               handleCompleteFollowUpHandler(item.id);
                             }}
-                            aria-disabled={
-                              item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM" ||
-                              item.leadStatus === "LOST"
-                            }
+                            aria-disabled={!canWon}
                           >
                             {/* <TaskIcon /> */}
                             <svg
@@ -449,37 +430,21 @@ export default function EnquiryDataTable({
                         </Tooltip>
 
                         <Tooltip
-                          isDisabled={
-                            item.leadStatus === "WON" ||
-                            item.leadStatus === "WARM" || 
-                            item.leadStatus === "LOST"
-                          }
+                          isDisabled={!canHold}
                           className="rounded bg-gray-200 text-[10px]"
                           color="danger"
                           content="HOLD"
                         >
                           <span
-                            className={`text-lg text-yellow-400 active:opacity-50 dark:text-yellow-200 ${
-                              item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM" || 
-                              item.leadStatus === "LOST"
+                            className={`text-lg text-yellow-400 active:opacity-50 dark:text-yellow-200 ${!canHold
                                 ? "pointer-events-none cursor-not-allowed opacity-50"
                                 : "cursor-pointer"
                             }`}
                             onClick={() => {
-                              if (
-                                item.leadStatus === "WON" ||
-                                item.leadStatus === "WARM" || 
-                                item.leadStatus === "LOST"
-                              )
-                                return;
+                              if (!canHoldEnquiry(item.leadStatus)) return;
                               handleHoldEnquiryHandler(item.id);
                             }}
-                            aria-disabled={
-                              item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM" || 
-                              item.leadStatus === "LOST"
-                            }
+                            aria-disabled={!canHold}
                           >
                             {/* <TrashBinIcon /> */}
                             <svg
@@ -501,29 +466,17 @@ export default function EnquiryDataTable({
                         </Tooltip>
 
                         <Tooltip
-                          isDisabled={
-                            item.leadStatus === "WON" ||
-                            item.leadStatus === "WARM" || 
-                                item.leadStatus === "LOST"
-                          }
+                          isDisabled={!canLost}
                           className="rounded bg-gray-200 text-[10px]"
                           content="LOST"
                         >
                           <span
-                            className={`text-lg text-red-600 active:opacity-50 dark:text-red-200 ${
-                              item.leadStatus === "WON" ||
-                              item.leadStatus === "WARM" || 
-                                item.leadStatus === "LOST"
+                            className={`text-lg text-red-600 active:opacity-50 dark:text-red-200 ${!canLost
                                 ? "pointer-events-none cursor-not-allowed opacity-50"
                                 : "cursor-pointer"
                             }`}
                             onClick={() => {
-                              if (
-                                item.leadStatus === "WON" ||
-                                item.leadStatus === "WARM" || 
-                                item.leadStatus === "LOST"
-                              )
-                                return;
+                              if (!canMarkLost(item.leadStatus)) return;
                               handleLostEnquiryHandler(item.id);
                             }}
                           >
@@ -554,26 +507,15 @@ export default function EnquiryDataTable({
                         content="Edit Enquiry"
                       >
                         <span
-                          className = {`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${
-                            item.leadStatus === "WON" || item.leadStatus === "LOST"  || 
-                            item.leadStatus === "LOST"
-                              ? "pointer-events-none cursor-not-allowed opacity-50"
-                              : "cursor-pointer"
+                          className = {`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${!canEdit 
+                            ? "pointer-events-none cursor-not-allowed opacity-50"
+                            : "cursor-pointer"
                           }`}
                           onClick={() => {
-                            if (
-                              item.leadStatus === "WON" ||
-                              item.leadStatus === "LOST" || 
-                              item.leadStatus === "LOST"
-                            )
-                              return;
+                            if (!canEditEnquiry(item.leadStatus)) return;
                             handleEditEnquiry(item);
                           }}
-                          aria-disabled={
-                            item.leadStatus === "WON" ||
-                            item.leadStatus === "WARM" || 
-                            item.leadStatus === "LOST"
-                          }
+                          aria-disabled={!canEdit}
                         >
                           {/* <PencilIcon /> */}
                           <svg
@@ -595,7 +537,7 @@ export default function EnquiryDataTable({
                       </Tooltip>
                     </TableCell>
                   </TableRow>
-                ))
+                )})
               ) : (
                 <TableRow>
                   <TableCell

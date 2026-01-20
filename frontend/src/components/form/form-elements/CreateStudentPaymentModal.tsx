@@ -99,17 +99,52 @@ export default function CreateStudentPaymentModal({
     }));
   };
 
+  const validate = () => {
+    const newErrors: Partial<PaymentData> = {};
+
+    if (!amountPaid.trim()) newErrors.amountPaid = "Amount is required.";
+    if (!paymentDate.trim()) newErrors.paymentDate = "Date is required.";
+    if (!paymentMode.trim()) newErrors.paymentMode = "Mode is required.";
+
+    setErrors(newErrors);
+
+    setTimeout(() => setErrors({}), 2000);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async () => {
-    const validationErrors: Partial<PaymentData> = {};
 
-    if (!amountPaid.trim()) validationErrors.amountPaid = "Amount is required.";
-    if (!paymentDate)
-      validationErrors.paymentDate = "Payment date is required.";
-    if (!paymentMode.trim())
-      validationErrors.paymentMode = "Payment mode is required.";
+    
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    if (!validate()) {
+      setAlert({
+        show: true,
+        title: "Validation Error",
+        message: "Please enter all inputs.",
+        variant: "error",
+      });
+
+      setTimeout(() => {
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 3000);
+
+      return;
+    }
+
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      setAlert({
+        show: true,
+        title: "Unauthorized",
+        message: "Token not found. Please log in again.",
+        variant: "error",
+      });
+
+      setTimeout(() => {
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
+
       return;
     }
 
@@ -123,11 +158,6 @@ export default function CreateStudentPaymentModal({
     const id = payment?.id;
     console.log("GET PAYMENT STUDENTFEE ID:", id);
 
-    const token = sessionStorage.getItem("token");
-
-    if (!token) {
-      throw new Error("Token Not Found");
-    }
     try {
       await createStudentPayment({
         amountPaid: parseFloat(amountPaid),
@@ -164,6 +194,7 @@ export default function CreateStudentPaymentModal({
     <ModalCard title="Student Payment" oncloseModal={onCloseModal}>
       <div className="space-y-4">
         {/* Amount Paid */}
+        <div>
         <label className="block text-sm text-gray-700 dark:text-gray-300">
           Amount Paid
         </label>
@@ -179,7 +210,9 @@ export default function CreateStudentPaymentModal({
         {errors.amountPaid && (
           <p className="text-sm text-red-500">{errors.amountPaid}</p>
         )}
+        </div>
 
+        <div>
         {/* Payment Date */}
         <label className="block text-sm text-gray-700 dark:text-gray-300">
           Payment Date
@@ -195,7 +228,9 @@ export default function CreateStudentPaymentModal({
         {errors.paymentDate && (
           <p className="text-sm text-red-500">{errors.paymentDate}</p>
         )}
+        </div>
 
+        <div>
         {/* Payment Mode */}
         <label className="block text-sm text-gray-700 dark:text-gray-300">
           Payment Mode
@@ -215,6 +250,7 @@ export default function CreateStudentPaymentModal({
         {errors.paymentMode && (
           <p className="text-sm text-red-500">{errors.paymentMode}</p>
         )}
+        </div>
 
         {/* Action Buttons */}
         <div className="mt-6 flex justify-end gap-3">

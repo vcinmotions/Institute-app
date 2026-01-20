@@ -10,7 +10,6 @@ import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from 
 import CourseDataTable from "@/components/tables/CourseDataTable";
 import CourseForm from "@/components/form/form-elements/CreateNewCourseForm";
 import { setCourses, setCurrentPage, setSearchQuery, setSort, setTotal, setTotalPages } from "@/store/slices/courseSlice";
-import { setBatches } from "@/store/slices/batchSlice";
 import StudentCard from "@/components/common/StudentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
@@ -18,8 +17,8 @@ import useDebounce from "@/hooks/useDebounce";
 export default function CourseTable() {
   const [showForm, setShowForm] = useState(false);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
-  const batch = useSelector((state: RootState) => state.batch.batches);
-  const courses = useSelector((state: RootState) => state.course.courses);
+  const batch = useSelector((state: RootState) => state.batch.batches ?? []);
+  const courses = useSelector((state: RootState) => state.course.courses ?? []);
   const [loading, setLoading] = useState<boolean>(false);
   const { currentPage, total, totalPages, searchQuery, sortField, sortOrder } = useSelector((state: RootState) => state.course);
   // 1. Separate state to track immediate input changes
@@ -66,7 +65,7 @@ export default function CourseTable() {
 
         console.log("COURSE IN COURSE TABLE:", response);
 
-        dispatch(setCourses(response.data || []));
+        dispatch(setCourses(response.course || []));
         dispatch(setTotalPages(response.totalPages || 1));
         dispatch(setTotal(response.total || 0));
       } catch (error) {

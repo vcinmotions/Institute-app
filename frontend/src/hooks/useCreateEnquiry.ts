@@ -58,16 +58,19 @@ export const useCreateEnquiry = () => {
 
       // Return token for onSuccess
       return { token };
-    },
+    },                                                 
 
     onSuccess: () => {
       // ✅ reload enquiry list (keeps current page automatically)
       queryClient.invalidateQueries({
         queryKey: ["enquiry"],
       });
+
+      console.log("INVALIDATEQUERIES TRIGGERED!")
     },
 
     onError: (error: any) => {
+      console.log("ERROR IN CREATE ENQUIRY:", error, error.response, error.message);
       const backend = error?.response?.data?.error || "Failed to create enquiry";
       dispatch(setError(backend));
       dispatch(setLoading(false));

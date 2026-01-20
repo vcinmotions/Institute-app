@@ -5,7 +5,7 @@ interface StudentState {
   students: any[];
   loading: boolean;
   error: string | null;
-  searchQuery: string | null;
+  searchQuery: string;
   total: number; // ✅ New field 
   totalPages: number; // ✅ New field 
   filters: Record<string, string | null>;
@@ -19,7 +19,7 @@ const initialState: StudentState = {
   students: [],
   loading: false,
   error: null,
-  searchQuery: null,
+  searchQuery: "",
   total: 0,
   totalPages: 1,
   filters: {},
@@ -41,7 +41,7 @@ const studentSlice = createSlice({
     setError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
     },
-    setSearchQuery(state, action: PayloadAction<string | null>) {
+    setSearchQuery(state, action: PayloadAction<string>) {
       state.searchQuery = action.payload;
     },
     setTotal(state, action: PayloadAction<number>) {

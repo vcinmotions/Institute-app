@@ -52,7 +52,7 @@ export const createEnquiryAPI = async (token: string, newEnquiry: Partial<Enquir
 export const getEnquiry = async ({
   token,
   page,
-  limit = 5,
+  limit,
   search = "",
   sortField,
   sortOrder,
@@ -79,9 +79,63 @@ export const getEnquiry = async ({
   return response.data;
 };
 
+export const getWonEnquiry = async ({
+  token,
+  page,
+  limit,
+  search = "",
+  sortField,
+  sortOrder,
+  leadStatus,
+  ...filters
+}: GetEnquiryParams) => {
+  const response = await apiClient.get("/won-enquiry", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page,
+      limit,
+      search,
+      sortField,
+      sortOrder,
+      leadStatus,
+      ...filters, // ✅ send filters to backend
+    },
+  });
+
+  return response.data;
+};
+
 // Edit Enquity API
 export const editEnquiryAPI = async (token: string, newEnquiryData: Partial<Enquiry>) => {
   const response = await apiClient.put("/edit-enquiry", newEnquiryData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🔧 FIXED getUser API with token header
+export const createHoldEnquiryAPI = async (
+  token: string,
+  newFollowUpData: any,
+) => {
+  const response = await apiClient.post(`/enquiry/hold`, newFollowUpData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🔧 FIXED getUser API with token header
+export const createLostEnquiryAPI = async (
+  token: string,
+  newFollowUpData: any,
+) => {
+  const response = await apiClient.post(`/enquiry/lost`, newFollowUpData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

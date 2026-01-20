@@ -2,9 +2,10 @@
 import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
 import redis from "../redis/redis";
-import { getEnquiries } from "../services/enquiry.service";
-import { enquiryQuerySchema } from "../validators/enquiry.query";
+import { convertEnquiryService, createEnquiryService, editEnquiryService, getEnquiries, getEnquiryByIdService, markEnquiryHoldService, markEnquiryLostService } from "../services/enquiry.service";
+import { enquiryCreateSchema, enquiryEditSchema, enquiryQuerySchema } from "../validators/enquiry.query";
 import { getWonEnquiries } from "../services/won.enquiry.service";
+import { logNotification } from "../utils/templates/notificationLogger";
 
 export async function addEnquiryController(req: Request, res: Response) {
   const { name, contact, course, source, email: enquiryEmail, alternateContact, age, location, gender, dob, referedBy } = req.body;
@@ -130,122 +131,174 @@ export async function addEnquiryController(req: Request, res: Response) {
   }
 }
 
+// export async function addEnquiryControllerNew(req: Request, res: Response) {
+//   // const { name, contact, email, source, courseId } = req.body;
+//   const { name, contact, courseId, source, email, alternateContact, location, city, gender, dob, referedBy } = req.body;
+
+//   if (!name || !contact) {
+//     return res.status(400).json({ error: "Missing required enquiry details" });
+//   }
+
+//   console.log("GET ENQUIRY CREATE DATA:", req.body)
+
+//   try {
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized" });
+//     }
+
+//     const clientAdminId = user.clientAdminId;
+
+//     // 1️⃣ Check for duplicate email
+//     if(email) {
+//     const existing = await tenantPrisma.enquiry.findFirst({
+//       where: { email },
+//     });
+
+    
+//     if (existing) {
+//       return res.status(409).json({
+//         error: "Email already exists in Enquiries. Use different Email!",
+//       });
+//     }
+//     }
+
+//     // 1️⃣ Check for duplicate email
+//     if(contact) {
+//     const existingContact = await tenantPrisma.enquiry.findFirst({
+//       where: { contact },
+//     });
+
+    
+//     if (existingContact) {
+//       return res.status(409).json({
+//         error: "Contact Already exists in Enquiries. Use different Contact details!",
+//       });
+//     }
+//     }
+
+//     // 2️⃣ Calculate age from DOB
+//     let age: number | null = null;
+//     if (dob) {
+//       const birthDate = new Date(dob);
+//       const today = new Date();
+
+//       age = today.getFullYear() - birthDate.getFullYear();
+//       const monthDiff = today.getMonth() - birthDate.getMonth();
+//       const dayDiff = today.getDate() - birthDate.getDate();
+
+//       // If birthday hasn't occurred yet this year, subtract 1
+//       if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+//         age -= 1;
+//       }
+//     }
+
+//     const last = await tenantPrisma.enquiry.findFirst({
+//       where: { clientAdminId },
+//       orderBy: { srNo: "desc" },
+//       select: { srNo: true },
+//     });
+
+//     const nextSrNo = (last?.srNo ?? 0) + 1;
+
+//     // 2️⃣ Create enquiry
+//     const enquiry = await tenantPrisma.enquiry.create({
+//       data: {
+//         srNo: nextSrNo,
+//         name,
+//         contact,
+//         email,
+//         source: source || null,
+//         alternateContact: alternateContact || null,
+//         age: age ? Number(age) : null,
+//         location: location || null,
+//         city: city || null,
+//         gender: gender || null,
+//         dob: dob ? new Date(dob) : null,
+//         referedBy: referedBy || null,
+//         clientAdminId,
+//       },
+//     });
+
+//     // 3️⃣ Link enquiry to multiple courses
+//     if (Array.isArray(courseId) && courseId.length > 0) {
+//       const linkData = courseId.map((id: string | number) => ({
+//         enquiryId: enquiry.id,
+//         courseId: Number(id),
+//         clientAdminId,
+//       }));
+
+//       await tenantPrisma.enquiryCourse.createMany({
+//         data: linkData,
+//       });
+//     }
+
+//     // 4️⃣ Create notification
+//     await tenantPrisma.notification.create({
+//       data: {
+//         message: `Create Follow-Up for ${email} (${contact})`,
+//         enquiryId: enquiry.id,
+//         clientAdminId,
+//       },
+//     });
+
+//     // 5️⃣ Log activity
+//     await logActivity({
+//       clientAdminId,
+//       entity: "Enquiry",
+//       entityId: enquiry.id,
+//       action: "CREATE",
+//       message: `New enquiry created: ${enquiry.id}`,
+//       dbUrl: user.dbUrl,
+//     });
+
+//     return res.status(201).json({
+//       message: "Enquiry created successfully",
+//       enquiry,
+//     });
+//   } catch (err) {
+//     console.error("Error creating enquiry:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
+
 export async function addEnquiryControllerNew(req: Request, res: Response) {
-  // const { name, contact, email, source, courseId } = req.body;
-  const { name, contact, courseId, source, email, alternateContact, location, city, gender, dob, referedBy } = req.body;
-
-  if (!name || !contact) {
-    return res.status(400).json({ error: "Missing required enquiry details" });
-  }
-
-  console.log("GET ENQUIRY CREATE DATA:", req.body)
-
   try {
-    const tenantPrisma = req.tenantPrisma;
+    const prisma = req.tenantPrisma;
     const user = req.user;
 
-    if (!tenantPrisma || !user || typeof user === "string") {
+    if (!prisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const clientAdminId = user.clientAdminId;
+    console.log("ENQUIRY DATA TO CREATE ENQUIRY IN BODY:", req.body);
 
-    // 1️⃣ Check for duplicate email
-    if(email) {
-    const existing = await tenantPrisma.enquiry.findFirst({
-      where: { email },
+    // ✅ Validate input
+    const data = enquiryCreateSchema.parse(req.body);
+
+    console.log("SUCCESSFUL ENQURY CREATE BODY PARSED!");
+
+    // ✅ Call service layer
+    const enquiry = await createEnquiryService({
+      prisma,
+      clientAdminId: user.clientAdminId,
+      data,
     });
 
-    
-    if (existing) {
-      return res.status(409).json({
-        error: "Email already exists in Enquiries. Use different Email!",
-      });
-    }
-    }
+    console.log("SUCCESSFUL ENQURY CREATED!");
 
-    // 1️⃣ Check for duplicate email
-    if(contact) {
-    const existingContact = await tenantPrisma.enquiry.findFirst({
-      where: { contact },
-    });
+    // ✅ Side effects
+    await logNotification({
+      clientAdminId: user.clientAdminId,
+      enquiryId: enquiry.id,
+      message: `New enquiry created for ${enquiry.name} - ${enquiry.contact.split("+91")[1]}`,
+      dbUrl: user.dbUrl,
+    })
 
-    
-    if (existingContact) {
-      return res.status(409).json({
-        error: "Contact Already exists in Enquiries. Use different Contact details!",
-      });
-    }
-    }
-
-    // 2️⃣ Calculate age from DOB
-    let age: number | null = null;
-    if (dob) {
-      const birthDate = new Date(dob);
-      const today = new Date();
-
-      age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      const dayDiff = today.getDate() - birthDate.getDate();
-
-      // If birthday hasn't occurred yet this year, subtract 1
-      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-        age -= 1;
-      }
-    }
-
-    const last = await tenantPrisma.enquiry.findFirst({
-      where: { clientAdminId },
-      orderBy: { srNo: "desc" },
-      select: { srNo: true },
-    });
-
-    const nextSrNo = (last?.srNo ?? 0) + 1;
-
-    // 2️⃣ Create enquiry
-    const enquiry = await tenantPrisma.enquiry.create({
-      data: {
-        srNo: nextSrNo,
-        name,
-        contact,
-        email,
-        source: source || null,
-        alternateContact: alternateContact || null,
-        age: age ? Number(age) : null,
-        location: location || null,
-        city: city || null,
-        gender: gender || null,
-        dob: dob ? new Date(dob) : null,
-        referedBy: referedBy || null,
-        clientAdminId,
-      },
-    });
-
-    // 3️⃣ Link enquiry to multiple courses
-    if (Array.isArray(courseId) && courseId.length > 0) {
-      const linkData = courseId.map((id: string | number) => ({
-        enquiryId: enquiry.id,
-        courseId: Number(id),
-        clientAdminId,
-      }));
-
-      await tenantPrisma.enquiryCourse.createMany({
-        data: linkData,
-      });
-    }
-
-    // 4️⃣ Create notification
-    await tenantPrisma.notification.create({
-      data: {
-        message: `Create Follow-Up for ${email} (${contact})`,
-        enquiryId: enquiry.id,
-        clientAdminId,
-      },
-    });
-
-    // 5️⃣ Log activity
     await logActivity({
-      clientAdminId,
+      clientAdminId: user.clientAdminId,
       entity: "Enquiry",
       entityId: enquiry.id,
       action: "CREATE",
@@ -257,122 +310,174 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
       message: "Enquiry created successfully",
       enquiry,
     });
-  } catch (err) {
+  } catch (err: any) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({ error: err.errors });
+    }
+
+    if (err.message?.includes("exists")) {
+      return res.status(409).json({ error: err.message });
+    }
+
+    if (err.name === "ZodError") {
+      console.error("Zod validation failed:", err.errors);
+      return res.status(400).json({ error: err.errors });
+    } 
+    
+    console.error("Error creating enquiry:", err);
+    return res.status(500).json({ error: err.message || "Internal server error" });
+
     console.error("Error creating enquiry:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
 
-export async function editEnquiryController(req: Request, res: Response) {
-  const { id, name, contact, courseId, source, email: enquiryEmail, alternateContact, dob, gender, location, city, referedBy } = req.body;
+// export async function editEnquiryController(req: Request, res: Response) {
+//   const { id, name, contact, courseId, source, email: enquiryEmail, alternateContact, dob, gender, location, city, referedBy } = req.body;
 
-  console.log("get Edit Enquiry data", req.body);
+//   console.log("get Edit Enquiry data", req.body);
 
-  if (!id || !name || !contact || !courseId ) {
-    return res.status(400).json({ error: "Missing required enquiry details" });
-  }
+//   if (!id || !name || !contact || !courseId ) {
+//     return res.status(400).json({ error: "Missing required enquiry details" });
+//   }
 
+//   try {
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user; // Injected by middleware
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
+
+//     const clientAdminId = user.clientAdminId;
+
+//     const existingEnquiry = await tenantPrisma.enquiry.findUnique({
+//       where: { id },
+//     });
+
+//     console.log("GET EXISTING ENQUIRY:", existingEnquiry);
+
+//     if (!existingEnquiry) {
+//       return res.status(404).json({ error: "Enquiry not found" });
+//     }
+
+//     if (existingEnquiry.leadStatus === "WON") {
+//       return res
+//         .status(409)
+//         .json({ error: "Enquiry has already been converted to admission" });
+//     }
+
+//     // 2️⃣ Calculate age from DOB
+//     let age: number | null = null;
+//     if (dob) {
+//       const birthDate = new Date(dob);
+//       const today = new Date();
+
+//       age = today.getFullYear() - birthDate.getFullYear();
+//       const monthDiff = today.getMonth() - birthDate.getMonth();
+//       const dayDiff = today.getDate() - birthDate.getDate();
+
+//       // If birthday hasn't occurred yet this year, subtract 1
+//       if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+//         age -= 1;
+//       }
+//     }
+
+//     const updatedEnquiry = await tenantPrisma.enquiry.update({
+//       where: { id },
+//       data: {
+//         name,
+//         contact,
+//         email: enquiryEmail,
+//         source: source || null,
+//         alternateContact: alternateContact || null,
+//         age: age ? Number(age) : null,
+//         location: location || null,
+//         city: city || null,
+//         gender: gender || null,
+//         dob: dob ? new Date(dob) : null,
+//         referedBy: referedBy || null,
+//         clientAdminId: clientAdminId,
+//       },
+//     });
+
+//     // 3️⃣ Link enquiry to multiple courses
+//     // 3️⃣ Link enquiry to multiple courses
+//     if (Array.isArray(courseId) && courseId.length > 0) {
+//       // 1️⃣ Delete old existing mappings
+//       await tenantPrisma.enquiryCourse.deleteMany({
+//         where: { enquiryId: id },
+//       });
+
+//       // 2️⃣ Create new mappings
+//       const linkData = courseId.map((course) => ({
+//         enquiryId: id, // FIX: enquiryId should be ENQUIRY ID (not course!)
+//         courseId: Number(course),
+//         clientAdminId,
+//       }));
+
+//       await tenantPrisma.enquiryCourse.createMany({
+//         data: linkData,
+//       });
+//     }
+
+//     console.log("ENQIRY EDITED!");
+
+//     // ✅ Log the update
+//     await logActivity({
+//       clientAdminId: clientAdminId,
+//       entity: "Enquiry",
+//       entityId: updatedEnquiry.id.toString(),
+//       action: "UPDATE",
+//       message: `Enquiry updated: ${updatedEnquiry.id}`,
+//       dbUrl: user.dbUrl,
+//     });
+
+//     console.log("Enquiry Updated Successfully:", updatedEnquiry);
+
+//     return res.status(200).json({
+//       message: "Enquiry updated successfully",
+//       enquiry: updatedEnquiry,
+//     });
+//   } catch (err) {
+//     console.error("Error updating Enquiry:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
+
+export async function editEnquiryController(req: any, res: any) {
   try {
-    const tenantPrisma = req.tenantPrisma;
-    const user = req.user; // Injected by middleware
+    const prisma = req.tenantPrisma;
+    const user = req.user;
 
-    if (!tenantPrisma || !user || typeof user === "string") {
-      return res.status(401).json({ error: "Unauthorized request" });
+    if (!prisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const clientAdminId = user.clientAdminId;
+    if (!req.tenantPrisma || !req.user || typeof req.user === "string") {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
-    const existingEnquiry = await tenantPrisma.enquiry.findUnique({
-      where: { id },
+    // 1️⃣ Validate request
+    const data = enquiryEditSchema.parse(req.body);
+
+    // 2️⃣ Call service
+    const enquiry = await editEnquiryService({
+      prisma: req.tenantPrisma,
+      clientAdminId: req.user.clientAdminId,
+      data,
     });
-
-    console.log("GET EXISTING ENQUIRY:", existingEnquiry);
-
-    if (!existingEnquiry) {
-      return res.status(404).json({ error: "Enquiry not found" });
-    }
-
-    if (existingEnquiry.leadStatus === "WON") {
-      return res
-        .status(409)
-        .json({ error: "Enquiry has already been converted to admission" });
-    }
-
-    // 2️⃣ Calculate age from DOB
-    let age: number | null = null;
-    if (dob) {
-      const birthDate = new Date(dob);
-      const today = new Date();
-
-      age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      const dayDiff = today.getDate() - birthDate.getDate();
-
-      // If birthday hasn't occurred yet this year, subtract 1
-      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-        age -= 1;
-      }
-    }
-
-    const updatedEnquiry = await tenantPrisma.enquiry.update({
-      where: { id },
-      data: {
-        name,
-        contact,
-        email: enquiryEmail,
-        source: source || null,
-        alternateContact: alternateContact || null,
-        age: age ? Number(age) : null,
-        location: location || null,
-        city: city || null,
-        gender: gender || null,
-        dob: dob ? new Date(dob) : null,
-        referedBy: referedBy || null,
-        clientAdminId: clientAdminId,
-      },
-    });
-
-    // 3️⃣ Link enquiry to multiple courses
-    // 3️⃣ Link enquiry to multiple courses
-    if (Array.isArray(courseId) && courseId.length > 0) {
-      // 1️⃣ Delete old existing mappings
-      await tenantPrisma.enquiryCourse.deleteMany({
-        where: { enquiryId: id },
-      });
-
-      // 2️⃣ Create new mappings
-      const linkData = courseId.map((course) => ({
-        enquiryId: id, // FIX: enquiryId should be ENQUIRY ID (not course!)
-        courseId: Number(course),
-        clientAdminId,
-      }));
-
-      await tenantPrisma.enquiryCourse.createMany({
-        data: linkData,
-      });
-    }
-
-    console.log("ENQIRY EDITED!");
-
-    // ✅ Log the update
-    await logActivity({
-      clientAdminId: clientAdminId,
-      entity: "Enquiry",
-      entityId: updatedEnquiry.id.toString(),
-      action: "UPDATE",
-      message: `Enquiry updated: ${updatedEnquiry.id}`,
-      dbUrl: user.dbUrl,
-    });
-
-    console.log("Enquiry Updated Successfully:", updatedEnquiry);
 
     return res.status(200).json({
       message: "Enquiry updated successfully",
-      enquiry: updatedEnquiry,
+      enquiry,
     });
-  } catch (err) {
-    console.error("Error updating Enquiry:", err);
-    return res.status(500).json({ error: "Internal server error" });
+  } catch (error: any) {
+    if (error.name === "ZodError") {
+      return res.status(400).json({ error: error.errors });
+    }
+
+    return res.status(400).json({ error: error.message });
   }
 }
 
@@ -731,62 +836,94 @@ export async function getWonEnquiryController(req: Request, res: Response) {
   }
 }
 
+// export async function getEnquiryByIdController(req: Request, res: Response) {
+//   const { id } = req.params;
+
+//   if (!id) {
+//     return res
+//       .status(400)
+//       .json({ error: "Missing tenant Id or Enquiry details" });
+//   }
+
+//   console.log("Enquiry Id", id);
+
+//   try {
+//     // 1. Use values injected by middleware
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+
+//     console.log("Get tenant user from Enquiry Controller", user);
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
+
+//     const email = user.email;
+
+//     // 2. Get client admin (we assume there's only one per tenant for now)
+//     const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
+//       where: { email: email },
+//     });
+//     if (!clientAdmin) {
+//       return res.status(404).json({ error: "Client admin not found" });
+//     }
+
+//     // 3. Create student under that admin
+//     const enquiry = await tenantPrisma.enquiry.findUnique({
+//       where: {
+//         id: id,
+//       },
+//       include: {
+//         enquiryCourse: {
+//           include: {
+//             course: true,
+//           },
+//         },
+//       },
+//     });
+
+//     console.log("Enquiry Fetched Successfully", enquiry);
+
+//     return res
+//       .status(201)
+//       .json({ message: "Enquiry Fetched successfully", enquiry });
+//   } catch (err) {
+//     console.error("Error deleted Enquiry:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
+
 export async function getEnquiryByIdController(req: Request, res: Response) {
-  const { id } = req.params;
-
-  if (!id) {
-    return res
-      .status(400)
-      .json({ error: "Missing tenant Id or Enquiry details" });
-  }
-
-  console.log("Enquiry Id", id);
-
   try {
-    // 1. Use values injected by middleware
-    const tenantPrisma = req.tenantPrisma;
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ error: "Enquiry ID is required" });
+    }
+
+    const prisma = req.tenantPrisma;
     const user = req.user;
 
-    console.log("Get tenant user from Enquiry Controller", user);
-
-    if (!tenantPrisma || !user || typeof user === "string") {
+    if (!prisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email: email },
-    });
-    if (!clientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
-    }
-
-    // 3. Create student under that admin
-    const enquiry = await tenantPrisma.enquiry.findUnique({
-      where: {
-        id: id,
-      },
-      include: {
-        enquiryCourse: {
-          include: {
-            course: true,
-          },
-        },
-      },
+    const enquiry = await getEnquiryByIdService({
+      prisma,
+      enquiryId: id,
+      clientAdminId: user.clientAdminId,
     });
 
-    console.log("Enquiry Fetched Successfully", enquiry);
-
-    return res
-      .status(201)
-      .json({ message: "Enquiry Fetched successfully", enquiry });
-  } catch (err) {
-    console.error("Error deleted Enquiry:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(200).json({
+      message: "Enquiry fetched by Id successfully",
+      enquiry,
+    });
+  } catch (error: any) {
+    console.error("Error fetching enquiry:", error);
+    return res.status(500).json({ error: error.message });
   }
 }
+
 
 export async function deleteEnquiryController(req: Request, res: Response) {
   const { id } = req.params;
@@ -861,198 +998,249 @@ export async function deleteEnquiryController(req: Request, res: Response) {
 }
 
 export async function convertEnquiryController(req: Request, res: Response) {
-  const { id } = req.params;
-
-  if (!id) {
-    return res
-      .status(400)
-      .json({ error: "Missing tenant email or Enquiry details" });
-  }
-
-  console.log("Enquiry data", id);
-
   try {
     // 1. Use values injected by middleware
-    const tenantPrisma = req.tenantPrisma;
+    const prisma = req.tenantPrisma;
     const user = req.user;
 
-    console.log("Get tenant user from middlerware", user);
-
-    if (!tenantPrisma || !user || typeof user === "string") {
+    if (!prisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    const { id } = req.params;
 
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email: email },
-    });
-    if (!clientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
+    if (!id) {
+      return res
+        .status(400)
+        .json({ error: "Missing tenant email or Enquiry details" });
     }
 
-    // 3. Create student under that admin
-    const enquiry = await tenantPrisma.enquiry.update({
-      where: { id },
-      data: { isConverted: true },
+    const enquiry = await convertEnquiryService({
+      prisma,
+      enquiryId: id,
+      clientAdminId: user.clientAdminId,
     });
-
-    console.log("Enquiry Follow Up Created Successfully", enquiry);
 
     return res
       .status(201)
-      .json({ message: "Enquiry Follow Up created successfully", enquiry });
+      .json({ message: "Enquiry Converting Enquiry to WON successfully", enquiry });
   } catch (err) {
-    console.error("Error creating Enquiry Follow Up:", err);
+    console.error("Error Converting Enquiry to WON:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
 
-export async function lostdEnquiryController(req: Request, res: Response) {
-  const { remark, enquiryId } = req.body;
+// export async function lostEnquiryController(req: Request, res: Response) {
+//   const { remark, enquiryId } = req.body;
 
-  if (!remark || !enquiryId) {
-    return res
-      .status(400)
-      .json({ error: "Missing tenant email or Enquiry details" });
-  }
+//   if (!remark || !enquiryId) {
+//     return res
+//       .status(400)
+//       .json({ error: "Missing tenant email or Enquiry details" });
+//   }
 
-  console.log("Enquiry Follow Up data", remark);
+//   console.log("Enquiry Follow Up data", remark);
 
+//   try {
+//     // 1. Use values injected by middleware
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+
+//     console.log("Get tenant user from middlerware", user);
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
+
+//     const email = user.email;
+
+//     // 0. Get client admin (we assume there's only one per tenant for now)
+//     const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
+//       where: { email: email },
+//     });
+//     if (!clientAdmin) {
+//       return res.status(404).json({ error: "Client admin not found" });
+//     }
+
+//     // ✅ 1. Update the enquiry’s lead status to WON (or COLD if you prefer)
+//     const updatedEnquiry = await tenantPrisma.enquiry.update({
+//       where: { id: enquiryId },
+//       data: {
+//         leadStatus: "LOST", // You can also use "COLD" if that fits your workflow
+//       },
+//     });
+
+//     //const updateEnquiryLeadStatus = await tenantPrisma.enquiry.update({ where: { id: enquiryId}, data: { leadStatus: "HOT"}});
+
+//     console.log("Updated Lead Status to COLD", updatedEnquiry);
+
+//     // ✅ 2. Mark all previous follow-ups for this enquiry as COMPLETED
+//     const completeOldFollowUps = await tenantPrisma.followUp.updateMany({
+//       where: { enquiryId },
+//       data: { followUpStatus: "COMPLETED", doneAt: new Date() },
+//     });
+
+//     console.log("followUp Updated Created Successfully", completeOldFollowUps);
+
+//     // ✅ 3. Create one final completed follow-up with the user remark
+//     const finalFollowUp = await tenantPrisma.followUp.create({
+//       data: {
+//         enquiry: { connect: { id: enquiryId } },
+//         remark,
+//         doneAt: new Date(),
+//         followUpStatus: "MISSED",
+//       },
+//     });
+
+//     console.log("🔄 New Follow-up created successfully:", finalFollowUp);
+
+//     return res.status(201).json({
+//       message: "FollowUp Updated Created Successfully",
+//       finalFollowUp,
+//     });
+//   } catch (err) {
+//     console.error("Error followUp Updated:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
+
+export async function lostEnquiryController(req: Request, res: Response) {
   try {
-    // 1. Use values injected by middleware
-    const tenantPrisma = req.tenantPrisma;
+    const prisma = req.tenantPrisma;
     const user = req.user;
 
-    console.log("Get tenant user from middlerware", user);
-
-    if (!tenantPrisma || !user || typeof user === "string") {
+    if (!prisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
-
-    // 0. Get client admin (we assume there's only one per tenant for now)
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email: email },
-    });
-    if (!clientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
+    const { remark, enquiryId } = req.body;
+    if (!remark || !enquiryId) {
+      return res.status(400).json({ error: "Remark and Enquiry ID are required" });
     }
 
-    // ✅ 1. Update the enquiry’s lead status to WON (or COLD if you prefer)
-    const updatedEnquiry = await tenantPrisma.enquiry.update({
-      where: { id: enquiryId },
-      data: {
-        leadStatus: "LOST", // You can also use "COLD" if that fits your workflow
-      },
+    const result = await markEnquiryLostService({
+      prisma,
+      enquiryId,
+      clientAdminId: user.clientAdminId,
+      remark,
     });
 
-    //const updateEnquiryLeadStatus = await tenantPrisma.enquiry.update({ where: { id: enquiryId}, data: { leadStatus: "HOT"}});
-
-    console.log("Updated Lead Status to COLD", updatedEnquiry);
-
-    // ✅ 2. Mark all previous follow-ups for this enquiry as COMPLETED
-    const completeOldFollowUps = await tenantPrisma.followUp.updateMany({
-      where: { enquiryId },
-      data: { followUpStatus: "COMPLETED", doneAt: new Date() },
+    return res.status(200).json({
+      message: "Enquiry marked as LOST and final follow-up created",
+      enquiry: result.enquiry,
+      finalFollowUp: result.finalFollowUp,
     });
-
-    console.log("followUp Updated Created Successfully", completeOldFollowUps);
-
-    // ✅ 3. Create one final completed follow-up with the user remark
-    const finalFollowUp = await tenantPrisma.followUp.create({
-      data: {
-        enquiry: { connect: { id: enquiryId } },
-        remark,
-        doneAt: new Date(),
-        followUpStatus: "MISSED",
-      },
-    });
-
-    console.log("🔄 New Follow-up created successfully:", finalFollowUp);
-
-    return res.status(201).json({
-      message: "FollowUp Updated Created Successfully",
-      finalFollowUp,
-    });
-  } catch (err) {
-    console.error("Error followUp Updated:", err);
-    return res.status(500).json({ error: "Internal server error" });
+  } catch (err: any) {
+    console.error("Error marking enquiry as LOST:", err);
+    return res.status(500).json({ error: err.message });
   }
 }
+
+// export async function holdEnquiryController(req: Request, res: Response) {
+//   const { remark, enquiryId } = req.body;
+
+//   if (!remark || !enquiryId) {
+//     return res
+//       .status(400)
+//       .json({ error: "Missing tenant email or Enquiry details" });
+//   }
+
+//   console.log("Enquiry Follow Up data", remark);
+
+//   try {
+//     // 1. Use values injected by middleware
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+
+//     console.log("Get tenant user from middlerware", user);
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
+
+//     const email = user.email;
+
+//     // 2. Get client admin (we assume there's only one per tenant for now)
+//     const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
+//       where: { email: email },
+//     });
+//     if (!clientAdmin) {
+//       return res.status(404).json({ error: "Client admin not found" });
+//     }
+
+//     // ✅ 1. Update the enquiry’s lead status to WON (or COLD if you prefer)
+//     const updatedEnquiry = await tenantPrisma.enquiry.update({
+//       where: { id: enquiryId },
+//       data: {
+//         leadStatus: "HOLD", // You can also use "COLD" if that fits your workflow
+//       },
+//     });
+
+//     //const updateEnquiryLeadStatus = await tenantPrisma.enquiry.update({ where: { id: enquiryId}, data: { leadStatus: "HOT"}});
+
+//     console.log("Updated Lead Status to COLD", updatedEnquiry);
+
+//     // ✅ 2. Mark all previous follow-ups for this enquiry as COMPLETED
+//     const completeOldFollowUps = await tenantPrisma.followUp.updateMany({
+//       where: { enquiryId },
+//       data: { followUpStatus: "COMPLETED", doneAt: new Date() },
+//     });
+
+//     console.log("followUp Updated Created Successfully", completeOldFollowUps);
+
+//     // ✅ 3. Create one final completed follow-up with the user remark
+//     const finalFollowUp = await tenantPrisma.followUp.create({
+//       data: {
+//         enquiry: { connect: { id: enquiryId } },
+//         remark,
+//         doneAt: new Date(),
+//         followUpStatus: "MISSED",
+//       },
+//     });
+
+//     console.log("🔄 New Follow-up created successfully:", finalFollowUp);
+
+//     return res.status(201).json({
+//       message: "FollowUp Updated Created Successfully",
+//       finalFollowUp,
+//     });
+//   } catch (err) {
+//     console.error("Error followUp Updated:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
 
 export async function holdEnquiryController(req: Request, res: Response) {
-  const { remark, enquiryId } = req.body;
-
-  if (!remark || !enquiryId) {
-    return res
-      .status(400)
-      .json({ error: "Missing tenant email or Enquiry details" });
-  }
-
-  console.log("Enquiry Follow Up data", remark);
-
   try {
     // 1. Use values injected by middleware
-    const tenantPrisma = req.tenantPrisma;
+    const prisma = req.tenantPrisma;
     const user = req.user;
 
-    console.log("Get tenant user from middlerware", user);
-
-    if (!tenantPrisma || !user || typeof user === "string") {
+    if (!prisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email: email },
-    });
-    if (!clientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
+    const { remark, enquiryId } = req.body;
+    if (!remark || !enquiryId) {
+      return res.status(400).json({ error: "Remark and Enquiry ID are required" });
     }
 
     // ✅ 1. Update the enquiry’s lead status to WON (or COLD if you prefer)
-    const updatedEnquiry = await tenantPrisma.enquiry.update({
-      where: { id: enquiryId },
-      data: {
-        leadStatus: "HOLD", // You can also use "COLD" if that fits your workflow
-      },
+    const result = await markEnquiryHoldService({
+      prisma,
+      enquiryId,
+      clientAdminId: user.clientAdminId,
+      remark,
     });
 
-    //const updateEnquiryLeadStatus = await tenantPrisma.enquiry.update({ where: { id: enquiryId}, data: { leadStatus: "HOT"}});
-
-    console.log("Updated Lead Status to COLD", updatedEnquiry);
-
-    // ✅ 2. Mark all previous follow-ups for this enquiry as COMPLETED
-    const completeOldFollowUps = await tenantPrisma.followUp.updateMany({
-      where: { enquiryId },
-      data: { followUpStatus: "COMPLETED", doneAt: new Date() },
-    });
-
-    console.log("followUp Updated Created Successfully", completeOldFollowUps);
-
-    // ✅ 3. Create one final completed follow-up with the user remark
-    const finalFollowUp = await tenantPrisma.followUp.create({
-      data: {
-        enquiry: { connect: { id: enquiryId } },
-        remark,
-        doneAt: new Date(),
-        followUpStatus: "MISSED",
-      },
-    });
-
-    console.log("🔄 New Follow-up created successfully:", finalFollowUp);
+    console.log("HOLD HOLD HOLD HOLD HOLD HOLD")
 
     return res.status(201).json({
-      message: "FollowUp Updated Created Successfully",
-      finalFollowUp,
+      message: "Enquiry marked as HOLD and final follow-up created",
+      finalFollowUp: result,
     });
   } catch (err) {
-    console.error("Error followUp Updated:", err);
+    console.error("Error Enquiry marked as LOST and final follow-up created:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

@@ -10,22 +10,16 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useDispatch } from "react-redux";
 import { setCourses } from "@/store/slices/courseSlice";
-import {
-  useFetchAllCourses,
-  useFetchCourse,
-} from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { toast } from "sonner";
 import { setError } from "@/store/slices/enquirySlice";
 import Select from "@/components/form/Select";
 import Input from "@/components/form/input/InputField";
-import { today, getLocalTimeZone } from "@internationalized/date";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Label from "@/components/form/Label";
 import PhoneInput from "@/components/form/group-input/PhoneInput";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import { focusNextInput } from "@/app/utils/focusNext";
 import MultiSelect from "@/components/form/MultiSelect";
-import { Tooltip } from "@heroui/react";
 import { capitalizeWords } from "@/components/common/ToCapitalize";
 import {
   City,
@@ -35,6 +29,7 @@ import {
   IState,
   State,
 } from "country-state-city";
+import { countries } from "@/components/common/CountriesCode";
 
 interface EnquiryData {
   name: string;
@@ -67,14 +62,11 @@ export default function EnquiryForm() {
   });
   const branchState = useSelector((state: RootState) => state.auth.statelocation);
   const branchCountry = useSelector((state: RootState) => state.auth.country);
-   const [state, setState] = useState<IState[]>([]);
-    const [city, setCity] = useState<ICity[]>([]);
-  const courses = useSelector((state: RootState) => state.course.courses);
+  const [state, setState] = useState<IState[]>([]);
+  const [city, setCity] = useState<ICity[]>([]);
 
   const dispatch = useDispatch();
   const router = useRouter();
-
-  //const course = useSelector((state: RootState) => state.course.courses);
 
   // New state for alert
   const [alert, setAlert] = useState<{
@@ -91,13 +83,6 @@ export default function EnquiryForm() {
 
   const [errors, setErrors] = useState<Partial<EnquiryData>>({});
   const { mutate: createEnquiry } = useCreateEnquiry();
-  const countries = [
-    { code: "IN", label: "+91" },
-    { code: "US", label: "+1" },
-    { code: "GB", label: "+44" },
-    { code: "CA", label: "+1" },
-    { code: "AU", label: "+61" },
-  ];
 
   
    const genders = [
@@ -106,7 +91,6 @@ export default function EnquiryForm() {
     { value: "other", label: "Other" },
   ];
 
-  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const firstInputRef = useRef<HTMLInputElement>(null);
   const jumpInputRef = useRef<HTMLInputElement>(null);
 
@@ -127,8 +111,6 @@ export default function EnquiryForm() {
     }
   }, []);
 
-  console.log("CURRENT PAGE IN  CREATE ENQUIRY FORM;", currentPage);
-
   useEffect(() => {
     if (Object.values(form).length > 0) {
       console.log("JUMPINPTREF");
@@ -147,14 +129,6 @@ export default function EnquiryForm() {
       firstInputRef.current?.focus();
     }
   }, []);
-
-  console.log("Get Courses Name in Enquiry Form:", courses);
-
-  // const {
-  //   data: courseData,
-  //   isLoading: courseLoading,
-  //   isError: courseError,
-  // } = useFetchCourse();
 
   const {
     data: courseData,
@@ -194,23 +168,9 @@ export default function EnquiryForm() {
       newErrors.name = "Name is required.";
     }
 
-    // if (!newEnquiry.email.trim()) {
-    //   newErrors.email = "Email is required.";
-    // } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEnquiry.email)) {
-    //   newErrors.email = "Email is invalid.";
-    // }
-
     if (!newEnquiry.contact.trim()) {
       newErrors.contact = "Contact number is required.";
     }
-
-    // if (!newEnquiry.course.trim()) {
-    //   newErrors.course = "Course is required.";
-    // }
-
-    // if (!newEnquiry.source.trim()) {
-    //   newErrors.source = "Source is required.";
-    // }
 
     setErrors(newErrors);
 
@@ -218,20 +178,18 @@ export default function EnquiryForm() {
     return Object.keys(newErrors).length === 0;
   };
 
- const handlePhoneNumberChange = (phoneNumber: string) => {
-    // Extract digits only
-    const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+  const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+    // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+    const formattedNumber = code + phoneNumber;
 
-    const formattedNumber = "+91" + digitsOnly;
-
-    // Update input value (NO +91 here)
     setNewEnquiry((prev) => ({
       ...prev,
       contact: formattedNumber,
     }));
 
-    // Validation
-    if (digitsOnly.length === 10) {
+    setField("contact", formattedNumber);
+
+    if (phoneNumber.length === 10) {
       setErrors((prev) => ({ ...prev, contact: "" }));
     } else {
       setErrors((prev) => ({
@@ -241,17 +199,19 @@ export default function EnquiryForm() {
     }
   };
 
-  const handleAlternatePhoneNumberChange = (phoneNumber: string) => {
+  const handleAlternatePhoneNumberChange = (phoneNumber: string, code: string) => {
     // Extract digits only
     const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
 
-    const formattedNumber = "+91" + digitsOnly;
+    const formattedNumber = code + digitsOnly;
 
     // Update input value (NO +91 here)
     setNewEnquiry((prev) => ({
       ...prev,
       alternateContact: formattedNumber,
     }));
+
+    setField("alternateContact", formattedNumber); // <-- IMPORTANT
 
     // Validation
     if (digitsOnly.length === 10) {
@@ -345,13 +305,6 @@ export default function EnquiryForm() {
     setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
 
     firstInputRef.current?.focus();
-  };
-
-  const handleEnter = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      focusNextInput(e.currentTarget as HTMLElement);
-    }
   };
 
   const handleDateChange = (field: keyof EnquiryData, value: string) => {
@@ -526,20 +479,20 @@ export default function EnquiryForm() {
             </div>
           </div>
           <div>
-            <Label>Contact No. *</Label>
-            <div className="relative">
-              <PhoneInput
-                selectPosition="start"
-                countries={countries}
-                tabIndex={3}
-                placeholder="Enter Contact"
-                onChange={handlePhoneNumberChange}
-              />
-              {errors.contact && (
-                <p className="text-sm text-red-500">{errors.contact}</p>
-              )}
-            </div>
-          </div>{" "}
+                    <Label>Contact No. *</Label>
+                    <div className="relative">
+                      <PhoneInput
+                        selectPosition="start"
+                        countries={countries}
+                        tabIndex={3}
+                        placeholder="Enter Contact"
+                        onChange={handlePhoneNumberChange}
+                      />
+                      {errors.contact && (
+                        <p className="text-sm text-red-500">{errors.contact}</p>
+                      )}
+                    </div>
+                  </div>{" "}     
 
           <div>
           <Label>Alternate Conatct No.</Label>

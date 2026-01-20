@@ -17,7 +17,7 @@ import { setCurrentPage, setAdmissions, setFilters, setSearchQuery, setSort, set
 
 export default function AdmissionTable() {
   //const [enquiries, setEnquiries] = useState<any[]>([]);
-  const admission = useSelector((state: RootState) => state.admission.admissions);
+  const admission = useSelector((state: RootState) => state.admission.admissions ?? []);
   const total = useSelector((state: RootState) => state.admission.total);
   const totalPages = useSelector((state: RootState) => state.admission.totalPages);
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,6 +35,7 @@ export default function AdmissionTable() {
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
   const leadStatusOptions = [null, "HOT", "WARM", "COLD"] as const;
+
 
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing

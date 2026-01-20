@@ -8,7 +8,7 @@ import { EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { useCreateUser } from "@/hooks/useCreateUser";
+import { useLoginUser } from "@/hooks/useLoginUser";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
@@ -17,7 +17,7 @@ export default function SignInForm() {
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const { mutate, error, isSuccess, isPending } = useCreateUser();
+  const { mutate, error, isSuccess, isPending } = useLoginUser();
   const token = localStorage.getItem("token");
   const firstInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();

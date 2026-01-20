@@ -21,12 +21,14 @@ export default function BatchTable() {
   const [showForm, setShowForm] = useState(false);
   const { currentPage, total, totalPages, searchQuery, sortField, sortOrder,  } = useSelector((state: RootState) => state.batch)
   //const [enquiries, setEnquiries] = useState<any[]>([]);
-  const batch = useSelector((state: RootState) => state.batch.batches);
-  const labs = useSelector((state: RootState) => state.lab.labs);
+  const batch = useSelector((state: RootState) => state.batch.batches ?? []);
+  const labs = useSelector((state: RootState) => state.lab.labs ?? []);
   const [loading, setLoading] = useState<boolean>(false);
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
+
+  console.log("Redux state in edit:", useSelector(state => state));
 
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
@@ -65,7 +67,7 @@ export default function BatchTable() {
           sortOrder,
         });
 
-        dispatch(setBatches(response.data || []));
+        dispatch(setBatches(response.batch || []));
         dispatch(setTotalPages(response.totalPages || 1));
         dispatch(setTotal(response.total || 0));
       } catch (error) {

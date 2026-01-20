@@ -8,7 +8,6 @@ interface AdmissionState {
   error: string | null;
   total: number; // ✅ New field
   totalPages: number; // ✅ New field
-  totalFiltered: number; // ✅ New field
   currentPage: number; // ✅ New field
   totalConverted: number; // ✅ New field
   totalNotConverted: number; // ✅ New field
@@ -31,7 +30,6 @@ const initialState: AdmissionState = {
   leadStatus: null,
   total: 0,
   totalPages: 1,
-  totalFiltered: 0,
   currentPage: 1,
   totalConverted: 0,
   totalNotConverted: 0,

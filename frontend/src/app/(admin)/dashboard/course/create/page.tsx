@@ -223,6 +223,13 @@ export default function CourseForm() {
   };
 
   const handleChange = (field: keyof CourseData, value: string) => {
+
+    // ✅ Ensure non-negative
+  if (["durationWeeks", "totalAmount"].includes(field)) {
+    const numericValue = Number(value);
+    if (numericValue < 0) return; // ignore negative
+  }
+
     setNewCourse((prev) => ({
       ...prev,
       [field]: value.toLocaleLowerCase(),
@@ -356,6 +363,7 @@ export default function CourseForm() {
               tabIndex={1}
               type="text"
               className="capitalize"
+              
               placeholder="Ex. Full Stack Developer"
               value={newCourse.name}
               onChange={(e) => handleChange("name", e.target.value)}
@@ -368,7 +376,8 @@ export default function CourseForm() {
           <div>
             <Label>Duration Weeks *</Label>
             <Input
-              type="text"
+              type="number"
+              min={0}              // ✅ Prevents negatives
               tabIndex={2}
               placeholder="Enter Duration"
               value={newCourse.durationWeeks}
@@ -382,7 +391,8 @@ export default function CourseForm() {
           <div>
             <Label>Course Amount *</Label>
             <Input
-              type="text"
+              type="number"
+              min={0}
               tabIndex={4}
               placeholder="Enter Amount"
               value={newCourse.totalAmount}

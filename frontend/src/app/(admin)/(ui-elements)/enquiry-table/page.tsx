@@ -21,47 +21,63 @@ import {
   setEnquiries,
   setFilters,
   setLeadStatus,
+  setLoading,
   setSearchQuery,
   setSort,
   setTotal,
   setTotalPages,
 } from "@/store/slices/enquirySlice";
 import { setCourses } from "@/store/slices/courseSlice";
-
-// --- Constants
-const LEAD_STATUS_OPTIONS = [null, "HOT", "WARM", "COLD", "LOST", "HOLD"] as const;
-
-const LEAD_STATUS_FILTER_OPTIONS = [
-  { label: "WON", value: "WON" },
-  { label: "HOLD", value: "HOLD" },
-  { label: "LOST", value: "LOST" },
-  { label: "WARM", value: "WARM" },
-  { label: "HOT", value: "HOT" },
-];
+import { selectEnquiries, selectEnquiryPage, selectEnquiryTotal, selectEnquiryTotalPages, selectFilters, selectLeadStatus, selectLoading, selectSearchQuery, selectSortField, selectSortOrder } from "@/store/selectors/enquirySelectors";
+import { LEAD_STATUS_FILTER_OPTIONS } from "@/components/common/LeadStatus";
+import { LEAD_STATUS_OPTIONS } from "@/domain/enquiry/leadStatus";
+import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
 
 export default function EnquiryTable() {
   const dispatch = useDispatch<AppDispatch>();
 
   // --- State
-  const [loading, setLoading] = useState(false);
+  const enquiries = useSelector(selectEnquiries);
+  const sortField = useSelector(selectSortField);
+  const sortOrder = useSelector(selectSortOrder);
+  const leadStatus = useSelector(selectLeadStatus);
+  const filters = useSelector(selectFilters);
+  const loading = useSelector(selectLoading);
+  const searchQuery = useSelector(selectSearchQuery);
+  const currentPage = useSelector(selectEnquiryPage);
+  const totalPages = useSelector(selectEnquiryTotalPages);
+  const total = useSelector(selectEnquiryTotal);
   const [searchInput, setSearchInput] = useState("");
-  // const [totalPages, setTotalPages] = useState(1);
 
-  const {
-    enquiries,
-    currentPage,
-    searchQuery,
-    filters,
-    sortField,
-    sortOrder,
-    leadStatus,
-    totalPages,
-    total: totalCount,
-  } = useSelector((state: RootState) => state.enquiry);
-
-  const courses = useSelector((state: RootState) => state.course.courses);
-
+  const courses = useSelector((state: RootState) => state.course.courses ?? []);
   const { data: courseData, isLoading: courseLoading } = useFetchCourse();
+
+  const token = useSelector((state: RootState) => state.auth.token);
+
+  const { data, isLoading } = useFetchEnquiry({
+  token,
+  currentPage,
+  searchQuery,
+  limit: 5,
+  sortField,
+  sortOrder,
+  leadStatus,
+  filters,
+});
+
+  // ✅ Reset page to 1 on navigation (mount)
+  useEffect(() => {
+   dispatch(setCurrentPage(1));
+  }, []);
+
+  useEffect(() => {
+    console.log("USEFFFECT TRIGGERED IN ENQUIRY-TABLE")
+    if (data) {
+      dispatch(setEnquiries(data.data || []));
+      dispatch(setTotal(data.total || 0));
+      dispatch(setTotalPages(data.totalPages || 1));
+    }
+  }, [data, dispatch]);
 
   // --- Load courses into Redux
   useEffect(() => {
@@ -82,38 +98,38 @@ export default function EnquiryTable() {
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // --- Fetch enquiries
-  useEffect(() => {
-    const fetchEnquiries = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) return;
+  // useEffect(() => {
+  //   const fetchEnquiries = async () => {
+  //     const token = sessionStorage.getItem("token");
+  //     if (!token) return;
 
-      setLoading(true);
-      try {
-        const res = await getEnquiry({
-          token,
-          page: currentPage,
-          limit: 5,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-          leadStatus,
-          ...filters,
-        });
+  //     dispatch(setLoading(true));
+  //     try {
+  //       const res = await getEnquiry({
+  //         token,
+  //         page: currentPage,
+  //         limit: 5,
+  //         search: searchQuery,
+  //         sortField,
+  //         sortOrder,
+  //         leadStatus,
+  //         ...filters,
+  //       });
 
-        console.log("RESULTTTTT for the ENQUIRES:", res);
+  //       console.log("RESULTTTTT for the ENQUIRES:", res);
 
-        dispatch(setEnquiries(res.data || []));
-        dispatch(setTotal(res.total || 0));
-        dispatch(setTotalPages(res.totalPages || 1));
-      } catch (err) {
-        console.error("Error fetching enquiries:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       dispatch(setEnquiries(res.data || []));
+  //       dispatch(setTotal(res.total || 0));
+  //       dispatch(setTotalPages(res.totalPages || 1));
+  //     } catch (err) {
+  //       console.error("Error fetching enquiries:", err);
+  //     } finally {
+  //       dispatch(setLoading(false));
+  //     }
+  //   };
 
-    fetchEnquiries();
-  }, [currentPage, searchQuery, sortField, sortOrder, leadStatus, filters, dispatch]);
+  //   fetchEnquiries();
+  // }, [currentPage, searchQuery, sortField, sortOrder, leadStatus, filters]);
 
   // --- Handlers (memoized)
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,6 +146,7 @@ export default function EnquiryTable() {
   }, [dispatch, totalPages]);
 
   const handleSort = useCallback((field: string) => {
+    console.log("SORTORDER IN ENQUIRY TABLE:", sortField, sortOrder, field);
     const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
     dispatch(setSort({ field, order }));
   }, [dispatch, sortField, sortOrder]);
@@ -200,7 +217,7 @@ export default function EnquiryTable() {
 
           <Pagination
             currentPage={currentPage}
-            totalCount={totalCount}
+            totalCount={total}
             totalPages={totalPages}
             title="Enquiries"
             onPageChange={handlePagination}

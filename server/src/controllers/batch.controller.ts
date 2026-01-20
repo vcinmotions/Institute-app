@@ -184,8 +184,8 @@ export async function addBatchController(req: Request, res: Response) {
 //     });
 
 //     // ✅ Total count (for frontend pagination)
-//     const totalCount = await tenantPrisma.batch.count({ where });
-//     const totalPages = Math.ceil(totalCount / limitNum);
+//     const total = await tenantPrisma.batch.count({ where });
+//     const totalPages = Math.ceil(total / limitNum);
 
 //     console.log("GET BATCH DATA IN GET BATCH CONTROLLER:", batch);
 
@@ -193,7 +193,7 @@ export async function addBatchController(req: Request, res: Response) {
 //       "Faculty Fetched Successfully",
 //       batch,
 //       totalPages,
-//       totalCount,
+//       total,
 //       pageNum,
 //       limitNum
 //     );
@@ -202,7 +202,7 @@ export async function addBatchController(req: Request, res: Response) {
 //       message: "Faculty fetched successfully",
 //       batch,
 //       totalPages,
-//       totalCount,
+//       total,
 //       page: pageNum,
 //       limit: limitNum,
 //     });
@@ -231,9 +231,18 @@ export async function getBatchController(req: Request, res: Response) {
       query,
     });
 
-    return res.json({
+    // return res.json({
+    //   message: "Bathces fetched successfully",
+    //   ...result,
+    //   page: query.page,
+    //   limit: query.limit,
+    // });
+
+    return res.status(200).json({
       message: "Bathces fetched successfully",
-      ...result,
+      batch: result.data,
+      totalPages: result.totalPages,
+      total: result.total,
       page: query.page,
       limit: query.limit,
     });
@@ -263,16 +272,6 @@ export async function getAllBatchController(req: Request, res: Response) {
      const onlyAvailable = req.params.onlyAvailable === "true"; // path param as boolean
 
      console.log("available pc query ONLYYYYYYYYYYYYYYYYYYYYYYYYYYYYY:", onlyAvailable);
-
-    const email = user.email;
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
-
-    // console.log("get ClientAdmin in getFacultyController:", clientAdmin);
 
     // 2. Get client admin (we assume there's only one per tenant for now)
     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
@@ -332,7 +331,7 @@ export async function getAllBatchController(req: Request, res: Response) {
       ? batches.filter((batch) => {
           if (!batch.labTimeSlot) return false;
 
-          const totalPCs = batch.labTimeSlot.lab.totalPCs || 0;
+          const totalPCs = batch.labTimeSlot.availablePCs || 0;
           const enrolled = batch.studentCourses?.length || 0;
           const remainingPCs = totalPCs - enrolled;
 
@@ -340,8 +339,7 @@ export async function getAllBatchController(req: Request, res: Response) {
         })
       : batches;
 
-
-      console.log("BATHCEDSSSSSSSSSSSSSSSSSSSSSSS:", responseBatches);
+    console.log("BATHCEDSSSSSSSSSSSSSSSSSSSSSSS:", responseBatches);
     return res.status(200).json({
       message: "BATCHES fetched successfully",
       batch: responseBatches,

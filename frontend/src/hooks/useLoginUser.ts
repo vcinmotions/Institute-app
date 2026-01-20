@@ -1,6 +1,6 @@
 
 import { useMutation } from "@tanstack/react-query";
-import { createUser } from "@/lib/api";
+import { loginUser } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import {
@@ -10,12 +10,12 @@ import {
   setLoading,
 } from "@/store/slices/authSlice";
 
-export const useCreateUser = () => {
+export const useLoginUser = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   return useMutation({
-    mutationFn: createUser,
+    mutationFn: loginUser,
     // mutationFn: async () => {
 
     //       dispatch(setLoading(true));
