@@ -75,9 +75,7 @@ export default function LabDataTable({
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedLabId, setSelectedLabId] = useState<string | null>(null);
-  const filteredEnquiriesData = useSelector(
-    (state: RootState) => state.enquiry.filteredEnquiries,
-  );
+
   const [modalType, setModalType] = useState<FollowUpModalType>(null);
   const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
     null,
@@ -93,14 +91,6 @@ export default function LabDataTable({
   const toggleExpanded = (lab: any) => {
     setExpandedRowId((prev) => (prev === lab.id ? null : lab.id));
   };
-
-  console.log("get All Query To search:", lab);
-
-  console.log("get All Query To search:", courses);
-  console.log(
-    "Get Enquiries to Proceed With Admission:",
-    filteredEnquiriesData,
-  );
 
   // Dispatch server-side fetch
   const handleSort = (field: string) => {

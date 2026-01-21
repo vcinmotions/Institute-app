@@ -814,7 +814,15 @@ export async function getAllCourseController(req: Request, res: Response) {
     // });
 
     // ✅ Fetch paginated, sorted, and filtered enquiries
-    const course = await tenantPrisma.course.findMany({});
+    const course = await tenantPrisma.course.findMany({
+      include: {
+        courseFeeStructure: {
+          include: {
+            installments: true, // 👈 return ALL installment details
+          },
+        },
+      },
+    });
 
     console.log("Courses Fetched Successfully", course);
 

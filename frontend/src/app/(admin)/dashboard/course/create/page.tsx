@@ -230,15 +230,29 @@ export default function CourseForm() {
     if (numericValue < 0) return; // ignore negative
   }
 
+    // setNewCourse((prev) => ({
+    //   ...prev,
+    //   [field]: value.toLocaleLowerCase(),
+    //   ...(field === "paymentType" && value === "ONE_TIME"
+    //     ? { installmentCount: "" }
+    //     : {}),
+    // }));
+
     setNewCourse((prev) => ({
       ...prev,
-      [field]: value.toLocaleLowerCase(),
+      [field]: (field === "name") && typeof value === "string"
+          ? value.toLowerCase()
+          : value,
       ...(field === "paymentType" && value === "ONE_TIME"
         ? { installmentCount: "" }
         : {}),
     }));
 
-    setField(field, value); // <-- IMPORTANT
+    setField(
+      field,
+      field === "name" ? value.toLowerCase() : value
+    );
+
 
     // Clear error on change
     setErrors((prev) => ({
@@ -334,7 +348,7 @@ export default function CourseForm() {
   };
 
   console.log("GET COURSE DATA IN STORE:", form);
-  console.log("GET NEW COURSE DATA IN STORE:", newCourse);
+  console.log("GET NEW COURSE DATA:", newCourse);
 
   return (
     <div>

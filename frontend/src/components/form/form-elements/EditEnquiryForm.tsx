@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useDispatch } from "react-redux";
 import { setCourses } from "@/store/slices/courseSlice";
-import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllCourses, useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useEditEnquiry } from "@/hooks/useEditEnquiry";
 import { toast } from "sonner";
 import { setError } from "@/store/slices/enquirySlice";
@@ -95,6 +95,27 @@ export default function EditEnquiryForm({
      const [state, setState] = useState<IState[]>([]);
       const [city, setCity] = useState<ICity[]>([]);
 
+  const {
+    data: courseData,
+    isLoading: courseLoading,
+    isError: courseError,
+  } = useFetchAllCourses();
+
+  useEffect(() => {
+      setState(State.getStatesOfCountry(branchCountry));
+      const countryIso = branchCountry;
+      const cities = City.getCitiesOfState(countryIso, branchState);
+      setCity(cities);
+    }, [])
+
+  useEffect(() => {
+    if (courseData?.course) {
+      dispatch(setCourses(courseData.course));
+    }
+  }, [courseData, dispatch]);
+
+  const courseList = useSelector((state: RootState) => state.course.courses);
+
   useEffect(() => {
     if (!error) return;
 
@@ -141,60 +162,62 @@ export default function EditEnquiryForm({
   //   }
   // }, [enquiryData]);
 
-    const genders = [
+  const genders = [
     { value: "female", label: "Female" },
     { value: "male", label: "Male" },
     { value: "other", label: "Other" },
   ];
 
-  useEffect(() => {
-    if (enquiryData && Object.keys(enquiryData).length > 0) {
-      console.log("🔥 Setting enquiry data to form:", enquiryData);
+  // useEffect(() => {
+  //   if (enquiryData && Object.keys(enquiryData).length > 0) {
+  //     console.log("🔥 Setting enquiry data to form:", enquiryData);
 
-      // Extract course IDs from enquiryCourse array
-      const courseIds: string[] = enquiryData.enquiryCourse
-        ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
-        : [];
+  //     // Extract course IDs from enquiryCourse array
+  //     const courseIds: string[] = enquiryData.enquiryCourse
+  //       ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
+  //       : [];
 
-      setNewEnquiry({
-        id: enquiryData.id,
-        name: enquiryData.name || "",
-        email: enquiryData.email || "",
-        courseId: courseIds, // ✅ set extracted course IDs
-        alternateContact: enquiryData.alternateContact || "",
-        location: enquiryData.location || "",
-        city: enquiryData.city || "",
-        gender: enquiryData.gender || "",
-        dob: enquiryData.dob
-        ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
-        : "",
-        referedBy: enquiryData.referedBy || "",
-        source: enquiryData.source || "",
-        contact: enquiryData.contact || "",
-      });
-    }
-  }, [enquiryData]);
-
-  const {
-    data: courseData,
-    isLoading: courseLoading,
-    isError: courseError,
-  } = useFetchCourse();
+  //     setNewEnquiry({
+  //       id: enquiryData.id,
+  //       name: enquiryData.name || "",
+  //       email: enquiryData.email || "",
+  //       courseId: courseIds, // ✅ set extracted course IDs
+  //       alternateContact: enquiryData.alternateContact || "",
+  //       location: enquiryData.location || "",
+  //       city: enquiryData.city || "",
+  //       gender: enquiryData.gender || "",
+  //       dob: enquiryData.dob
+  //       ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+  //       : "",
+  //       referedBy: enquiryData.referedBy || "",
+  //       source: enquiryData.source || "",
+  //       contact: enquiryData.contact || "",
+  //     });
+  //   }
+  // }, [enquiryData]);
 
   useEffect(() => {
-      setState(State.getStatesOfCountry(branchCountry));
-      const countryIso = branchCountry;
-      const cities = City.getCitiesOfState(countryIso, branchState);
-      setCity(cities);
-    }, [])
+  if (!enquiryData) return;
 
-  useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
-    }
-  }, [courseData, dispatch]);
+  const courseIds = enquiryData.enquiryCourse
+    ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
+    : [];
 
-  const courseList = useSelector((state: RootState) => state.course.courses);
+  setNewEnquiry({
+    id: enquiryData.id,
+    name: enquiryData.name ?? "",
+    email: enquiryData.email ?? "",
+    contact: enquiryData.contact ?? "",
+    alternateContact: enquiryData.alternateContact ?? "",
+    location: enquiryData.location ?? "",
+    city: enquiryData.city ?? "",
+    gender: enquiryData.gender ?? "",
+    dob: enquiryData.dob ? enquiryData.dob.split("T")[0] : "",
+    referedBy: enquiryData.referedBy ?? "",
+    source: enquiryData.source ?? "",
+    courseId: courseIds,
+  });
+}, [enquiryData]);
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 

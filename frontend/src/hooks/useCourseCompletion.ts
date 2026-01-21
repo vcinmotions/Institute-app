@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { courseCompletionAPI, createCourse, getStudentCourse } from "@/lib/api";
+import { courseCompletionAPI, getStudentCourse } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { setStudents } from "@/store/slices/studentSlice";
 import { useDispatch, useSelector } from "react-redux";

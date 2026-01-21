@@ -34,7 +34,7 @@ export const useEditCourse = () => {
       );
 
       // ✅ Only dispatch the array part
-      dispatch(setCourses(updated.data));
+      dispatch(setCourses(updated.course));
     },
 
     onError: (error: any) => {

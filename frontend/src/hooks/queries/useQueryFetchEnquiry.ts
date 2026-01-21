@@ -30,7 +30,7 @@ export const useFetchEnquiry = ({
   filters = {},
 }: UseFetchEnquiryParams) => {
   return useQuery<EnquiryApiResponse, Error>({
-    queryKey: ["enquiry", limit, currentPage, searchQuery, sortField, sortOrder, leadStatus],
+    queryKey: ["enquiry", limit, currentPage, searchQuery, sortField, sortOrder, leadStatus, filters,],
 
     queryFn: async ({ signal }) => {
       if (!token) throw new Error("Missing token");

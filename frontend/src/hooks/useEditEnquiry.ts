@@ -31,12 +31,12 @@ export const useEditEnquiry = () => {
 
     onSuccess: async ({ token }) => {
       //Refetch latest enquiries
-      const updated = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
+      // ✅ reload enquiry list (keeps current page automatically)
+      queryClient.invalidateQueries({
+        queryKey: ["enquiry"],
+      });
 
-      dispatch(setEnquiries(updated.data));
-      dispatch(setTotal(updated.total));
-      dispatch(setTotalPages(updated.totalPages));
-      dispatch(setError(null));
+      console.log("INVALIDATEQUERIES TRIGGERED IN EDIT!")
 
 
       console.log("MUTATION SUCCESSFUL")

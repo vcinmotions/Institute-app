@@ -5,7 +5,7 @@ import Alert from "@/components/ui/alert/Alert";
 import { ChevronDownIcon, EnvelopeIcon } from "@/icons";
 import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 import { useDispatch, useSelector } from "react-redux";
-import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { setCourses } from "@/store/slices/courseSlice";
 import { RootState } from "@/store";
 import Label from "@/components/form/Label";
@@ -23,6 +23,9 @@ import { capitalizeWords } from "@/components/common/ToCapitalize";
 import TextArea from "@/components/form/input/TextArea";
 import { countries } from "@/components/common/CountriesCode";
 import { genders, options } from "@/components/common/Options";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+type FormErrors = Partial<Record<keyof NewEnquiryDataAll, string>>;
 
 interface EnquiryData {
   id: string;
@@ -182,9 +185,11 @@ export default function AdmissionForm() {
 
   const courses = useSelector((state: RootState) => state.course.courses ?? []);
 
-  const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  //const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const { inputRefs, scrollToError } = useScrollToError();
 
-  const [errors, setErrors] = useState<Partial<NewEnquiryDataAll>>({});
+  // const [errors, setErrors] = useState<Partial<NewEnquiryDataAll>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [paymentTypeOption, setpaymentTypeOption] = useState<any>([]);
   const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
   const { mutate: createAdmission } = useCreateAdmission();
@@ -199,6 +204,14 @@ export default function AdmissionForm() {
     return course?.courseFeeStructure?.installments || [];
   };
   
+
+   const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (newEnquiry.name !== undefined && firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, [newEnquiry.name]);
 
   console.log("Redux state in edit:", useSelector(state => state));
 
@@ -303,124 +316,22 @@ export default function AdmissionForm() {
     [courses]
   );
   
-  // useEffect(() => {
-  //   if (!enquiryData || !enquiryData.enquiryCourse) return;
-
-  //   let dobValue = "";
-  //   if (enquiryData.dob) {
-  //     const date = new Date(enquiryData.dob);
-  //     const day = String(date.getDate()).padStart(2, "0");
-  //     const month = String(date.getMonth() + 1).padStart(2, "0");
-  //     const year = date.getFullYear();
-  //     dobValue = `${day}-${month}-${year}`; // DD-MM-YYYY
-  //   }
-
-  //   const courseIds = enquiryData.enquiryCourse.map((c: any) =>
-  //     String(c.courseId),
-  //   );
-
-  //   setNewEnquiry({
-  //     id: enquiryData.id,
-  //     name: enquiryData.name || "",
-  //     email: enquiryData.email || "",
-  //     contact: enquiryData.contact || "",
-  //     alternateContact: enquiryData.alternateContact || "",
-  //     age: enquiryData.age || "",
-  //     location: enquiryData.location || "",
-  //     gender: enquiryData.gender || "",
-  //     dob: enquiryData.dob
-  //     ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
-  //     : "",
-  //     referedBy: enquiryData.referedBy || "",
-  //     courseId: courseIds, // -------------------------- FIXED
-  //   });
-  // }, [enquiryData]);
-
-  // useEffect(() => {
-  //     if (!enquiryData) return;
-
-  //     let dobValue = "";
-  //     if (enquiryData.dob) {
-  //       const date = new Date(enquiryData.dob);
-  //       const day = String(date.getDate()).padStart(2, "0");
-  //       const month = String(date.getMonth() + 1).padStart(2, "0");
-  //       const year = date.getFullYear();
-  //       dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
-  //     }
-
-  //     setFilledEnquiryData((prev) => ({
-  //       ...prev,
-  //       dob: dobValue,
-  //       gender: enquiryData.gender || "",
-  //       parentsContact: enquiryData.alternateContact || "", // default to ""
-  //     }));
-
-  //     // Also set in newEnquiry if needed for internal use
-  //     setNewEnquiry((prev) => ({
-  //       ...prev,
-  //       dob: dobValue,
-  //     }));
-  //   }, [enquiryData]);
-
-
-  // useEffect(() => {
-  //   if (
-  //     enquiryData &&
-  //     enquiryData?.enquiryCourse &&
-  //     Object.keys(enquiryData).length > 0
-  //   ) {
-  //     console.log("🔥 Setting enquiry data to form:", enquiryData);
-
-  //     // Extract course IDs from enquiryCourse array
-  //     const courseIds: string[] = enquiryData.enquiryCourse
-  //       ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
-  //       : [];
-
-  //     setNewEnquiry({
-  //       id: enquiryData.id,
-  //       name: enquiryData.name || "",
-  //       email: enquiryData.email || "",
-  //       courseId: courseIds, // ✅ set extracted course IDs
-  //        alternateContact: enquiryData.alternateContact || "",
-  //       age: enquiryData.age || "",
-  //       location: enquiryData.location || "",
-  //       gender: enquiryData.gender || "",
-  //       dob: enquiryData.dob
-  //       ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
-  //       : "",
-  //       referedBy: enquiryData.referedBy || "",
-  //       contact: enquiryData.contact || "",
-  //     });
-  //   }
-  // }, [enquiryData]);
-
-  // useEffect(() => {
-  //   console.log("🎯 enquiryData changed:", enquiryData);
-  // }, [enquiryData, data]);
-
   useEffect(() => {
     if (!enquiryData || !enquiryData.enquiryCourse) return;
 
-    // ----------------- Parse DOB -----------------
-    let dobForForm = "";
-    let dobForFilledData = "";
-
+    let dobValue = "";
     if (enquiryData.dob) {
       const date = new Date(enquiryData.dob);
       const day = String(date.getDate()).padStart(2, "0");
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const year = date.getFullYear();
-
-      dobForForm = enquiryData.dob.split("T")[0]; // YYYY-MM-DD for inputs
-      dobForFilledData = `${day}/${month}/${year}`; // DD/MM/YYYY for display
+      dobValue = `${day}-${month}-${year}`; // DD-MM-YYYY
     }
 
-    // ----------------- Extract course IDs -----------------
-    const courseIds: string[] = enquiryData.enquiryCourse.map(
-      (c: any) => String(c.courseId)
+    const courseIds = enquiryData.enquiryCourse.map((c: any) =>
+      String(c.courseId),
     );
 
-    // ----------------- Set newEnquiry -----------------
     setNewEnquiry({
       id: enquiryData.id,
       name: enquiryData.name || "",
@@ -430,21 +341,127 @@ export default function AdmissionForm() {
       age: enquiryData.age || "",
       location: enquiryData.location || "",
       gender: enquiryData.gender || "",
-      dob: dobForForm,
+      dob: enquiryData.dob
+      ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+      : "",
       referedBy: enquiryData.referedBy || "",
-      courseId: courseIds,
+      courseId: courseIds, // -------------------------- FIXED
     });
-
-    // ----------------- Set filledEnquiryData -----------------
-    setFilledEnquiryData((prev) => ({
-      ...prev,
-      dob: dobForFilledData,
-      gender: enquiryData.gender || "",
-      parentsContact: enquiryData.alternateContact || "",
-    }));
-
-    console.log("🎯 enquiryData initialized:", enquiryData);
   }, [enquiryData]);
+
+  useEffect(() => {
+      if (!enquiryData) return;
+
+      let dobValue = "";
+      if (enquiryData.dob) {
+        const date = new Date(enquiryData.dob);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
+      }
+
+      const dobISO = enquiryData.dob
+        ? enquiryData.dob.split("T")[0] // ✅ YYYY-MM-DD
+        : "";
+
+      setFilledEnquiryData((prev) => ({
+        ...prev,
+        dob: dobISO,
+        gender: enquiryData.gender || "",
+        parentsContact: enquiryData.alternateContact || "", // default to ""
+      }));
+
+      // Also set in newEnquiry if needed for internal use
+      setNewEnquiry((prev) => ({
+        ...prev,
+        dob: dobValue,
+      }));
+    }, [enquiryData]);
+
+
+  useEffect(() => {
+    if (
+      enquiryData &&
+      enquiryData?.enquiryCourse &&
+      Object.keys(enquiryData).length > 0
+    ) {
+      console.log("🔥 Setting enquiry data to form:", enquiryData);
+
+      // Extract course IDs from enquiryCourse array
+      const courseIds: string[] = enquiryData.enquiryCourse
+        ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
+        : [];
+
+      setNewEnquiry({
+        id: enquiryData.id,
+        name: enquiryData.name || "",
+        email: enquiryData.email || "",
+        courseId: courseIds, // ✅ set extracted course IDs
+         alternateContact: enquiryData.alternateContact || "",
+        age: enquiryData.age || "",
+        location: enquiryData.location || "",
+        gender: enquiryData.gender || "",
+        dob: enquiryData.dob
+        ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+        : "",
+        referedBy: enquiryData.referedBy || "",
+        contact: enquiryData.contact || "",
+      });
+    }
+  }, [enquiryData]);
+
+  useEffect(() => {
+    console.log("🎯 enquiryData changed:", enquiryData);
+  }, [enquiryData, data]);
+
+  // useEffect(() => {
+  //   if (!enquiryData || !enquiryData.enquiryCourse) return;
+
+  //   // ----------------- Parse DOB -----------------
+  //   let dobForForm = "";
+  //   let dobForFilledData = "";
+
+  //   if (enquiryData.dob) {
+  //     const date = new Date(enquiryData.dob);
+  //     const day = String(date.getDate()).padStart(2, "0");
+  //     const month = String(date.getMonth() + 1).padStart(2, "0");
+  //     const year = date.getFullYear();
+
+  //     dobForForm = enquiryData.dob.split("T")[0]; // YYYY-MM-DD for inputs
+  //     dobForFilledData = `${day}/${month}/${year}`; // DD/MM/YYYY for display
+  //   }
+
+  //   // ----------------- Extract course IDs -----------------
+  //   const courseIds: string[] = enquiryData.enquiryCourse.map(
+  //     (c: any) => String(c.courseId)
+  //   );
+
+  //   // ----------------- Set newEnquiry -----------------
+  //   setNewEnquiry({
+  //     id: enquiryData.id,
+  //     name: enquiryData.name || "",
+  //     email: enquiryData.email || "",
+  //     contact: enquiryData.contact || "",
+  //     alternateContact: enquiryData.alternateContact || "",
+  //     age: enquiryData.age || "",
+  //     location: enquiryData.location || "",
+  //     gender: enquiryData.gender || "",
+  //     dob: dobForForm,
+  //     referedBy: enquiryData.referedBy || "",
+  //     courseId: courseIds,
+  //   });
+
+  //   // ----------------- Set filledEnquiryData -----------------
+  //   setFilledEnquiryData((prev) => ({
+  //     ...prev,
+  //     dob: dobForFilledData,
+  //     gender: enquiryData.gender || "",
+  //     parentsContact: enquiryData.alternateContact || "",
+  //   }));
+
+  //   console.log("🎯 enquiryData initialized:", enquiryData);
+  // }, [enquiryData]);
 
   useEffect(() => {
     if (!newEnquiry.courseId) return;
@@ -469,7 +486,7 @@ export default function AdmissionForm() {
     data: courseData,
     isLoading: courseLoading,
     isError: courseError,
-  } = useFetchCourse();
+  } = useFetchAllCourses();
 
   const {
     data: batchData,
@@ -477,11 +494,7 @@ export default function AdmissionForm() {
     isError: batchError,
   } = useFetchAllBatches({ onlyAvailable: true });
 
-  const firstInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    firstInputRef.current?.focus();
-  }, []);
+ 
 
   useEffect(() => {
     if (courseData?.course) {
@@ -585,7 +598,7 @@ export default function AdmissionForm() {
 
     if (!filledEnquiryData.dob.trim())
       newErrors.dob = "Date of birth is required.";
-    else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(filledEnquiryData.dob))
+    else if (!/^\d{4}-\d{2}-\d{2}$/.test(filledEnquiryData.dob))
       newErrors.dob = "Date of birth must be in DD/MM/YYYY format.";
 
     if (!filledEnquiryData.idProofType.trim())
@@ -634,7 +647,15 @@ export default function AdmissionForm() {
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 3000);
 
-    return Object.keys(newErrors).length === 0;
+    setErrors(newErrors);
+
+     // Return true if no errors, false otherwise
+    // return Object.keys(newErrors).length === 0;
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   const handleDateChange = (field: keyof NewEnquiryData, value: string) => {
@@ -719,18 +740,22 @@ export default function AdmissionForm() {
     });
   };
 
-  const scrollToError = () => {
-    const firstErrorKey = Object.keys(errors)[0];
-    if (!firstErrorKey) return;
+  // const scrollToError = (errs: Record<string, string>) => {
+  //   const firstErrorKey = Object.keys(errs)[0];
+  //   if (!firstErrorKey) return;
 
-    const element = inputRefs.current[firstErrorKey];
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  };
+  //   const element = inputRefs.current[firstErrorKey];
+  //   if (element) {
+  //     element.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "center",
+  //     });
+
+  //     // optional focus
+  //     const input = element.querySelector("input, textarea, select") as HTMLElement;
+  //     input?.focus();
+  //   }
+  // };
 
   const handleChangeNew = (field: keyof EnquiryData, value: any) => {
     setNewEnquiry((prev) => ({
@@ -804,24 +829,24 @@ export default function AdmissionForm() {
   };
 
   const handleSubmit = async () => {
-    if (!validate()) {
-      setAlert({
-        show: true,
-        title: "Validation Error",
-        message: "Please enter all inputs.",
-        variant: "error",
-      });
+    const { isValid, errors: validationErrors } = validate();
 
-      window.scrollTo({
-        top: 0, behavior: "smooth"
-      })
+  if (!isValid) {
+    setAlert({
+      show: true,
+      title: "Validation Error",
+      message: "Please enter all inputs.",
+      variant: "error",
+    });
 
-      setTimeout(() => {
+    scrollToError(validationErrors); // ✅ ALWAYS WORKS
+
+     setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 2000);
 
-      return;
-    }
+    return; // ⛔ mutation never runs
+  }
 
     const token = sessionStorage.getItem("token");
     if (!token) {
@@ -870,28 +895,56 @@ export default function AdmissionForm() {
       profilePicture: selectedProfilePicture, // you'll need to track this in state
     };
 
-    try {
-      await createAdmission(admissionPayload);
-      // reset form and show success alert as before
-      // Wait 3 seconds before showing alert
-      setAlert({
+    // try {
+    //   await createAdmission(admissionPayload);
+    //   // reset form and show success alert as before
+    //   // Wait 3 seconds before showing alert
+    //   setAlert({
+    //     show: true,
+    //     title: "Admission Successful",
+    //     message: "Student admission has been successfully submitted.",
+    //     variant: "success",
+    //   });
+
+    //   window.scrollTo({
+    //     top: 0, behavior: "smooth"
+    //   })
+
+    //   // Close modal after showing alert for 2 seconds (for example)
+    //   setTimeout(() => {
+    //     router.back();
+    //   }, 1000);
+    // } catch (error) {
+    //   // handle error
+    // }
+
+    createAdmission(admissionPayload, {
+      onSuccess: () => {
+
+        window.scrollTo({
+          top: 0, behavior: "smooth"
+        })
+
+        setAlert({
         show: true,
         title: "Admission Successful",
         message: "Student admission has been successfully submitted.",
         variant: "success",
       });
 
-      window.scrollTo({
-        top: 0, behavior: "smooth"
-      })
+        setTimeout(() => {
+          router.back();
+        }, 1000);
+      },
 
-      // Close modal after showing alert for 2 seconds (for example)
-      setTimeout(() => {
-        router.back();
-      }, 1000);
-    } catch (error) {
-      // handle error
-    }
+      onError: (error) => {
+        console.error("Error creating admission:", error);
+        // You already handle error via redux + toast
+        window.scrollTo({
+          top: 0, behavior: "smooth"
+        })
+      },
+    });
   };
 
   return (
@@ -913,9 +966,9 @@ export default function AdmissionForm() {
                 showLink={false}
               />
             )}
-            <div
+            <div  
               ref={(el) => {
-                inputRefs.current["name"] = el;
+                inputRefs.current.name = el;
               }}
             >
               <Label>Name</Label>
@@ -934,7 +987,7 @@ export default function AdmissionForm() {
             </div>
             <div
               ref={(el) => {
-                inputRefs.current["fatherName"] = el;
+                inputRefs.current.fatherName = el; // ✅ different key
               }}
             >
               <Label>Father's Name</Label>
@@ -952,7 +1005,7 @@ export default function AdmissionForm() {
             </div>
             <div
               ref={(el) => {
-                inputRefs.current["motherName"] = el;
+                inputRefs.current.motherName = el; // ✅ different key
               }}
             >
               <Label>Mother's Name</Label>
@@ -970,7 +1023,7 @@ export default function AdmissionForm() {
             </div>
             <div
               ref={(el) => {
-                inputRefs.current["email"] = el;
+                inputRefs.current.email = el; // ✅ different key
               }}
             >
               <Label>Email</Label>
@@ -991,7 +1044,9 @@ export default function AdmissionForm() {
                 </span>
               </div>
             </div>
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.contact = el; // ✅ different key
+              }}>
               <Label>Student Contact</Label>
               <PhoneInput
                 tabIndex={5}
@@ -1005,7 +1060,9 @@ export default function AdmissionForm() {
                 <p className="text-sm text-red-500">{errors.contact}</p>
               )}
             </div>
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.parentsContact = el; // ✅ different key
+              }}>
               <Label>Alternate Contact</Label>
               <PhoneInput
                 tabIndex={6}
@@ -1019,21 +1076,27 @@ export default function AdmissionForm() {
                 <p className="text-sm text-red-500">{errors.parentsContact}</p>
               )}
             </div>{" "}
-            <div>
+
+            <div ref={(el) => {
+                inputRefs.current.dob = el; // ✅ different key
+              }}>
               <Label>Date Of Birth</Label>
               <Input
                 tabIndex={7}
-                type="text"
-                placeholder="Enter DOB"
+                type="date"
+                placeholder="Enter DoB"
                 //maxLength={10} // e.g. 12:30 PM
                 value={filledEnquiryData.dob}
-                onChange={(e) => handleDateChange("dob", e.target.value)}
+                onChange={(e) => handleChange("dob", e.target.value)}
               />
-              {errors.dob && (
+               {errors.dob && (
                 <p className="text-sm text-red-500">{errors.dob}</p>
               )}
             </div>
-            <div>
+
+            <div ref={(el) => {
+                inputRefs.current.gender = el; // ✅ different key
+              }}>
               <Label>Gender</Label>
 
               <div className="relative">
@@ -1056,7 +1119,9 @@ export default function AdmissionForm() {
                 <p className="text-sm text-red-500">{errors.gender}</p>
               )}
             </div>
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.religion = el; // ✅ different key
+              }}>
               <Label>Religion</Label>
               <Input
                 tabIndex={9}
@@ -1071,7 +1136,9 @@ export default function AdmissionForm() {
               )}
             </div>
             {/* Select Course */}
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.courseId = el; // ✅ different key
+              }}>
               <div className="relative" data-master="course">
                 <MultiSelect
                   tabIndex={10}
@@ -1110,7 +1177,9 @@ export default function AdmissionForm() {
                   </h3>
 
                   {/* Payment Type */}
-                  <div>
+                  <div ref={(el) => {
+                inputRefs.current.paymentType = el; // ✅ different key
+              }}>
                     <Label>Select Payment Type</Label>
                     <div className="relative">
                       <Select
@@ -1203,7 +1272,9 @@ export default function AdmissionForm() {
                 </div>
               );
             })}
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.idProofType = el; // ✅ different key
+              }}>
               <Label>Select Id Proof</Label>
               <div className="relative">
                 <Select
@@ -1221,7 +1292,9 @@ export default function AdmissionForm() {
                 <p className="text-sm text-red-500">{errors.idProofType}</p>
               )}
             </div>
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.idProofNumber = el; // ✅ different key
+              }}>
               <Label>
                 <span className="capitalize">
                   {filledEnquiryData.idProofType
@@ -1242,7 +1315,9 @@ export default function AdmissionForm() {
                 <p className="text-sm text-red-500">{errors.idProofNumber}</p>
               )}
             </div>
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.residentialAddress = el; // ✅ different key
+              }}>
               <Label>Residential Address</Label>
               <TextArea
                 tabIndex={14}
@@ -1258,7 +1333,9 @@ export default function AdmissionForm() {
                 </p>
               )}
             </div>
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.permenantAddress = el; // ✅ different key
+              }}>
               <Label>Permenant Address</Label>
 
               <TextArea
@@ -1275,7 +1352,9 @@ export default function AdmissionForm() {
                 </p>
               )}
             </div>
-            <div>
+            <div ref={(el) => {
+                inputRefs.current.admissionDate = el; // ✅ different key
+              }}>
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                 Admission Date
               </label>

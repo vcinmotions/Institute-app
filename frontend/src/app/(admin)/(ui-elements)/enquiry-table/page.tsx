@@ -32,6 +32,7 @@ import { selectEnquiries, selectEnquiryPage, selectEnquiryTotal, selectEnquiryTo
 import { LEAD_STATUS_FILTER_OPTIONS } from "@/components/common/LeadStatus";
 import { LEAD_STATUS_OPTIONS } from "@/domain/enquiry/leadStatus";
 import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function EnquiryTable() {
   const dispatch = useDispatch<AppDispatch>();
@@ -108,7 +109,7 @@ export default function EnquiryTable() {
   //       const res = await getEnquiry({
   //         token,
   //         page: currentPage,
-  //         limit: 5,
+  //         limit: PAGE_SIZE,
   //         search: searchQuery,
   //         sortField,
   //         sortOrder,

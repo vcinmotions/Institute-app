@@ -30,6 +30,9 @@ import {
   State,
 } from "country-state-city";
 import { countries } from "@/components/common/CountriesCode";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
 interface EnquiryData {
   name: string;
@@ -81,7 +84,7 @@ export default function EnquiryForm() {
     variant: "",
   });
 
-  const [errors, setErrors] = useState<Partial<EnquiryData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const { mutate: createEnquiry } = useCreateEnquiry();
 
   
@@ -91,6 +94,7 @@ export default function EnquiryForm() {
     { value: "other", label: "Other" },
   ];
 
+  const { inputRefs, scrollToError } = useScrollToError();
   const firstInputRef = useRef<HTMLInputElement>(null);
   const jumpInputRef = useRef<HTMLInputElement>(null);
 
@@ -162,20 +166,28 @@ export default function EnquiryForm() {
   }, [error, dispatch]);
 
   const validate = () => {
-    const newErrors: Partial<EnquiryData> = {};
+    const newErrors: FormErrors = {};
 
     if (!newEnquiry.name.trim()) {
       newErrors.name = "Name is required.";
     }
 
     if (!newEnquiry.contact.trim()) {
-      newErrors.contact = "Contact number is required.";
+      newErrors.contact = "Contact no. is required.";
+    }
+
+    if (newEnquiry.courseId.length === 0) {
+      newErrors.courseId = "Select at least one course.";
     }
 
     setErrors(newErrors);
+      setTimeout(() => setErrors({}), 2000);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
@@ -347,23 +359,42 @@ export default function EnquiryForm() {
   };
 
   const handleSubmit = () => {
-    if (!validate()) {
+    // if (!validate()) {
+    //   setAlert({
+    //     show: true,
+    //     title: "Validation Error",
+    //     message: "Please enter required inputs.",
+    //     variant: "error",
+    //   });
+
+    //    window.scrollTo({
+    //       top: 0, behavior: "smooth"
+    //     })
+
+    //   setTimeout(() => {
+    //     setAlert({ show: false, title: "", message: "", variant: "" });
+    //   }, 2000);
+
+    //   return;
+    // }
+
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-       window.scrollTo({
-          top: 0, behavior: "smooth"
-        })
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
 
-      return;
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -404,9 +435,14 @@ export default function EnquiryForm() {
 
         reset();
 
+        // setTimeout(() => {
+        //   router.back();
+        // }, 300);
+
         setTimeout(() => {
-          router.back();
+          router.replace("/dashboard/enquiry");
         }, 300);
+
       },
 
       onError: () => {
@@ -444,7 +480,11 @@ export default function EnquiryForm() {
               showLink={false}
             />
           )}
-          <div>
+          <div
+          ref={(el) => {
+                inputRefs.current.name = el;
+              }}
+          >
             <Label>Name *</Label>
             <Input
               ref={firstInputRef}
@@ -478,21 +518,25 @@ export default function EnquiryForm() {
               </span>
             </div>
           </div>
-          <div>
-                    <Label>Contact No. *</Label>
-                    <div className="relative">
-                      <PhoneInput
-                        selectPosition="start"
-                        countries={countries}
-                        tabIndex={3}
-                        placeholder="Enter Contact"
-                        onChange={handlePhoneNumberChange}
-                      />
-                      {errors.contact && (
-                        <p className="text-sm text-red-500">{errors.contact}</p>
-                      )}
-                    </div>
-                  </div>{" "}     
+          <div
+            ref={(el) => {
+              inputRefs.current.contact = el;
+            }}
+          >
+          <Label>Contact No. *</Label>
+          <div className="relative">
+            <PhoneInput
+              selectPosition="start"
+              countries={countries}
+              tabIndex={3}
+              placeholder="Enter Contact"
+              onChange={handlePhoneNumberChange}
+            />
+            {errors.contact && (
+              <p className="text-sm text-red-500">{errors.contact}</p>
+            )}
+          </div>
+        </div>{" "}     
 
           <div>
           <Label>Alternate Conatct No.</Label>
@@ -500,13 +544,15 @@ export default function EnquiryForm() {
             selectPosition="start"
             countries={countries}
             tabIndex={4}
-            placeholder="Enter Alternate Conatct"
+            placeholder="Enter Alternate Conatact"
             onChange={handleAlternatePhoneNumberChange}
           />
            {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}
 
-         <div>
+         <div ref={(el) => {
+                inputRefs.current.courseId = el;
+              }}>
             <div className="relative" data-master="course">
               <MultiSelect
                 ref={jumpInputRef}
@@ -613,7 +659,7 @@ export default function EnquiryForm() {
         </div>
 
          <div>
-          <Label>Refered By</Label>
+          <Label>Referred By</Label>
           <Input
             type="text"
             className="capitalize"
@@ -633,7 +679,7 @@ export default function EnquiryForm() {
             >
               Clear
             </Button>
-            <Button size="sm" tabIndex={13} variant="primary"  className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+            <Button size="sm" tabIndex={13} variant="primary" className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>
@@ -642,3 +688,7 @@ export default function EnquiryForm() {
     </div>
   );
 }
+function scrollToError(validationErrors: any) {
+  throw new Error("Function not implemented.");
+}
+

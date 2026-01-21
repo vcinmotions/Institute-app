@@ -12,7 +12,7 @@ interface SelectProps {
   onChange: (value: string) => void;
   className?: string;
   defaultValue?: string;
-  tabIndex?: number; // ⭐ ADD THIS
+  tabIndex?: number;     // ⭐ ADD THIS
   value?: string | null; // ⭐ ADD THIS
   onKeyDown?: any | null;
 }

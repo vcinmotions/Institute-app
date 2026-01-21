@@ -34,13 +34,7 @@ export default function NotificaionDataTable({
   sortField,
   sortOrder,
 }: ActivityDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
-  const [selectedEnquiryData, setSelectedEnquiryData] = useState<any>(null); // You can strongly type this
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const filteredEnquiriesData = useSelector(
-    (state: RootState) => state.enquiry.filteredEnquiries,
-  );
+
   const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
     null,
   );

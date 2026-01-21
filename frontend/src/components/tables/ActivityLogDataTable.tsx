@@ -30,19 +30,6 @@ export default function ActivityDataTable({
   sortField,
   sortOrder,
 }: ActivityDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
-  const [selectedEnquiryData, setSelectedEnquiryData] = useState<any>(null); // You can strongly type this
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const filteredEnquiriesData = useSelector(
-    (state: RootState) => state.enquiry.filteredEnquiries,
-  );
-  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
-    null,
-  );
-  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
-    null,
-  );
   const { mutate: fetchEnquiries, data } = useFetchEnquiry();
 
   console.log("get All Query To search Activity Log data Table:", logs);
@@ -61,9 +48,6 @@ export default function ActivityDataTable({
       sortOrder: order,
     });
   };
-
-  console.log("get selectedEnquiryId", selectedEnquiryId);
-  console.log("get selectedFollowUpId", selectedFollowUpId);
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
