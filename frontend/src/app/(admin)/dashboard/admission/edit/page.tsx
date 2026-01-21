@@ -494,7 +494,7 @@ export default function AdmissionForm() {
     isError: batchError,
   } = useFetchAllBatches({ onlyAvailable: true });
 
- 
+
 
   useEffect(() => {
     if (courseData?.course) {
