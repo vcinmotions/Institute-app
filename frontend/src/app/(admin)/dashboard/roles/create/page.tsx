@@ -300,14 +300,14 @@ export default function RolesForm() {
           </div>
 
           <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-            <Button
+            {/* <Button
               size="sm"
               tabIndex={5}
               variant="outline"
               onClick={handleResetForm}
             >
               Clear
-            </Button>
+            </Button> */}
             <Button size="sm" tabIndex={6} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>

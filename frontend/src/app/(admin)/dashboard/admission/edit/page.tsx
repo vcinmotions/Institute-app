@@ -1383,10 +1383,10 @@ export default function AdmissionForm() {
               )}
             </div>
             <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-              <Button size="sm" variant="outline" tabIndex={18}>
+              <Button size="sm" variant="outline" tabIndex={19}>
                 Clear
               </Button>
-              <Button size="sm" tabIndex={19} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+              <Button size="sm" tabIndex={18} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
                 Save
               </Button>
             </div>

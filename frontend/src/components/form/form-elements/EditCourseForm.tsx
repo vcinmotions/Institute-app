@@ -459,8 +459,9 @@ export default function EditCourseForm({
         <div>
           <Label>Duration Weeks</Label>
           <Input
-            type="text"
+            type="number"
             tabIndex={2}
+            min={0}
             placeholder="12"
             value={newCourse.durationWeeks}
             onChange={(e) => handleChange("durationWeeks", e.target.value)}
@@ -473,7 +474,8 @@ export default function EditCourseForm({
         <div>
           <Label>Course Amount</Label>
           <Input
-            type="text"
+            type="number"
+            min={0}
             tabIndex={4}
             placeholder="12000"
             value={newCourse.totalAmount}
@@ -518,7 +520,8 @@ export default function EditCourseForm({
               />
 
               <Input
-                type="text"
+                type="number"
+                min={0}
                 className="w-48"
                 value={newCourse.totalAmount}
                 placeholder="Amount"
@@ -543,7 +546,8 @@ export default function EditCourseForm({
                 />
 
                 <Input
-                  type="text"
+                  type="number"
+                  min={0}
                   className="w-48"
                   value={item.addAmount}
                   placeholder="Amount"

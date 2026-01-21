@@ -469,7 +469,8 @@ export default function CourseForm() {
                 />
 
                 <Input
-                  type="text"
+                  type="number"
+                  min={0}
                   className="w-48"
                   value={newCourse.totalAmount}
                   placeholder="Amount"
@@ -494,7 +495,8 @@ export default function CourseForm() {
                   />
 
                   <Input
-                    type="text"
+                    type="number"
+                    min={0}
                     className="w-48"
                     value={item.addAmount}
                     placeholder="Amount"
@@ -522,15 +524,15 @@ export default function CourseForm() {
           )}
 
           <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-            <Button
+            {/* <Button
               size="sm"
               variant="outline"
-              tabIndex={7}
+              tabIndex={8}
               onClick={handleResetForm}
             >
               Clear
-            </Button>
-            <Button size="sm" tabIndex={8} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+            </Button> */}
+            <Button size="sm" tabIndex={7} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>

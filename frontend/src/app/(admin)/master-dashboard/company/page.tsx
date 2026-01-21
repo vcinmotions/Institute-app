@@ -684,13 +684,13 @@ export default function Company() {
 
           {/* BUTTONS */}
           <div className="mt-6 flex justify-end gap-3">
-            <Button
+            {/* <Button
               variant="outline"
               disabled={loading === true}
               onClick={handleResetForm}
             >
               Clear
-            </Button>
+            </Button> */}
             <Button disabled={loading === true} onClick={handleSubmit}>
               {loading === true ? "Creating..." : "Save"}
             </Button>

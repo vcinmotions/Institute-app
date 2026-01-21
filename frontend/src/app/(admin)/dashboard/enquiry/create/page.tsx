@@ -671,15 +671,15 @@ export default function EnquiryForm() {
         </div>
           
           <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-            <Button
+            {/* <Button
               size="sm"
               variant="outline"
-              tabIndex={12}
+              tabIndex={13}
               onClick={handleClearForm}
             >
               Clear
-            </Button>
-            <Button size="sm" tabIndex={13} variant="primary" className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+            </Button> */}
+            <Button size="sm" tabIndex={12} variant="primary" className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>
