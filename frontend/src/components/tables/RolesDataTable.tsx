@@ -29,17 +29,13 @@ type FollowUpModalType = "createNew" | "update" | "complete" | null;
 type RolesDataTableProps = {
   roles: any[];
   loading: boolean;
-  onSort: (field: string) => void;
-  sortField: string;
-  sortOrder: "asc" | "desc";
+
 };
 
 export default function RolesDataTable({
   roles,
   loading,
-  onSort,
-  sortField,
-  sortOrder,
+
 }: RolesDataTableProps) {
   const [showForm, setShowForm] = useState(false);
   const [roleDetail, setRoleDetail] = useState<boolean>(false);
@@ -73,21 +69,6 @@ export default function RolesDataTable({
   // const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   console.log("get All Query To search in Course DATA Table:", roles);
-
-  // Dispatch server-side fetch
-  const handleSort = (field: string) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
-    const order: "asc" | "desc" =
-      sortField === field && sortOrder === "asc" ? "desc" : "asc";
-
-    fetchEnquiries({
-      token,
-      sortField: field,
-      sortOrder: order,
-    });
-  };
 
   const handleCloseModal = () => {
     setSelectedId(null);

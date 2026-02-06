@@ -112,14 +112,14 @@ export default function PaymentDataTable({
                   <button
                     type="button"
                     className="flex items-center gap-1"
-                    onClick={() => onPaymentType("paymentType")}
+                    // onClick={() => onPaymentType("paymentType")}
                   >
                     Payment Type
-                    <span>
+                    {/* <span>
                       {sortField === "paymentType" && sortOrder === "asc"
                         ? "▲"
                         : "▼"}
-                    </span>
+                    </span> */}
                   </button>
                 </TableCell>
 

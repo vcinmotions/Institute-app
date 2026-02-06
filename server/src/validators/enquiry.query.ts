@@ -62,6 +62,9 @@ export const enquiryEditSchema = z.object({
     (val) => (val === "" || val === null ? undefined : val),
     z.string().email("Invalid email").optional()
   ),
+  courseId: z
+    .array(z.union([z.number(), z.string()]))
+    .min(1, "At least one course is required"),
   source: z.preprocess(
     (val) => (val === "" || val === null ? undefined : val),
     z.string().optional()

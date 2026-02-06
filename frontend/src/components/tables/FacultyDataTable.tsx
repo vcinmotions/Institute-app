@@ -24,10 +24,6 @@ type FacultyDataTableProps = {
   courses: any[];
   batch: any[];
   loading: boolean;
-  onSort: (field: string) => void;
-  sortField: string;
-  sortOrder: "asc" | "desc";
-  onLeadStatus: (field: string) => void;
 };
 
 export default function FacultyDataTable({
@@ -35,10 +31,6 @@ export default function FacultyDataTable({
   courses,
   batch,
   loading,
-  onSort,
-  onLeadStatus,
-  sortField,
-  sortOrder,
 }: FacultyDataTableProps) {
   const [showForm, setShowForm] = useState(false);
   const [showAdmissionForm, setShowAdmissionForm] = useState(false);
@@ -77,21 +69,6 @@ export default function FacultyDataTable({
   console.log("get All Query To search in faculty Table:", faculties);
 
   console.log("get All Query To search in faculty Table:", courses);
-
-  // Dispatch server-side fetch
-  const handleSort = (field: string) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
-    const order: "asc" | "desc" =
-      sortField === field && sortOrder === "asc" ? "desc" : "asc";
-
-    fetchEnquiries({
-      token,
-      sortField: field,
-      sortOrder: order,
-    });
-  };
 
   const openDeleteModal = (id: string) => {
     setSelectedId(id);

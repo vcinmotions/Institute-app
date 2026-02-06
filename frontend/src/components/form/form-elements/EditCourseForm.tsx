@@ -9,6 +9,7 @@ import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useEditCourse } from "@/hooks/useEditCourse";
 import Checkbox from "../input/Checkbox";
+import { titleCase } from "@/app/utils/Normalize";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -338,10 +339,7 @@ export default function EditCourseForm({
 
     setNewCourse((prev) => ({
       ...prev,
-      [field]:
-        field === "name" && typeof value === "string"
-          ? value.toLowerCase()
-          : value,
+      [field]: value,
     }));
 
     // clear error for that field
@@ -392,8 +390,14 @@ export default function EditCourseForm({
     const id = batchData.id;
     console.log("GET LABDATA ID IN HABDLE SUBMIT:", id);
 
+    const normalizedCourse = {
+      ...newCourse,
+      name: titleCase(newCourse.name),
+    };
+
+
     editCourse(
-      { newCourse, id },
+      { newCourse: normalizedCourse, id },
       {
         onSuccess: () => {
           setNewCourse({
@@ -448,9 +452,8 @@ export default function EditCourseForm({
             ref={firstInputRef}
             tabIndex={1}
             type="text"
-            className="capitalize"
             placeholder="Ex. Full Stack Developer"
-            value={newCourse.name}
+            value={titleCase(newCourse.name)}
             onChange={(e) => handleChange("name", e.target.value)}
           />
           {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
@@ -583,7 +586,7 @@ export default function EditCourseForm({
           >
             Close
           </Button>
-          <Button size="sm" tabIndex={8} onClick={handleSubmit}>
+          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={8} onClick={handleSubmit}>
             Save
           </Button>
         </div>

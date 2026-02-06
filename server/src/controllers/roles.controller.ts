@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import { titleCase } from "../utils/Normalize";
 
 // =============================
 // ✅ Create a new Role-based User (sub-admin)
@@ -161,27 +162,42 @@ export async function getRoleUsersController(req: Request, res: Response) {
     const {
       page,
       limit,
-      search,
     } = req.query;
 
-    console.log("GET ROLE SEARCH:", page, limit, search);
+    console.log("GET ROLE SEARCH:", page, limit);
 
     const pageNum = parseInt(page as string, 10) || 1;
     const limitNum = parseInt(limit as string, 5) || 5;
     const skip = (pageNum - 1) * limitNum;
+    const search = req.query.search as string | undefined;
+
 
     // ✅ Build search filter
-    const where = {
-      clientAdminId,
-      ...(search
-        ? {
-            OR: [
-              { name: { contains: search as string } },
-              { email: { contains: search as string } },
-            ],
-          }
-        : {}),
-    };
+    // const where = {
+    //   clientAdminId,
+    //   ...(search
+    //     ? {
+    //         OR: [
+    //           { name: { contains: search as string } },
+    //           { email: { contains: search as string } },
+    //         ],
+    //       }
+    //     : {}),
+    // };
+
+    // ✅ Build search filter
+        const where: any = {
+          clientAdminId: user.clientAdminId, // only fetch faculties for this admin
+        };
+    
+        if (search) {
+          const normalizeRoleName = titleCase(search);
+          where.OR = [
+            { name: { startsWith: normalizeRoleName } },
+            { email: { contains: search } },
+          ];
+        }
+    
 
     const roles = await tenantPrisma.roleUser.findMany({
       where,

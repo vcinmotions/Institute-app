@@ -511,7 +511,7 @@ export default function CourseForm({
               ref={firstInputRef}
               tabIndex={1}
               options={filteredCourses.map((course) => ({
-                label: capitalizeWords(course.name),
+                label: course.name,
                 value: course.id,
               }))}
               placeholder="Select a course"
@@ -534,7 +534,7 @@ export default function CourseForm({
             <Select
               tabIndex={2}
               options={filteredBatches.map((batch) => ({
-                label: capitalizeWords(batch.label),
+                label: batch.label,
                 value: batch.value,
               }))}
               placeholder="Select an option"

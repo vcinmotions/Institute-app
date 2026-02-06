@@ -11,6 +11,7 @@ import { useCreateRolest } from "@/hooks/useCreateRoles"; // ✅ new hook
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useEditRoles } from "@/hooks/useEditRoles";
+import { titleCase } from "@/app/utils/Normalize";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -154,8 +155,14 @@ export default function EditRolesForm({
     const id = roleData.id;
     console.log("GET roleData ID IN HABDLE SUBMIT:", id);
 
+    const normalizeRole = {
+          ...formData,
+          name: titleCase(formData.name)
+        }
+    
+
     editRolesBasedAdmin(
-      { formData, id },
+      { formData: normalizeRole, id },
       {
         onSuccess: () => {
           setAlert({
@@ -167,7 +174,7 @@ export default function EditRolesForm({
 
           setTimeout(() => {
             onCloseModal();
-          }, 3000);
+          }, 2000);
         },
 
         onError: () => {
@@ -197,7 +204,7 @@ export default function EditRolesForm({
             tabIndex={1}
             type="text"
             placeholder="Ex. John Doe"
-            value={formData.name}
+            value={titleCase(formData.name)}
             onChange={(e) => handleChange("name", e.target.value)}
           />
           {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
@@ -259,7 +266,7 @@ export default function EditRolesForm({
           >
             Close
           </Button>
-          <Button size="sm" tabIndex={6} onClick={handleSubmit}>
+          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={6} onClick={handleSubmit}>
             Save
           </Button>
         </div>

@@ -337,7 +337,7 @@ export default function EnquiryDataTable({
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       <span>
                         {item.enquiryCourse.map((c: any, index: any) => (
-                          <div className="capitalize" key={index}>{c.course.name}</div>
+                          <div key={index}>{c.course.name}</div>
                         ))}
                       </span>
                     </TableCell>

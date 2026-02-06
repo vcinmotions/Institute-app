@@ -5,6 +5,7 @@ import { ensureUniqueEnquiry } from "../domain/enquiry/enquiryRules";
 import { buildEnquiryWhere } from "../filters/enquiry.filter";
 import { buildEnquiryOrderBy } from "../filters/enquiry.sort";
 import { parseDate } from "../helpers/date";
+import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "../utils/Normalize";
 
 export async function getEnquiries({
   prisma,
@@ -39,6 +40,8 @@ export async function getEnquiries({
     prisma.enquiry.count({ where }),
   ]);
 
+  console.log("DATA IN ENQUIRY SERVICE;", data);
+
   return {
     data,
     total,
@@ -55,7 +58,24 @@ export async function createEnquiryService({
   clientAdminId: string;
   data: any;
 }) {
-  const { name, contact, email, dob, courseId } = data;
+
+   // ✅ Normalize FIRST (backend is source of truth)
+  const normalizedData = {
+    ...data,
+    name: data.name ? titleCase(data.name) : null,
+    email: data.email ? normalizeEmail(data.email) : null,
+    contact: data.contact ? normalizePhone(data.contact) : null,
+    alternateContact: data.alternateContact
+      ? normalizePhone(data.alternateContact)
+      : null,
+    location: data.location
+      ? normalizeToLowercase(data.location)
+      : null,
+  };
+
+  const { name, contact, email, dob, courseId } = normalizedData;
+  
+  // const { name, contact, email, dob, courseId } = data;
 
   // 1️⃣ Check for duplicates only if values exist
   if (email) {
@@ -93,14 +113,14 @@ export async function createEnquiryService({
       name,
       contact,
       email,
-      source: data.source || null,
-      alternateContact: data.alternateContact || null,
       age: age ?? null,
-      location: data.location || null,
-      city: data.city || null,
-      gender: data.gender || null,
       dob: dob ? new Date(dob) : null,
-      referedBy: data.referedBy || null,
+      source: normalizedData.source || null,
+      alternateContact: normalizedData.alternateContact || null,
+      location: normalizedData.location || null,
+      city: normalizedData.city || null,
+      gender: normalizedData.gender || null,
+      referedBy: normalizedData.referedBy || null,
       clientAdminId,
     },
   });
@@ -128,7 +148,26 @@ export async function editEnquiryService({
   clientAdminId: string;
   data: any;
 }) {
-  const { id, name, contact, email, dob, courseId } = data;
+
+   // ✅ Normalize FIRST (backend is source of truth)
+  const normalizedData = {
+    ...data,
+    name: data.name ? titleCase(data.name) : null,
+    email: data.email ? normalizeEmail(data.email) : null,
+    contact: data.contact ? normalizePhone(data.contact) : null,
+    alternateContact: data.alternateContact
+      ? normalizePhone(data.alternateContact)
+      : null,
+    location: data.location
+      ? normalizeToLowercase(data.location)
+      : null,
+  };
+
+  const { id, name, contact, email, dob, courseId } = normalizedData;
+  //const { id, name, contact, email, dob, courseId } = data;
+
+  console.log("GET ENIT DATA:", normalizedData);
+  console.log("GET ENIT DATA:", data);
 
   // 1️⃣ Check for duplicates in domain rule
   const existingEnquiry = await prisma.enquiry.findUnique({
@@ -156,14 +195,14 @@ export async function editEnquiryService({
       name,
       contact,
       email,
-      source: data.source || null,
-      alternateContact: data.alternateContact || null,
       age: age,
-      location: data.location || null,
-      city: data.city || null,
-      gender: data.gender || null,
       dob: parseDate(dob),
-      referedBy: data.referedBy || null,
+      source: normalizedData.source || null,
+      alternateContact: normalizedData.alternateContact || null,
+      location: normalizedData.location || null,
+      city: normalizedData.city || null,
+      gender: normalizedData.gender || null,
+      referedBy: normalizedData.referedBy || null,
       clientAdminId,
     },
   });

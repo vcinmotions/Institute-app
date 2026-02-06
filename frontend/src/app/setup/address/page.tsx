@@ -263,7 +263,7 @@ export default function AddressSetupPage() {
             >
               Cancel
             </Button> */}
-            <Button size="sm" disabled={loading}>
+            <Button size="sm"  className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" disabled={loading}>
               {loading ? "Setting up..." : "Create System"}
             </Button>
           </div>

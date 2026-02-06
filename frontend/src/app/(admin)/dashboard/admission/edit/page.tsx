@@ -24,6 +24,7 @@ import TextArea from "@/components/form/input/TextArea";
 import { countries } from "@/components/common/CountriesCode";
 import { genders, options } from "@/components/common/Options";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { titleCase } from "@/app/utils/Normalize";
 
 type FormErrors = Partial<Record<keyof NewEnquiryDataAll, string>>;
 
@@ -533,7 +534,7 @@ export default function AdmissionForm() {
     () =>
       batch.map((b: any) => ({
         value: b.id.toString(),
-        label: `${capitalizeWords(b.name)} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+        label: `${(b.name)} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
       })),
     [batch]
   );
@@ -977,8 +978,7 @@ export default function AdmissionForm() {
                 ref={firstInputRef}
                 tabIndex={1}
                 placeholder="Enter Student Name"
-                value={newEnquiry.name}
-                className="capitalize"
+                value={titleCase(newEnquiry.name)}
                 onChange={(e) => handleChangeNew("name", e.target.value)}
               />
               {errors.name && (
@@ -994,9 +994,9 @@ export default function AdmissionForm() {
               <Input
                 type="text"
                 tabIndex={2}
-                className="capitalize"
+          
                 placeholder="Enter Father Name"
-                value={filledEnquiryData.fatherName}
+                value={titleCase(filledEnquiryData.fatherName)}
                 onChange={(e) => handleChange("fatherName", e.target.value)}
               />
               {errors.fatherName && (
@@ -1012,9 +1012,8 @@ export default function AdmissionForm() {
               <Input
                 type="text"
                 tabIndex={3}
-                className="capitalize"
                 placeholder="Enter Mother Name"
-                value={filledEnquiryData.motherName}
+                value={titleCase(filledEnquiryData.motherName)}
                 onChange={(e) => handleChange("motherName", e.target.value)}
               />
               {errors.motherName && (
@@ -1126,7 +1125,6 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={9}
                 type="text"
-                className="capitalize"
                 placeholder="Enter Student Religion"
                 value={filledEnquiryData.religion}
                 onChange={(e) => handleChange("religion", e.target.value)}
@@ -1144,7 +1142,7 @@ export default function AdmissionForm() {
                   tabIndex={10}
                   options={courses.map((course) => ({
                     value: String(course.id),
-                    text: capitalizeWords(course.name),
+                    text: course.name,
                     selected: newEnquiry.courseId.includes(String(course.id)),
                   }))}
                   label="Select Courses"

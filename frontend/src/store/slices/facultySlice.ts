@@ -5,7 +5,10 @@ interface FacultyState {
   faculties: any[];
   loading: boolean;
   error: string | null;
-  total: number; // ✅ New field
+  searchQuery: string;
+  total: number; // ✅ New field 
+  totalPages: number; // ✅ New field 
+  currentPage: number,
 }
 
 // 🟢 Initial state must match the shape of EnquiryState
@@ -14,6 +17,9 @@ const initialState: FacultyState = {
   loading: false,
   error: null,
   total: 0,
+  searchQuery: "",
+  totalPages: 0,
+  currentPage: 1,
 };
 
 const facultySlice = createSlice({
@@ -31,10 +37,19 @@ const facultySlice = createSlice({
     },
     setTotal(state, action: PayloadAction<number>) {
       state.total = action.payload;
-    }
+    },
+    setSearchQuery(state, action: PayloadAction<string>) {
+      state.searchQuery = action.payload;
+    },
+    setTotalPages(state, action: PayloadAction<number>) {
+      state.totalPages = action.payload;
+    },
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.currentPage = action.payload;
+    },
   },
 });
 
 // Export actions and reducer
-export const { setFaculties, setLoading, setError, setTotal } = facultySlice.actions;
+export const { setFaculties, setLoading, setError, setTotal, setCurrentPage, setSearchQuery, setTotalPages } = facultySlice.actions;
 export default facultySlice.reducer;

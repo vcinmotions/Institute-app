@@ -8,6 +8,7 @@ import Alert from "@/components/ui/alert/Alert";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useEditLab } from "@/hooks/useEditLab";
+import { normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 
 interface LabFormProps {
   onCloseModal: () => void;
@@ -170,8 +171,14 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
     const id = labData.id;
     console.log("GET LABDATA ID IN HABDLE SUBMIT:", id);
 
+     const normalizedLab = {
+          ...lab,
+          name: titleCase(lab.name),
+          location: normalizeToLowercase(lab.location),
+        }
+
     editLab(
-      { lab, id },
+      { lab: normalizedLab, id },
       {
         onSuccess: () => {
           // Reset form
@@ -222,9 +229,8 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
             ref={firstInputRef}
             tabIndex={1}
             type="text"
-            className="capitalize"
             placeholder="Ex. LAB-06"
-            value={lab.name}
+            value={titleCase(lab.name)}
             onChange={(e) => handleChange("name", e.target.value)}
           />
           {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
@@ -236,9 +242,8 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
           <Input
             type="text"
             tabIndex={2}
-            className="capitalize"
             placeholder="Ex. Building D - Floor 1"
-            value={lab.location}
+            value={titleCase(lab.location)}
             onChange={(e) => handleChange("location", e.target.value)}
           />
           {errors.location && (
@@ -361,7 +366,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
           <Button size="sm" variant="outline" onClick={onCloseModal}>
             Close
           </Button>
-          <Button size="sm" onClick={handleSubmit}>
+          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

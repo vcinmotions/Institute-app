@@ -1,5 +1,6 @@
 // filters/enquiry.filter.ts
 import { PrismaClient } from "../../prisma-client/generated/tenant";
+import { titleCase } from "../utils/Normalize";
 
 type BatchWhere = NonNullable<
   Parameters<PrismaClient["batch"]["findMany"]>[0]
@@ -20,9 +21,10 @@ export function buildBatchWhere({
   };
 
   if (search) {
+    const normalizeBatchName = titleCase(search);
     const numeric = Number(search);
     where.OR = [
-      { name: { contains: search } },
+      { name: { contains: normalizeBatchName } },
     ];
   }
 

@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useLabStore } from "@/store/labStore";
 import { useRouter } from "next/navigation";
+import { normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 
 interface TimeSlot {
   day: string;
@@ -194,7 +195,13 @@ export default function LabForm() {
       return;
     }
 
-    createLab(lab, {
+    const normalizedLab = {
+      ...lab,
+      name: titleCase(lab.name),
+      location: normalizeToLowercase(lab.location),
+    }
+
+    createLab(normalizedLab, {
       onSuccess: () => {
         // Reset form
         setLab({
@@ -252,9 +259,8 @@ export default function LabForm() {
             <Input
               ref={firstInputRef}
               type="text"
-              className="capitalize"
               placeholder="Ex. LAB-06"
-              value={lab.name}
+              value={titleCase(lab.name)}
               onChange={(e) => handleChange("name", e.target.value)}
             />
             {errors.name && (
@@ -268,8 +274,7 @@ export default function LabForm() {
             <Input
               type="text"
               placeholder="Ex. Building D - Floor 1"
-              value={lab.location}
-              className="capitalize"
+              value={titleCase(lab.location)}
               onChange={(e) => handleChange("location", e.target.value)}
             />
             {errors.location && (

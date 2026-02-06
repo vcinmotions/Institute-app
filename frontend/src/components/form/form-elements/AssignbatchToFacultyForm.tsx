@@ -8,6 +8,9 @@ import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useAssignBatch } from "@/hooks/useAssignBatchToFaculty";
+import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
+import { setBatches } from "@/store/slices/batchSlice";
+import { useDispatch } from "react-redux";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -45,6 +48,8 @@ export default function AssignBatchFacultyForm({
     variant: "",
   });
 
+  const dispatch = useDispatch();
+
   const [errors, setErrors] = useState<Partial<FacultyBatchData>>({});
   const { mutate: assignBatchToFaculty } = useAssignBatch();
 
@@ -53,6 +58,20 @@ export default function AssignBatchFacultyForm({
   useEffect(() => {
     firstInputRef.current?.focus();
   }, []);
+
+  const {
+        data: batchData,
+        isLoading: batchLoading,
+        isError: batchError,
+      } = useFetchAllBatches();
+
+      useEffect(() => {
+            console.log("get all batches data;", batchData);
+            if (batchData?.batch) { 
+              dispatch(setBatches(batchData.batch));
+            }
+            setBatches;
+          }, [batchData, dispatch]);
 
   // ✅ Auto–fill faculty details
   useEffect(() => {

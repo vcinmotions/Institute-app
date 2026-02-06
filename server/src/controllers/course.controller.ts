@@ -3,6 +3,7 @@ import { generateCertificate } from "../utils/templates/certificatesGenerate";
 import path from "path";
 import { courseQuerySchema } from "../validators/course.query";
 import { getCourses } from "../services/course.service";
+import { titleCase } from "../utils/Normalize";
 
 function calculateTimePerDay(schedule: { startTime: string; endTime: string }) {
   const [startH, startM] = schedule.startTime.split(":").map(Number);
@@ -219,6 +220,13 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
         .json({ message: "Course Fee Structure not Found!" });
     }
 
+     // Create StudentCourse
+    const startDate = new Date(admissionDate);
+    const endDate = new Date(startDate);
+    if (courseExists.durationWeeks) {
+      endDate.setDate(startDate.getDate() + courseExists.durationWeeks * 7);
+    }
+
     // 🔗 5. Attach student to course
     const studentCourse = await tenantPrisma.studentCourse.create({
       data: {
@@ -226,8 +234,8 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
         courseId: Number(courseId),
         batchId: Number(batchId),
         studentCode: student.studentCode,
-        startDate: new Date(admissionDate),
-        endDate: new Date(admissionDate),
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
         status: "ACTIVE",
         clientAdminId,
       },
@@ -404,18 +412,12 @@ export async function addCourseController(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-    //   where: { email: user.email }
-    // });
-
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: "Client admin not found" });
-    // }
+    const normalizeCourseName = titleCase(name);
 
     // ✅ Step 1: Create Course
     const course = await tenantPrisma.course.create({
       data: {
-        name,
+        name: normalizeCourseName,
         durationWeeks: parseInt(durationWeeks),
         description,
         clientAdminId: user.clientAdminId,

@@ -229,7 +229,7 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
           >
             Close
           </Button>
-          <Button size="sm" tabIndex={6} onClick={handleSubmit}>
+          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={6} onClick={handleSubmit}>
             Save
           </Button>
         </div>

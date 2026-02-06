@@ -72,7 +72,7 @@ export default function EnquiryTable() {
   }, []);
 
   useEffect(() => {
-    console.log("USEFFFECT TRIGGERED IN ENQUIRY-TABLE")
+    console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
     if (data) {
       dispatch(setEnquiries(data.data || []));
       dispatch(setTotal(data.total || 0));
@@ -134,7 +134,7 @@ export default function EnquiryTable() {
 
   // --- Handlers (memoized)
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value.toLocaleLowerCase());
+    setSearchInput(e.target.value);
   }, []);
 
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
@@ -172,6 +172,8 @@ export default function EnquiryTable() {
   const courseOptions = useMemo(() => {
     return courses.map(c => ({ label: c.name, value: c.id }));
   }, [courses]);
+
+  console.log("get ENQUURY SEARCH DATA:", searchQuery);
 
   return (
     <div>

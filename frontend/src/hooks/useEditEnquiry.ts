@@ -23,6 +23,8 @@ export const useEditEnquiry = () => {
     mutationFn: async (payload: any) => {
       if (!token) throw new Error("Missing Token for edit enquiry");
 
+      console.log("EDIT ENQUIRY PAYLOAD WITH NORMALIZATION", payload);
+
       await editEnquiryAPI(token, payload);
 
       // Return token for use in onSuccess

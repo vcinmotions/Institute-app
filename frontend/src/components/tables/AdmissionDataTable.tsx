@@ -170,7 +170,7 @@ export default function AdmissionDataTable({
                       {item.email ? item.email : "-"}
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.contact ? item.contact.split('+91')[1] : "-"}
+                      {item.contact }
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.enquiryCourse.map((cr: any, index: number) => (

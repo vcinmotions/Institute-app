@@ -980,11 +980,15 @@ export async function getStudentController(req: Request, res: Response) {
 
     const query = studentQuerySchema.parse(req.query);
 
+    console.log("STUDENT QUERY IN GET STUDETM CONTROLLER:", query);
+
     const result = await getStudents({
       prisma,
       clientAdminId: user.clientAdminId,
       query,
     });
+
+    console.log("STUDENT DATA IN GET STUDETM CONTROLLER:", result);
 
     return res.json({
       message: "Students fetched successfully",

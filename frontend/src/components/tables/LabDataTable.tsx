@@ -29,6 +29,9 @@ import HoldEnquiryModal from "../form/form-elements/HoldEnquiryForm";
 import LostEnquiryModal from "../form/form-elements/LostEnquiryForm";
 import { RootState } from "@/store";
 import EditLabForm from "../form/form-elements/EditLabForm";
+import { useFetchLab } from "@/hooks/useFetchLab";
+
+type LabSortField = "isActive";
 
 type FollowUpModalType =
   | "createNew"
@@ -42,10 +45,9 @@ type LabDataTableProps = {
   lab: any[];
   courses: any[];
   loading: boolean;
-  onSort: (field: string) => void;
+  onSort: (field: LabSortField) => void; // ✅ FIX
   sortField: string;
   sortOrder: "asc" | "desc";
-  onLeadStatus: (field: string) => void;
 };
 
 export default function LabDataTable({
@@ -53,7 +55,6 @@ export default function LabDataTable({
   courses,
   loading,
   onSort,
-  onLeadStatus,
   sortField,
   sortOrder,
 }: LabDataTableProps) {
@@ -83,7 +84,7 @@ export default function LabDataTable({
   const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
     null,
   );
-  const { mutate: fetchEnquiries, data } = useFetchEnquiry();
+  const { mutate: fetchLab, data } = useFetchLab();
   const { followupDetails, isLoading, isError, refetch } =
     useFollowUp(selectedId);
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
@@ -92,32 +93,6 @@ export default function LabDataTable({
     setExpandedRowId((prev) => (prev === lab.id ? null : lab.id));
   };
 
-  // Dispatch server-side fetch
-  const handleSort = (field: string) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
-    const order: "asc" | "desc" =
-      sortField === field && sortOrder === "asc" ? "desc" : "asc";
-
-    fetchEnquiries({
-      token,
-      sortField: field,
-      sortOrder: order,
-    });
-  };
-
-  const handleReopenEnquiry = (enquiry: any, status: "LOST" | "HOLD") => {
-    setSelectedEnquiryId(enquiry.id);
-    setSelectedEnquiryData(enquiry);
-    setShowForm(true); // You can use this to show your EnquiryDetails or UpdateEnquiryModal
-    console.log(`Reopening enquiry ${enquiry.name} as ${status}`);
-  };
-
-  const handleCreateFollowUpForEnquiry = (enquiryId: string) => {
-    setSelectedEnquiryId(enquiryId);
-    setModalType("createNew");
-  };
 
   const handleCreateFollowUpForFollowUp = (followUpId: string) => {
     setSelectedFollowUpId(followUpId);
@@ -128,146 +103,11 @@ export default function LabDataTable({
       followupDetails,
     );
   };
-
-  const handleCompleteFollowUpHandler = (EnqiuryId: string) => {
-    setSelectedEnquiryId(EnqiuryId);
-    setModalType("complete");
-    console.log(
-      "GetTing Follow Up Details After Completing Follow-Up Component Logic:",
-      followupDetails,
-    );
-  };
-
-  const handleHoldEnquiryHandler = (EnqiuryId: string) => {
-    setSelectedEnquiryId(EnqiuryId);
-    setModalType("hold");
-    console.log(
-      "GetTing Follow Up Details After Completing Follow-Up Component Logic:",
-      followupDetails,
-    );
-  };
-
-  const handleLostEnquiryHandler = (EnqiuryId: string) => {
-    setSelectedEnquiryId(EnqiuryId);
-    setModalType("lost");
-    console.log(
-      "GetTing Follow Up Details After Completing Follow-Up Component Logic:",
-      followupDetails,
-    );
-  };
-
   const handleCloseModal = () => {
     setSelectedId(null);
     setLabDetail(false);
   };
 
-  const handleCloseAdmissionModal = () => {
-    setShowAdmissionForm(false);
-    setSelectedEnquiryData(null);
-  };
-
-  const { mutate: followUp, error, isSuccess, isPending } = useFetchFollowUps();
-  const { mutate: admissionStudent } = useCreateAdmission();
-  const { mutate: deleteEnquiry } = useDeleteEnquiry();
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEnquiry({ ...newEnquiry, [e.target.name]: e.target.value });
-  };
-
-  const handleFollowUp = (enquiryId: string) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
-
-    setSelectedId(enquiryId);
-    setSelectedEnquiryId(enquiryId);
-
-    followUp(
-      { token, id: enquiryId },
-      {
-        onSuccess: async (data) => {
-          const followUps = data.followup || [];
-
-          // Save to Redux
-          dispatch(
-            addFollowUpsForEnquiry({
-              enquiryId,
-              followUps,
-            }),
-          );
-
-          await refetch();
-
-          if (followUps.length > 0) {
-            // Show the Timeline Modal if follow-ups exist
-            setFollowUpData(followupDetails);
-            setShowForm(true); // This triggers TimelineDatatable
-            setModalType(null);
-          } else {
-            // Show Create Follow-Up Modal if no follow-ups
-            setModalType("createNew");
-          }
-        },
-      },
-    );
-  };
-
-  const handleAdmission = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
-
-    console.log("Get EnquiryId to Admission Handle:", id);
-
-    const enquiryData = lab.find((item) => item.id === id);
-
-    console.log("Get Enquity Data in Handle Admission:", enquiryData);
-
-    if (!enquiryData) {
-      console.error("No enquiry data found for this ID");
-      return;
-    }
-
-    const { name, email, contact, course } = enquiryData;
-
-    // ✅ Save ID and data to state
-    setSelectedEnquiryId(id);
-    setSelectedEnquiryData({ name, email, contact, course });
-
-    console.log("Get Enquiry Id in HandleAdmission:", selectedEnquiryId);
-    console.log("Get Enquiry DATA in HandleAdmission:", selectedEnquiryData);
-    setShowAdmissionForm(true);
-  };
-
-  const handleDeleted = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
-
-    console.log("Get EnquiryId to Deleted Enquiry", id);
-
-    deleteEnquiry(
-      { token, id },
-      {
-        onSuccess: (data) => {
-          console.log("Deleted Enquiry:", data);
-          setFollowUpData(null); // Optional: Clear data if needed
-          setShowModal(false); // ✅ Close the modal
-          setSelectedId(null); // ✅ Reset selectedId
-        },
-        onError: (err) => {
-          console.error("Delete failed:", err);
-          alert("Something went wrong while deleting");
-        },
-      },
-    );
-  };
 
   const handleEditLab = (item: any) => {
     console.log("Get LAB ID to EDIt LAB", item.id);
@@ -308,11 +148,11 @@ export default function LabDataTable({
                   <button
                     type="button"
                     className="flex items-center gap-1"
-                    onClick={() => onLeadStatus("leadStatus")}
+                    onClick={() => onSort("isActive")}
                   >
                     Status
                     <span>
-                      {sortField === "leadStatus" && sortOrder === "asc"
+                      {sortField === "isActive" && sortOrder === "asc"
                         ? "▲"
                         : "▼"}
                     </span>

@@ -12,6 +12,15 @@ interface GetEnquiryParams {
   leadStatus?: "HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null;
 }
 
+interface GetLabParams {
+  token: string;
+  page?: number;
+  limit?: number;
+  search?: string | null;
+  sortField?: string;
+  sortOrder?: "asc" | "desc";
+}
+
 interface GetMasterParams {
   token: string;
   page?: number;
@@ -177,31 +186,29 @@ export const createCompanyApi = async (token: string, newCompanyData: any) => {
 //   return response.data;
 // };
 
-export const getLab = async ({
-  token,
-  page = 1,
-  limit = 5,
-  search = "",
-  sortField,
-  sortOrder,
-  leadStatus,
-}: GetEnquiryParams) => {
-  const response = await apiClient.get("/all-lab", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    params: {
-      page,
-      limit,
-      search,
-      sortField,
-      sortOrder,
-      leadStatus,
-    },
-  });
+  export const getLab = async ({
+    token,
+    page = 1,
+    limit = 5,
+    search = "",
+    sortField,
+    sortOrder,
+  }: GetLabParams) => {
+    const response = await apiClient.get("/all-lab", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        page,
+        limit,
+        search,
+        sortField,
+        sortOrder,
+      },
+    });
 
-  return response.data;
-};
+    return response.data;
+  };
 
 export const getAnalytics = async (token: string) => {
   const response = await apiClient.get("/profit", {
@@ -527,7 +534,7 @@ export const getEnquiry = async ({
 export const getWonEnquiry = async ({
   token,
   page,
-  limit = 5,
+  limit,
   search = "",
   sortField,
   sortOrder,
@@ -686,12 +693,9 @@ export const getCourse = async ({
 
 export const getBatch = async ({
   token,
-  page = 1,
-  limit = 5,
+  page,
+  limit,
   search = "",
-  sortField,
-  sortOrder,
-  leadStatus,
 }: GetEnquiryParams) => {
   const response = await apiClient.get("/batch", {
     headers: {
@@ -701,9 +705,6 @@ export const getBatch = async ({
       page,
       limit,
       search,
-      sortField,
-      sortOrder,
-      leadStatus,
     },
   });
 
@@ -712,8 +713,8 @@ export const getBatch = async ({
 
 export const getFaculty = async ({
   token,
-  page = 1,
-  limit = 5,
+  page,
+  limit,
   search = "",
   sortField,
   sortOrder,

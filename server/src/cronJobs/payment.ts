@@ -90,8 +90,6 @@ export async function processDuePayments(dbUrl: string) {
     },
   });
 
-  console.log("ALL PAYMENT PENDING AND MISSED:", duePayments);
-
 
   for (const payment of duePayments) {
     const exists = await prisma.notification.findUnique({

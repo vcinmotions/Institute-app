@@ -34,13 +34,12 @@ export default function AdmissionTable() {
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
-  const leadStatusOptions = [null, "HOT", "WARM", "COLD"] as const;
 
 
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value.toLocaleLowerCase());
+    setSearchInput(e.target.value);
   };
 
   // Debounce effect: update searchQuery 1 second after user stops typing

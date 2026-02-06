@@ -31,6 +31,9 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import TextArea from "@/components/form/input/TextArea";
 import { toast } from "sonner";
 import { setError } from "@/store/slices/authSlice";
+import PhoneInput from "@/components/form/group-input/PhoneInput";
+import { countries } from "@/components/common/CountriesCode";
+import { normalizeEmail, titleCase } from "@/app/utils/Normalize";
 
 // interface CompanyData {
 //   name: string;
@@ -193,9 +196,47 @@ export default function Company() {
     });
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), 2000);
 
-    return Object.keys(newErrors).length === 0;
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
+  };
+
+   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      !/[0-9]/.test(e.key) &&
+      e.key !== "+" &&
+      e.key !== "Backspace" &&
+      e.key !== "Delete" &&
+      e.key !== "ArrowLeft" &&
+      e.key !== "ArrowRight" &&
+      e.key !== "Tab"
+    ) {
+      e.preventDefault();
+    }
+  };
+
+  const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+    // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+    const formattedNumber = code + phoneNumber;
+
+    setNewCompany((prev) => ({
+      ...prev,
+      contact: formattedNumber,
+    }));
+
+    setField("contact", formattedNumber);
+
+    if (phoneNumber.length === 10) {
+      setErrors((prev) => ({ ...prev, contact: "" }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        contact: "Phone number must be 10 digits",
+      }));
+    }
   };
 
   // Function to generate a password based on selected options
@@ -333,25 +374,45 @@ export default function Company() {
   };
 
   const handleSubmit = async () => {
-    if (!validate()) {
+    // if (!validate()) {
+    //   setAlert({
+    //     show: true,
+    //     title: "Validation Error",
+    //     message: "Please fill all fields.",
+    //     variant: "error",
+    //   });
+
+    //   setTimeout(
+    //     () => setAlert({ show: false, title: "", message: "", variant: "" }),
+    //     3000,
+    //   );
+    //   return;
+    // }
+
+    const token = sessionStorage.getItem("token");
+    if (!token) {
       setAlert({
         show: true,
-        title: "Validation Error",
-        message: "Please fill all fields.",
+        title: "Unauthorized",
+        message: "Token not found. Please log in again.",
         variant: "error",
       });
 
-      setTimeout(
-        () => setAlert({ show: false, title: "", message: "", variant: "" }),
-        3000,
-      );
+       window.scrollTo({
+          top: 0, behavior: "smooth"
+        })
+
+      setTimeout(() => {
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
+
       return;
     }
 
     // Combine all data
     const admissionPayload = {
-      name: newCompany.name,
-      email: newCompany.email,
+      name: titleCase(newCompany.name),
+      email: normalizeEmail(newCompany.email),
       contact: newCompany.contact,
       instituteName: newCompany.instituteName,
       password: newCompany.password,
@@ -464,8 +525,7 @@ export default function Company() {
                 ref={firstInputRef}
                 type="text"
                 placeholder="Enter Institute Name"
-                value={newCompany.instituteName}
-                className="capitalize"
+                value={titleCase(newCompany.instituteName)}
                 onChange={(e) => handleChange("instituteName", e.target.value)}
               />
               {errors.instituteName && (
@@ -479,8 +539,7 @@ export default function Company() {
               <Input
                 type="text"
                 placeholder="Enter Display Name"
-                value={newCompany.name}
-                className="capitalize"
+                value={titleCase(newCompany.name)}
                 onChange={(e) => handleChange("name", e.target.value)}
               />
               {errors.name && (
@@ -490,11 +549,11 @@ export default function Company() {
 
             {/* EMAIL */}
             <div className="col-span-4 md:col-span-2 lg:col-span-1">
-              <Label>Username </Label>
+              <Label>Username *</Label>
               <Input
                 type="text"
                 placeholder="Enter Username"
-                value={newCompany.email}
+                value={normalizeEmail(newCompany.email)}
                 onChange={(e) => handleChange("email", e.target.value)}
               />
               {errors.email && (
@@ -529,12 +588,20 @@ export default function Company() {
             {/* CONTACT */}
             <div className="col-span-4 md:col-span-2 lg:col-span-1">
               <Label>Contact </Label>
-              <Input
+              {/* <Input
                 type="text"
                 placeholder="Enter Contact"
                 value={newCompany.contact}
                 onChange={(e) => handleChange("contact", e.target.value)}
-              />
+              /> */}
+              <PhoneInput
+              selectPosition="start"
+              countries={countries}
+              tabIndex={3}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter Contact"
+              onChange={handlePhoneNumberChange}
+            />
               {errors.contact && (
                 <p className="text-sm text-red-500">{errors.contact}</p>
               )}
@@ -691,7 +758,7 @@ export default function Company() {
             >
               Clear
             </Button> */}
-            <Button disabled={loading === true} onClick={handleSubmit}>
+            <Button disabled={loading === true} size="sm" className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               {loading === true ? "Creating..." : "Save"}
             </Button>
           </div>

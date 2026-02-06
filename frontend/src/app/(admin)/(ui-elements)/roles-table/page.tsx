@@ -6,18 +6,17 @@ import { getRoles } from "@/lib/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
-import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
 import RolesDataTable from "@/components/tables/RolesDataTable";
-import { setRoles } from "@/store/slices/rolesSlices";
+import { setCurrentPage, setRoles, setSearchQuery, setTotal, setTotalPages } from "@/store/slices/rolesSlices";
 import RolesForm from "@/components/form/form-elements/RolesForm";
 import StudentCard from "@/components/common/StudentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
+import useDebounce from "@/hooks/useDebounce";
 
 export default function RolesTable() {
   const [showForm, setShowForm] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const { currentPage, totalPages, searchQuery, total } = useSelector((state: RootState) => state.role);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const roles = useSelector((state: RootState) => state.role.roles);
   const courses = useSelector((state: RootState) => state.course.courses);
@@ -32,35 +31,23 @@ export default function RolesTable() {
   const dispatch = useDispatch();
   const leadStatusOptions = [null, "HOT", "WARM", "COLD"] as const;
 
-  // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
+ // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value.toLocaleLowerCase());
+    setSearchInput(e.target.value);
   };
 
-  // useEffect(() => {
-  //   const handleKeyDown = (e: KeyboardEvent) => {
-  //     if (e.key === "F11") {
-  //       e.preventDefault();
-  //       setShowForm(prev => !prev); // ✅ FIXED toggle
-  //     }
-  //   };
-  
-  //   window.addEventListener("keydown", handleKeyDown);
-  //   return () => window.removeEventListener("keydown", handleKeyDown);
-  // }, []);
-
   // Debounce effect: update searchQuery 1 second after user stops typing
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
-    }, 300);
+  // --- Debounced search and Set delay time according to your needs
+    const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchInput]);
+    // 2. sync debounced value to Redux
+    useEffect(() => {
+      if (debouncedSearchTerm !== searchQuery) {
+        dispatch(setSearchQuery(debouncedSearchTerm));
+        dispatch(setCurrentPage(1));
+      }
+    }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -81,7 +68,8 @@ export default function RolesTable() {
           );
 
         dispatch(setRoles(response.roles || []));
-        setTotalPages(response.totalPages || 1);
+        dispatch(setTotalPages(response.totalPages || 0));
+        dispatch(setTotal(response.totalCount || 0));
       } catch (error) {
         console.error("Error fetching Courses:", error);
       } finally {
@@ -94,48 +82,21 @@ export default function RolesTable() {
 
   console.log("Query data:", currentPage, searchQuery, totalPages);
 
-  // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(e.target.value);
-  // };
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
+        e.preventDefault();
+        dispatch(setCurrentPage(1));
+      }, [dispatch]);
+    
+      const handlePagination = useCallback((page: number) => {
+        if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+      }, [dispatch, totalPages]);
 
-  const handleSearchSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
-  };
-
-  const handlePagination = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
-
-  const handleCreateClick = () => {
-    setShowForm(!showForm);
-  };
-
-  const handleCloseModal = () => {
-    setShowForm(false);
-  };
-
-  const handleSort = (field: string) => {
-    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-    setSortField(field);
-    setSortOrder(order);
-    setLeadStatus(leadStatus);
-  };
-
-  const handleLeadStatus = (field: string) => {
-    const currentIndex = leadStatusOptions.indexOf(leadStatus);
-    const nextStatus =
-      leadStatusOptions[(currentIndex + 1) % leadStatusOptions.length];
-    setLeadStatus(nextStatus);
-    setCurrentPage(1); // Reset pagination on status change
-  };
 
   console.log("GET ROLE SEARCH:", searchQuery, searchInput, totalPages);
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Role User Lists" onCreateClick={handleCreateClick}>
+        <StudentCard title="Role User Lists">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
@@ -145,21 +106,18 @@ export default function RolesTable() {
           <RolesDataTable
             roles={roles}
             loading={loading}
-            onSort={handleSort}
-     
-            sortField={sortField}
-            sortOrder={sortOrder}
+
           />
 
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            totalCount={total}
             onPageChange={handlePagination}
           />
         </StudentCard>
       </div>
 
-      {showForm && <RolesForm onCloseModal={handleCloseModal} />}
     </div>
   );
 }

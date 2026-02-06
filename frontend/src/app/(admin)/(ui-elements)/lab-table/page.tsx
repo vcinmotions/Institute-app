@@ -6,13 +6,14 @@ import { getLab } from "@/lib/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
-import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
 //import LabDataTable from "@/components/tables/LabDataTable";
-import { setLab } from "@/store/slices/labSlice";
+import { setCurrentPage, setLab, setSearchQuery, setSort, setTotal, setTotalPages } from "@/store/slices/labSlice";
 import LabForm from "@/components/form/form-elements/LabCreateForm";
 import dynamic from "next/dynamic";
 import StudentCard from "@/components/common/StudentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
+import useDebounce from "@/hooks/useDebounce";
 
 const LabDataTable = dynamic(
   () => import("@/components/tables/LabDataTable"),
@@ -21,72 +22,37 @@ const LabDataTable = dynamic(
 
 export default function LabTable() {
   const [showForm, setShowForm] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const lab = useSelector((state: RootState) => state.lab.labs);
   const courses = useSelector((state: RootState) => state.course.courses);
   const [loading, setLoading] = useState<boolean>(false);
-  const [sortField, setSortField] = useState("createdAt");
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(
     null,
   );
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const { currentPage, searchQuery, totalPages, sortField, sortOrder, total } = useSelector((state: RootState) => state.lab)
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
-  const leadStatusOptions = [null, "HOT", "WARM", "COLD"] as const;
 
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value.toLocaleLowerCase());
+    setSearchInput(e.target.value);
   };
 
-  // useEffect(() => {
-  //       const handleKeyDown = (e: KeyboardEvent) => {
-  //         switch (e.key) {
-  //           case "F8":
-  //             e.preventDefault();
-  //             setShowForm(!showForm);
-  //             break;
-  //         }
-  //       };
-    
-  //       window.addEventListener("keydown", handleKeyDown);
-  //       return () => window.removeEventListener("keydown", handleKeyDown);
-  //     }, []);
-
-  useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "F9") {
-      e.preventDefault();
-      setShowForm(prev => !prev); // ✅ FIXED toggle
-    }
-
-    if (e.key === "Escape") {
-          e.preventDefault();
-          setShowForm(false);
-        }
-  };
-
-  window.addEventListener("keydown", handleKeyDown);
-  return () => window.removeEventListener("keydown", handleKeyDown);
-}, []);
-
+  console.log("TOTAL", total);
 
   // Debounce effect: update searchQuery 1 second after user stops typing
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
-    }, 300);
+  // --- Debounced search and Set delay time according to your needs
+    const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchInput]);
+    // 2. sync debounced value to Redux
+    useEffect(() => {
+      if (debouncedSearchTerm !== searchQuery) {
+        dispatch(setSearchQuery(debouncedSearchTerm));
+        dispatch(setCurrentPage(1));
+      }
+    }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -106,11 +72,12 @@ export default function LabTable() {
           search: searchQuery,
           sortField,
           sortOrder,
-          leadStatus, // 👈 Add this
         });
 
         dispatch(setLab(response.labs || []));
-        setTotalPages(response.totalPages || 1);
+        dispatch(setTotalPages(response.totalPages || 1));
+        dispatch(setTotal(response.total || 0));
+        console.log("LOG LAB DATA:", response);
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       } finally {
@@ -119,23 +86,13 @@ export default function LabTable() {
     };
 
     fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, leadStatus]);
+  }, [currentPage, searchQuery, sortField, sortOrder]);
 
-  console.log("Lab Query data:", currentPage, searchQuery, totalPages);
+  console.log("Lab Query data:", currentPage, searchQuery, totalPages, sortField, sortOrder);
 
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(e.target.value);
   // };
-
-  const handleSearchSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
-  };
-
-  const handlePagination = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
 
   const handleCreateClick = () => {
     setShowForm(!showForm);
@@ -145,20 +102,31 @@ export default function LabTable() {
     setShowForm(false);
   };
 
-  const handleSort = (field: string) => {
-    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-    setSortField(field);
-    setSortOrder(order);
-    setLeadStatus(leadStatus);
-  };
+  // const handleSort = (field: "isActive") => {
+  //   const order =
+  //     sortField === field && sortOrder === "desc" ? "asc" : "desc";
 
-  const handleLeadStatus = (field: string) => {
-    const currentIndex = leadStatusOptions.indexOf(leadStatus);
-    const nextStatus =
-      leadStatusOptions[(currentIndex + 1) % leadStatusOptions.length];
-    setLeadStatus(nextStatus);
-    setCurrentPage(1); // Reset pagination on status change
-  };
+  //   setSortField(field);
+  //   setSortOrder(order);
+  //   dispatch(setCurrentPage(1));
+  // };
+
+// --- Handlers (memoized)
+    
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(setCurrentPage(1));
+  }, [dispatch]);
+
+  const handlePagination = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+  }, [dispatch, totalPages]);
+
+  const handleSort = useCallback((field: "isActive") => {
+    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
+    dispatch(setSort({ field, order }));
+  }, [dispatch, sortField, sortOrder]);
+
 
   return (
     <div>
@@ -175,7 +143,6 @@ export default function LabTable() {
             loading={loading}
             courses={courses}
             onSort={handleSort}
-            onLeadStatus={handleLeadStatus}
             sortField={sortField}
             sortOrder={sortOrder}
           />
@@ -183,6 +150,8 @@ export default function LabTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            totalCount={total}
+            title="Labs"
             onPageChange={handlePagination}
           />
         </StudentCard>

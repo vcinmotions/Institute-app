@@ -6,71 +6,47 @@ import { getBatch, getCourse, getFaculty } from "@/lib/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
-import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
 import { setCourses } from "@/store/slices/courseSlice";
 import FacultyForm from "@/components/form/form-elements/FacultyCreateForm";
 import FacultyDataTable from "@/components/tables/FacultyDataTable";
-import { setFaculties, setTotal } from "@/store/slices/facultySlice";
+import { setCurrentPage, setFaculties, setSearchQuery, setTotal, setTotalPages } from "@/store/slices/facultySlice";
 import { setBatches } from "@/store/slices/batchSlice";
 import StudentCard from "@/components/common/StudentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
+import useDebounce from "@/hooks/useDebounce";
 
 export default function FacultyTable() {
   const [showForm, setShowForm] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const faculties = useSelector((state: RootState) => state.faculty.faculties);
-  const totalCount = useSelector((state: RootState) => state.faculty.total);
+  const { total, totalPages, currentPage, searchQuery } = useSelector((state: RootState) => state.faculty);
   const courses = useSelector((state: RootState) => state.course.courses);
   const batch = useSelector((state: RootState) => state.batch.batches);
   const [loading, setLoading] = useState<boolean>(false);
-  const [sortField, setSortField] = useState("createdAt");
-  const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(
-    null,
-  );
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
-  const leadStatusOptions = [null, "HOT", "WARM", "COLD"] as const;
 
-  // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
+ // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value.toLocaleLowerCase());
+    setSearchInput(e.target.value);
   };
 
-  // useEffect(() => {
-  //       const handleKeyDown = (e: KeyboardEvent) => {
-  //         if (e.key === "F10") {
-  //           e.preventDefault();
-  //           setShowForm(prev => !prev); // ✅ FIXED toggle
-  //         }
-
-  //         if (e.key === "Escape") {
-  //         e.preventDefault();
-  //         setShowForm(false);
-  //       }
-  //       };
-      
-  //       window.addEventListener("keydown", handleKeyDown);
-  //       return () => window.removeEventListener("keydown", handleKeyDown);
-  //     }, []);
-
   // Debounce effect: update searchQuery 1 second after user stops typing
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
-    }, 300);
+  // --- Debounced search and Set delay time according to your needs
+    const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchInput]);
-
+    // 2. sync debounced value to Redux
+    useEffect(() => {
+      if (debouncedSearchTerm !== searchQuery) {
+        dispatch(setSearchQuery(debouncedSearchTerm));
+        dispatch(setCurrentPage(1));
+      }
+    }, [debouncedSearchTerm, searchQuery, dispatch]);
   // Fetch data on mount or when filters change
   useEffect(() => {
     const fetchData = async () => {
@@ -85,11 +61,9 @@ export default function FacultyTable() {
         const response = await getFaculty({
           token,
           page: currentPage,
-          limit: 5,
+          limit: PAGE_SIZE,
           search: searchQuery,
-          sortField,
-          sortOrder,
-          leadStatus, // 👈 Add this
+
         });
 
         console.log("geting faculty Details:", response.faculty);
@@ -99,9 +73,6 @@ export default function FacultyTable() {
           page: currentPage,
           limit: 5,
           search: searchQuery,
-          sortField,
-          sortOrder,
-          leadStatus, // 👈 Add this
         });
 
         dispatch(setCourses(responseCourse.course));
@@ -111,15 +82,12 @@ export default function FacultyTable() {
           page: currentPage,
           limit: PAGE_SIZE,
           search: searchQuery,
-          sortField,
-          sortOrder,
-          leadStatus, // 👈 Add this
         });
 
         dispatch(setBatches(responseLab.batch));
 
         dispatch(setFaculties(response.faculty || []));
-        setTotalPages(response.totalPages || 1);
+        dispatch(setTotalPages(response.totalPages || 1));
         dispatch(setTotal(response.totalCount || 0));
       } catch (error) {
         console.error("Error fetching faculty:", error);
@@ -129,7 +97,7 @@ export default function FacultyTable() {
     };
 
     fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, leadStatus]);
+  }, [currentPage, searchQuery]);
 
   console.log("faculty Query data:", currentPage, searchQuery, totalPages);
 
@@ -137,43 +105,20 @@ export default function FacultyTable() {
   //   setSearchQuery(e.target.value);
   // };
 
-  const handleSearchSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
-  };
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
+      e.preventDefault();
+      dispatch(setCurrentPage(1));
+    }, [dispatch]);
+  
+    const handlePagination = useCallback((page: number) => {
+      if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+    }, [dispatch, totalPages]);
 
-  const handlePagination = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
-
-  const handleCreateClick = () => {
-    setShowForm(!showForm);
-  };
-
-  const handleCloseModal = () => {
-    setShowForm(false);
-  };
-
-  const handleSort = (field: string) => {
-    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-    setSortField(field);
-    setSortOrder(order);
-    setLeadStatus(leadStatus);
-  };
-
-  const handleLeadStatus = (field: string) => {
-    const currentIndex = leadStatusOptions.indexOf(leadStatus);
-    const nextStatus =
-      leadStatusOptions[(currentIndex + 1) % leadStatusOptions.length];
-    setLeadStatus(nextStatus);
-    setCurrentPage(1); // Reset pagination on status change
-  };
 
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Faculty Lists" onCreateClick={handleCreateClick}>
+        <StudentCard title="Faculty Lists">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
@@ -185,29 +130,18 @@ export default function FacultyTable() {
             courses={courses}
             batch={batch}
             loading={loading}
-            onSort={handleSort}
-            onLeadStatus={handleLeadStatus}
-            sortField={sortField}
-            sortOrder={sortOrder}
           />
 
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             title="Faculties"
-            totalCount={totalCount}
+            totalCount={total}
             onPageChange={handlePagination}
           />
         </StudentCard>
       </div>
 
-      {showForm && (
-        <FacultyForm
-          onCloseModal={handleCloseModal}
-          courses={courses}
-          batch={batch}
-        />
-      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 // filters/enquiry.filter.ts
 import { PrismaClient } from "../../prisma-client/generated/tenant";
+import { titleCase } from "../utils/Normalize";
 
 type CourseWhere = NonNullable<
   Parameters<PrismaClient["course"]["findMany"]>[0]
@@ -20,9 +21,11 @@ export function buildCourseWhere({
   };
 
   if (search) {
-    const numeric = Number(search);
+
+    const normalizeCourseName = titleCase(search);
+
     where.OR = [
-      { name: { contains: search } },
+      { name: { contains: normalizeCourseName } },
     ];
   }
 

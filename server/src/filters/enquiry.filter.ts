@@ -1,5 +1,6 @@
 // filters/enquiry.filter.ts
 import { PrismaClient, $Enums } from "../../prisma-client/generated/tenant";
+import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "../utils/Normalize";
 
 type EnquiryWhere = NonNullable<
   Parameters<PrismaClient["enquiry"]["findMany"]>[0]
@@ -24,11 +25,15 @@ export function buildEnquiryWhere({
   };
 
   if (search) {
+     const normalizedNameSearch = titleCase(search);
+     const normalizedEmailSearch = normalizeEmail(search);
+     const normalizedLocationSearch = normalizeToLowercase(search);
+
     const numeric = Number(search);
     where.OR = [
-      { name: { contains: search } },
-      { email: { contains: search } },
-      { city: { contains: search } },
+      { name: { contains: normalizedNameSearch } },
+      { email: { contains: normalizedEmailSearch } },
+      { location: { contains: normalizedLocationSearch } },
       { contact: { contains: search } },
       ...(isNaN(numeric) ? [] : [{ srNo: numeric }]),
     ];

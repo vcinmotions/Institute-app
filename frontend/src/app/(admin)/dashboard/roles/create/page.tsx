@@ -14,6 +14,7 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { redirect } from "next/navigation";
 import { useRoleStore } from "@/store/roleStore";
 import { useRouter } from "next/navigation";
+import { titleCase } from "@/app/utils/Normalize";
 
 interface RoleUserData {
   name: string;
@@ -191,7 +192,12 @@ export default function RolesForm() {
       return;
     }
 
-    createRolesBasedAdmin(formData, {
+    const normalizeRole = {
+      ...formData,
+      name: titleCase(formData.name)
+    }
+
+    createRolesBasedAdmin(normalizeRole, {
       onSuccess: () => {
         setAlert({
           show: true,
@@ -241,9 +247,8 @@ export default function RolesForm() {
               ref={firstInputRef}
               tabIndex={1}
               type="text"
-              className="capitalize"
               placeholder="Ex. John Doe"
-              value={formData.name}
+              value={titleCase(formData.name)}
               onChange={(e) => handleChange("name", e.target.value)}
             />
             {errors.name && (

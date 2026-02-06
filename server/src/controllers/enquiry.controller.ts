@@ -461,12 +461,16 @@ export async function editEnquiryController(req: any, res: any) {
     // 1️⃣ Validate request
     const data = enquiryEditSchema.parse(req.body);
 
+    console.log("EDIT ENQUIRY REQ BODY:", req.body);
+
     // 2️⃣ Call service
     const enquiry = await editEnquiryService({
       prisma: req.tenantPrisma,
       clientAdminId: req.user.clientAdminId,
       data,
     });
+
+    console.log("EDIT ENQUIRY DATA 🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐:", enquiry);
 
     return res.status(200).json({
       message: "Enquiry updated successfully",

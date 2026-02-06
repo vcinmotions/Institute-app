@@ -28,6 +28,10 @@ import {
   IState,
   State,
 } from "country-state-city";
+import { capitalizeWords } from "@/components/common/ToCapitalize";
+import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
+
+type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -128,7 +132,7 @@ export default function EditEnquiryForm({
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
-  const [errors, setErrors] = useState<Partial<EnquiryData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const { mutate: editEnquiry, isPending } = useEditEnquiry();
   const countries = [
     { code: "IN", label: "+91" },
@@ -146,21 +150,6 @@ export default function EditEnquiryForm({
   };
 
   console.log("Get Courses Name in Enquiry Form:", courses);
-
-  // useEffect(() => {
-  //   if (enquiryData && Object.keys(enquiryData).length > 0) {
-  //     console.log("🔥 Setting enquiry data to form:", enquiryData);
-
-  //     setNewEnquiry({
-  //       id: enquiryData.id,
-  //       name: enquiryData.name || "",
-  //       email: enquiryData.email || "",
-  //       courseId: enquiryData.course || [],
-  //       source: enquiryData.source || "",
-  //       contact: enquiryData.contact || "",
-  //     });
-  //   }
-  // }, [enquiryData]);
 
   const genders = [
     { value: "female", label: "Female" },
@@ -203,12 +192,20 @@ export default function EditEnquiryForm({
     ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
     : [];
 
+  const splicedContact = enquiryData.contact
+    ? enquiryData.contact.slice(-10) // last 10 digits
+    : "";
+
+  const splicedAlternateContact = enquiryData.alternateContact
+    ? enquiryData.alternateContact.slice(-10) // last 10 digits
+    : "";
+
   setNewEnquiry({
     id: enquiryData.id,
     name: enquiryData.name ?? "",
     email: enquiryData.email ?? "",
-    contact: enquiryData.contact ?? "",
-    alternateContact: enquiryData.alternateContact ?? "",
+    contact: splicedContact,
+    alternateContact: splicedAlternateContact,
     location: enquiryData.location ?? "",
     city: enquiryData.city ?? "",
     gender: enquiryData.gender ?? "",
@@ -227,84 +224,122 @@ export default function EditEnquiryForm({
 
   console.log("Get Courses Name in Enquiry Form:", courseList);
 
-  const handlePhoneNumberChange = (
-    phoneNumber: string,
-    countryCode = "+91",
-  ) => {
-    // If phoneNumber doesn't start with +, prepend selected country code
-    let formattedNumber = phoneNumber;
-    if (!phoneNumber.startsWith("+")) {
-      formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
-    }
+  // const handlePhoneNumberChange = (
+  //   phoneNumber: string,
+  //   countryCode: string,
+  // ) => {
+  //   // If phoneNumber doesn't start with +, prepend selected country code
+  //   let formattedNumber = phoneNumber;
+  //   if (!phoneNumber.startsWith("+")) {
+  //     formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
+  //   }
 
-    setNewEnquiry((prev) => ({
-      ...prev,
-      contact: formattedNumber,
-    }));
+  //   setNewEnquiry((prev) => ({
+  //     ...prev,
+  //     contact: formattedNumber,
+  //   }));
 
-    setErrors((prev) => ({
-      ...prev,
-      contact: "",
-    }));
-  };
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     contact: "",
+  //   }));
+  // };
 
-   const handleAlternatePhoneNumberChange = (
-    phoneNumber: string,
-    countryCode = "+91",
-  ) => {
-    // If phoneNumber doesn't start with +, prepend selected country code
-    let formattedNumber = phoneNumber;
-    if (!phoneNumber.startsWith("+")) {
-      formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
-    }
 
-    setNewEnquiry((prev) => ({
-      ...prev,
-      alternateContact: formattedNumber,
-    }));
+  const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+  let digitsOnly = phoneNumber.replace(/\D/g, "");
 
-    setErrors((prev) => ({
-      ...prev,
-      alternateContact: "",
-    }));
-  };
+  // Remove country code digits if already present
+  const countryDigits = code.replace("+", "");
+  if (digitsOnly.startsWith(countryDigits)) {
+    digitsOnly = digitsOnly.slice(countryDigits.length);
+  }
 
-  const options = [
-    { value: "linkedin", label: "LinkedIn" },
-    { value: "indeed", label: "Indeed" },
-    { value: "instagram", label: "Instagram" },
-    { value: "other", label: "Other" },
-  ];
+  digitsOnly = digitsOnly.slice(0, 10);
+
+  const formattedNumber = digitsOnly
+    ? `${code}${digitsOnly}`
+    : "";
+
+  setNewEnquiry((prev) => ({
+    ...prev,
+    contact: formattedNumber,
+  }));
+
+  setErrors((prev) => ({
+    ...prev,
+    contact:
+      digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+  }));
+};
+
+const handleAlternatePhoneNumberChange = (
+  phoneNumber: string,
+  code: string
+) => {
+  let digitsOnly = phoneNumber.replace(/\D/g, "");
+
+  const countryDigits = code.replace("+", "");
+  if (digitsOnly.startsWith(countryDigits)) {
+    digitsOnly = digitsOnly.slice(countryDigits.length);
+  }
+
+  digitsOnly = digitsOnly.slice(0, 10);
+
+  const formattedNumber = digitsOnly
+    ? `${code}${digitsOnly}`
+    : "";
+
+  setNewEnquiry((prev) => ({
+    ...prev,
+    alternateContact: formattedNumber,
+  }));
+
+  setErrors((prev) => ({
+    ...prev,
+    alternateContact:
+      digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+  }));
+};
+
+
+
+  //  const handleAlternatePhoneNumberChange = (
+  //   phoneNumber: string,
+  //   countryCode: string,
+  // ) => {
+  //   // If phoneNumber doesn't start with +, prepend selected country code
+  //   let formattedNumber = phoneNumber;
+  //   if (!phoneNumber.startsWith("+")) {
+  //     formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
+  //   }
+
+  //   setNewEnquiry((prev) => ({
+  //     ...prev,
+  //     alternateContact: formattedNumber,
+  //   }));
+
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     alternateContact: "",
+  //   }));
+  // };
+
 
   const validate = () => {
-    const newErrors: Partial<EnquiryData> = {};
+    const newErrors: FormErrors = {};
 
     if (!newEnquiry.name.trim()) {
       newErrors.name = "Name is required.";
     }
 
-    // if (!newEnquiry.email.trim()) {
-    //   newErrors.email = "Email is required.";
-    // }
-
-    // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEnquiry.email)) {
-    //   newErrors.email = "Email is invalid.";
-    // }
-
     if (!newEnquiry.contact.trim()) {
       newErrors.contact = "Contact number is required.";
     }
-    // else if (!/^\+\d{10,15}$/.test(newEnquiry.contact)) {
-    //   newErrors.contact = "Contact must be 10 digits.";
-    // }
 
-    // if (!newEnquiry.courseId) {
-    //   newErrors.courseId = "Course is required.";
-    // }
-
-    // if (!newEnquiry.source.trim()) {
-    //   newErrors.source = "Source is required.";
-    // }
+     if (newEnquiry.courseId.length === 0) {
+      newErrors.courseId = "Select at least one course.";
+    }
 
     setErrors(newErrors);
 
@@ -360,7 +395,16 @@ export default function EditEnquiryForm({
       return;
     }
 
-    editEnquiry(newEnquiry, {
+    const normalizedEnquiry = {
+      ...newEnquiry,
+      name: titleCase(newEnquiry.name),
+      email: normalizeEmail(newEnquiry.email),
+      contact: normalizePhone(newEnquiry.contact),
+      alternateContact: normalizePhone(newEnquiry.alternateContact),
+      location: normalizeToLowercase(newEnquiry.location),
+    };
+
+    editEnquiry(normalizedEnquiry, {
       onSuccess: () => {
         setNewEnquiry({
           id: "",
@@ -420,9 +464,8 @@ export default function EditEnquiryForm({
           <Input
             ref={firstInputRef}
             type="text"
-            className="capitalize"
             placeholder="Info Demo"
-            value={newEnquiry.name}
+            value={titleCase(newEnquiry.name)}
             tabIndex={1}
             onChange={(e) => handleChange("name", e.target.value)}
           />
@@ -448,13 +491,13 @@ export default function EditEnquiryForm({
           </div>
         </div>
         <div>
-          <Label>Contact Nu.</Label>
+          <Label>Contact No.</Label>
           <PhoneInput
             selectPosition="start"
             countries={countries}
              tabIndex={3}
             value={newEnquiry.contact}
-            placeholder="+91 55555 00000"
+            placeholder="Enter Contact"
             onChange={handlePhoneNumberChange}
           />
           {errors.contact && (
@@ -504,9 +547,8 @@ export default function EditEnquiryForm({
           <Input
             type="text"
             placeholder="Enter Location"
-            value={newEnquiry.location}
+            value={normalizeToLowercase(newEnquiry.location)}
             tabIndex={6}
-             className="capitalize"
             onChange={(e) => handleChange("location", e.target.value)}         />
             {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
@@ -549,11 +591,10 @@ export default function EditEnquiryForm({
               label="Select Courses"
               options={courseList.map((course) => ({
                 value: String(course.id),
-                text: course.name,
+                text: capitalizeWords(course.name),
                 selected: newEnquiry.courseId.includes(String(course.id)), // optional if MultiSelect uses selected prop
               }))}
               value={newEnquiry.courseId} // 🔥 CONTROLLED VALUE
-              defaultSelected={newEnquiry.courseId}
               onChange={(value) => handleChange("courseId", value)}
             />
           </div>
@@ -570,7 +611,7 @@ export default function EditEnquiryForm({
               placeholder="Select an option"
               value={newEnquiry.source} // Bind selected course
               onChange={(e) => handleChange("source", e.target.value)}
-              className="dark:bg-dark-900 capitalize"
+              className="dark:bg-dark-900"
             />
           </div>
           {errors.source && (
@@ -583,7 +624,6 @@ export default function EditEnquiryForm({
           <Input
             type="text"
             placeholder="Enter Age"
-            className="capitalize"
             value={newEnquiry.referedBy}
             tabIndex={11}
             onChange={(e) => handleChange("referedBy", e.target.value)}         />
@@ -594,7 +634,7 @@ export default function EditEnquiryForm({
           <Button size="sm" variant="outline" tabIndex={12} onClick={onCloseModal}>
             Close
           </Button>
-          <Button size="sm" tabIndex={13} variant="primary"  className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+          <Button size="sm" tabIndex={13} className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

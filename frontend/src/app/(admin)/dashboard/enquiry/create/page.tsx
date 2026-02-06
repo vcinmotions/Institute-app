@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-
 import { useEnquiryStore } from "@/store/enquiryStore";
 import Button from "@/components/ui/button/Button";
 import { useCreateEnquiry } from "@/hooks/useCreateEnquiry";
@@ -31,6 +30,7 @@ import {
 } from "country-state-city";
 import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 
 type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
@@ -86,7 +86,6 @@ export default function EnquiryForm() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const { mutate: createEnquiry } = useCreateEnquiry();
-
   
    const genders = [
     { value: "female", label: "Female" },
@@ -181,7 +180,7 @@ export default function EnquiryForm() {
     }
 
     setErrors(newErrors);
-      setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), 2000);
 
 
     return {
@@ -238,37 +237,10 @@ export default function EnquiryForm() {
 
   const handleChange = (field: keyof EnquiryData, value: string | string[]) => {
 
-    // if (field === "city") {
-    //   setNewEnquiry((prev) => ({
-    //     ...prev,
-    //     city: value,
-    //   }));
-    //   setField("city", value);
-    //   return;
-    // }
-
     setNewEnquiry((prev) => ({
       ...prev,
-      [field]:
-        (field === "name" || field === "location") && typeof value === "string"
-          ? value.toLowerCase()
-          : value,
+      [field]: value,
     }));
-
-  
-    // setNewEnquiry((prev) => ({
-    //   ...prev,
-    //   [field]:
-    //     field === "name" && typeof value === "string"
-    //       ? value.toLowerCase()
-    //       : value,
-          
-    // }));
-
-    // setNewEnquiry((prev) => ({
-    //   ...prev,
-    //   [field]: value,
-    // }));
 
     setField(field, value); // <-- IMPORTANT
 
@@ -279,47 +251,21 @@ export default function EnquiryForm() {
     }));
   };
 
-  // const handleSubmit = async () => {
-  //   console.log("Submitting enquiry data:", newEnquiry);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (
+    !/[0-9]/.test(e.key) &&
+    e.key !== "+" &&
+    e.key !== "Backspace" &&
+    e.key !== "Delete" &&
+    e.key !== "ArrowLeft" &&
+    e.key !== "ArrowRight" &&
+    e.key !== "Tab"
+  ) {
+    e.preventDefault();
+  }
+};
 
-  //   if (!validate()) {
-  //     console.warn("Validation failed:", errors);
-  //     return;
-  //   }
-
-  //   try {
-  //     await createEnquiry(newEnquiry);
-  //     // alert("Enquiry created successfully!");
-  //     setNewEnquiry({ name: "", email: "", course: "", source: "", contact: "" });
-  //     setErrors({});
-
-  //     // Wait 3 seconds before showing alert
-  //       setAlert({
-  //         show: true,
-  //         title: "Enquiry Created",
-  //         message: "Your enquiry has been successfully submitted.",
-  //         variant: "success",
-  //       });
-
-  //     // Close modal after showing alert for 2 seconds (for example)
-  //       setTimeout(() => {
-  //         onCloseModal();
-  //       }, 3000);
-
-  //   } catch (error) {
-  //     //alert("Failed to create enquiry.");
-  //   }
-  // };
-
-  const handleClearForm = () => {
-    reset();
- 
-    setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
-
-    firstInputRef.current?.focus();
-  };
-
-  const handleDateChange = (field: keyof EnquiryData, value: string) => {
+const handleDateChange = (field: keyof EnquiryData, value: string) => {
     // Allow only digits
     let digits = value.replace(/\D/g, "");
 
@@ -329,9 +275,9 @@ export default function EnquiryForm() {
     // Auto-format as DD/MM/YYYY
     let formattedValue = digits;
     if (digits.length > 4) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4, 8)}`;
+      formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4, 8)}`;
     } else if (digits.length > 2) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
+      formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}`;
     }
 
     // Update form data
@@ -339,6 +285,9 @@ export default function EnquiryForm() {
       ...prev,
       [field]: formattedValue,
     }));
+
+    // 🔥 save to store
+    setField(field as string, formattedValue);
 
     // Simple validation (optional)
     let error = "";
@@ -359,24 +308,6 @@ export default function EnquiryForm() {
   };
 
   const handleSubmit = () => {
-    // if (!validate()) {
-    //   setAlert({
-    //     show: true,
-    //     title: "Validation Error",
-    //     message: "Please enter required inputs.",
-    //     variant: "error",
-    //   });
-
-    //    window.scrollTo({
-    //       top: 0, behavior: "smooth"
-    //     })
-
-    //   setTimeout(() => {
-    //     setAlert({ show: false, title: "", message: "", variant: "" });
-    //   }, 2000);
-
-    //   return;
-    // }
 
     const { isValid, errors: validationErrors } = validate();
 
@@ -417,7 +348,16 @@ export default function EnquiryForm() {
       return;
     }
 
-    createEnquiry(newEnquiry, {
+    const normalizedEnquiry = {
+      ...newEnquiry,
+      name: titleCase(newEnquiry.name),
+      email: normalizeEmail(newEnquiry.email),
+      contact: normalizePhone(newEnquiry.contact),
+      alternateContact: normalizePhone(newEnquiry.alternateContact),
+      location: normalizeToLowercase(newEnquiry.location),
+    };
+
+    createEnquiry(normalizedEnquiry, {
       onSuccess: () => {
 
         setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
@@ -434,10 +374,6 @@ export default function EnquiryForm() {
         });
 
         reset();
-
-        // setTimeout(() => {
-        //   router.back();
-        // }, 300);
 
         setTimeout(() => {
           router.replace("/dashboard/enquiry");
@@ -489,9 +425,8 @@ export default function EnquiryForm() {
             <Input
               ref={firstInputRef}
               type="text"
-              className="capitalize"
               placeholder="Info Demo"
-              value={newEnquiry.name}
+              value={titleCase(newEnquiry.name)}
               tabIndex={1}
               onChange={(e) => handleChange("name", e.target.value)}
             />
@@ -507,7 +442,7 @@ export default function EnquiryForm() {
                 type="text"
                 className="pl-15.5"
                 tabIndex={2}
-                value={newEnquiry.email}
+                value={normalizeEmail(newEnquiry.email)}
                 onChange={(e) => handleChange("email", e.target.value)}
               />
               {errors.email && (
@@ -529,6 +464,7 @@ export default function EnquiryForm() {
               selectPosition="start"
               countries={countries}
               tabIndex={3}
+              onKeyDown={handleKeyDown}
               placeholder="Enter Contact"
               onChange={handlePhoneNumberChange}
             />
@@ -544,6 +480,7 @@ export default function EnquiryForm() {
             selectPosition="start"
             countries={countries}
             tabIndex={4}
+            onKeyDown={handleKeyDown}
             placeholder="Enter Alternate Conatact"
             onChange={handleAlternatePhoneNumberChange}
           />
@@ -562,7 +499,7 @@ export default function EnquiryForm() {
                 label="Select Courses *"
                 options={courseList.map((course) => ({
                   value: String(course.id),
-                  text: capitalizeWords(course.name),
+                  text: course.name,
                   selected: newEnquiry.courseId.includes(String(course.id)),
                 }))}
                 value={newEnquiry.courseId}
@@ -577,14 +514,15 @@ export default function EnquiryForm() {
 
           <div>
           <Label>Date Of Birth</Label>
+
           <Input
-            tabIndex={6}
-            type="date"
-            placeholder="30-02-2002"
-            //maxLength={10} // e.g. 12:30 PM
-            value={newEnquiry.dob}
-            onChange={(e) => handleChange("dob", e.target.value)}
-          />
+              type="text"
+              tabIndex={6}
+              placeholder="Enter DoB"
+              className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+              value={newEnquiry.dob}
+              onChange={(e) => handleDateChange("dob", e.target.value)}
+            />
           {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
         </div>
 
@@ -635,8 +573,7 @@ export default function EnquiryForm() {
           <Input
             type="text"
             placeholder="Enter Locality"
-            className="capitalize"
-            value={newEnquiry.location}
+            value={normalizeToLowercase(newEnquiry.location)}
             tabIndex={9}
             onChange={(e) => handleChange("location", e.target.value)}         />
             {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
@@ -648,7 +585,7 @@ export default function EnquiryForm() {
             <Input
               placeholder="Enter Source"
               onChange={(e) => handleChange("source", e.target.value)}
-              className="dark:bg-dark-900 capitalize"
+              className="dark:bg-dark-900"
               value={newEnquiry.source} // Bind selected course
               tabIndex={10}
             />
@@ -662,7 +599,6 @@ export default function EnquiryForm() {
           <Label>Referred By</Label>
           <Input
             type="text"
-            className="capitalize"
             placeholder="Enter Age"
             value={newEnquiry.referedBy}
             tabIndex={11}
@@ -688,7 +624,3 @@ export default function EnquiryForm() {
     </div>
   );
 }
-function scrollToError(validationErrors: any) {
-  throw new Error("Function not implemented.");
-}
-

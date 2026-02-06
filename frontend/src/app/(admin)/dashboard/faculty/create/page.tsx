@@ -21,6 +21,9 @@ import { setCourses } from "@/store/slices/courseSlice";
 import { useFacultyStore } from "@/store/facultyStore";
 import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
+import PhoneInput from "@/components/form/group-input/PhoneInput";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+import { normalizeEmail, normalizePhone, titleCase } from "@/app/utils/Normalize";
 
 interface CourseData {
   email: string;
@@ -60,6 +63,7 @@ export default function FacultyForm() {
   });
 
   const [errors, setErrors] = useState<Partial<CourseData>>({});
+  const { inputRefs, scrollToError } = useScrollToError();
   const { mutate: createFaculty } = useCreateFaculty();
   const batch = useSelector((state: RootState) => state.batch.batches);
   const courses = useSelector((state: RootState) => state.course.courses);
@@ -143,9 +147,9 @@ export default function FacultyForm() {
     // Auto-format as DD/MM/YYYY
     let formattedValue = digits;
     if (digits.length > 4) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4, 8)}`;
+      formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4, 8)}`;
     } else if (digits.length > 2) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
+      formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}`;
     }
 
     // Update form data
@@ -174,26 +178,6 @@ export default function FacultyForm() {
       [field]: error,
     }));
   };
-
-  const handlePhoneNumberChange = (phoneNumber: string) => {
-    setNewFaculty((prev) => ({
-      ...prev,
-      contact: phoneNumber,
-    }));
-
-    // Clear error if any
-    setErrors((prev) => ({
-      ...prev,
-      contact: "",
-    }));
-  };
-
-  const options = [
-    { value: "linkedin", label: "LinkedIn" },
-    { value: "indeed", label: "Indeed" },
-    { value: "instagram", label: "Instagram" },
-    { value: "other", label: "Other" },
-  ];
 
   const validate = () => {
     const newErrors: Partial<CourseData> = {};
@@ -230,29 +214,40 @@ export default function FacultyForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // const handleChange = (field: keyof CourseData, value: string) => {
-  //   setNewFaculty((prev) => {
-  //     let updated = { ...prev, [field]: value };
+  const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+    // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+    const formattedNumber = code + phoneNumber;
 
-  //     // 🧠 Auto-generate email if faculty name changes
-  //     if (field === "name" && user?.instituteName) {
-  //       const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
-  //       const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-  //       updated.email = `${formattedName}@${institute}`;
-  //     }
+    setNewFaculty((prev) => ({
+      ...prev,
+      contact: formattedNumber,
+    }));
 
-  //     // 🔥 SAVE TO ZUSTAND
-  //     setField(field as string, updated[field]);
+    setField("contact", formattedNumber);
 
-  //     return updated;
-  //   });
+    if (phoneNumber.length === 10) {
+      setErrors((prev) => ({ ...prev, contact: "" }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        contact: "Phone number must be 10 digits",
+      }));
+    }
+  };
 
-  //   // 🔄 Reset any validation errors
-  //   setErrors((prev) => ({
-  //     ...prev,
-  //     [field]: "",
-  //   }));
-  // };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      !/[0-9]/.test(e.key) &&
+      e.key !== "+" &&
+      e.key !== "Backspace" &&
+      e.key !== "Delete" &&
+      e.key !== "ArrowLeft" &&
+      e.key !== "ArrowRight" &&
+      e.key !== "Tab"
+    ) {
+      e.preventDefault();
+    }
+  };
 
   const handleChange = (field: keyof CourseData, value: string) => {
   // Ensure value is always lowercase if it's the name
@@ -260,7 +255,7 @@ export default function FacultyForm() {
 
   // 1️⃣ Update local UI state
   setNewFaculty((prev) => {
-    const updated = { ...prev, [field]: processedValue };
+    const updated = { ...prev, [field]: value };
 
     // Update email automatically when name changes
     if (field === "name" && user?.slug) {
@@ -273,7 +268,7 @@ export default function FacultyForm() {
   });
 
   // 2️⃣ Update ZUSTAND (outside render cycle)
-  setField(field as string, processedValue);
+  setField(field as string, value);
 
   // 3️⃣ Clear validation errors
   setErrors((prev) => ({
@@ -346,7 +341,14 @@ export default function FacultyForm() {
       return;
     }
 
-    createFaculty(newFaculty, {
+      const normalizedFaculty = {
+          ...newFaculty,
+          name: titleCase(newFaculty.name),
+          email: normalizeEmail(newFaculty.email),
+          contact: normalizePhone(newFaculty.contact),
+        };
+
+    createFaculty(normalizedFaculty, {
       onSuccess: () => {
         setNewFaculty({
           email: "",
@@ -408,10 +410,9 @@ export default function FacultyForm() {
             <Input
               ref={firstInputRef}
               tabIndex={1}
-              className="capitalize"
               type="text"
               placeholder="Ex. Full Stack Developer"
-              value={newFaculty.name}
+              value={titleCase(newFaculty.name)}
               onChange={(e) => handleChange("name", e.target.value)}
             />
             {errors.name && (
@@ -448,7 +449,7 @@ export default function FacultyForm() {
             )}
           </div>
 
-          <div>
+          {/* <div>
             <Label>Contact No. *</Label>
             <Input
               type="text"
@@ -460,6 +461,27 @@ export default function FacultyForm() {
             {errors.contact && (
               <p className="text-sm text-red-500">{errors.contact}</p>
             )}
+          </div> */}
+
+          <div
+            ref={(el) => {
+              inputRefs.current.contact = el;
+            }}
+          >
+            <Label>Contact No. *</Label>
+            <div className="relative">
+              <PhoneInput
+                selectPosition="start"
+                countries={countries}
+                tabIndex={3}
+                onKeyDown={handleKeyDown}
+                placeholder="Enter Contact"
+                onChange={handlePhoneNumberChange}
+              />
+              {errors.contact && (
+                <p className="text-sm text-red-500">{errors.contact}</p>
+              )}
+            </div>
           </div>
 
           <div>
@@ -508,10 +530,10 @@ export default function FacultyForm() {
             value={newFaculty.joiningDate}
             onChange={(e) => handleChange("joiningDate", e.target.value)}         
           /> */}
-            <input
+            <Input
               type="text"
               tabIndex={7}
-              placeholder="10/10/2025"
+              placeholder="10-10-2025"
               className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
               value={newFaculty.joiningDate}
               onChange={(e) => handleDateChange("joiningDate", e.target.value)}

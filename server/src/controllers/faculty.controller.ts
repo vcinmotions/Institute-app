@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import { normalizeEmail, normalizePhone, titleCase } from "../utils/Normalize";
+import { startsWith } from "zod";
 
 export async function addFacultyController(req: Request, res: Response) {
   const { name, email, password, contact, joiningDate, batchId, courseId } =
@@ -70,7 +72,7 @@ export async function addFacultyController(req: Request, res: Response) {
 }
 
 export async function updateFacultyController(req: Request, res: Response) {
-  const { name, email, contact } = req.body;
+  const { name, email, contact, batchId } = req.body;
   const { id } = req.params;
 
   if (!name || !email || !contact) {
@@ -112,6 +114,11 @@ export async function updateFacultyController(req: Request, res: Response) {
         city: clientAdmin.city,
         zipCode: clientAdmin.zipCode,
         clientAdminId: clientAdminId,
+        batches: batchId
+        ? {
+            set: batchId.map((batch: string) => ({ id: Number(batch) })), // 🔥 update batches
+          }
+        : undefined,
       },
     });
 
@@ -166,10 +173,8 @@ export async function getFacultyController(req: Request, res: Response) {
     const {
       page,
       limit,
-      search,
       sortField, // default sort by created date
       sortOrder, // default descending
-      leadStatus, // 👈 Add this
     } = req.query;
 
     console.log("get ALl Params:", sortField, sortOrder);
@@ -181,17 +186,25 @@ export async function getFacultyController(req: Request, res: Response) {
     const pageNum = parseInt(page as string, 10) || 1;
     const limitNum = parseInt(limit as string, 10) || 10;
     const skip = (pageNum - 1) * limitNum;
+    const search = req.query.search as string | undefined;
+
+    console.log("get ALl Params:", search);
+
 
     // ✅ Build search filter
-    const where: any = {};
+    const where: any = {
+      clientAdminId: user.clientAdminId, // only fetch faculties for this admin
+    };
+
     if (search) {
+      const normalizeFacultyName = titleCase(search);
       where.OR = [
-        { name: { contains: search } },
+        { name: { startsWith: normalizeFacultyName } },
         { email: { contains: search } },
-        { contact: { contains: search } },
-        // Add more searchable fields as needed
       ];
     }
+
+    console.log("WHREE:", where, where.OR);
 
     // 3. Create student under that admin
     // const enquiry = await tenantPrisma.enquiry.findMany({

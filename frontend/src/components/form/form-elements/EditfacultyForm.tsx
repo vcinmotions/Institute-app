@@ -12,10 +12,16 @@ import { EnvelopeIcon } from "@/icons";
 import PhoneInput from "../group-input/PhoneInput";
 import { useCreateCourse } from "@/hooks/useCreateCourseData";
 import { useCreateFaculty } from "@/hooks/useCreateFaculty";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import useFocusOnEnter from "@/app/utils/UseFocusOnEnter";
 import { useEditFaculty } from "@/hooks/useEditFaculty";
+import { normalizeEmail, normalizePhone, titleCase } from "@/app/utils/Normalize";
+import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
+import { setBatches } from "@/store/slices/batchSlice";
+import { countries } from "@/components/common/CountriesCode";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+import MultiSelect from "../MultiSelect";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -29,7 +35,7 @@ interface FacultyData {
   contact: string;
   joiningDate: string;
   courseId: string;
-  batchId: String;
+  batchId: string[]; // <-- change to array
   password: string;
   name: string; // ✅ this matches backend
 }
@@ -46,10 +52,12 @@ export default function EditFacultyForm({
     joiningDate: "",
     contact: "",
     courseId: "",
-    batchId: "",
+    batchId: [],
     password: "",
   });
   const user = useSelector((state: RootState) => state.auth.user);
+    const { inputRefs, scrollToError } = useScrollToError();
+  
 
   // New state for alert
   const [alert, setAlert] = useState<{
@@ -66,25 +74,41 @@ export default function EditFacultyForm({
 
   const [errors, setErrors] = useState<Partial<FacultyData>>({});
   const { mutate: editFaculty } = useEditFaculty();
-  const countries = [
-    { code: "IN", label: "+91" },
-    { code: "US", label: "+1" },
-    { code: "GB", label: "+44" },
-    { code: "CA", label: "+1" },
-    { code: "AU", label: "+61" },
-  ];
+  const dispatch = useDispatch()
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     firstInputRef.current?.focus();
   }, []);
 
-  const [batchList, setBatchList] = useState([]);
+  const {
+        data: batchData,
+        isLoading: batchLoading,
+        isError: batchError,
+      } = useFetchAllBatches();
+
+      useEffect(() => {
+            console.log("get all batches data;", batchData);
+            if (batchData?.batch) { 
+              dispatch(setBatches(batchData.batch));
+            }
+            setBatches;
+          }, [batchData, dispatch]);
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: `${b.name}`,
   }));
+
+  // ✅ Remove already assigned batch from dropdown
+  const assignedBatchIds = newFaculty?.batchId || "";
+
+  const filteredBatchOptions = batch
+    .filter((b: any) => !assignedBatchIds.includes(b.id)) // exclude assigned batches
+    .map((b: any) => ({
+      value: b.id.toString(),
+      label: `${b.name}`,
+    }));
 
   console.log("get User data In Faculty Edit Form Modal;", user);
   console.log("get faculty data In Faculty Edit Form Modal;", facultyData);
@@ -110,7 +134,7 @@ export default function EditFacultyForm({
         joiningDate: facultyData.joiningDate || "",
         contact: facultyData.contact || "",
         courseId: facultyData.courseId || "", // only if facultyData has courseId
-        batchId: facultyData.batchId || "", // only if facultyData has batchId
+        batchId: facultyData.batches?.map((b: any) => b.id.toString()) || [], // <-- all batches
         password: facultyData.password || "",
       });
     }
@@ -152,19 +176,6 @@ export default function EditFacultyForm({
     setErrors((prev) => ({
       ...prev,
       [field]: error,
-    }));
-  };
-
-  const handlePhoneNumberChange = (phoneNumber: string) => {
-    setNewFaculty((prev) => ({
-      ...prev,
-      contact: phoneNumber,
-    }));
-
-    // Clear error if any
-    setErrors((prev) => ({
-      ...prev,
-      contact: "",
     }));
   };
 
@@ -233,12 +244,12 @@ export default function EditFacultyForm({
   //   }));
   // };
 
-  const handleChange = (field: keyof FacultyData, value: string) => {
+  const handleChange = (field: keyof FacultyData, value: string | string[]) => {
     setNewFaculty((prev) => {
       let updated = { ...prev, [field]: value };
 
       // 🧠 Auto-generate email if faculty name changes
-      if (field === "name" && user?.instituteName) {
+      if (field === "name" && typeof value === "string" && user?.instituteName) {
         const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
         const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
         updated.email = `${formattedName}@${institute}`;
@@ -274,6 +285,47 @@ export default function EditFacultyForm({
     const [day, month, year] = dateStr.split("/");
     return new Date(`${year}-${month}-${day}`).toISOString();
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (
+        !/[0-9]/.test(e.key) &&
+        e.key !== "+" &&
+        e.key !== "Backspace" &&
+        e.key !== "Delete" &&
+        e.key !== "ArrowLeft" &&
+        e.key !== "ArrowRight" &&
+        e.key !== "Tab"
+      ) {
+        e.preventDefault();
+      }
+    };
+
+      const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+  let digitsOnly = phoneNumber.replace(/\D/g, "");
+
+  // Remove country code digits if already present
+  const countryDigits = code.replace("+", "");
+  if (digitsOnly.startsWith(countryDigits)) {
+    digitsOnly = digitsOnly.slice(countryDigits.length);
+  }
+
+  digitsOnly = digitsOnly.slice(0, 10);
+
+  const formattedNumber = digitsOnly
+    ? `${code}${digitsOnly}`
+    : "";
+
+  setNewFaculty((prev) => ({
+    ...prev,
+    contact: formattedNumber,
+  }));
+
+  setErrors((prev) => ({
+    ...prev,
+    contact:
+      digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+  }));
+};
 
   const handleSubmit = async () => {
     console.log("Submitting enquiry data:", newFaculty);
@@ -312,8 +364,14 @@ export default function EditFacultyForm({
     const id = facultyData.id;
     console.log("GET facultyData ID IN HABDLE SUBMIT:", id);
 
+    const normalizedFaculty = {
+              ...newFaculty,
+              name: titleCase(newFaculty.name),
+              contact: normalizePhone(newFaculty.contact),
+            };
+
     editFaculty(
-      { newFaculty, id },
+      { newFaculty: normalizedFaculty, id },
       {
         onSuccess: () => {
           setNewFaculty({
@@ -322,7 +380,7 @@ export default function EditFacultyForm({
             name: "",
             contact: "",
             courseId: "",
-            batchId: "",
+            batchId: [],
             password: "",
           });
 
@@ -345,7 +403,7 @@ export default function EditFacultyForm({
     );
   };
 
-  console.log("faculty Data:", newFaculty);
+  console.log("faculty Edit Data:", newFaculty);
 
   return (
     <ModalCard title="Update Faculty" oncloseModal={onCloseModal}>
@@ -400,18 +458,60 @@ export default function EditFacultyForm({
             <p className="text-sm text-red-500">{errors.password}</p>
           )}
         </div> */}
-
+{/* 
         <div>
           <Label>Contact No.</Label>
           <Input
             type="text"
-            tabIndex={4}
+            tabIndex={3}
             placeholder="Info Demo"
             value={newFaculty.contact}
             onChange={(e) => handleChange("contact", e.target.value)}
           />
           {errors.contact && (
             <p className="text-sm text-red-500">{errors.contact}</p>
+          )}
+        </div> */}
+
+        <div
+            ref={(el) => {
+              inputRefs.current.contact = el;
+            }}
+          >
+            <Label>Contact No. *</Label>
+            <div className="relative">
+              <PhoneInput
+                selectPosition="start"
+                countries={countries}
+                tabIndex={3}
+                value={newFaculty.contact}
+                onKeyDown={handleKeyDown}
+                placeholder="Enter Contact"
+                onChange={handlePhoneNumberChange}
+              />
+              {errors.contact && (
+                <p className="text-sm text-red-500">{errors.contact}</p>
+              )}
+            </div>
+          </div>
+
+          <div>
+          <div className="relative">
+            <MultiSelect
+              tabIndex={9}
+              label="Select Courses"
+              options={batchOptions.map((batch) => ({
+                value: String(batch.value),
+                text: batch.label,
+                selected: newFaculty.batchId.includes(String(batch.value)), // optional if MultiSelect uses selected prop
+              }))}
+              value={newFaculty.batchId} // 🔥 CONTROLLED VALUE
+              defaultSelected={newFaculty.batchId}
+              onChange={(value: string[]) => handleChange("batchId", value)} // 🔥 change field to batchId
+            />
+          </div>
+          {errors.courseId && (
+            <p className="text-sm text-red-500">{errors.courseId}</p>
           )}
         </div>
 
@@ -441,7 +541,7 @@ export default function EditFacultyForm({
           >
             Close
           </Button>
-          <Button size="sm" tabIndex={9} onClick={handleSubmit}>
+          <Button  size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={9} onClick={handleSubmit}>
             Save
           </Button>
         </div>

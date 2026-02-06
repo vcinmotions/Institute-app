@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { getEnquiry } from "@/lib/api";
+import { getEnquiry, getLab } from "@/lib/api";
 
 type GetLabParams = {
   token: string;
@@ -15,7 +15,7 @@ export const useFetchLab = () => {
     // Accept the whole object
     mutationFn: async (params: GetLabParams) => {
         console.log("get All Params:", params);
-      return await getEnquiry(params); // ✅ Now you're passing the full object
+      return await getLab(params); // ✅ Now you're passing the full object
     },
     onSuccess: (data) => {
       console.log("Lab data fetched successfully:", data);

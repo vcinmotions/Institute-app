@@ -95,6 +95,7 @@ import { Request, Response } from "express";
 
 // import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
+import { normalizeToLowercase, titleCase } from "../utils/Normalize";
 // import { verifyToken } from "../utils/jwt"; // custom util for JWT
 // import { activityLogger } from "../utils/activityLogger"; // optional
 
@@ -120,11 +121,14 @@ export const createLab = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "ClientAdmin not found" });
     }
 
+    const normalizeCourseName = titleCase(name);
+    const normalizeCourselocation = normalizeToLowercase(location);
+
     // ✅ 1. Create the Lab
     const lab = await tenantPrisma.lab.create({
       data: {
-        name,
-        location,
+        name: normalizeCourseName,
+        location: normalizeCourselocation,
         totalPCs,
         clientAdminId: clientAdmin.id,
       },
@@ -166,7 +170,7 @@ export const createLab = async (req: Request, res: Response) => {
           // 2b. Create a default batch for this timeslot
           await tenantPrisma.batch.create({
             data: {
-              name: `${name} ${slot.day} ${slot.startTime} - ${slot.endTime}`,
+              name: `${normalizeCourseName} ${slot.day} ${slot.startTime} - ${slot.endTime}`,
               labTimeSlotId: newSlot.id,
               clientAdminId: clientAdmin.id,
             },
@@ -323,10 +327,13 @@ export async function updateLabController(req: Request, res: Response) {
         console.log("🗑️ Deleted timeslot:", slot.id);
       }
 
+     const normalizeCourseName = titleCase(name);
+     const normalizeCourselocation = normalizeToLowercase(location);
+
     // 3️⃣ Update lab info
     await tenantPrisma.lab.update({
       where: { id: Number(id) },
-      data: { name, location, totalPCs },
+      data: { name: normalizeCourseName, location: normalizeCourselocation, totalPCs },
     });
 
     // 4️⃣ Process each timeslot
@@ -440,7 +447,8 @@ export async function getLabController(req: Request, res: Response) {
     // 🔍 Build filters
     const where: any = { clientAdminId };
     if (search) {
-      where.name = { contains: search };
+      const normalizeCourseName = titleCase(search);
+      where.name = { contains: normalizeCourseName };
     }
 
     // 🧩 Fetch labs with relations
@@ -524,20 +532,6 @@ export async function getLabController(req: Request, res: Response) {
       { totalPCs: 0, totalAllocated: 0, totalAvailable: 0 }
     );
 
-    console.log(
-      "GET LAB DATA:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-      labsWithPcInfo
-    );
-    console.log(
-      "GET Availbale PC DATA:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-      overall
-    );
-    console.log(
-      "GET TOTAL PC AVAILABILITY::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::",
-      overall.totalPCs,
-      overall.totalAllocated,
-      overall.totalAvailable
-    );
     // 🧾 Response
     return res.status(200).json({
       message: "Labs fetched successfully",
@@ -555,6 +549,7 @@ export async function getLabController(req: Request, res: Response) {
       },
       totalPages: Math.ceil(totalCount / limitNum),
       page: pageNum,
+      total: totalCount,
       limit: limitNum,
     });
   } catch (err) {

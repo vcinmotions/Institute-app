@@ -12,6 +12,7 @@ import Select from "@/components/form/Select";
 import { ChevronDownIcon } from "@/icons";
 import Button from "@/components/ui/button/Button";
 import Checkbox from "@/components/form/input/Checkbox";
+import { titleCase } from "@/app/utils/Normalize";
 
 interface CourseData {
   description: string;
@@ -240,19 +241,13 @@ export default function CourseForm() {
 
     setNewCourse((prev) => ({
       ...prev,
-      [field]: (field === "name") && typeof value === "string"
-          ? value.toLowerCase()
-          : value,
+      [field]: value,
       ...(field === "paymentType" && value === "ONE_TIME"
         ? { installmentCount: "" }
         : {}),
     }));
 
-    setField(
-      field,
-      field === "name" ? value.toLowerCase() : value
-    );
-
+     setField(field, value); // <-- IMPORTANT
 
     // Clear error on change
     setErrors((prev) => ({
@@ -316,7 +311,12 @@ export default function CourseForm() {
     //   }
     // });
 
-    createCourse(newCourse, {
+    const normalizedCourse = {
+      ...newCourse,
+      name: titleCase(newCourse.name),
+    };
+
+    createCourse(normalizedCourse, {
       onSuccess: () => {
         setNewCourse({
           description: "",
@@ -374,12 +374,11 @@ export default function CourseForm() {
             <Label>Course *</Label>
             <Input
               ref={firstInputRef}
-              tabIndex={1}
+             
               type="text"
-              className="capitalize"
               
               placeholder="Ex. Full Stack Developer"
-              value={newCourse.name}
+              value={titleCase(newCourse.name)}
               onChange={(e) => handleChange("name", e.target.value)}
             />
             {errors.name && (
@@ -392,7 +391,7 @@ export default function CourseForm() {
             <Input
               type="number"
               min={0}              // ✅ Prevents negatives
-              tabIndex={2}
+             
               placeholder="Enter Duration"
               value={newCourse.durationWeeks}
               onChange={(e) => handleChange("durationWeeks", e.target.value)}
@@ -407,7 +406,7 @@ export default function CourseForm() {
             <Input
               type="number"
               min={0}
-              tabIndex={4}
+              
               placeholder="Enter Amount"
               value={newCourse.totalAmount}
               onChange={(e) => handleChange("totalAmount", e.target.value)}
@@ -532,7 +531,7 @@ export default function CourseForm() {
             >
               Clear
             </Button> */}
-            <Button size="sm" tabIndex={7} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+            <Button size="sm" variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>

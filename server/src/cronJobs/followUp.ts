@@ -97,8 +97,6 @@ export async function processDueFollowUps(dbUrl: string) {
     },
   });
 
-  console.log("ALL FOLLOW_UPS PENDING AND MISSED:", followUps);
-
   for (const followUp of followUps) {
     const exists = await prisma.notification.findUnique({
       where: { followUpId: followUp.id },
