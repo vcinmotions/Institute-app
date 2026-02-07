@@ -7,6 +7,7 @@ import { RootState } from "@/store";
 import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import TextArea from "../input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
+import { useScrollToError } from "@/app/utils/ScrollToError";
 
 interface CreateFollowUpModalProps {
   onClose: () => void;
@@ -31,6 +32,8 @@ export default function CreateFollowUpModal({
   const [remark, setRemark] = useState("");
   const { refetch } = useFollowUp(enquiryId);
   const [scheduledAt, setScheduledAt] = useState<string>("");
+  const { inputRefs, scrollToError } = useScrollToError();
+  
   const [errors, setErrors] = useState<Partial<FollowUpData>>({});
   // New state for alert
     const [alert, setAlert] = useState<{
@@ -55,12 +58,17 @@ export default function CreateFollowUpModal({
   }, []);
 
   const validate = () => {
-  const validationErrors: Partial<FollowUpData> = {};
-  if (!remark.trim()) validationErrors.remark = "Remark is required.";
-  if (!scheduledAt) validationErrors.scheduledAt = "Schedule time is required.";
+  const newErrors: Partial<FollowUpData> = {};
+  if (!remark.trim()) newErrors.remark = "Remark is required.";
+  if (!scheduledAt) newErrors.scheduledAt = "Schedule time is required.";
 
-  setErrors(validationErrors);
-  return Object.keys(validationErrors).length === 0;
+     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };;
 };
 
 //   const handleSubmit = async () => {
@@ -118,20 +126,24 @@ export default function CreateFollowUpModal({
 //   };
 
 const handleSubmit = async () => {
-  if (!validate()) {
-    setAlert({
-      show: true,
-      title: "Validation Error",
-      message: "Please fill all fields.",
-      variant: "error",
-    });
+  const { isValid, errors: validationErrors } = validate();
 
-    setTimeout(
-      () => setAlert({ show: false, title: "", message: "", variant: "" }),
-      3000,
-    );
-    return;
-  }
+    if (!isValid) {
+      setAlert({
+        show: true,
+        title: "Validation Error",
+        message: "Please enter required fileds.",
+        variant: "error",
+      });
+
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
+
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
+    }
 
   const isoScheduledAt = new Date(scheduledAt).toISOString();
 
@@ -179,7 +191,7 @@ const handleSubmit = async () => {
 
         setTimeout(
           () => setAlert({ show: false, title: "", message: "", variant: "" }),
-          3000,
+          2000,
         );
       },
     },
@@ -234,8 +246,8 @@ const handleSubmit = async () => {
               onChange={(e) => setScheduledAt(e.target.value)}
               className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-400"
             />
-            {errors.remark && (
-              <p className="text-sm text-red-500">{errors.remark}</p>
+            {errors.scheduledAt && (
+              <p className="text-sm text-red-500">{errors.scheduledAt}</p>
             )}
           </div>
         </div>

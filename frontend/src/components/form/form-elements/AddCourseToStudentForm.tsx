@@ -15,6 +15,7 @@ import { RootState } from "@/store";
 import { setBatches } from "@/store/slices/batchSlice";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { capitalizeWords } from "@/components/common/ToCapitalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -53,6 +54,8 @@ export default function CourseForm({
   });
   const dispatch = useDispatch();
   const [facultyList, setFacultyList] = useState([]);
+  const { inputRefs, scrollToError } = useScrollToError();
+  
 
   const [batchList, setBatchList] = useState([]);
 
@@ -214,10 +217,12 @@ export default function CourseForm({
       newErrors.admissionDate = "Admission date is required.";
 
     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
 
-    setTimeout(() => setErrors({}), 3000);
-
-    return Object.keys(newErrors).length === 0;
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   const handleChange = (field: keyof NewCourseData, value: string) => {
@@ -380,19 +385,23 @@ export default function CourseForm({
   console.log("GET SELECTED PAYMENTTUPE :", paymentTypeOption);
 
   const handleSubmit = async () => {
-    if (!validate()) {
+     const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -482,6 +491,9 @@ export default function CourseForm({
 
         onError: () => {
           // You already handle error via redux + toast
+          window.scrollTo({
+            top: 0, behavior: "smooth"
+          })
         },
       },
     );

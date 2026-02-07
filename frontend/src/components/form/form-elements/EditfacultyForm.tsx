@@ -23,6 +23,8 @@ import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import MultiSelect from "../MultiSelect";
 
+type FormErrors = Partial<Record<keyof FacultyData, string>>;
+
 interface DefaultInputsProps {
   onCloseModal: () => void;
   facultyData: any;
@@ -72,7 +74,7 @@ export default function EditFacultyForm({
     variant: "",
   });
 
-  const [errors, setErrors] = useState<Partial<FacultyData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const { mutate: editFaculty } = useEditFaculty();
   const dispatch = useDispatch()
   const firstInputRef = useRef<HTMLInputElement>(null);
@@ -187,7 +189,7 @@ export default function EditFacultyForm({
   ];
 
   const validate = () => {
-    const newErrors: Partial<FacultyData> = {};
+    const newErrors: FormErrors = {};
 
     if (!newFaculty.name.trim()) {
       newErrors.name = "Name is required.";
@@ -202,9 +204,13 @@ export default function EditFacultyForm({
     }
 
     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   // const handleChange = (field: keyof CourseData, value: string) => {
@@ -300,7 +306,7 @@ export default function EditFacultyForm({
       }
     };
 
-      const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+  const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
   let digitsOnly = phoneNumber.replace(/\D/g, "");
 
   // Remove country code digits if already present
@@ -328,21 +334,23 @@ export default function EditFacultyForm({
 };
 
   const handleSubmit = async () => {
-    console.log("Submitting enquiry data:", newFaculty);
+   const { isValid, errors: validationErrors } = validate();
 
-    if (!validate()) {
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");

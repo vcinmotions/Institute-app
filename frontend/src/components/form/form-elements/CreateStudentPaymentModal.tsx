@@ -6,7 +6,9 @@ import { useFetchPayment } from "@/hooks/queries/useQueryFetchPayment";
 import { useDispatch } from "react-redux";
 import { setPayment } from "@/store/slices/paymentSlice";
 import { getPayment } from "@/lib/api";
-import { Alert } from "@heroui/react";
+import Alert from "@/components/ui/alert/Alert";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
 
 // interface CreateStudentPaymentModalProps {
 //   onCloseModal: () => void;
@@ -42,17 +44,19 @@ export default function CreateStudentPaymentModal({
   const [errors, setErrors] = useState<Partial<PaymentData>>({});
 
   const [alert, setAlert] = useState<{
-    show: boolean;
-    title: string;
-    message: string;
-    variant: string;
-  }>({
-    show: false,
-    title: "",
-    message: "",
-    variant: "",
-  });
+      show: boolean;
+      title: string;
+      message: string;
+      variant: string;
+    }>({
+      show: false,
+      title: "",
+      message: "",
+      variant: "",
+    });
 
+  const { inputRefs, scrollToError } = useScrollToError();
+    
   const { mutate: createStudentPayment } = useCreateStudentPayment();
 
   const firstInputRef = useRef<HTMLInputElement>(null);
@@ -107,27 +111,31 @@ export default function CreateStudentPaymentModal({
     if (!paymentMode.trim()) newErrors.paymentMode = "Mode is required.";
 
     setErrors(newErrors);
-
     setTimeout(() => setErrors({}), 2000);
 
-    return Object.keys(newErrors).length === 0;
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   const handleSubmit = async () => {
 
-    
+    const { isValid, errors: validationErrors } = validate();
 
-    if (!validate()) {
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
+      scrollToError(validationErrors);
+
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 2000);
 
       return;
     }
@@ -191,9 +199,16 @@ export default function CreateStudentPaymentModal({
   };
 
   return (
-    <ModalCard title="Student Payment" oncloseModal={onCloseModal}>
+    <ModalCard title="Create New Student Payment" oncloseModal={onCloseModal}>
       <div className="space-y-4">
-        {/* Amount Paid */}
+        {alert.show && (
+          <Alert
+            variant={alert.variant as any}
+            title={alert.title}
+            message={alert.message}
+            showLink={false}
+          />
+        )}
         <div>
         <label className="block text-sm text-gray-700 dark:text-gray-300">
           Amount Paid
@@ -220,7 +235,7 @@ export default function CreateStudentPaymentModal({
         <input
           tabIndex={2}
           type="Text"
-          placeholder="10/10/2025"
+          placeholder="Enter Date"
           className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-400"
           value={paymentDate}
           onChange={(e) => handleDateChange("paymentDate", e.target.value)}

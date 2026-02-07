@@ -12,6 +12,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useEditRoles } from "@/hooks/useEditRoles";
 import { titleCase } from "@/app/utils/Normalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -36,8 +39,8 @@ export default function EditRolesForm({
     role: "",
   });
   const user = useSelector((state: RootState) => state.auth.user);
-
-  const [errors, setErrors] = useState<Partial<RoleUserData>>({});
+  const { inputRefs, scrollToError } = useScrollToError();
+  const [errors, setErrors] = useState<FormErrors>({});
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -78,16 +81,20 @@ export default function EditRolesForm({
   console.log("GET ROLE DATA IN ROLE CREATE FORM:", roleData);
 
   const validate = () => {
-    const newErrors: Partial<RoleUserData> = {};
+    const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) newErrors.email = "Email is required.";
     if (!formData.role.trim()) newErrors.role = "Please select a role.";
 
     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   // const handleChange = (field: keyof RoleUserData, value: string) => {
@@ -122,19 +129,23 @@ export default function EditRolesForm({
   };
 
   const handleSubmit = async () => {
-    if (!validate()) {
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -197,7 +208,9 @@ export default function EditRolesForm({
           />
         )}
 
-        <div>
+        <div  ref={(el) => {
+                inputRefs.current.name = el;
+              }}>
           <Label>Name</Label>
           <Input
             ref={firstInputRef}
@@ -210,8 +223,10 @@ export default function EditRolesForm({
           {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
         </div>
 
-        <div>
-          <Label>Email</Label>
+        <div ref={(el) => {
+                inputRefs.current.email = el;
+              }}>
+          <Label>Username</Label>
           <Input
             type="text"
             tabIndex={2}
@@ -239,7 +254,9 @@ export default function EditRolesForm({
           )}
         </div> */}
 
-        <div>
+        <div  ref={(el) => {
+                inputRefs.current.role = el;
+              }}>
           <Label>Assign Role</Label>
           <div className="relative">
             <Select

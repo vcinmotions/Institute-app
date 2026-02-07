@@ -125,7 +125,7 @@ export default function NotificaionDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                  Update
+                  Mark Done
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -185,7 +185,7 @@ export default function NotificaionDataTable({
                             : "rounded bg-gray-800 px-4 py-2 text-sm text-white transition hover:bg-gray-900"
                         }
                       >
-                        Update
+                        Done
                       </Button>
                     </TableCell>
                   </TableRow>

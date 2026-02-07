@@ -10,6 +10,9 @@ import Alert from "@/components/ui/alert/Alert";
 import { useEditCourse } from "@/hooks/useEditCourse";
 import Checkbox from "../input/Checkbox";
 import { titleCase } from "@/app/utils/Normalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+type FormErrors = Partial<Record<keyof CourseData, string>>;
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -69,11 +72,14 @@ export default function EditCourseForm({
 
   console.log("GET BATCH DATA IN EDIT COURSE FORM:", batchData);
 
+  const { inputRefs, scrollToError } = useScrollToError();
+  
   // Installments State (Array)
   const [installments, setInstallments] = useState<InstallmentDetail[]>([
     { installment: "2", addAmount: "" },
   ]);
-  const [errors, setErrors] = useState<Partial<CourseData>>({});
+    const [errors, setErrors] = useState<FormErrors>({});
+  
   const [oneTime, setOneTime] = useState<boolean>(false);
   const [installment, setInstallment] = useState<boolean>(false);
   const { mutate: editCourse } = useEditCourse();
@@ -104,7 +110,7 @@ export default function EditCourseForm({
   };
 
   const validate = () => {
-    const newErrors: Partial<CourseData> = {};
+    const newErrors: FormErrors = {};
 
     if (!newCourse.durationWeeks.trim()) {
       newErrors.durationWeeks = "Name is required.";
@@ -118,14 +124,18 @@ export default function EditCourseForm({
       newErrors.totalAmount = "totalAmount is required.";
     }
 
-    if (!newCourse.paymentType) {
-      newErrors.paymentType = "paymentType is required.";
+    if (!newCourse.paymentType || newCourse.paymentType.length === 0) {
+      newErrors.paymentType = "Please select at least one payment type.";
     }
 
     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   // useEffect(() => {
@@ -350,21 +360,23 @@ export default function EditCourseForm({
   };
 
   const handleSubmit = async () => {
-    console.log("Submitting enquiry data:", newCourse);
+    const { isValid, errors: validationErrors } = validate();
 
-    if (!validate()) {
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -427,6 +439,9 @@ export default function EditCourseForm({
 
         onError: () => {
           // You already handle error via redux + toast
+          window.scrollTo({
+            top: 0, behavior: "smooth"
+          })
         },
       },
     );
@@ -507,6 +522,9 @@ export default function EditCourseForm({
             />
             <Label> INSTALLMENTS</Label>
           </div>
+           {errors.paymentType && (
+            <p className="text-sm text-red-500">{errors.paymentType}</p>
+          )}
         </div>
 
         {oneTime === true && (

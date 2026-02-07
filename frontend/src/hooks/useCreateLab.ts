@@ -45,7 +45,6 @@ export const useCreateLab = () => {
     onError: (error: any) => {
       const backend = error?.response?.data?.error || "Failed to create Lab";
       dispatch(setError(backend));
-      dispatch(setLoading(false));
     },
   });
 };

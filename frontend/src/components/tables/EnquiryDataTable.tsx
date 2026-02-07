@@ -75,21 +75,6 @@ export default function EnquiryDataTable({
   const { followupDetails, isLoading, isError, refetch } =
     useFollowUp(selectedId);
 
-  // Dispatch server-side fetch
-  const handleSort = (field: string) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
-    const order: "asc" | "desc" =
-      sortField === field && sortOrder === "asc" ? "desc" : "asc";
-
-    fetchEnquiries({
-      token,
-      sortField: field,
-      sortOrder: order,
-    });
-  };
-
   const handleCreateFollowUpForFollowUp = (followUpId: string) => {
     setSelectedFollowUpId(followUpId);
     setShowCreateNextModal(true)

@@ -1,5 +1,6 @@
 // filters/enquiry.filter.ts
 import { PrismaClient } from "../../prisma-client/generated/tenant";
+import { normalizeEmail, normalizeToUppercase, titleCase } from "../utils/Normalize";
 
 type StudentCourseWhere = NonNullable<
   Parameters<PrismaClient["studentCourse"]["findMany"]>[0]
@@ -23,13 +24,17 @@ export function buildStudentCourseWhere({
   };
 
   if (search) {
+    const normalizeStudentCourseName = titleCase(search);
+    const normalizeStudentCourse = titleCase(search);
+    const normalizeStudentCourseEmail = normalizeEmail(search);
+    const normalizeStudentCode = normalizeToUppercase(search);
     where.OR = [
       {
         student: {
           OR: [
-            { fullName: { contains: search } },
-            { email: { contains: search } },
-            { studentCode: { contains: search } },
+            { fullName: { contains: normalizeStudentCourseName } },
+            { email: { contains: normalizeStudentCourseEmail } },
+            { studentCode: { contains: normalizeStudentCode } },
             { contact: { contains: search } },
           ],
         },
@@ -37,7 +42,7 @@ export function buildStudentCourseWhere({
       {
         course: {
           OR: [
-            { name: { contains: search } },
+            { name: { contains: normalizeStudentCourse } },
             { description: { contains: search } },
           ],
         },

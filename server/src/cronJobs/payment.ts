@@ -71,18 +71,66 @@ import { io } from "../utils/socket"; // Reference to your Socket.IO server
 //   }
 // }
 
+// export async function processDuePayments(dbUrl: string) {
+//   const prisma = getTenantPrisma(dbUrl);
+
+//   const now = dayjs();
+//   const reminderEnd = now.add(21, "day").endOf("day").toDate();
+
+//   const duePayments = await prisma.studentFee.findMany({
+//     where: {
+//       paymentStatus: { in: ["PENDING", "FAILED"] },
+//       // dueDate: {
+//       //   lte: reminderEnd, // 🔥 within next 2 days OR overdue
+//       // },
+//     },
+//     include: {
+//       student: true,
+//       course: true,
+//     },
+//   });
+
+
+//   for (const payment of duePayments) {
+//     const exists = await prisma.notification.findUnique({
+//       where: { paymentId: payment.id },
+//     });
+
+//     if (exists) continue;
+
+//     const message = `Payment due for ${payment.student.fullName}
+//     Course: ${payment.course.name}
+//     Amount: ₹${payment.amountDue}
+//     Due Date: ${dayjs(payment.dueDate).format("DD MMM")}`;
+
+//     await prisma.notification.create({
+//       data: {
+//         message,
+//         clientAdminId: payment.clientAdminId,
+//         paymentId: payment.id,
+//       },
+//     });
+
+//     io.to(payment.clientAdminId).emit("payment-notification", {
+//       message,
+//       createdAt: new Date().toISOString(),
+//     });
+//   }
+// }
+
+
 export async function processDuePayments(dbUrl: string) {
   const prisma = getTenantPrisma(dbUrl);
 
   const now = dayjs();
-  const reminderEnd = now.add(21, "day").endOf("day").toDate();
+
+  // 🔥 Only consider payments that are 21 days overdue
+  const overdueThreshold = now.subtract(21, "day").startOf("day").toDate();
 
   const duePayments = await prisma.studentFee.findMany({
     where: {
       paymentStatus: { in: ["PENDING", "FAILED"] },
-      // dueDate: {
-      //   lte: reminderEnd, // 🔥 within next 2 days OR overdue
-      // },
+      dueDate: { lte: overdueThreshold }, // Payment due date is 21+ days ago
     },
     include: {
       student: true,
@@ -90,19 +138,20 @@ export async function processDuePayments(dbUrl: string) {
     },
   });
 
-
   for (const payment of duePayments) {
+    // ✅ Skip if notification already exists
     const exists = await prisma.notification.findUnique({
       where: { paymentId: payment.id },
     });
-
     if (exists) continue;
 
-    const message = `Payment due for ${payment.student.fullName}
-    Course: ${payment.course.name}
-    Amount: ₹${payment.amountDue}
-    Due Date: ${dayjs(payment.dueDate).format("DD MMM")}`;
+    const message = `Payment overdue for ${payment.student.fullName}
+Course: ${payment.course.name}
+Amount: ₹${payment.amountDue}
+Due Date: ${dayjs(payment.dueDate).format("DD MMM YYYY")}
+Overdue by: ${dayjs().diff(dayjs(payment.dueDate), "day")} days`;
 
+    // 🔥 Create notification
     await prisma.notification.create({
       data: {
         message,
@@ -111,13 +160,15 @@ export async function processDuePayments(dbUrl: string) {
       },
     });
 
+    // 🔔 Emit via Socket.IO
     io.to(payment.clientAdminId).emit("payment-notification", {
       message,
       createdAt: new Date().toISOString(),
     });
+
+    console.log(`Notification sent for overdue payment: ${payment.id}`);
   }
 }
-
 
 // export async function processDuePayments(dbUrl: string) {
 //   const tenantPrisma = getTenantPrisma(dbUrl);

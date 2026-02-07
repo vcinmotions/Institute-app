@@ -1,6 +1,6 @@
 // filters/enquiry.filter.ts
 import { PrismaClient, $Enums } from "../../prisma-client/generated/tenant";
-import { normalizeEmail, normalizePhone, titleCase } from "../utils/Normalize";
+import { normalizeEmail, normalizePhone, normalizeToUppercase, titleCase } from "../utils/Normalize";
 
 type StudentWhere = NonNullable<
   Parameters<PrismaClient["student"]["findMany"]>[0]
@@ -28,12 +28,13 @@ export function buildStudentWhere({
     const normalizedNameSearch = titleCase(search);
     const normalizedEmailSearch = normalizeEmail(search);
     const normalizedPhoneSearch = normalizePhone(search);
-
+    const normalizeStudentCode = normalizeToUppercase(search);
+    
     const numeric = Number(search);
     where.OR = [
       { fullName: { contains: normalizedNameSearch } },
       { email: { startsWith: normalizedEmailSearch } },
-      { studentCode: { startsWith: search } },
+      { studentCode: { startsWith: normalizeStudentCode } },
       { contact: { contains: search } },
     //   ...(isNaN(numeric) ? [] : [{ srNo: numeric }]),
     ];

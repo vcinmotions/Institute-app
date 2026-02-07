@@ -15,6 +15,10 @@ import { redirect } from "next/navigation";
 import { useRoleStore } from "@/store/roleStore";
 import { useRouter } from "next/navigation";
 import { titleCase } from "@/app/utils/Normalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+
+type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
 interface RoleUserData {
   name: string;
@@ -32,9 +36,9 @@ export default function RolesForm() {
   });
   const { form, reset, setField } = useRoleStore();
   const user = useSelector((state: RootState) => state.auth.user);
-
+  const { inputRefs, scrollToError } = useScrollToError();
   const router = useRouter();
-  const [errors, setErrors] = useState<Partial<RoleUserData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -52,7 +56,6 @@ export default function RolesForm() {
   const roles = [
     { value: "FRONT_DESK", label: "Front Desk" },
     { value: "ACCOUNTANT", label: "Accountant" },
-    { value: "VIEW_ONLY", label: "View Only" },
   ];
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -69,7 +72,7 @@ export default function RolesForm() {
 
   console.log("GET USER DATA IN ROLE CREATE FORM:", user);
   const validate = () => {
-    const newErrors: Partial<RoleUserData> = {};
+    const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) newErrors.email = "Email is required.";
@@ -77,9 +80,13 @@ export default function RolesForm() {
     if (!formData.role.trim()) newErrors.role = "Please select a role.";
 
     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   // const handleChange = (field: keyof RoleUserData, value: string) => {
@@ -161,19 +168,23 @@ export default function RolesForm() {
   };
 
   const handleSubmit = async () => {
-    if (!validate()) {
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -216,6 +227,7 @@ export default function RolesForm() {
 
       onError: () => {
         // You already handle error via redux + toast
+        window.scrollTo({top: 0, behavior: "smooth"})
       },
     });
   };
@@ -241,7 +253,9 @@ export default function RolesForm() {
             />
           )}
 
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.name = el;
+              }}>
             <Label>Name</Label>
             <Input
               ref={firstInputRef}
@@ -256,7 +270,9 @@ export default function RolesForm() {
             )}
           </div>
 
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.email = el;
+              }}>
             <Label>Username</Label>
             <Input
               type="text"
@@ -271,7 +287,9 @@ export default function RolesForm() {
             )}
           </div>
 
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.password = el;
+              }}>
             <Label>Password</Label>
             <Input
               type="text"
@@ -285,7 +303,9 @@ export default function RolesForm() {
             )}
           </div>
 
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.role = el;
+              }}>
             <Label>Assign Role</Label>
             <div className="relative">
               <Select

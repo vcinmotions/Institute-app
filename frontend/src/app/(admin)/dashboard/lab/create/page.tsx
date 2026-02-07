@@ -13,6 +13,9 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useLabStore } from "@/store/labStore";
 import { useRouter } from "next/navigation";
 import { normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+type FormErrors = Partial<Record<keyof LabData, string>>;
 
 interface TimeSlot {
   day: string;
@@ -31,6 +34,7 @@ export default function LabForm() {
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: createLab } = useCreateLab();
   const { form, setField, reset } = useLabStore();
+  const { inputRefs, scrollToError } = useScrollToError();
 
   const [lab, setLab] = useState<LabData>({
     name: "",
@@ -40,7 +44,8 @@ export default function LabForm() {
   });
   const router = useRouter();
 
-  const [errors, setErrors] = useState<Partial<LabData>>({});
+    const [errors, setErrors] = useState<FormErrors>({});
+  
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -130,24 +135,34 @@ export default function LabForm() {
 
   // 🔹 Basic validation
   const validate = () => {
-    const newErrors: Partial<LabData> = {};
+    const newErrors: FormErrors = {};
     if (!lab.name.trim()) newErrors.name = "Lab name is required.";
     // if (!lab.location.trim()) newErrors.location = "Location is required.";
     if (!lab.totalPCs || lab.totalPCs <= 0)
       newErrors.totalPCs = "Total PCs must be greater than 0." as any;
     if (
       !lab.timeSlots ||
-      (lab.timeSlots.length <= 0 &&
-        lab.timeSlots.map(
-          (t) =>
-            t.endTime !== null && lab.timeSlots.map((t) => t.endTime !== null),
-        ))
-    )
-      newErrors.totalPCs = "Total PCs must be greater than 0." as any;
-    setErrors(newErrors);
+      lab.timeSlots.length === 0 ||
+      lab.timeSlots.some(
+        (slot) =>
+          !slot.startTime ||
+          !slot.endTime ||
+          slot.startTime >= slot.endTime
+      )
+    ) {
+      newErrors.timeSlots =
+        "Add at least one valid time slot (start time must be before end time)." as any;
+    }
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+
+    setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
+
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   const handleResetForm = () => {
@@ -162,19 +177,23 @@ export default function LabForm() {
   };
 
   const handleSubmit = () => {
-    if (!validate()) {
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -254,7 +273,9 @@ export default function LabForm() {
           )}
 
           {/* 🔹 Lab Name */}
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.name = el;
+              }}>
             <Label>Lab Name</Label>
             <Input
               ref={firstInputRef}
@@ -283,7 +304,9 @@ export default function LabForm() {
           </div>
 
           {/* 🔹 Total PCs */}
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.totalPCs = el;
+              }}>
             <Label>Total PCs</Label>
             <Input
               type="number"
@@ -297,7 +320,9 @@ export default function LabForm() {
           </div>
 
           {/* 🔹 Time Slots */}
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.timeSlots = el;
+              }}>
             <Label>Time Slots</Label>
             {lab.timeSlots.map((slot, index) => (
               <div key={index} className="mb-3 flex gap-3">
@@ -335,6 +360,10 @@ export default function LabForm() {
                 )}
               </div>
             ))}
+
+            {errors.timeSlots && (
+              <p className="text-sm text-red-500">{errors.timeSlots}</p>
+            )}
 
             <Button size="sm" variant="outline" onClick={addTimeSlot}>
               + Add Time Slot

@@ -142,8 +142,16 @@ export default function EnquiryTable() {
     dispatch(setCurrentPage(1));
   }, [dispatch]);
 
+  const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max);
+
+  // const handlePagination = useCallback((page: number) => {
+  //   if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+  // }, [dispatch, totalPages]);
+
   const handlePagination = useCallback((page: number) => {
-    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+    const safePage = clamp(page, 1, totalPages);
+    dispatch(setCurrentPage(safePage));
   }, [dispatch, totalPages]);
 
   const handleSort = useCallback((field: string) => {

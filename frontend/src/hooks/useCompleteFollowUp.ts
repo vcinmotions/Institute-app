@@ -53,8 +53,8 @@ export const useCreateCompleteFollowUp = () => {
     },
 
     onError: (error: any) => {
-      dispatch(setError(error.message || "Failed to create FollowUp"));
-      dispatch(setLoading(false));
+      const backend = error?.response?.data?.error || "Failed to create next follow-up";
+      dispatch(setError(backend));
     },
   });
 };
@@ -92,8 +92,8 @@ export const useCreateHoldEnquiry = () => {
     },
 
     onError: (error: any) => {
-      dispatch(setError(error.message || "Failed to create FollowUp"));
-      dispatch(setLoading(false));
+      const backend = error?.response?.data?.error || "Failed to create next follow-up";
+      dispatch(setError(backend));
     },
   });
 };
@@ -132,8 +132,8 @@ export const useCreateLostEnquiry = () => {
     },
 
     onError: (error: any) => {
-      dispatch(setError(error.message || "Failed to create FollowUp"));
-      dispatch(setLoading(false));
+      const backend = error?.response?.data?.error || "Failed to create next follow-up";
+      dispatch(setError(backend));
     },
   });
 };

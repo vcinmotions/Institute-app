@@ -7,6 +7,7 @@ import TextArea from "../input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { useScrollToError } from "@/app/utils/ScrollToError";
 
 interface CreateFollowUpModalProps {
   onClose: () => void;
@@ -46,53 +47,128 @@ export default function CompleteFollowUpModal({
   console.log("Creating follow-up for Enquiry ID:", enquiryId);
 
   const firstInputRef = useRef<HTMLInputElement>(null);
+  const { inputRefs, scrollToError } = useScrollToError();
+ 
 
   useEffect(() => {
     firstInputRef.current?.focus();
   }, []);
 
-  const handleSubmit = async () => {
-    const validationErrors: Partial<FollowUpData> = {};
+  const validate = () => {
+  const newErrors: Partial<FollowUpData> = {};
+  if (!remark.trim()) newErrors.remark = "Remark is required.";
 
-    if (!remark.trim()) validationErrors.remark = "Remark is required.";
+     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-        setAlert({
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };;
+};
+
+  // const handleSubmit = async () => {
+  //   const { isValid, errors: validationErrors } = validate();
+
+  //   if (!isValid) {
+  //     setAlert({
+  //       show: true,
+  //       title: "Validation Error",
+  //       message: "Please enter required fileds.",
+  //       variant: "error",
+  //     });
+
+  //     scrollToError(validationErrors); // ✅ ALWAYS WORKS
+
+  //     setTimeout(() => {
+  //         setAlert({ show: false, title: "", message: "", variant: "" });
+  //       }, 2000);
+
+  //     return; // ⛔ mutation never runs
+  //   }
+
+  //   try {
+  //     console.log("get Enquiry Id:", enquiryId);
+  //     console.log("Remark:", remark);
+
+  //     if (!enquiryId) return;
+
+  //     await createCompleteFollowUp({ enquiryId, remark, currentPage });
+
+  //     // Reset form and close modal
+  //     setRemark("");
+
+  //     // Refetch Follow-up Data
+  //     await refetch();
+
+  //     setErrors({});
+  //     onClose();
+  //   } catch (error) {
+  //     console.error("Failed to create follow-up:", error);
+  //     setErrors({ remark: "Failed to create follow-up. Please try again." });
+  //   }
+  // };
+
+  const handleSubmit = () => {
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
+      setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter at least feedback or remark.",
+        message: "Please enter required fileds.",
         variant: "error",
       });
 
-      // ✅ FIXED setTimeout
-    setTimeout(() => {
-      setErrors({});
-      setAlert({ show: false, title: "", message: "", variant: "" });
-    }, 2000);
+      scrollToError(validationErrors);
+
+      setTimeout(() => {
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
+
       return;
     }
 
-    try {
-      console.log("get Enquiry Id:", enquiryId);
-      console.log("Remark:", remark);
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      setAlert({
+        show: true,
+        title: "Unauthorized",
+        message: "Token not found. Please log in again.",
+        variant: "error",
+      });
 
-      if (!enquiryId) return;
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
-      await createCompleteFollowUp({ enquiryId, remark, currentPage });
+      setTimeout(() => {
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
-      // Reset form and close modal
-      setRemark("");
-
-      // Refetch Follow-up Data
-      await refetch();
-
-      setErrors({});
-      onClose();
-    } catch (error) {
-      console.error("Failed to create follow-up:", error);
-      setErrors({ remark: "Failed to create follow-up. Please try again." });
+      return;
     }
+
+    if (!enquiryId) return;
+
+    createCompleteFollowUp(
+      { enquiryId, remark, currentPage },
+      {
+        onSuccess: async () => {
+          setRemark("");
+          setErrors({});
+
+          // Refetch follow-ups
+          await refetch();
+
+          onClose();
+        },
+        onError: () => {
+          console.error("Failed to create follow-up");
+          setErrors({
+            remark: "Failed to create follow-up. Please try again.",
+          });
+        },
+      }
+    );
   };
 
   return (

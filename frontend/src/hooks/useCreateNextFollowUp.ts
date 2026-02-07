@@ -103,7 +103,6 @@ export const useCreateNextFollowUp = () => {
     onError: (error: any) => {
       const backend = error?.response?.data?.error || "Failed to create next follow-up";
       dispatch(setError(backend));
-      dispatch(setLoading(false));
     },
   });
 };
@@ -155,7 +154,6 @@ export const useEditNextFollowUp = () => {
     onError: (error: any) => {
       const backend = error?.response?.data?.error || "Failed to create next follow-up";
       dispatch(setError(backend));
-      dispatch(setLoading(false));
     },
   });
 };

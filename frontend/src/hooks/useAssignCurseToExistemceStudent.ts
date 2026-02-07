@@ -3,6 +3,7 @@ import { assignCourseToStudent, getStudent } from "@/lib/api";
 import { setCurrentPage, setStudents, setTotal, setTotalPages } from "@/store/slices/studentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { setError } from "@/store/slices/studentCourseSlice";
 
 type AdmissionPayload = {
   token: string;
@@ -66,8 +67,9 @@ export const useCourseToExistenceStudent = () => {
       dispatch(setCurrentPage(currentPage)); // reset page when search changes
       dispatch(setTotal(response.total || 0));
     },
-    onError: (error) => {
-      console.error("❌ Error Creating Admission:", error);
+    onError: (error: any) => {
+      const backend = error?.response?.data?.error || "Failed to create enquiry";
+      dispatch(setError(backend));
     },
   });
 };

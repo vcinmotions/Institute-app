@@ -50,8 +50,7 @@ export const useEditFaculty = () => {
     },
 
     onError: (error: any) => {
-      const backend =
-        error?.response?.data?.error || "Failed to create enquiry";
+      const backend = error?.response?.data?.error || "Failed to create enquiry";
       dispatch(setError(backend));
       dispatch(setLoading(false));
     },

@@ -15,6 +15,10 @@ export function normalizeToLowercase(str: string): string {
   return str.trim().toLowerCase();
 }
 
+export function normalizeToUppercase(str: string): string {
+  return str.trim().toUpperCase();
+}
+
 export function normalizePhone(phone: string): string {
   // Keep digits only, remove spaces, dashes, plus signs, etc.
   return phone.replace(/\D/g, '');

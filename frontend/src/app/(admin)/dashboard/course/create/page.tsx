@@ -13,12 +13,15 @@ import { ChevronDownIcon } from "@/icons";
 import Button from "@/components/ui/button/Button";
 import Checkbox from "@/components/form/input/Checkbox";
 import { titleCase } from "@/app/utils/Normalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+type FormErrors = Partial<Record<keyof CourseData, string>>;
 
 interface CourseData {
   description: string;
   durationWeeks: string;
   name: string; // ✅ this matches backend
-  paymentType: any;
+  paymentType: string[];
   totalAmount: string;
 }
 
@@ -34,7 +37,7 @@ export default function CourseForm() {
     name: "",
     description: "",
     durationWeeks: "",
-    paymentType: "",
+    paymentType: [],
     totalAmount: "",
   });
 
@@ -51,7 +54,8 @@ export default function CourseForm() {
     variant: "",
   });
 
-  const [errors, setErrors] = useState<Partial<CourseData>>({});
+  const { inputRefs, scrollToError } = useScrollToError();
+  const [errors, setErrors] = useState<FormErrors>({});
   const [oneTime, setOneTime] = useState<boolean>(false);
   const [installment, setInstallment] = useState<boolean>(false);
   const { mutate: createCourse } = useCreateCourse();
@@ -85,17 +89,34 @@ export default function CourseForm() {
   // 🟢 Restore data from Zustand when page opens
   // 🟢 Restore saved form when opening Course Create
 
+  // useEffect(() => {
+  //   if (!form || Object.keys(form).length === 0) return;
+
+  //   setNewCourse((prev) => ({
+  //     name: form.name || prev.name,
+  //     description: form.description || prev.description,
+  //     durationWeeks: form.durationWeeks || prev.durationWeeks,
+  //     paymentType: form.paymentType?.length
+  //       ? form.paymentType
+  //       : prev.paymentType,
+  //     totalAmount: form.totalAmount || prev.totalAmount,
+  //   }));
+  // }, [form]);
+
   useEffect(() => {
     if (!form || Object.keys(form).length === 0) return;
 
     setNewCourse((prev) => ({
-      name: form.name || prev.name,
-      description: form.description || prev.description,
-      durationWeeks: form.durationWeeks || prev.durationWeeks,
-      paymentType: form.paymentType?.length
+      ...prev,
+      name: form.name ?? prev.name,
+      description: form.description ?? prev.description,
+      durationWeeks: form.durationWeeks ?? prev.durationWeeks,
+      totalAmount: form.totalAmount ?? prev.totalAmount,
+      paymentType: Array.isArray(form.paymentType)
         ? form.paymentType
-        : prev.paymentType,
-      totalAmount: form.totalAmount || prev.totalAmount,
+        : form.paymentType
+        ? [form.paymentType]
+        : [],
     }));
   }, [form]);
 
@@ -165,7 +186,7 @@ export default function CourseForm() {
   // };
 
   const validate = () => {
-    const newErrors: Partial<CourseData> = {};
+    const newErrors: FormErrors = {};
 
     if (!newCourse.durationWeeks.trim()) {
       newErrors.durationWeeks = "Name is required.";
@@ -176,17 +197,20 @@ export default function CourseForm() {
     }
 
     if (!newCourse.totalAmount.trim()) {
-      newErrors.totalAmount = "totalAmount is required.";
+      newErrors.totalAmount = "Course Amount is required.";
     }
 
-    // if (!newCourse.paymentType) {
-    //   newErrors.paymentType = "paymentType is required.";
-    // }
+    if (!newCourse.paymentType || newCourse.paymentType.length === 0) {
+      newErrors.paymentType = "Please select at least one payment type.";
+    }
 
     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   // Handle input change
@@ -256,34 +280,24 @@ export default function CourseForm() {
     }));
   };
 
-  const handleResetForm = () => {
-    reset();
-
-    setNewCourse({
-      description: "",
-      durationWeeks: "",
-      name: "",
-      paymentType: "",
-      totalAmount: "",
-    });
-  };
-
   const handleSubmit = async () => {
-    console.log("Submitting enquiry data:", newCourse);
+    const { isValid, errors: validationErrors } = validate();
 
-    if (!validate()) {
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -322,7 +336,7 @@ export default function CourseForm() {
           description: "",
           durationWeeks: "",
           name: "",
-          paymentType: "",
+          paymentType: [],
           totalAmount: "",
         });
 
@@ -343,6 +357,7 @@ export default function CourseForm() {
 
       onError: () => {
         // You already handle error via redux + toast
+        window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });
   };
@@ -354,9 +369,6 @@ export default function CourseForm() {
     <div>
       <PageBreadcrumb pageTitle="Create Course" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-        {/* <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-          Profile
-        </h3> */}
 
         <div className="space-y-8">
           <h2 className="border-b pb-6">Course Infomation</h2>
@@ -370,13 +382,13 @@ export default function CourseForm() {
             />
           )}
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.name = el;
+              }}>
             <Label>Course *</Label>
             <Input
               ref={firstInputRef}
-             
               type="text"
-              
               placeholder="Ex. Full Stack Developer"
               value={titleCase(newCourse.name)}
               onChange={(e) => handleChange("name", e.target.value)}
@@ -386,7 +398,9 @@ export default function CourseForm() {
             )}
           </div>
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.durationWeeks = el;
+              }}>
             <Label>Duration Weeks *</Label>
             <Input
               type="number"
@@ -401,7 +415,9 @@ export default function CourseForm() {
             )}
           </div>
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.totalAmount = el;
+              }}>
             <Label>Course Amount *</Label>
             <Input
               type="number"
@@ -416,7 +432,9 @@ export default function CourseForm() {
             )}
           </div>
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.paymentType = el;
+              }}>
             <Label> Payment Type *</Label>
 
             <div className="flex gap-4">
@@ -434,6 +452,9 @@ export default function CourseForm() {
               />
               <Label> INSTALLMENTS</Label>
             </div>
+            {errors.paymentType && (
+              <p className="text-sm text-red-500">{errors.paymentType}</p>
+            )}
           </div>
           {/* <div>
             <Label>Select Payment Type *</Label>

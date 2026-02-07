@@ -25,7 +25,9 @@ import PhoneInput from "@/components/form/group-input/PhoneInput";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { normalizeEmail, normalizePhone, titleCase } from "@/app/utils/Normalize";
 
-interface CourseData {
+type FormErrors = Partial<Record<keyof FacultyData, string>>;
+
+interface FacultyData {
   email: string;
   contact: string;
   joiningDate: string;
@@ -36,7 +38,7 @@ interface CourseData {
 }
 
 export default function FacultyForm() {
-  const [newFaculty, setNewFaculty] = useState<CourseData>({
+  const [newFaculty, setNewFaculty] = useState<FacultyData>({
     name: "",
     email: "",
     joiningDate: "",
@@ -62,7 +64,7 @@ export default function FacultyForm() {
     variant: "",
   });
 
-  const [errors, setErrors] = useState<Partial<CourseData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const { inputRefs, scrollToError } = useScrollToError();
   const { mutate: createFaculty } = useCreateFaculty();
   const batch = useSelector((state: RootState) => state.batch.batches);
@@ -137,7 +139,7 @@ export default function FacultyForm() {
   }, [form]);
 
 
-  const handleDateChange = (field: keyof CourseData, value: string) => {
+  const handleDateChange = (field: keyof FacultyData, value: string) => {
     // Allow only digits
     let digits = value.replace(/\D/g, "");
 
@@ -180,7 +182,7 @@ export default function FacultyForm() {
   };
 
   const validate = () => {
-    const newErrors: Partial<CourseData> = {};
+    const newErrors: FormErrors = {};
 
     if (!newFaculty.name.trim()) {
       newErrors.name = "Name is required.";
@@ -209,9 +211,13 @@ export default function FacultyForm() {
     }
 
     setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
@@ -249,7 +255,7 @@ export default function FacultyForm() {
     }
   };
 
-  const handleChange = (field: keyof CourseData, value: string) => {
+  const handleChange = (field: keyof FacultyData, value: string) => {
   // Ensure value is always lowercase if it's the name
   let processedValue = field === "name" ? value.toLowerCase() : value;
 
@@ -308,21 +314,23 @@ export default function FacultyForm() {
   }));
 
   const handleSubmit = async () => {
-    console.log("Submitting enquiry data:", newFaculty);
+   const { isValid, errors: validationErrors } = validate();
 
-    if (!validate()) {
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -405,7 +413,9 @@ export default function FacultyForm() {
             />
           )}
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.name = el;
+              }}>
             <Label>Faculty Name *</Label>
             <Input
               ref={firstInputRef}
@@ -420,7 +430,9 @@ export default function FacultyForm() {
             )}
           </div>
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.email = el;
+              }}>
             <Label>Username *</Label>
             <Input
               type="text"
@@ -435,7 +447,9 @@ export default function FacultyForm() {
             )}
           </div>
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.password = el;
+              }}>
             <Label>Password *</Label>
             <Input
               type="text"
@@ -503,7 +517,9 @@ export default function FacultyForm() {
             </div>
           </div>
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.batchId = el;
+              }}>
             <Label>Select Batch *</Label>
             <div className="relative" data-master="batch">
               <Select
@@ -522,7 +538,9 @@ export default function FacultyForm() {
             )}
           </div>
 
-          <div>
+          <div ref={(el) => {
+                inputRefs.current.joiningDate = el;
+              }}>
             <Label>Joining Date *</Label>
             {/* <Input
             type="text"

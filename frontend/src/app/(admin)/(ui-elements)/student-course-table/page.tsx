@@ -195,7 +195,7 @@ export default function StudentCourseTable() {
 
    // --- Handlers (memoized)
     const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchInput(e.target.value.toLocaleLowerCase());
+      setSearchInput(e.target.value);
     }, []);
   
     const handleSearchSubmit = useCallback((e: React.FormEvent) => {

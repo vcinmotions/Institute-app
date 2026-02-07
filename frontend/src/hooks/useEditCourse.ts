@@ -38,10 +38,8 @@ export const useEditCourse = () => {
     },
 
     onError: (error: any) => {
-      const backendError =
-        error?.response?.data?.error || "Failed to assign batch";
+      const backendError = error?.response?.data?.error || "Failed to assign batch";
       dispatch(setError(backendError));
-      dispatch(setLoading(false));
     },
   });
 };

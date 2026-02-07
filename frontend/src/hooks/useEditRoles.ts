@@ -43,8 +43,7 @@ export const useEditRoles = () => {
     },
 
     onError: (error: any) => {
-      const backend =
-        error?.response?.data?.error || "Failed to update enquiry";
+      const backend = error?.response?.data?.error || "Failed to update enquiry";
       dispatch(setError(backend));
     },
   });

@@ -195,17 +195,6 @@ export default function AdmissionForm() {
   const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
   const { mutate: createAdmission } = useCreateAdmission();
 
-  const getPaymentTypes = (courseId: string) => {
-    const course = courses.find(c => c.id.toString() === courseId);
-    return course?.courseFeeStructure?.paymentType || [];
-  };
-
-  const getInstallments = (courseId: string) => {
-    const course = courses.find(c => c.id.toString() === courseId);
-    return course?.courseFeeStructure?.installments || [];
-  };
-  
-
    const firstInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -495,8 +484,6 @@ export default function AdmissionForm() {
     isError: batchError,
   } = useFetchAllBatches({ onlyAvailable: true });
 
-
-
   useEffect(() => {
     if (courseData?.course) {
       console.log("get all courses data;", courseData);
@@ -650,9 +637,6 @@ export default function AdmissionForm() {
 
     setErrors(newErrors);
 
-     // Return true if no errors, false otherwise
-    // return Object.keys(newErrors).length === 0;
-
     return {
       isValid: Object.keys(newErrors).length === 0,
       errors: newErrors,
@@ -733,14 +717,6 @@ export default function AdmissionForm() {
     }
   };
 
-  const handleRowChange = (index: number, field: string, value: any) => {
-    setCourseRows((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
-      return updated;
-    });
-  };
-
   // const scrollToError = (errs: Record<string, string>) => {
   //   const firstErrorKey = Object.keys(errs)[0];
   //   if (!firstErrorKey) return;
@@ -790,43 +766,6 @@ export default function AdmissionForm() {
 
       setCourseRows((prev) => []);
     }
-  };
-
-  const handleChangeNewNew = (field: keyof EnquiryData, value: string) => {
-    console.log("Filled Data NOW:", filledEnquiryData);
-
-    console.log("Field and value in handleChange New:", field, value);
-
-    setNewEnquiry((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-
-    console.log("Filled Data NOW:", filledEnquiryData); // ✔ correct place
-
-    if (field === "courseId") {
-      const selectedCourse = courses.find((c) => c.id.toString() === value);
-
-      console.log("Selected Course:", selectedCourse);
-
-      // ✅ Always set Fee + Payment Type if courseFeeStructure exists
-      if (selectedCourse?.courseFeeStructure) {
-        setpaymentTypeOption(selectedCourse.courseFeeStructure.paymentType);
-        setFilledEnquiryData((prev) => ({
-          ...prev,
-
-          feeAmount: installmentTypeOption.amount?.toString() || "",
-
-          //paymentType: selectedCourse.courseFeeStructure.paymentType || "",
-        }));
-      }
-    }
-
-    // Clear error on change
-    setErrors((prev) => ({
-      ...prev,
-      [field]: "",
-    }));
   };
 
   const handleSubmit = async () => {

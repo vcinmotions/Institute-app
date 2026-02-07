@@ -30,6 +30,7 @@ import {
 } from "country-state-city";
 import { capitalizeWords } from "@/components/common/ToCapitalize";
 import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
 
 type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
@@ -93,6 +94,7 @@ export default function EditEnquiryForm({
   });
   const error = useSelector((state: RootState) => state.enquiry.error);
   const modalBodyRef = useRef<HTMLDivElement>(null);
+  const { inputRefs, scrollToError } = useScrollToError();
 
   const branchState = useSelector((state: RootState) => state.auth.statelocation);
     const branchCountry = useSelector((state: RootState) => state.auth.country);
@@ -333,6 +335,10 @@ const handleAlternatePhoneNumberChange = (
       newErrors.name = "Name is required.";
     }
 
+    if (!newEnquiry.email.trim()) {
+      newErrors.email = "Email is required.";
+    }
+
     if (!newEnquiry.contact.trim()) {
       newErrors.contact = "Contact number is required.";
     }
@@ -341,10 +347,18 @@ const handleAlternatePhoneNumberChange = (
       newErrors.courseId = "Select at least one course.";
     }
 
-    setErrors(newErrors);
+    // setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+    // setTimeout(() => setErrors({}), 1000);
+    // return Object.keys(newErrors).length === 0;
+
+    setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   const handleChange = (field: keyof EnquiryData, value: string | string[]) => {
@@ -360,21 +374,23 @@ const handleAlternatePhoneNumberChange = (
   };
 
   const handleSubmit = () => {
-    if (!validate()) {
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required fileds.",
         variant: "error",
       });
 
-      scrollModalToTop();
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 1000);
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
 
-      return;
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -436,6 +452,7 @@ const handleAlternatePhoneNumberChange = (
       },
 
       onError: () => {
+        scrollModalToTop();
         // You already handle error via redux + toast
       },
     });
@@ -459,7 +476,9 @@ const handleAlternatePhoneNumberChange = (
             showLink={false}
           />
         )}
-        <div>
+        <div  ref={(el) => {
+                inputRefs.current.name = el;
+              }}>
           <Label>Name</Label>
           <Input
             ref={firstInputRef}
@@ -471,7 +490,9 @@ const handleAlternatePhoneNumberChange = (
           />
           {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
         </div>
-        <div>
+        <div  ref={(el) => {
+                inputRefs.current.email = el;
+              }}>
           <Label>Email</Label>
           <div className="relative">
             <Input
@@ -490,7 +511,9 @@ const handleAlternatePhoneNumberChange = (
             </span>
           </div>
         </div>
-        <div>
+        <div  ref={(el) => {
+                inputRefs.current.contact = el;
+              }}>
           <Label>Contact No.</Label>
           <PhoneInput
             selectPosition="start"

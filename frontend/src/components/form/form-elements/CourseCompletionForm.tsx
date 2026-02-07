@@ -7,6 +7,9 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useCourseCompletion } from "@/hooks/useCourseCompletion";
 import TextArea from "../input/TextArea";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+type FormErrors = Partial<Record<keyof CourseCompletionData, string>>;
 
 interface CourseCompletionFormProps {
   onCloseModal: () => void;
@@ -28,7 +31,9 @@ export default function CourseCompletionForm({
     feedback: "",
     remark: "",
   });
-    const [errors, setErrors] = useState<Partial<CourseCompletionData>>({});
+    const { inputRefs, scrollToError } = useScrollToError();
+  
+    const [errors, setErrors] = useState<FormErrors>({});
   
   const { mutate: courseCompletion } = useCourseCompletion();
 
@@ -91,6 +96,22 @@ export default function CourseCompletionForm({
     },
   });
 
+  const validate = () => {
+    const newErrors: FormErrors = {};
+
+    if (!formData.remark.trim()) newErrors.remark = "Remark is required.";
+    if (!formData.feedback.trim()) newErrors.feedback = "Feedback is required.";
+
+    setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
+
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
+  };
+
   const handleChange = (field: keyof CourseCompletionData, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -98,28 +119,99 @@ export default function CourseCompletionForm({
     }));
   };
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
 
-    const validationErrors: Partial<CourseCompletionData> = {};
+  //    const { isValid, errors: validationErrors } = validate();
 
-    if (!formData.remark.trim()) validationErrors.remark = "Remark is required.";
-    if (!formData.feedback.trim()) validationErrors.feedback = "Feedback is required.";
+  //   if (!isValid) {
+  //     setAlert({
+  //       show: true,
+  //       title: "Validation Error",
+  //       message: "Please enter required inputs.",
+  //       variant: "error",
+  //     });
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+  //     scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
+  //     setTimeout(() => {
+  //         setAlert({ show: false, title: "", message: "", variant: "" });
+  //       }, 2000);
+
+  //     return; // ⛔ mutation never runs
+  //   }
+
+  //   const token = sessionStorage.getItem("token");
+  //   if (!token) {
+  //     setAlert({
+  //       show: true,
+  //       title: "Unauthorized",
+  //       message: "Token not found. Please log in again.",
+  //       variant: "error",
+  //     });
+
+  //     // ❌ Hide token error after 3 seconds
+  //     setTimeout(() => {
+  //       setAlert({ show: false, title: "", message: "", variant: "" });
+  //     }, 2000);
+
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     token,
+  //     studentId,
+  //     studentCourseId,
+  //     feedback: formData.feedback,
+  //     remark: formData.remark,
+  //   };
+
+  //   try {
+  //     await courseCompletion(payload);
+  //     setAlert({
+  //       show: true,
+  //       title: "Course Completion Done",
+  //       message: "Course marked as completed successfully.",
+  //       variant: "success",
+  //     });
+
+  //     // ✅ Close modal after 3s
+  //     setTimeout(() => {
+  //       onCloseModal();
+  //     }, 2000);
+  //   } catch (error) {
+  //     console.error("Error in Course Completion", error);
+  //     setAlert({
+  //       show: true,
+  //       title: "Error",
+  //       message: "Something went wrong while completing the course.",
+  //       variant: "error",
+  //     });
+
+  //     // ❌ Hide server error alert after 3 seconds
+  //     setTimeout(() => {
+  //       setAlert({ show: false, title: "", message: "", variant: "" });
+  //     }, 2000);
+  //   }
+  // };
+
+
+  const handleSubmit = () => {
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter at least feedback or remark.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-        // ✅ FIXED setTimeout
-    setTimeout(() => {
-      setErrors({});
-      setAlert({ show: false, title: "", message: "", variant: "" });
-    }, 2000);
+      scrollToError(validationErrors);
+
+      setTimeout(() => {
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
+
       return;
     }
 
@@ -132,7 +224,8 @@ export default function CourseCompletionForm({
         variant: "error",
       });
 
-      // ❌ Hide token error after 3 seconds
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 2000);
@@ -148,35 +241,39 @@ export default function CourseCompletionForm({
       remark: formData.remark,
     };
 
-    try {
-      await courseCompletion(payload);
-      setAlert({
-        show: true,
-        title: "Course Completion Done",
-        message: "Course marked as completed successfully.",
-        variant: "success",
-      });
+    courseCompletion(payload, {
+      onSuccess: () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
 
-      // ✅ Close modal after 3s
-      setTimeout(() => {
-        onCloseModal();
-      }, 2000);
-    } catch (error) {
-      console.error("Error in Course Completion", error);
-      setAlert({
-        show: true,
-        title: "Error",
-        message: "Something went wrong while completing the course.",
-        variant: "error",
-      });
+        setAlert({
+          show: true,
+          title: "Course Completion Done",
+          message: "Course marked as completed successfully.",
+          variant: "success",
+        });
 
-      // ❌ Hide server error alert after 3 seconds
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
-    }
+        setTimeout(() => {
+          onCloseModal();
+        }, 2000);
+      },
+
+      onError: () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        setAlert({
+          show: true,
+          title: "Error",
+          message: "Something went wrong while completing the course.",
+          variant: "error",
+        });
+
+        setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+      },
+    });
   };
-
+  
   return (
     <ModalCard title="Course Completion Form" oncloseModal={onCloseModal}>
       <div className="space-y-6">
@@ -203,8 +300,8 @@ export default function CourseCompletionForm({
           rows={4}
           placeholder="Interview Follow-Up Schedule"
         />
-        {errors.remark && (
-            <p className="text-sm text-red-500">{errors.remark}</p>
+        {errors.feedback && (
+            <p className="text-sm text-red-500">{errors.feedback}</p>
           )}
           </div>
 
@@ -228,8 +325,8 @@ export default function CourseCompletionForm({
           rows={4}
           placeholder="Interview Follow-Up Schedule"
         />
-        {errors.feedback && (
-            <p className="text-sm text-red-500">{errors.feedback}</p>
+        {errors.remark && (
+            <p className="text-sm text-red-500">{errors.remark}</p>
           )}
 </div>
         <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">

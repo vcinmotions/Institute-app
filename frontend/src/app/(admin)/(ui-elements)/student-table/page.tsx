@@ -42,7 +42,7 @@ export default function StudentTable() {
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value.toLocaleLowerCase());
+    setSearchInput(e.target.value);
   };
 
   const {
@@ -144,7 +144,6 @@ export default function StudentTable() {
     dispatch(setFilters(selectedFilters));
   }, [dispatch]);
 
-  console.log("student redux data:", currentPage, searchQuery, totalPages, totalCount);
 
   return (
     <div>

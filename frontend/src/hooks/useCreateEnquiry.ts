@@ -70,10 +70,8 @@ export const useCreateEnquiry = () => {
     },
 
     onError: (error: any) => {
-      console.log("ERROR IN CREATE ENQUIRY:", error, error.response, error.message);
       const backend = error?.response?.data?.error || "Failed to create enquiry";
       dispatch(setError(backend));
-      dispatch(setLoading(false));
     },
   });
 };

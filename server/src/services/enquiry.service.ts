@@ -169,6 +169,31 @@ export async function editEnquiryService({
   console.log("GET ENIT DATA:", normalizedData);
   console.log("GET ENIT DATA:", data);
 
+  // 1️⃣ Check for duplicates only if values exist
+  if (email) {
+    const existingEmail = await prisma.enquiry.findFirst({
+      where: {
+        email,
+        clientAdminId,
+        NOT: { id }, // 👈 exclude current enquiry
+      },
+    });
+
+    ensureUniqueEnquiry(!!existingEmail, false);
+  }
+
+  if (contact) {
+    const existingContact = await prisma.enquiry.findFirst({
+      where: {
+        contact,
+        clientAdminId,
+        NOT: { id }, // 👈 exclude current enquiry
+      },
+    });
+
+    ensureUniqueEnquiry(false, !!existingContact);
+  }
+
   // 1️⃣ Check for duplicates in domain rule
   const existingEnquiry = await prisma.enquiry.findUnique({
     where: {

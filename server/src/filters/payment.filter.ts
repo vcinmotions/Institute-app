@@ -1,4 +1,5 @@
 import { $Enums, PrismaClient } from "../../prisma-client/generated/tenant";
+import { normalizeEmail, normalizeToUppercase, titleCase } from "../utils/Normalize";
 
 type PaymentWhere = NonNullable<
   Parameters<PrismaClient["studentFee"]["findMany"]>[0]
@@ -22,13 +23,18 @@ export function buildPaymentWhere({
   const where: PaymentWhere = { clientAdminId };
 
   if (search) {
+    const normalizeStudent = titleCase(search);
+    const normalizeStudentCourse = titleCase(search);
+    const normalizeStudentCode = normalizeToUppercase(search);
+    const normalizeStudentEmail = normalizeEmail(search);
+
     where.OR = [
       {
         student: {
           OR: [
-            { fullName: { contains: search } },
-            { email: { contains: search } },
-            { studentCode: { contains: search } },
+            { fullName: { contains: normalizeStudent } },
+            { email: { contains: normalizeStudentEmail } },
+            { studentCode: { contains: normalizeStudentCode } },
             { contact: { contains: search } },
           ],
         },
@@ -36,7 +42,7 @@ export function buildPaymentWhere({
       {
         course: {
           OR: [
-            { name: { contains: search } },
+            { name: { contains: normalizeStudentCourse } },
             { description: { contains: search } },
           ],
         },

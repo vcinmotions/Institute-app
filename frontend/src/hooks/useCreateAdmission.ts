@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setEnquiries,
 } from "@/store/slices/enquirySlice";
-import { setAdmissions, setCurrentPage, setSearchQuery } from "@/store/slices/admissionSlice";
+import { setAdmissions, setCurrentPage, setError, setSearchQuery } from "@/store/slices/admissionSlice";
 import { RootState } from "@/store";
 
 type AdmissionPayload = {
@@ -103,8 +103,9 @@ export const useCreateAdmission = () => {
       dispatch(setSearchQuery(""));
     },
 
-    onError: (error) => {
-      console.error("❌ Error Creating Admission:", error);
+    onError: (error: any) => {
+      const backend = error?.response?.data?.error || "Failed to create enquiry";
+      dispatch(setError(backend));
     },
   });
 };

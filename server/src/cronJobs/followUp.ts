@@ -78,51 +78,100 @@ import { io } from "../utils/socket"; // Reference to your Socket.IO server
 //   }
 // }
 
+// export async function processDueFollowUps(dbUrl: string) {
+//   const prisma = getTenantPrisma(dbUrl);
+
+//   const now = dayjs();
+//   const reminderEnd = now.add(2, "day").endOf("day").toDate();
+
+//   const followUps = await prisma.followUp.findMany({
+//     where: {
+//       doneAt: null,
+//       followUpStatus: { in: ["PENDING", "MISSED"] },
+//       // scheduledAt: {
+//       //   lte: reminderEnd, // 🔥 near or overdue
+//       // },
+//     },
+//     include: {
+//       enquiry: true,
+//     },
+//   });
+
+//   for (const followUp of followUps) {
+//     const exists = await prisma.notification.findUnique({
+//       where: { followUpId: followUp.id },
+//     });
+
+//     if (exists) continue;
+
+//     const message = `Follow-up due for ${followUp.enquiry.name}
+//     Remark: ${followUp.remark}
+//     Scheduled: ${dayjs(followUp.scheduledAt).format("DD MMM")}`;
+
+//     await prisma.notification.create({
+//       data: {
+//         message,
+//         clientAdminId: followUp.enquiry.clientAdminId,
+//         followUpId: followUp.id,
+//       },
+//     });
+
+//     io.to(followUp.enquiry.clientAdminId).emit("followup-notification", {
+//       message,
+//       createdAt: new Date().toISOString(),
+//     });
+
+//     // 🔥 Mark missed if overdue
+//     if (dayjs(followUp.scheduledAt).isBefore(now)) {
+//       await prisma.followUp.update({
+//         where: { id: followUp.id },
+//         data: { followUpStatus: "MISSED" },
+//       });
+//     }
+//   }
+// }
+
 export async function processDueFollowUps(dbUrl: string) {
   const prisma = getTenantPrisma(dbUrl);
-
   const now = dayjs();
   const reminderEnd = now.add(2, "day").endOf("day").toDate();
 
   const followUps = await prisma.followUp.findMany({
     where: {
       doneAt: null,
+      scheduledAt: { lte: reminderEnd },
       followUpStatus: { in: ["PENDING", "MISSED"] },
-      // scheduledAt: {
-      //   lte: reminderEnd, // 🔥 near or overdue
-      // },
     },
-    include: {
-      enquiry: true,
-    },
+    include: { enquiry: true },
   });
 
   for (const followUp of followUps) {
-    const exists = await prisma.notification.findUnique({
-      where: { followUpId: followUp.id },
-    });
-
-    if (exists) continue;
-
     const message = `Follow-up due for ${followUp.enquiry.name}
-    Remark: ${followUp.remark}
-    Scheduled: ${dayjs(followUp.scheduledAt).format("DD MMM")}`;
+Remark: ${followUp.remark}
+Scheduled: ${dayjs(followUp.scheduledAt).format("DD MMM")}`;
 
-    await prisma.notification.create({
-      data: {
+    try {
+      await prisma.notification.create({
+        data: {
+          message,
+          clientAdminId: followUp.enquiry.clientAdminId,
+          followUpId: followUp.id,
+        },
+      });
+
+      io.to(followUp.enquiry.clientAdminId).emit("followup-notification", {
         message,
-        clientAdminId: followUp.enquiry.clientAdminId,
-        followUpId: followUp.id,
-      },
-    });
+        createdAt: new Date().toISOString(),
+      });
+    } catch {
+      // duplicate notification → skip
+    }
 
-    io.to(followUp.enquiry.clientAdminId).emit("followup-notification", {
-      message,
-      createdAt: new Date().toISOString(),
-    });
-
-    // 🔥 Mark missed if overdue
-    if (dayjs(followUp.scheduledAt).isBefore(now)) {
+    // Mark MISSED after 1 full day overdue
+    if (
+      followUp.scheduledAt &&
+      dayjs(followUp.scheduledAt).isBefore(now.subtract(1, "day"))
+    ) {
       await prisma.followUp.update({
         where: { id: followUp.id },
         data: { followUpStatus: "MISSED" },
@@ -130,7 +179,6 @@ export async function processDueFollowUps(dbUrl: string) {
     }
   }
 }
-
 
 // export async function processDueFollowUps(dbUrl: string) {
 //   const tenantPrisma = getTenantPrisma(dbUrl);

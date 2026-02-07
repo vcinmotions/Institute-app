@@ -3,6 +3,7 @@ type PaginationProps = {
   totalPages: number;
   totalCount?: number;
   title?: string;
+  noTotal?: boolean; 
   onPageChange: (page: number) => void;
 };
 
@@ -11,6 +12,7 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   totalCount,
   title,
+  noTotal,
   onPageChange,
 }) => {
   // const pagesAroundCurrent = Array.from(
@@ -63,11 +65,14 @@ const Pagination: React.FC<PaginationProps> = ({
       </button>
     </div>
 
-    <div>
-      <span className="ml-2.5 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs text-sm h-10 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
-        Total {title}: {totalCount}
-      </span>
-    </div>
+    {!noTotal && (
+      <div>
+        <span className="ml-2.5 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs text-sm h-10 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+          Total {title}: {totalCount}
+        </span>
+      </div>
+    )}
+
     </div>
   );
 };

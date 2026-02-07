@@ -9,6 +9,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useEditLab } from "@/hooks/useEditLab";
 import { normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
+
+type FormErrors = Partial<Record<keyof LabData, string>>;
 
 interface LabFormProps {
   onCloseModal: () => void;
@@ -43,6 +46,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
   console.log("GET LAB DATA IN EDIT LAB FORM:", labData);
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: editLab } = useEditLab();
+  const { inputRefs, scrollToError } = useScrollToError();
 
   const [lab, setLab] = useState<LabData>({
     name: "",
@@ -51,7 +55,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
     timeSlots: [{ day: "Daily", startTime: "", endTime: "" }],
   });
 
-  const [errors, setErrors] = useState<Partial<LabData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -125,31 +129,54 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
   // 🔹 Basic validation
   const validate = () => {
-    const newErrors: Partial<LabData> = {};
+    const newErrors: FormErrors = {};
     if (!lab.name.trim()) newErrors.name = "Lab name is required.";
     if (!lab.location.trim()) newErrors.location = "Location is required.";
     if (!lab.totalPCs || lab.totalPCs <= 0)
       newErrors.totalPCs = "Total PCs must be greater than 0." as any;
-    setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+    if (
+      !lab.timeSlots ||
+      lab.timeSlots.length === 0 ||
+      lab.timeSlots.some(
+        (slot) =>
+          !slot.startTime ||
+          !slot.endTime ||
+          slot.startTime >= slot.endTime
+      )
+    ) {
+      newErrors.timeSlots =
+        "Add at least one valid time slot (start time must be before end time)." as any;
+    }
+
+    setErrors(newErrors);
+    setTimeout(() => setErrors({}), 2000);
+
+
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors,
+    };
   };
 
   const handleSubmit = () => {
-    if (!validate()) {
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please enter required inputs.",
         variant: "error",
       });
 
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-      return;
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
     }
 
     const token = sessionStorage.getItem("token");
@@ -203,6 +230,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
         onError: () => {
           // You already handle error via redux + toast
+          window.scrollTo({top: 0, behavior: "smooth"})
         },
       },
     );
@@ -211,7 +239,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
   console.log("GET UPDATED LAB FORM DATA:", lab);
 
   return (
-    <ModalCard title="Add New Lab" oncloseModal={onCloseModal}>
+    <ModalCard title="Edit Lab" oncloseModal={onCloseModal}>
       <div className="space-y-6">
         {alert.show && (
           <Alert
@@ -223,7 +251,9 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
         )}
 
         {/* 🔹 Lab Name */}
-        <div>
+        <div  ref={(el) => {
+                inputRefs.current.name = el;
+              }}>
           <Label>Lab Name</Label>
           <Input
             ref={firstInputRef}
@@ -252,7 +282,9 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
         </div>
 
         {/* 🔹 Total PCs */}
-        <div>
+        <div  ref={(el) => {
+                inputRefs.current.totalPCs = el;
+              }}>
           <Label>Total PCs</Label>
           <Input
             tabIndex={3}
@@ -315,7 +347,9 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
           const isLocked = (slot.allocatedPCs ?? 0) > 0;
 
           return (
-            <div key={index} className="mb-3 flex items-center gap-3">
+            <div key={index} className="mb-3 flex items-center gap-3"  ref={(el) => {
+                inputRefs.current.timeSlots = el;
+              }}>
               <Input
                 type="text"
                 value={slot.day}
@@ -353,6 +387,9 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
                   ✕
                 </Button>
               )}
+               {errors.timeSlots && (
+              <p className="text-sm text-red-500">{errors.timeSlots}</p>
+            )}
             </div>
           );
         })}

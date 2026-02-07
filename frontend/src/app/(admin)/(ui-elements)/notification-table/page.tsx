@@ -133,6 +133,7 @@ export default function NotificationTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            noTotal
             onPageChange={handlePagination}
           />
         </StudentCard>
