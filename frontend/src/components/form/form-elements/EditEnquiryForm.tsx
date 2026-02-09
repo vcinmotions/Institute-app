@@ -483,7 +483,7 @@ const handleAlternatePhoneNumberChange = (
           <Input
             ref={firstInputRef}
             type="text"
-            placeholder="Info Demo"
+            placeholder="Enter Name"
             value={titleCase(newEnquiry.name)}
             tabIndex={1}
             onChange={(e) => handleChange("name", e.target.value)}
@@ -496,7 +496,7 @@ const handleAlternatePhoneNumberChange = (
           <Label>Email</Label>
           <div className="relative">
             <Input
-              placeholder="info@gmail.com"
+              placeholder="Enterv Email"
               type="text"
               className="pl-[62px]"
               tabIndex={2}
@@ -563,7 +563,7 @@ const handleAlternatePhoneNumberChange = (
           <Input
             tabIndex={6}
             type="date"
-            placeholder="30-02-2002"
+            placeholder="Enter DoB"
             //maxLength={10} // e.g. 12:30 PM
             value={newEnquiry.dob}
             onChange={(e) => handleChange("dob", e.target.value)}
@@ -649,7 +649,7 @@ const handleAlternatePhoneNumberChange = (
           <Label>Source</Label>
           <Input
             type="text"
-            placeholder="Enter Age"
+            placeholder="Enter Source"
             value={newEnquiry.source}
             tabIndex={10}
             onChange={(e) => handleChange("source", e.target.value)}         />
@@ -661,7 +661,7 @@ const handleAlternatePhoneNumberChange = (
           <Label>Refered By</Label>
           <Input
             type="text"
-            placeholder="Enter Age"
+            placeholder="Enter Refered Name"
             value={newEnquiry.referedBy}
             tabIndex={11}
             onChange={(e) => handleChange("referedBy", e.target.value)}         />

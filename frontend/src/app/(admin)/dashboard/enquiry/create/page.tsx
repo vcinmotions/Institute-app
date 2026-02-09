@@ -425,7 +425,7 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
             <Input
               ref={firstInputRef}
               type="text"
-              placeholder="Info Demo"
+              placeholder="Enter Name"
               value={titleCase(newEnquiry.name)}
               tabIndex={1}
               onChange={(e) => handleChange("name", e.target.value)}
@@ -438,7 +438,7 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
             <Label>Email </Label>
             <div className="relative">
               <Input
-                placeholder="info@gmail.com"
+                placeholder="Enter Email"
                 type="text"
                 className="pl-15.5"
                 tabIndex={2}
@@ -599,7 +599,7 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
           <Label>Referred By</Label>
           <Input
             type="text"
-            placeholder="Enter Age"
+            placeholder="Enter Reference"
             value={newEnquiry.referedBy}
             tabIndex={11}
             onChange={(e) => handleChange("referedBy", e.target.value)}         />

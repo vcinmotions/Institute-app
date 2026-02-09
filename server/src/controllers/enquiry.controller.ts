@@ -290,19 +290,19 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
     console.log("SUCCESSFUL ENQURY CREATED!");
 
     // ✅ Side effects
-    await logNotification({
-      clientAdminId: user.clientAdminId,
-      enquiryId: enquiry.id,
-      message: `New enquiry created for ${enquiry.name} - ${enquiry.contact.split("+91")[1]}`,
-      dbUrl: user.dbUrl,
-    })
+    // await logNotification({
+    //   clientAdminId: user.clientAdminId,
+    //   enquiryId: enquiry.id,
+    //   message: `New enquiry created for ${enquiry.name} - ${enquiry.contact.split("+91")[1]}`,
+    //   dbUrl: user.dbUrl,
+    // })
 
     await logActivity({
       clientAdminId: user.clientAdminId,
       entity: "Enquiry",
       entityId: enquiry.id,
       action: "CREATE",
-      message: `New enquiry created: ${enquiry.id}`,
+      message: `New enquiry created for: ${enquiry.name}. Contact: ${enquiry.contact.split("91")[1]}`,
       dbUrl: user.dbUrl,
     });
 
@@ -326,9 +326,6 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
     
     console.error("Error creating enquiry:", err);
     return res.status(500).json({ error: err.message || "Internal server error" });
-
-    console.error("Error creating enquiry:", err);
-    return res.status(500).json({ error: "Internal server error" });
   }
 }
 

@@ -6,7 +6,6 @@ import cors from "cors";
 import cron from "node-cron";
 import authRoute from "./routes/auth.routes";
 import path from "path";
-import { PrismaClient } from "../prisma-client/generated/central";
 import { isPackaged } from "./middlewares/runtimePaths";
 import tenantRoutes from "../src/routes/tenant.routes";
 import AdmissionRoute from "./routes/admission.routes";

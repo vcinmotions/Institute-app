@@ -508,15 +508,6 @@ export default function AdmissionForm() {
   //   label: `${capitalizeWords(b.name)} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
   // }));
 
-   const formatDOB = (dob: string) => {
-    if (!dob) return "";
-    const d = new Date(dob);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
   const batchOptions = React.useMemo(
     () =>
       batch.map((b: any) => ({
@@ -1007,7 +998,7 @@ export default function AdmissionForm() {
                 selectPosition="start"
                 countries={countries}
                 value={stripCountryCode(filledEnquiryData.parentsContact)} // 👈 IMPORTANT
-                placeholder="Enter Alternate Contact no."
+                placeholder="Enter Alternate Contact"
                 onChange={(value) => handlePhoneNumberChange("parentsContact", value)}
               />
               {errors.parentsContact && (
@@ -1064,7 +1055,7 @@ export default function AdmissionForm() {
               <Input
                 tabIndex={9}
                 type="text"
-                placeholder="Enter Student Religion"
+                placeholder="Enter Religion"
                 value={filledEnquiryData.religion}
                 onChange={(e) => handleChange("religion", e.target.value)}
               />

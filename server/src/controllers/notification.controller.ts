@@ -6,11 +6,19 @@ export async function getNotifications(req: Request, res: Response) {
     const tenantPrisma = req.tenantPrisma;
     const user = req.user;
 
+    const {
+      page,
+      limit,
+    } = req.query;
+
     console.log("get user in notification controller", user);
 
     if (!tenantPrisma || !user || typeof user === 'string') {
     return res.status(401).json({ error: 'Unauthorized request' });
   }
+
+  const pageNum = parseInt(page as string, 10) || 1;
+  const limitNum = parseInt(limit as string, 5) || 5;
 
   const notifications = await tenantPrisma.notification.findMany({
     where: {
@@ -20,7 +28,10 @@ export async function getNotifications(req: Request, res: Response) {
     orderBy: { createdAt: 'desc' }
   });
 
-  return res.status(200).json({ notifications });
+  const totalCount = await tenantPrisma.activityLog.count();
+    const totalPages = Math.ceil(totalCount / limitNum);
+
+  return res.status(200).json({ notifications, total: totalCount, totalPages });
     
   } catch (err) {
     console.error('Error fetching Notifications:', err);
@@ -42,15 +53,7 @@ export async function getNotificationController(req: Request, res: Response) {
       return res.status(401).json({ error: 'Unauthorized request' });
     }
 
-    const email = user.email;   
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
-
-    // console.log("get ClientAdmin in getEnquiryController:", clientAdmin);
+    const email = user.email;  
 
     // 2. Get client admin (we assume there's only one per tenant for now)
     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
@@ -71,10 +74,6 @@ export async function getNotificationController(req: Request, res: Response) {
 
     console.log("get ALl Params:", sortField, sortOrder);
 
-    // const pageNum = parseInt(page as string, 10);
-    // const limitNum = parseInt(limit as string, 10);
-    // const skip = (pageNum - 1) * limitNum;
-
     const pageNum = parseInt(page as string, 10) || 1;
     const limitNum = parseInt(limit as string, 10) || 10;
     const skip = (pageNum - 1) * limitNum;
@@ -88,10 +87,6 @@ export async function getNotificationController(req: Request, res: Response) {
         // Add more searchable fields as needed
       ];
     }
-
-    // 3. Create student under that admin
-    // const enquiry = await tenantPrisma.enquiry.findMany({
-    // });
 
     // ✅ Fetch paginated, sorted, and filtered enquiries
     const notification = await tenantPrisma.notification.findMany({

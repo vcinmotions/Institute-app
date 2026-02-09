@@ -11,16 +11,15 @@ import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import StudentCard from "@/components/common/StudentCard";
 
 import NotificaionDataTable from "@/components/tables/NotificationDataTable";
-import { setNotifications } from "@/store/slices/notificationSlice";
+import { setCurrentPage, setNotifications, setTotalPages } from "@/store/slices/notificationSlice";
 import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function NotificationTable() {
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const notifications = useSelector((state: RootState) => state.notification.notifications);
+  const { currentPage, totalPages } = useSelector((state: RootState) => state.notification);
   const [loading, setLoading] = useState<boolean>(false);
   const [sortField, setSortField] = useState("createdAt");
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(null);
@@ -115,11 +114,11 @@ export default function NotificationTable() {
     <div>
       <div className="space-y-6">
         <StudentCard title="Task Lists">
-          <Search
+          {/* <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
-          />
+          /> */}
 
           <NotificaionDataTable
             notifications={notifications}

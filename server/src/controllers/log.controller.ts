@@ -70,9 +70,9 @@ export async function getLogController(req: Request, res: Response) {
     // ✅ Fetch paginated, sorted, and filtered enquiries
     const log = await tenantPrisma.activityLog.findMany({
       where,
-      // orderBy: {
-      //   [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
-      // },
+      orderBy: {
+        [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
+      },
       skip,
       take: limitNum,
     });

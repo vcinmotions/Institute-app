@@ -116,11 +116,11 @@ export default function ActivityTable() {
     <div>
       <div className="space-y-6">
         <StudentCard title="Activity Logs">
-          <Search
+          {/* <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
-          />
+          /> */}
 
           <ActivityDataTable
             logs={logs}
