@@ -252,6 +252,7 @@ export default function LabForm() {
   };
 
   console.log("GET LAB FORM DATA IN STORE:", form);
+  console.log("GET LAB FORM DATA:", lab);
 
   return (
     <div>
