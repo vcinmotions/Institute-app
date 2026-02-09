@@ -42226,6 +42226,8 @@ export namespace Prisma {
     id?: string
     srNo?: number
     studentId?: number
+    email_clientAdminId?: EnquiryEmailClientAdminIdCompoundUniqueInput
+    contact_clientAdminId?: EnquiryContactClientAdminIdCompoundUniqueInput
     AND?: EnquiryWhereInput | EnquiryWhereInput[]
     OR?: EnquiryWhereInput[]
     NOT?: EnquiryWhereInput | EnquiryWhereInput[]
@@ -42251,7 +42253,7 @@ export namespace Prisma {
     enquiryCourse?: EnquiryCourseListRelationFilter
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
-  }, "id" | "srNo" | "studentId">
+  }, "id" | "srNo" | "studentId" | "email_clientAdminId" | "contact_clientAdminId">
 
   export type EnquiryOrderByWithAggregationInput = {
     id?: SortOrder
@@ -47527,6 +47529,16 @@ export namespace Prisma {
 
   export type FollowUpOrderByRelationAggregateInput = {
     _count?: SortOrder
+  }
+
+  export type EnquiryEmailClientAdminIdCompoundUniqueInput = {
+    email: string
+    clientAdminId: string
+  }
+
+  export type EnquiryContactClientAdminIdCompoundUniqueInput = {
+    contact: string
+    clientAdminId: string
   }
 
   export type EnquiryCountOrderByAggregateInput = {

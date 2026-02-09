@@ -112,11 +112,12 @@ export default function CourseForm() {
       description: form.description ?? prev.description,
       durationWeeks: form.durationWeeks ?? prev.durationWeeks,
       totalAmount: form.totalAmount ?? prev.totalAmount,
-      paymentType: Array.isArray(form.paymentType)
+      paymentType: form && form.paymentType
+      ? Array.isArray(form.paymentType) && form.paymentType.length > 0
         ? form.paymentType
-        : form.paymentType
-        ? [form.paymentType]
-        : [],
+        : [form.paymentType]  // convert single string to array
+      : prev.paymentType
+
     }));
   }, [form]);
 

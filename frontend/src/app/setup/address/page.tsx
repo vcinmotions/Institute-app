@@ -33,6 +33,26 @@ const CompanySchema = z.object({
 
 type CompanyData = z.infer<typeof CompanySchema>;
 
+const validateForm = (data: CompanyData) => {
+  const result = CompanySchema.safeParse(data);
+
+  if (!result.success) {
+    const fieldErrors: Partial<CompanyData> = {};
+
+    const flattened = result.error.flatten().fieldErrors;
+
+    for (const key in flattened) {
+      const field = key as keyof CompanyData;
+      fieldErrors[field] = flattened[field]?.[0];
+    }
+
+    return fieldErrors;
+  }
+
+  return null;
+};
+
+
 export default function AddressSetupPage() {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
@@ -244,9 +264,10 @@ export default function AddressSetupPage() {
           <div>
             <Label>Zip Code </Label>
             <Input
-              type="text"
+              type="number"
               placeholder="Enter Zip Code"
               value={newCompany.zipCode}
+              min={0}
               onChange={(e) => handleChange("zipCode", e.target.value)}
             />
             {errors.zipCode && (

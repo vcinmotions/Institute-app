@@ -541,12 +541,42 @@ const handleAlternatePhoneNumberChange = (
            {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}
 
+        <div>
+          <Label>Select Source</Label>
+          <div className="relative">
+            <Input
+              tabIndex={5}
+              type="text"
+              placeholder="Select an option"
+              value={newEnquiry.source} // Bind selected course
+              onChange={(e) => handleChange("source", e.target.value)}
+              className="dark:bg-dark-900"
+            />
+          </div>
+          {errors.source && (
+            <p className="text-sm text-red-500">{errors.source}</p>
+          )}
+        </div>
+
+        <div>
+          <Label>Date Of Birth</Label>
+          <Input
+            tabIndex={6}
+            type="date"
+            placeholder="30-02-2002"
+            //maxLength={10} // e.g. 12:30 PM
+            value={newEnquiry.dob}
+            onChange={(e) => handleChange("dob", e.target.value)}
+          />
+          {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
+        </div>
+
        <div>
           <Label>Gender</Label>
 
           <div className="relative">
             <Select
-              tabIndex={5}
+              tabIndex={7}
               options={genders.map((item) => ({
                 label: item.label,
                 value: item.value,
@@ -565,16 +595,7 @@ const handleAlternatePhoneNumberChange = (
           )}
         </div>
 
-        <div>
-          <Label>Location</Label>
-          <Input
-            type="text"
-            placeholder="Enter Location"
-            value={normalizeToLowercase(newEnquiry.location)}
-            tabIndex={6}
-            onChange={(e) => handleChange("location", e.target.value)}         />
-            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
-        </div>
+        
 
         {/* CITY */}
           <div>
@@ -584,7 +605,7 @@ const handleAlternatePhoneNumberChange = (
                 label: c.name,
                 value: c.name, // city name is fine
               }))}
-               tabIndex={7}
+               tabIndex={8}
               placeholder="Select City"
               onChange={(value) => handleChange("city", value)}
               value={newEnquiry.city}
@@ -595,19 +616,17 @@ const handleAlternatePhoneNumberChange = (
           </div>
 
         <div>
-          <Label>Date Of Birth</Label>
+          <Label>Location</Label>
           <Input
-            tabIndex={8}
-            type="date"
-            placeholder="30-02-2002"
-            //maxLength={10} // e.g. 12:30 PM
-            value={newEnquiry.dob}
-            onChange={(e) => handleChange("dob", e.target.value)}
-          />
-          {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
+            type="text"
+            placeholder="Enter Location"
+            value={normalizeToLowercase(newEnquiry.location)}
+            tabIndex={9}
+            onChange={(e) => handleChange("location", e.target.value)}         />
+            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
 
-        <div>
+        {/* <div>
           <div className="relative">
             <MultiSelect
               tabIndex={9}
@@ -624,23 +643,19 @@ const handleAlternatePhoneNumberChange = (
           {errors.courseId && (
             <p className="text-sm text-red-500">{errors.courseId}</p>
           )}
+        </div> */}
+
+         <div>
+          <Label>Source</Label>
+          <Input
+            type="text"
+            placeholder="Enter Age"
+            value={newEnquiry.source}
+            tabIndex={10}
+            onChange={(e) => handleChange("source", e.target.value)}         />
+            {errors.source && <p className="text-red-500 text-sm">{errors.source}</p>}
         </div>
-        <div>
-          <Label>Select Source</Label>
-          <div className="relative">
-            <Input
-              tabIndex={10}
-              type="text"
-              placeholder="Select an option"
-              value={newEnquiry.source} // Bind selected course
-              onChange={(e) => handleChange("source", e.target.value)}
-              className="dark:bg-dark-900"
-            />
-          </div>
-          {errors.source && (
-            <p className="text-sm text-red-500">{errors.source}</p>
-          )}
-        </div>
+        
 
          <div>
           <Label>Refered By</Label>

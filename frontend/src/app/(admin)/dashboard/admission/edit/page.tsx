@@ -633,7 +633,7 @@ export default function AdmissionForm() {
       newErrors.selectedProfilePicture = "Profiloe Picture is required.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), 2000);
 
     setErrors(newErrors);
 

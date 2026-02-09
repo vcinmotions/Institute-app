@@ -10,6 +10,7 @@ interface CompanyFormData {
   state: string;
   city: string;
   zipCode: string;
+  fullAddress: string;
   // ---- add your fields here ----
 }
 

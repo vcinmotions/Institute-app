@@ -34,6 +34,7 @@ import { setError } from "@/store/slices/authSlice";
 import PhoneInput from "@/components/form/group-input/PhoneInput";
 import { countries } from "@/components/common/CountriesCode";
 import { normalizeEmail, titleCase } from "@/app/utils/Normalize";
+import { useScrollToError } from "@/app/utils/ScrollToError";
 
 // interface CompanyData {
 //   name: string;
@@ -68,6 +69,8 @@ const CompanySchema = z.object({
 
 type CompanyData = z.infer<typeof CompanySchema>;
 
+type FormErrors = Partial<Record<keyof CompanyData, string>>;
+
 export default function Company() {
   const [newCompany, setNewCompany] = useState<CompanyData>({
     name: "",
@@ -89,8 +92,9 @@ export default function Company() {
     null,
   );
   const router = useRouter();
+  const { inputRefs, scrollToError } = useScrollToError();
 
-  const [errors, setErrors] = useState<Partial<CompanyData>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [alert, setAlert] = useState({
     show: false,
     title: "",
@@ -152,6 +156,7 @@ export default function Company() {
         state: form.state ?? "",
         city: form.city ?? "",
         zipCode: form.zipCode ?? "",
+        fullAddress: form.fullAddress ?? "",
       }));
     }
   }, []);
@@ -389,6 +394,25 @@ export default function Company() {
     //   return;
     // }
 
+    const { isValid, errors: validationErrors } = validate();
+
+    if (!isValid) {
+      setAlert({
+        show: true,
+        title: "Validation Error",
+        message: "Please enter required fileds.",
+        variant: "error",
+      });
+
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
+
+      setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 2000);
+
+      return; // ⛔ mutation never runs
+    }
+
     const token = sessionStorage.getItem("token");
     if (!token) {
       setAlert({
@@ -510,7 +534,9 @@ export default function Company() {
           <div className="grid grid-cols-2 gap-8 border-b pb-8">
             {/* AUTO-INSTITUTE NAME */}
             <div className="col-span-4 md:col-span-2 lg:col-span-1">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1"  ref={(el) => {
+                inputRefs.current.name = el;
+              }}>
                 <Label>Institute Name </Label>
                 <Tooltip
                   content="Unique than other created company"
@@ -534,7 +560,9 @@ export default function Company() {
             </div>
 
             {/* NAME */}
-            <div className="col-span-4 md:col-span-2 lg:col-span-1">
+            <div className="col-span-4 md:col-span-2 lg:col-span-1"  ref={(el) => {
+                inputRefs.current.displayName = el;
+              }}>
               <Label>Display Name </Label>
               <Input
                 type="text"
@@ -548,7 +576,9 @@ export default function Company() {
             </div>
 
             {/* EMAIL */}
-            <div className="col-span-4 md:col-span-2 lg:col-span-1">
+            <div className="col-span-4 md:col-span-2 lg:col-span-1"  ref={(el) => {
+                inputRefs.current.email = el;
+              }}>
               <Label>Username *</Label>
               <Input
                 type="text"
@@ -562,7 +592,9 @@ export default function Company() {
             </div>
 
             {/* PASSWORD */}
-            <div className="relative col-span-4 md:col-span-2 lg:col-span-1">
+            <div className="relative col-span-4 md:col-span-2 lg:col-span-1"  ref={(el) => {
+                inputRefs.current.password = el;
+              }}>
               <Label>Password *</Label>
               <div className="relative">
                 <Input
@@ -586,7 +618,9 @@ export default function Company() {
             </div>
 
             {/* CONTACT */}
-            <div className="col-span-4 md:col-span-2 lg:col-span-1">
+            <div className="col-span-4 md:col-span-2 lg:col-span-1"  ref={(el) => {
+                inputRefs.current.contact = el;
+              }}>
               <Label>Contact </Label>
               {/* <Input
                 type="text"
@@ -608,9 +642,11 @@ export default function Company() {
             </div>
           </div>
 
-          <h2 className="border-b pb-6">Address Infomation</h2>
+          <h2 className="border-b pb-6"  ref={(el) => {
+                inputRefs.current.fullAddress = el;
+              }}>Address Infomation</h2>
 
-          <div>
+          <div >
             <Label>Institute Full Address *</Label>
             <div className="relative">
               <TextArea
@@ -626,7 +662,9 @@ export default function Company() {
             </div>
           </div>
           {/* COUNTRY */}
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.country = el;
+              }}>
             <Label>Select Country *</Label>
             <div className="relative">
               <Select
@@ -648,7 +686,9 @@ export default function Company() {
           </div>
 
           {/* STATE */}
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.statelocation = el;
+              }}>
             <Label>Select State *</Label>
             <div className="relative">
               <Select
@@ -670,7 +710,9 @@ export default function Company() {
           </div>
 
           {/* CITY */}
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.city = el;
+              }}>
             <Label>City *</Label>
             <Select
               options={city.map((c) => ({
@@ -687,10 +729,13 @@ export default function Company() {
           </div>
 
           {/* ZIPCODE */}
-          <div>
+          <div  ref={(el) => {
+                inputRefs.current.zipCode = el;
+              }}>
             <Label>Zip Code </Label>
             <Input
-              type="text"
+              type="number"
+              min={0}
               placeholder="Enter Zip Code"
               value={newCompany.zipCode}
               onChange={(e) => handleChange("zipCode", e.target.value)}
