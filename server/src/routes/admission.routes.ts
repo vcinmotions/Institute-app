@@ -6,6 +6,7 @@ import path from "path";
 import {
   addStudentController,
   addStudentControllerNew,
+  editStudentController,
   getStudentController,
   getStudentCourseController,
 } from "../controllers/admission.controller";
@@ -74,6 +75,7 @@ router.post(
 );
 router.get("/student", getStudentController);
 router.get("/students/:id/courses", getStudentCourseController);
+router.put("/edit-student/:id", editStudentController);
 
 // Test Route
 router.post("/test-upload", upload.single("profilePicture"), (req, res) => {

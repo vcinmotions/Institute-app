@@ -962,6 +962,18 @@ export const createAdmission = async (token: string, formData: FormData) => {
   return response.data;
 };
 
+
+// 🔧 FIXED getUser API with token header
+export const editStudent = async (token: string, formData: FormData, id: string) => {
+  const response = await apiClient.put(`/edit-student/${id}`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
 // 🔧 FIXED getUser API with token header
 export const assignCourseToStudent = async (token: string, formData: FormData) => {
   const response = await apiClient.post(`/add-course`, formData, {

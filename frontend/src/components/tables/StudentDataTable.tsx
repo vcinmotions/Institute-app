@@ -23,6 +23,7 @@ import CourseForm from "../form/form-elements/AddCourseToStudentForm";
 import { RootState } from "@/store";
 import { getUser } from "@/lib/api";
 import { setLoading, setUser } from "@/store/slices/authSlice";
+import EditStudentForm from "../form/form-elements/EditStudentForm";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
@@ -47,6 +48,7 @@ export default function StudentDataTable({
 }: StudentDataTableProps) {
   const [showForm, setShowForm] = useState(false);
   const [showAdmissionForm, setShowAdmissionForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [showCourseForm, setShowCourseForm] = useState(false);
   const dispatch = useDispatch();
 
@@ -80,6 +82,10 @@ export default function StudentDataTable({
 
   const handleCloseAdmissionModal = () => {
     setShowAdmissionForm(false);
+  };
+
+  const handleCloseEditStudentModal = () => {
+    setShowEditForm(false);
   };
 
   const handleCloseCourseModal = () => {
@@ -118,6 +124,38 @@ export default function StudentDataTable({
     console.log("Get student Id in HandleAdmission:", studentId);
     console.log("Get studentDetails in HandleAdmission:", studentDetails);
     setShowAdmissionForm(true);
+  };
+
+  const handleEditForm = (id: any) => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      console.error("No token found in sessionStorage");
+      return;
+    }
+
+    console.log("Get studentId to Admission Handle:", id);
+
+    console.log("Student All Details:", students);
+
+    const studentDetails = students.find((item) => item.id === id);
+
+    console.log(
+      "Get student Data with Id in Handle Admission:",
+      studentDetails,
+    );
+
+    if (!studentDetails) {
+      console.error("No enquiry data found for this ID");
+      return;
+    }
+
+    // ✅ Save ID and data to state
+    setStudentDetails(studentDetails);
+    setStudentId(id);
+
+    console.log("Get student Id in HandleAdmission:", studentId);
+    console.log("Get studentDetails in HandleAdmission:", studentDetails);
+    setShowEditForm(true);
   };
 
   useEffect(() => {
@@ -241,17 +279,20 @@ export default function StudentDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                  <button type="button" className="flex items-center gap-1">
                     Add New Course
-                  </button>
                 </TableCell>
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                  <button type="button" className="flex items-center gap-1">
                     Admission Form
-                  </button>
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                >
+                    Edit Details
+                
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -333,6 +374,15 @@ export default function StudentDataTable({
                         Admission
                       </Button>
                     </TableCell>
+                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
+                      <Button
+                        onClick={() => handleEditForm(item.id)}
+                        size="sm"
+                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                      >
+                        Edit
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -351,11 +401,19 @@ export default function StudentDataTable({
       </div>
 
 
-      {/* === Follow-Up Timeline modal === */}
+      {/* === Student Admission modal === */}
       {showAdmissionForm && studentDetails && studentId !== null && (
         <AdmissionForm
           companyDetails={user}
           onCloseModal={handleCloseAdmissionModal} // Function to close timeline modal
+          student={studentDetails!} // Pass follow-up data fetched from API
+        />
+      )}
+
+      {/* === Edit STudent Detail modal === */}
+      {showEditForm && studentDetails && studentId !== null && (
+        <EditStudentForm
+          onCloseModal={handleCloseEditStudentModal} // Function to close timeline modal
           student={studentDetails!} // Pass follow-up data fetched from API
         />
       )}

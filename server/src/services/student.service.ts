@@ -297,3 +297,56 @@ export async function createStudentService({
 
   return { student, allStudentCourses, allFees };
 }
+export async function editStudentService({
+  prisma,
+  clientAdminId,
+  data,
+}: {
+  prisma: any;
+  clientAdminId: string;
+  data: any;
+}) {
+  const {
+    id, // enquiryId
+    name,
+    contact,
+    email,
+    residentialAddress,
+    permenantAddress,
+    idProofType,
+    idProofNumber,
+    religion,
+    fatherName,
+    motherName,
+    dob,
+    gender,
+    parentsContact,
+  } = data;
+
+  console.log("FIND THE STUDNE EDIT DATA IN SERVICE:", data);
+  // 2️⃣ Create student
+  const student = await prisma.student.update({
+    where: {
+      id
+    },
+    data: {
+      fullName: name,
+      contact,
+      email,
+      residentialAddress,
+      permenantAddress,
+      idProofType,
+      idProofNumber,
+      religion,
+      fatherName,
+      motherName,
+      parentsContact,
+      dob: dob, // ✅ full ISO
+      gender,
+    },
+  });
+
+  const getAllStudent = await prisma.student.findMany()
+
+  return { student, getAllStudent };
+}

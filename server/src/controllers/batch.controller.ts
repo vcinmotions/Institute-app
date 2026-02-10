@@ -271,15 +271,12 @@ export async function getAllBatchController(req: Request, res: Response) {
 
      const onlyAvailable = req.params.onlyAvailable === "true"; // path param as boolean
 
-     console.log("available pc query ONLYYYYYYYYYYYYYYYYYYYYYYYYYYYYY:", onlyAvailable);
-
     // 2. Get client admin (we assume there's only one per tenant for now)
     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
     if (!allClientAdmin) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
-    console.log("get allClientAdmin in BATCHES:", allClientAdmin);
   
     // ✅ Fetch paginated, sorted, and filtered enquiries
     // const batch = await tenantPrisma.batch.findMany({
@@ -325,8 +322,6 @@ export async function getAllBatchController(req: Request, res: Response) {
       },
     });
 
-    console.log("AL BATCHED ADAT:", batches);
-
       const responseBatches = onlyAvailable
       ? batches.filter((batch) => {
           if (!batch.labTimeSlot) return false;
@@ -339,7 +334,6 @@ export async function getAllBatchController(req: Request, res: Response) {
         })
       : batches;
 
-    console.log("BATHCEDSSSSSSSSSSSSSSSSSSSSSSS:", responseBatches);
     return res.status(200).json({
       message: "BATCHES fetched successfully",
       batch: responseBatches,

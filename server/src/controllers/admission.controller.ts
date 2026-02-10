@@ -1,8 +1,8 @@
 // controllers/studentController.ts
 import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
-import { studentCreateSchema, studentQuerySchema } from "../validators/student.query";
-import { createStudentService, getStudents } from "../services/student.service";
+import { studentCreateSchema, studentEditSchema, studentQuerySchema } from "../validators/student.query";
+import { createStudentService, editStudentService, getStudents } from "../services/student.service";
 
 export async function addStudentController(req: Request, res: Response) {
   const {
@@ -764,6 +764,42 @@ export async function addStudentControllerNew(req: any, res: any) {
 
     return res.status(201).json({
       message: "Student admitted successfully",
+      ...result,
+    });
+  } catch (err: any) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({ error: err.errors });
+    }
+    console.error("❌ Admission Error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function editStudentController(req: any, res: any) {
+  try {
+    const prisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!prisma || !user || typeof user === "string")
+      return res.status(401).json({ error: "Unauthorized request" });
+
+
+    console.log("editStudentController editStudentController editStudentController editStudentController:", req.body, req.params);
+      // ✅ Validate input
+      const data = studentEditSchema.parse({
+        id: Number(req.params.id),
+      ...req.body
+    });
+
+    // ✅ Call Service Layer
+    const result = await editStudentService({
+      prisma,
+      clientAdminId: user.clientAdminId,
+      data,
+    });
+
+    return res.status(201).json({
+      message: "Student Updated successfully",
       ...result,
     });
   } catch (err: any) {
