@@ -69,7 +69,7 @@ export default function NotificationTable() {
         });
 
         dispatch(setNotifications(response.notification || []));
-        setTotalPages(response.totalPages || 1);
+        dispatch(setTotalPages(response.totalPages || 1));
       } catch (error) {
         console.error("Error fetching notification:", error);
       } finally {

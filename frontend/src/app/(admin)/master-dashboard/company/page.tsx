@@ -631,7 +631,6 @@ export default function Company() {
               <PhoneInput
               selectPosition="start"
               countries={countries}
-              tabIndex={3}
               onKeyDown={handleKeyDown}
               placeholder="Enter Contact"
               onChange={handlePhoneNumberChange}

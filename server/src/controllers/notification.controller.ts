@@ -102,7 +102,8 @@ export async function getNotificationController(req: Request, res: Response) {
     });
 
     // ✅ Total count (for frontend pagination)
-    const totalPages = await tenantPrisma.notification.count({ where });
+    const totalCount = await tenantPrisma.roleUser.count({ where });
+    const totalPages = Math.ceil(totalCount / limitNum);
 
     console.log("notification Fetched Successfully", notification, totalPages, pageNum, limitNum);
 

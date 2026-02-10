@@ -197,11 +197,18 @@ export default function AdmissionForm() {
 
    const firstInputRef = useRef<HTMLInputElement>(null);
 
+  // useEffect(() => {
+  //   if (newEnquiry.name !== undefined && firstInputRef.current) {
+  //     firstInputRef.current.focus();
+  //   }
+  // }, []);
+
+
   useEffect(() => {
-    if (newEnquiry.name !== undefined && firstInputRef.current) {
+    if (!isLoading && firstInputRef.current) {
       firstInputRef.current.focus();
     }
-  }, [newEnquiry.name]);
+  }, [isLoading]);
 
   console.log("Redux state in edit:", useSelector(state => state));
 
@@ -512,7 +519,7 @@ export default function AdmissionForm() {
     () =>
       batch.map((b: any) => ({
         value: b.id.toString(),
-        label: `${(b.name)} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+        label: `${(b.name)} | PCs: ${b.labTimeSlot.availablePCs}`,
       })),
     [batch]
   );
@@ -905,6 +912,7 @@ export default function AdmissionForm() {
               <Label>Name</Label>
               <Input
                 type="text"
+                autoFocus
                 ref={firstInputRef}
                 tabIndex={1}
                 placeholder="Enter Student Name"

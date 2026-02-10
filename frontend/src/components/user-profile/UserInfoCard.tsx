@@ -85,7 +85,7 @@ export default function UserInfoCard() {
                 Phone
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                +91 {user?.contact || user?.contact}
+                {user?.contact || user?.contact}
               </p>
             </div>
 
@@ -156,6 +156,7 @@ export default function UserInfoCard() {
                     <Label>Email Address</Label>
                     <Input
                       type="text"
+                      readOnly
                       value={form.email}
                       onChange={(e) => handleChange("email", e.target.value)}
                     />
