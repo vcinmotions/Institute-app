@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { AppDispatch } from "@/store";
-
 import StudentCard from "@/components/common/StudentCard";
 import Search from "@/components/form/input/Search";
 import FilterBox from "@/components/form/input/FilterBox";
@@ -14,7 +13,6 @@ import useDebounce from "@/hooks/useDebounce";
 import { Tooltip } from "@heroui/react";
 
 import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
-import { getEnquiry } from "@/lib/api";
 
 import {
   setCurrentPage,
