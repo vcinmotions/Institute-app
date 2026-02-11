@@ -1,5 +1,5 @@
-//helpers/date.ts
-export function parseDate(dob: string | undefined): Date | null {
+// Helper function
+function parseDob(dob: string | undefined): Date | null {
   if (!dob) return null;
 
   // Split DD-MM-YYYY
@@ -17,13 +17,4 @@ export function parseDate(dob: string | undefined): Date | null {
 
   // Create a valid ISO string
   return new Date(`${year}-${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`);
-}
-
-export function parseDateISO(dob: string | undefined): Date | null {
-  if (!dob) return null;
-
-  const date = new Date(dob);
-  if (isNaN(date.getTime())) return null;
-
-  return date;
 }

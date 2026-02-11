@@ -798,7 +798,17 @@ export async function editStudentController(req: any, res: any) {
       data,
     });
 
-    return res.status(201).json({
+    // ✅ Log Activity with changeReason
+    await logActivity({
+      clientAdminId: user.clientAdminId,
+      entity: "Student",
+      entityId: result.student.id.toString(),
+      action: "UPDATE",
+      message: `Student updated: ${data.changeReason || "No reason provided"}`,
+      dbUrl: user.dbUrl,
+    });
+
+    return res.status(200).json({
       message: "Student Updated successfully",
       ...result,
     });
@@ -1026,7 +1036,7 @@ export async function getStudentController(req: Request, res: Response) {
 
     console.log("STUDENT DATA IN GET STUDETM CONTROLLER:", result);
 
-    return res.json({
+    return res.status(200).json({
       message: "Students fetched successfully",
       ...result,
       page: query.page,

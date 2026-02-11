@@ -542,19 +542,21 @@ const handleAlternatePhoneNumberChange = (
         </div>{" "}
 
         <div>
-          <Label>Select Source</Label>
           <div className="relative">
-            <Input
-              tabIndex={5}
-              type="text"
-              placeholder="Select an option"
-              value={newEnquiry.source} // Bind selected course
-              onChange={(e) => handleChange("source", e.target.value)}
-              className="dark:bg-dark-900"
+            <MultiSelect
+              tabIndex={9}
+              label="Select Courses"
+              options={courseList.map((course) => ({
+                value: String(course.id),
+                text: capitalizeWords(course.name),
+                selected: newEnquiry.courseId.includes(String(course.id)), // optional if MultiSelect uses selected prop
+              }))}
+              value={newEnquiry.courseId} // 🔥 CONTROLLED VALUE
+              onChange={(value) => handleChange("courseId", value)}
             />
           </div>
-          {errors.source && (
-            <p className="text-sm text-red-500">{errors.source}</p>
+          {errors.courseId && (
+            <p className="text-sm text-red-500">{errors.courseId}</p>
           )}
         </div>
 
@@ -626,24 +628,7 @@ const handleAlternatePhoneNumberChange = (
             {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
 
-        {/* <div>
-          <div className="relative">
-            <MultiSelect
-              tabIndex={9}
-              label="Select Courses"
-              options={courseList.map((course) => ({
-                value: String(course.id),
-                text: capitalizeWords(course.name),
-                selected: newEnquiry.courseId.includes(String(course.id)), // optional if MultiSelect uses selected prop
-              }))}
-              value={newEnquiry.courseId} // 🔥 CONTROLLED VALUE
-              onChange={(value) => handleChange("courseId", value)}
-            />
-          </div>
-          {errors.courseId && (
-            <p className="text-sm text-red-500">{errors.courseId}</p>
-          )}
-        </div> */}
+        
 
          <div>
           <Label>Source</Label>

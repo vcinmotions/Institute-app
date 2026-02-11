@@ -184,7 +184,7 @@ model Student {
   email         String?
   residentialAddress       String?
   permenantAddress String?
-  dob           String
+  dob           DateTime?
   gender        String
   religion      String?
   idProofType   String?

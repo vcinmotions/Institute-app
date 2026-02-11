@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface AnalyticsState {
   summary: Record<string, any>;
   breakdown: Record<string, any>;
+  birthdays: any;
   loading: boolean;
   error: string | null;
 }
@@ -11,6 +12,7 @@ interface AnalyticsState {
 const initialState: AnalyticsState = {
   summary: {},
   breakdown: {},
+  birthdays: {},
   loading: false,
   error: null,
 };
@@ -24,6 +26,9 @@ const analyticsSlice = createSlice({
     },
     setAnalyticsBreakdown(state, action: PayloadAction<Record<string, any>>) {
       state.breakdown = action.payload;
+    },
+    setBirthdays(state, action: PayloadAction<any>) {
+      state.birthdays = action.payload;
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
@@ -39,6 +44,7 @@ export const {
   setAnalyticsBreakdown,
   setLoading,
   setError,
+  setBirthdays
 } = analyticsSlice.actions;
 
 export default analyticsSlice.reducer;

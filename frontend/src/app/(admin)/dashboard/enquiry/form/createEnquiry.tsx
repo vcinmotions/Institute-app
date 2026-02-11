@@ -93,6 +93,8 @@ export default function EnquiryForm() {
     { value: "other", label: "Other" },
   ];
 
+  console.log("CITIES", city);
+
   const { inputRefs, scrollToError } = useScrollToError();
   const firstInputRef = useRef<HTMLInputElement>(null);
   const jumpInputRef = useRef<HTMLInputElement>(null);

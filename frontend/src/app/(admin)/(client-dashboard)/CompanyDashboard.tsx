@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
-import { getAnalytics, getEnquiry, getUser } from "@/lib/api";
+import { getAnalytics, getEnquiry, getStudent, getUser } from "@/lib/api";
 import {
   setCurrentPage,
   setEnquiries,
@@ -15,6 +15,7 @@ import {
 import {
   setAnalytics,
   setAnalyticsBreakdown,
+  setBirthdays,
 } from "@/store/slices/analyticsSlice";
 import { exportAnalyticsToExcel } from "@/app/utils/exportToExcel";
 
@@ -29,6 +30,7 @@ import DemographicCard from "@/components/ecommerce/DemographicCard";
 import EnquiryTarget from "@/components/ecommerce/EnquiryPieChart";
 import RecentOrders from "@/components/ecommerce/RecentOrders";
 import { PAGE_SIZE } from "@/constants/pagination";
+import MonthlyBirthdayCard from "@/components/ecommerce/MonthlyBirthdayCard";
 
 //const EcommerceMetrics = dynamic(() => import("@/components/ecommerce/EcommerceMetrics"));
 
@@ -42,6 +44,7 @@ export default function CompanyDashboard() {
   const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
   const summary = useSelector((state: RootState) => state.analytic.summary);
   const breakdown = useSelector((state: RootState) => state.analytic.breakdown);
+  const birthdays = useSelector((state: RootState) => state.analytic.birthdays);
   const totalConverted = useSelector(
     (state: RootState) => state.enquiry.totalConverted,
   );
@@ -73,6 +76,7 @@ export default function CompanyDashboard() {
             search: "",
           });
           const responseAnalytics = await getAnalytics(token);
+
 
           dispatch(setAnalytics(responseAnalytics.summary || {}));
           dispatch(setAnalyticsBreakdown(responseAnalytics.breakdown || {}));
@@ -119,6 +123,9 @@ export default function CompanyDashboard() {
             notConvertedCount={totalNotConverted}
           />
         )}
+        <MonthlyBirthdayCard birthdays={enquiries}
+            convertedCount={totalConverted}
+            notConvertedCount={totalNotConverted} />
       </div>
 
       <div className="col-span-12">

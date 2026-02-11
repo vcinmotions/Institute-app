@@ -53,6 +53,7 @@ export const studentEditSchema = z.object({
   contact: z.string().min(1, "Contact is required"),
   email: z.string().email("Invalid email").min(1),
   residentialAddress: z.string().min(1),
+  changeReason: z.string().min(1),
   permenantAddress: z.string().min(1),
   idProofType: z.string().min(1),
   idProofNumber: z.string().min(1),

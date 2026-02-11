@@ -23,6 +23,7 @@ import MultiSelect from "@/components/form/MultiSelect";
 import { Modal } from "@/components/ui/modal";
 import ModalCard from "@/components/common/ModalCard";
 import { useEditStudent } from "@/hooks/useEditStudent";
+import ChangeLogModal from "@/components/common/ChangeLogModal";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -76,6 +77,10 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
   const batch = useSelector((state: RootState) => state.batch.batches);
   console.log("get Courses data in admission form:", courses);
   console.log("get batch data in admission form:", batch);
+
+  const [showChangeLog, setShowChangeLog] = useState(false);
+  const [pendingPayload, setPendingPayload] = useState<any>(null);
+
   const [newEnquiry, setNewEnquiry] = useState<EnquiryData>({
     id: "",
     name: "",
@@ -438,6 +443,31 @@ const handlePhoneNumberChange = (
     }
   };
 
+  const handleConfirmUpdate = async (reason: string) => {
+      if (!pendingPayload) return;
+
+    try {
+      await editStudent({
+        ...pendingPayload,
+        changeReason: reason,
+      });
+
+      setShowChangeLog(false);
+
+      setAlert({
+        show: true,
+        title: "Student Updated Successfully",
+        message: "Student details updated successfully.",
+        variant: "success",
+      });
+
+      setTimeout(() => {
+        onCloseModal();
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!validate()) {
@@ -497,25 +527,31 @@ const handlePhoneNumberChange = (
 
     };
 
-    try {
-      await editStudent(editStudentPayload);
-      // reset form and show success alert as before
+    // 🔥 DO NOT CALL API HERE
+      setPendingPayload(editStudentPayload);
+      setShowChangeLog(true);
 
-      // Wait 3 seconds before showing alert
-      setAlert({
-        show: true,
-        title: "Student details Updated Successful",
-        message: "Student admission has been successfully submitted.",
-        variant: "success",
-      });
+      return;
 
-      // Close modal after showing alert for 2 seconds (for example)
-      setTimeout(() => {
-        onCloseModal()
-      }, 2000);
-    } catch (error) {   
-      // handle error
-    }
+    // try {
+    //   await editStudent(editStudentPayload);
+    //   // reset form and show success alert as before
+
+    //   // Wait 3 seconds before showing alert
+    //   setAlert({
+    //     show: true,
+    //     title: "Student details Updated Successful",
+    //     message: "Student admission has been successfully submitted.",
+    //     variant: "success",
+    //   });
+
+    //   // Close modal after showing alert for 2 seconds (for example)
+    //   setTimeout(() => {
+    //     onCloseModal()
+    //   }, 2000);
+    // } catch (error) {   
+    //   // handle error
+    // }
   };
 
   console.log("get All Admission form data:", newEnquiry);
@@ -753,13 +789,20 @@ const handlePhoneNumberChange = (
         </div>
  
         <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-          <Button size="sm" variant="outline" tabIndex={18}>
-            Clear
+          <Button size="sm" variant="outline" tabIndex={12} onClick={onCloseModal}>
+            Close
           </Button>
-          <Button size="sm" tabIndex={19} onClick={handleSubmit}>
+          <Button size="sm" tabIndex={19} className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>
+
+        <ChangeLogModal
+          isOpen={showChangeLog}
+          onClose={() => setShowChangeLog(false)}
+          onConfirm={handleConfirmUpdate}
+        />
+
       </div>
     </ModalCard>
   );

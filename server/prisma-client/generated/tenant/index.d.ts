@@ -13471,7 +13471,7 @@ export namespace Prisma {
     email: string | null
     residentialAddress: string | null
     permenantAddress: string | null
-    dob: string | null
+    dob: Date | null
     gender: string | null
     religion: string | null
     idProofType: string | null
@@ -13493,7 +13493,7 @@ export namespace Prisma {
     email: string | null
     residentialAddress: string | null
     permenantAddress: string | null
-    dob: string | null
+    dob: Date | null
     gender: string | null
     religion: string | null
     idProofType: string | null
@@ -13702,7 +13702,7 @@ export namespace Prisma {
     email: string | null
     residentialAddress: string | null
     permenantAddress: string | null
-    dob: string
+    dob: Date | null
     gender: string
     religion: string | null
     idProofType: string | null
@@ -13888,7 +13888,7 @@ export namespace Prisma {
       email: string | null
       residentialAddress: string | null
       permenantAddress: string | null
-      dob: string
+      dob: Date | null
       gender: string
       religion: string | null
       idProofType: string | null
@@ -14343,7 +14343,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Student", 'String'>
     readonly residentialAddress: FieldRef<"Student", 'String'>
     readonly permenantAddress: FieldRef<"Student", 'String'>
-    readonly dob: FieldRef<"Student", 'String'>
+    readonly dob: FieldRef<"Student", 'DateTime'>
     readonly gender: FieldRef<"Student", 'String'>
     readonly religion: FieldRef<"Student", 'String'>
     readonly idProofType: FieldRef<"Student", 'String'>
@@ -42533,7 +42533,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Student"> | string | null
     residentialAddress?: StringNullableFilter<"Student"> | string | null
     permenantAddress?: StringNullableFilter<"Student"> | string | null
-    dob?: StringFilter<"Student"> | string
+    dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     gender?: StringFilter<"Student"> | string
     religion?: StringNullableFilter<"Student"> | string | null
     idProofType?: StringNullableFilter<"Student"> | string | null
@@ -42568,7 +42568,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     residentialAddress?: SortOrderInput | SortOrder
     permenantAddress?: SortOrderInput | SortOrder
-    dob?: SortOrder
+    dob?: SortOrderInput | SortOrder
     gender?: SortOrder
     religion?: SortOrderInput | SortOrder
     idProofType?: SortOrderInput | SortOrder
@@ -42606,7 +42606,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Student"> | string | null
     residentialAddress?: StringNullableFilter<"Student"> | string | null
     permenantAddress?: StringNullableFilter<"Student"> | string | null
-    dob?: StringFilter<"Student"> | string
+    dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     gender?: StringFilter<"Student"> | string
     religion?: StringNullableFilter<"Student"> | string | null
     idProofType?: StringNullableFilter<"Student"> | string | null
@@ -42641,7 +42641,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     residentialAddress?: SortOrderInput | SortOrder
     permenantAddress?: SortOrderInput | SortOrder
-    dob?: SortOrder
+    dob?: SortOrderInput | SortOrder
     gender?: SortOrder
     religion?: SortOrderInput | SortOrder
     idProofType?: SortOrderInput | SortOrder
@@ -42671,7 +42671,7 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Student"> | string | null
     residentialAddress?: StringNullableWithAggregatesFilter<"Student"> | string | null
     permenantAddress?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    dob?: StringWithAggregatesFilter<"Student"> | string
+    dob?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
     gender?: StringWithAggregatesFilter<"Student"> | string
     religion?: StringNullableWithAggregatesFilter<"Student"> | string | null
     idProofType?: StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -45189,7 +45189,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -45223,7 +45223,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -45256,7 +45256,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45290,7 +45290,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45324,7 +45324,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -45345,7 +45345,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45366,7 +45366,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53671,7 +53671,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -53704,7 +53704,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -54468,7 +54468,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Student"> | string | null
     residentialAddress?: StringNullableFilter<"Student"> | string | null
     permenantAddress?: StringNullableFilter<"Student"> | string | null
-    dob?: StringFilter<"Student"> | string
+    dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     gender?: StringFilter<"Student"> | string
     religion?: StringNullableFilter<"Student"> | string | null
     idProofType?: StringNullableFilter<"Student"> | string | null
@@ -55357,7 +55357,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -55390,7 +55390,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -55610,7 +55610,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55643,7 +55643,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60531,7 +60531,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -60564,7 +60564,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -60741,7 +60741,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60774,7 +60774,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60909,7 +60909,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -60942,7 +60942,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -61200,7 +61200,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61233,7 +61233,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61488,7 +61488,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -61521,7 +61521,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -61765,7 +61765,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61798,7 +61798,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -62097,7 +62097,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -62130,7 +62130,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -62393,7 +62393,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -62426,7 +62426,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -62745,7 +62745,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -62778,7 +62778,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -62981,7 +62981,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63014,7 +63014,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63219,7 +63219,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -63252,7 +63252,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -63485,7 +63485,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63518,7 +63518,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63753,7 +63753,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -63786,7 +63786,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -64019,7 +64019,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64052,7 +64052,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64287,7 +64287,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -64320,7 +64320,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -64507,7 +64507,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64540,7 +64540,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64755,7 +64755,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -64788,7 +64788,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -64971,7 +64971,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65004,7 +65004,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65139,7 +65139,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -65172,7 +65172,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -65391,7 +65391,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65424,7 +65424,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65645,7 +65645,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -65678,7 +65678,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -65935,7 +65935,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65968,7 +65968,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66311,7 +66311,7 @@ export namespace Prisma {
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
-    dob: string
+    dob?: Date | string | null
     gender: string
     religion?: string | null
     idProofType?: string | null
@@ -66757,7 +66757,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66790,7 +66790,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66823,7 +66823,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: StringFieldUpdateOperationsInput | string
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null

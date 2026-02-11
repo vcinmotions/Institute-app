@@ -5,6 +5,7 @@ import { buildStudentWhere } from "../filters/student.filter";
 import { buildStudentOrderBy } from "../filters/student.sort";
 import { studentQuerySchema } from "../validators/student.query";
 import { Student } from "../domain/student/student";
+import { parseDate, parseDateISO } from "../helpers/date";
 
 type StudentQuery = z.infer<typeof studentQuerySchema>;
 
@@ -101,6 +102,8 @@ export async function createStudentService({
   const studentCode = Student.generateStudentCode(lastStudent?.studentCode);
   const serialNumber = Student.nextSerialNumber(lastStudent?.serialNumber);
 
+  const parsedDOB = parseDateISO(dob);
+
   // 2️⃣ Create student
   const student = await prisma.student.create({
     data: {
@@ -118,7 +121,7 @@ export async function createStudentService({
       fatherName,
       motherName,
       parentsContact,
-      dob: dob, // ✅ full ISO
+      dob: parsedDOB ? new Date(parsedDOB) : null, // ✅ full ISO
       gender,
       photoUrl: photoUrl || null,
       clientAdminId,

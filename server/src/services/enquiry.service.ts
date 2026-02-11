@@ -92,11 +92,15 @@ export async function createEnquiryService({
     ensureUniqueEnquiry(false, !!existingContact);
   }
 
+  const parsedDob = parseDate(dob);
+
+const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
+
   // 2️⃣ Calculate age safely
-  const age =
-    dob && !isNaN(new Date(dob).getTime())
-      ? Enquiry.calculateAge(new Date(dob))
-      : null;
+  // const age =
+  //   dob && !isNaN(new Date(dob).getTime())
+  //     ? Enquiry.calculateAge(new Date(dob))
+  //     : null;
 
   // 3️⃣ Get next SR No
   const last = await prisma.enquiry.findFirst({
@@ -114,7 +118,7 @@ export async function createEnquiryService({
       contact,
       email,
       age: age ?? null,
-      dob: dob ? new Date(dob) : null,
+      dob: parsedDob ? new Date(parsedDob) : null,
       source: normalizedData.source || null,
       alternateContact: normalizedData.alternateContact || null,
       location: normalizedData.location || null,
