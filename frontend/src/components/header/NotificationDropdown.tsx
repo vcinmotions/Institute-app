@@ -7,6 +7,7 @@ import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { useNotifications } from "@/context/NotificationContext";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import Avatar from "../common/Avatar";
 
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -107,13 +108,15 @@ export default function NotificationDropdown() {
                   className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                 >
                   <span className="relative block w-full h-10 rounded-full z-1 max-w-10">
-                    <Image
+                    {/* <Image
                       width={40}
                       height={40}
                       src="/images/user/user-05.jpg"
                       alt="Notification"
                       className="w-full overflow-hidden rounded-full"
-                    />
+                    /> */}
+
+                    <Avatar name={notification.notificationMessage} size={42} />
                   </span>
                   <span className="block">
                     <span className="mb-1.5 block text-theme-sm text-gray-800 dark:text-white/90">

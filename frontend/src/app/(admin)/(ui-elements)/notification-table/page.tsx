@@ -1,7 +1,5 @@
 "use client";
 
-import Search from "@/components/form/input/Search";
-
 import Pagination from "@/components/tables/Pagination";
 import { getNotification } from "@/lib/api";
 import { useSelector } from "react-redux";
@@ -15,7 +13,6 @@ import { setCurrentPage, setNotifications, setTotalPages } from "@/store/slices/
 import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function NotificationTable() {
-  const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const notifications = useSelector((state: RootState) => state.notification.notifications);
@@ -25,27 +22,7 @@ export default function NotificationTable() {
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   // 1. Separate state to track immediate input changes
-  const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
-  const leadStatusOptions = [null, "HOT", "WARM", "COLD"] as const;
-
-  // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
-  // Update searchInput immediately on typing
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  };
-
-  // Debounce effect: update searchQuery 1 second after user stops typing
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(searchInput);
-      setCurrentPage(1); // reset page when search changes
-    }, 300);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchInput]);
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -65,7 +42,6 @@ export default function NotificationTable() {
           search: searchQuery,
           sortField,
           sortOrder,
-          leadStatus, // 👈 Add this
         });
 
         dispatch(setNotifications(response.notification || []));
@@ -93,7 +69,7 @@ export default function NotificationTable() {
 
   const handlePagination = (page: number) => {
     if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
+    dispatch(setCurrentPage(page));
   };
 
   const handleSort = (field: string) => {
@@ -101,13 +77,6 @@ export default function NotificationTable() {
     setSortField(field);
     setSortOrder(order);
     setLeadStatus(leadStatus)
-  };
-
-  const handleLeadStatus = (field: string) => {
-    const currentIndex = leadStatusOptions.indexOf(leadStatus);
-    const nextStatus = leadStatusOptions[(currentIndex + 1) % leadStatusOptions.length];
-    setLeadStatus(nextStatus);
-    setCurrentPage(1); // Reset pagination on status change
   };
 
   return (
@@ -124,7 +93,6 @@ export default function NotificationTable() {
             notifications={notifications}
             loading={loading}
             onSort={handleSort}
-            onLeadStatus={handleLeadStatus}
             sortField={sortField}
             sortOrder={sortOrder}
           />

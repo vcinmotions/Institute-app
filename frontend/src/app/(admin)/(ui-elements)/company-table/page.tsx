@@ -144,10 +144,6 @@ export default function CompanyTable() {
           <CompanyDataTable
             company={company}
             loading={loading}
-            onSort={handleSort}
-            onLeadStatus={handleLeadStatus}
-            sortField={sortField}
-            sortOrder={sortOrder}
           />
 
           <Pagination

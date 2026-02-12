@@ -4,19 +4,10 @@ import { getMasterUser } from "@/lib/api";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-//import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-//import CompanyTable from "../(ui-elements)/company-table/page";
 import { setCountry, setStateLocation, setUser } from "@/store/slices/authSlice";
 import RoleProtected from "@/components/auth/RoleProtected";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import CompanyTable from "../(ui-elements)/company-table/page";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
-};
 
 export default function MasterDashboard() {
   const router = useRouter();
@@ -54,11 +45,8 @@ export default function MasterDashboard() {
 
   return (
     <RoleProtected allowedRoles={["MASTER_ADMIN"]}>
-      <div>
         <PageBreadcrumb pageTitle="Company" />
-
         <CompanyTable />
-      </div>
     </RoleProtected>
   );
 }

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { getUser } from "@/lib/api";
-import ClientAdminLayout from "../ClientAdminLayout";
+import ClientAdminLayout from "../(client-layout)/ClientAdminLayout";
 
 export default function AdminLayout({
   children,

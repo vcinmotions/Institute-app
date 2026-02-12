@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 interface EnquiryApiResponse {
   data: any[];
   total: number;
+  convertedCount: number;
+  notConvertedCount: number;
   totalPages: number;
 }
 

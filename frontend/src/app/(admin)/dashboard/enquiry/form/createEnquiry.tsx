@@ -19,7 +19,6 @@ import Label from "@/components/form/Label";
 import PhoneInput from "@/components/form/group-input/PhoneInput";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import MultiSelect from "@/components/form/MultiSelect";
-import { capitalizeWords } from "@/components/common/ToCapitalize";
 import {
   City,
   Country,
@@ -93,7 +92,6 @@ export default function EnquiryForm() {
     { value: "other", label: "Other" },
   ];
 
-  console.log("CITIES", city);
 
   const { inputRefs, scrollToError } = useScrollToError();
   const firstInputRef = useRef<HTMLInputElement>(null);
@@ -193,7 +191,12 @@ export default function EnquiryForm() {
 
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
     // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
-    const formattedNumber = code + phoneNumber;
+    //const formattedNumber = code + phoneNumber;
+
+    // Extract digits only
+    const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+
+    const formattedNumber = code + digitsOnly;
 
     setNewEnquiry((prev) => ({
       ...prev,
@@ -227,7 +230,7 @@ export default function EnquiryForm() {
     setField("alternateContact", formattedNumber); // <-- IMPORTANT
 
     // Validation
-    if (digitsOnly.length === 10) {
+    if (phoneNumber.length === 10) {
       setErrors((prev) => ({ ...prev, alternateContact: "" }));
     } else {
       setErrors((prev) => ({

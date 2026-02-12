@@ -1,29 +1,18 @@
-"use client";
-
+import RoleProtected from "@/components/auth/RoleProtected";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import { Metadata } from "next";
 import dynamic from "next/dynamic";
-import React from "react";
+import ActivityTable from "../../(ui-elements)/activity-table/page";
 
-// Dynamic imports now work with ssr: false
-const PageBreadcrumb = dynamic(
-  () => import("@/components/common/PageBreadCrumb"),
-  { ssr: false },
-);
-const RoleProtected = dynamic(() => import("@/components/auth/RoleProtected"), {
-  ssr: false,
-});
-const ActivityTable = dynamic(
-  () => import("../../(ui-elements)/activity-table/page"),
-  { ssr: false },
-);
+export const metadata: Metadata = {
+  title: "Logs",
+};
 
 export default function Activity() {
   return (
     <RoleProtected allowedRoles={["ADMIN", "FRONT_DESK"]}>
-      <div>
         <PageBreadcrumb pageTitle="Activity" />
-
         <ActivityTable />
-      </div>
     </RoleProtected>
   );
 }

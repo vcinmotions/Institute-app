@@ -1,6 +1,5 @@
 "use client";
 
-import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
 import { getLog } from "@/lib/api";
 import { useSelector } from "react-redux";
@@ -13,7 +12,7 @@ import { setLogs } from "@/store/slices/logSlice";
 import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function ActivityTable() {
-  const [showForm, setShowForm] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

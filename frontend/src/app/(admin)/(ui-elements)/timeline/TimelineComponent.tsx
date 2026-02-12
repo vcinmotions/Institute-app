@@ -579,7 +579,7 @@ export default function TimelineDatatable({
               {/* 🎯 Render button only if follow-up is NOT completed AND enquiry is NOT LOST */}
               {lastItem.followUpStatus !== "COMPLETED" &&
                 fineEnquiryById?.leadStatus !== "LOST" && (
-                  <div className="mt-6 flex justify-end gap-4">
+                  <div className="mt-6 flex justify-end gap-4 md:mr-[-100px]">
                     <button
                       className="rounded border border-gray-300 bg-white px-4 py-2 text-sm text-black transition hover:bg-gray-100"
                       onClick={() => handleCreateFollowUpForFollowUp(lastItem.id)}

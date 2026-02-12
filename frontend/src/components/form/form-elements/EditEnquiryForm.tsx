@@ -496,7 +496,7 @@ const handleAlternatePhoneNumberChange = (
           <Label>Email</Label>
           <div className="relative">
             <Input
-              placeholder="Enterv Email"
+              placeholder="Enter Email"
               type="text"
               className="pl-[62px]"
               tabIndex={2}

@@ -7,20 +7,14 @@ import RoleProtected from "@/components/auth/RoleProtected";
 import AttendanceTable from "../../(ui-elements)/attendance-table/page";
 
 export const metadata: Metadata = {
-  title: "Next.js Profile | TailAdmin - Next.js Dashboard Template",
-  description:
-    "This is Next.js Profile page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+  title: "Attendance",
 };
 
 export default function Attendance() {
   return (
     <RoleProtected allowedRoles={["ADMIN", "FACULTY"]}>
-      <div>
         <PageBreadcrumb pageTitle="Attendance" />
-       
-            <AttendanceTable />
-          </div>
-        
+        <AttendanceTable />
     </RoleProtected>
   );
 }

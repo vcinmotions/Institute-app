@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getMasterUser } from "@/lib/api";
-import MasterAdminLayout from "../MasterAdminLayout";
+import MasterAdminLayout from "../(client-layout)/MasterAdminLayout";
 
 export default function MasterLayout({
   children,

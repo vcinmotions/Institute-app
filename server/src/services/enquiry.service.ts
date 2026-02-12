@@ -40,11 +40,28 @@ export async function getEnquiries({
     prisma.enquiry.count({ where }),
   ]);
 
+  const convertedCount = await prisma.enquiry.count({
+      where: {
+        ...where,
+        isConverted: true,
+        NOT: { studentId: null }, // ensures studentId exists
+      },
+    });
+
+    const notConvertedCount = await prisma.enquiry.count({
+      where: {
+        ...where,
+        OR: [{ isConverted: false }, { studentId: null }],
+      },
+    });
+
   console.log("DATA IN ENQUIRY SERVICE;", data);
 
   return {
     data,
     total,
+    notConvertedCount,
+    convertedCount,
     totalPages: Math.ceil(total / query.limit),
   };
 }

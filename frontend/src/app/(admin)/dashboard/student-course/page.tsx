@@ -5,9 +5,7 @@ import RoleProtected from "@/components/auth/RoleProtected";
 import StudentCourseTable from "../../(ui-elements)/student-course-table/page";
 
 export const metadata: Metadata = {
-  title: "Next.js Profile | TailAdmin - Next.js Dashboard Template",
-  description:
-    "This is Next.js Profile page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+  title: "Student Course",
 };
 
 export default function StudentCourse() {

@@ -6,12 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-
-import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
-
-import { RootState } from "@/store";
 
 type ActivityDataTableProps = {
   logs: any[];
@@ -30,24 +24,9 @@ export default function ActivityDataTable({
   sortField,
   sortOrder,
 }: ActivityDataTableProps) {
-  const { mutate: fetchEnquiries, data } = useFetchEnquiry();
 
   console.log("get All Query To search Activity Log data Table:", logs);
 
-  // Dispatch server-side fetch
-  const handleSort = (field: string) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
-    const order: "asc" | "desc" =
-      sortField === field && sortOrder === "asc" ? "desc" : "asc";
-
-    fetchEnquiries({
-      token,
-      sortField: field,
-      sortOrder: order,
-    });
-  };
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">

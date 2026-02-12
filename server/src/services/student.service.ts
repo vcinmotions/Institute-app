@@ -43,7 +43,11 @@ export async function getStudents({
     query.sortOrder
   );
 
-  const [data, total] = await prisma.$transaction([
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.getMonth() + 1;
+
+  const [data, total, birthday] = await prisma.$transaction([
     prisma.student.findMany({
       where,
       orderBy,
@@ -55,11 +59,18 @@ export async function getStudents({
       },
     }),
     prisma.student.count({ where }),
+    prisma.$queryRaw`
+      SELECT *
+      FROM "Student"
+      WHERE "clientAdminId" = ${clientAdminId}
+        AND TO_CHAR("dob", 'MM-DD') = TO_CHAR(CURRENT_DATE, 'MM-DD')
+    `,
   ]);
 
   return {
     data,
     total,
+    birthday,
     totalPages: Math.ceil(total / query.limit),
   };
 }
@@ -74,7 +85,6 @@ export async function createStudentService({
   data: any;
 }) {
   const {
-    id, // enquiryId
     name,
     contact,
     email,

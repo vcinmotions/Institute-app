@@ -11,6 +11,14 @@ interface GetEnquiryParams {
   sortOrder?: "asc" | "desc";
   leadStatus?: "HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null;
 }
+interface GetNotificationParams {
+  token: string;
+  page?: number;
+  limit?: number;
+  search?: string | null;
+  sortField?: string;
+  sortOrder?: "asc" | "desc";
+}
 
 interface GetLabParams {
   token: string;
@@ -486,7 +494,7 @@ export const getNotification = async ({
   search = "",
   sortField,
   sortOrder,
-}: GetEnquiryParams) => {
+}: GetNotificationParams) => {
   const response = await apiClient.get("/notification", {
     headers: {
       Authorization: `Bearer ${token}`,

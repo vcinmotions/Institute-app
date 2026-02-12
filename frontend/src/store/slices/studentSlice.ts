@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface StudentState {
   students: any[];
+  birthday: any[];
   loading: boolean;
   error: string | null;
   searchQuery: string;
@@ -17,6 +18,7 @@ interface StudentState {
 // 🟢 Initial state must match the shape of EnquiryState
 const initialState: StudentState = {
   students: [],
+  birthday: [],
   loading: false,
   error: null,
   searchQuery: "",
@@ -34,6 +36,9 @@ const studentSlice = createSlice({
   reducers: {
     setStudents(state, action: PayloadAction<any[]>) {
     state.students = action.payload;
+    },
+    setBirthday(state, action: PayloadAction<any[]>) {
+    state.birthday = action.payload;
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
@@ -65,5 +70,5 @@ const studentSlice = createSlice({
 });
 
 // Export actions and reducer
-export const { setStudents, setLoading, setError, setTotal, setTotalPages, setCurrentPage, setFilters, setSort, setSearchQuery } = studentSlice.actions;
+export const { setStudents, setLoading, setError, setTotal, setTotalPages, setCurrentPage, setFilters, setSort, setSearchQuery, setBirthday } = studentSlice.actions;
 export default studentSlice.reducer;

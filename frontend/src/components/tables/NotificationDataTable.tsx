@@ -23,14 +23,12 @@ type ActivityDataTableProps = {
   onSort: (field: string) => void;
   sortField: string;
   sortOrder: "asc" | "desc";
-  onLeadStatus: (field: string) => void;
 };
 
 export default function NotificaionDataTable({
   notifications,
   loading,
   onSort,
-  onLeadStatus,
   sortField,
   sortOrder,
 }: ActivityDataTableProps) {

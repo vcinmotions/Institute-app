@@ -24,16 +24,12 @@ export default function MonthlyBirthdayCard({
 }: EnquiryTargetProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // const converted = 45;
-  // const notConverted = 55;
-
-  //  const convertedCount = enquiries.filter(e => e.isConverted && e.studentId !== null).length;
-  // const notConvertedCount = enquiries.length - convertedCount;
-
   console.log(
     "Monthly Birthdays:",
     birthdays,
   );
+
+  console.log("TODAYS DATE:", new Date());
 
   //const series = [notConverted, converted]; // false, true
   const options: ApexOptions = {
@@ -95,17 +91,48 @@ export default function MonthlyBirthdayCard({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-2xl h-[350px] border border-gray-200 bg-white px-5 pt-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">      
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Monthly Birthday
+          🎂 Today's Birthdays
         </h3>
       </div>
+
+      <div className="overflow-y-auto">
+      <div className="mt-4 space-y-3">
+        {birthdays && birthdays.length > 0 ? (
+          birthdays.map((student) => (
+            <div
+              key={student.id}
+              className="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-800"
+            >
+              <div>
+                <p className="font-medium text-gray-800 dark:text-white">
+                  {student.fullName}
+                </p>
+                <p className="text-sm text-gray-500">
+                  🎉 {new Date(student.dob).toLocaleDateString()}
+                </p>
+              </div>
+
+              <span className="text-sm text-blue-600 font-medium">
+                {student.studentCode}
+              </span>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-gray-500 text-center">
+            No birthdays today 🎈
+          </p>
+        )}
+      </div>
+      </div>
+
 
       <div className="custom-scrollbar max-w-full overflow-x-auto">
         {/* Footer note */}
         <p className="py-3 text-center text-sm text-gray-500 dark:text-gray-400">
-          {convertedCount}% of inquiries were converted to Admission this month.
+          {birthdays.length} Birthday Today.
         </p>
       </div>
     </div>

@@ -31,6 +31,9 @@ import EnquiryTarget from "@/components/ecommerce/EnquiryPieChart";
 import RecentOrders from "@/components/ecommerce/RecentOrders";
 import { PAGE_SIZE } from "@/constants/pagination";
 import MonthlyBirthdayCard from "@/components/ecommerce/MonthlyBirthdayCard";
+import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
+import { useFetchStudent } from "@/hooks/queries/useQueryFetchStudent";
+import { setBirthday } from "@/store/slices/studentSlice";
 
 //const EcommerceMetrics = dynamic(() => import("@/components/ecommerce/EcommerceMetrics"));
 
@@ -40,8 +43,9 @@ export default function CompanyDashboard() {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
   const enquiries = useSelector((state: RootState) => state.enquiry.enquiries);
-  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const birthday = useSelector((state: RootState) => state.student.birthday);
   const summary = useSelector((state: RootState) => state.analytic.summary);
   const breakdown = useSelector((state: RootState) => state.analytic.breakdown);
   const birthdays = useSelector((state: RootState) => state.analytic.birthdays);
@@ -53,6 +57,34 @@ export default function CompanyDashboard() {
   );
 
   console.log("GET USER DTA IN ECOMMERCE:", user);
+
+  const { data, isLoading } = useFetchEnquiry({
+    token
+  });
+
+  const { data: student } = useFetchStudent({
+    token
+  });
+
+  console.log("ENQUIRIES IN DASHBOARD:", data);
+
+  
+    useEffect(() => {
+      console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
+      if (data) {
+        dispatch(setEnquiries(data.data || []));
+        dispatch(setTotal(data.total || 0));
+        dispatch(setTotalConverted(data.convertedCount || 0));
+        dispatch(setTotalNotConverted(data.notConvertedCount || 0));
+      }
+    }, [data, dispatch]);
+
+     useEffect(() => {
+      console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
+      if (student) {
+        dispatch(setBirthday(student.birthday || []));
+      }
+    }, [student, dispatch]);
 
   // 1️⃣ Fetch user & role
   useEffect(() => {
@@ -69,21 +101,12 @@ export default function CompanyDashboard() {
         setUserRole(role);
 
         if (role === "ADMIN") {
-          const response = await getEnquiry({
-            token,
-            page: currentPage,
-            limit: PAGE_SIZE,
-            search: "",
-          });
           const responseAnalytics = await getAnalytics(token);
 
 
           dispatch(setAnalytics(responseAnalytics.summary || {}));
           dispatch(setAnalyticsBreakdown(responseAnalytics.breakdown || {}));
-          dispatch(setEnquiries(response.data || []));
-          dispatch(setTotalConverted(response.convertedCount || 0));
-          dispatch(setTotalNotConverted(response.notConvertedCount || 0));
-          dispatch(setTotal(response.total));
+          
         }
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -101,15 +124,8 @@ export default function CompanyDashboard() {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className="col-span-12 space-y-6 xl:col-span-7">
-        <EcommerceMetrics summary={summary} breakdown={breakdown} />
-        {userRole === "ADMIN" && (
-          <Button
-            onClick={() => exportAnalyticsToExcel(summary, breakdown)}
-            className="rounded bg-green-600 px-4 py-2 text-white"
-          >
-            Export to Excel
-          </Button>
-        )}
+        <EcommerceMetrics user={user} summary={summary} breakdown={breakdown} />
+        
         {userRole === "ADMIN" && <FinancialReport />}
         <MonthlySalesChart />
       </div>
@@ -123,7 +139,7 @@ export default function CompanyDashboard() {
             notConvertedCount={totalNotConverted}
           />
         )}
-        <MonthlyBirthdayCard birthdays={enquiries}
+        <MonthlyBirthdayCard birthdays={birthday}
             convertedCount={totalConverted}
             notConvertedCount={totalNotConverted} />
       </div>
