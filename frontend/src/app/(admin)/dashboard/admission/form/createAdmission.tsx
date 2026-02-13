@@ -1870,30 +1870,94 @@ export default function AdmissionForm() {
     }
   }, [courseData, batchData, dispatch]);
 
-  const handlePhoneNumberChange = (
-    field: "contact" | "parentsContact",
-    phoneNumber: string,
-    countryCode = "+91"
-  ) => {
-    let formattedNumber = phoneNumber;
-    if (!phoneNumber.startsWith("+")) {
-      formattedNumber = countryCode + phoneNumber.replace(/^0+/, "");
-    }
+  // const handlePhoneNumberChange = (
+  //   field: "contact" | "parentsContact",
+  //   phoneNumber: string,
+  //   countryCode = "+91"
+  // ) => {
+  //   let formattedNumber = phoneNumber;
+  //   if (!phoneNumber.startsWith("+")) {
+  //     formattedNumber = countryCode + phoneNumber.replace(/^0+/, "");
+  //   }
 
-    if (field === "contact") {
-      setNewEnquiry((prev) => ({
-        ...prev,
-        contact: formattedNumber,
-      }));
-      setErrors((prev) => ({ ...prev, contact: "" }));
-    } else {
-      setFilledEnquiryData((prev) => ({
-        ...prev,
-        parentsContact: formattedNumber,
-      }));
-      setErrors((prev) => ({ ...prev, parentsContact: "" }));
+  //   if (field === "contact") {
+  //     setNewEnquiry((prev) => ({
+  //       ...prev,
+  //       contact: formattedNumber,
+  //     }));
+  //     setErrors((prev) => ({ ...prev, contact: "" }));
+  //   } else {
+  //     setFilledEnquiryData((prev) => ({
+  //       ...prev,
+  //       parentsContact: formattedNumber,
+  //     }));
+  //     setErrors((prev) => ({ ...prev, parentsContact: "" }));
+  //   }
+  // };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      !/[0-9]/.test(e.key) &&
+      e.key !== "+" &&
+      e.key !== "Backspace" &&
+      e.key !== "Delete" &&
+      e.key !== "ArrowLeft" &&
+      e.key !== "ArrowRight" &&
+      e.key !== "Tab"
+    ) {
+      e.preventDefault();
     }
   };
+
+ const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+    // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+    //const formattedNumber = code + phoneNumber;
+
+    // Extract digits only
+    const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+
+    const formattedNumber = code + digitsOnly;
+
+    setNewEnquiry((prev) => ({
+      ...prev,
+      contact: formattedNumber,
+    }));
+
+
+    if (phoneNumber.length === 10) {
+      setErrors((prev) => ({ ...prev, contact: "" }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        contact: "Phone number must be 10 digits",
+      }));
+    }
+  };
+
+  const handleAlternatePhoneNumberChange = (phoneNumber: string, code: string) => {
+    // Extract digits only
+    const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
+
+    const formattedNumber = code + digitsOnly;
+
+    // Update input value (NO +91 here)
+    setFilledEnquiryData((prev) => ({
+      ...prev,
+      parentsContact: formattedNumber,
+    }));
+
+
+    // Validation
+    if (phoneNumber.length === 10) {
+      setErrors((prev) => ({ ...prev, parentsContact: "" }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        parentsContact: "Phone number must be 10 digits",
+      }));
+    }
+  };
+
 
   if(loading === true) return null;
 
@@ -2329,8 +2393,9 @@ export default function AdmissionForm() {
                 countries={countries}
                 placeholder="Enter Student Contact"
                 value={stripCountryCode(newEnquiry.contact)} // 👈 IMPORTANT
-                onChange={(value) => handlePhoneNumberChange("contact", value)}
+                onChange={(value, country) => handlePhoneNumberChange(value, country)}
               />
+
               {errors.contact && (
                 <p className="text-sm text-red-500">{errors.contact}</p>
               )}
@@ -2345,8 +2410,9 @@ export default function AdmissionForm() {
                 countries={countries}
                 value={stripCountryCode(filledEnquiryData.parentsContact)} // 👈 IMPORTANT
                 placeholder="Enter Alternate Contact"
-                onChange={(value) => handlePhoneNumberChange("parentsContact", value)}
+                onChange={(value, country) => handleAlternatePhoneNumberChange(value, country)}
               />
+
               {errors.parentsContact && (
                 <p className="text-sm text-red-500">{errors.parentsContact}</p>
               )}

@@ -52,7 +52,6 @@ const validateForm = (data: CompanyData) => {
   return null;
 };
 
-
 export default function AddressSetupPage() {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
@@ -143,6 +142,15 @@ export default function AddressSetupPage() {
       fullAddress: newCompany.fullAddress,
     };
 
+    // ✅ RUN ZOD VALIDATION
+    const validationErrors = validateForm(newCompany);
+
+    if (validationErrors) {
+      setErrors(validationErrors);
+      setLoading(false);
+      return; // ❗ stop submit
+    }
+
     try {
       const res = await fetch("http://localhost:5001/api/setup/address", {
         method: "POST",
@@ -180,7 +188,6 @@ export default function AddressSetupPage() {
             showLink={false}
           />
         )}
-
         <form className="space-y-4" onSubmit={handleSubmit}>
 
           <div>

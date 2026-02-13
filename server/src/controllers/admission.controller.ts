@@ -1049,7 +1049,8 @@ export async function getStudentController(req: Request, res: Response) {
     }
 
     console.error(err);
-    return res.status(500).json({ error: "Internal server error" });
+    console.error("FULL ERROR:", err);
+    return res.status(500).json({ error: err.message });
   }
 }
 

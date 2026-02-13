@@ -119,6 +119,9 @@ model Enquiry {
 
   clientAdminId String
   clientAdmin   ClientAdmin @relation("AdminToEnquiries", fields: [clientAdminId], references: [id])
+
+  @@unique([email, clientAdminId])
+  @@unique([contact, clientAdminId])
 }
 
 model EnquiryCourse {
@@ -181,7 +184,7 @@ model Student {
   email         String?
   residentialAddress       String?
   permenantAddress String?
-  dob           String
+  dob           DateTime?
   gender        String
   religion      String?
   idProofType   String?

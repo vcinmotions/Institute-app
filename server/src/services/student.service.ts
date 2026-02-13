@@ -44,10 +44,10 @@ export async function getStudents({
   );
 
   const today = new Date();
-  const day = today.getDate();
-  const month = today.getMonth() + 1;
+  const todayMonth = today.getMonth(); // 0-based
+  const todayDate = today.getDate();
 
-  const [data, total, birthday] = await prisma.$transaction([
+  const [data, total, allStudentsForBirthday] = await prisma.$transaction([
     prisma.student.findMany({
       where,
       orderBy,
@@ -59,13 +59,28 @@ export async function getStudents({
       },
     }),
     prisma.student.count({ where }),
-    prisma.$queryRaw`
-      SELECT *
-      FROM "Student"
-      WHERE "clientAdminId" = ${clientAdminId}
-        AND TO_CHAR("dob", 'MM-DD') = TO_CHAR(CURRENT_DATE, 'MM-DD')
-    `,
+
+    prisma.student.findMany({
+        where: {
+          clientAdminId,
+          dob: { not: null },
+        },
+        select: {
+          id: true,
+          fullName: true,
+          dob: true,
+        },
+      }),
   ]);
+
+  // 🎂 Filter birthdays in JS (works in all DBs)
+  const birthday = allStudentsForBirthday.filter((student: { dob: string | number | Date; }) => {
+    const dob = new Date(student.dob);
+    return (
+      dob.getMonth() === todayMonth &&
+      dob.getDate() === todayDate
+    );
+  });
 
   return {
     data,

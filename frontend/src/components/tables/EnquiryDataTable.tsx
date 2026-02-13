@@ -237,6 +237,12 @@ export default function EnquiryDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
+                  Contact
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                >
                   <button
                     type="button"
                     className="flex items-center gap-1"
@@ -325,6 +331,9 @@ export default function EnquiryDataTable({
                           <div key={index}>{c.course.name}</div>
                         ))}
                       </span>
+                    </TableCell>
+                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+                      {item.contact.split("91")[1]}
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       <span>

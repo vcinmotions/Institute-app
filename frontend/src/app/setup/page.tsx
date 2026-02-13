@@ -88,17 +88,17 @@ export default function SetupPage() {
 
           <div>
             <Label>Institite Name</Label>
-            <Input name="name" className="capitalize" placeholder="Enter Institute Name" />
+            <Input name="name" className="capitalize" required placeholder="Enter Institute Name" />
           </div>
 
           <div>
             <Label>Registered Email</Label>
-            <Input name="email" placeholder="Enter Email" />
+            <Input name="email" required placeholder="Enter Email" />
           </div>
 
           <div>
             <Label> Password</Label>
-            <Input type="password" name="password" placeholder="Enter Password" />
+            <Input type="password" name="password" required placeholder="Enter Password" />
           </div>
 
           <div className="mt-4 flex justify-end gap-3">

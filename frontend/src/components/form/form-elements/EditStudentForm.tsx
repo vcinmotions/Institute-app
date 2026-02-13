@@ -322,19 +322,20 @@ const handleExtendedChange = (
 const handlePhoneNumberChange = (
   phoneNumber: string,
   field: "contact" | "parentsContact",
-  countryCode = "+91"
+  countryCode: string
 ) => {
-  const digitsOnly = phoneNumber.replace(/\D/g, "").replace(/^0+/, "");
+  let digitsOnly = phoneNumber.replace(/\D/g, "");
 
-  if (digitsOnly.length !== 10) {
-    setErrors((prev) => ({
-      ...prev,
-      [field]: "Phone number must be 10 digits",
-    }));
-    return;
+  const countryDigits = countryCode.replace("+", "");
+
+  if (digitsOnly.startsWith(countryDigits)) {
+    digitsOnly = digitsOnly.slice(countryDigits.length);
   }
 
-  const formattedNumber = countryCode + digitsOnly;
+  digitsOnly = digitsOnly.slice(0, 10);
+
+  const formattedNumber =
+    digitsOnly.length > 0 ? `${countryCode}${digitsOnly}` : "";
 
   if (field === "contact") {
     setNewEnquiry((prev) => ({
@@ -350,9 +351,71 @@ const handlePhoneNumberChange = (
     }));
   }
 
-  setErrors((prev) => ({ ...prev, [field]: "" }));
+  setErrors((prev) => ({
+    ...prev,
+    [field]:
+      digitsOnly.length === 0 || digitsOnly.length === 10
+        ? ""
+        : "Phone number must be 10 digits",
+  }));
 };
 
+
+// const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+//   let digitsOnly = phoneNumber.replace(/\D/g, "");
+
+//   // Remove country code digits if already present
+//   const countryDigits = code.replace("+", "");
+//   if (digitsOnly.startsWith(countryDigits)) {
+//     digitsOnly = digitsOnly.slice(countryDigits.length);
+//   }
+
+//   digitsOnly = digitsOnly.slice(0, 10);
+
+//   const formattedNumber = digitsOnly
+//     ? `${code}${digitsOnly}`
+//     : "";
+
+//   setNewEnquiry((prev) => ({
+//     ...prev,
+//     contact: formattedNumber,
+//   }));
+
+//   setErrors((prev) => ({
+//     ...prev,
+//     contact:
+//       digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+//   }));
+// };
+
+// const handleAlternatePhoneNumberChange = (
+//   phoneNumber: string,
+//   code: string
+// ) => {
+//   let digitsOnly = phoneNumber.replace(/\D/g, "");
+
+//   const countryDigits = code.replace("+", "");
+//   if (digitsOnly.startsWith(countryDigits)) {
+//     digitsOnly = digitsOnly.slice(countryDigits.length);
+//   }
+
+//   digitsOnly = digitsOnly.slice(0, 10);
+
+//   const formattedNumber = digitsOnly
+//     ? `${code}${digitsOnly}`
+//     : "";
+
+//   setNewEnquiry((prev) => ({
+//     ...prev,
+//     alternateContact: formattedNumber,
+//   }));
+
+//   setErrors((prev) => ({
+//     ...prev,
+//     alternateContact:
+//       digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+//   }));
+// };
 
 
   const handleDateChange = (field: keyof NewEnquiryData, value: string) => {
@@ -463,8 +526,8 @@ const handlePhoneNumberChange = (
 
       setTimeout(() => {
         onCloseModal();
-      }, 2000);
-    } catch (error) {
+      }, 100);
+    } catch (error) { 
       console.error(error);
     }
   };
@@ -482,7 +545,7 @@ const handlePhoneNumberChange = (
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 2000);
 
       return;
     }
@@ -498,7 +561,7 @@ const handlePhoneNumberChange = (
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, 1000);
 
       return;
     }
@@ -653,7 +716,7 @@ const handlePhoneNumberChange = (
             countries={countries}
             placeholder="+910000000000"
             value={newEnquiry.contact}
-            onChange={(value) => handlePhoneNumberChange(value, "contact")}
+            onChange={(value, country) => handlePhoneNumberChange(value, "contact", country)}
           />
           {errors.contact && (
             <p className="text-sm text-red-500">{errors.contact}</p>
@@ -666,7 +729,8 @@ const handlePhoneNumberChange = (
             selectPosition="start"
             countries={countries}
             placeholder="+91 55555 00000"
-            onChange={(value) => handlePhoneNumberChange(value, "parentsContact")}
+            value={filledEnquiryData.parentsContact}
+            onChange={(value, country) => handlePhoneNumberChange(value, "parentsContact", country)}
           />
           {errors.parentsContact && (
             <p className="text-sm text-red-500">{errors.parentsContact}</p>

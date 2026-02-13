@@ -33,21 +33,40 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
     {},
   );
 
+  // const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const newCountry = e.target.value;
+  //   setSelectedCountry(newCountry);
+  //   setPhoneNumber(countryCodes[newCountry]);
+
+  //   onChange?.(phoneNumber, countryCodes[newCountry]);
+  // };
+
+  // const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newPhoneNumber = e.target.value;
+  //   setPhoneNumber(newPhoneNumber);
+
+  //   onChange?.(newPhoneNumber, countryCodes[selectedCountry]);
+  // };
+
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newCountry = e.target.value;
-    setSelectedCountry(newCountry);
-    setPhoneNumber(countryCodes[newCountry]);
+    const newCode = countryCodes[newCountry];
 
-    onChange?.(phoneNumber, countryCodes[newCountry]);
+    setSelectedCountry(newCountry);
+
+    // Reset input to empty when country changes
+    setPhoneNumber("");
+
+    // Send only new country code with empty number
+    onChange?.("", newCode);
   };
 
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhoneNumberChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const newPhoneNumber = e.target.value;
-    setPhoneNumber(newPhoneNumber);
-
     onChange?.(newPhoneNumber, countryCodes[selectedCountry]);
   };
-
 
   return (
     <div className="relative flex">
