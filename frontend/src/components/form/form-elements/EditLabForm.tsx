@@ -135,19 +135,40 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
     if (!lab.totalPCs || lab.totalPCs <= 0)
       newErrors.totalPCs = "Total PCs must be greater than 0." as any;
 
-    if (
-      !lab.timeSlots ||
-      lab.timeSlots.length === 0 ||
-      lab.timeSlots.some(
-        (slot) =>
-          !slot.startTime ||
-          !slot.endTime ||
-          slot.startTime >= slot.endTime
-      )
-    ) {
+    const isInvalidSlot = lab.timeSlots.some((slot) => {
+      // Ignore completely empty slot
+      if (!slot.startTime && !slot.endTime) return false;
+
+      // If one is filled but not the other → invalid
+      if (!slot.startTime || !slot.endTime) return true;
+
+      const [startH, startM] = slot.startTime.split(":").map(Number);
+      const [endH, endM] = slot.endTime.split(":").map(Number);
+
+      const startMinutes = startH * 60 + startM;
+      const endMinutes = endH * 60 + endM;
+
+      return startMinutes >= endMinutes;
+    });
+
+    if (!lab.timeSlots || lab.timeSlots.length === 0 || isInvalidSlot) {
       newErrors.timeSlots =
         "Add at least one valid time slot (start time must be before end time)." as any;
     }
+
+    // if (
+    //   !lab.timeSlots ||
+    //   lab.timeSlots.length === 0 ||
+    //   lab.timeSlots.some(
+    //     (slot) =>
+    //       !slot.startTime ||
+    //       !slot.endTime ||
+    //       slot.startTime >= slot.endTime
+    //   )
+    // ) {
+    //   newErrors.timeSlots =
+    //     "Add at least one valid time slot (start time must be before end time)." as any;
+    // }
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 2000);

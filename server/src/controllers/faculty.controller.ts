@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { normalizeEmail, normalizePhone, titleCase } from "../utils/Normalize";
 import { startsWith } from "zod";
+import { parseDate, parseDateISO } from "../helpers/date";
 
 export async function addFacultyController(req: Request, res: Response) {
   const { name, email, password, contact, joiningDate, batchId, courseId } =
@@ -31,13 +32,23 @@ export async function addFacultyController(req: Request, res: Response) {
 
     const clientAdminId = user.clientAdminId;
 
+    console.log("Checking faculty parsed Joinindate")
+
+    const parsedJoiningDate = parseDate(joiningDate); 
+
+    if (!parsedJoiningDate) {
+      return res.status(400).json({ error: "Invalid joining date" });
+    }
+
+    console.log("Passed faculty parsed Joinindate")
+
     // ✅ Create Faculty
     const faculty = await tenantPrisma.faculty.create({
       data: {
         name,
         email,
         password: await bcrypt.hash(password, 10),
-        joiningDate: new Date(joiningDate.split("/").reverse().join("-")),
+        joiningDate: new Date(parsedJoiningDate),
         contact,
         role: "FACULTY",
         country: clientAdmin.country,

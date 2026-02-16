@@ -367,6 +367,10 @@ export default function FacultyForm() {
           password: "",
         });
 
+        window.scrollTo({
+          top: 0, behavior: "smooth"
+        })
+
         setAlert({
           show: true,
           title: "Faculty Created",
