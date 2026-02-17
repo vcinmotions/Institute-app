@@ -201,6 +201,26 @@ const navItems: NavItem[] = [
       { name: "Create Roles", path: "/dashboard/roles/create" },
     ],
   },
+   {
+    icon: <LockIcon />,
+    name: "Stationary",
+    path: "/dashboard/stationary",
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
+    subItems: [
+      { name: "Stationary List", path: "/dashboard/stationary" },
+      { name: "Create Stationary", path: "/dashboard/stationary/create" },
+    ],
+  },
+   {
+    icon: <LockIcon />,
+    name: "Task",
+    path: "/dashboard/task",
+    roles: ["ADMIN", "FRONT_DESK", "VIEW_ONLY"], // allowed roles
+    subItems: [
+      { name: "Task List", path: "/dashboard/task" },
+      { name: "Create Task", path: "/dashboard/task/create" },
+    ],
+  },
   {
     icon: <LockIcon />,
     name: "Attendance",
@@ -454,8 +474,8 @@ const AppSidebar: React.FC = () => {
                     const isSubKeyboard = si === subIndex;
                     return (
                       <li key={subItem.name}  ref={(el) => {
-        subMenuItemRefs.current[key][si] = el;
-      }}>
+                        subMenuItemRefs.current[key][si] = el;
+                      }}>
                         <Link
                           href={subItem.path}
                           // className={`menu-dropdown-item ${
@@ -628,9 +648,6 @@ useEffect(() => {
     }
   }
 }, [subIndex, openSubmenu]);
-
-
-
 
   // const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
   //   setOpenSubmenu((prevOpenSubmenu) => {

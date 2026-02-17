@@ -27,7 +27,9 @@ import AnalyticsRoute from "../src/routes/analytics.routes";
 import MasterRoute from "../src/routes/master.dashboard.routes";
 import LogRoute from "../src/routes/log.routes";
 import rolesRoute from "../src/routes/roles.routes";
+import stationaryRoute from "../src/routes/stationary.routes";
 import attendanceRoute from "./routes/attendance.routes";
+import taskRoute from "./routes/task.routes";
 
 const app = express();
 app.use(cors());
@@ -115,5 +117,7 @@ app.use("/api", LabRoute);
 app.use("/api", AnalyticsRoute);
 app.use("/api", LogRoute);
 app.use("/api", rolesRoute);
+app.use("/api", taskRoute);
+app.use("/api", stationaryRoute);
 
 export default app;

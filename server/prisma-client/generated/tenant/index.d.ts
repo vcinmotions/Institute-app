@@ -139,10 +139,20 @@ export type StationeryIssue = $Result.DefaultSelection<Prisma.$StationeryIssuePa
  */
 export type AttendanceRecord = $Result.DefaultSelection<Prisma.$AttendanceRecordPayload>
 /**
+ * Model Task
+ * 
+ */
+export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
+/**
  * Model StudentTask
  * 
  */
 export type StudentTask = $Result.DefaultSelection<Prisma.$StudentTaskPayload>
+/**
+ * Model Test
+ * 
+ */
+export type Test = $Result.DefaultSelection<Prisma.$TestPayload>
 /**
  * Model StudentTest
  * 
@@ -236,6 +246,22 @@ export const UserRole: {
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
+
+export const TestStatus: {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+};
+
+export type TestStatus = (typeof TestStatus)[keyof typeof TestStatus]
+
+
+export const TaskStatus: {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+};
+
+export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
+
 }
 
 export type RecordType = $Enums.RecordType
@@ -265,6 +291,14 @@ export const PaymentMode: typeof $Enums.PaymentMode
 export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
+
+export type TestStatus = $Enums.TestStatus
+
+export const TestStatus: typeof $Enums.TestStatus
+
+export type TaskStatus = $Enums.TaskStatus
+
+export const TaskStatus: typeof $Enums.TaskStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -635,6 +669,16 @@ export class PrismaClient<
   get attendanceRecord(): Prisma.AttendanceRecordDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.task`: Exposes CRUD operations for the **Task** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tasks
+    * const tasks = await prisma.task.findMany()
+    * ```
+    */
+  get task(): Prisma.TaskDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.studentTask`: Exposes CRUD operations for the **StudentTask** model.
     * Example usage:
     * ```ts
@@ -643,6 +687,16 @@ export class PrismaClient<
     * ```
     */
   get studentTask(): Prisma.StudentTaskDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.test`: Exposes CRUD operations for the **Test** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tests
+    * const tests = await prisma.test.findMany()
+    * ```
+    */
+  get test(): Prisma.TestDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.studentTest`: Exposes CRUD operations for the **StudentTest** model.
@@ -1148,7 +1202,9 @@ export namespace Prisma {
     StationeryItem: 'StationeryItem',
     StationeryIssue: 'StationeryIssue',
     AttendanceRecord: 'AttendanceRecord',
+    Task: 'Task',
     StudentTask: 'StudentTask',
+    Test: 'Test',
     StudentTest: 'StudentTest',
     CourseCompletion: 'CourseCompletion',
     Certificate: 'Certificate',
@@ -1171,7 +1227,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "clientAdmin" | "roleUser" | "activityLog" | "enquiry" | "enquiryCourse" | "followUp" | "notification" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "studentTask" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
+      modelProps: "clientAdmin" | "roleUser" | "activityLog" | "enquiry" | "enquiryCourse" | "followUp" | "notification" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3025,6 +3081,80 @@ export namespace Prisma {
           }
         }
       }
+      Task: {
+        payload: Prisma.$TaskPayload<ExtArgs>
+        fields: Prisma.TaskFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TaskFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TaskFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          findFirst: {
+            args: Prisma.TaskFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TaskFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          findMany: {
+            args: Prisma.TaskFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
+          }
+          create: {
+            args: Prisma.TaskCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          createMany: {
+            args: Prisma.TaskCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TaskCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
+          }
+          delete: {
+            args: Prisma.TaskDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          update: {
+            args: Prisma.TaskUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          deleteMany: {
+            args: Prisma.TaskDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TaskUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TaskUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
+          }
+          upsert: {
+            args: Prisma.TaskUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          aggregate: {
+            args: Prisma.TaskAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTask>
+          }
+          groupBy: {
+            args: Prisma.TaskGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TaskGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TaskCountArgs<ExtArgs>
+            result: $Utils.Optional<TaskCountAggregateOutputType> | number
+          }
+        }
+      }
       StudentTask: {
         payload: Prisma.$StudentTaskPayload<ExtArgs>
         fields: Prisma.StudentTaskFieldRefs
@@ -3096,6 +3226,80 @@ export namespace Prisma {
           count: {
             args: Prisma.StudentTaskCountArgs<ExtArgs>
             result: $Utils.Optional<StudentTaskCountAggregateOutputType> | number
+          }
+        }
+      }
+      Test: {
+        payload: Prisma.$TestPayload<ExtArgs>
+        fields: Prisma.TestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>
+          }
+          findFirst: {
+            args: Prisma.TestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>
+          }
+          findMany: {
+            args: Prisma.TestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>[]
+          }
+          create: {
+            args: Prisma.TestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>
+          }
+          createMany: {
+            args: Prisma.TestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>[]
+          }
+          delete: {
+            args: Prisma.TestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>
+          }
+          update: {
+            args: Prisma.TestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>
+          }
+          deleteMany: {
+            args: Prisma.TestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>[]
+          }
+          upsert: {
+            args: Prisma.TestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestPayload>
+          }
+          aggregate: {
+            args: Prisma.TestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTest>
+          }
+          groupBy: {
+            args: Prisma.TestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TestCountArgs<ExtArgs>
+            result: $Utils.Optional<TestCountAggregateOutputType> | number
           }
         }
       }
@@ -3516,7 +3720,9 @@ export namespace Prisma {
     stationeryItem?: StationeryItemOmit
     stationeryIssue?: StationeryIssueOmit
     attendanceRecord?: AttendanceRecordOmit
+    task?: TaskOmit
     studentTask?: StudentTaskOmit
+    test?: TestOmit
     studentTest?: StudentTestOmit
     courseCompletion?: CourseCompletionOmit
     certificate?: CertificateOmit
@@ -3621,9 +3827,12 @@ export namespace Prisma {
     courseCompletions: number
     certificates: number
     financialRecords: number
+    StationeryItems: number
     enquiries: number
     notifications: number
     courseFeeStructures: number
+    tasks: number
+    tests: number
   }
 
   export type ClientAdminCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3647,9 +3856,12 @@ export namespace Prisma {
     courseCompletions?: boolean | ClientAdminCountOutputTypeCountCourseCompletionsArgs
     certificates?: boolean | ClientAdminCountOutputTypeCountCertificatesArgs
     financialRecords?: boolean | ClientAdminCountOutputTypeCountFinancialRecordsArgs
+    StationeryItems?: boolean | ClientAdminCountOutputTypeCountStationeryItemsArgs
     enquiries?: boolean | ClientAdminCountOutputTypeCountEnquiriesArgs
     notifications?: boolean | ClientAdminCountOutputTypeCountNotificationsArgs
     courseFeeStructures?: boolean | ClientAdminCountOutputTypeCountCourseFeeStructuresArgs
+    tasks?: boolean | ClientAdminCountOutputTypeCountTasksArgs
+    tests?: boolean | ClientAdminCountOutputTypeCountTestsArgs
   }
 
   // Custom InputTypes
@@ -3806,6 +4018,13 @@ export namespace Prisma {
   /**
    * ClientAdminCountOutputType without action
    */
+  export type ClientAdminCountOutputTypeCountStationeryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StationeryItemWhereInput
+  }
+
+  /**
+   * ClientAdminCountOutputType without action
+   */
   export type ClientAdminCountOutputTypeCountEnquiriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EnquiryWhereInput
   }
@@ -3822,6 +4041,20 @@ export namespace Prisma {
    */
   export type ClientAdminCountOutputTypeCountCourseFeeStructuresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CourseFeeStructureWhereInput
+  }
+
+  /**
+   * ClientAdminCountOutputType without action
+   */
+  export type ClientAdminCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
+  }
+
+  /**
+   * ClientAdminCountOutputType without action
+   */
+  export type ClientAdminCountOutputTypeCountTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TestWhereInput
   }
 
 
@@ -4001,6 +4234,8 @@ export namespace Prisma {
     studentTests: number
     certificates: number
     financialRecords: number
+    tasks: number
+    tests: number
     batchCourses: number
   }
 
@@ -4015,6 +4250,8 @@ export namespace Prisma {
     studentTests?: boolean | CourseCountOutputTypeCountStudentTestsArgs
     certificates?: boolean | CourseCountOutputTypeCountCertificatesArgs
     financialRecords?: boolean | CourseCountOutputTypeCountFinancialRecordsArgs
+    tasks?: boolean | CourseCountOutputTypeCountTasksArgs
+    tests?: boolean | CourseCountOutputTypeCountTestsArgs
     batchCourses?: boolean | CourseCountOutputTypeCountBatchCoursesArgs
   }
 
@@ -4102,6 +4339,20 @@ export namespace Prisma {
   /**
    * CourseCountOutputType without action
    */
+  export type CourseCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TestWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
   export type CourseCountOutputTypeCountBatchCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchCourseWhereInput
   }
@@ -4145,11 +4396,15 @@ export namespace Prisma {
   export type BatchCountOutputType = {
     studentCourses: number
     batchCourses: number
+    tasks: number
+    tests: number
   }
 
   export type BatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     studentCourses?: boolean | BatchCountOutputTypeCountStudentCoursesArgs
     batchCourses?: boolean | BatchCountOutputTypeCountBatchCoursesArgs
+    tasks?: boolean | BatchCountOutputTypeCountTasksArgs
+    tests?: boolean | BatchCountOutputTypeCountTestsArgs
   }
 
   // Custom InputTypes
@@ -4175,6 +4430,20 @@ export namespace Prisma {
    */
   export type BatchCountOutputTypeCountBatchCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchCourseWhereInput
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TestWhereInput
   }
 
 
@@ -4468,6 +4737,68 @@ export namespace Prisma {
    */
   export type StationeryItemCountOutputTypeCountStationeryIssuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StationeryIssueWhereInput
+  }
+
+
+  /**
+   * Count Type TaskCountOutputType
+   */
+
+  export type TaskCountOutputType = {
+    StudentTask: number
+  }
+
+  export type TaskCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    StudentTask?: boolean | TaskCountOutputTypeCountStudentTaskArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TaskCountOutputType without action
+   */
+  export type TaskCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCountOutputType
+     */
+    select?: TaskCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TaskCountOutputType without action
+   */
+  export type TaskCountOutputTypeCountStudentTaskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTaskWhereInput
+  }
+
+
+  /**
+   * Count Type TestCountOutputType
+   */
+
+  export type TestCountOutputType = {
+    StudentTest: number
+  }
+
+  export type TestCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    StudentTest?: boolean | TestCountOutputTypeCountStudentTestArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TestCountOutputType without action
+   */
+  export type TestCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCountOutputType
+     */
+    select?: TestCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TestCountOutputType without action
+   */
+  export type TestCountOutputTypeCountStudentTestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTestWhereInput
   }
 
 
@@ -4787,9 +5118,12 @@ export namespace Prisma {
     courseCompletions?: boolean | ClientAdmin$courseCompletionsArgs<ExtArgs>
     certificates?: boolean | ClientAdmin$certificatesArgs<ExtArgs>
     financialRecords?: boolean | ClientAdmin$financialRecordsArgs<ExtArgs>
+    StationeryItems?: boolean | ClientAdmin$StationeryItemsArgs<ExtArgs>
     enquiries?: boolean | ClientAdmin$enquiriesArgs<ExtArgs>
     notifications?: boolean | ClientAdmin$notificationsArgs<ExtArgs>
     courseFeeStructures?: boolean | ClientAdmin$courseFeeStructuresArgs<ExtArgs>
+    tasks?: boolean | ClientAdmin$tasksArgs<ExtArgs>
+    tests?: boolean | ClientAdmin$testsArgs<ExtArgs>
     _count?: boolean | ClientAdminCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clientAdmin"]>
 
@@ -4887,9 +5221,12 @@ export namespace Prisma {
     courseCompletions?: boolean | ClientAdmin$courseCompletionsArgs<ExtArgs>
     certificates?: boolean | ClientAdmin$certificatesArgs<ExtArgs>
     financialRecords?: boolean | ClientAdmin$financialRecordsArgs<ExtArgs>
+    StationeryItems?: boolean | ClientAdmin$StationeryItemsArgs<ExtArgs>
     enquiries?: boolean | ClientAdmin$enquiriesArgs<ExtArgs>
     notifications?: boolean | ClientAdmin$notificationsArgs<ExtArgs>
     courseFeeStructures?: boolean | ClientAdmin$courseFeeStructuresArgs<ExtArgs>
+    tasks?: boolean | ClientAdmin$tasksArgs<ExtArgs>
+    tests?: boolean | ClientAdmin$testsArgs<ExtArgs>
     _count?: boolean | ClientAdminCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ClientAdminIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4918,9 +5255,12 @@ export namespace Prisma {
       courseCompletions: Prisma.$CourseCompletionPayload<ExtArgs>[]
       certificates: Prisma.$CertificatePayload<ExtArgs>[]
       financialRecords: Prisma.$FinancialRecordPayload<ExtArgs>[]
+      StationeryItems: Prisma.$StationeryItemPayload<ExtArgs>[]
       enquiries: Prisma.$EnquiryPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       courseFeeStructures: Prisma.$CourseFeeStructurePayload<ExtArgs>[]
+      tasks: Prisma.$TaskPayload<ExtArgs>[]
+      tests: Prisma.$TestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5358,9 +5698,12 @@ export namespace Prisma {
     courseCompletions<T extends ClientAdmin$courseCompletionsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$courseCompletionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificates<T extends ClientAdmin$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     financialRecords<T extends ClientAdmin$financialRecordsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$financialRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    StationeryItems<T extends ClientAdmin$StationeryItemsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$StationeryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StationeryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     enquiries<T extends ClientAdmin$enquiriesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$enquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends ClientAdmin$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     courseFeeStructures<T extends ClientAdmin$courseFeeStructuresArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$courseFeeStructuresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseFeeStructurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tasks<T extends ClientAdmin$tasksArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tests<T extends ClientAdmin$testsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6279,6 +6622,30 @@ export namespace Prisma {
   }
 
   /**
+   * ClientAdmin.StationeryItems
+   */
+  export type ClientAdmin$StationeryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StationeryItem
+     */
+    select?: StationeryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StationeryItem
+     */
+    omit?: StationeryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StationeryItemInclude<ExtArgs> | null
+    where?: StationeryItemWhereInput
+    orderBy?: StationeryItemOrderByWithRelationInput | StationeryItemOrderByWithRelationInput[]
+    cursor?: StationeryItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StationeryItemScalarFieldEnum | StationeryItemScalarFieldEnum[]
+  }
+
+  /**
    * ClientAdmin.enquiries
    */
   export type ClientAdmin$enquiriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6348,6 +6715,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CourseFeeStructureScalarFieldEnum | CourseFeeStructureScalarFieldEnum[]
+  }
+
+  /**
+   * ClientAdmin.tasks
+   */
+  export type ClientAdmin$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    cursor?: TaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * ClientAdmin.tests
+   */
+  export type ClientAdmin$testsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    where?: TestWhereInput
+    orderBy?: TestOrderByWithRelationInput | TestOrderByWithRelationInput[]
+    cursor?: TestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TestScalarFieldEnum | TestScalarFieldEnum[]
   }
 
   /**
@@ -15260,6 +15675,8 @@ export namespace Prisma {
     studentTests?: boolean | Course$studentTestsArgs<ExtArgs>
     certificates?: boolean | Course$certificatesArgs<ExtArgs>
     financialRecords?: boolean | Course$financialRecordsArgs<ExtArgs>
+    tasks?: boolean | Course$tasksArgs<ExtArgs>
+    tests?: boolean | Course$testsArgs<ExtArgs>
     batchCourses?: boolean | Course$batchCoursesArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
@@ -15304,6 +15721,8 @@ export namespace Prisma {
     studentTests?: boolean | Course$studentTestsArgs<ExtArgs>
     certificates?: boolean | Course$certificatesArgs<ExtArgs>
     financialRecords?: boolean | Course$financialRecordsArgs<ExtArgs>
+    tasks?: boolean | Course$tasksArgs<ExtArgs>
+    tests?: boolean | Course$testsArgs<ExtArgs>
     batchCourses?: boolean | Course$batchCoursesArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
@@ -15329,6 +15748,8 @@ export namespace Prisma {
       studentTests: Prisma.$StudentTestPayload<ExtArgs>[]
       certificates: Prisma.$CertificatePayload<ExtArgs>[]
       financialRecords: Prisma.$FinancialRecordPayload<ExtArgs>[]
+      tasks: Prisma.$TaskPayload<ExtArgs>[]
+      tests: Prisma.$TestPayload<ExtArgs>[]
       batchCourses: Prisma.$BatchCoursePayload<ExtArgs>[]
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
     }
@@ -15743,6 +16164,8 @@ export namespace Prisma {
     studentTests<T extends Course$studentTestsArgs<ExtArgs> = {}>(args?: Subset<T, Course$studentTestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificates<T extends Course$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, Course$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     financialRecords<T extends Course$financialRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Course$financialRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tasks<T extends Course$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Course$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tests<T extends Course$testsArgs<ExtArgs> = {}>(args?: Subset<T, Course$testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batchCourses<T extends Course$batchCoursesArgs<ExtArgs> = {}>(args?: Subset<T, Course$batchCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -16431,6 +16854,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FinancialRecordScalarFieldEnum | FinancialRecordScalarFieldEnum[]
+  }
+
+  /**
+   * Course.tasks
+   */
+  export type Course$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    cursor?: TaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Course.tests
+   */
+  export type Course$testsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    where?: TestWhereInput
+    orderBy?: TestOrderByWithRelationInput | TestOrderByWithRelationInput[]
+    cursor?: TestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TestScalarFieldEnum | TestScalarFieldEnum[]
   }
 
   /**
@@ -17820,6 +18291,8 @@ export namespace Prisma {
     labTimeSlot?: boolean | LabTimeSlotDefaultArgs<ExtArgs>
     studentCourses?: boolean | Batch$studentCoursesArgs<ExtArgs>
     batchCourses?: boolean | Batch$batchCoursesArgs<ExtArgs>
+    tasks?: boolean | Batch$tasksArgs<ExtArgs>
+    tests?: boolean | Batch$testsArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
@@ -17860,6 +18333,8 @@ export namespace Prisma {
     labTimeSlot?: boolean | LabTimeSlotDefaultArgs<ExtArgs>
     studentCourses?: boolean | Batch$studentCoursesArgs<ExtArgs>
     batchCourses?: boolean | Batch$batchCoursesArgs<ExtArgs>
+    tasks?: boolean | Batch$tasksArgs<ExtArgs>
+    tests?: boolean | Batch$testsArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -17881,6 +18356,8 @@ export namespace Prisma {
       labTimeSlot: Prisma.$LabTimeSlotPayload<ExtArgs>
       studentCourses: Prisma.$StudentCoursePayload<ExtArgs>[]
       batchCourses: Prisma.$BatchCoursePayload<ExtArgs>[]
+      tasks: Prisma.$TaskPayload<ExtArgs>[]
+      tests: Prisma.$TestPayload<ExtArgs>[]
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -18287,6 +18764,8 @@ export namespace Prisma {
     labTimeSlot<T extends LabTimeSlotDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LabTimeSlotDefaultArgs<ExtArgs>>): Prisma__LabTimeSlotClient<$Result.GetResult<Prisma.$LabTimeSlotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     studentCourses<T extends Batch$studentCoursesArgs<ExtArgs> = {}>(args?: Subset<T, Batch$studentCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batchCourses<T extends Batch$batchCoursesArgs<ExtArgs> = {}>(args?: Subset<T, Batch$batchCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tasks<T extends Batch$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Batch$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tests<T extends Batch$testsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -18782,6 +19261,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchCourseScalarFieldEnum | BatchCourseScalarFieldEnum[]
+  }
+
+  /**
+   * Batch.tasks
+   */
+  export type Batch$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    cursor?: TaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Batch.tests
+   */
+  export type Batch$testsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    where?: TestWhereInput
+    orderBy?: TestOrderByWithRelationInput | TestOrderByWithRelationInput[]
+    cursor?: TestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TestScalarFieldEnum | TestScalarFieldEnum[]
   }
 
   /**
@@ -31756,60 +32283,76 @@ export namespace Prisma {
 
   export type StationeryItemAvgAggregateOutputType = {
     id: number | null
+    totalQuantity: number | null
     quantityAvailable: number | null
   }
 
   export type StationeryItemSumAggregateOutputType = {
     id: number | null
+    totalQuantity: number | null
     quantityAvailable: number | null
   }
 
   export type StationeryItemMinAggregateOutputType = {
     id: number | null
     name: string | null
+    totalQuantity: number | null
     quantityAvailable: number | null
+    clientAdminId: string | null
   }
 
   export type StationeryItemMaxAggregateOutputType = {
     id: number | null
     name: string | null
+    totalQuantity: number | null
     quantityAvailable: number | null
+    clientAdminId: string | null
   }
 
   export type StationeryItemCountAggregateOutputType = {
     id: number
     name: number
+    totalQuantity: number
     quantityAvailable: number
+    clientAdminId: number
     _all: number
   }
 
 
   export type StationeryItemAvgAggregateInputType = {
     id?: true
+    totalQuantity?: true
     quantityAvailable?: true
   }
 
   export type StationeryItemSumAggregateInputType = {
     id?: true
+    totalQuantity?: true
     quantityAvailable?: true
   }
 
   export type StationeryItemMinAggregateInputType = {
     id?: true
     name?: true
+    totalQuantity?: true
     quantityAvailable?: true
+    clientAdminId?: true
   }
 
   export type StationeryItemMaxAggregateInputType = {
     id?: true
     name?: true
+    totalQuantity?: true
     quantityAvailable?: true
+    clientAdminId?: true
   }
 
   export type StationeryItemCountAggregateInputType = {
     id?: true
     name?: true
+    totalQuantity?: true
     quantityAvailable?: true
+    clientAdminId?: true
     _all?: true
   }
 
@@ -31902,7 +32445,9 @@ export namespace Prisma {
   export type StationeryItemGroupByOutputType = {
     id: number
     name: string
+    totalQuantity: number
     quantityAvailable: number
+    clientAdminId: string
     _count: StationeryItemCountAggregateOutputType | null
     _avg: StationeryItemAvgAggregateOutputType | null
     _sum: StationeryItemSumAggregateOutputType | null
@@ -31927,46 +32472,65 @@ export namespace Prisma {
   export type StationeryItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    totalQuantity?: boolean
     quantityAvailable?: boolean
+    clientAdminId?: boolean
     stationeryIssues?: boolean | StationeryItem$stationeryIssuesArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     _count?: boolean | StationeryItemCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stationeryItem"]>
 
   export type StationeryItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    totalQuantity?: boolean
     quantityAvailable?: boolean
+    clientAdminId?: boolean
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stationeryItem"]>
 
   export type StationeryItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    totalQuantity?: boolean
     quantityAvailable?: boolean
+    clientAdminId?: boolean
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["stationeryItem"]>
 
   export type StationeryItemSelectScalar = {
     id?: boolean
     name?: boolean
+    totalQuantity?: boolean
     quantityAvailable?: boolean
+    clientAdminId?: boolean
   }
 
-  export type StationeryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "quantityAvailable", ExtArgs["result"]["stationeryItem"]>
+  export type StationeryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "totalQuantity" | "quantityAvailable" | "clientAdminId", ExtArgs["result"]["stationeryItem"]>
   export type StationeryItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     stationeryIssues?: boolean | StationeryItem$stationeryIssuesArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     _count?: boolean | StationeryItemCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type StationeryItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type StationeryItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type StationeryItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+  export type StationeryItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
 
   export type $StationeryItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StationeryItem"
     objects: {
       stationeryIssues: Prisma.$StationeryIssuePayload<ExtArgs>[]
+      clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
+      totalQuantity: number
       quantityAvailable: number
+      clientAdminId: string
     }, ExtArgs["result"]["stationeryItem"]>
     composites: {}
   }
@@ -32362,6 +32926,7 @@ export namespace Prisma {
   export interface Prisma__StationeryItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     stationeryIssues<T extends StationeryItem$stationeryIssuesArgs<ExtArgs> = {}>(args?: Subset<T, StationeryItem$stationeryIssuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StationeryIssuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -32393,7 +32958,9 @@ export namespace Prisma {
   interface StationeryItemFieldRefs {
     readonly id: FieldRef<"StationeryItem", 'Int'>
     readonly name: FieldRef<"StationeryItem", 'String'>
+    readonly totalQuantity: FieldRef<"StationeryItem", 'Int'>
     readonly quantityAvailable: FieldRef<"StationeryItem", 'Int'>
+    readonly clientAdminId: FieldRef<"StationeryItem", 'String'>
   }
     
 
@@ -32643,6 +33210,10 @@ export namespace Prisma {
      */
     data: StationeryItemCreateManyInput | StationeryItemCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StationeryItemIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -32713,6 +33284,10 @@ export namespace Prisma {
      * Limit how many StationeryItems to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StationeryItemIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -35167,6 +35742,1165 @@ export namespace Prisma {
 
 
   /**
+   * Model Task
+   */
+
+  export type AggregateTask = {
+    _count: TaskCountAggregateOutputType | null
+    _avg: TaskAvgAggregateOutputType | null
+    _sum: TaskSumAggregateOutputType | null
+    _min: TaskMinAggregateOutputType | null
+    _max: TaskMaxAggregateOutputType | null
+  }
+
+  export type TaskAvgAggregateOutputType = {
+    id: number | null
+    batchId: number | null
+    courseId: number | null
+  }
+
+  export type TaskSumAggregateOutputType = {
+    id: number | null
+    batchId: number | null
+    courseId: number | null
+  }
+
+  export type TaskMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    status: $Enums.TaskStatus | null
+    batchId: number | null
+    courseId: number | null
+    clientAdminId: string | null
+  }
+
+  export type TaskMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    status: $Enums.TaskStatus | null
+    batchId: number | null
+    courseId: number | null
+    clientAdminId: string | null
+  }
+
+  export type TaskCountAggregateOutputType = {
+    id: number
+    name: number
+    status: number
+    batchId: number
+    courseId: number
+    clientAdminId: number
+    _all: number
+  }
+
+
+  export type TaskAvgAggregateInputType = {
+    id?: true
+    batchId?: true
+    courseId?: true
+  }
+
+  export type TaskSumAggregateInputType = {
+    id?: true
+    batchId?: true
+    courseId?: true
+  }
+
+  export type TaskMinAggregateInputType = {
+    id?: true
+    name?: true
+    status?: true
+    batchId?: true
+    courseId?: true
+    clientAdminId?: true
+  }
+
+  export type TaskMaxAggregateInputType = {
+    id?: true
+    name?: true
+    status?: true
+    batchId?: true
+    courseId?: true
+    clientAdminId?: true
+  }
+
+  export type TaskCountAggregateInputType = {
+    id?: true
+    name?: true
+    status?: true
+    batchId?: true
+    courseId?: true
+    clientAdminId?: true
+    _all?: true
+  }
+
+  export type TaskAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Task to aggregate.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Tasks
+    **/
+    _count?: true | TaskCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TaskAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TaskSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TaskMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TaskMaxAggregateInputType
+  }
+
+  export type GetTaskAggregateType<T extends TaskAggregateArgs> = {
+        [P in keyof T & keyof AggregateTask]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTask[P]>
+      : GetScalarType<T[P], AggregateTask[P]>
+  }
+
+
+
+
+  export type TaskGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithAggregationInput | TaskOrderByWithAggregationInput[]
+    by: TaskScalarFieldEnum[] | TaskScalarFieldEnum
+    having?: TaskScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TaskCountAggregateInputType | true
+    _avg?: TaskAvgAggregateInputType
+    _sum?: TaskSumAggregateInputType
+    _min?: TaskMinAggregateInputType
+    _max?: TaskMaxAggregateInputType
+  }
+
+  export type TaskGroupByOutputType = {
+    id: number
+    name: string
+    status: $Enums.TaskStatus
+    batchId: number
+    courseId: number
+    clientAdminId: string
+    _count: TaskCountAggregateOutputType | null
+    _avg: TaskAvgAggregateOutputType | null
+    _sum: TaskSumAggregateOutputType | null
+    _min: TaskMinAggregateOutputType | null
+    _max: TaskMaxAggregateOutputType | null
+  }
+
+  type GetTaskGroupByPayload<T extends TaskGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TaskGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TaskGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TaskGroupByOutputType[P]>
+            : GetScalarType<T[P], TaskGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TaskSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    status?: boolean
+    batchId?: boolean
+    courseId?: boolean
+    clientAdminId?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+    StudentTask?: boolean | Task$StudentTaskArgs<ExtArgs>
+    _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["task"]>
+
+  export type TaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    status?: boolean
+    batchId?: boolean
+    courseId?: boolean
+    clientAdminId?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["task"]>
+
+  export type TaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    status?: boolean
+    batchId?: boolean
+    courseId?: boolean
+    clientAdminId?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["task"]>
+
+  export type TaskSelectScalar = {
+    id?: boolean
+    name?: boolean
+    status?: boolean
+    batchId?: boolean
+    courseId?: boolean
+    clientAdminId?: boolean
+  }
+
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "batchId" | "courseId" | "clientAdminId", ExtArgs["result"]["task"]>
+  export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+    StudentTask?: boolean | Task$StudentTaskArgs<ExtArgs>
+    _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+  export type TaskIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+
+  export type $TaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Task"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs>
+      clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
+      StudentTask: Prisma.$StudentTaskPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      status: $Enums.TaskStatus
+      batchId: number
+      courseId: number
+      clientAdminId: string
+    }, ExtArgs["result"]["task"]>
+    composites: {}
+  }
+
+  type TaskGetPayload<S extends boolean | null | undefined | TaskDefaultArgs> = $Result.GetResult<Prisma.$TaskPayload, S>
+
+  type TaskCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TaskFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TaskCountAggregateInputType | true
+    }
+
+  export interface TaskDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Task'], meta: { name: 'Task' } }
+    /**
+     * Find zero or one Task that matches the filter.
+     * @param {TaskFindUniqueArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TaskFindUniqueArgs>(args: SelectSubset<T, TaskFindUniqueArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Task that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TaskFindUniqueOrThrowArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TaskFindUniqueOrThrowArgs>(args: SelectSubset<T, TaskFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Task that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindFirstArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TaskFindFirstArgs>(args?: SelectSubset<T, TaskFindFirstArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Task that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindFirstOrThrowArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TaskFindFirstOrThrowArgs>(args?: SelectSubset<T, TaskFindFirstOrThrowArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Tasks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Tasks
+     * const tasks = await prisma.task.findMany()
+     * 
+     * // Get first 10 Tasks
+     * const tasks = await prisma.task.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const taskWithIdOnly = await prisma.task.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TaskFindManyArgs>(args?: SelectSubset<T, TaskFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Task.
+     * @param {TaskCreateArgs} args - Arguments to create a Task.
+     * @example
+     * // Create one Task
+     * const Task = await prisma.task.create({
+     *   data: {
+     *     // ... data to create a Task
+     *   }
+     * })
+     * 
+     */
+    create<T extends TaskCreateArgs>(args: SelectSubset<T, TaskCreateArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Tasks.
+     * @param {TaskCreateManyArgs} args - Arguments to create many Tasks.
+     * @example
+     * // Create many Tasks
+     * const task = await prisma.task.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TaskCreateManyArgs>(args?: SelectSubset<T, TaskCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tasks and returns the data saved in the database.
+     * @param {TaskCreateManyAndReturnArgs} args - Arguments to create many Tasks.
+     * @example
+     * // Create many Tasks
+     * const task = await prisma.task.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tasks and only return the `id`
+     * const taskWithIdOnly = await prisma.task.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TaskCreateManyAndReturnArgs>(args?: SelectSubset<T, TaskCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Task.
+     * @param {TaskDeleteArgs} args - Arguments to delete one Task.
+     * @example
+     * // Delete one Task
+     * const Task = await prisma.task.delete({
+     *   where: {
+     *     // ... filter to delete one Task
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TaskDeleteArgs>(args: SelectSubset<T, TaskDeleteArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Task.
+     * @param {TaskUpdateArgs} args - Arguments to update one Task.
+     * @example
+     * // Update one Task
+     * const task = await prisma.task.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TaskUpdateArgs>(args: SelectSubset<T, TaskUpdateArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Tasks.
+     * @param {TaskDeleteManyArgs} args - Arguments to filter Tasks to delete.
+     * @example
+     * // Delete a few Tasks
+     * const { count } = await prisma.task.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TaskDeleteManyArgs>(args?: SelectSubset<T, TaskDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Tasks
+     * const task = await prisma.task.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TaskUpdateManyArgs>(args: SelectSubset<T, TaskUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tasks and returns the data updated in the database.
+     * @param {TaskUpdateManyAndReturnArgs} args - Arguments to update many Tasks.
+     * @example
+     * // Update many Tasks
+     * const task = await prisma.task.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Tasks and only return the `id`
+     * const taskWithIdOnly = await prisma.task.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TaskUpdateManyAndReturnArgs>(args: SelectSubset<T, TaskUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Task.
+     * @param {TaskUpsertArgs} args - Arguments to update or create a Task.
+     * @example
+     * // Update or create a Task
+     * const task = await prisma.task.upsert({
+     *   create: {
+     *     // ... data to create a Task
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Task we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TaskUpsertArgs>(args: SelectSubset<T, TaskUpsertArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Tasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCountArgs} args - Arguments to filter Tasks to count.
+     * @example
+     * // Count the number of Tasks
+     * const count = await prisma.task.count({
+     *   where: {
+     *     // ... the filter for the Tasks we want to count
+     *   }
+     * })
+    **/
+    count<T extends TaskCountArgs>(
+      args?: Subset<T, TaskCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TaskCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Task.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TaskAggregateArgs>(args: Subset<T, TaskAggregateArgs>): Prisma.PrismaPromise<GetTaskAggregateType<T>>
+
+    /**
+     * Group by Task.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TaskGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TaskGroupByArgs['orderBy'] }
+        : { orderBy?: TaskGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TaskGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTaskGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Task model
+   */
+  readonly fields: TaskFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Task.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    StudentTask<T extends Task$StudentTaskArgs<ExtArgs> = {}>(args?: Subset<T, Task$StudentTaskArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Task model
+   */
+  interface TaskFieldRefs {
+    readonly id: FieldRef<"Task", 'Int'>
+    readonly name: FieldRef<"Task", 'String'>
+    readonly status: FieldRef<"Task", 'TaskStatus'>
+    readonly batchId: FieldRef<"Task", 'Int'>
+    readonly courseId: FieldRef<"Task", 'Int'>
+    readonly clientAdminId: FieldRef<"Task", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Task findUnique
+   */
+  export type TaskFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task findUniqueOrThrow
+   */
+  export type TaskFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task findFirst
+   */
+  export type TaskFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tasks.
+     */
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task findFirstOrThrow
+   */
+  export type TaskFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tasks.
+     */
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task findMany
+   */
+  export type TaskFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Tasks to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task create
+   */
+  export type TaskCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Task.
+     */
+    data: XOR<TaskCreateInput, TaskUncheckedCreateInput>
+  }
+
+  /**
+   * Task createMany
+   */
+  export type TaskCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Tasks.
+     */
+    data: TaskCreateManyInput | TaskCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Task createManyAndReturn
+   */
+  export type TaskCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * The data used to create many Tasks.
+     */
+    data: TaskCreateManyInput | TaskCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Task update
+   */
+  export type TaskUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Task.
+     */
+    data: XOR<TaskUpdateInput, TaskUncheckedUpdateInput>
+    /**
+     * Choose, which Task to update.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task updateMany
+   */
+  export type TaskUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Tasks.
+     */
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyInput>
+    /**
+     * Filter which Tasks to update
+     */
+    where?: TaskWhereInput
+    /**
+     * Limit how many Tasks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Task updateManyAndReturn
+   */
+  export type TaskUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * The data used to update Tasks.
+     */
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyInput>
+    /**
+     * Filter which Tasks to update
+     */
+    where?: TaskWhereInput
+    /**
+     * Limit how many Tasks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Task upsert
+   */
+  export type TaskUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Task to update in case it exists.
+     */
+    where: TaskWhereUniqueInput
+    /**
+     * In case the Task found by the `where` argument doesn't exist, create a new Task with this data.
+     */
+    create: XOR<TaskCreateInput, TaskUncheckedCreateInput>
+    /**
+     * In case the Task was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TaskUpdateInput, TaskUncheckedUpdateInput>
+  }
+
+  /**
+   * Task delete
+   */
+  export type TaskDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter which Task to delete.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task deleteMany
+   */
+  export type TaskDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tasks to delete
+     */
+    where?: TaskWhereInput
+    /**
+     * Limit how many Tasks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Task.StudentTask
+   */
+  export type Task$StudentTaskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTask
+     */
+    select?: StudentTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTask
+     */
+    omit?: StudentTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTaskInclude<ExtArgs> | null
+    where?: StudentTaskWhereInput
+    orderBy?: StudentTaskOrderByWithRelationInput | StudentTaskOrderByWithRelationInput[]
+    cursor?: StudentTaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTaskScalarFieldEnum | StudentTaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task without action
+   */
+  export type TaskDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model StudentTask
    */
 
@@ -35182,6 +36916,7 @@ export namespace Prisma {
     id: number | null
     studentId: number | null
     courseId: number | null
+    taskId: number | null
     facultyId: number | null
   }
 
@@ -35189,6 +36924,7 @@ export namespace Prisma {
     id: number | null
     studentId: number | null
     courseId: number | null
+    taskId: number | null
     facultyId: number | null
   }
 
@@ -35202,6 +36938,7 @@ export namespace Prisma {
     status: string | null
     facultyRemarks: string | null
     grade: string | null
+    taskId: number | null
     facultyId: number | null
     clientAdminId: string | null
   }
@@ -35216,6 +36953,7 @@ export namespace Prisma {
     status: string | null
     facultyRemarks: string | null
     grade: string | null
+    taskId: number | null
     facultyId: number | null
     clientAdminId: string | null
   }
@@ -35230,6 +36968,7 @@ export namespace Prisma {
     status: number
     facultyRemarks: number
     grade: number
+    taskId: number
     facultyId: number
     clientAdminId: number
     _all: number
@@ -35240,6 +36979,7 @@ export namespace Prisma {
     id?: true
     studentId?: true
     courseId?: true
+    taskId?: true
     facultyId?: true
   }
 
@@ -35247,6 +36987,7 @@ export namespace Prisma {
     id?: true
     studentId?: true
     courseId?: true
+    taskId?: true
     facultyId?: true
   }
 
@@ -35260,6 +37001,7 @@ export namespace Prisma {
     status?: true
     facultyRemarks?: true
     grade?: true
+    taskId?: true
     facultyId?: true
     clientAdminId?: true
   }
@@ -35274,6 +37016,7 @@ export namespace Prisma {
     status?: true
     facultyRemarks?: true
     grade?: true
+    taskId?: true
     facultyId?: true
     clientAdminId?: true
   }
@@ -35288,6 +37031,7 @@ export namespace Prisma {
     status?: true
     facultyRemarks?: true
     grade?: true
+    taskId?: true
     facultyId?: true
     clientAdminId?: true
     _all?: true
@@ -35389,6 +37133,7 @@ export namespace Prisma {
     status: string
     facultyRemarks: string | null
     grade: string | null
+    taskId: number
     facultyId: number | null
     clientAdminId: string
     _count: StudentTaskCountAggregateOutputType | null
@@ -35422,10 +37167,12 @@ export namespace Prisma {
     status?: boolean
     facultyRemarks?: boolean
     grade?: boolean
+    taskId?: boolean
     facultyId?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
     faculty?: boolean | StudentTask$facultyArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentTask"]>
@@ -35440,10 +37187,12 @@ export namespace Prisma {
     status?: boolean
     facultyRemarks?: boolean
     grade?: boolean
+    taskId?: boolean
     facultyId?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
     faculty?: boolean | StudentTask$facultyArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentTask"]>
@@ -35458,10 +37207,12 @@ export namespace Prisma {
     status?: boolean
     facultyRemarks?: boolean
     grade?: boolean
+    taskId?: boolean
     facultyId?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
     faculty?: boolean | StudentTask$facultyArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentTask"]>
@@ -35476,26 +37227,30 @@ export namespace Prisma {
     status?: boolean
     facultyRemarks?: boolean
     grade?: boolean
+    taskId?: boolean
     facultyId?: boolean
     clientAdminId?: boolean
   }
 
-  export type StudentTaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "assignedDate" | "dueDate" | "description" | "status" | "facultyRemarks" | "grade" | "facultyId" | "clientAdminId", ExtArgs["result"]["studentTask"]>
+  export type StudentTaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "assignedDate" | "dueDate" | "description" | "status" | "facultyRemarks" | "grade" | "taskId" | "facultyId" | "clientAdminId", ExtArgs["result"]["studentTask"]>
   export type StudentTaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
     faculty?: boolean | StudentTask$facultyArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
   export type StudentTaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
     faculty?: boolean | StudentTask$facultyArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
   export type StudentTaskIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
     faculty?: boolean | StudentTask$facultyArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
@@ -35505,6 +37260,7 @@ export namespace Prisma {
     objects: {
       student: Prisma.$StudentPayload<ExtArgs>
       course: Prisma.$CoursePayload<ExtArgs>
+      task: Prisma.$TaskPayload<ExtArgs>
       faculty: Prisma.$FacultyPayload<ExtArgs> | null
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
     }
@@ -35518,6 +37274,7 @@ export namespace Prisma {
       status: string
       facultyRemarks: string | null
       grade: string | null
+      taskId: number
       facultyId: number | null
       clientAdminId: string
     }, ExtArgs["result"]["studentTask"]>
@@ -35916,6 +37673,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    task<T extends TaskDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskDefaultArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     faculty<T extends StudentTask$facultyArgs<ExtArgs> = {}>(args?: Subset<T, StudentTask$facultyArgs<ExtArgs>>): Prisma__FacultyClient<$Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -35956,6 +37714,7 @@ export namespace Prisma {
     readonly status: FieldRef<"StudentTask", 'String'>
     readonly facultyRemarks: FieldRef<"StudentTask", 'String'>
     readonly grade: FieldRef<"StudentTask", 'String'>
+    readonly taskId: FieldRef<"StudentTask", 'Int'>
     readonly facultyId: FieldRef<"StudentTask", 'Int'>
     readonly clientAdminId: FieldRef<"StudentTask", 'String'>
   }
@@ -36392,6 +38151,1165 @@ export namespace Prisma {
 
 
   /**
+   * Model Test
+   */
+
+  export type AggregateTest = {
+    _count: TestCountAggregateOutputType | null
+    _avg: TestAvgAggregateOutputType | null
+    _sum: TestSumAggregateOutputType | null
+    _min: TestMinAggregateOutputType | null
+    _max: TestMaxAggregateOutputType | null
+  }
+
+  export type TestAvgAggregateOutputType = {
+    id: number | null
+    batchId: number | null
+    courseId: number | null
+  }
+
+  export type TestSumAggregateOutputType = {
+    id: number | null
+    batchId: number | null
+    courseId: number | null
+  }
+
+  export type TestMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    status: $Enums.TestStatus | null
+    batchId: number | null
+    courseId: number | null
+    clientAdminId: string | null
+  }
+
+  export type TestMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    status: $Enums.TestStatus | null
+    batchId: number | null
+    courseId: number | null
+    clientAdminId: string | null
+  }
+
+  export type TestCountAggregateOutputType = {
+    id: number
+    name: number
+    status: number
+    batchId: number
+    courseId: number
+    clientAdminId: number
+    _all: number
+  }
+
+
+  export type TestAvgAggregateInputType = {
+    id?: true
+    batchId?: true
+    courseId?: true
+  }
+
+  export type TestSumAggregateInputType = {
+    id?: true
+    batchId?: true
+    courseId?: true
+  }
+
+  export type TestMinAggregateInputType = {
+    id?: true
+    name?: true
+    status?: true
+    batchId?: true
+    courseId?: true
+    clientAdminId?: true
+  }
+
+  export type TestMaxAggregateInputType = {
+    id?: true
+    name?: true
+    status?: true
+    batchId?: true
+    courseId?: true
+    clientAdminId?: true
+  }
+
+  export type TestCountAggregateInputType = {
+    id?: true
+    name?: true
+    status?: true
+    batchId?: true
+    courseId?: true
+    clientAdminId?: true
+    _all?: true
+  }
+
+  export type TestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Test to aggregate.
+     */
+    where?: TestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tests to fetch.
+     */
+    orderBy?: TestOrderByWithRelationInput | TestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Tests
+    **/
+    _count?: true | TestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TestMaxAggregateInputType
+  }
+
+  export type GetTestAggregateType<T extends TestAggregateArgs> = {
+        [P in keyof T & keyof AggregateTest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTest[P]>
+      : GetScalarType<T[P], AggregateTest[P]>
+  }
+
+
+
+
+  export type TestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TestWhereInput
+    orderBy?: TestOrderByWithAggregationInput | TestOrderByWithAggregationInput[]
+    by: TestScalarFieldEnum[] | TestScalarFieldEnum
+    having?: TestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TestCountAggregateInputType | true
+    _avg?: TestAvgAggregateInputType
+    _sum?: TestSumAggregateInputType
+    _min?: TestMinAggregateInputType
+    _max?: TestMaxAggregateInputType
+  }
+
+  export type TestGroupByOutputType = {
+    id: number
+    name: string
+    status: $Enums.TestStatus
+    batchId: number
+    courseId: number
+    clientAdminId: string
+    _count: TestCountAggregateOutputType | null
+    _avg: TestAvgAggregateOutputType | null
+    _sum: TestSumAggregateOutputType | null
+    _min: TestMinAggregateOutputType | null
+    _max: TestMaxAggregateOutputType | null
+  }
+
+  type GetTestGroupByPayload<T extends TestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TestGroupByOutputType[P]>
+            : GetScalarType<T[P], TestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    status?: boolean
+    batchId?: boolean
+    courseId?: boolean
+    clientAdminId?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+    StudentTest?: boolean | Test$StudentTestArgs<ExtArgs>
+    _count?: boolean | TestCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["test"]>
+
+  export type TestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    status?: boolean
+    batchId?: boolean
+    courseId?: boolean
+    clientAdminId?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["test"]>
+
+  export type TestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    status?: boolean
+    batchId?: boolean
+    courseId?: boolean
+    clientAdminId?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["test"]>
+
+  export type TestSelectScalar = {
+    id?: boolean
+    name?: boolean
+    status?: boolean
+    batchId?: boolean
+    courseId?: boolean
+    clientAdminId?: boolean
+  }
+
+  export type TestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "batchId" | "courseId" | "clientAdminId", ExtArgs["result"]["test"]>
+  export type TestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+    StudentTest?: boolean | Test$StudentTestArgs<ExtArgs>
+    _count?: boolean | TestCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+  export type TestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+
+  export type $TestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Test"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs>
+      clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
+      StudentTest: Prisma.$StudentTestPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      status: $Enums.TestStatus
+      batchId: number
+      courseId: number
+      clientAdminId: string
+    }, ExtArgs["result"]["test"]>
+    composites: {}
+  }
+
+  type TestGetPayload<S extends boolean | null | undefined | TestDefaultArgs> = $Result.GetResult<Prisma.$TestPayload, S>
+
+  type TestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TestCountAggregateInputType | true
+    }
+
+  export interface TestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Test'], meta: { name: 'Test' } }
+    /**
+     * Find zero or one Test that matches the filter.
+     * @param {TestFindUniqueArgs} args - Arguments to find a Test
+     * @example
+     * // Get one Test
+     * const test = await prisma.test.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TestFindUniqueArgs>(args: SelectSubset<T, TestFindUniqueArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Test that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TestFindUniqueOrThrowArgs} args - Arguments to find a Test
+     * @example
+     * // Get one Test
+     * const test = await prisma.test.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TestFindUniqueOrThrowArgs>(args: SelectSubset<T, TestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Test that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestFindFirstArgs} args - Arguments to find a Test
+     * @example
+     * // Get one Test
+     * const test = await prisma.test.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TestFindFirstArgs>(args?: SelectSubset<T, TestFindFirstArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Test that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestFindFirstOrThrowArgs} args - Arguments to find a Test
+     * @example
+     * // Get one Test
+     * const test = await prisma.test.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TestFindFirstOrThrowArgs>(args?: SelectSubset<T, TestFindFirstOrThrowArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Tests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Tests
+     * const tests = await prisma.test.findMany()
+     * 
+     * // Get first 10 Tests
+     * const tests = await prisma.test.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const testWithIdOnly = await prisma.test.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TestFindManyArgs>(args?: SelectSubset<T, TestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Test.
+     * @param {TestCreateArgs} args - Arguments to create a Test.
+     * @example
+     * // Create one Test
+     * const Test = await prisma.test.create({
+     *   data: {
+     *     // ... data to create a Test
+     *   }
+     * })
+     * 
+     */
+    create<T extends TestCreateArgs>(args: SelectSubset<T, TestCreateArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Tests.
+     * @param {TestCreateManyArgs} args - Arguments to create many Tests.
+     * @example
+     * // Create many Tests
+     * const test = await prisma.test.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TestCreateManyArgs>(args?: SelectSubset<T, TestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tests and returns the data saved in the database.
+     * @param {TestCreateManyAndReturnArgs} args - Arguments to create many Tests.
+     * @example
+     * // Create many Tests
+     * const test = await prisma.test.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tests and only return the `id`
+     * const testWithIdOnly = await prisma.test.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TestCreateManyAndReturnArgs>(args?: SelectSubset<T, TestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Test.
+     * @param {TestDeleteArgs} args - Arguments to delete one Test.
+     * @example
+     * // Delete one Test
+     * const Test = await prisma.test.delete({
+     *   where: {
+     *     // ... filter to delete one Test
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TestDeleteArgs>(args: SelectSubset<T, TestDeleteArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Test.
+     * @param {TestUpdateArgs} args - Arguments to update one Test.
+     * @example
+     * // Update one Test
+     * const test = await prisma.test.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TestUpdateArgs>(args: SelectSubset<T, TestUpdateArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Tests.
+     * @param {TestDeleteManyArgs} args - Arguments to filter Tests to delete.
+     * @example
+     * // Delete a few Tests
+     * const { count } = await prisma.test.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TestDeleteManyArgs>(args?: SelectSubset<T, TestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Tests
+     * const test = await prisma.test.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TestUpdateManyArgs>(args: SelectSubset<T, TestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tests and returns the data updated in the database.
+     * @param {TestUpdateManyAndReturnArgs} args - Arguments to update many Tests.
+     * @example
+     * // Update many Tests
+     * const test = await prisma.test.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Tests and only return the `id`
+     * const testWithIdOnly = await prisma.test.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TestUpdateManyAndReturnArgs>(args: SelectSubset<T, TestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Test.
+     * @param {TestUpsertArgs} args - Arguments to update or create a Test.
+     * @example
+     * // Update or create a Test
+     * const test = await prisma.test.upsert({
+     *   create: {
+     *     // ... data to create a Test
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Test we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TestUpsertArgs>(args: SelectSubset<T, TestUpsertArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Tests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestCountArgs} args - Arguments to filter Tests to count.
+     * @example
+     * // Count the number of Tests
+     * const count = await prisma.test.count({
+     *   where: {
+     *     // ... the filter for the Tests we want to count
+     *   }
+     * })
+    **/
+    count<T extends TestCountArgs>(
+      args?: Subset<T, TestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Test.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TestAggregateArgs>(args: Subset<T, TestAggregateArgs>): Prisma.PrismaPromise<GetTestAggregateType<T>>
+
+    /**
+     * Group by Test.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TestGroupByArgs['orderBy'] }
+        : { orderBy?: TestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Test model
+   */
+  readonly fields: TestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Test.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    StudentTest<T extends Test$StudentTestArgs<ExtArgs> = {}>(args?: Subset<T, Test$StudentTestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Test model
+   */
+  interface TestFieldRefs {
+    readonly id: FieldRef<"Test", 'Int'>
+    readonly name: FieldRef<"Test", 'String'>
+    readonly status: FieldRef<"Test", 'TestStatus'>
+    readonly batchId: FieldRef<"Test", 'Int'>
+    readonly courseId: FieldRef<"Test", 'Int'>
+    readonly clientAdminId: FieldRef<"Test", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Test findUnique
+   */
+  export type TestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * Filter, which Test to fetch.
+     */
+    where: TestWhereUniqueInput
+  }
+
+  /**
+   * Test findUniqueOrThrow
+   */
+  export type TestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * Filter, which Test to fetch.
+     */
+    where: TestWhereUniqueInput
+  }
+
+  /**
+   * Test findFirst
+   */
+  export type TestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * Filter, which Test to fetch.
+     */
+    where?: TestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tests to fetch.
+     */
+    orderBy?: TestOrderByWithRelationInput | TestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tests.
+     */
+    cursor?: TestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tests.
+     */
+    distinct?: TestScalarFieldEnum | TestScalarFieldEnum[]
+  }
+
+  /**
+   * Test findFirstOrThrow
+   */
+  export type TestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * Filter, which Test to fetch.
+     */
+    where?: TestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tests to fetch.
+     */
+    orderBy?: TestOrderByWithRelationInput | TestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tests.
+     */
+    cursor?: TestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tests.
+     */
+    distinct?: TestScalarFieldEnum | TestScalarFieldEnum[]
+  }
+
+  /**
+   * Test findMany
+   */
+  export type TestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * Filter, which Tests to fetch.
+     */
+    where?: TestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tests to fetch.
+     */
+    orderBy?: TestOrderByWithRelationInput | TestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Tests.
+     */
+    cursor?: TestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tests.
+     */
+    skip?: number
+    distinct?: TestScalarFieldEnum | TestScalarFieldEnum[]
+  }
+
+  /**
+   * Test create
+   */
+  export type TestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Test.
+     */
+    data: XOR<TestCreateInput, TestUncheckedCreateInput>
+  }
+
+  /**
+   * Test createMany
+   */
+  export type TestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Tests.
+     */
+    data: TestCreateManyInput | TestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Test createManyAndReturn
+   */
+  export type TestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * The data used to create many Tests.
+     */
+    data: TestCreateManyInput | TestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Test update
+   */
+  export type TestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Test.
+     */
+    data: XOR<TestUpdateInput, TestUncheckedUpdateInput>
+    /**
+     * Choose, which Test to update.
+     */
+    where: TestWhereUniqueInput
+  }
+
+  /**
+   * Test updateMany
+   */
+  export type TestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Tests.
+     */
+    data: XOR<TestUpdateManyMutationInput, TestUncheckedUpdateManyInput>
+    /**
+     * Filter which Tests to update
+     */
+    where?: TestWhereInput
+    /**
+     * Limit how many Tests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Test updateManyAndReturn
+   */
+  export type TestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * The data used to update Tests.
+     */
+    data: XOR<TestUpdateManyMutationInput, TestUncheckedUpdateManyInput>
+    /**
+     * Filter which Tests to update
+     */
+    where?: TestWhereInput
+    /**
+     * Limit how many Tests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Test upsert
+   */
+  export type TestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Test to update in case it exists.
+     */
+    where: TestWhereUniqueInput
+    /**
+     * In case the Test found by the `where` argument doesn't exist, create a new Test with this data.
+     */
+    create: XOR<TestCreateInput, TestUncheckedCreateInput>
+    /**
+     * In case the Test was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TestUpdateInput, TestUncheckedUpdateInput>
+  }
+
+  /**
+   * Test delete
+   */
+  export type TestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    /**
+     * Filter which Test to delete.
+     */
+    where: TestWhereUniqueInput
+  }
+
+  /**
+   * Test deleteMany
+   */
+  export type TestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tests to delete
+     */
+    where?: TestWhereInput
+    /**
+     * Limit how many Tests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Test.StudentTest
+   */
+  export type Test$StudentTestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTest
+     */
+    select?: StudentTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTest
+     */
+    omit?: StudentTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTestInclude<ExtArgs> | null
+    where?: StudentTestWhereInput
+    orderBy?: StudentTestOrderByWithRelationInput | StudentTestOrderByWithRelationInput[]
+    cursor?: StudentTestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTestScalarFieldEnum | StudentTestScalarFieldEnum[]
+  }
+
+  /**
+   * Test without action
+   */
+  export type TestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model StudentTest
    */
 
@@ -36409,6 +39327,7 @@ export namespace Prisma {
     courseId: number | null
     totalMarks: number | null
     marksObtained: number | null
+    testId: number | null
   }
 
   export type StudentTestSumAggregateOutputType = {
@@ -36417,6 +39336,7 @@ export namespace Prisma {
     courseId: number | null
     totalMarks: number | null
     marksObtained: number | null
+    testId: number | null
   }
 
   export type StudentTestMinAggregateOutputType = {
@@ -36428,6 +39348,7 @@ export namespace Prisma {
     totalMarks: number | null
     marksObtained: number | null
     grade: string | null
+    testId: number | null
     clientAdminId: string | null
   }
 
@@ -36440,6 +39361,7 @@ export namespace Prisma {
     totalMarks: number | null
     marksObtained: number | null
     grade: string | null
+    testId: number | null
     clientAdminId: string | null
   }
 
@@ -36452,6 +39374,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: number
+    testId: number
     clientAdminId: number
     _all: number
   }
@@ -36463,6 +39386,7 @@ export namespace Prisma {
     courseId?: true
     totalMarks?: true
     marksObtained?: true
+    testId?: true
   }
 
   export type StudentTestSumAggregateInputType = {
@@ -36471,6 +39395,7 @@ export namespace Prisma {
     courseId?: true
     totalMarks?: true
     marksObtained?: true
+    testId?: true
   }
 
   export type StudentTestMinAggregateInputType = {
@@ -36482,6 +39407,7 @@ export namespace Prisma {
     totalMarks?: true
     marksObtained?: true
     grade?: true
+    testId?: true
     clientAdminId?: true
   }
 
@@ -36494,6 +39420,7 @@ export namespace Prisma {
     totalMarks?: true
     marksObtained?: true
     grade?: true
+    testId?: true
     clientAdminId?: true
   }
 
@@ -36506,6 +39433,7 @@ export namespace Prisma {
     totalMarks?: true
     marksObtained?: true
     grade?: true
+    testId?: true
     clientAdminId?: true
     _all?: true
   }
@@ -36605,6 +39533,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
     clientAdminId: string
     _count: StudentTestCountAggregateOutputType | null
     _avg: StudentTestAvgAggregateOutputType | null
@@ -36636,9 +39565,11 @@ export namespace Prisma {
     totalMarks?: boolean
     marksObtained?: boolean
     grade?: boolean
+    testId?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    test?: boolean | TestDefaultArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentTest"]>
 
@@ -36651,9 +39582,11 @@ export namespace Prisma {
     totalMarks?: boolean
     marksObtained?: boolean
     grade?: boolean
+    testId?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    test?: boolean | TestDefaultArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentTest"]>
 
@@ -36666,9 +39599,11 @@ export namespace Prisma {
     totalMarks?: boolean
     marksObtained?: boolean
     grade?: boolean
+    testId?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    test?: boolean | TestDefaultArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentTest"]>
 
@@ -36681,23 +39616,27 @@ export namespace Prisma {
     totalMarks?: boolean
     marksObtained?: boolean
     grade?: boolean
+    testId?: boolean
     clientAdminId?: boolean
   }
 
-  export type StudentTestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "testName" | "testDate" | "totalMarks" | "marksObtained" | "grade" | "clientAdminId", ExtArgs["result"]["studentTest"]>
+  export type StudentTestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "testName" | "testDate" | "totalMarks" | "marksObtained" | "grade" | "testId" | "clientAdminId", ExtArgs["result"]["studentTest"]>
   export type StudentTestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    test?: boolean | TestDefaultArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
   export type StudentTestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    test?: boolean | TestDefaultArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
   export type StudentTestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    test?: boolean | TestDefaultArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
 
@@ -36706,6 +39645,7 @@ export namespace Prisma {
     objects: {
       student: Prisma.$StudentPayload<ExtArgs>
       course: Prisma.$CoursePayload<ExtArgs>
+      test: Prisma.$TestPayload<ExtArgs>
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -36717,6 +39657,7 @@ export namespace Prisma {
       totalMarks: number
       marksObtained: number
       grade: string
+      testId: number
       clientAdminId: string
     }, ExtArgs["result"]["studentTest"]>
     composites: {}
@@ -37114,6 +40055,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    test<T extends TestDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TestDefaultArgs<ExtArgs>>): Prisma__TestClient<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -37152,6 +40094,7 @@ export namespace Prisma {
     readonly totalMarks: FieldRef<"StudentTest", 'Int'>
     readonly marksObtained: FieldRef<"StudentTest", 'Int'>
     readonly grade: FieldRef<"StudentTest", 'String'>
+    readonly testId: FieldRef<"StudentTest", 'Int'>
     readonly clientAdminId: FieldRef<"StudentTest", 'String'>
   }
     
@@ -41500,7 +44443,9 @@ export namespace Prisma {
   export const StationeryItemScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    quantityAvailable: 'quantityAvailable'
+    totalQuantity: 'totalQuantity',
+    quantityAvailable: 'quantityAvailable',
+    clientAdminId: 'clientAdminId'
   };
 
   export type StationeryItemScalarFieldEnum = (typeof StationeryItemScalarFieldEnum)[keyof typeof StationeryItemScalarFieldEnum]
@@ -41534,6 +44479,18 @@ export namespace Prisma {
   export type AttendanceRecordScalarFieldEnum = (typeof AttendanceRecordScalarFieldEnum)[keyof typeof AttendanceRecordScalarFieldEnum]
 
 
+  export const TaskScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    status: 'status',
+    batchId: 'batchId',
+    courseId: 'courseId',
+    clientAdminId: 'clientAdminId'
+  };
+
+  export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+
+
   export const StudentTaskScalarFieldEnum: {
     id: 'id',
     studentId: 'studentId',
@@ -41544,11 +44501,24 @@ export namespace Prisma {
     status: 'status',
     facultyRemarks: 'facultyRemarks',
     grade: 'grade',
+    taskId: 'taskId',
     facultyId: 'facultyId',
     clientAdminId: 'clientAdminId'
   };
 
   export type StudentTaskScalarFieldEnum = (typeof StudentTaskScalarFieldEnum)[keyof typeof StudentTaskScalarFieldEnum]
+
+
+  export const TestScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    status: 'status',
+    batchId: 'batchId',
+    courseId: 'courseId',
+    clientAdminId: 'clientAdminId'
+  };
+
+  export type TestScalarFieldEnum = (typeof TestScalarFieldEnum)[keyof typeof TestScalarFieldEnum]
 
 
   export const StudentTestScalarFieldEnum: {
@@ -41560,6 +44530,7 @@ export namespace Prisma {
     totalMarks: 'totalMarks',
     marksObtained: 'marksObtained',
     grade: 'grade',
+    testId: 'testId',
     clientAdminId: 'clientAdminId'
   };
 
@@ -41786,6 +44757,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TaskStatus'
+   */
+  export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskStatus[]'
+   */
+  export type ListEnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TestStatus'
+   */
+  export type EnumTestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TestStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TestStatus[]'
+   */
+  export type ListEnumTestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TestStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'RecordType'
    */
   export type EnumRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecordType'>
@@ -41847,9 +44846,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionListRelationFilter
     certificates?: CertificateListRelationFilter
     financialRecords?: FinancialRecordListRelationFilter
+    StationeryItems?: StationeryItemListRelationFilter
     enquiries?: EnquiryListRelationFilter
     notifications?: NotificationListRelationFilter
     courseFeeStructures?: CourseFeeStructureListRelationFilter
+    tasks?: TaskListRelationFilter
+    tests?: TestListRelationFilter
   }
 
   export type ClientAdminOrderByWithRelationInput = {
@@ -41894,9 +44896,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionOrderByRelationAggregateInput
     certificates?: CertificateOrderByRelationAggregateInput
     financialRecords?: FinancialRecordOrderByRelationAggregateInput
+    StationeryItems?: StationeryItemOrderByRelationAggregateInput
     enquiries?: EnquiryOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     courseFeeStructures?: CourseFeeStructureOrderByRelationAggregateInput
+    tasks?: TaskOrderByRelationAggregateInput
+    tests?: TestOrderByRelationAggregateInput
   }
 
   export type ClientAdminWhereUniqueInput = Prisma.AtLeast<{
@@ -41944,9 +44949,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionListRelationFilter
     certificates?: CertificateListRelationFilter
     financialRecords?: FinancialRecordListRelationFilter
+    StationeryItems?: StationeryItemListRelationFilter
     enquiries?: EnquiryListRelationFilter
     notifications?: NotificationListRelationFilter
     courseFeeStructures?: CourseFeeStructureListRelationFilter
+    tasks?: TaskListRelationFilter
+    tests?: TestListRelationFilter
   }, "id" | "email" | "slug">
 
   export type ClientAdminOrderByWithAggregationInput = {
@@ -42700,6 +45708,8 @@ export namespace Prisma {
     studentTests?: StudentTestListRelationFilter
     certificates?: CertificateListRelationFilter
     financialRecords?: FinancialRecordListRelationFilter
+    tasks?: TaskListRelationFilter
+    tests?: TestListRelationFilter
     batchCourses?: BatchCourseListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }
@@ -42721,6 +45731,8 @@ export namespace Prisma {
     studentTests?: StudentTestOrderByRelationAggregateInput
     certificates?: CertificateOrderByRelationAggregateInput
     financialRecords?: FinancialRecordOrderByRelationAggregateInput
+    tasks?: TaskOrderByRelationAggregateInput
+    tests?: TestOrderByRelationAggregateInput
     batchCourses?: BatchCourseOrderByRelationAggregateInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
   }
@@ -42745,6 +45757,8 @@ export namespace Prisma {
     studentTests?: StudentTestListRelationFilter
     certificates?: CertificateListRelationFilter
     financialRecords?: FinancialRecordListRelationFilter
+    tasks?: TaskListRelationFilter
+    tests?: TestListRelationFilter
     batchCourses?: BatchCourseListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }, "id">
@@ -42849,6 +45863,8 @@ export namespace Prisma {
     labTimeSlot?: XOR<LabTimeSlotScalarRelationFilter, LabTimeSlotWhereInput>
     studentCourses?: StudentCourseListRelationFilter
     batchCourses?: BatchCourseListRelationFilter
+    tasks?: TaskListRelationFilter
+    tests?: TestListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }
 
@@ -42862,6 +45878,8 @@ export namespace Prisma {
     labTimeSlot?: LabTimeSlotOrderByWithRelationInput
     studentCourses?: StudentCourseOrderByRelationAggregateInput
     batchCourses?: BatchCourseOrderByRelationAggregateInput
+    tasks?: TaskOrderByRelationAggregateInput
+    tests?: TestOrderByRelationAggregateInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
   }
 
@@ -42879,6 +45897,8 @@ export namespace Prisma {
     labTimeSlot?: XOR<LabTimeSlotScalarRelationFilter, LabTimeSlotWhereInput>
     studentCourses?: StudentCourseListRelationFilter
     batchCourses?: BatchCourseListRelationFilter
+    tasks?: TaskListRelationFilter
+    tests?: TestListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }, "id" | "labTimeSlotId_clientAdminId">
 
@@ -43746,15 +46766,21 @@ export namespace Prisma {
     NOT?: StationeryItemWhereInput | StationeryItemWhereInput[]
     id?: IntFilter<"StationeryItem"> | number
     name?: StringFilter<"StationeryItem"> | string
+    totalQuantity?: IntFilter<"StationeryItem"> | number
     quantityAvailable?: IntFilter<"StationeryItem"> | number
+    clientAdminId?: StringFilter<"StationeryItem"> | string
     stationeryIssues?: StationeryIssueListRelationFilter
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }
 
   export type StationeryItemOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    totalQuantity?: SortOrder
     quantityAvailable?: SortOrder
+    clientAdminId?: SortOrder
     stationeryIssues?: StationeryIssueOrderByRelationAggregateInput
+    clientAdmin?: ClientAdminOrderByWithRelationInput
   }
 
   export type StationeryItemWhereUniqueInput = Prisma.AtLeast<{
@@ -43763,14 +46789,19 @@ export namespace Prisma {
     OR?: StationeryItemWhereInput[]
     NOT?: StationeryItemWhereInput | StationeryItemWhereInput[]
     name?: StringFilter<"StationeryItem"> | string
+    totalQuantity?: IntFilter<"StationeryItem"> | number
     quantityAvailable?: IntFilter<"StationeryItem"> | number
+    clientAdminId?: StringFilter<"StationeryItem"> | string
     stationeryIssues?: StationeryIssueListRelationFilter
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }, "id">
 
   export type StationeryItemOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    totalQuantity?: SortOrder
     quantityAvailable?: SortOrder
+    clientAdminId?: SortOrder
     _count?: StationeryItemCountOrderByAggregateInput
     _avg?: StationeryItemAvgOrderByAggregateInput
     _max?: StationeryItemMaxOrderByAggregateInput
@@ -43784,7 +46815,9 @@ export namespace Prisma {
     NOT?: StationeryItemScalarWhereWithAggregatesInput | StationeryItemScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"StationeryItem"> | number
     name?: StringWithAggregatesFilter<"StationeryItem"> | string
+    totalQuantity?: IntWithAggregatesFilter<"StationeryItem"> | number
     quantityAvailable?: IntWithAggregatesFilter<"StationeryItem"> | number
+    clientAdminId?: StringWithAggregatesFilter<"StationeryItem"> | string
   }
 
   export type StationeryIssueWhereInput = {
@@ -43949,6 +46982,77 @@ export namespace Prisma {
     clientAdminId?: StringWithAggregatesFilter<"AttendanceRecord"> | string
   }
 
+  export type TaskWhereInput = {
+    AND?: TaskWhereInput | TaskWhereInput[]
+    OR?: TaskWhereInput[]
+    NOT?: TaskWhereInput | TaskWhereInput[]
+    id?: IntFilter<"Task"> | number
+    name?: StringFilter<"Task"> | string
+    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
+    batchId?: IntFilter<"Task"> | number
+    courseId?: IntFilter<"Task"> | number
+    clientAdminId?: StringFilter<"Task"> | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+    StudentTask?: StudentTaskListRelationFilter
+  }
+
+  export type TaskOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+    course?: CourseOrderByWithRelationInput
+    clientAdmin?: ClientAdminOrderByWithRelationInput
+    StudentTask?: StudentTaskOrderByRelationAggregateInput
+  }
+
+  export type TaskWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: TaskWhereInput | TaskWhereInput[]
+    OR?: TaskWhereInput[]
+    NOT?: TaskWhereInput | TaskWhereInput[]
+    name?: StringFilter<"Task"> | string
+    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
+    batchId?: IntFilter<"Task"> | number
+    courseId?: IntFilter<"Task"> | number
+    clientAdminId?: StringFilter<"Task"> | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+    StudentTask?: StudentTaskListRelationFilter
+  }, "id">
+
+  export type TaskOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+    _count?: TaskCountOrderByAggregateInput
+    _avg?: TaskAvgOrderByAggregateInput
+    _max?: TaskMaxOrderByAggregateInput
+    _min?: TaskMinOrderByAggregateInput
+    _sum?: TaskSumOrderByAggregateInput
+  }
+
+  export type TaskScalarWhereWithAggregatesInput = {
+    AND?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
+    OR?: TaskScalarWhereWithAggregatesInput[]
+    NOT?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Task"> | number
+    name?: StringWithAggregatesFilter<"Task"> | string
+    status?: EnumTaskStatusWithAggregatesFilter<"Task"> | $Enums.TaskStatus
+    batchId?: IntWithAggregatesFilter<"Task"> | number
+    courseId?: IntWithAggregatesFilter<"Task"> | number
+    clientAdminId?: StringWithAggregatesFilter<"Task"> | string
+  }
+
   export type StudentTaskWhereInput = {
     AND?: StudentTaskWhereInput | StudentTaskWhereInput[]
     OR?: StudentTaskWhereInput[]
@@ -43962,10 +47066,12 @@ export namespace Prisma {
     status?: StringFilter<"StudentTask"> | string
     facultyRemarks?: StringNullableFilter<"StudentTask"> | string | null
     grade?: StringNullableFilter<"StudentTask"> | string | null
+    taskId?: IntFilter<"StudentTask"> | number
     facultyId?: IntNullableFilter<"StudentTask"> | number | null
     clientAdminId?: StringFilter<"StudentTask"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
     faculty?: XOR<FacultyNullableScalarRelationFilter, FacultyWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }
@@ -43980,10 +47086,12 @@ export namespace Prisma {
     status?: SortOrder
     facultyRemarks?: SortOrderInput | SortOrder
     grade?: SortOrderInput | SortOrder
+    taskId?: SortOrder
     facultyId?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
     student?: StudentOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
+    task?: TaskOrderByWithRelationInput
     faculty?: FacultyOrderByWithRelationInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
   }
@@ -44001,10 +47109,12 @@ export namespace Prisma {
     status?: StringFilter<"StudentTask"> | string
     facultyRemarks?: StringNullableFilter<"StudentTask"> | string | null
     grade?: StringNullableFilter<"StudentTask"> | string | null
+    taskId?: IntFilter<"StudentTask"> | number
     facultyId?: IntNullableFilter<"StudentTask"> | number | null
     clientAdminId?: StringFilter<"StudentTask"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
     faculty?: XOR<FacultyNullableScalarRelationFilter, FacultyWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }, "id">
@@ -44019,6 +47129,7 @@ export namespace Prisma {
     status?: SortOrder
     facultyRemarks?: SortOrderInput | SortOrder
     grade?: SortOrderInput | SortOrder
+    taskId?: SortOrder
     facultyId?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
     _count?: StudentTaskCountOrderByAggregateInput
@@ -44041,8 +47152,80 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"StudentTask"> | string
     facultyRemarks?: StringNullableWithAggregatesFilter<"StudentTask"> | string | null
     grade?: StringNullableWithAggregatesFilter<"StudentTask"> | string | null
+    taskId?: IntWithAggregatesFilter<"StudentTask"> | number
     facultyId?: IntNullableWithAggregatesFilter<"StudentTask"> | number | null
     clientAdminId?: StringWithAggregatesFilter<"StudentTask"> | string
+  }
+
+  export type TestWhereInput = {
+    AND?: TestWhereInput | TestWhereInput[]
+    OR?: TestWhereInput[]
+    NOT?: TestWhereInput | TestWhereInput[]
+    id?: IntFilter<"Test"> | number
+    name?: StringFilter<"Test"> | string
+    status?: EnumTestStatusFilter<"Test"> | $Enums.TestStatus
+    batchId?: IntFilter<"Test"> | number
+    courseId?: IntFilter<"Test"> | number
+    clientAdminId?: StringFilter<"Test"> | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+    StudentTest?: StudentTestListRelationFilter
+  }
+
+  export type TestOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+    course?: CourseOrderByWithRelationInput
+    clientAdmin?: ClientAdminOrderByWithRelationInput
+    StudentTest?: StudentTestOrderByRelationAggregateInput
+  }
+
+  export type TestWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: TestWhereInput | TestWhereInput[]
+    OR?: TestWhereInput[]
+    NOT?: TestWhereInput | TestWhereInput[]
+    name?: StringFilter<"Test"> | string
+    status?: EnumTestStatusFilter<"Test"> | $Enums.TestStatus
+    batchId?: IntFilter<"Test"> | number
+    courseId?: IntFilter<"Test"> | number
+    clientAdminId?: StringFilter<"Test"> | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+    StudentTest?: StudentTestListRelationFilter
+  }, "id">
+
+  export type TestOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+    _count?: TestCountOrderByAggregateInput
+    _avg?: TestAvgOrderByAggregateInput
+    _max?: TestMaxOrderByAggregateInput
+    _min?: TestMinOrderByAggregateInput
+    _sum?: TestSumOrderByAggregateInput
+  }
+
+  export type TestScalarWhereWithAggregatesInput = {
+    AND?: TestScalarWhereWithAggregatesInput | TestScalarWhereWithAggregatesInput[]
+    OR?: TestScalarWhereWithAggregatesInput[]
+    NOT?: TestScalarWhereWithAggregatesInput | TestScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Test"> | number
+    name?: StringWithAggregatesFilter<"Test"> | string
+    status?: EnumTestStatusWithAggregatesFilter<"Test"> | $Enums.TestStatus
+    batchId?: IntWithAggregatesFilter<"Test"> | number
+    courseId?: IntWithAggregatesFilter<"Test"> | number
+    clientAdminId?: StringWithAggregatesFilter<"Test"> | string
   }
 
   export type StudentTestWhereInput = {
@@ -44057,9 +47240,11 @@ export namespace Prisma {
     totalMarks?: IntFilter<"StudentTest"> | number
     marksObtained?: IntFilter<"StudentTest"> | number
     grade?: StringFilter<"StudentTest"> | string
+    testId?: IntFilter<"StudentTest"> | number
     clientAdminId?: StringFilter<"StudentTest"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    test?: XOR<TestScalarRelationFilter, TestWhereInput>
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }
 
@@ -44072,9 +47257,11 @@ export namespace Prisma {
     totalMarks?: SortOrder
     marksObtained?: SortOrder
     grade?: SortOrder
+    testId?: SortOrder
     clientAdminId?: SortOrder
     student?: StudentOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
+    test?: TestOrderByWithRelationInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
   }
 
@@ -44090,9 +47277,11 @@ export namespace Prisma {
     totalMarks?: IntFilter<"StudentTest"> | number
     marksObtained?: IntFilter<"StudentTest"> | number
     grade?: StringFilter<"StudentTest"> | string
+    testId?: IntFilter<"StudentTest"> | number
     clientAdminId?: StringFilter<"StudentTest"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    test?: XOR<TestScalarRelationFilter, TestWhereInput>
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }, "id">
 
@@ -44105,6 +47294,7 @@ export namespace Prisma {
     totalMarks?: SortOrder
     marksObtained?: SortOrder
     grade?: SortOrder
+    testId?: SortOrder
     clientAdminId?: SortOrder
     _count?: StudentTestCountOrderByAggregateInput
     _avg?: StudentTestAvgOrderByAggregateInput
@@ -44125,6 +47315,7 @@ export namespace Prisma {
     totalMarks?: IntWithAggregatesFilter<"StudentTest"> | number
     marksObtained?: IntWithAggregatesFilter<"StudentTest"> | number
     grade?: StringWithAggregatesFilter<"StudentTest"> | string
+    testId?: IntWithAggregatesFilter<"StudentTest"> | number
     clientAdminId?: StringWithAggregatesFilter<"StudentTest"> | string
   }
 
@@ -44418,9 +47609,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateInput = {
@@ -44465,9 +47659,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUpdateInput = {
@@ -44512,9 +47709,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateInput = {
@@ -44559,9 +47759,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminCreateManyInput = {
@@ -45390,6 +48593,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -45411,6 +48616,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -45429,6 +48636,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -45450,6 +48659,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -45536,6 +48747,8 @@ export namespace Prisma {
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
     studentCourses?: StudentCourseCreateNestedManyWithoutBatchInput
     batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
+    tasks?: TaskCreateNestedManyWithoutBatchInput
+    tests?: TestCreateNestedManyWithoutBatchInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
   }
 
@@ -45547,6 +48760,8 @@ export namespace Prisma {
     clientAdminId: string
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutBatchInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutBatchInput
+    tests?: TestUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUpdateInput = {
@@ -45555,6 +48770,8 @@ export namespace Prisma {
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutBatchNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUpdateManyWithoutBatchNestedInput
+    tests?: TestUpdateManyWithoutBatchNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
   }
 
@@ -45566,6 +48783,8 @@ export namespace Prisma {
     clientAdminId?: StringFieldUpdateOperationsInput | string
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutBatchNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutBatchNestedInput
+    tests?: TestUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchCreateManyInput = {
@@ -46384,45 +49603,58 @@ export namespace Prisma {
 
   export type StationeryItemCreateInput = {
     name: string
+    totalQuantity: number
     quantityAvailable: number
     stationeryIssues?: StationeryIssueCreateNestedManyWithoutItemInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutStationeryItemsInput
   }
 
   export type StationeryItemUncheckedCreateInput = {
     id?: number
     name: string
+    totalQuantity: number
     quantityAvailable: number
+    clientAdminId: string
     stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutItemInput
   }
 
   export type StationeryItemUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
     quantityAvailable?: IntFieldUpdateOperationsInput | number
     stationeryIssues?: StationeryIssueUpdateManyWithoutItemNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutStationeryItemsNestedInput
   }
 
   export type StationeryItemUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
     quantityAvailable?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
     stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutItemNestedInput
   }
 
   export type StationeryItemCreateManyInput = {
     id?: number
     name: string
+    totalQuantity: number
     quantityAvailable: number
+    clientAdminId: string
   }
 
   export type StationeryItemUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
     quantityAvailable?: IntFieldUpdateOperationsInput | number
   }
 
   export type StationeryItemUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
     quantityAvailable?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StationeryIssueCreateInput = {
@@ -46565,6 +49797,67 @@ export namespace Prisma {
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type TaskCreateInput = {
+    name: string
+    status?: $Enums.TaskStatus
+    batch: BatchCreateNestedOneWithoutTasksInput
+    course: CourseCreateNestedOneWithoutTasksInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutTasksInput
+    StudentTask?: StudentTaskCreateNestedManyWithoutTaskInput
+  }
+
+  export type TaskUncheckedCreateInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    batchId: number
+    courseId: number
+    clientAdminId: string
+    StudentTask?: StudentTaskUncheckedCreateNestedManyWithoutTaskInput
+  }
+
+  export type TaskUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batch?: BatchUpdateOneRequiredWithoutTasksNestedInput
+    course?: CourseUpdateOneRequiredWithoutTasksNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutTasksNestedInput
+    StudentTask?: StudentTaskUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    StudentTask?: StudentTaskUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskCreateManyInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    batchId: number
+    courseId: number
+    clientAdminId: string
+  }
+
+  export type TaskUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+  }
+
+  export type TaskUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StudentTaskCreateInput = {
     assignedDate: Date | string
     dueDate: Date | string
@@ -46574,6 +49867,7 @@ export namespace Prisma {
     grade?: string | null
     student: StudentCreateNestedOneWithoutTasksInput
     course: CourseCreateNestedOneWithoutStudentTasksInput
+    task: TaskCreateNestedOneWithoutStudentTaskInput
     faculty?: FacultyCreateNestedOneWithoutTasksInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTasksInput
   }
@@ -46588,6 +49882,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     facultyId?: number | null
     clientAdminId: string
   }
@@ -46601,6 +49896,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutTasksNestedInput
     course?: CourseUpdateOneRequiredWithoutStudentTasksNestedInput
+    task?: TaskUpdateOneRequiredWithoutStudentTaskNestedInput
     faculty?: FacultyUpdateOneWithoutTasksNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTasksNestedInput
   }
@@ -46615,6 +49911,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -46629,6 +49926,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     facultyId?: number | null
     clientAdminId: string
   }
@@ -46652,7 +49950,69 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestCreateInput = {
+    name: string
+    status?: $Enums.TestStatus
+    batch: BatchCreateNestedOneWithoutTestsInput
+    course: CourseCreateNestedOneWithoutTestsInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutTestsInput
+    StudentTest?: StudentTestCreateNestedManyWithoutTestInput
+  }
+
+  export type TestUncheckedCreateInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    batchId: number
+    courseId: number
+    clientAdminId: string
+    StudentTest?: StudentTestUncheckedCreateNestedManyWithoutTestInput
+  }
+
+  export type TestUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batch?: BatchUpdateOneRequiredWithoutTestsNestedInput
+    course?: CourseUpdateOneRequiredWithoutTestsNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutTestsNestedInput
+    StudentTest?: StudentTestUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    StudentTest?: StudentTestUncheckedUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestCreateManyInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    batchId: number
+    courseId: number
+    clientAdminId: string
+  }
+
+  export type TestUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+  }
+
+  export type TestUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -46664,6 +50024,7 @@ export namespace Prisma {
     grade: string
     student: StudentCreateNestedOneWithoutTestsInput
     course: CourseCreateNestedOneWithoutStudentTestsInput
+    test: TestCreateNestedOneWithoutStudentTestInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTestsInput
   }
 
@@ -46676,6 +50037,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
     clientAdminId: string
   }
 
@@ -46687,6 +50049,7 @@ export namespace Prisma {
     grade?: StringFieldUpdateOperationsInput | string
     student?: StudentUpdateOneRequiredWithoutTestsNestedInput
     course?: CourseUpdateOneRequiredWithoutStudentTestsNestedInput
+    test?: TestUpdateOneRequiredWithoutStudentTestNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTestsNestedInput
   }
 
@@ -46699,6 +50062,7 @@ export namespace Prisma {
     totalMarks?: IntFieldUpdateOperationsInput | number
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
+    testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -46711,6 +50075,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
     clientAdminId: string
   }
 
@@ -46731,6 +50096,7 @@ export namespace Prisma {
     totalMarks?: IntFieldUpdateOperationsInput | number
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
+    testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -47133,6 +50499,12 @@ export namespace Prisma {
     none?: FinancialRecordWhereInput
   }
 
+  export type StationeryItemListRelationFilter = {
+    every?: StationeryItemWhereInput
+    some?: StationeryItemWhereInput
+    none?: StationeryItemWhereInput
+  }
+
   export type EnquiryListRelationFilter = {
     every?: EnquiryWhereInput
     some?: EnquiryWhereInput
@@ -47149,6 +50521,18 @@ export namespace Prisma {
     every?: CourseFeeStructureWhereInput
     some?: CourseFeeStructureWhereInput
     none?: CourseFeeStructureWhereInput
+  }
+
+  export type TaskListRelationFilter = {
+    every?: TaskWhereInput
+    some?: TaskWhereInput
+    none?: TaskWhereInput
+  }
+
+  export type TestListRelationFilter = {
+    every?: TestWhereInput
+    some?: TestWhereInput
+    none?: TestWhereInput
   }
 
   export type SortOrderInput = {
@@ -47236,6 +50620,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type StationeryItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type EnquiryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -47245,6 +50633,14 @@ export namespace Prisma {
   }
 
   export type CourseFeeStructureOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TaskOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -48686,28 +52082,36 @@ export namespace Prisma {
   export type StationeryItemCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    totalQuantity?: SortOrder
     quantityAvailable?: SortOrder
+    clientAdminId?: SortOrder
   }
 
   export type StationeryItemAvgOrderByAggregateInput = {
     id?: SortOrder
+    totalQuantity?: SortOrder
     quantityAvailable?: SortOrder
   }
 
   export type StationeryItemMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    totalQuantity?: SortOrder
     quantityAvailable?: SortOrder
+    clientAdminId?: SortOrder
   }
 
   export type StationeryItemMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    totalQuantity?: SortOrder
     quantityAvailable?: SortOrder
+    clientAdminId?: SortOrder
   }
 
   export type StationeryItemSumOrderByAggregateInput = {
     id?: SortOrder
+    totalQuantity?: SortOrder
     quantityAvailable?: SortOrder
   }
 
@@ -48819,6 +52223,67 @@ export namespace Prisma {
     batchId?: SortOrder
   }
 
+  export type EnumTaskStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
+  }
+
+  export type TaskCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type TaskAvgOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+  }
+
+  export type TaskMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type TaskMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type TaskSumOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+  }
+
+  export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskStatusFilter<$PrismaModel>
+    _max?: NestedEnumTaskStatusFilter<$PrismaModel>
+  }
+
+  export type TaskScalarRelationFilter = {
+    is?: TaskWhereInput
+    isNot?: TaskWhereInput
+  }
+
   export type StudentTaskCountOrderByAggregateInput = {
     id?: SortOrder
     studentId?: SortOrder
@@ -48829,6 +52294,7 @@ export namespace Prisma {
     status?: SortOrder
     facultyRemarks?: SortOrder
     grade?: SortOrder
+    taskId?: SortOrder
     facultyId?: SortOrder
     clientAdminId?: SortOrder
   }
@@ -48837,6 +52303,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     courseId?: SortOrder
+    taskId?: SortOrder
     facultyId?: SortOrder
   }
 
@@ -48850,6 +52317,7 @@ export namespace Prisma {
     status?: SortOrder
     facultyRemarks?: SortOrder
     grade?: SortOrder
+    taskId?: SortOrder
     facultyId?: SortOrder
     clientAdminId?: SortOrder
   }
@@ -48864,6 +52332,7 @@ export namespace Prisma {
     status?: SortOrder
     facultyRemarks?: SortOrder
     grade?: SortOrder
+    taskId?: SortOrder
     facultyId?: SortOrder
     clientAdminId?: SortOrder
   }
@@ -48872,7 +52341,69 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     courseId?: SortOrder
+    taskId?: SortOrder
     facultyId?: SortOrder
+  }
+
+  export type EnumTestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TestStatus | EnumTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTestStatusFilter<$PrismaModel> | $Enums.TestStatus
+  }
+
+  export type TestCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type TestAvgOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+  }
+
+  export type TestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type TestMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    status?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type TestSumOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    courseId?: SortOrder
+  }
+
+  export type EnumTestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TestStatus | EnumTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTestStatusWithAggregatesFilter<$PrismaModel> | $Enums.TestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTestStatusFilter<$PrismaModel>
+    _max?: NestedEnumTestStatusFilter<$PrismaModel>
+  }
+
+  export type TestScalarRelationFilter = {
+    is?: TestWhereInput
+    isNot?: TestWhereInput
   }
 
   export type StudentTestCountOrderByAggregateInput = {
@@ -48884,6 +52415,7 @@ export namespace Prisma {
     totalMarks?: SortOrder
     marksObtained?: SortOrder
     grade?: SortOrder
+    testId?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -48893,6 +52425,7 @@ export namespace Prisma {
     courseId?: SortOrder
     totalMarks?: SortOrder
     marksObtained?: SortOrder
+    testId?: SortOrder
   }
 
   export type StudentTestMaxOrderByAggregateInput = {
@@ -48904,6 +52437,7 @@ export namespace Prisma {
     totalMarks?: SortOrder
     marksObtained?: SortOrder
     grade?: SortOrder
+    testId?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -48916,6 +52450,7 @@ export namespace Prisma {
     totalMarks?: SortOrder
     marksObtained?: SortOrder
     grade?: SortOrder
+    testId?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -48925,6 +52460,7 @@ export namespace Prisma {
     courseId?: SortOrder
     totalMarks?: SortOrder
     marksObtained?: SortOrder
+    testId?: SortOrder
   }
 
   export type StudentCourseScalarRelationFilter = {
@@ -49260,6 +52796,13 @@ export namespace Prisma {
     connect?: FinancialRecordWhereUniqueInput | FinancialRecordWhereUniqueInput[]
   }
 
+  export type StationeryItemCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
+    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
+    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+  }
+
   export type EnquiryCreateNestedManyWithoutClientAdminInput = {
     create?: XOR<EnquiryCreateWithoutClientAdminInput, EnquiryUncheckedCreateWithoutClientAdminInput> | EnquiryCreateWithoutClientAdminInput[] | EnquiryUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: EnquiryCreateOrConnectWithoutClientAdminInput | EnquiryCreateOrConnectWithoutClientAdminInput[]
@@ -49279,6 +52822,20 @@ export namespace Prisma {
     connectOrCreate?: CourseFeeStructureCreateOrConnectWithoutClientAdminInput | CourseFeeStructureCreateOrConnectWithoutClientAdminInput[]
     createMany?: CourseFeeStructureCreateManyClientAdminInputEnvelope
     connect?: CourseFeeStructureWhereUniqueInput | CourseFeeStructureWhereUniqueInput[]
+  }
+
+  export type TaskCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<TaskCreateWithoutClientAdminInput, TaskUncheckedCreateWithoutClientAdminInput> | TaskCreateWithoutClientAdminInput[] | TaskUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutClientAdminInput | TaskCreateOrConnectWithoutClientAdminInput[]
+    createMany?: TaskCreateManyClientAdminInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type TestCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<TestCreateWithoutClientAdminInput, TestUncheckedCreateWithoutClientAdminInput> | TestCreateWithoutClientAdminInput[] | TestUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutClientAdminInput | TestCreateOrConnectWithoutClientAdminInput[]
+    createMany?: TestCreateManyClientAdminInputEnvelope
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
   }
 
   export type RoleUserUncheckedCreateNestedManyWithoutClientAdminInput = {
@@ -49421,6 +52978,13 @@ export namespace Prisma {
     connect?: FinancialRecordWhereUniqueInput | FinancialRecordWhereUniqueInput[]
   }
 
+  export type StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
+    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
+    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+  }
+
   export type EnquiryUncheckedCreateNestedManyWithoutClientAdminInput = {
     create?: XOR<EnquiryCreateWithoutClientAdminInput, EnquiryUncheckedCreateWithoutClientAdminInput> | EnquiryCreateWithoutClientAdminInput[] | EnquiryUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: EnquiryCreateOrConnectWithoutClientAdminInput | EnquiryCreateOrConnectWithoutClientAdminInput[]
@@ -49440,6 +53004,20 @@ export namespace Prisma {
     connectOrCreate?: CourseFeeStructureCreateOrConnectWithoutClientAdminInput | CourseFeeStructureCreateOrConnectWithoutClientAdminInput[]
     createMany?: CourseFeeStructureCreateManyClientAdminInputEnvelope
     connect?: CourseFeeStructureWhereUniqueInput | CourseFeeStructureWhereUniqueInput[]
+  }
+
+  export type TaskUncheckedCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<TaskCreateWithoutClientAdminInput, TaskUncheckedCreateWithoutClientAdminInput> | TaskCreateWithoutClientAdminInput[] | TaskUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutClientAdminInput | TaskCreateOrConnectWithoutClientAdminInput[]
+    createMany?: TaskCreateManyClientAdminInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type TestUncheckedCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<TestCreateWithoutClientAdminInput, TestUncheckedCreateWithoutClientAdminInput> | TestCreateWithoutClientAdminInput[] | TestUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutClientAdminInput | TestCreateOrConnectWithoutClientAdminInput[]
+    createMany?: TestCreateManyClientAdminInputEnvelope
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -49742,6 +53320,20 @@ export namespace Prisma {
     deleteMany?: FinancialRecordScalarWhereInput | FinancialRecordScalarWhereInput[]
   }
 
+  export type StationeryItemUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
+    upsert?: StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput | StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
+    set?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    disconnect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    delete?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    update?: StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput | StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: StationeryItemUpdateManyWithWhereWithoutClientAdminInput | StationeryItemUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
+  }
+
   export type EnquiryUpdateManyWithoutClientAdminNestedInput = {
     create?: XOR<EnquiryCreateWithoutClientAdminInput, EnquiryUncheckedCreateWithoutClientAdminInput> | EnquiryCreateWithoutClientAdminInput[] | EnquiryUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: EnquiryCreateOrConnectWithoutClientAdminInput | EnquiryCreateOrConnectWithoutClientAdminInput[]
@@ -49782,6 +53374,34 @@ export namespace Prisma {
     update?: CourseFeeStructureUpdateWithWhereUniqueWithoutClientAdminInput | CourseFeeStructureUpdateWithWhereUniqueWithoutClientAdminInput[]
     updateMany?: CourseFeeStructureUpdateManyWithWhereWithoutClientAdminInput | CourseFeeStructureUpdateManyWithWhereWithoutClientAdminInput[]
     deleteMany?: CourseFeeStructureScalarWhereInput | CourseFeeStructureScalarWhereInput[]
+  }
+
+  export type TaskUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<TaskCreateWithoutClientAdminInput, TaskUncheckedCreateWithoutClientAdminInput> | TaskCreateWithoutClientAdminInput[] | TaskUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutClientAdminInput | TaskCreateOrConnectWithoutClientAdminInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutClientAdminInput | TaskUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: TaskCreateManyClientAdminInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutClientAdminInput | TaskUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutClientAdminInput | TaskUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type TestUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<TestCreateWithoutClientAdminInput, TestUncheckedCreateWithoutClientAdminInput> | TestCreateWithoutClientAdminInput[] | TestUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutClientAdminInput | TestCreateOrConnectWithoutClientAdminInput[]
+    upsert?: TestUpsertWithWhereUniqueWithoutClientAdminInput | TestUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: TestCreateManyClientAdminInputEnvelope
+    set?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    disconnect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    delete?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    update?: TestUpdateWithWhereUniqueWithoutClientAdminInput | TestUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: TestUpdateManyWithWhereWithoutClientAdminInput | TestUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
   }
 
   export type RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput = {
@@ -50064,6 +53684,20 @@ export namespace Prisma {
     deleteMany?: FinancialRecordScalarWhereInput | FinancialRecordScalarWhereInput[]
   }
 
+  export type StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
+    upsert?: StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput | StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
+    set?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    disconnect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    delete?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    update?: StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput | StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: StationeryItemUpdateManyWithWhereWithoutClientAdminInput | StationeryItemUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
+  }
+
   export type EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput = {
     create?: XOR<EnquiryCreateWithoutClientAdminInput, EnquiryUncheckedCreateWithoutClientAdminInput> | EnquiryCreateWithoutClientAdminInput[] | EnquiryUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: EnquiryCreateOrConnectWithoutClientAdminInput | EnquiryCreateOrConnectWithoutClientAdminInput[]
@@ -50104,6 +53738,34 @@ export namespace Prisma {
     update?: CourseFeeStructureUpdateWithWhereUniqueWithoutClientAdminInput | CourseFeeStructureUpdateWithWhereUniqueWithoutClientAdminInput[]
     updateMany?: CourseFeeStructureUpdateManyWithWhereWithoutClientAdminInput | CourseFeeStructureUpdateManyWithWhereWithoutClientAdminInput[]
     deleteMany?: CourseFeeStructureScalarWhereInput | CourseFeeStructureScalarWhereInput[]
+  }
+
+  export type TaskUncheckedUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<TaskCreateWithoutClientAdminInput, TaskUncheckedCreateWithoutClientAdminInput> | TaskCreateWithoutClientAdminInput[] | TaskUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutClientAdminInput | TaskCreateOrConnectWithoutClientAdminInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutClientAdminInput | TaskUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: TaskCreateManyClientAdminInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutClientAdminInput | TaskUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutClientAdminInput | TaskUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type TestUncheckedUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<TestCreateWithoutClientAdminInput, TestUncheckedCreateWithoutClientAdminInput> | TestCreateWithoutClientAdminInput[] | TestUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutClientAdminInput | TestCreateOrConnectWithoutClientAdminInput[]
+    upsert?: TestUpsertWithWhereUniqueWithoutClientAdminInput | TestUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: TestCreateManyClientAdminInputEnvelope
+    set?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    disconnect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    delete?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    update?: TestUpdateWithWhereUniqueWithoutClientAdminInput | TestUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: TestUpdateManyWithWhereWithoutClientAdminInput | TestUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
   }
 
   export type ClientAdminCreateNestedOneWithoutRoleUsersInput = {
@@ -51042,6 +54704,20 @@ export namespace Prisma {
     connect?: FinancialRecordWhereUniqueInput | FinancialRecordWhereUniqueInput[]
   }
 
+  export type TaskCreateNestedManyWithoutCourseInput = {
+    create?: XOR<TaskCreateWithoutCourseInput, TaskUncheckedCreateWithoutCourseInput> | TaskCreateWithoutCourseInput[] | TaskUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutCourseInput | TaskCreateOrConnectWithoutCourseInput[]
+    createMany?: TaskCreateManyCourseInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type TestCreateNestedManyWithoutCourseInput = {
+    create?: XOR<TestCreateWithoutCourseInput, TestUncheckedCreateWithoutCourseInput> | TestCreateWithoutCourseInput[] | TestUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutCourseInput | TestCreateOrConnectWithoutCourseInput[]
+    createMany?: TestCreateManyCourseInputEnvelope
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+  }
+
   export type BatchCourseCreateNestedManyWithoutCourseInput = {
     create?: XOR<BatchCourseCreateWithoutCourseInput, BatchCourseUncheckedCreateWithoutCourseInput> | BatchCourseCreateWithoutCourseInput[] | BatchCourseUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: BatchCourseCreateOrConnectWithoutCourseInput | BatchCourseCreateOrConnectWithoutCourseInput[]
@@ -51129,6 +54805,20 @@ export namespace Prisma {
     connectOrCreate?: FinancialRecordCreateOrConnectWithoutCourseInput | FinancialRecordCreateOrConnectWithoutCourseInput[]
     createMany?: FinancialRecordCreateManyCourseInputEnvelope
     connect?: FinancialRecordWhereUniqueInput | FinancialRecordWhereUniqueInput[]
+  }
+
+  export type TaskUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<TaskCreateWithoutCourseInput, TaskUncheckedCreateWithoutCourseInput> | TaskCreateWithoutCourseInput[] | TaskUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutCourseInput | TaskCreateOrConnectWithoutCourseInput[]
+    createMany?: TaskCreateManyCourseInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type TestUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<TestCreateWithoutCourseInput, TestUncheckedCreateWithoutCourseInput> | TestCreateWithoutCourseInput[] | TestUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutCourseInput | TestCreateOrConnectWithoutCourseInput[]
+    createMany?: TestCreateManyCourseInputEnvelope
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
   }
 
   export type BatchCourseUncheckedCreateNestedManyWithoutCourseInput = {
@@ -51286,6 +54976,34 @@ export namespace Prisma {
     update?: FinancialRecordUpdateWithWhereUniqueWithoutCourseInput | FinancialRecordUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: FinancialRecordUpdateManyWithWhereWithoutCourseInput | FinancialRecordUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: FinancialRecordScalarWhereInput | FinancialRecordScalarWhereInput[]
+  }
+
+  export type TaskUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<TaskCreateWithoutCourseInput, TaskUncheckedCreateWithoutCourseInput> | TaskCreateWithoutCourseInput[] | TaskUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutCourseInput | TaskCreateOrConnectWithoutCourseInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutCourseInput | TaskUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: TaskCreateManyCourseInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutCourseInput | TaskUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutCourseInput | TaskUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type TestUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<TestCreateWithoutCourseInput, TestUncheckedCreateWithoutCourseInput> | TestCreateWithoutCourseInput[] | TestUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutCourseInput | TestCreateOrConnectWithoutCourseInput[]
+    upsert?: TestUpsertWithWhereUniqueWithoutCourseInput | TestUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: TestCreateManyCourseInputEnvelope
+    set?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    disconnect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    delete?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    update?: TestUpdateWithWhereUniqueWithoutCourseInput | TestUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: TestUpdateManyWithWhereWithoutCourseInput | TestUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
   }
 
   export type BatchCourseUpdateManyWithoutCourseNestedInput = {
@@ -51460,6 +55178,34 @@ export namespace Prisma {
     deleteMany?: FinancialRecordScalarWhereInput | FinancialRecordScalarWhereInput[]
   }
 
+  export type TaskUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<TaskCreateWithoutCourseInput, TaskUncheckedCreateWithoutCourseInput> | TaskCreateWithoutCourseInput[] | TaskUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutCourseInput | TaskCreateOrConnectWithoutCourseInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutCourseInput | TaskUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: TaskCreateManyCourseInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutCourseInput | TaskUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutCourseInput | TaskUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type TestUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<TestCreateWithoutCourseInput, TestUncheckedCreateWithoutCourseInput> | TestCreateWithoutCourseInput[] | TestUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutCourseInput | TestCreateOrConnectWithoutCourseInput[]
+    upsert?: TestUpsertWithWhereUniqueWithoutCourseInput | TestUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: TestCreateManyCourseInputEnvelope
+    set?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    disconnect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    delete?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    update?: TestUpdateWithWhereUniqueWithoutCourseInput | TestUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: TestUpdateManyWithWhereWithoutCourseInput | TestUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
+  }
+
   export type BatchCourseUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<BatchCourseCreateWithoutCourseInput, BatchCourseUncheckedCreateWithoutCourseInput> | BatchCourseCreateWithoutCourseInput[] | BatchCourseUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: BatchCourseCreateOrConnectWithoutCourseInput | BatchCourseCreateOrConnectWithoutCourseInput[]
@@ -51587,6 +55333,20 @@ export namespace Prisma {
     connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
   }
 
+  export type TaskCreateNestedManyWithoutBatchInput = {
+    create?: XOR<TaskCreateWithoutBatchInput, TaskUncheckedCreateWithoutBatchInput> | TaskCreateWithoutBatchInput[] | TaskUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutBatchInput | TaskCreateOrConnectWithoutBatchInput[]
+    createMany?: TaskCreateManyBatchInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type TestCreateNestedManyWithoutBatchInput = {
+    create?: XOR<TestCreateWithoutBatchInput, TestUncheckedCreateWithoutBatchInput> | TestCreateWithoutBatchInput[] | TestUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutBatchInput | TestCreateOrConnectWithoutBatchInput[]
+    createMany?: TestCreateManyBatchInputEnvelope
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+  }
+
   export type ClientAdminCreateNestedOneWithoutBatchesInput = {
     create?: XOR<ClientAdminCreateWithoutBatchesInput, ClientAdminUncheckedCreateWithoutBatchesInput>
     connectOrCreate?: ClientAdminCreateOrConnectWithoutBatchesInput
@@ -51605,6 +55365,20 @@ export namespace Prisma {
     connectOrCreate?: BatchCourseCreateOrConnectWithoutBatchInput | BatchCourseCreateOrConnectWithoutBatchInput[]
     createMany?: BatchCourseCreateManyBatchInputEnvelope
     connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+  }
+
+  export type TaskUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<TaskCreateWithoutBatchInput, TaskUncheckedCreateWithoutBatchInput> | TaskCreateWithoutBatchInput[] | TaskUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutBatchInput | TaskCreateOrConnectWithoutBatchInput[]
+    createMany?: TaskCreateManyBatchInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type TestUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<TestCreateWithoutBatchInput, TestUncheckedCreateWithoutBatchInput> | TestCreateWithoutBatchInput[] | TestUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutBatchInput | TestCreateOrConnectWithoutBatchInput[]
+    createMany?: TestCreateManyBatchInputEnvelope
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
   }
 
   export type FacultyUpdateOneWithoutBatchesNestedInput = {
@@ -51653,6 +55427,34 @@ export namespace Prisma {
     deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
   }
 
+  export type TaskUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<TaskCreateWithoutBatchInput, TaskUncheckedCreateWithoutBatchInput> | TaskCreateWithoutBatchInput[] | TaskUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutBatchInput | TaskCreateOrConnectWithoutBatchInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutBatchInput | TaskUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: TaskCreateManyBatchInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutBatchInput | TaskUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutBatchInput | TaskUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type TestUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<TestCreateWithoutBatchInput, TestUncheckedCreateWithoutBatchInput> | TestCreateWithoutBatchInput[] | TestUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutBatchInput | TestCreateOrConnectWithoutBatchInput[]
+    upsert?: TestUpsertWithWhereUniqueWithoutBatchInput | TestUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: TestCreateManyBatchInputEnvelope
+    set?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    disconnect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    delete?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    update?: TestUpdateWithWhereUniqueWithoutBatchInput | TestUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: TestUpdateManyWithWhereWithoutBatchInput | TestUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
+  }
+
   export type ClientAdminUpdateOneRequiredWithoutBatchesNestedInput = {
     create?: XOR<ClientAdminCreateWithoutBatchesInput, ClientAdminUncheckedCreateWithoutBatchesInput>
     connectOrCreate?: ClientAdminCreateOrConnectWithoutBatchesInput
@@ -51687,6 +55489,34 @@ export namespace Prisma {
     update?: BatchCourseUpdateWithWhereUniqueWithoutBatchInput | BatchCourseUpdateWithWhereUniqueWithoutBatchInput[]
     updateMany?: BatchCourseUpdateManyWithWhereWithoutBatchInput | BatchCourseUpdateManyWithWhereWithoutBatchInput[]
     deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
+  }
+
+  export type TaskUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<TaskCreateWithoutBatchInput, TaskUncheckedCreateWithoutBatchInput> | TaskCreateWithoutBatchInput[] | TaskUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutBatchInput | TaskCreateOrConnectWithoutBatchInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutBatchInput | TaskUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: TaskCreateManyBatchInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutBatchInput | TaskUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutBatchInput | TaskUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type TestUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<TestCreateWithoutBatchInput, TestUncheckedCreateWithoutBatchInput> | TestCreateWithoutBatchInput[] | TestUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutBatchInput | TestCreateOrConnectWithoutBatchInput[]
+    upsert?: TestUpsertWithWhereUniqueWithoutBatchInput | TestUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: TestCreateManyBatchInputEnvelope
+    set?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    disconnect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    delete?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    update?: TestUpdateWithWhereUniqueWithoutBatchInput | TestUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: TestUpdateManyWithWhereWithoutBatchInput | TestUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
   }
 
   export type BatchCreateNestedOneWithoutBatchCoursesInput = {
@@ -52604,6 +56434,12 @@ export namespace Prisma {
     connect?: StationeryIssueWhereUniqueInput | StationeryIssueWhereUniqueInput[]
   }
 
+  export type ClientAdminCreateNestedOneWithoutStationeryItemsInput = {
+    create?: XOR<ClientAdminCreateWithoutStationeryItemsInput, ClientAdminUncheckedCreateWithoutStationeryItemsInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutStationeryItemsInput
+    connect?: ClientAdminWhereUniqueInput
+  }
+
   export type StationeryIssueUncheckedCreateNestedManyWithoutItemInput = {
     create?: XOR<StationeryIssueCreateWithoutItemInput, StationeryIssueUncheckedCreateWithoutItemInput> | StationeryIssueCreateWithoutItemInput[] | StationeryIssueUncheckedCreateWithoutItemInput[]
     connectOrCreate?: StationeryIssueCreateOrConnectWithoutItemInput | StationeryIssueCreateOrConnectWithoutItemInput[]
@@ -52623,6 +56459,14 @@ export namespace Prisma {
     update?: StationeryIssueUpdateWithWhereUniqueWithoutItemInput | StationeryIssueUpdateWithWhereUniqueWithoutItemInput[]
     updateMany?: StationeryIssueUpdateManyWithWhereWithoutItemInput | StationeryIssueUpdateManyWithWhereWithoutItemInput[]
     deleteMany?: StationeryIssueScalarWhereInput | StationeryIssueScalarWhereInput[]
+  }
+
+  export type ClientAdminUpdateOneRequiredWithoutStationeryItemsNestedInput = {
+    create?: XOR<ClientAdminCreateWithoutStationeryItemsInput, ClientAdminUncheckedCreateWithoutStationeryItemsInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutStationeryItemsInput
+    upsert?: ClientAdminUpsertWithoutStationeryItemsInput
+    connect?: ClientAdminWhereUniqueInput
+    update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutStationeryItemsInput, ClientAdminUpdateWithoutStationeryItemsInput>, ClientAdminUncheckedUpdateWithoutStationeryItemsInput>
   }
 
   export type StationeryIssueUncheckedUpdateManyWithoutItemNestedInput = {
@@ -52751,6 +56595,94 @@ export namespace Prisma {
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutAttendanceRecordsInput, ClientAdminUpdateWithoutAttendanceRecordsInput>, ClientAdminUncheckedUpdateWithoutAttendanceRecordsInput>
   }
 
+  export type BatchCreateNestedOneWithoutTasksInput = {
+    create?: XOR<BatchCreateWithoutTasksInput, BatchUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutTasksInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type CourseCreateNestedOneWithoutTasksInput = {
+    create?: XOR<CourseCreateWithoutTasksInput, CourseUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutTasksInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type ClientAdminCreateNestedOneWithoutTasksInput = {
+    create?: XOR<ClientAdminCreateWithoutTasksInput, ClientAdminUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutTasksInput
+    connect?: ClientAdminWhereUniqueInput
+  }
+
+  export type StudentTaskCreateNestedManyWithoutTaskInput = {
+    create?: XOR<StudentTaskCreateWithoutTaskInput, StudentTaskUncheckedCreateWithoutTaskInput> | StudentTaskCreateWithoutTaskInput[] | StudentTaskUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: StudentTaskCreateOrConnectWithoutTaskInput | StudentTaskCreateOrConnectWithoutTaskInput[]
+    createMany?: StudentTaskCreateManyTaskInputEnvelope
+    connect?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+  }
+
+  export type StudentTaskUncheckedCreateNestedManyWithoutTaskInput = {
+    create?: XOR<StudentTaskCreateWithoutTaskInput, StudentTaskUncheckedCreateWithoutTaskInput> | StudentTaskCreateWithoutTaskInput[] | StudentTaskUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: StudentTaskCreateOrConnectWithoutTaskInput | StudentTaskCreateOrConnectWithoutTaskInput[]
+    createMany?: StudentTaskCreateManyTaskInputEnvelope
+    connect?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+  }
+
+  export type EnumTaskStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TaskStatus
+  }
+
+  export type BatchUpdateOneRequiredWithoutTasksNestedInput = {
+    create?: XOR<BatchCreateWithoutTasksInput, BatchUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutTasksInput
+    upsert?: BatchUpsertWithoutTasksInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutTasksInput, BatchUpdateWithoutTasksInput>, BatchUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type CourseUpdateOneRequiredWithoutTasksNestedInput = {
+    create?: XOR<CourseCreateWithoutTasksInput, CourseUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutTasksInput
+    upsert?: CourseUpsertWithoutTasksInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutTasksInput, CourseUpdateWithoutTasksInput>, CourseUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type ClientAdminUpdateOneRequiredWithoutTasksNestedInput = {
+    create?: XOR<ClientAdminCreateWithoutTasksInput, ClientAdminUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutTasksInput
+    upsert?: ClientAdminUpsertWithoutTasksInput
+    connect?: ClientAdminWhereUniqueInput
+    update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutTasksInput, ClientAdminUpdateWithoutTasksInput>, ClientAdminUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type StudentTaskUpdateManyWithoutTaskNestedInput = {
+    create?: XOR<StudentTaskCreateWithoutTaskInput, StudentTaskUncheckedCreateWithoutTaskInput> | StudentTaskCreateWithoutTaskInput[] | StudentTaskUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: StudentTaskCreateOrConnectWithoutTaskInput | StudentTaskCreateOrConnectWithoutTaskInput[]
+    upsert?: StudentTaskUpsertWithWhereUniqueWithoutTaskInput | StudentTaskUpsertWithWhereUniqueWithoutTaskInput[]
+    createMany?: StudentTaskCreateManyTaskInputEnvelope
+    set?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+    disconnect?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+    delete?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+    connect?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+    update?: StudentTaskUpdateWithWhereUniqueWithoutTaskInput | StudentTaskUpdateWithWhereUniqueWithoutTaskInput[]
+    updateMany?: StudentTaskUpdateManyWithWhereWithoutTaskInput | StudentTaskUpdateManyWithWhereWithoutTaskInput[]
+    deleteMany?: StudentTaskScalarWhereInput | StudentTaskScalarWhereInput[]
+  }
+
+  export type StudentTaskUncheckedUpdateManyWithoutTaskNestedInput = {
+    create?: XOR<StudentTaskCreateWithoutTaskInput, StudentTaskUncheckedCreateWithoutTaskInput> | StudentTaskCreateWithoutTaskInput[] | StudentTaskUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: StudentTaskCreateOrConnectWithoutTaskInput | StudentTaskCreateOrConnectWithoutTaskInput[]
+    upsert?: StudentTaskUpsertWithWhereUniqueWithoutTaskInput | StudentTaskUpsertWithWhereUniqueWithoutTaskInput[]
+    createMany?: StudentTaskCreateManyTaskInputEnvelope
+    set?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+    disconnect?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+    delete?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+    connect?: StudentTaskWhereUniqueInput | StudentTaskWhereUniqueInput[]
+    update?: StudentTaskUpdateWithWhereUniqueWithoutTaskInput | StudentTaskUpdateWithWhereUniqueWithoutTaskInput[]
+    updateMany?: StudentTaskUpdateManyWithWhereWithoutTaskInput | StudentTaskUpdateManyWithWhereWithoutTaskInput[]
+    deleteMany?: StudentTaskScalarWhereInput | StudentTaskScalarWhereInput[]
+  }
+
   export type StudentCreateNestedOneWithoutTasksInput = {
     create?: XOR<StudentCreateWithoutTasksInput, StudentUncheckedCreateWithoutTasksInput>
     connectOrCreate?: StudentCreateOrConnectWithoutTasksInput
@@ -52761,6 +56693,12 @@ export namespace Prisma {
     create?: XOR<CourseCreateWithoutStudentTasksInput, CourseUncheckedCreateWithoutStudentTasksInput>
     connectOrCreate?: CourseCreateOrConnectWithoutStudentTasksInput
     connect?: CourseWhereUniqueInput
+  }
+
+  export type TaskCreateNestedOneWithoutStudentTaskInput = {
+    create?: XOR<TaskCreateWithoutStudentTaskInput, TaskUncheckedCreateWithoutStudentTaskInput>
+    connectOrCreate?: TaskCreateOrConnectWithoutStudentTaskInput
+    connect?: TaskWhereUniqueInput
   }
 
   export type FacultyCreateNestedOneWithoutTasksInput = {
@@ -52791,6 +56729,14 @@ export namespace Prisma {
     update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutStudentTasksInput, CourseUpdateWithoutStudentTasksInput>, CourseUncheckedUpdateWithoutStudentTasksInput>
   }
 
+  export type TaskUpdateOneRequiredWithoutStudentTaskNestedInput = {
+    create?: XOR<TaskCreateWithoutStudentTaskInput, TaskUncheckedCreateWithoutStudentTaskInput>
+    connectOrCreate?: TaskCreateOrConnectWithoutStudentTaskInput
+    upsert?: TaskUpsertWithoutStudentTaskInput
+    connect?: TaskWhereUniqueInput
+    update?: XOR<XOR<TaskUpdateToOneWithWhereWithoutStudentTaskInput, TaskUpdateWithoutStudentTaskInput>, TaskUncheckedUpdateWithoutStudentTaskInput>
+  }
+
   export type FacultyUpdateOneWithoutTasksNestedInput = {
     create?: XOR<FacultyCreateWithoutTasksInput, FacultyUncheckedCreateWithoutTasksInput>
     connectOrCreate?: FacultyCreateOrConnectWithoutTasksInput
@@ -52809,6 +56755,94 @@ export namespace Prisma {
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutStudentTasksInput, ClientAdminUpdateWithoutStudentTasksInput>, ClientAdminUncheckedUpdateWithoutStudentTasksInput>
   }
 
+  export type BatchCreateNestedOneWithoutTestsInput = {
+    create?: XOR<BatchCreateWithoutTestsInput, BatchUncheckedCreateWithoutTestsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutTestsInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type CourseCreateNestedOneWithoutTestsInput = {
+    create?: XOR<CourseCreateWithoutTestsInput, CourseUncheckedCreateWithoutTestsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutTestsInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type ClientAdminCreateNestedOneWithoutTestsInput = {
+    create?: XOR<ClientAdminCreateWithoutTestsInput, ClientAdminUncheckedCreateWithoutTestsInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutTestsInput
+    connect?: ClientAdminWhereUniqueInput
+  }
+
+  export type StudentTestCreateNestedManyWithoutTestInput = {
+    create?: XOR<StudentTestCreateWithoutTestInput, StudentTestUncheckedCreateWithoutTestInput> | StudentTestCreateWithoutTestInput[] | StudentTestUncheckedCreateWithoutTestInput[]
+    connectOrCreate?: StudentTestCreateOrConnectWithoutTestInput | StudentTestCreateOrConnectWithoutTestInput[]
+    createMany?: StudentTestCreateManyTestInputEnvelope
+    connect?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+  }
+
+  export type StudentTestUncheckedCreateNestedManyWithoutTestInput = {
+    create?: XOR<StudentTestCreateWithoutTestInput, StudentTestUncheckedCreateWithoutTestInput> | StudentTestCreateWithoutTestInput[] | StudentTestUncheckedCreateWithoutTestInput[]
+    connectOrCreate?: StudentTestCreateOrConnectWithoutTestInput | StudentTestCreateOrConnectWithoutTestInput[]
+    createMany?: StudentTestCreateManyTestInputEnvelope
+    connect?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+  }
+
+  export type EnumTestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TestStatus
+  }
+
+  export type BatchUpdateOneRequiredWithoutTestsNestedInput = {
+    create?: XOR<BatchCreateWithoutTestsInput, BatchUncheckedCreateWithoutTestsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutTestsInput
+    upsert?: BatchUpsertWithoutTestsInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutTestsInput, BatchUpdateWithoutTestsInput>, BatchUncheckedUpdateWithoutTestsInput>
+  }
+
+  export type CourseUpdateOneRequiredWithoutTestsNestedInput = {
+    create?: XOR<CourseCreateWithoutTestsInput, CourseUncheckedCreateWithoutTestsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutTestsInput
+    upsert?: CourseUpsertWithoutTestsInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutTestsInput, CourseUpdateWithoutTestsInput>, CourseUncheckedUpdateWithoutTestsInput>
+  }
+
+  export type ClientAdminUpdateOneRequiredWithoutTestsNestedInput = {
+    create?: XOR<ClientAdminCreateWithoutTestsInput, ClientAdminUncheckedCreateWithoutTestsInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutTestsInput
+    upsert?: ClientAdminUpsertWithoutTestsInput
+    connect?: ClientAdminWhereUniqueInput
+    update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutTestsInput, ClientAdminUpdateWithoutTestsInput>, ClientAdminUncheckedUpdateWithoutTestsInput>
+  }
+
+  export type StudentTestUpdateManyWithoutTestNestedInput = {
+    create?: XOR<StudentTestCreateWithoutTestInput, StudentTestUncheckedCreateWithoutTestInput> | StudentTestCreateWithoutTestInput[] | StudentTestUncheckedCreateWithoutTestInput[]
+    connectOrCreate?: StudentTestCreateOrConnectWithoutTestInput | StudentTestCreateOrConnectWithoutTestInput[]
+    upsert?: StudentTestUpsertWithWhereUniqueWithoutTestInput | StudentTestUpsertWithWhereUniqueWithoutTestInput[]
+    createMany?: StudentTestCreateManyTestInputEnvelope
+    set?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+    disconnect?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+    delete?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+    connect?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+    update?: StudentTestUpdateWithWhereUniqueWithoutTestInput | StudentTestUpdateWithWhereUniqueWithoutTestInput[]
+    updateMany?: StudentTestUpdateManyWithWhereWithoutTestInput | StudentTestUpdateManyWithWhereWithoutTestInput[]
+    deleteMany?: StudentTestScalarWhereInput | StudentTestScalarWhereInput[]
+  }
+
+  export type StudentTestUncheckedUpdateManyWithoutTestNestedInput = {
+    create?: XOR<StudentTestCreateWithoutTestInput, StudentTestUncheckedCreateWithoutTestInput> | StudentTestCreateWithoutTestInput[] | StudentTestUncheckedCreateWithoutTestInput[]
+    connectOrCreate?: StudentTestCreateOrConnectWithoutTestInput | StudentTestCreateOrConnectWithoutTestInput[]
+    upsert?: StudentTestUpsertWithWhereUniqueWithoutTestInput | StudentTestUpsertWithWhereUniqueWithoutTestInput[]
+    createMany?: StudentTestCreateManyTestInputEnvelope
+    set?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+    disconnect?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+    delete?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+    connect?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+    update?: StudentTestUpdateWithWhereUniqueWithoutTestInput | StudentTestUpdateWithWhereUniqueWithoutTestInput[]
+    updateMany?: StudentTestUpdateManyWithWhereWithoutTestInput | StudentTestUpdateManyWithWhereWithoutTestInput[]
+    deleteMany?: StudentTestScalarWhereInput | StudentTestScalarWhereInput[]
+  }
+
   export type StudentCreateNestedOneWithoutTestsInput = {
     create?: XOR<StudentCreateWithoutTestsInput, StudentUncheckedCreateWithoutTestsInput>
     connectOrCreate?: StudentCreateOrConnectWithoutTestsInput
@@ -52819,6 +56853,12 @@ export namespace Prisma {
     create?: XOR<CourseCreateWithoutStudentTestsInput, CourseUncheckedCreateWithoutStudentTestsInput>
     connectOrCreate?: CourseCreateOrConnectWithoutStudentTestsInput
     connect?: CourseWhereUniqueInput
+  }
+
+  export type TestCreateNestedOneWithoutStudentTestInput = {
+    create?: XOR<TestCreateWithoutStudentTestInput, TestUncheckedCreateWithoutStudentTestInput>
+    connectOrCreate?: TestCreateOrConnectWithoutStudentTestInput
+    connect?: TestWhereUniqueInput
   }
 
   export type ClientAdminCreateNestedOneWithoutStudentTestsInput = {
@@ -52841,6 +56881,14 @@ export namespace Prisma {
     upsert?: CourseUpsertWithoutStudentTestsInput
     connect?: CourseWhereUniqueInput
     update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutStudentTestsInput, CourseUpdateWithoutStudentTestsInput>, CourseUncheckedUpdateWithoutStudentTestsInput>
+  }
+
+  export type TestUpdateOneRequiredWithoutStudentTestNestedInput = {
+    create?: XOR<TestCreateWithoutStudentTestInput, TestUncheckedCreateWithoutStudentTestInput>
+    connectOrCreate?: TestCreateOrConnectWithoutStudentTestInput
+    upsert?: TestUpsertWithoutStudentTestInput
+    connect?: TestWhereUniqueInput
+    update?: XOR<XOR<TestUpdateToOneWithWhereWithoutStudentTestInput, TestUpdateWithoutStudentTestInput>, TestUncheckedUpdateWithoutStudentTestInput>
   }
 
   export type ClientAdminUpdateOneRequiredWithoutStudentTestsNestedInput = {
@@ -53354,6 +57402,40 @@ export namespace Prisma {
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
+  }
+
+  export type NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskStatusFilter<$PrismaModel>
+    _max?: NestedEnumTaskStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TestStatus | EnumTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTestStatusFilter<$PrismaModel> | $Enums.TestStatus
+  }
+
+  export type NestedEnumTestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TestStatus | EnumTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTestStatusWithAggregatesFilter<$PrismaModel> | $Enums.TestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTestStatusFilter<$PrismaModel>
+    _max?: NestedEnumTestStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumRecordTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.RecordType | EnumRecordTypeFieldRefInput<$PrismaModel>
     in?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
@@ -53485,6 +57567,8 @@ export namespace Prisma {
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
     studentCourses?: StudentCourseCreateNestedManyWithoutBatchInput
     batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
+    tasks?: TaskCreateNestedManyWithoutBatchInput
+    tests?: TestCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutClientAdminInput = {
@@ -53494,6 +57578,8 @@ export namespace Prisma {
     labTimeSlotId: number
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutBatchInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutBatchInput
+    tests?: TestUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutClientAdminInput = {
@@ -53521,6 +57607,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
@@ -53540,6 +57628,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -53937,6 +58027,7 @@ export namespace Prisma {
     grade?: string | null
     student: StudentCreateNestedOneWithoutTasksInput
     course: CourseCreateNestedOneWithoutStudentTasksInput
+    task: TaskCreateNestedOneWithoutStudentTaskInput
     faculty?: FacultyCreateNestedOneWithoutTasksInput
   }
 
@@ -53950,6 +58041,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     facultyId?: number | null
   }
 
@@ -53971,6 +58063,7 @@ export namespace Prisma {
     grade: string
     student: StudentCreateNestedOneWithoutTestsInput
     course: CourseCreateNestedOneWithoutStudentTestsInput
+    test: TestCreateNestedOneWithoutStudentTestInput
   }
 
   export type StudentTestUncheckedCreateWithoutClientAdminInput = {
@@ -53982,6 +58075,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
   }
 
   export type StudentTestCreateOrConnectWithoutClientAdminInput = {
@@ -54081,6 +58175,31 @@ export namespace Prisma {
 
   export type FinancialRecordCreateManyClientAdminInputEnvelope = {
     data: FinancialRecordCreateManyClientAdminInput | FinancialRecordCreateManyClientAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StationeryItemCreateWithoutClientAdminInput = {
+    name: string
+    totalQuantity: number
+    quantityAvailable: number
+    stationeryIssues?: StationeryIssueCreateNestedManyWithoutItemInput
+  }
+
+  export type StationeryItemUncheckedCreateWithoutClientAdminInput = {
+    id?: number
+    name: string
+    totalQuantity: number
+    quantityAvailable: number
+    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutItemInput
+  }
+
+  export type StationeryItemCreateOrConnectWithoutClientAdminInput = {
+    where: StationeryItemWhereUniqueInput
+    create: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type StationeryItemCreateManyClientAdminInputEnvelope = {
+    data: StationeryItemCreateManyClientAdminInput | StationeryItemCreateManyClientAdminInput[]
     skipDuplicates?: boolean
   }
 
@@ -54196,6 +58315,60 @@ export namespace Prisma {
 
   export type CourseFeeStructureCreateManyClientAdminInputEnvelope = {
     data: CourseFeeStructureCreateManyClientAdminInput | CourseFeeStructureCreateManyClientAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TaskCreateWithoutClientAdminInput = {
+    name: string
+    status?: $Enums.TaskStatus
+    batch: BatchCreateNestedOneWithoutTasksInput
+    course: CourseCreateNestedOneWithoutTasksInput
+    StudentTask?: StudentTaskCreateNestedManyWithoutTaskInput
+  }
+
+  export type TaskUncheckedCreateWithoutClientAdminInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    batchId: number
+    courseId: number
+    StudentTask?: StudentTaskUncheckedCreateNestedManyWithoutTaskInput
+  }
+
+  export type TaskCreateOrConnectWithoutClientAdminInput = {
+    where: TaskWhereUniqueInput
+    create: XOR<TaskCreateWithoutClientAdminInput, TaskUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type TaskCreateManyClientAdminInputEnvelope = {
+    data: TaskCreateManyClientAdminInput | TaskCreateManyClientAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TestCreateWithoutClientAdminInput = {
+    name: string
+    status?: $Enums.TestStatus
+    batch: BatchCreateNestedOneWithoutTestsInput
+    course: CourseCreateNestedOneWithoutTestsInput
+    StudentTest?: StudentTestCreateNestedManyWithoutTestInput
+  }
+
+  export type TestUncheckedCreateWithoutClientAdminInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    batchId: number
+    courseId: number
+    StudentTest?: StudentTestUncheckedCreateNestedManyWithoutTestInput
+  }
+
+  export type TestCreateOrConnectWithoutClientAdminInput = {
+    where: TestWhereUniqueInput
+    create: XOR<TestCreateWithoutClientAdminInput, TestUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type TestCreateManyClientAdminInputEnvelope = {
+    data: TestCreateManyClientAdminInput | TestCreateManyClientAdminInput[]
     skipDuplicates?: boolean
   }
 
@@ -54690,6 +58863,7 @@ export namespace Prisma {
     status?: StringFilter<"StudentTask"> | string
     facultyRemarks?: StringNullableFilter<"StudentTask"> | string | null
     grade?: StringNullableFilter<"StudentTask"> | string | null
+    taskId?: IntFilter<"StudentTask"> | number
     facultyId?: IntNullableFilter<"StudentTask"> | number | null
     clientAdminId?: StringFilter<"StudentTask"> | string
   }
@@ -54722,6 +58896,7 @@ export namespace Prisma {
     totalMarks?: IntFilter<"StudentTest"> | number
     marksObtained?: IntFilter<"StudentTest"> | number
     grade?: StringFilter<"StudentTest"> | string
+    testId?: IntFilter<"StudentTest"> | number
     clientAdminId?: StringFilter<"StudentTest"> | string
   }
 
@@ -54814,6 +58989,33 @@ export namespace Prisma {
     courseId?: IntNullableFilter<"FinancialRecord"> | number | null
     facultyId?: IntNullableFilter<"FinancialRecord"> | number | null
     labId?: IntNullableFilter<"FinancialRecord"> | number | null
+  }
+
+  export type StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput = {
+    where: StationeryItemWhereUniqueInput
+    update: XOR<StationeryItemUpdateWithoutClientAdminInput, StationeryItemUncheckedUpdateWithoutClientAdminInput>
+    create: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput = {
+    where: StationeryItemWhereUniqueInput
+    data: XOR<StationeryItemUpdateWithoutClientAdminInput, StationeryItemUncheckedUpdateWithoutClientAdminInput>
+  }
+
+  export type StationeryItemUpdateManyWithWhereWithoutClientAdminInput = {
+    where: StationeryItemScalarWhereInput
+    data: XOR<StationeryItemUpdateManyMutationInput, StationeryItemUncheckedUpdateManyWithoutClientAdminInput>
+  }
+
+  export type StationeryItemScalarWhereInput = {
+    AND?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
+    OR?: StationeryItemScalarWhereInput[]
+    NOT?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
+    id?: IntFilter<"StationeryItem"> | number
+    name?: StringFilter<"StationeryItem"> | string
+    totalQuantity?: IntFilter<"StationeryItem"> | number
+    quantityAvailable?: IntFilter<"StationeryItem"> | number
+    clientAdminId?: StringFilter<"StationeryItem"> | string
   }
 
   export type EnquiryUpsertWithWhereUniqueWithoutClientAdminInput = {
@@ -54915,6 +59117,62 @@ export namespace Prisma {
     clientAdminId?: StringFilter<"CourseFeeStructure"> | string
   }
 
+  export type TaskUpsertWithWhereUniqueWithoutClientAdminInput = {
+    where: TaskWhereUniqueInput
+    update: XOR<TaskUpdateWithoutClientAdminInput, TaskUncheckedUpdateWithoutClientAdminInput>
+    create: XOR<TaskCreateWithoutClientAdminInput, TaskUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type TaskUpdateWithWhereUniqueWithoutClientAdminInput = {
+    where: TaskWhereUniqueInput
+    data: XOR<TaskUpdateWithoutClientAdminInput, TaskUncheckedUpdateWithoutClientAdminInput>
+  }
+
+  export type TaskUpdateManyWithWhereWithoutClientAdminInput = {
+    where: TaskScalarWhereInput
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutClientAdminInput>
+  }
+
+  export type TaskScalarWhereInput = {
+    AND?: TaskScalarWhereInput | TaskScalarWhereInput[]
+    OR?: TaskScalarWhereInput[]
+    NOT?: TaskScalarWhereInput | TaskScalarWhereInput[]
+    id?: IntFilter<"Task"> | number
+    name?: StringFilter<"Task"> | string
+    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
+    batchId?: IntFilter<"Task"> | number
+    courseId?: IntFilter<"Task"> | number
+    clientAdminId?: StringFilter<"Task"> | string
+  }
+
+  export type TestUpsertWithWhereUniqueWithoutClientAdminInput = {
+    where: TestWhereUniqueInput
+    update: XOR<TestUpdateWithoutClientAdminInput, TestUncheckedUpdateWithoutClientAdminInput>
+    create: XOR<TestCreateWithoutClientAdminInput, TestUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type TestUpdateWithWhereUniqueWithoutClientAdminInput = {
+    where: TestWhereUniqueInput
+    data: XOR<TestUpdateWithoutClientAdminInput, TestUncheckedUpdateWithoutClientAdminInput>
+  }
+
+  export type TestUpdateManyWithWhereWithoutClientAdminInput = {
+    where: TestScalarWhereInput
+    data: XOR<TestUpdateManyMutationInput, TestUncheckedUpdateManyWithoutClientAdminInput>
+  }
+
+  export type TestScalarWhereInput = {
+    AND?: TestScalarWhereInput | TestScalarWhereInput[]
+    OR?: TestScalarWhereInput[]
+    NOT?: TestScalarWhereInput | TestScalarWhereInput[]
+    id?: IntFilter<"Test"> | number
+    name?: StringFilter<"Test"> | string
+    status?: EnumTestStatusFilter<"Test"> | $Enums.TestStatus
+    batchId?: IntFilter<"Test"> | number
+    courseId?: IntFilter<"Test"> | number
+    clientAdminId?: StringFilter<"Test"> | string
+  }
+
   export type ClientAdminCreateWithoutRoleUsersInput = {
     id?: string
     name: string
@@ -54956,9 +59214,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutRoleUsersInput = {
@@ -55002,9 +59263,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutRoleUsersInput = {
@@ -55064,9 +59328,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutRoleUsersInput = {
@@ -55110,9 +59377,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminCreateWithoutActivitiesInput = {
@@ -55156,9 +59426,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutActivitiesInput = {
@@ -55202,9 +59475,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutActivitiesInput = {
@@ -55264,9 +59540,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutActivitiesInput = {
@@ -55310,9 +59589,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type FollowUpCreateWithoutEnquiryInput = {
@@ -55503,8 +59785,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutEnquiriesInput = {
@@ -55549,8 +59834,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutEnquiriesInput = {
@@ -55763,8 +60051,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutEnquiriesInput = {
@@ -55809,8 +60100,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type EnquiryCreateWithoutEnquiryCourseInput = {
@@ -55882,6 +60176,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -55902,6 +60198,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -55951,9 +60249,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutEnquiryCourseInput = {
@@ -55997,9 +60298,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutEnquiryCourseInput = {
@@ -56093,6 +60397,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -56113,6 +60419,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -56168,9 +60476,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutEnquiryCourseInput = {
@@ -56214,9 +60525,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type EnquiryCreateWithoutFollowUpsInput = {
@@ -56548,8 +60862,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutNotificationsInput = {
@@ -56594,8 +60911,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutNotificationsInput = {
@@ -56789,8 +61109,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutNotificationsInput = {
@@ -56835,8 +61158,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type EnquiryCreateWithoutStudentInput = {
@@ -57064,6 +61390,7 @@ export namespace Prisma {
     facultyRemarks?: string | null
     grade?: string | null
     course: CourseCreateNestedOneWithoutStudentTasksInput
+    task: TaskCreateNestedOneWithoutStudentTaskInput
     faculty?: FacultyCreateNestedOneWithoutTasksInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTasksInput
   }
@@ -57077,6 +61404,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     facultyId?: number | null
     clientAdminId: string
   }
@@ -57098,6 +61426,7 @@ export namespace Prisma {
     marksObtained: number
     grade: string
     course: CourseCreateNestedOneWithoutStudentTestsInput
+    test: TestCreateNestedOneWithoutStudentTestInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTestsInput
   }
 
@@ -57109,6 +61438,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
     clientAdminId: string
   }
 
@@ -57282,9 +61612,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentsInput = {
@@ -57328,9 +61661,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentsInput = {
@@ -57627,9 +61963,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentsInput = {
@@ -57673,9 +62012,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type CourseFeeStructureCreateWithoutCourseInput = {
@@ -57893,6 +62235,7 @@ export namespace Prisma {
     facultyRemarks?: string | null
     grade?: string | null
     student: StudentCreateNestedOneWithoutTasksInput
+    task: TaskCreateNestedOneWithoutStudentTaskInput
     faculty?: FacultyCreateNestedOneWithoutTasksInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTasksInput
   }
@@ -57906,6 +62249,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     facultyId?: number | null
     clientAdminId: string
   }
@@ -57927,6 +62271,7 @@ export namespace Prisma {
     marksObtained: number
     grade: string
     student: StudentCreateNestedOneWithoutTestsInput
+    test: TestCreateNestedOneWithoutStudentTestInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTestsInput
   }
 
@@ -57938,6 +62283,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
     clientAdminId: string
   }
 
@@ -58014,6 +62360,60 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TaskCreateWithoutCourseInput = {
+    name: string
+    status?: $Enums.TaskStatus
+    batch: BatchCreateNestedOneWithoutTasksInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutTasksInput
+    StudentTask?: StudentTaskCreateNestedManyWithoutTaskInput
+  }
+
+  export type TaskUncheckedCreateWithoutCourseInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    batchId: number
+    clientAdminId: string
+    StudentTask?: StudentTaskUncheckedCreateNestedManyWithoutTaskInput
+  }
+
+  export type TaskCreateOrConnectWithoutCourseInput = {
+    where: TaskWhereUniqueInput
+    create: XOR<TaskCreateWithoutCourseInput, TaskUncheckedCreateWithoutCourseInput>
+  }
+
+  export type TaskCreateManyCourseInputEnvelope = {
+    data: TaskCreateManyCourseInput | TaskCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TestCreateWithoutCourseInput = {
+    name: string
+    status?: $Enums.TestStatus
+    batch: BatchCreateNestedOneWithoutTestsInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutTestsInput
+    StudentTest?: StudentTestCreateNestedManyWithoutTestInput
+  }
+
+  export type TestUncheckedCreateWithoutCourseInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    batchId: number
+    clientAdminId: string
+    StudentTest?: StudentTestUncheckedCreateNestedManyWithoutTestInput
+  }
+
+  export type TestCreateOrConnectWithoutCourseInput = {
+    where: TestWhereUniqueInput
+    create: XOR<TestCreateWithoutCourseInput, TestUncheckedCreateWithoutCourseInput>
+  }
+
+  export type TestCreateManyCourseInputEnvelope = {
+    data: TestCreateManyCourseInput | TestCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BatchCourseCreateWithoutCourseInput = {
     pcsReserved?: number | null
     batch: BatchCreateNestedOneWithoutBatchCoursesInput
@@ -58076,9 +62476,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutCoursesInput = {
@@ -58122,9 +62525,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutCoursesInput = {
@@ -58318,6 +62724,38 @@ export namespace Prisma {
     data: XOR<FinancialRecordUpdateManyMutationInput, FinancialRecordUncheckedUpdateManyWithoutCourseInput>
   }
 
+  export type TaskUpsertWithWhereUniqueWithoutCourseInput = {
+    where: TaskWhereUniqueInput
+    update: XOR<TaskUpdateWithoutCourseInput, TaskUncheckedUpdateWithoutCourseInput>
+    create: XOR<TaskCreateWithoutCourseInput, TaskUncheckedCreateWithoutCourseInput>
+  }
+
+  export type TaskUpdateWithWhereUniqueWithoutCourseInput = {
+    where: TaskWhereUniqueInput
+    data: XOR<TaskUpdateWithoutCourseInput, TaskUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type TaskUpdateManyWithWhereWithoutCourseInput = {
+    where: TaskScalarWhereInput
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutCourseInput>
+  }
+
+  export type TestUpsertWithWhereUniqueWithoutCourseInput = {
+    where: TestWhereUniqueInput
+    update: XOR<TestUpdateWithoutCourseInput, TestUncheckedUpdateWithoutCourseInput>
+    create: XOR<TestCreateWithoutCourseInput, TestUncheckedCreateWithoutCourseInput>
+  }
+
+  export type TestUpdateWithWhereUniqueWithoutCourseInput = {
+    where: TestWhereUniqueInput
+    data: XOR<TestUpdateWithoutCourseInput, TestUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type TestUpdateManyWithWhereWithoutCourseInput = {
+    where: TestScalarWhereInput
+    data: XOR<TestUpdateManyMutationInput, TestUncheckedUpdateManyWithoutCourseInput>
+  }
+
   export type BatchCourseUpsertWithWhereUniqueWithoutCourseInput = {
     where: BatchCourseWhereUniqueInput
     update: XOR<BatchCourseUpdateWithoutCourseInput, BatchCourseUncheckedUpdateWithoutCourseInput>
@@ -58396,9 +62834,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutCoursesInput = {
@@ -58442,9 +62883,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type CourseCreateWithoutCourseFeeStructureInput = {
@@ -58461,6 +62905,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -58481,6 +62927,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -58554,8 +63002,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutCourseFeeStructuresInput = {
@@ -58600,8 +63051,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutCourseFeeStructuresInput = {
@@ -58634,6 +63088,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -58654,6 +63110,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -58736,8 +63194,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutCourseFeeStructuresInput = {
@@ -58782,8 +63243,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type FacultyCreateWithoutBatchesInput = {
@@ -58916,6 +63380,60 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TaskCreateWithoutBatchInput = {
+    name: string
+    status?: $Enums.TaskStatus
+    course: CourseCreateNestedOneWithoutTasksInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutTasksInput
+    StudentTask?: StudentTaskCreateNestedManyWithoutTaskInput
+  }
+
+  export type TaskUncheckedCreateWithoutBatchInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    courseId: number
+    clientAdminId: string
+    StudentTask?: StudentTaskUncheckedCreateNestedManyWithoutTaskInput
+  }
+
+  export type TaskCreateOrConnectWithoutBatchInput = {
+    where: TaskWhereUniqueInput
+    create: XOR<TaskCreateWithoutBatchInput, TaskUncheckedCreateWithoutBatchInput>
+  }
+
+  export type TaskCreateManyBatchInputEnvelope = {
+    data: TaskCreateManyBatchInput | TaskCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TestCreateWithoutBatchInput = {
+    name: string
+    status?: $Enums.TestStatus
+    course: CourseCreateNestedOneWithoutTestsInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutTestsInput
+    StudentTest?: StudentTestCreateNestedManyWithoutTestInput
+  }
+
+  export type TestUncheckedCreateWithoutBatchInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    courseId: number
+    clientAdminId: string
+    StudentTest?: StudentTestUncheckedCreateNestedManyWithoutTestInput
+  }
+
+  export type TestCreateOrConnectWithoutBatchInput = {
+    where: TestWhereUniqueInput
+    create: XOR<TestCreateWithoutBatchInput, TestUncheckedCreateWithoutBatchInput>
+  }
+
+  export type TestCreateManyBatchInputEnvelope = {
+    data: TestCreateManyBatchInput | TestCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ClientAdminCreateWithoutBatchesInput = {
     id?: string
     name: string
@@ -58957,9 +63475,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutBatchesInput = {
@@ -59003,9 +63524,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutBatchesInput = {
@@ -59129,6 +63653,38 @@ export namespace Prisma {
     data: XOR<BatchCourseUpdateManyMutationInput, BatchCourseUncheckedUpdateManyWithoutBatchInput>
   }
 
+  export type TaskUpsertWithWhereUniqueWithoutBatchInput = {
+    where: TaskWhereUniqueInput
+    update: XOR<TaskUpdateWithoutBatchInput, TaskUncheckedUpdateWithoutBatchInput>
+    create: XOR<TaskCreateWithoutBatchInput, TaskUncheckedCreateWithoutBatchInput>
+  }
+
+  export type TaskUpdateWithWhereUniqueWithoutBatchInput = {
+    where: TaskWhereUniqueInput
+    data: XOR<TaskUpdateWithoutBatchInput, TaskUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type TaskUpdateManyWithWhereWithoutBatchInput = {
+    where: TaskScalarWhereInput
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type TestUpsertWithWhereUniqueWithoutBatchInput = {
+    where: TestWhereUniqueInput
+    update: XOR<TestUpdateWithoutBatchInput, TestUncheckedUpdateWithoutBatchInput>
+    create: XOR<TestCreateWithoutBatchInput, TestUncheckedCreateWithoutBatchInput>
+  }
+
+  export type TestUpdateWithWhereUniqueWithoutBatchInput = {
+    where: TestWhereUniqueInput
+    data: XOR<TestUpdateWithoutBatchInput, TestUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type TestUpdateManyWithWhereWithoutBatchInput = {
+    where: TestScalarWhereInput
+    data: XOR<TestUpdateManyMutationInput, TestUncheckedUpdateManyWithoutBatchInput>
+  }
+
   export type ClientAdminUpsertWithoutBatchesInput = {
     update: XOR<ClientAdminUpdateWithoutBatchesInput, ClientAdminUncheckedUpdateWithoutBatchesInput>
     create: XOR<ClientAdminCreateWithoutBatchesInput, ClientAdminUncheckedCreateWithoutBatchesInput>
@@ -59181,9 +63737,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutBatchesInput = {
@@ -59227,9 +63786,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type BatchCreateWithoutBatchCoursesInput = {
@@ -59237,6 +63799,8 @@ export namespace Prisma {
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
     studentCourses?: StudentCourseCreateNestedManyWithoutBatchInput
+    tasks?: TaskCreateNestedManyWithoutBatchInput
+    tests?: TestCreateNestedManyWithoutBatchInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
   }
 
@@ -59247,6 +63811,8 @@ export namespace Prisma {
     labTimeSlotId: number
     clientAdminId: string
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutBatchInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutBatchInput
+    tests?: TestUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutBatchCoursesInput = {
@@ -59269,6 +63835,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
 
@@ -59289,6 +63857,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutBatchCoursesInput = {
@@ -59312,6 +63882,8 @@ export namespace Prisma {
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUpdateManyWithoutBatchNestedInput
+    tests?: TestUpdateManyWithoutBatchNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
   }
 
@@ -59322,6 +63894,8 @@ export namespace Prisma {
     labTimeSlotId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutBatchNestedInput
+    tests?: TestUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type CourseUpsertWithoutBatchCoursesInput = {
@@ -59350,6 +63924,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
 
@@ -59370,6 +63946,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type BatchCreateWithoutFacultyInput = {
@@ -59377,6 +63955,8 @@ export namespace Prisma {
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
     studentCourses?: StudentCourseCreateNestedManyWithoutBatchInput
     batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
+    tasks?: TaskCreateNestedManyWithoutBatchInput
+    tests?: TestCreateNestedManyWithoutBatchInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
   }
 
@@ -59387,6 +63967,8 @@ export namespace Prisma {
     clientAdminId: string
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutBatchInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutBatchInput
+    tests?: TestUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutFacultyInput = {
@@ -59437,6 +64019,7 @@ export namespace Prisma {
     grade?: string | null
     student: StudentCreateNestedOneWithoutTasksInput
     course: CourseCreateNestedOneWithoutStudentTasksInput
+    task: TaskCreateNestedOneWithoutStudentTaskInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTasksInput
   }
 
@@ -59450,6 +64033,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     clientAdminId: string
   }
 
@@ -59540,9 +64124,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutFacultiesInput = {
@@ -59586,9 +64173,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutFacultiesInput = {
@@ -59712,9 +64302,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutFacultiesInput = {
@@ -59758,9 +64351,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type LabTimeSlotCreateWithoutLabInput = {
@@ -59871,9 +64467,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutLabsInput = {
@@ -59917,9 +64516,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutLabsInput = {
@@ -60011,9 +64613,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabsInput = {
@@ -60057,9 +64662,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type LabCreateWithoutTimeSlotsInput = {
@@ -60091,6 +64699,8 @@ export namespace Prisma {
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     studentCourses?: StudentCourseCreateNestedManyWithoutBatchInput
     batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
+    tasks?: TaskCreateNestedManyWithoutBatchInput
+    tests?: TestCreateNestedManyWithoutBatchInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
   }
 
@@ -60101,6 +64711,8 @@ export namespace Prisma {
     clientAdminId: string
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutBatchInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutBatchInput
+    tests?: TestUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutLabTimeSlotInput = {
@@ -60179,9 +64791,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutLabTimeSlotsInput = {
@@ -60225,9 +64840,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutLabTimeSlotsInput = {
@@ -60349,9 +64967,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabTimeSlotsInput = {
@@ -60395,9 +65016,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type FeeStructureCreateWithoutInstallmentInput = {
@@ -60630,9 +65254,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutLabAllocationsInput = {
@@ -60676,9 +65303,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutLabAllocationsInput = {
@@ -60846,9 +65476,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabAllocationsInput = {
@@ -60892,9 +65525,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutStudentCoursesInput = {
@@ -60981,6 +65617,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -61001,6 +65639,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -61014,6 +65654,8 @@ export namespace Prisma {
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
     batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
+    tasks?: TaskCreateNestedManyWithoutBatchInput
+    tests?: TestCreateNestedManyWithoutBatchInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
   }
 
@@ -61024,6 +65666,8 @@ export namespace Prisma {
     labTimeSlotId: number
     clientAdminId: string
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutBatchInput
+    tests?: TestUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutStudentCoursesInput = {
@@ -61121,9 +65765,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentCoursesInput = {
@@ -61167,9 +65814,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentCoursesInput = {
@@ -61278,6 +65928,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -61298,6 +65950,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -61317,6 +65971,8 @@ export namespace Prisma {
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUpdateManyWithoutBatchNestedInput
+    tests?: TestUpdateManyWithoutBatchNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
   }
 
@@ -61327,6 +65983,8 @@ export namespace Prisma {
     labTimeSlotId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutBatchNestedInput
+    tests?: TestUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type CertificateUpsertWithoutStudentCourseInput = {
@@ -61425,9 +66083,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentCoursesInput = {
@@ -61471,9 +66132,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutFeeStructuresInput = {
@@ -61560,6 +66224,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -61580,6 +66246,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -61686,9 +66354,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutFeeStructuresInput = {
@@ -61732,9 +66403,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutFeeStructuresInput = {
@@ -61843,6 +66517,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -61863,6 +66539,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -61958,9 +66636,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutFeeStructuresInput = {
@@ -62004,9 +66685,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentFeeCreateWithoutFeeLogsInput = {
@@ -62169,6 +66853,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -62189,6 +66875,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -62314,9 +67002,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentFeesInput = {
@@ -62360,9 +67051,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentFeesInput = {
@@ -62471,6 +67165,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -62491,6 +67187,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -62637,9 +67335,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentFeesInput = {
@@ -62683,9 +67384,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StationeryIssueCreateWithoutItemInput = {
@@ -62717,6 +67421,109 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ClientAdminCreateWithoutStationeryItemsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyCreateNestedManyWithoutClientAdminInput
+    batches?: BatchCreateNestedManyWithoutClientAdminInput
+    courses?: CourseCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutClientAdminInput
+    labs?: LabCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationCreateNestedManyWithoutClientAdminInput
+    students?: StudentCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminUncheckedCreateWithoutStationeryItemsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
+    batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
+    courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    labs?: LabUncheckedCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutClientAdminInput
+    students?: StudentUncheckedCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminCreateOrConnectWithoutStationeryItemsInput = {
+    where: ClientAdminWhereUniqueInput
+    create: XOR<ClientAdminCreateWithoutStationeryItemsInput, ClientAdminUncheckedCreateWithoutStationeryItemsInput>
+  }
+
   export type StationeryIssueUpsertWithWhereUniqueWithoutItemInput = {
     where: StationeryIssueWhereUniqueInput
     update: XOR<StationeryIssueUpdateWithoutItemInput, StationeryIssueUncheckedUpdateWithoutItemInput>
@@ -62731,6 +67538,115 @@ export namespace Prisma {
   export type StationeryIssueUpdateManyWithWhereWithoutItemInput = {
     where: StationeryIssueScalarWhereInput
     data: XOR<StationeryIssueUpdateManyMutationInput, StationeryIssueUncheckedUpdateManyWithoutItemInput>
+  }
+
+  export type ClientAdminUpsertWithoutStationeryItemsInput = {
+    update: XOR<ClientAdminUpdateWithoutStationeryItemsInput, ClientAdminUncheckedUpdateWithoutStationeryItemsInput>
+    create: XOR<ClientAdminCreateWithoutStationeryItemsInput, ClientAdminUncheckedCreateWithoutStationeryItemsInput>
+    where?: ClientAdminWhereInput
+  }
+
+  export type ClientAdminUpdateToOneWithWhereWithoutStationeryItemsInput = {
+    where?: ClientAdminWhereInput
+    data: XOR<ClientAdminUpdateWithoutStationeryItemsInput, ClientAdminUncheckedUpdateWithoutStationeryItemsInput>
+  }
+
+  export type ClientAdminUpdateWithoutStationeryItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type ClientAdminUncheckedUpdateWithoutStationeryItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUncheckedUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUncheckedUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUncheckedUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUncheckedUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUncheckedUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutStationeryInput = {
@@ -62817,6 +67733,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -62837,6 +67755,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -62847,13 +67767,17 @@ export namespace Prisma {
 
   export type StationeryItemCreateWithoutStationeryIssuesInput = {
     name: string
+    totalQuantity: number
     quantityAvailable: number
+    clientAdmin: ClientAdminCreateNestedOneWithoutStationeryItemsInput
   }
 
   export type StationeryItemUncheckedCreateWithoutStationeryIssuesInput = {
     id?: number
     name: string
+    totalQuantity: number
     quantityAvailable: number
+    clientAdminId: string
   }
 
   export type StationeryItemCreateOrConnectWithoutStationeryIssuesInput = {
@@ -62902,9 +67826,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStationeryIssuesInput = {
@@ -62948,9 +67875,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStationeryIssuesInput = {
@@ -63059,6 +67989,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -63079,6 +68011,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -63095,13 +68029,17 @@ export namespace Prisma {
 
   export type StationeryItemUpdateWithoutStationeryIssuesInput = {
     name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
     quantityAvailable?: IntFieldUpdateOperationsInput | number
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutStationeryItemsNestedInput
   }
 
   export type StationeryItemUncheckedUpdateWithoutStationeryIssuesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
     quantityAvailable?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
   export type ClientAdminUpsertWithoutStationeryIssuesInput = {
@@ -63156,9 +68094,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStationeryIssuesInput = {
@@ -63202,9 +68143,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutAttendanceInput = {
@@ -63291,6 +68235,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -63311,6 +68257,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -63406,9 +68354,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutAttendanceRecordsInput = {
@@ -63452,9 +68403,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutAttendanceRecordsInput = {
@@ -63563,6 +68517,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -63583,6 +68539,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -63690,9 +68648,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutAttendanceRecordsInput = {
@@ -63736,9 +68697,433 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type BatchCreateWithoutTasksInput = {
+    name: string
+    faculty?: FacultyCreateNestedOneWithoutBatchesInput
+    labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutBatchInput
+    batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
+    tests?: TestCreateNestedManyWithoutBatchInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
+  }
+
+  export type BatchUncheckedCreateWithoutTasksInput = {
+    id?: number
+    name: string
+    facultyId?: number | null
+    labTimeSlotId: number
+    clientAdminId: string
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutBatchInput
+    batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    tests?: TestUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutTasksInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutTasksInput, BatchUncheckedCreateWithoutTasksInput>
+  }
+
+  export type CourseCreateWithoutTasksInput = {
+    name: string
+    durationWeeks: number
+    description?: string | null
+    courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutCourseInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutCourseInput
+    stationery?: StationeryIssueCreateNestedManyWithoutCourseInput
+    studentFees?: StudentFeeCreateNestedManyWithoutCourseInput
+    attendanceRecords?: AttendanceRecordCreateNestedManyWithoutCourseInput
+    studentTasks?: StudentTaskCreateNestedManyWithoutCourseInput
+    studentTests?: StudentTestCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
+    batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
+  }
+
+  export type CourseUncheckedCreateWithoutTasksInput = {
+    id?: number
+    name: string
+    durationWeeks: number
+    description?: string | null
+    clientAdminId: string
+    courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutCourseInput
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutCourseInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutCourseInput
+    stationery?: StationeryIssueUncheckedCreateNestedManyWithoutCourseInput
+    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutCourseInput
+    attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutCourseInput
+    studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutCourseInput
+    studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
+    batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutTasksInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutTasksInput, CourseUncheckedCreateWithoutTasksInput>
+  }
+
+  export type ClientAdminCreateWithoutTasksInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyCreateNestedManyWithoutClientAdminInput
+    batches?: BatchCreateNestedManyWithoutClientAdminInput
+    courses?: CourseCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutClientAdminInput
+    labs?: LabCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationCreateNestedManyWithoutClientAdminInput
+    students?: StudentCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminUncheckedCreateWithoutTasksInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
+    batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
+    courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    labs?: LabUncheckedCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutClientAdminInput
+    students?: StudentUncheckedCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminCreateOrConnectWithoutTasksInput = {
+    where: ClientAdminWhereUniqueInput
+    create: XOR<ClientAdminCreateWithoutTasksInput, ClientAdminUncheckedCreateWithoutTasksInput>
+  }
+
+  export type StudentTaskCreateWithoutTaskInput = {
+    assignedDate: Date | string
+    dueDate: Date | string
+    description: string
+    status: string
+    facultyRemarks?: string | null
+    grade?: string | null
+    student: StudentCreateNestedOneWithoutTasksInput
+    course: CourseCreateNestedOneWithoutStudentTasksInput
+    faculty?: FacultyCreateNestedOneWithoutTasksInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutStudentTasksInput
+  }
+
+  export type StudentTaskUncheckedCreateWithoutTaskInput = {
+    id?: number
+    studentId: number
+    courseId: number
+    assignedDate: Date | string
+    dueDate: Date | string
+    description: string
+    status: string
+    facultyRemarks?: string | null
+    grade?: string | null
+    facultyId?: number | null
+    clientAdminId: string
+  }
+
+  export type StudentTaskCreateOrConnectWithoutTaskInput = {
+    where: StudentTaskWhereUniqueInput
+    create: XOR<StudentTaskCreateWithoutTaskInput, StudentTaskUncheckedCreateWithoutTaskInput>
+  }
+
+  export type StudentTaskCreateManyTaskInputEnvelope = {
+    data: StudentTaskCreateManyTaskInput | StudentTaskCreateManyTaskInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchUpsertWithoutTasksInput = {
+    update: XOR<BatchUpdateWithoutTasksInput, BatchUncheckedUpdateWithoutTasksInput>
+    create: XOR<BatchCreateWithoutTasksInput, BatchUncheckedCreateWithoutTasksInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutTasksInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutTasksInput, BatchUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type BatchUpdateWithoutTasksInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    faculty?: FacultyUpdateOneWithoutBatchesNestedInput
+    labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutBatchNestedInput
+    batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    tests?: TestUpdateManyWithoutBatchNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutTasksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    facultyId?: NullableIntFieldUpdateOperationsInput | number | null
+    labTimeSlotId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutBatchNestedInput
+    batchCourses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tests?: TestUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type CourseUpsertWithoutTasksInput = {
+    update: XOR<CourseUpdateWithoutTasksInput, CourseUncheckedUpdateWithoutTasksInput>
+    create: XOR<CourseCreateWithoutTasksInput, CourseUncheckedCreateWithoutTasksInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutTasksInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutTasksInput, CourseUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type CourseUpdateWithoutTasksInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    durationWeeks?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutCourseNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutCourseNestedInput
+    stationery?: StationeryIssueUpdateManyWithoutCourseNestedInput
+    studentFees?: StudentFeeUpdateManyWithoutCourseNestedInput
+    attendanceRecords?: AttendanceRecordUpdateManyWithoutCourseNestedInput
+    studentTasks?: StudentTaskUpdateManyWithoutCourseNestedInput
+    studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
+    batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutTasksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    durationWeeks?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutCourseNestedInput
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutCourseNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutCourseNestedInput
+    stationery?: StationeryIssueUncheckedUpdateManyWithoutCourseNestedInput
+    studentFees?: StudentFeeUncheckedUpdateManyWithoutCourseNestedInput
+    attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutCourseNestedInput
+    studentTasks?: StudentTaskUncheckedUpdateManyWithoutCourseNestedInput
+    studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
+    batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type ClientAdminUpsertWithoutTasksInput = {
+    update: XOR<ClientAdminUpdateWithoutTasksInput, ClientAdminUncheckedUpdateWithoutTasksInput>
+    create: XOR<ClientAdminCreateWithoutTasksInput, ClientAdminUncheckedCreateWithoutTasksInput>
+    where?: ClientAdminWhereInput
+  }
+
+  export type ClientAdminUpdateToOneWithWhereWithoutTasksInput = {
+    where?: ClientAdminWhereInput
+    data: XOR<ClientAdminUpdateWithoutTasksInput, ClientAdminUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type ClientAdminUpdateWithoutTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type ClientAdminUncheckedUpdateWithoutTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUncheckedUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUncheckedUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUncheckedUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUncheckedUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUncheckedUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type StudentTaskUpsertWithWhereUniqueWithoutTaskInput = {
+    where: StudentTaskWhereUniqueInput
+    update: XOR<StudentTaskUpdateWithoutTaskInput, StudentTaskUncheckedUpdateWithoutTaskInput>
+    create: XOR<StudentTaskCreateWithoutTaskInput, StudentTaskUncheckedCreateWithoutTaskInput>
+  }
+
+  export type StudentTaskUpdateWithWhereUniqueWithoutTaskInput = {
+    where: StudentTaskWhereUniqueInput
+    data: XOR<StudentTaskUpdateWithoutTaskInput, StudentTaskUncheckedUpdateWithoutTaskInput>
+  }
+
+  export type StudentTaskUpdateManyWithWhereWithoutTaskInput = {
+    where: StudentTaskScalarWhereInput
+    data: XOR<StudentTaskUpdateManyMutationInput, StudentTaskUncheckedUpdateManyWithoutTaskInput>
   }
 
   export type StudentCreateWithoutTasksInput = {
@@ -63825,6 +69210,8 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -63845,12 +69232,36 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutStudentTasksInput = {
     where: CourseWhereUniqueInput
     create: XOR<CourseCreateWithoutStudentTasksInput, CourseUncheckedCreateWithoutStudentTasksInput>
+  }
+
+  export type TaskCreateWithoutStudentTaskInput = {
+    name: string
+    status?: $Enums.TaskStatus
+    batch: BatchCreateNestedOneWithoutTasksInput
+    course: CourseCreateNestedOneWithoutTasksInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutTasksInput
+  }
+
+  export type TaskUncheckedCreateWithoutStudentTaskInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    batchId: number
+    courseId: number
+    clientAdminId: string
+  }
+
+  export type TaskCreateOrConnectWithoutStudentTaskInput = {
+    where: TaskWhereUniqueInput
+    create: XOR<TaskCreateWithoutStudentTaskInput, TaskUncheckedCreateWithoutStudentTaskInput>
   }
 
   export type FacultyCreateWithoutTasksInput = {
@@ -63940,9 +69351,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentTasksInput = {
@@ -63986,9 +69400,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentTasksInput = {
@@ -64097,6 +69514,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -64117,7 +69536,37 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type TaskUpsertWithoutStudentTaskInput = {
+    update: XOR<TaskUpdateWithoutStudentTaskInput, TaskUncheckedUpdateWithoutStudentTaskInput>
+    create: XOR<TaskCreateWithoutStudentTaskInput, TaskUncheckedCreateWithoutStudentTaskInput>
+    where?: TaskWhereInput
+  }
+
+  export type TaskUpdateToOneWithWhereWithoutStudentTaskInput = {
+    where?: TaskWhereInput
+    data: XOR<TaskUpdateWithoutStudentTaskInput, TaskUncheckedUpdateWithoutStudentTaskInput>
+  }
+
+  export type TaskUpdateWithoutStudentTaskInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batch?: BatchUpdateOneRequiredWithoutTasksNestedInput
+    course?: CourseUpdateOneRequiredWithoutTasksNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutTasksNestedInput
+  }
+
+  export type TaskUncheckedUpdateWithoutStudentTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
   export type FacultyUpsertWithoutTasksInput = {
@@ -64224,9 +69673,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentTasksInput = {
@@ -64270,9 +69722,429 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type BatchCreateWithoutTestsInput = {
+    name: string
+    faculty?: FacultyCreateNestedOneWithoutBatchesInput
+    labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutBatchInput
+    batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
+    tasks?: TaskCreateNestedManyWithoutBatchInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
+  }
+
+  export type BatchUncheckedCreateWithoutTestsInput = {
+    id?: number
+    name: string
+    facultyId?: number | null
+    labTimeSlotId: number
+    clientAdminId: string
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutBatchInput
+    batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutTestsInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutTestsInput, BatchUncheckedCreateWithoutTestsInput>
+  }
+
+  export type CourseCreateWithoutTestsInput = {
+    name: string
+    durationWeeks: number
+    description?: string | null
+    courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutCourseInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutCourseInput
+    stationery?: StationeryIssueCreateNestedManyWithoutCourseInput
+    studentFees?: StudentFeeCreateNestedManyWithoutCourseInput
+    attendanceRecords?: AttendanceRecordCreateNestedManyWithoutCourseInput
+    studentTasks?: StudentTaskCreateNestedManyWithoutCourseInput
+    studentTests?: StudentTestCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
+  }
+
+  export type CourseUncheckedCreateWithoutTestsInput = {
+    id?: number
+    name: string
+    durationWeeks: number
+    description?: string | null
+    clientAdminId: string
+    courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutCourseInput
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutCourseInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutCourseInput
+    stationery?: StationeryIssueUncheckedCreateNestedManyWithoutCourseInput
+    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutCourseInput
+    attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutCourseInput
+    studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutCourseInput
+    studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutTestsInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutTestsInput, CourseUncheckedCreateWithoutTestsInput>
+  }
+
+  export type ClientAdminCreateWithoutTestsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyCreateNestedManyWithoutClientAdminInput
+    batches?: BatchCreateNestedManyWithoutClientAdminInput
+    courses?: CourseCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutClientAdminInput
+    labs?: LabCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationCreateNestedManyWithoutClientAdminInput
+    students?: StudentCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminUncheckedCreateWithoutTestsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
+    batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
+    courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    labs?: LabUncheckedCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutClientAdminInput
+    students?: StudentUncheckedCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminCreateOrConnectWithoutTestsInput = {
+    where: ClientAdminWhereUniqueInput
+    create: XOR<ClientAdminCreateWithoutTestsInput, ClientAdminUncheckedCreateWithoutTestsInput>
+  }
+
+  export type StudentTestCreateWithoutTestInput = {
+    testName: string
+    testDate: Date | string
+    totalMarks: number
+    marksObtained: number
+    grade: string
+    student: StudentCreateNestedOneWithoutTestsInput
+    course: CourseCreateNestedOneWithoutStudentTestsInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutStudentTestsInput
+  }
+
+  export type StudentTestUncheckedCreateWithoutTestInput = {
+    id?: number
+    studentId: number
+    courseId: number
+    testName: string
+    testDate: Date | string
+    totalMarks: number
+    marksObtained: number
+    grade: string
+    clientAdminId: string
+  }
+
+  export type StudentTestCreateOrConnectWithoutTestInput = {
+    where: StudentTestWhereUniqueInput
+    create: XOR<StudentTestCreateWithoutTestInput, StudentTestUncheckedCreateWithoutTestInput>
+  }
+
+  export type StudentTestCreateManyTestInputEnvelope = {
+    data: StudentTestCreateManyTestInput | StudentTestCreateManyTestInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchUpsertWithoutTestsInput = {
+    update: XOR<BatchUpdateWithoutTestsInput, BatchUncheckedUpdateWithoutTestsInput>
+    create: XOR<BatchCreateWithoutTestsInput, BatchUncheckedCreateWithoutTestsInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutTestsInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutTestsInput, BatchUncheckedUpdateWithoutTestsInput>
+  }
+
+  export type BatchUpdateWithoutTestsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    faculty?: FacultyUpdateOneWithoutBatchesNestedInput
+    labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutBatchNestedInput
+    batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUpdateManyWithoutBatchNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutTestsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    facultyId?: NullableIntFieldUpdateOperationsInput | number | null
+    labTimeSlotId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutBatchNestedInput
+    batchCourses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type CourseUpsertWithoutTestsInput = {
+    update: XOR<CourseUpdateWithoutTestsInput, CourseUncheckedUpdateWithoutTestsInput>
+    create: XOR<CourseCreateWithoutTestsInput, CourseUncheckedCreateWithoutTestsInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutTestsInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutTestsInput, CourseUncheckedUpdateWithoutTestsInput>
+  }
+
+  export type CourseUpdateWithoutTestsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    durationWeeks?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutCourseNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutCourseNestedInput
+    stationery?: StationeryIssueUpdateManyWithoutCourseNestedInput
+    studentFees?: StudentFeeUpdateManyWithoutCourseNestedInput
+    attendanceRecords?: AttendanceRecordUpdateManyWithoutCourseNestedInput
+    studentTasks?: StudentTaskUpdateManyWithoutCourseNestedInput
+    studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutTestsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    durationWeeks?: IntFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutCourseNestedInput
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutCourseNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutCourseNestedInput
+    stationery?: StationeryIssueUncheckedUpdateManyWithoutCourseNestedInput
+    studentFees?: StudentFeeUncheckedUpdateManyWithoutCourseNestedInput
+    attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutCourseNestedInput
+    studentTasks?: StudentTaskUncheckedUpdateManyWithoutCourseNestedInput
+    studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type ClientAdminUpsertWithoutTestsInput = {
+    update: XOR<ClientAdminUpdateWithoutTestsInput, ClientAdminUncheckedUpdateWithoutTestsInput>
+    create: XOR<ClientAdminCreateWithoutTestsInput, ClientAdminUncheckedCreateWithoutTestsInput>
+    where?: ClientAdminWhereInput
+  }
+
+  export type ClientAdminUpdateToOneWithWhereWithoutTestsInput = {
+    where?: ClientAdminWhereInput
+    data: XOR<ClientAdminUpdateWithoutTestsInput, ClientAdminUncheckedUpdateWithoutTestsInput>
+  }
+
+  export type ClientAdminUpdateWithoutTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type ClientAdminUncheckedUpdateWithoutTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUncheckedUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUncheckedUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUncheckedUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUncheckedUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUncheckedUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type StudentTestUpsertWithWhereUniqueWithoutTestInput = {
+    where: StudentTestWhereUniqueInput
+    update: XOR<StudentTestUpdateWithoutTestInput, StudentTestUncheckedUpdateWithoutTestInput>
+    create: XOR<StudentTestCreateWithoutTestInput, StudentTestUncheckedCreateWithoutTestInput>
+  }
+
+  export type StudentTestUpdateWithWhereUniqueWithoutTestInput = {
+    where: StudentTestWhereUniqueInput
+    data: XOR<StudentTestUpdateWithoutTestInput, StudentTestUncheckedUpdateWithoutTestInput>
+  }
+
+  export type StudentTestUpdateManyWithWhereWithoutTestInput = {
+    where: StudentTestScalarWhereInput
+    data: XOR<StudentTestUpdateManyMutationInput, StudentTestUncheckedUpdateManyWithoutTestInput>
   }
 
   export type StudentCreateWithoutTestsInput = {
@@ -64359,6 +70231,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -64379,12 +70253,36 @@ export namespace Prisma {
     studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutStudentTestsInput = {
     where: CourseWhereUniqueInput
     create: XOR<CourseCreateWithoutStudentTestsInput, CourseUncheckedCreateWithoutStudentTestsInput>
+  }
+
+  export type TestCreateWithoutStudentTestInput = {
+    name: string
+    status?: $Enums.TestStatus
+    batch: BatchCreateNestedOneWithoutTestsInput
+    course: CourseCreateNestedOneWithoutTestsInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutTestsInput
+  }
+
+  export type TestUncheckedCreateWithoutStudentTestInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    batchId: number
+    courseId: number
+    clientAdminId: string
+  }
+
+  export type TestCreateOrConnectWithoutStudentTestInput = {
+    where: TestWhereUniqueInput
+    create: XOR<TestCreateWithoutStudentTestInput, TestUncheckedCreateWithoutStudentTestInput>
   }
 
   export type ClientAdminCreateWithoutStudentTestsInput = {
@@ -64428,9 +70326,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentTestsInput = {
@@ -64474,9 +70375,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentTestsInput = {
@@ -64585,6 +70489,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -64605,7 +70511,37 @@ export namespace Prisma {
     studentTasks?: StudentTaskUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type TestUpsertWithoutStudentTestInput = {
+    update: XOR<TestUpdateWithoutStudentTestInput, TestUncheckedUpdateWithoutStudentTestInput>
+    create: XOR<TestCreateWithoutStudentTestInput, TestUncheckedCreateWithoutStudentTestInput>
+    where?: TestWhereInput
+  }
+
+  export type TestUpdateToOneWithWhereWithoutStudentTestInput = {
+    where?: TestWhereInput
+    data: XOR<TestUpdateWithoutStudentTestInput, TestUncheckedUpdateWithoutStudentTestInput>
+  }
+
+  export type TestUpdateWithoutStudentTestInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batch?: BatchUpdateOneRequiredWithoutTestsNestedInput
+    course?: CourseUpdateOneRequiredWithoutTestsNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutTestsNestedInput
+  }
+
+  export type TestUncheckedUpdateWithoutStudentTestInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
   export type ClientAdminUpsertWithoutStudentTestsInput = {
@@ -64660,9 +70596,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentTestsInput = {
@@ -64706,9 +70645,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCourseCreateWithoutCompletionsInput = {
@@ -64854,9 +70796,12 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutCourseCompletionsInput = {
@@ -64900,9 +70845,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutCourseCompletionsInput = {
@@ -65076,9 +71024,12 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutCourseCompletionsInput = {
@@ -65122,9 +71073,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutCertificatesInput = {
@@ -65211,6 +71165,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskCreateNestedManyWithoutCourseInput
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -65231,6 +71187,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutCourseInput
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -65312,9 +71270,12 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutCertificatesInput = {
@@ -65358,9 +71319,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutCertificatesInput = {
@@ -65469,6 +71433,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskUpdateManyWithoutCourseNestedInput
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -65489,6 +71455,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskUncheckedUpdateManyWithoutCourseNestedInput
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -65582,9 +71550,12 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutCertificatesInput = {
@@ -65628,9 +71599,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutFinancialRecordsInput = {
@@ -65717,6 +71691,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskCreateNestedManyWithoutCourseInput
     studentTests?: StudentTestCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    tasks?: TaskCreateNestedManyWithoutCourseInput
+    tests?: TestCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseCreateNestedManyWithoutCourseInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCoursesInput
   }
@@ -65737,6 +71713,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutCourseInput
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutCourseInput
+    tests?: TestUncheckedCreateNestedManyWithoutCourseInput
     batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -65856,9 +71834,12 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutFinancialRecordsInput = {
@@ -65902,9 +71883,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutFinancialRecordsInput = {
@@ -66013,6 +71997,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskUpdateManyWithoutCourseNestedInput
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -66033,6 +72019,8 @@ export namespace Prisma {
     studentTasks?: StudentTaskUncheckedUpdateManyWithoutCourseNestedInput
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -66170,9 +72158,12 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutFinancialRecordsInput = {
@@ -66216,9 +72207,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type RoleUserCreateManyClientAdminInput = {
@@ -66393,6 +72387,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     facultyId?: number | null
   }
 
@@ -66405,6 +72400,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
   }
 
   export type CourseCompletionCreateManyClientAdminInput = {
@@ -66436,6 +72432,13 @@ export namespace Prisma {
     courseId?: number | null
     facultyId?: number | null
     labId?: number | null
+  }
+
+  export type StationeryItemCreateManyClientAdminInput = {
+    id?: number
+    name: string
+    totalQuantity: number
+    quantityAvailable: number
   }
 
   export type EnquiryCreateManyClientAdminInput = {
@@ -66475,6 +72478,22 @@ export namespace Prisma {
     courseId: number
     totalAmount: number
     paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+  }
+
+  export type TaskCreateManyClientAdminInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    batchId: number
+    courseId: number
+  }
+
+  export type TestCreateManyClientAdminInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    batchId: number
+    courseId: number
   }
 
   export type RoleUserUpdateWithoutClientAdminInput = {
@@ -66586,6 +72605,8 @@ export namespace Prisma {
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutBatchNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUpdateManyWithoutBatchNestedInput
+    tests?: TestUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutClientAdminInput = {
@@ -66595,6 +72616,8 @@ export namespace Prisma {
     labTimeSlotId?: IntFieldUpdateOperationsInput | number
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutBatchNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutBatchNestedInput
+    tests?: TestUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateManyWithoutClientAdminInput = {
@@ -66619,6 +72642,8 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUpdateManyWithoutCourseNestedInput
+    tests?: TestUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
@@ -66638,6 +72663,8 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutCourseNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutCourseNestedInput
+    tests?: TestUncheckedUpdateManyWithoutCourseNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -67038,6 +73065,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutTasksNestedInput
     course?: CourseUpdateOneRequiredWithoutStudentTasksNestedInput
+    task?: TaskUpdateOneRequiredWithoutStudentTaskNestedInput
     faculty?: FacultyUpdateOneWithoutTasksNestedInput
   }
 
@@ -67051,6 +73079,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -67064,6 +73093,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -67075,6 +73105,7 @@ export namespace Prisma {
     grade?: StringFieldUpdateOperationsInput | string
     student?: StudentUpdateOneRequiredWithoutTestsNestedInput
     course?: CourseUpdateOneRequiredWithoutStudentTestsNestedInput
+    test?: TestUpdateOneRequiredWithoutStudentTestNestedInput
   }
 
   export type StudentTestUncheckedUpdateWithoutClientAdminInput = {
@@ -67086,6 +73117,7 @@ export namespace Prisma {
     totalMarks?: IntFieldUpdateOperationsInput | number
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
+    testId?: IntFieldUpdateOperationsInput | number
   }
 
   export type StudentTestUncheckedUpdateManyWithoutClientAdminInput = {
@@ -67097,6 +73129,7 @@ export namespace Prisma {
     totalMarks?: IntFieldUpdateOperationsInput | number
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
+    testId?: IntFieldUpdateOperationsInput | number
   }
 
   export type CourseCompletionUpdateWithoutClientAdminInput = {
@@ -67188,6 +73221,28 @@ export namespace Prisma {
     courseId?: NullableIntFieldUpdateOperationsInput | number | null
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
     labId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type StationeryItemUpdateWithoutClientAdminInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
+    quantityAvailable?: IntFieldUpdateOperationsInput | number
+    stationeryIssues?: StationeryIssueUpdateManyWithoutItemNestedInput
+  }
+
+  export type StationeryItemUncheckedUpdateWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
+    quantityAvailable?: IntFieldUpdateOperationsInput | number
+    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutItemNestedInput
+  }
+
+  export type StationeryItemUncheckedUpdateManyWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
+    quantityAvailable?: IntFieldUpdateOperationsInput | number
   }
 
   export type EnquiryUpdateWithoutClientAdminInput = {
@@ -67314,6 +73369,56 @@ export namespace Prisma {
     paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
   }
 
+  export type TaskUpdateWithoutClientAdminInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batch?: BatchUpdateOneRequiredWithoutTasksNestedInput
+    course?: CourseUpdateOneRequiredWithoutTasksNestedInput
+    StudentTask?: StudentTaskUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskUncheckedUpdateWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    StudentTask?: StudentTaskUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskUncheckedUpdateManyWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TestUpdateWithoutClientAdminInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batch?: BatchUpdateOneRequiredWithoutTestsNestedInput
+    course?: CourseUpdateOneRequiredWithoutTestsNestedInput
+    StudentTest?: StudentTestUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    StudentTest?: StudentTestUncheckedUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateManyWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type FollowUpCreateManyEnquiryInput = {
     id?: string
     scheduledAt?: Date | string | null
@@ -67437,6 +73542,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     facultyId?: number | null
     clientAdminId: string
   }
@@ -67449,6 +73555,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
     clientAdminId: string
   }
 
@@ -67666,6 +73773,7 @@ export namespace Prisma {
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     course?: CourseUpdateOneRequiredWithoutStudentTasksNestedInput
+    task?: TaskUpdateOneRequiredWithoutStudentTaskNestedInput
     faculty?: FacultyUpdateOneWithoutTasksNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTasksNestedInput
   }
@@ -67679,6 +73787,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -67692,6 +73801,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -67703,6 +73813,7 @@ export namespace Prisma {
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
     course?: CourseUpdateOneRequiredWithoutStudentTestsNestedInput
+    test?: TestUpdateOneRequiredWithoutStudentTestNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTestsNestedInput
   }
 
@@ -67714,6 +73825,7 @@ export namespace Prisma {
     totalMarks?: IntFieldUpdateOperationsInput | number
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
+    testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -67725,6 +73837,7 @@ export namespace Prisma {
     totalMarks?: IntFieldUpdateOperationsInput | number
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
+    testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -67918,6 +74031,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     facultyId?: number | null
     clientAdminId: string
   }
@@ -67930,6 +74044,7 @@ export namespace Prisma {
     totalMarks: number
     marksObtained: number
     grade: string
+    testId: number
     clientAdminId: string
   }
 
@@ -67953,6 +74068,22 @@ export namespace Prisma {
     studentId?: number | null
     facultyId?: number | null
     labId?: number | null
+  }
+
+  export type TaskCreateManyCourseInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    batchId: number
+    clientAdminId: string
+  }
+
+  export type TestCreateManyCourseInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    batchId: number
+    clientAdminId: string
   }
 
   export type BatchCourseCreateManyCourseInput = {
@@ -68157,6 +74288,7 @@ export namespace Prisma {
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutTasksNestedInput
+    task?: TaskUpdateOneRequiredWithoutStudentTaskNestedInput
     faculty?: FacultyUpdateOneWithoutTasksNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTasksNestedInput
   }
@@ -68170,6 +74302,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -68183,6 +74316,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -68194,6 +74328,7 @@ export namespace Prisma {
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
     student?: StudentUpdateOneRequiredWithoutTestsNestedInput
+    test?: TestUpdateOneRequiredWithoutStudentTestNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTestsNestedInput
   }
 
@@ -68205,6 +74340,7 @@ export namespace Prisma {
     totalMarks?: IntFieldUpdateOperationsInput | number
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
+    testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -68216,6 +74352,7 @@ export namespace Prisma {
     totalMarks?: IntFieldUpdateOperationsInput | number
     marksObtained?: IntFieldUpdateOperationsInput | number
     grade?: StringFieldUpdateOperationsInput | string
+    testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -68284,6 +74421,56 @@ export namespace Prisma {
     labId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type TaskUpdateWithoutCourseInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batch?: BatchUpdateOneRequiredWithoutTasksNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutTasksNestedInput
+    StudentTask?: StudentTaskUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskUncheckedUpdateWithoutCourseInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    StudentTask?: StudentTaskUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskUncheckedUpdateManyWithoutCourseInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestUpdateWithoutCourseInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batch?: BatchUpdateOneRequiredWithoutTestsNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutTestsNestedInput
+    StudentTest?: StudentTestUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateWithoutCourseInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    StudentTest?: StudentTestUncheckedUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateManyWithoutCourseInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    batchId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type BatchCourseUpdateWithoutCourseInput = {
     pcsReserved?: NullableIntFieldUpdateOperationsInput | number | null
     batch?: BatchUpdateOneRequiredWithoutBatchCoursesNestedInput
@@ -68344,6 +74531,22 @@ export namespace Prisma {
     pcsReserved?: number | null
   }
 
+  export type TaskCreateManyBatchInput = {
+    id?: number
+    name: string
+    status?: $Enums.TaskStatus
+    courseId: number
+    clientAdminId: string
+  }
+
+  export type TestCreateManyBatchInput = {
+    id?: number
+    name: string
+    status?: $Enums.TestStatus
+    courseId: number
+    clientAdminId: string
+  }
+
   export type StudentCourseUpdateWithoutBatchInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68400,6 +74603,56 @@ export namespace Prisma {
     pcsReserved?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type TaskUpdateWithoutBatchInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    course?: CourseUpdateOneRequiredWithoutTasksNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutTasksNestedInput
+    StudentTask?: StudentTaskUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskUncheckedUpdateWithoutBatchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    StudentTask?: StudentTaskUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type TaskUncheckedUpdateManyWithoutBatchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestUpdateWithoutBatchInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    course?: CourseUpdateOneRequiredWithoutTestsNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutTestsNestedInput
+    StudentTest?: StudentTestUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateWithoutBatchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    StudentTest?: StudentTestUncheckedUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateManyWithoutBatchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    courseId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type BatchCreateManyFacultyInput = {
     id?: number
     name: string
@@ -68427,6 +74680,7 @@ export namespace Prisma {
     status: string
     facultyRemarks?: string | null
     grade?: string | null
+    taskId: number
     clientAdminId: string
   }
 
@@ -68448,6 +74702,8 @@ export namespace Prisma {
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutBatchNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUpdateManyWithoutBatchNestedInput
+    tests?: TestUpdateManyWithoutBatchNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
   }
 
@@ -68458,6 +74714,8 @@ export namespace Prisma {
     clientAdminId?: StringFieldUpdateOperationsInput | string
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutBatchNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutBatchNestedInput
+    tests?: TestUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateManyWithoutFacultyInput = {
@@ -68505,6 +74763,7 @@ export namespace Prisma {
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutTasksNestedInput
     course?: CourseUpdateOneRequiredWithoutStudentTasksNestedInput
+    task?: TaskUpdateOneRequiredWithoutStudentTaskNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTasksNestedInput
   }
 
@@ -68518,6 +74777,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -68531,6 +74791,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    taskId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -68684,6 +74945,8 @@ export namespace Prisma {
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutBatchNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUpdateManyWithoutBatchNestedInput
+    tests?: TestUpdateManyWithoutBatchNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
   }
 
@@ -68694,6 +74957,8 @@ export namespace Prisma {
     clientAdminId?: StringFieldUpdateOperationsInput | string
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutBatchNestedInput
     batchCourses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutBatchNestedInput
+    tests?: TestUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateManyWithoutLabTimeSlotInput = {
@@ -68922,6 +75187,108 @@ export namespace Prisma {
     issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudentTaskCreateManyTaskInput = {
+    id?: number
+    studentId: number
+    courseId: number
+    assignedDate: Date | string
+    dueDate: Date | string
+    description: string
+    status: string
+    facultyRemarks?: string | null
+    grade?: string | null
+    facultyId?: number | null
+    clientAdminId: string
+  }
+
+  export type StudentTaskUpdateWithoutTaskInput = {
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    student?: StudentUpdateOneRequiredWithoutTasksNestedInput
+    course?: CourseUpdateOneRequiredWithoutStudentTasksNestedInput
+    faculty?: FacultyUpdateOneWithoutTasksNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTasksNestedInput
+  }
+
+  export type StudentTaskUncheckedUpdateWithoutTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyId?: NullableIntFieldUpdateOperationsInput | number | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudentTaskUncheckedUpdateManyWithoutTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyId?: NullableIntFieldUpdateOperationsInput | number | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudentTestCreateManyTestInput = {
+    id?: number
+    studentId: number
+    courseId: number
+    testName: string
+    testDate: Date | string
+    totalMarks: number
+    marksObtained: number
+    grade: string
+    clientAdminId: string
+  }
+
+  export type StudentTestUpdateWithoutTestInput = {
+    testName?: StringFieldUpdateOperationsInput | string
+    testDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalMarks?: IntFieldUpdateOperationsInput | number
+    marksObtained?: IntFieldUpdateOperationsInput | number
+    grade?: StringFieldUpdateOperationsInput | string
+    student?: StudentUpdateOneRequiredWithoutTestsNestedInput
+    course?: CourseUpdateOneRequiredWithoutStudentTestsNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTestsNestedInput
+  }
+
+  export type StudentTestUncheckedUpdateWithoutTestInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    testName?: StringFieldUpdateOperationsInput | string
+    testDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalMarks?: IntFieldUpdateOperationsInput | number
+    marksObtained?: IntFieldUpdateOperationsInput | number
+    grade?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudentTestUncheckedUpdateManyWithoutTestInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    courseId?: IntFieldUpdateOperationsInput | number
+    testName?: StringFieldUpdateOperationsInput | string
+    testDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalMarks?: IntFieldUpdateOperationsInput | number
+    marksObtained?: IntFieldUpdateOperationsInput | number
+    grade?: StringFieldUpdateOperationsInput | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 

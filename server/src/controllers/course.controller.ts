@@ -747,6 +747,8 @@ export async function getCourseController(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
+    console.log("GET COURSE QUERY:", req.query);
+
     const query = courseQuerySchema.parse(req.query);
 
     const result = await getCourses({
@@ -755,12 +757,7 @@ export async function getCourseController(req: Request, res: Response) {
       query,
     });
 
-    // return res.json({
-    //   message: "Courses fetched successfully",
-    //   ...result,
-    //   page: query.page,
-    //   limit: query.limit,
-    // });
+    console.log("Courses Fetched Successfully in getCourseConTroller", result.data);
 
     return res.status(200).json({
       message: "Courses fetched successfully",
@@ -793,16 +790,6 @@ export async function getAllCourseController(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
-
-    // 2. Get client admin (we assume there's only one per tenant for now)
-    // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({ where: { email: email } });
-    // if (!clientAdmin) {
-    //   return res.status(404).json({ error: 'Client admin not found' });
-    // }
-
-    // console.log("get ClientAdmin in getEnquiryController:", clientAdmin);
-
     // 2. Get client admin (we assume there's only one per tenant for now)
     const allClientAdmin = await tenantPrisma.clientAdmin.findMany();
     if (!allClientAdmin) {
@@ -811,9 +798,7 @@ export async function getAllCourseController(req: Request, res: Response) {
 
     console.log("get allClientAdmin in getEnquiryController:", allClientAdmin);
 
-    // 3. Create student under that admin
-    // const enquiry = await tenantPrisma.enquiry.findMany({
-    // });
+    console.log("GET ALL COURSE QUERY:");
 
     // ✅ Fetch paginated, sorted, and filtered enquiries
     const course = await tenantPrisma.course.findMany({
@@ -826,7 +811,7 @@ export async function getAllCourseController(req: Request, res: Response) {
       },
     });
 
-    console.log("Courses Fetched Successfully", course);
+    console.log("Courses Fetched Successfully in getAllCourseConTroller", course);
 
     return res.status(200).json({
       message: "Courses fetched successfully",

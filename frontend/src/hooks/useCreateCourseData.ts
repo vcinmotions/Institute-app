@@ -43,6 +43,7 @@ export const useCreateCourse = () => {
     onError: (error: any) => {
       const backendError = error?.response?.data?.error || "Failed to assign batch";
       dispatch(setError(backendError));
+      console.error("ERROR IN CREATEING TASK:", backendError)
     },
   });
 };

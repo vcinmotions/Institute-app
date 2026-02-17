@@ -383,7 +383,9 @@ exports.Prisma.StudentFeeScalarFieldEnum = {
 exports.Prisma.StationeryItemScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  quantityAvailable: 'quantityAvailable'
+  totalQuantity: 'totalQuantity',
+  quantityAvailable: 'quantityAvailable',
+  clientAdminId: 'clientAdminId'
 };
 
 exports.Prisma.StationeryIssueScalarFieldEnum = {
@@ -408,6 +410,15 @@ exports.Prisma.AttendanceRecordScalarFieldEnum = {
   clientAdminId: 'clientAdminId'
 };
 
+exports.Prisma.TaskScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  status: 'status',
+  batchId: 'batchId',
+  courseId: 'courseId',
+  clientAdminId: 'clientAdminId'
+};
+
 exports.Prisma.StudentTaskScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
@@ -418,7 +429,17 @@ exports.Prisma.StudentTaskScalarFieldEnum = {
   status: 'status',
   facultyRemarks: 'facultyRemarks',
   grade: 'grade',
+  taskId: 'taskId',
   facultyId: 'facultyId',
+  clientAdminId: 'clientAdminId'
+};
+
+exports.Prisma.TestScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  status: 'status',
+  batchId: 'batchId',
+  courseId: 'courseId',
   clientAdminId: 'clientAdminId'
 };
 
@@ -431,6 +452,7 @@ exports.Prisma.StudentTestScalarFieldEnum = {
   totalMarks: 'totalMarks',
   marksObtained: 'marksObtained',
   grade: 'grade',
+  testId: 'testId',
   clientAdminId: 'clientAdminId'
 };
 
@@ -525,6 +547,16 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.TaskStatus = exports.$Enums.TaskStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+};
+
+exports.TestStatus = exports.$Enums.TestStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+};
+
 exports.RecordType = exports.$Enums.RecordType = {
   INCOME: 'INCOME',
   EXPENSE: 'EXPENSE'
@@ -556,7 +588,9 @@ exports.Prisma.ModelName = {
   StationeryItem: 'StationeryItem',
   StationeryIssue: 'StationeryIssue',
   AttendanceRecord: 'AttendanceRecord',
+  Task: 'Task',
   StudentTask: 'StudentTask',
+  Test: 'Test',
   StudentTest: 'StudentTest',
   CourseCompletion: 'CourseCompletion',
   Certificate: 'Certificate',

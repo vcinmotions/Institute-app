@@ -103,14 +103,21 @@ export default function FacultyForm() {
     }, [batchData, dispatch]);
     console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
 
+    const batchOptions = batch.map((b: any) => ({
+    value: b.id.toString(),
+    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+  }));
+
+   const courseOptions = courses.map((course: any) => ({
+    value: course.id.toString(),
+    label: course.name,
+  }));
+
   useEffect(() => {
     firstInputRef.current?.focus();
   }, []);
 
-  const batchOptions = batch.map((b: any) => ({
-    value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
-  }));
+  
 
   console.log("get User data In Faculty Create Form Modal;", user);
   console.log("get Course Info In Faculty Create Form Modal;", courses);
@@ -307,10 +314,10 @@ export default function FacultyForm() {
   //   }));
   // };
 
-  const courseOptions = courses.map((course: any) => ({
-    value: course.id.toString(),
-    label: course.name,
-  }));
+  // const courseOptions = courses.map((course: any) => ({
+  //   value: course.id.toString(),
+  //   label: course.name,
+  // }));
 
   const handleSubmit = async () => {
    const { isValid, errors: validationErrors } = validate();
@@ -400,9 +407,6 @@ export default function FacultyForm() {
     <div>
       <PageBreadcrumb pageTitle="Create Faculty" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-        {/* <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-          Profile
-        </h3> */}
 
         <div className="space-y-8">
           <h2 className="border-b pb-6">Faculty Infomation</h2>
@@ -546,11 +550,11 @@ export default function FacultyForm() {
               }}>
             <Label>Joining Date *</Label>
             {/* <Input
-            type="text"
-            placeholder="Info Demo"
-            value={newFaculty.joiningDate}
-            onChange={(e) => handleChange("joiningDate", e.target.value)}         
-          /> */}
+              type="text"
+              placeholder="Info Demo"
+              value={newFaculty.joiningDate}
+              onChange={(e) => handleChange("joiningDate", e.target.value)}         
+            /> */}
             <Input
               type="text"
               tabIndex={7}

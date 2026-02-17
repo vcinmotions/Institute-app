@@ -54,10 +54,13 @@ model ClientAdmin {
   courseCompletions CourseCompletion[]
   certificates      Certificate[]
   financialRecords FinancialRecord[]
+  StationeryItems   StationeryItem[]
   enquiries Enquiry[] @relation("AdminToEnquiries")
   notifications Notification[] // ✅ Reverse relation
   // 👇 Add this line to fix the missing relation
   courseFeeStructures CourseFeeStructure[]
+  tasks               Task[]
+  tests               Test[]
 }
 
 model RoleUser {
@@ -224,6 +227,8 @@ model Course {
   studentTests      StudentTest[]
   certificates      Certificate[]
   financialRecords FinancialRecord[]
+  tasks Task[]
+  tests Test[]
 
   // ✅ Many courses in many batches
   batchCourses BatchCourse[]
@@ -262,6 +267,9 @@ model Batch {
 
    // ✅ Multiple courses linked later
   batchCourses BatchCourse[]
+
+  tasks Task[]
+  tests Test[]
 
   clientAdminId String
   clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
@@ -465,8 +473,14 @@ model StudentFee {
 model StationeryItem {
   id                Int              @id @default(autoincrement())
   name              String
+
+  totalQuantity     Int
   quantityAvailable Int
-  stationeryIssues StationeryIssue[]
+
+  stationeryIssues  StationeryIssue[]
+
+  clientAdminId     String
+  clientAdmin       ClientAdmin @relation(fields: [clientAdminId], references: [id])
 }
 
 model StationeryIssue {
@@ -505,6 +519,21 @@ model AttendanceRecord {
   clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
 }
 
+model Task {
+  id                Int              @id @default(autoincrement())
+  name              String
+  status            TaskStatus       @default(DRAFT)
+  batchId           Int   
+  batch   Batch @relation(fields: [batchId], references: [id])
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+  StudentTask       StudentTask[]
+}
+
 model StudentTask {
   id            Int       @id @default(autoincrement())
   student       Student   @relation(fields: [studentId], references: [id])
@@ -518,12 +547,30 @@ model StudentTask {
   facultyRemarks String?
   grade         String?
 
+  task     Task @relation(fields: [taskId], references: [id])
+  taskId   Int
+
   faculty Faculty? @relation("FacultyTasks", fields: [facultyId], references: [id])
   facultyId Int?
 
   // ✅ Required relation to ClientAdmin
   clientAdminId  String
   clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+model Test {
+  id                Int              @id @default(autoincrement())
+  name              String
+  status            TestStatus       @default(DRAFT)  // 👈 Add default
+  batchId           Int           
+  batch   Batch @relation(fields: [batchId], references: [id])
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+  StudentTest       StudentTest[]
 }
 
 model StudentTest {
@@ -537,6 +584,9 @@ model StudentTest {
   totalMarks    Int
   marksObtained Int
   grade         String
+
+  test     Test @relation(fields: [testId], references: [id])
+  testId   Int
 
   // ✅ Required relation to ClientAdmin
   clientAdminId  String
@@ -642,4 +692,14 @@ enum UserRole {
   FACULTY
   ACCOUNTANT
   VIEW_ONLY
+}
+
+enum TestStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum TaskStatus {
+  DRAFT
+  PUBLISHED
 }

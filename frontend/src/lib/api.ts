@@ -699,6 +699,46 @@ export const getCourse = async ({
   return response.data;
 };
 
+export const getStationary = async ({
+  token,
+  page = 1,
+  limit = 5,
+  search = "",
+}: GetEnquiryParams) => {
+  const response = await apiClient.get("/stationary", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page,
+      limit,
+      search,
+    },
+  });
+
+  return response.data;
+};
+
+export const getTask = async ({
+  token,
+  page = 1,
+  limit = 5,
+  search = "",
+}: GetEnquiryParams) => {
+  const response = await apiClient.get("/task", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page,
+      limit,
+      search,
+    },
+  });
+
+  return response.data;
+};
+
 export const getBatch = async ({
   token,
   page,
@@ -795,6 +835,27 @@ export const courseCompletionAPI = async (
 // 🔧 FIXED getUser API with token header
 export const createCourseAPI = async (token: string, newCourseData: any) => {
   const response = await apiClient.post(`/create-course`, newCourseData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🔧 FIXED getUser API with token header
+export const createStationaryAPI = async (token: string, newStationaryData: any) => {
+  const response = await apiClient.post(`/create-stationary`, newStationaryData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+
+// 🔧 FIXED getUser API with token header
+export const createTaskAPI = async (token: string, newTaskData: any) => {
+  const response = await apiClient.post(`/create-task`, newTaskData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

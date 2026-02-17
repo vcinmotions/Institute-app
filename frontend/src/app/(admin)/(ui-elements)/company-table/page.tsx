@@ -86,7 +86,7 @@ export default function CompanyTable() {
         setLoading(false); // ✅ All good, show dashboard
         console.log("👤 Get Master User Data in CompanyTable:", data);
         dispatch(setTenant(data.tenant));
-        setTotalPages(data.totalPages);
+        setTotalPages(data.totalPages || 1);
         setTotalCount(data.totalCount || 0);
       } catch (err) {
         console.error("❌ Error fetching user:", err);

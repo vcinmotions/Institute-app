@@ -422,9 +422,9 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
             />
           )}
           <div
-          ref={(el) => {
-                inputRefs.current.name = el;
-              }}
+            ref={(el) => {
+              inputRefs.current.name = el;
+            }}
           >
             <Label>Name *</Label>
             <Input

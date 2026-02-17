@@ -12,3 +12,8 @@ export const PAYMENTSTATUS_COLOR_MAP: Record<string, any> = {
     PENDING: "warning",
     SUCCESS: "success",
   };
+
+export const TASK_STATUS: Record<string, any> = {
+    DRAFT: "error",
+    PUBLISH: "success",
+  };

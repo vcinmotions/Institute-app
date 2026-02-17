@@ -206,8 +206,8 @@ export default function EditEnquiryForm({
     id: enquiryData.id,
     name: enquiryData.name ?? "",
     email: enquiryData.email ?? "",
-    contact: splicedContact,
-    alternateContact: splicedAlternateContact,
+    contact: enquiryData.contact,
+    alternateContact: enquiryData.alternateContact,
     location: enquiryData.location ?? "",
     city: enquiryData.city ?? "",
     gender: enquiryData.gender ?? "",
@@ -275,36 +275,34 @@ export default function EditEnquiryForm({
   }));
 };
 
-const handleAlternatePhoneNumberChange = (
-  phoneNumber: string,
-  code: string
-) => {
-  let digitsOnly = phoneNumber.replace(/\D/g, "");
+  const handleAlternatePhoneNumberChange = (
+    phoneNumber: string,
+    code: string
+  ) => {
+    let digitsOnly = phoneNumber.replace(/\D/g, "");
 
-  const countryDigits = code.replace("+", "");
-  if (digitsOnly.startsWith(countryDigits)) {
-    digitsOnly = digitsOnly.slice(countryDigits.length);
-  }
+    const countryDigits = code.replace("+", "");
+    if (digitsOnly.startsWith(countryDigits)) {
+      digitsOnly = digitsOnly.slice(countryDigits.length);
+    }
 
-  digitsOnly = digitsOnly.slice(0, 10);
+    digitsOnly = digitsOnly.slice(0, 10);
 
-  const formattedNumber = digitsOnly
-    ? `${code}${digitsOnly}`
-    : "";
+    const formattedNumber = digitsOnly
+      ? `${code}${digitsOnly}`
+      : "";
 
-  setNewEnquiry((prev) => ({
-    ...prev,
-    alternateContact: formattedNumber,
-  }));
+    setNewEnquiry((prev) => ({
+      ...prev,
+      alternateContact: formattedNumber,
+    }));
 
-  setErrors((prev) => ({
-    ...prev,
-    alternateContact:
-      digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
-  }));
-};
-
-
+    setErrors((prev) => ({
+      ...prev,
+      alternateContact:
+        digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+    }));
+  };
 
   //  const handleAlternatePhoneNumberChange = (
   //   phoneNumber: string,
