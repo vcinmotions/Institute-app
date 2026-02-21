@@ -10,6 +10,7 @@ import EditCourseForm from "../form/form-elements/EditCourseForm";
 import Button from "../ui/button/Button";
 import Badge from "../ui/badge/Badge";
 import { STATUS_COLOR_MAP, TASK_STATUS } from "../common/BadgeStatus";
+import EditTaskForm from "../form/form-elements/EditTaskForm";
 
 
 type CourseDataTableProps = {
@@ -136,6 +137,7 @@ export default function TaskDataTable({
                       >
                        <Button
                           onClick={() => handlePublish(item.id)}
+                          disabled
                           size="sm"
                           allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]} // hide for others
                           className="rounded bg-gray-100 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
@@ -185,7 +187,7 @@ export default function TaskDataTable({
       </div>
 
       {selectedId !== null && batchDetail === true && (
-        <EditCourseForm onCloseModal={handleCloseModal} batchData={batchData} />
+        <EditTaskForm onCloseModal={handleCloseModal} taskData={batchData} />
       )}
     </div>
   );

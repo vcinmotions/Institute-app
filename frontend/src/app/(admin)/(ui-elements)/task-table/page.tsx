@@ -17,7 +17,7 @@ export default function TaskTable() {
   const batch = useSelector((state: RootState) => state.batch.batches ?? []);
   const tasks = useSelector((state: RootState) => state.task.tasks ?? []);
   const [loading, setLoading] = useState<boolean>(false);
-  const { currentPage, total, totalPages, searchQuery, sortField, sortOrder } = useSelector((state: RootState) => state.course);
+  const { currentPage, total, totalPages, searchQuery, } = useSelector((state: RootState) => state.task);
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ export default function TaskTable() {
     };
 
     fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder]);
+  }, [currentPage, searchQuery]);
 
 
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {

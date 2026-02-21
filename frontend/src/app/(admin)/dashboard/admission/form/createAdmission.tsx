@@ -2027,7 +2027,14 @@ export default function AdmissionForm() {
       filledEnquiryData.idProofType === "aadhar card" &&
       !/^\d{12}$/.test(filledEnquiryData.idProofNumber)
     )
-      newErrors.idProofNumber = "Aadhar must be 12 digits.";
+      newErrors.idProofNumber = "Aadhar number must be 12 digits.";
+
+    // Optional: validate ID proof type/number pattern
+    if (
+      filledEnquiryData.idProofType === "pan card" &&
+      !/^\d{10}$/.test(filledEnquiryData.idProofNumber)
+    )
+      newErrors.idProofNumber = "Pan number must be 10 digits.";
 
     if (!selectedProfilePicture)
       newErrors.selectedProfilePicture = "Profiloe Picture is required.";

@@ -84,7 +84,7 @@ export async function editTaskController(
   req: Request,
   res: Response
 ) {
-  const { id, name, batchId } = req.body;
+  const { id, name, batchId, courseId } = req.body;
 
   console.log("EDIT TASK DATA in REQ.BODY:", req.body);
 
@@ -112,6 +112,7 @@ export async function editTaskController(
       },
       include: {
         batch: true,
+        course: true
       },
     });
 
@@ -123,6 +124,7 @@ export async function editTaskController(
 
     let normalizedTaskName: string | undefined;
     let finalBatchId = existingTask.batchId;
+    let finalCourseId = existingTask.courseId;
 
     // ✅ Step 2: If batchId provided, verify batch exists
     if (batchId) {
@@ -142,6 +144,24 @@ export async function editTaskController(
       finalBatchId = Number(batchId);
     }
 
+    // ✅ Step 2.5: If courseId provided, verify course exists
+    if (courseId) {
+      const courseExists = await tenantPrisma.course.findFirst({
+        where: {
+          id: Number(courseId),
+          clientAdminId: user.clientAdminId,
+        },
+      });
+
+      if (!courseExists) {
+        return res.status(404).json({
+          error: "Course not found ❌",
+        });
+      }
+
+      finalCourseId = Number(courseId);
+    }
+
     // ✅ Step 3: Normalize name if provided
     if (name) {
       normalizedTaskName = titleCase(name);
@@ -151,6 +171,7 @@ export async function editTaskController(
         where: {
           name: normalizedTaskName,
           batchId: finalBatchId,
+          courseId: finalCourseId,
           NOT: {
             id: Number(id),
           },
@@ -164,6 +185,8 @@ export async function editTaskController(
       }
     }
 
+    console.log("NAME FINAL BATCH ID AND COURSE ID:", normalizedTaskName, finalBatchId, finalCourseId);
+
     // ✅ Step 4: Update Task
     const updatedTask = await tenantPrisma.task.update({
       where: {
@@ -172,6 +195,7 @@ export async function editTaskController(
       data: {
         name: normalizedTaskName ?? existingTask.name,
         batchId: finalBatchId,
+        courseId: finalCourseId,
       },
     });
 
@@ -190,6 +214,119 @@ export async function editTaskController(
     });
   }
 }
+
+export async function addStudentTaskController(
+  req: Request,
+  res: Response
+) {
+  const {
+    studentId,
+    taskId,
+    assignedDate,
+    dueDate,
+    description,
+    facultyId,
+  } = req.body;
+
+  console.log("ADD STUDENT TASK DATA in REQ.BODY:", req.body);
+
+  // ✅ Validation
+  if (!studentId || !taskId || !assignedDate || !dueDate || !description) {
+    return res.status(400).json({
+      error: "studentId, taskId, assignedDate, dueDate and description are required ❌",
+    });
+  }
+
+  const parsedStudentId = Number(studentId);
+  const parsedTaskId = Number(taskId);
+  const parsedFacultyId = facultyId ? Number(facultyId) : null;
+
+  if (isNaN(parsedStudentId) || isNaN(parsedTaskId)) {
+    return res.status(400).json({
+      error: "studentId and taskId must be valid numbers ❌",
+    });
+  }
+
+  try {
+    const tenantPrisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!tenantPrisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized request" });
+    }
+
+    // ✅ Step 1: Check if Student Exists
+    const student = await tenantPrisma.student.findFirst({
+      where: {
+        id: parsedStudentId,
+        clientAdminId: user.clientAdminId,
+      },
+    });
+
+    if (!student) {
+      return res.status(404).json({
+        error: "Student not found ❌",
+      });
+    }
+
+    // ✅ Step 2: Check if Task Exists
+    const task = await tenantPrisma.task.findFirst({
+      where: {
+        id: parsedTaskId,
+        clientAdminId: user.clientAdminId,
+      },
+    });
+
+    if (!task) {
+      return res.status(404).json({
+        error: "Task not found ❌",
+      });
+    }
+
+    // ✅ Step 3: Prevent Duplicate Assignment
+    const existingStudentTask = await tenantPrisma.studentTask.findFirst({
+      where: {
+        studentId: parsedStudentId,
+        taskId: parsedTaskId,
+      },
+    });
+
+    if (existingStudentTask) {
+      return res.status(409).json({
+        error: "Task already assigned to this student ❌",
+      });
+    }
+
+    // ✅ Step 4: Create StudentTask
+    const studentTask = await tenantPrisma.studentTask.create({
+      data: {
+        studentId: parsedStudentId,
+        taskId: parsedTaskId,
+        courseId: task.courseId,
+        assignedDate: new Date(assignedDate),
+        dueDate: new Date(dueDate),
+        description,
+        status: "PENDING",
+        facultyId: parsedFacultyId,
+        clientAdminId: user.clientAdminId,
+      },
+    });
+
+    console.log("STUDENT TASK CREATED:", studentTask);
+
+    return res.status(201).json({
+      message: "Student task created successfully ✅",
+      studentTask,
+    });
+  } catch (err: any) {
+    console.error("Error creating student task:", err);
+
+    return res.status(500).json({
+      error: "Internal server error ❌",
+    });
+  }
+}
+
 
 export async function getTaskController(req: Request, res: Response) {
   try {

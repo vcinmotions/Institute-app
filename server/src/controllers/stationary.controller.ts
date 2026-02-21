@@ -212,7 +212,7 @@ export async function editStationeryItemController(
     }
 
     // ✅ Step 3: Update Item
-    const updatedItem = await tenantPrisma.stationeryItem.update({
+    const stationary = await tenantPrisma.stationeryItem.update({
       where: {
         id: Number(id),
       },
@@ -225,11 +225,11 @@ export async function editStationeryItemController(
       },
     });
 
-    console.log("STATIONERY ITEM UPDATED:", updatedItem);
+    console.log("STATIONERY ITEM UPDATED:", stationary);
 
     return res.status(200).json({
       message: "Stationery item updated successfully ✅",
-      updatedItem,
+      stationary,
     });
   } catch (err: any) {
     console.error("Error updating stationery item:", err);

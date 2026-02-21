@@ -11,6 +11,7 @@ import { useEditCourse } from "@/hooks/useEditCourse";
 import Checkbox from "../input/Checkbox";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { useEditStationary } from "@/hooks/useEditStationary";
 
 type FormErrors = Partial<Record<keyof CourseData, string>>;
 
@@ -54,7 +55,7 @@ export default function EditStationaryForm({
 
     const [errors, setErrors] = useState<FormErrors>({});
   
-  const { mutate: editCourse } = useEditCourse();
+  const { mutate: editStationary } = useEditStationary();
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -160,8 +161,8 @@ export default function EditStationaryForm({
     };
 
 
-    editCourse(
-      { newCourse: normalizedCourse, id },
+    editStationary(
+      { newStationary: normalizedCourse, id },
       {
         onSuccess: () => {
           setNewStationary({
@@ -173,8 +174,8 @@ export default function EditStationaryForm({
 
           setAlert({
             show: true,
-            title: "Enquiry Created",
-            message: "Your enquiry has been successfully submitted.",
+            title: "Stationary Created",
+            message: "New stationary has been successfully Created.",
             variant: "success",
           });
 
@@ -204,7 +205,7 @@ export default function EditStationaryForm({
       <div className="space-y-6">
         {alert.show && (
           <Alert
-            variant={alert.title === "Enquiry Created" ? "success" : "error"}
+            variant={alert.title === "Stationary Created" ? "success" : "error"}
             title={alert.title}
             message={alert.message}
             showLink={false}

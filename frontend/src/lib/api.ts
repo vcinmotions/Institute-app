@@ -878,6 +878,34 @@ export const editCourseAPI = async (
 };
 
 // 🔧 FIXED getUser API with token header
+export const editStationaryAPI = async (
+  token: string,
+  newStationary: any,
+  id: any,
+) => {
+  const response = await apiClient.put(`/edit-stationary/${id}`, newStationary, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🔧 FIXED getUser API with token header
+export const editTaskAPI = async (
+  token: string,
+  newTask: any,
+  id: any,
+) => {
+  const response = await apiClient.put(`/edit-task/${id}`, newTask, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🔧 FIXED getUser API with token header
 export const createFacultyAPI = async (token: string, newFacultyData: any) => {
   const response = await apiClient.post(`/create-faculty`, newFacultyData, {
     headers: {

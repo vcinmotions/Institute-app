@@ -96,18 +96,6 @@ export default function EditCourseForm({
     firstInputRef.current?.focus();
   }, []);
 
-  const handlePhoneNumberChange = (phoneNumber: string) => {
-    setNewCourse((prev) => ({
-      ...prev,
-      contact: phoneNumber,
-    }));
-
-    // Clear error if any
-    setErrors((prev) => ({
-      ...prev,
-      contact: "",
-    }));
-  };
 
   const validate = () => {
     const newErrors: FormErrors = {};
