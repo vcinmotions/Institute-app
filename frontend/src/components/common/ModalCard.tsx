@@ -1,6 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useRef } from "react";
 import { escBus } from "@/app/utils/escBus";
+import { lockBodyScroll, unlockBodyScroll } from "@/app/utils/ModalManager";
 
 interface ComponentCardProps {
   title: string;
@@ -43,12 +44,20 @@ const ModalCard: React.FC<ComponentCardProps> = ({
   }, []);
 
   // Disable background scroll
-  useEffect(() => {
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-    document.body.style.overflow = "hidden";
+  // useEffect(() => {
+  //   const originalStyle = window.getComputedStyle(document.body).overflow;
+  //   document.body.style.overflow = "hidden";
+
+  //   return () => {
+  //     document.body.style.overflow = originalStyle;
+  //   };
+  // }, []);
+
+   useEffect(() => {
+    lockBodyScroll();
 
     return () => {
-      document.body.style.overflow = originalStyle;
+      unlockBodyScroll();
     };
   }, []);
 

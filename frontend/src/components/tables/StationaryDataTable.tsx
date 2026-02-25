@@ -134,7 +134,7 @@ export default function StationaryDataTable({
                     colSpan={4}
                     className="py-6 text-center text-gray-500 dark:text-gray-400"
                   >
-                    No Course found.
+                    No Stationary found.
                   </TableCell>
                 </TableRow>
               )}
