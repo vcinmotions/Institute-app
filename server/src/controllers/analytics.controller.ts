@@ -240,10 +240,15 @@ async function calculateTotalPaidByStudent(prisma: any, clientAdminId: string) {
     include: { feeLogs: true },
   });
 
+  console.log("ALL STIUDENT FEES IN calculateTotalPaidByStudent:", allFees);
+
   // 2️⃣ Get all fee structures for this client
   const allStructures = await prisma.feeStructure.findMany({
     where: { clientAdminId },
   });
+
+  console.log("ALL STIUDENT feeStructure IN calculateTotalPaidByStudent:", allStructures);
+
 
   // 3️⃣ Create lookup map for quick access
   const structureMap = new Map<string, any>();
