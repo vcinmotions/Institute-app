@@ -189,43 +189,114 @@
 //   }
 // }
 
+// async function calculateTotalPaidByStudent(prisma: any, clientAdminId: string) {
+//   const allFees = await prisma.studentFee.findMany({
+//     where: { clientAdminId },
+//     include: { feeLogs: true, feeStructure: true },
+//   });
+
+//   const totals = new Map<number, { paid: number; totalFee: number; outstanding: number }>();
+
+//   for (const fee of allFees) {
+//     let paid = 0;
+
+//     // ✅ Case 1: One-time payment
+//     if (fee.feeStructure?.paymentType === 'ONE_TIME') {
+//       paid = fee.amountPaid || 0;
+
+//     // ✅ Case 2: Installment payment
+//     } else if (fee.feeStructure?.paymentType === 'INSTALLMENT') {
+//       paid = fee.feeLogs.reduce((sum: any, log: any) => sum + (log.amountPaid || 0), 0);
+
+//     // ✅ Fallback
+//     } else if (fee.paymentStatus === 'SUCCESS') {
+//       paid = fee.amountPaid || 0;
+//     }
+
+//     const totalFee = fee.feeStructure?.totalAmount || 0;
+//     const outstanding = Math.max(totalFee - paid, 0);
+
+//     // Merge data if student has multiple fee records
+//     const existing = totals.get(fee.studentId);
+//     if (existing) {
+//       totals.set(fee.studentId, {
+//         paid: existing.paid + paid,
+//         totalFee: existing.totalFee,
+//         outstanding: totalFee - paid,
+//       });
+//     } else {
+//       totals.set(fee.studentId, { paid, totalFee, outstanding });
+//     }
+//   }
+
+//   return totals;
+// }
+
 async function calculateTotalPaidByStudent(prisma: any, clientAdminId: string) {
+
+  // 1️⃣ Get all student fees with logs
   const allFees = await prisma.studentFee.findMany({
     where: { clientAdminId },
-    include: { feeLogs: true, feeStructure: true },
+    include: { feeLogs: true },
   });
 
-  const totals = new Map<number, { paid: number; totalFee: number; outstanding: number }>();
+  // 2️⃣ Get all fee structures for this client
+  const allStructures = await prisma.feeStructure.findMany({
+    where: { clientAdminId },
+  });
+
+  // 3️⃣ Create lookup map for quick access
+  const structureMap = new Map<string, any>();
+
+  for (const fs of allStructures) {
+    structureMap.set(`${fs.studentId}-${fs.courseId}`, fs);
+  }
+
+  const totals = new Map<
+    number,
+    { paid: number; totalFee: number; outstanding: number }
+  >();
 
   for (const fee of allFees) {
+
+    const key = fee.courseId
+      ? `${fee.studentId}-${fee.courseId}`
+      : null;
+
+    const feeStructure = key ? structureMap.get(key) : null;
+
     let paid = 0;
 
-    // ✅ Case 1: One-time payment
-    if (fee.feeStructure?.paymentType === 'ONE_TIME') {
+    if (feeStructure?.paymentType === 'ONE_TIME') {
       paid = fee.amountPaid || 0;
 
-    // ✅ Case 2: Installment payment
-    } else if (fee.feeStructure?.paymentType === 'INSTALLMENT') {
-      paid = fee.feeLogs.reduce((sum: any, log: any) => sum + (log.amountPaid || 0), 0);
+    } else if (feeStructure?.paymentType === 'INSTALLMENT') {
+      paid = fee.feeLogs.reduce(
+        (sum: number, log: any) => sum + (log.amountPaid || 0),
+        0
+      );
 
-    // ✅ Fallback
     } else if (fee.paymentStatus === 'SUCCESS') {
       paid = fee.amountPaid || 0;
     }
 
-    const totalFee = fee.feeStructure?.totalAmount || 0;
+    const totalFee = feeStructure?.totalAmount || 0;
     const outstanding = Math.max(totalFee - paid, 0);
 
-    // Merge data if student has multiple fee records
     const existing = totals.get(fee.studentId);
+
     if (existing) {
       totals.set(fee.studentId, {
         paid: existing.paid + paid,
-        totalFee: existing.totalFee,
-        outstanding: totalFee - paid,
+        totalFee: existing.totalFee + totalFee,
+        outstanding: existing.outstanding + outstanding,
       });
     } else {
-      totals.set(fee.studentId, { paid, totalFee, outstanding });
+      totals.set(fee.studentId, {
+        paid,
+        totalFee,
+        outstanding,
+      });
     }
   }
 
@@ -318,8 +389,16 @@ export async function profitAnalyticsController(req: Request, res: Response) {
       where: { clientAdminId, paymentStatus: "SUCCESS" },
     });
 
+    // const courseDetails = await tenantPrisma.course.findMany({
+    //   where: { id: { in: incomePerCourse.map((i) => i.courseId) } },
+    //   select: { id: true, name: true },
+    // });
+
+    const courseIds = Array.from(perStudentTotals.keys())
+      .filter((id): id is number => id !== null);
+
     const courseDetails = await tenantPrisma.course.findMany({
-      where: { id: { in: incomePerCourse.map((i) => i.courseId) } },
+      where: { id: { in: courseIds } },
       select: { id: true, name: true },
     });
 
@@ -564,8 +643,16 @@ export async function financialReportController(req: Request, res: Response) {
       where: { clientAdminId, paymentStatus: "SUCCESS" },
     });
 
+    // const courseDetails = await tenantPrisma.course.findMany({
+    //   where: { id: { in: incomePerCourse.map((i) => i.courseId) } },
+    //   select: { id: true, name: true },
+    // });
+
+    const courseIds = Array.from(perStudentTotals.keys())
+      .filter((id): id is number => id !== null);
+
     const courseDetails = await tenantPrisma.course.findMany({
-      where: { id: { in: incomePerCourse.map((i) => i.courseId) } },
+      where: { id: { in: courseIds } },
       select: { id: true, name: true },
     });
 
@@ -946,7 +1033,7 @@ export async function outstandingReportController(req: Request, res: Response) {
         rec.student.fullName,
         rec.student.studentCode,
         rec.student.contact,
-        rec.course.name,
+        rec.course?.name ?? "N/A",
         rec.amountDue,
         rec.amountPaid,
         rec.amountDue - rec.amountPaid,

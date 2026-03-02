@@ -12,11 +12,15 @@ import PaymentDataTable from "@/components/tables/PaymentDataTable";
 import FilterBox from "@/components/form/input/FilterBox";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
+import EnquiryCard from "@/components/common/EnquiryCard";
+import LabForm from "@/components/form/form-elements/LabCreateForm";
+import OpeningBalanceForm from "@/components/form/form-elements/OpeningBalanceCreateForm";
 
 export default function PaymentTable() {
   const studentDetails = useSelector(
     (state: RootState) => state.studentCourse.studentDetails,
   );
+  const [showForm, setShowForm] = useState(false);
   const { payment, searchQuery, sortField, sortOrder, currentPage, filters, total, totalPages } = useSelector((state: RootState) => state.payment);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -76,7 +80,7 @@ export default function PaymentTable() {
 
         dispatch(setPayment(response.data || []));
         dispatch(setTotalPages(response.totalPages || 1));
-        dispatch(setTotal(response.total || 1));
+        dispatch(setTotal(response.total || 0));
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       } finally {
@@ -117,10 +121,18 @@ export default function PaymentTable() {
     setCurrentPage(1); // Reset pagination on status change
   };
 
+  const handleCreateClick = () => {
+    setShowForm(!showForm);
+  };
+
+  const handleCloseModal = () => {
+    setShowForm(false);
+  };
+
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Student Payment Lists">
+        <EnquiryCard title="Student Payment Lists" onCreateClick={handleCreateClick}>
           <div className="flex justify-between">
             <Search
               value={searchInput}
@@ -173,8 +185,9 @@ export default function PaymentTable() {
             title="Student Payments"
             onPageChange={handlePagination}
           />
-        </StudentCard>
+        </EnquiryCard>
       </div>
+      {showForm && <OpeningBalanceForm onCloseModal={handleCloseModal} />}
     </div>
   );
 }

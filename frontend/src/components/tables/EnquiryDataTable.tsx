@@ -248,7 +248,7 @@ export default function EnquiryDataTable({
                     className="flex items-center gap-1"
                     onClick={() => onSort("createdAt")}
                   >
-                    Created At
+                    Enquiry Date
                    <span>
                     {sortField !== "createdAt"
                       ? "↑↓"       // neutral
@@ -337,7 +337,7 @@ export default function EnquiryDataTable({
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       <span>
-                        {new Date(item.createdAt).toLocaleDateString(
+                        {new Date(item.enquiryDate).toLocaleDateString(
                               "en-US",
                               {
                                 year: "numeric",

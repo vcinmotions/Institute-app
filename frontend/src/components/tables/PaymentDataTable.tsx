@@ -95,13 +95,6 @@ export default function PaymentDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                  Course
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
                   Payment Status
                 </TableCell>
 
@@ -199,14 +192,10 @@ export default function PaymentDataTable({
                               {item?.student?.fullName || "N/A"}
                             </span>
                             <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
-                              {item.receiptNo ? item?.receiptNo : "N/A"}
+                              {item.receiptNo ? item?.receiptNo : "-"}
                             </span>
                           </div>
                         </div>
-                      </TableCell>
-
-                      <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                        {item?.course?.name || "N/A"}
                       </TableCell>
 
                       <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
@@ -219,11 +208,11 @@ export default function PaymentDataTable({
                       </TableCell>
 
                       <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                        {item?.feeStructure?.paymentType}
+                        {item?.feeStructure?.paymentType ?? "-"}
                       </TableCell>
 
                       <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                        {item?.feeStructure?.totalAmount}
+                        {item?.feeStructure?.totalAmount ?? item.amountDue + item.amountPaid}
                       </TableCell>
 
                       <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">

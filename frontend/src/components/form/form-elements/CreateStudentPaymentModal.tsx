@@ -77,9 +77,9 @@ export default function CreateStudentPaymentModal({
     // Auto-format as DD/MM/YYYY
     let formattedValue = digits;
     if (digits.length > 4) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4, 8)}`;
+      formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4, 8)}`;
     } else if (digits.length > 2) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
+      formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}`;
     }
 
     // Update form data
@@ -156,20 +156,21 @@ export default function CreateStudentPaymentModal({
       return;
     }
 
-    const [day, month, year] = paymentDate.split("/").map(Number);
-    const parsedDate = new Date(year, month - 1, day); // month is 0-indexed
-    if (isNaN(parsedDate.getTime())) {
-      setErrors({ paymentDate: "Invalid date" });
-      return;
-    }
+    // const [day, month, year] = paymentDate.split("/").map(Number);
+    // const parsedDate = new Date(year, month - 1, day); // month is 0-indexed
+    // if (isNaN(parsedDate.getTime())) {
+    //   setErrors({ paymentDate: "Invalid date" });
+    //   return;
+    // }
 
     const id = payment?.id;
     console.log("GET PAYMENT STUDENTFEE ID:", id);
+    console.log("GET PAYMENT DATE:", paymentDate);
 
     try {
       await createStudentPayment({
         amountPaid: parseFloat(amountPaid),
-        paymentDate: new Date(parsedDate).toISOString(),
+        paymentDate: paymentDate,
         paymentMode,
         id,
       });

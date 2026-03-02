@@ -4648,37 +4648,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type FeeStructureCountOutputType
-   */
-
-  export type FeeStructureCountOutputType = {
-    studentFees: number
-  }
-
-  export type FeeStructureCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    studentFees?: boolean | FeeStructureCountOutputTypeCountStudentFeesArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * FeeStructureCountOutputType without action
-   */
-  export type FeeStructureCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FeeStructureCountOutputType
-     */
-    select?: FeeStructureCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * FeeStructureCountOutputType without action
-   */
-  export type FeeStructureCountOutputTypeCountStudentFeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: StudentFeeWhereInput
-  }
-
-
-  /**
    * Count Type StudentFeeCountOutputType
    */
 
@@ -9070,6 +9039,7 @@ export namespace Prisma {
     source: string | null
     referedBy: string | null
     leadStatus: $Enums.LeadStatus | null
+    enquiryDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     isConverted: boolean | null
@@ -9093,6 +9063,7 @@ export namespace Prisma {
     source: string | null
     referedBy: string | null
     leadStatus: $Enums.LeadStatus | null
+    enquiryDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     isConverted: boolean | null
@@ -9116,6 +9087,7 @@ export namespace Prisma {
     source: number
     referedBy: number
     leadStatus: number
+    enquiryDate: number
     createdAt: number
     updatedAt: number
     isConverted: number
@@ -9153,6 +9125,7 @@ export namespace Prisma {
     source?: true
     referedBy?: true
     leadStatus?: true
+    enquiryDate?: true
     createdAt?: true
     updatedAt?: true
     isConverted?: true
@@ -9176,6 +9149,7 @@ export namespace Prisma {
     source?: true
     referedBy?: true
     leadStatus?: true
+    enquiryDate?: true
     createdAt?: true
     updatedAt?: true
     isConverted?: true
@@ -9199,6 +9173,7 @@ export namespace Prisma {
     source?: true
     referedBy?: true
     leadStatus?: true
+    enquiryDate?: true
     createdAt?: true
     updatedAt?: true
     isConverted?: true
@@ -9309,6 +9284,7 @@ export namespace Prisma {
     source: string | null
     referedBy: string | null
     leadStatus: $Enums.LeadStatus
+    enquiryDate: Date | null
     createdAt: Date
     updatedAt: Date
     isConverted: boolean
@@ -9351,6 +9327,7 @@ export namespace Prisma {
     source?: boolean
     referedBy?: boolean
     leadStatus?: boolean
+    enquiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     isConverted?: boolean
@@ -9380,6 +9357,7 @@ export namespace Prisma {
     source?: boolean
     referedBy?: boolean
     leadStatus?: boolean
+    enquiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     isConverted?: boolean
@@ -9405,6 +9383,7 @@ export namespace Prisma {
     source?: boolean
     referedBy?: boolean
     leadStatus?: boolean
+    enquiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     isConverted?: boolean
@@ -9430,6 +9409,7 @@ export namespace Prisma {
     source?: boolean
     referedBy?: boolean
     leadStatus?: boolean
+    enquiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     isConverted?: boolean
@@ -9437,7 +9417,7 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "city" | "course" | "gender" | "dob" | "source" | "referedBy" | "leadStatus" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
+  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "city" | "course" | "gender" | "dob" | "source" | "referedBy" | "leadStatus" | "enquiryDate" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
   export type EnquiryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     followUps?: boolean | Enquiry$followUpsArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
@@ -9480,6 +9460,7 @@ export namespace Prisma {
       source: string | null
       referedBy: string | null
       leadStatus: $Enums.LeadStatus
+      enquiryDate: Date | null
       createdAt: Date
       updatedAt: Date
       isConverted: boolean
@@ -9928,6 +9909,7 @@ export namespace Prisma {
     readonly source: FieldRef<"Enquiry", 'String'>
     readonly referedBy: FieldRef<"Enquiry", 'String'>
     readonly leadStatus: FieldRef<"Enquiry", 'LeadStatus'>
+    readonly enquiryDate: FieldRef<"Enquiry", 'DateTime'>
     readonly createdAt: FieldRef<"Enquiry", 'DateTime'>
     readonly updatedAt: FieldRef<"Enquiry", 'DateTime'>
     readonly isConverted: FieldRef<"Enquiry", 'Boolean'>
@@ -11549,6 +11531,7 @@ export namespace Prisma {
     doneAt: Date | null
     remark: string | null
     createdAt: Date | null
+    updatedAt: Date | null
     followUpStatus: $Enums.FollowUpStatus | null
   }
 
@@ -11559,6 +11542,7 @@ export namespace Prisma {
     doneAt: Date | null
     remark: string | null
     createdAt: Date | null
+    updatedAt: Date | null
     followUpStatus: $Enums.FollowUpStatus | null
   }
 
@@ -11569,6 +11553,7 @@ export namespace Prisma {
     doneAt: number
     remark: number
     createdAt: number
+    updatedAt: number
     followUpStatus: number
     _all: number
   }
@@ -11581,6 +11566,7 @@ export namespace Prisma {
     doneAt?: true
     remark?: true
     createdAt?: true
+    updatedAt?: true
     followUpStatus?: true
   }
 
@@ -11591,6 +11577,7 @@ export namespace Prisma {
     doneAt?: true
     remark?: true
     createdAt?: true
+    updatedAt?: true
     followUpStatus?: true
   }
 
@@ -11601,6 +11588,7 @@ export namespace Prisma {
     doneAt?: true
     remark?: true
     createdAt?: true
+    updatedAt?: true
     followUpStatus?: true
     _all?: true
   }
@@ -11684,6 +11672,7 @@ export namespace Prisma {
     doneAt: Date | null
     remark: string
     createdAt: Date
+    updatedAt: Date
     followUpStatus: $Enums.FollowUpStatus
     _count: FollowUpCountAggregateOutputType | null
     _min: FollowUpMinAggregateOutputType | null
@@ -11711,6 +11700,7 @@ export namespace Prisma {
     doneAt?: boolean
     remark?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     followUpStatus?: boolean
     enquiry?: boolean | EnquiryDefaultArgs<ExtArgs>
     notification?: boolean | FollowUp$notificationArgs<ExtArgs>
@@ -11723,6 +11713,7 @@ export namespace Prisma {
     doneAt?: boolean
     remark?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     followUpStatus?: boolean
     enquiry?: boolean | EnquiryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["followUp"]>
@@ -11734,6 +11725,7 @@ export namespace Prisma {
     doneAt?: boolean
     remark?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     followUpStatus?: boolean
     enquiry?: boolean | EnquiryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["followUp"]>
@@ -11745,10 +11737,11 @@ export namespace Prisma {
     doneAt?: boolean
     remark?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     followUpStatus?: boolean
   }
 
-  export type FollowUpOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enquiryId" | "scheduledAt" | "doneAt" | "remark" | "createdAt" | "followUpStatus", ExtArgs["result"]["followUp"]>
+  export type FollowUpOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enquiryId" | "scheduledAt" | "doneAt" | "remark" | "createdAt" | "updatedAt" | "followUpStatus", ExtArgs["result"]["followUp"]>
   export type FollowUpInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enquiry?: boolean | EnquiryDefaultArgs<ExtArgs>
     notification?: boolean | FollowUp$notificationArgs<ExtArgs>
@@ -11773,6 +11766,7 @@ export namespace Prisma {
       doneAt: Date | null
       remark: string
       createdAt: Date
+      updatedAt: Date
       followUpStatus: $Enums.FollowUpStatus
     }, ExtArgs["result"]["followUp"]>
     composites: {}
@@ -12205,6 +12199,7 @@ export namespace Prisma {
     readonly doneAt: FieldRef<"FollowUp", 'DateTime'>
     readonly remark: FieldRef<"FollowUp", 'String'>
     readonly createdAt: FieldRef<"FollowUp", 'DateTime'>
+    readonly updatedAt: FieldRef<"FollowUp", 'DateTime'>
     readonly followUpStatus: FieldRef<"FollowUp", 'FollowUpStatus'>
   }
     
@@ -13892,6 +13887,8 @@ export namespace Prisma {
     idProofType: string | null
     idProofNumber: string | null
     admissionDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
     clientAdminId: string | null
   }
 
@@ -13914,6 +13911,8 @@ export namespace Prisma {
     idProofType: string | null
     idProofNumber: string | null
     admissionDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
     clientAdminId: string | null
   }
 
@@ -13936,6 +13935,8 @@ export namespace Prisma {
     idProofType: number
     idProofNumber: number
     admissionDate: number
+    createdAt: number
+    updatedAt: number
     clientAdminId: number
     _all: number
   }
@@ -13970,6 +13971,8 @@ export namespace Prisma {
     idProofType?: true
     idProofNumber?: true
     admissionDate?: true
+    createdAt?: true
+    updatedAt?: true
     clientAdminId?: true
   }
 
@@ -13992,6 +13995,8 @@ export namespace Prisma {
     idProofType?: true
     idProofNumber?: true
     admissionDate?: true
+    createdAt?: true
+    updatedAt?: true
     clientAdminId?: true
   }
 
@@ -14014,6 +14019,8 @@ export namespace Prisma {
     idProofType?: true
     idProofNumber?: true
     admissionDate?: true
+    createdAt?: true
+    updatedAt?: true
     clientAdminId?: true
     _all?: true
   }
@@ -14109,20 +14116,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName: string | null
+    motherName: string | null
     photoUrl: string | null
     contact: string
-    parentsContact: string
+    parentsContact: string | null
     email: string | null
     residentialAddress: string | null
     permenantAddress: string | null
     dob: Date | null
-    gender: string
+    gender: string | null
     religion: string | null
     idProofType: string | null
     idProofNumber: string | null
-    admissionDate: Date
+    admissionDate: Date | null
+    createdAt: Date
+    updatedAt: Date
     clientAdminId: string
     _count: StudentCountAggregateOutputType | null
     _avg: StudentAvgAggregateOutputType | null
@@ -14164,6 +14173,8 @@ export namespace Prisma {
     idProofType?: boolean
     idProofNumber?: boolean
     admissionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     clientAdminId?: boolean
     enquiry?: boolean | Student$enquiryArgs<ExtArgs>
     labAllocations?: boolean | Student$labAllocationsArgs<ExtArgs>
@@ -14200,6 +14211,8 @@ export namespace Prisma {
     idProofType?: boolean
     idProofNumber?: boolean
     admissionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     clientAdminId?: boolean
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
@@ -14223,6 +14236,8 @@ export namespace Prisma {
     idProofType?: boolean
     idProofNumber?: boolean
     admissionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     clientAdminId?: boolean
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
@@ -14246,10 +14261,12 @@ export namespace Prisma {
     idProofType?: boolean
     idProofNumber?: boolean
     admissionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     clientAdminId?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serialNumber" | "studentCode" | "fullName" | "fatherName" | "motherName" | "photoUrl" | "contact" | "parentsContact" | "email" | "residentialAddress" | "permenantAddress" | "dob" | "gender" | "religion" | "idProofType" | "idProofNumber" | "admissionDate" | "clientAdminId", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serialNumber" | "studentCode" | "fullName" | "fatherName" | "motherName" | "photoUrl" | "contact" | "parentsContact" | "email" | "residentialAddress" | "permenantAddress" | "dob" | "gender" | "religion" | "idProofType" | "idProofNumber" | "admissionDate" | "createdAt" | "updatedAt" | "clientAdminId", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enquiry?: boolean | Student$enquiryArgs<ExtArgs>
     labAllocations?: boolean | Student$labAllocationsArgs<ExtArgs>
@@ -14295,20 +14312,22 @@ export namespace Prisma {
       serialNumber: number
       studentCode: string
       fullName: string
-      fatherName: string
-      motherName: string
+      fatherName: string | null
+      motherName: string | null
       photoUrl: string | null
       contact: string
-      parentsContact: string
+      parentsContact: string | null
       email: string | null
       residentialAddress: string | null
       permenantAddress: string | null
       dob: Date | null
-      gender: string
+      gender: string | null
       religion: string | null
       idProofType: string | null
       idProofNumber: string | null
-      admissionDate: Date
+      admissionDate: Date | null
+      createdAt: Date
+      updatedAt: Date
       clientAdminId: string
     }, ExtArgs["result"]["student"]>
     composites: {}
@@ -14764,6 +14783,8 @@ export namespace Prisma {
     readonly idProofType: FieldRef<"Student", 'String'>
     readonly idProofNumber: FieldRef<"Student", 'String'>
     readonly admissionDate: FieldRef<"Student", 'DateTime'>
+    readonly createdAt: FieldRef<"Student", 'DateTime'>
+    readonly updatedAt: FieldRef<"Student", 'DateTime'>
     readonly clientAdminId: FieldRef<"Student", 'String'>
   }
     
@@ -28895,9 +28916,7 @@ export namespace Prisma {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     installment?: boolean | FeeStructure$installmentArgs<ExtArgs>
-    studentFees?: boolean | FeeStructure$studentFeesArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
-    _count?: boolean | FeeStructureCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["feeStructure"]>
 
   export type FeeStructureSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -28946,9 +28965,7 @@ export namespace Prisma {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     installment?: boolean | FeeStructure$installmentArgs<ExtArgs>
-    studentFees?: boolean | FeeStructure$studentFeesArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
-    _count?: boolean | FeeStructureCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FeeStructureIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -28969,7 +28986,6 @@ export namespace Prisma {
       student: Prisma.$StudentPayload<ExtArgs>
       course: Prisma.$CoursePayload<ExtArgs>
       installment: Prisma.$InstallmentDetailPayload<ExtArgs> | null
-      studentFees: Prisma.$StudentFeePayload<ExtArgs>[]
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -29378,7 +29394,6 @@ export namespace Prisma {
     student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     installment<T extends FeeStructure$installmentArgs<ExtArgs> = {}>(args?: Subset<T, FeeStructure$installmentArgs<ExtArgs>>): Prisma__InstallmentDetailClient<$Result.GetResult<Prisma.$InstallmentDetailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    studentFees<T extends FeeStructure$studentFeesArgs<ExtArgs> = {}>(args?: Subset<T, FeeStructure$studentFeesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -29829,30 +29844,6 @@ export namespace Prisma {
      */
     include?: InstallmentDetailInclude<ExtArgs> | null
     where?: InstallmentDetailWhereInput
-  }
-
-  /**
-   * FeeStructure.studentFees
-   */
-  export type FeeStructure$studentFeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudentFee
-     */
-    select?: StudentFeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudentFee
-     */
-    omit?: StudentFeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudentFeeInclude<ExtArgs> | null
-    where?: StudentFeeWhereInput
-    orderBy?: StudentFeeOrderByWithRelationInput | StudentFeeOrderByWithRelationInput[]
-    cursor?: StudentFeeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: StudentFeeScalarFieldEnum | StudentFeeScalarFieldEnum[]
   }
 
   /**
@@ -31023,9 +31014,12 @@ export namespace Prisma {
     amountDue: number | null
     amountPaid: number | null
     paymentDate: Date | null
+    createdAt: Date | null
     paymentMode: $Enums.PaymentMode | null
     receiptNo: string | null
     paymentStatus: $Enums.PaymentStatus | null
+    isOpeningBalance: boolean | null
+    sourceType: string | null
     clientAdminId: string | null
   }
 
@@ -31037,9 +31031,12 @@ export namespace Prisma {
     amountDue: number | null
     amountPaid: number | null
     paymentDate: Date | null
+    createdAt: Date | null
     paymentMode: $Enums.PaymentMode | null
     receiptNo: string | null
     paymentStatus: $Enums.PaymentStatus | null
+    isOpeningBalance: boolean | null
+    sourceType: string | null
     clientAdminId: string | null
   }
 
@@ -31051,9 +31048,12 @@ export namespace Prisma {
     amountDue: number
     amountPaid: number
     paymentDate: number
+    createdAt: number
     paymentMode: number
     receiptNo: number
     paymentStatus: number
+    isOpeningBalance: number
+    sourceType: number
     clientAdminId: number
     _all: number
   }
@@ -31083,9 +31083,12 @@ export namespace Prisma {
     amountDue?: true
     amountPaid?: true
     paymentDate?: true
+    createdAt?: true
     paymentMode?: true
     receiptNo?: true
     paymentStatus?: true
+    isOpeningBalance?: true
+    sourceType?: true
     clientAdminId?: true
   }
 
@@ -31097,9 +31100,12 @@ export namespace Prisma {
     amountDue?: true
     amountPaid?: true
     paymentDate?: true
+    createdAt?: true
     paymentMode?: true
     receiptNo?: true
     paymentStatus?: true
+    isOpeningBalance?: true
+    sourceType?: true
     clientAdminId?: true
   }
 
@@ -31111,9 +31117,12 @@ export namespace Prisma {
     amountDue?: true
     amountPaid?: true
     paymentDate?: true
+    createdAt?: true
     paymentMode?: true
     receiptNo?: true
     paymentStatus?: true
+    isOpeningBalance?: true
+    sourceType?: true
     clientAdminId?: true
     _all?: true
   }
@@ -31207,14 +31216,17 @@ export namespace Prisma {
   export type StudentFeeGroupByOutputType = {
     id: number
     studentId: number
-    courseId: number
+    courseId: number | null
     dueDate: Date
     amountDue: number
     amountPaid: number
     paymentDate: Date | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt: Date
+    paymentMode: $Enums.PaymentMode | null
+    receiptNo: string | null
     paymentStatus: $Enums.PaymentStatus
+    isOpeningBalance: boolean
+    sourceType: string | null
     clientAdminId: string
     _count: StudentFeeCountAggregateOutputType | null
     _avg: StudentFeeAvgAggregateOutputType | null
@@ -31245,14 +31257,16 @@ export namespace Prisma {
     amountDue?: boolean
     amountPaid?: boolean
     paymentDate?: boolean
+    createdAt?: boolean
     paymentMode?: boolean
     receiptNo?: boolean
     paymentStatus?: boolean
+    isOpeningBalance?: boolean
+    sourceType?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
-    course?: boolean | CourseDefaultArgs<ExtArgs>
+    course?: boolean | StudentFee$courseArgs<ExtArgs>
     feeLogs?: boolean | StudentFee$feeLogsArgs<ExtArgs>
-    feeStructure?: boolean | StudentFee$feeStructureArgs<ExtArgs>
     notification?: boolean | StudentFee$notificationArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     _count?: boolean | StudentFeeCountOutputTypeDefaultArgs<ExtArgs>
@@ -31266,13 +31280,15 @@ export namespace Prisma {
     amountDue?: boolean
     amountPaid?: boolean
     paymentDate?: boolean
+    createdAt?: boolean
     paymentMode?: boolean
     receiptNo?: boolean
     paymentStatus?: boolean
+    isOpeningBalance?: boolean
+    sourceType?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
-    course?: boolean | CourseDefaultArgs<ExtArgs>
-    feeStructure?: boolean | StudentFee$feeStructureArgs<ExtArgs>
+    course?: boolean | StudentFee$courseArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentFee"]>
 
@@ -31284,13 +31300,15 @@ export namespace Prisma {
     amountDue?: boolean
     amountPaid?: boolean
     paymentDate?: boolean
+    createdAt?: boolean
     paymentMode?: boolean
     receiptNo?: boolean
     paymentStatus?: boolean
+    isOpeningBalance?: boolean
+    sourceType?: boolean
     clientAdminId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
-    course?: boolean | CourseDefaultArgs<ExtArgs>
-    feeStructure?: boolean | StudentFee$feeStructureArgs<ExtArgs>
+    course?: boolean | StudentFee$courseArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentFee"]>
 
@@ -31302,32 +31320,32 @@ export namespace Prisma {
     amountDue?: boolean
     amountPaid?: boolean
     paymentDate?: boolean
+    createdAt?: boolean
     paymentMode?: boolean
     receiptNo?: boolean
     paymentStatus?: boolean
+    isOpeningBalance?: boolean
+    sourceType?: boolean
     clientAdminId?: boolean
   }
 
-  export type StudentFeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "dueDate" | "amountDue" | "amountPaid" | "paymentDate" | "paymentMode" | "receiptNo" | "paymentStatus" | "clientAdminId", ExtArgs["result"]["studentFee"]>
+  export type StudentFeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "dueDate" | "amountDue" | "amountPaid" | "paymentDate" | "createdAt" | "paymentMode" | "receiptNo" | "paymentStatus" | "isOpeningBalance" | "sourceType" | "clientAdminId", ExtArgs["result"]["studentFee"]>
   export type StudentFeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
-    course?: boolean | CourseDefaultArgs<ExtArgs>
+    course?: boolean | StudentFee$courseArgs<ExtArgs>
     feeLogs?: boolean | StudentFee$feeLogsArgs<ExtArgs>
-    feeStructure?: boolean | StudentFee$feeStructureArgs<ExtArgs>
     notification?: boolean | StudentFee$notificationArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     _count?: boolean | StudentFeeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentFeeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
-    course?: boolean | CourseDefaultArgs<ExtArgs>
-    feeStructure?: boolean | StudentFee$feeStructureArgs<ExtArgs>
+    course?: boolean | StudentFee$courseArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
   export type StudentFeeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
-    course?: boolean | CourseDefaultArgs<ExtArgs>
-    feeStructure?: boolean | StudentFee$feeStructureArgs<ExtArgs>
+    course?: boolean | StudentFee$courseArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
 
@@ -31335,23 +31353,25 @@ export namespace Prisma {
     name: "StudentFee"
     objects: {
       student: Prisma.$StudentPayload<ExtArgs>
-      course: Prisma.$CoursePayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs> | null
       feeLogs: Prisma.$StudentFeeLogPayload<ExtArgs>[]
-      feeStructure: Prisma.$FeeStructurePayload<ExtArgs> | null
       notification: Prisma.$NotificationPayload<ExtArgs> | null
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       studentId: number
-      courseId: number
+      courseId: number | null
       dueDate: Date
       amountDue: number
       amountPaid: number
       paymentDate: Date | null
-      paymentMode: $Enums.PaymentMode
-      receiptNo: string
+      createdAt: Date
+      paymentMode: $Enums.PaymentMode | null
+      receiptNo: string | null
       paymentStatus: $Enums.PaymentStatus
+      isOpeningBalance: boolean
+      sourceType: string | null
       clientAdminId: string
     }, ExtArgs["result"]["studentFee"]>
     composites: {}
@@ -31748,9 +31768,8 @@ export namespace Prisma {
   export interface Prisma__StudentFeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    course<T extends StudentFee$courseArgs<ExtArgs> = {}>(args?: Subset<T, StudentFee$courseArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     feeLogs<T extends StudentFee$feeLogsArgs<ExtArgs> = {}>(args?: Subset<T, StudentFee$feeLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFeeLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    feeStructure<T extends StudentFee$feeStructureArgs<ExtArgs> = {}>(args?: Subset<T, StudentFee$feeStructureArgs<ExtArgs>>): Prisma__FeeStructureClient<$Result.GetResult<Prisma.$FeeStructurePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     notification<T extends StudentFee$notificationArgs<ExtArgs> = {}>(args?: Subset<T, StudentFee$notificationArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -31789,9 +31808,12 @@ export namespace Prisma {
     readonly amountDue: FieldRef<"StudentFee", 'Float'>
     readonly amountPaid: FieldRef<"StudentFee", 'Float'>
     readonly paymentDate: FieldRef<"StudentFee", 'DateTime'>
+    readonly createdAt: FieldRef<"StudentFee", 'DateTime'>
     readonly paymentMode: FieldRef<"StudentFee", 'PaymentMode'>
     readonly receiptNo: FieldRef<"StudentFee", 'String'>
     readonly paymentStatus: FieldRef<"StudentFee", 'PaymentStatus'>
+    readonly isOpeningBalance: FieldRef<"StudentFee", 'Boolean'>
+    readonly sourceType: FieldRef<"StudentFee", 'String'>
     readonly clientAdminId: FieldRef<"StudentFee", 'String'>
   }
     
@@ -32189,6 +32211,25 @@ export namespace Prisma {
   }
 
   /**
+   * StudentFee.course
+   */
+  export type StudentFee$courseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Course
+     */
+    select?: CourseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Course
+     */
+    omit?: CourseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseInclude<ExtArgs> | null
+    where?: CourseWhereInput
+  }
+
+  /**
    * StudentFee.feeLogs
    */
   export type StudentFee$feeLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32210,25 +32251,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentFeeLogScalarFieldEnum | StudentFeeLogScalarFieldEnum[]
-  }
-
-  /**
-   * StudentFee.feeStructure
-   */
-  export type StudentFee$feeStructureArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FeeStructure
-     */
-    select?: FeeStructureSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FeeStructure
-     */
-    omit?: FeeStructureOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FeeStructureInclude<ExtArgs> | null
-    where?: FeeStructureWhereInput
   }
 
   /**
@@ -44189,6 +44211,7 @@ export namespace Prisma {
     source: 'source',
     referedBy: 'referedBy',
     leadStatus: 'leadStatus',
+    enquiryDate: 'enquiryDate',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     isConverted: 'isConverted',
@@ -44216,6 +44239,7 @@ export namespace Prisma {
     doneAt: 'doneAt',
     remark: 'remark',
     createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     followUpStatus: 'followUpStatus'
   };
 
@@ -44255,6 +44279,8 @@ export namespace Prisma {
     idProofType: 'idProofType',
     idProofNumber: 'idProofNumber',
     admissionDate: 'admissionDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     clientAdminId: 'clientAdminId'
   };
 
@@ -44431,9 +44457,12 @@ export namespace Prisma {
     amountDue: 'amountDue',
     amountPaid: 'amountPaid',
     paymentDate: 'paymentDate',
+    createdAt: 'createdAt',
     paymentMode: 'paymentMode',
     receiptNo: 'receiptNo',
     paymentStatus: 'paymentStatus',
+    isOpeningBalance: 'isOpeningBalance',
+    sourceType: 'sourceType',
     clientAdminId: 'clientAdminId'
   };
 
@@ -45190,6 +45219,7 @@ export namespace Prisma {
     source?: StringNullableFilter<"Enquiry"> | string | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
+    enquiryDate?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
     createdAt?: DateTimeFilter<"Enquiry"> | Date | string
     updatedAt?: DateTimeFilter<"Enquiry"> | Date | string
     isConverted?: BoolFilter<"Enquiry"> | boolean
@@ -45218,6 +45248,7 @@ export namespace Prisma {
     source?: SortOrderInput | SortOrder
     referedBy?: SortOrderInput | SortOrder
     leadStatus?: SortOrder
+    enquiryDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isConverted?: SortOrder
@@ -45252,6 +45283,7 @@ export namespace Prisma {
     source?: StringNullableFilter<"Enquiry"> | string | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
+    enquiryDate?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
     createdAt?: DateTimeFilter<"Enquiry"> | Date | string
     updatedAt?: DateTimeFilter<"Enquiry"> | Date | string
     isConverted?: BoolFilter<"Enquiry"> | boolean
@@ -45279,6 +45311,7 @@ export namespace Prisma {
     source?: SortOrderInput | SortOrder
     referedBy?: SortOrderInput | SortOrder
     leadStatus?: SortOrder
+    enquiryDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isConverted?: SortOrder
@@ -45310,6 +45343,7 @@ export namespace Prisma {
     source?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     referedBy?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusWithAggregatesFilter<"Enquiry"> | $Enums.LeadStatus
+    enquiryDate?: DateTimeNullableWithAggregatesFilter<"Enquiry"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Enquiry"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Enquiry"> | Date | string
     isConverted?: BoolWithAggregatesFilter<"Enquiry"> | boolean
@@ -45386,6 +45420,7 @@ export namespace Prisma {
     doneAt?: DateTimeNullableFilter<"FollowUp"> | Date | string | null
     remark?: StringFilter<"FollowUp"> | string
     createdAt?: DateTimeFilter<"FollowUp"> | Date | string
+    updatedAt?: DateTimeFilter<"FollowUp"> | Date | string
     followUpStatus?: EnumFollowUpStatusFilter<"FollowUp"> | $Enums.FollowUpStatus
     enquiry?: XOR<EnquiryScalarRelationFilter, EnquiryWhereInput>
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
@@ -45398,6 +45433,7 @@ export namespace Prisma {
     doneAt?: SortOrderInput | SortOrder
     remark?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     followUpStatus?: SortOrder
     enquiry?: EnquiryOrderByWithRelationInput
     notification?: NotificationOrderByWithRelationInput
@@ -45413,6 +45449,7 @@ export namespace Prisma {
     doneAt?: DateTimeNullableFilter<"FollowUp"> | Date | string | null
     remark?: StringFilter<"FollowUp"> | string
     createdAt?: DateTimeFilter<"FollowUp"> | Date | string
+    updatedAt?: DateTimeFilter<"FollowUp"> | Date | string
     followUpStatus?: EnumFollowUpStatusFilter<"FollowUp"> | $Enums.FollowUpStatus
     enquiry?: XOR<EnquiryScalarRelationFilter, EnquiryWhereInput>
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
@@ -45425,6 +45462,7 @@ export namespace Prisma {
     doneAt?: SortOrderInput | SortOrder
     remark?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     followUpStatus?: SortOrder
     _count?: FollowUpCountOrderByAggregateInput
     _max?: FollowUpMaxOrderByAggregateInput
@@ -45441,6 +45479,7 @@ export namespace Prisma {
     doneAt?: DateTimeNullableWithAggregatesFilter<"FollowUp"> | Date | string | null
     remark?: StringWithAggregatesFilter<"FollowUp"> | string
     createdAt?: DateTimeWithAggregatesFilter<"FollowUp"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FollowUp"> | Date | string
     followUpStatus?: EnumFollowUpStatusWithAggregatesFilter<"FollowUp"> | $Enums.FollowUpStatus
   }
 
@@ -45533,20 +45572,22 @@ export namespace Prisma {
     serialNumber?: IntFilter<"Student"> | number
     studentCode?: StringFilter<"Student"> | string
     fullName?: StringFilter<"Student"> | string
-    fatherName?: StringFilter<"Student"> | string
-    motherName?: StringFilter<"Student"> | string
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
     photoUrl?: StringNullableFilter<"Student"> | string | null
     contact?: StringFilter<"Student"> | string
-    parentsContact?: StringFilter<"Student"> | string
+    parentsContact?: StringNullableFilter<"Student"> | string | null
     email?: StringNullableFilter<"Student"> | string | null
     residentialAddress?: StringNullableFilter<"Student"> | string | null
     permenantAddress?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
-    gender?: StringFilter<"Student"> | string
+    gender?: StringNullableFilter<"Student"> | string | null
     religion?: StringNullableFilter<"Student"> | string | null
     idProofType?: StringNullableFilter<"Student"> | string | null
     idProofNumber?: StringNullableFilter<"Student"> | string | null
-    admissionDate?: DateTimeFilter<"Student"> | Date | string
+    admissionDate?: DateTimeNullableFilter<"Student"> | Date | string | null
+    createdAt?: DateTimeFilter<"Student"> | Date | string
+    updatedAt?: DateTimeFilter<"Student"> | Date | string
     clientAdminId?: StringFilter<"Student"> | string
     enquiry?: XOR<EnquiryNullableScalarRelationFilter, EnquiryWhereInput> | null
     labAllocations?: LabAllocationListRelationFilter
@@ -45568,20 +45609,22 @@ export namespace Prisma {
     serialNumber?: SortOrder
     studentCode?: SortOrder
     fullName?: SortOrder
-    fatherName?: SortOrder
-    motherName?: SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
     contact?: SortOrder
-    parentsContact?: SortOrder
+    parentsContact?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     residentialAddress?: SortOrderInput | SortOrder
     permenantAddress?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
-    gender?: SortOrder
+    gender?: SortOrderInput | SortOrder
     religion?: SortOrderInput | SortOrder
     idProofType?: SortOrderInput | SortOrder
     idProofNumber?: SortOrderInput | SortOrder
-    admissionDate?: SortOrder
+    admissionDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     clientAdminId?: SortOrder
     enquiry?: EnquiryOrderByWithRelationInput
     labAllocations?: LabAllocationOrderByRelationAggregateInput
@@ -45606,20 +45649,22 @@ export namespace Prisma {
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
     fullName?: StringFilter<"Student"> | string
-    fatherName?: StringFilter<"Student"> | string
-    motherName?: StringFilter<"Student"> | string
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
     photoUrl?: StringNullableFilter<"Student"> | string | null
     contact?: StringFilter<"Student"> | string
-    parentsContact?: StringFilter<"Student"> | string
+    parentsContact?: StringNullableFilter<"Student"> | string | null
     email?: StringNullableFilter<"Student"> | string | null
     residentialAddress?: StringNullableFilter<"Student"> | string | null
     permenantAddress?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
-    gender?: StringFilter<"Student"> | string
+    gender?: StringNullableFilter<"Student"> | string | null
     religion?: StringNullableFilter<"Student"> | string | null
     idProofType?: StringNullableFilter<"Student"> | string | null
     idProofNumber?: StringNullableFilter<"Student"> | string | null
-    admissionDate?: DateTimeFilter<"Student"> | Date | string
+    admissionDate?: DateTimeNullableFilter<"Student"> | Date | string | null
+    createdAt?: DateTimeFilter<"Student"> | Date | string
+    updatedAt?: DateTimeFilter<"Student"> | Date | string
     clientAdminId?: StringFilter<"Student"> | string
     enquiry?: XOR<EnquiryNullableScalarRelationFilter, EnquiryWhereInput> | null
     labAllocations?: LabAllocationListRelationFilter
@@ -45641,20 +45686,22 @@ export namespace Prisma {
     serialNumber?: SortOrder
     studentCode?: SortOrder
     fullName?: SortOrder
-    fatherName?: SortOrder
-    motherName?: SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
     contact?: SortOrder
-    parentsContact?: SortOrder
+    parentsContact?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     residentialAddress?: SortOrderInput | SortOrder
     permenantAddress?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
-    gender?: SortOrder
+    gender?: SortOrderInput | SortOrder
     religion?: SortOrderInput | SortOrder
     idProofType?: SortOrderInput | SortOrder
     idProofNumber?: SortOrderInput | SortOrder
-    admissionDate?: SortOrder
+    admissionDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     clientAdminId?: SortOrder
     _count?: StudentCountOrderByAggregateInput
     _avg?: StudentAvgOrderByAggregateInput
@@ -45671,20 +45718,22 @@ export namespace Prisma {
     serialNumber?: IntWithAggregatesFilter<"Student"> | number
     studentCode?: StringWithAggregatesFilter<"Student"> | string
     fullName?: StringWithAggregatesFilter<"Student"> | string
-    fatherName?: StringWithAggregatesFilter<"Student"> | string
-    motherName?: StringWithAggregatesFilter<"Student"> | string
+    fatherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    motherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
     photoUrl?: StringNullableWithAggregatesFilter<"Student"> | string | null
     contact?: StringWithAggregatesFilter<"Student"> | string
-    parentsContact?: StringWithAggregatesFilter<"Student"> | string
+    parentsContact?: StringNullableWithAggregatesFilter<"Student"> | string | null
     email?: StringNullableWithAggregatesFilter<"Student"> | string | null
     residentialAddress?: StringNullableWithAggregatesFilter<"Student"> | string | null
     permenantAddress?: StringNullableWithAggregatesFilter<"Student"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
-    gender?: StringWithAggregatesFilter<"Student"> | string
+    gender?: StringNullableWithAggregatesFilter<"Student"> | string | null
     religion?: StringNullableWithAggregatesFilter<"Student"> | string | null
     idProofType?: StringNullableWithAggregatesFilter<"Student"> | string | null
     idProofNumber?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    admissionDate?: DateTimeWithAggregatesFilter<"Student"> | Date | string
+    admissionDate?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     clientAdminId?: StringWithAggregatesFilter<"Student"> | string
   }
 
@@ -46526,7 +46575,6 @@ export namespace Prisma {
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     installment?: XOR<InstallmentDetailNullableScalarRelationFilter, InstallmentDetailWhereInput> | null
-    studentFees?: StudentFeeListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }
 
@@ -46542,7 +46590,6 @@ export namespace Prisma {
     student?: StudentOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
     installment?: InstallmentDetailOrderByWithRelationInput
-    studentFees?: StudentFeeOrderByRelationAggregateInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
   }
 
@@ -46562,7 +46609,6 @@ export namespace Prisma {
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     installment?: XOR<InstallmentDetailNullableScalarRelationFilter, InstallmentDetailWhereInput> | null
-    studentFees?: StudentFeeListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }, "id" | "studentId_courseId">
 
@@ -46664,19 +46710,21 @@ export namespace Prisma {
     NOT?: StudentFeeWhereInput | StudentFeeWhereInput[]
     id?: IntFilter<"StudentFee"> | number
     studentId?: IntFilter<"StudentFee"> | number
-    courseId?: IntFilter<"StudentFee"> | number
+    courseId?: IntNullableFilter<"StudentFee"> | number | null
     dueDate?: DateTimeFilter<"StudentFee"> | Date | string
     amountDue?: FloatFilter<"StudentFee"> | number
     amountPaid?: FloatFilter<"StudentFee"> | number
     paymentDate?: DateTimeNullableFilter<"StudentFee"> | Date | string | null
-    paymentMode?: EnumPaymentModeFilter<"StudentFee"> | $Enums.PaymentMode
-    receiptNo?: StringFilter<"StudentFee"> | string
+    createdAt?: DateTimeFilter<"StudentFee"> | Date | string
+    paymentMode?: EnumPaymentModeNullableFilter<"StudentFee"> | $Enums.PaymentMode | null
+    receiptNo?: StringNullableFilter<"StudentFee"> | string | null
     paymentStatus?: EnumPaymentStatusFilter<"StudentFee"> | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFilter<"StudentFee"> | boolean
+    sourceType?: StringNullableFilter<"StudentFee"> | string | null
     clientAdminId?: StringFilter<"StudentFee"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
-    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    course?: XOR<CourseNullableScalarRelationFilter, CourseWhereInput> | null
     feeLogs?: StudentFeeLogListRelationFilter
-    feeStructure?: XOR<FeeStructureNullableScalarRelationFilter, FeeStructureWhereInput> | null
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }
@@ -46684,57 +46732,64 @@ export namespace Prisma {
   export type StudentFeeOrderByWithRelationInput = {
     id?: SortOrder
     studentId?: SortOrder
-    courseId?: SortOrder
+    courseId?: SortOrderInput | SortOrder
     dueDate?: SortOrder
     amountDue?: SortOrder
     amountPaid?: SortOrder
     paymentDate?: SortOrderInput | SortOrder
-    paymentMode?: SortOrder
-    receiptNo?: SortOrder
+    createdAt?: SortOrder
+    paymentMode?: SortOrderInput | SortOrder
+    receiptNo?: SortOrderInput | SortOrder
     paymentStatus?: SortOrder
+    isOpeningBalance?: SortOrder
+    sourceType?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
     student?: StudentOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
     feeLogs?: StudentFeeLogOrderByRelationAggregateInput
-    feeStructure?: FeeStructureOrderByWithRelationInput
     notification?: NotificationOrderByWithRelationInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
   }
 
   export type StudentFeeWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    receiptNo?: string
     AND?: StudentFeeWhereInput | StudentFeeWhereInput[]
     OR?: StudentFeeWhereInput[]
     NOT?: StudentFeeWhereInput | StudentFeeWhereInput[]
     studentId?: IntFilter<"StudentFee"> | number
-    courseId?: IntFilter<"StudentFee"> | number
+    courseId?: IntNullableFilter<"StudentFee"> | number | null
     dueDate?: DateTimeFilter<"StudentFee"> | Date | string
     amountDue?: FloatFilter<"StudentFee"> | number
     amountPaid?: FloatFilter<"StudentFee"> | number
     paymentDate?: DateTimeNullableFilter<"StudentFee"> | Date | string | null
-    paymentMode?: EnumPaymentModeFilter<"StudentFee"> | $Enums.PaymentMode
+    createdAt?: DateTimeFilter<"StudentFee"> | Date | string
+    paymentMode?: EnumPaymentModeNullableFilter<"StudentFee"> | $Enums.PaymentMode | null
+    receiptNo?: StringNullableFilter<"StudentFee"> | string | null
     paymentStatus?: EnumPaymentStatusFilter<"StudentFee"> | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFilter<"StudentFee"> | boolean
+    sourceType?: StringNullableFilter<"StudentFee"> | string | null
     clientAdminId?: StringFilter<"StudentFee"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
-    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    course?: XOR<CourseNullableScalarRelationFilter, CourseWhereInput> | null
     feeLogs?: StudentFeeLogListRelationFilter
-    feeStructure?: XOR<FeeStructureNullableScalarRelationFilter, FeeStructureWhereInput> | null
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
-  }, "id" | "receiptNo">
+  }, "id">
 
   export type StudentFeeOrderByWithAggregationInput = {
     id?: SortOrder
     studentId?: SortOrder
-    courseId?: SortOrder
+    courseId?: SortOrderInput | SortOrder
     dueDate?: SortOrder
     amountDue?: SortOrder
     amountPaid?: SortOrder
     paymentDate?: SortOrderInput | SortOrder
-    paymentMode?: SortOrder
-    receiptNo?: SortOrder
+    createdAt?: SortOrder
+    paymentMode?: SortOrderInput | SortOrder
+    receiptNo?: SortOrderInput | SortOrder
     paymentStatus?: SortOrder
+    isOpeningBalance?: SortOrder
+    sourceType?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
     _count?: StudentFeeCountOrderByAggregateInput
     _avg?: StudentFeeAvgOrderByAggregateInput
@@ -46749,14 +46804,17 @@ export namespace Prisma {
     NOT?: StudentFeeScalarWhereWithAggregatesInput | StudentFeeScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"StudentFee"> | number
     studentId?: IntWithAggregatesFilter<"StudentFee"> | number
-    courseId?: IntWithAggregatesFilter<"StudentFee"> | number
+    courseId?: IntNullableWithAggregatesFilter<"StudentFee"> | number | null
     dueDate?: DateTimeWithAggregatesFilter<"StudentFee"> | Date | string
     amountDue?: FloatWithAggregatesFilter<"StudentFee"> | number
     amountPaid?: FloatWithAggregatesFilter<"StudentFee"> | number
     paymentDate?: DateTimeNullableWithAggregatesFilter<"StudentFee"> | Date | string | null
-    paymentMode?: EnumPaymentModeWithAggregatesFilter<"StudentFee"> | $Enums.PaymentMode
-    receiptNo?: StringWithAggregatesFilter<"StudentFee"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"StudentFee"> | Date | string
+    paymentMode?: EnumPaymentModeNullableWithAggregatesFilter<"StudentFee"> | $Enums.PaymentMode | null
+    receiptNo?: StringNullableWithAggregatesFilter<"StudentFee"> | string | null
     paymentStatus?: EnumPaymentStatusWithAggregatesFilter<"StudentFee"> | $Enums.PaymentStatus
+    isOpeningBalance?: BoolWithAggregatesFilter<"StudentFee"> | boolean
+    sourceType?: StringNullableWithAggregatesFilter<"StudentFee"> | string | null
     clientAdminId?: StringWithAggregatesFilter<"StudentFee"> | string
   }
 
@@ -48035,6 +48093,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -48061,6 +48120,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -48087,6 +48147,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -48113,6 +48174,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -48139,6 +48201,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -48162,6 +48225,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -48183,6 +48247,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -48240,6 +48305,7 @@ export namespace Prisma {
     doneAt?: Date | string | null
     remark: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     followUpStatus?: $Enums.FollowUpStatus
     enquiry: EnquiryCreateNestedOneWithoutFollowUpsInput
     notification?: NotificationCreateNestedOneWithoutFollowUpInput
@@ -48252,6 +48318,7 @@ export namespace Prisma {
     doneAt?: Date | string | null
     remark: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     followUpStatus?: $Enums.FollowUpStatus
     notification?: NotificationUncheckedCreateNestedOneWithoutFollowUpInput
   }
@@ -48262,6 +48329,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
     enquiry?: EnquiryUpdateOneRequiredWithoutFollowUpsNestedInput
     notification?: NotificationUpdateOneWithoutFollowUpNestedInput
@@ -48274,6 +48342,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
     notification?: NotificationUncheckedUpdateOneWithoutFollowUpNestedInput
   }
@@ -48285,6 +48354,7 @@ export namespace Prisma {
     doneAt?: Date | string | null
     remark: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     followUpStatus?: $Enums.FollowUpStatus
   }
 
@@ -48294,6 +48364,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
   }
 
@@ -48304,6 +48375,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
   }
 
@@ -48384,20 +48456,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -48418,20 +48492,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -48451,20 +48527,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -48485,20 +48563,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -48519,20 +48599,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
   }
 
@@ -48540,20 +48622,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StudentUncheckedUpdateManyInput = {
@@ -48561,20 +48645,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -49373,7 +49459,6 @@ export namespace Prisma {
     student: StudentCreateNestedOneWithoutFeeStructuresInput
     course: CourseCreateNestedOneWithoutFeeStructuresInput
     installment?: InstallmentDetailCreateNestedOneWithoutFeeStructuresInput
-    studentFees?: StudentFeeCreateNestedManyWithoutFeeStructureInput
     clientAdmin: ClientAdminCreateNestedOneWithoutFeeStructuresInput
   }
 
@@ -49386,7 +49471,6 @@ export namespace Prisma {
     installmentCount?: number | null
     installmentTypeId?: number | null
     clientAdminId: string
-    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutFeeStructureInput
   }
 
   export type FeeStructureUpdateInput = {
@@ -49396,7 +49480,6 @@ export namespace Prisma {
     student?: StudentUpdateOneRequiredWithoutFeeStructuresNestedInput
     course?: CourseUpdateOneRequiredWithoutFeeStructuresNestedInput
     installment?: InstallmentDetailUpdateOneWithoutFeeStructuresNestedInput
-    studentFees?: StudentFeeUpdateManyWithoutFeeStructureNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutFeeStructuresNestedInput
   }
 
@@ -49409,7 +49492,6 @@ export namespace Prisma {
     installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
     installmentTypeId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
-    studentFees?: StudentFeeUncheckedUpdateManyWithoutFeeStructureNestedInput
   }
 
   export type FeeStructureCreateManyInput = {
@@ -49502,15 +49584,17 @@ export namespace Prisma {
   export type StudentFeeCreateInput = {
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     student: StudentCreateNestedOneWithoutFeeRecordsInput
-    course: CourseCreateNestedOneWithoutStudentFeesInput
+    course?: CourseCreateNestedOneWithoutStudentFeesInput
     feeLogs?: StudentFeeLogCreateNestedManyWithoutStudentFeeInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutStudentFeesInput
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
   }
@@ -49518,14 +49602,17 @@ export namespace Prisma {
   export type StudentFeeUncheckedCreateInput = {
     id?: number
     studentId: number
-    courseId: number
+    courseId?: number | null
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     clientAdminId: string
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
@@ -49536,13 +49623,15 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
-    course?: CourseUpdateOneRequiredWithoutStudentFeesNestedInput
+    course?: CourseUpdateOneWithoutStudentFeesNestedInput
     feeLogs?: StudentFeeLogUpdateManyWithoutStudentFeeNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutStudentFeesNestedInput
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
   }
@@ -49550,14 +49639,17 @@ export namespace Prisma {
   export type StudentFeeUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     studentId?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
+    courseId?: NullableIntFieldUpdateOperationsInput | number | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
@@ -49566,14 +49658,17 @@ export namespace Prisma {
   export type StudentFeeCreateManyInput = {
     id?: number
     studentId: number
-    courseId: number
+    courseId?: number | null
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     clientAdminId: string
   }
 
@@ -49582,22 +49677,28 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentFeeUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     studentId?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
+    courseId?: NullableIntFieldUpdateOperationsInput | number | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -50953,6 +51054,7 @@ export namespace Prisma {
     source?: SortOrder
     referedBy?: SortOrder
     leadStatus?: SortOrder
+    enquiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isConverted?: SortOrder
@@ -50982,6 +51084,7 @@ export namespace Prisma {
     source?: SortOrder
     referedBy?: SortOrder
     leadStatus?: SortOrder
+    enquiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isConverted?: SortOrder
@@ -51005,6 +51108,7 @@ export namespace Prisma {
     source?: SortOrder
     referedBy?: SortOrder
     leadStatus?: SortOrder
+    enquiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isConverted?: SortOrder
@@ -51128,6 +51232,7 @@ export namespace Prisma {
     doneAt?: SortOrder
     remark?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     followUpStatus?: SortOrder
   }
 
@@ -51138,6 +51243,7 @@ export namespace Prisma {
     doneAt?: SortOrder
     remark?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     followUpStatus?: SortOrder
   }
 
@@ -51148,6 +51254,7 @@ export namespace Prisma {
     doneAt?: SortOrder
     remark?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     followUpStatus?: SortOrder
   }
 
@@ -51236,6 +51343,8 @@ export namespace Prisma {
     idProofType?: SortOrder
     idProofNumber?: SortOrder
     admissionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -51263,6 +51372,8 @@ export namespace Prisma {
     idProofType?: SortOrder
     idProofNumber?: SortOrder
     admissionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -51285,6 +51396,8 @@ export namespace Prisma {
     idProofType?: SortOrder
     idProofNumber?: SortOrder
     admissionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -51989,6 +52102,13 @@ export namespace Prisma {
     _max?: NestedEnumPaymentModeFilter<$PrismaModel>
   }
 
+  export type EnumPaymentModeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentModeNullableFilter<$PrismaModel> | $Enums.PaymentMode | null
+  }
+
   export type EnumPaymentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -51996,15 +52116,15 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
+  export type CourseNullableScalarRelationFilter = {
+    is?: CourseWhereInput | null
+    isNot?: CourseWhereInput | null
+  }
+
   export type StudentFeeLogListRelationFilter = {
     every?: StudentFeeLogWhereInput
     some?: StudentFeeLogWhereInput
     none?: StudentFeeLogWhereInput
-  }
-
-  export type FeeStructureNullableScalarRelationFilter = {
-    is?: FeeStructureWhereInput | null
-    isNot?: FeeStructureWhereInput | null
   }
 
   export type StudentFeeLogOrderByRelationAggregateInput = {
@@ -52019,9 +52139,12 @@ export namespace Prisma {
     amountDue?: SortOrder
     amountPaid?: SortOrder
     paymentDate?: SortOrder
+    createdAt?: SortOrder
     paymentMode?: SortOrder
     receiptNo?: SortOrder
     paymentStatus?: SortOrder
+    isOpeningBalance?: SortOrder
+    sourceType?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -52041,9 +52164,12 @@ export namespace Prisma {
     amountDue?: SortOrder
     amountPaid?: SortOrder
     paymentDate?: SortOrder
+    createdAt?: SortOrder
     paymentMode?: SortOrder
     receiptNo?: SortOrder
     paymentStatus?: SortOrder
+    isOpeningBalance?: SortOrder
+    sourceType?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -52055,9 +52181,12 @@ export namespace Prisma {
     amountDue?: SortOrder
     amountPaid?: SortOrder
     paymentDate?: SortOrder
+    createdAt?: SortOrder
     paymentMode?: SortOrder
     receiptNo?: SortOrder
     paymentStatus?: SortOrder
+    isOpeningBalance?: SortOrder
+    sourceType?: SortOrder
     clientAdminId?: SortOrder
   }
 
@@ -52067,6 +52196,16 @@ export namespace Prisma {
     courseId?: SortOrder
     amountDue?: SortOrder
     amountPaid?: SortOrder
+  }
+
+  export type EnumPaymentModeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
+    _max?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
   }
 
   export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -52561,18 +52700,6 @@ export namespace Prisma {
     not?: NestedEnumRecordTypeFilter<$PrismaModel> | $Enums.RecordType
   }
 
-  export type EnumPaymentModeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPaymentModeNullableFilter<$PrismaModel> | $Enums.PaymentMode | null
-  }
-
-  export type CourseNullableScalarRelationFilter = {
-    is?: CourseWhereInput | null
-    isNot?: CourseWhereInput | null
-  }
-
   export type LabNullableScalarRelationFilter = {
     is?: LabWhereInput | null
     isNot?: LabWhereInput | null
@@ -52644,16 +52771,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRecordTypeFilter<$PrismaModel>
     _max?: NestedEnumRecordTypeFilter<$PrismaModel>
-  }
-
-  export type EnumPaymentModeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
-    _max?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
   }
 
   export type RoleUserCreateNestedManyWithoutClientAdminInput = {
@@ -56191,24 +56308,10 @@ export namespace Prisma {
     connect?: InstallmentDetailWhereUniqueInput
   }
 
-  export type StudentFeeCreateNestedManyWithoutFeeStructureInput = {
-    create?: XOR<StudentFeeCreateWithoutFeeStructureInput, StudentFeeUncheckedCreateWithoutFeeStructureInput> | StudentFeeCreateWithoutFeeStructureInput[] | StudentFeeUncheckedCreateWithoutFeeStructureInput[]
-    connectOrCreate?: StudentFeeCreateOrConnectWithoutFeeStructureInput | StudentFeeCreateOrConnectWithoutFeeStructureInput[]
-    createMany?: StudentFeeCreateManyFeeStructureInputEnvelope
-    connect?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-  }
-
   export type ClientAdminCreateNestedOneWithoutFeeStructuresInput = {
     create?: XOR<ClientAdminCreateWithoutFeeStructuresInput, ClientAdminUncheckedCreateWithoutFeeStructuresInput>
     connectOrCreate?: ClientAdminCreateOrConnectWithoutFeeStructuresInput
     connect?: ClientAdminWhereUniqueInput
-  }
-
-  export type StudentFeeUncheckedCreateNestedManyWithoutFeeStructureInput = {
-    create?: XOR<StudentFeeCreateWithoutFeeStructureInput, StudentFeeUncheckedCreateWithoutFeeStructureInput> | StudentFeeCreateWithoutFeeStructureInput[] | StudentFeeUncheckedCreateWithoutFeeStructureInput[]
-    connectOrCreate?: StudentFeeCreateOrConnectWithoutFeeStructureInput | StudentFeeCreateOrConnectWithoutFeeStructureInput[]
-    createMany?: StudentFeeCreateManyFeeStructureInputEnvelope
-    connect?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
   }
 
   export type StudentUpdateOneRequiredWithoutFeeStructuresNestedInput = {
@@ -56237,40 +56340,12 @@ export namespace Prisma {
     update?: XOR<XOR<InstallmentDetailUpdateToOneWithWhereWithoutFeeStructuresInput, InstallmentDetailUpdateWithoutFeeStructuresInput>, InstallmentDetailUncheckedUpdateWithoutFeeStructuresInput>
   }
 
-  export type StudentFeeUpdateManyWithoutFeeStructureNestedInput = {
-    create?: XOR<StudentFeeCreateWithoutFeeStructureInput, StudentFeeUncheckedCreateWithoutFeeStructureInput> | StudentFeeCreateWithoutFeeStructureInput[] | StudentFeeUncheckedCreateWithoutFeeStructureInput[]
-    connectOrCreate?: StudentFeeCreateOrConnectWithoutFeeStructureInput | StudentFeeCreateOrConnectWithoutFeeStructureInput[]
-    upsert?: StudentFeeUpsertWithWhereUniqueWithoutFeeStructureInput | StudentFeeUpsertWithWhereUniqueWithoutFeeStructureInput[]
-    createMany?: StudentFeeCreateManyFeeStructureInputEnvelope
-    set?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-    disconnect?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-    delete?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-    connect?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-    update?: StudentFeeUpdateWithWhereUniqueWithoutFeeStructureInput | StudentFeeUpdateWithWhereUniqueWithoutFeeStructureInput[]
-    updateMany?: StudentFeeUpdateManyWithWhereWithoutFeeStructureInput | StudentFeeUpdateManyWithWhereWithoutFeeStructureInput[]
-    deleteMany?: StudentFeeScalarWhereInput | StudentFeeScalarWhereInput[]
-  }
-
   export type ClientAdminUpdateOneRequiredWithoutFeeStructuresNestedInput = {
     create?: XOR<ClientAdminCreateWithoutFeeStructuresInput, ClientAdminUncheckedCreateWithoutFeeStructuresInput>
     connectOrCreate?: ClientAdminCreateOrConnectWithoutFeeStructuresInput
     upsert?: ClientAdminUpsertWithoutFeeStructuresInput
     connect?: ClientAdminWhereUniqueInput
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutFeeStructuresInput, ClientAdminUpdateWithoutFeeStructuresInput>, ClientAdminUncheckedUpdateWithoutFeeStructuresInput>
-  }
-
-  export type StudentFeeUncheckedUpdateManyWithoutFeeStructureNestedInput = {
-    create?: XOR<StudentFeeCreateWithoutFeeStructureInput, StudentFeeUncheckedCreateWithoutFeeStructureInput> | StudentFeeCreateWithoutFeeStructureInput[] | StudentFeeUncheckedCreateWithoutFeeStructureInput[]
-    connectOrCreate?: StudentFeeCreateOrConnectWithoutFeeStructureInput | StudentFeeCreateOrConnectWithoutFeeStructureInput[]
-    upsert?: StudentFeeUpsertWithWhereUniqueWithoutFeeStructureInput | StudentFeeUpsertWithWhereUniqueWithoutFeeStructureInput[]
-    createMany?: StudentFeeCreateManyFeeStructureInputEnvelope
-    set?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-    disconnect?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-    delete?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-    connect?: StudentFeeWhereUniqueInput | StudentFeeWhereUniqueInput[]
-    update?: StudentFeeUpdateWithWhereUniqueWithoutFeeStructureInput | StudentFeeUpdateWithWhereUniqueWithoutFeeStructureInput[]
-    updateMany?: StudentFeeUpdateManyWithWhereWithoutFeeStructureInput | StudentFeeUpdateManyWithWhereWithoutFeeStructureInput[]
-    deleteMany?: StudentFeeScalarWhereInput | StudentFeeScalarWhereInput[]
   }
 
   export type StudentFeeCreateNestedOneWithoutFeeLogsInput = {
@@ -56310,12 +56385,6 @@ export namespace Prisma {
     connect?: StudentFeeLogWhereUniqueInput | StudentFeeLogWhereUniqueInput[]
   }
 
-  export type FeeStructureCreateNestedOneWithoutStudentFeesInput = {
-    create?: XOR<FeeStructureCreateWithoutStudentFeesInput, FeeStructureUncheckedCreateWithoutStudentFeesInput>
-    connectOrCreate?: FeeStructureCreateOrConnectWithoutStudentFeesInput
-    connect?: FeeStructureWhereUniqueInput
-  }
-
   export type NotificationCreateNestedOneWithoutPaymentInput = {
     create?: XOR<NotificationCreateWithoutPaymentInput, NotificationUncheckedCreateWithoutPaymentInput>
     connectOrCreate?: NotificationCreateOrConnectWithoutPaymentInput
@@ -56341,6 +56410,10 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput
   }
 
+  export type NullableEnumPaymentModeFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentMode | null
+  }
+
   export type EnumPaymentStatusFieldUpdateOperationsInput = {
     set?: $Enums.PaymentStatus
   }
@@ -56353,10 +56426,12 @@ export namespace Prisma {
     update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutFeeRecordsInput, StudentUpdateWithoutFeeRecordsInput>, StudentUncheckedUpdateWithoutFeeRecordsInput>
   }
 
-  export type CourseUpdateOneRequiredWithoutStudentFeesNestedInput = {
+  export type CourseUpdateOneWithoutStudentFeesNestedInput = {
     create?: XOR<CourseCreateWithoutStudentFeesInput, CourseUncheckedCreateWithoutStudentFeesInput>
     connectOrCreate?: CourseCreateOrConnectWithoutStudentFeesInput
     upsert?: CourseUpsertWithoutStudentFeesInput
+    disconnect?: CourseWhereInput | boolean
+    delete?: CourseWhereInput | boolean
     connect?: CourseWhereUniqueInput
     update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutStudentFeesInput, CourseUpdateWithoutStudentFeesInput>, CourseUncheckedUpdateWithoutStudentFeesInput>
   }
@@ -56373,16 +56448,6 @@ export namespace Prisma {
     update?: StudentFeeLogUpdateWithWhereUniqueWithoutStudentFeeInput | StudentFeeLogUpdateWithWhereUniqueWithoutStudentFeeInput[]
     updateMany?: StudentFeeLogUpdateManyWithWhereWithoutStudentFeeInput | StudentFeeLogUpdateManyWithWhereWithoutStudentFeeInput[]
     deleteMany?: StudentFeeLogScalarWhereInput | StudentFeeLogScalarWhereInput[]
-  }
-
-  export type FeeStructureUpdateOneWithoutStudentFeesNestedInput = {
-    create?: XOR<FeeStructureCreateWithoutStudentFeesInput, FeeStructureUncheckedCreateWithoutStudentFeesInput>
-    connectOrCreate?: FeeStructureCreateOrConnectWithoutStudentFeesInput
-    upsert?: FeeStructureUpsertWithoutStudentFeesInput
-    disconnect?: FeeStructureWhereInput | boolean
-    delete?: FeeStructureWhereInput | boolean
-    connect?: FeeStructureWhereUniqueInput
-    update?: XOR<XOR<FeeStructureUpdateToOneWithWhereWithoutStudentFeesInput, FeeStructureUpdateWithoutStudentFeesInput>, FeeStructureUncheckedUpdateWithoutStudentFeesInput>
   }
 
   export type NotificationUpdateOneWithoutPaymentNestedInput = {
@@ -57031,10 +57096,6 @@ export namespace Prisma {
     set?: $Enums.RecordType
   }
 
-  export type NullableEnumPaymentModeFieldUpdateOperationsInput = {
-    set?: $Enums.PaymentMode | null
-  }
-
   export type StudentUpdateOneWithoutFinancialRecordsNestedInput = {
     create?: XOR<StudentCreateWithoutFinancialRecordsInput, StudentUncheckedCreateWithoutFinancialRecordsInput>
     connectOrCreate?: StudentCreateOrConnectWithoutFinancialRecordsInput
@@ -57385,11 +57446,28 @@ export namespace Prisma {
     _max?: NestedEnumPaymentModeFilter<$PrismaModel>
   }
 
+  export type NestedEnumPaymentModeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentModeNullableFilter<$PrismaModel> | $Enums.PaymentMode | null
+  }
+
   export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
+  }
+
+  export type NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
+    _max?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -57443,13 +57521,6 @@ export namespace Prisma {
     not?: NestedEnumRecordTypeFilter<$PrismaModel> | $Enums.RecordType
   }
 
-  export type NestedEnumPaymentModeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPaymentModeNullableFilter<$PrismaModel> | $Enums.PaymentMode | null
-  }
-
   export type NestedEnumRecordTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.RecordType | EnumRecordTypeFieldRefInput<$PrismaModel>
     in?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
@@ -57458,16 +57529,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRecordTypeFilter<$PrismaModel>
     _max?: NestedEnumRecordTypeFilter<$PrismaModel>
-  }
-
-  export type NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
-    _max?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
   }
 
   export type RoleUserCreateWithoutClientAdminInput = {
@@ -57753,20 +57814,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -57786,20 +57849,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutStudentInput
@@ -57896,7 +57961,6 @@ export namespace Prisma {
     student: StudentCreateNestedOneWithoutFeeStructuresInput
     course: CourseCreateNestedOneWithoutFeeStructuresInput
     installment?: InstallmentDetailCreateNestedOneWithoutFeeStructuresInput
-    studentFees?: StudentFeeCreateNestedManyWithoutFeeStructureInput
   }
 
   export type FeeStructureUncheckedCreateWithoutClientAdminInput = {
@@ -57907,7 +57971,6 @@ export namespace Prisma {
     paymentType: $Enums.PaymentType
     installmentCount?: number | null
     installmentTypeId?: number | null
-    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutFeeStructureInput
   }
 
   export type FeeStructureCreateOrConnectWithoutClientAdminInput = {
@@ -57923,29 +57986,34 @@ export namespace Prisma {
   export type StudentFeeCreateWithoutClientAdminInput = {
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     student: StudentCreateNestedOneWithoutFeeRecordsInput
-    course: CourseCreateNestedOneWithoutStudentFeesInput
+    course?: CourseCreateNestedOneWithoutStudentFeesInput
     feeLogs?: StudentFeeLogCreateNestedManyWithoutStudentFeeInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutStudentFeesInput
     notification?: NotificationCreateNestedOneWithoutPaymentInput
   }
 
   export type StudentFeeUncheckedCreateWithoutClientAdminInput = {
     id?: number
     studentId: number
-    courseId: number
+    courseId?: number | null
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
   }
@@ -58219,6 +58287,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -58244,6 +58313,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -58633,20 +58703,22 @@ export namespace Prisma {
     serialNumber?: IntFilter<"Student"> | number
     studentCode?: StringFilter<"Student"> | string
     fullName?: StringFilter<"Student"> | string
-    fatherName?: StringFilter<"Student"> | string
-    motherName?: StringFilter<"Student"> | string
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
     photoUrl?: StringNullableFilter<"Student"> | string | null
     contact?: StringFilter<"Student"> | string
-    parentsContact?: StringFilter<"Student"> | string
+    parentsContact?: StringNullableFilter<"Student"> | string | null
     email?: StringNullableFilter<"Student"> | string | null
     residentialAddress?: StringNullableFilter<"Student"> | string | null
     permenantAddress?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
-    gender?: StringFilter<"Student"> | string
+    gender?: StringNullableFilter<"Student"> | string | null
     religion?: StringNullableFilter<"Student"> | string | null
     idProofType?: StringNullableFilter<"Student"> | string | null
     idProofNumber?: StringNullableFilter<"Student"> | string | null
-    admissionDate?: DateTimeFilter<"Student"> | Date | string
+    admissionDate?: DateTimeNullableFilter<"Student"> | Date | string | null
+    createdAt?: DateTimeFilter<"Student"> | Date | string
+    updatedAt?: DateTimeFilter<"Student"> | Date | string
     clientAdminId?: StringFilter<"Student"> | string
   }
 
@@ -58763,14 +58835,17 @@ export namespace Prisma {
     NOT?: StudentFeeScalarWhereInput | StudentFeeScalarWhereInput[]
     id?: IntFilter<"StudentFee"> | number
     studentId?: IntFilter<"StudentFee"> | number
-    courseId?: IntFilter<"StudentFee"> | number
+    courseId?: IntNullableFilter<"StudentFee"> | number | null
     dueDate?: DateTimeFilter<"StudentFee"> | Date | string
     amountDue?: FloatFilter<"StudentFee"> | number
     amountPaid?: FloatFilter<"StudentFee"> | number
     paymentDate?: DateTimeNullableFilter<"StudentFee"> | Date | string | null
-    paymentMode?: EnumPaymentModeFilter<"StudentFee"> | $Enums.PaymentMode
-    receiptNo?: StringFilter<"StudentFee"> | string
+    createdAt?: DateTimeFilter<"StudentFee"> | Date | string
+    paymentMode?: EnumPaymentModeNullableFilter<"StudentFee"> | $Enums.PaymentMode | null
+    receiptNo?: StringNullableFilter<"StudentFee"> | string | null
     paymentStatus?: EnumPaymentStatusFilter<"StudentFee"> | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFilter<"StudentFee"> | boolean
+    sourceType?: StringNullableFilter<"StudentFee"> | string | null
     clientAdminId?: StringFilter<"StudentFee"> | string
   }
 
@@ -59053,6 +59128,7 @@ export namespace Prisma {
     source?: StringNullableFilter<"Enquiry"> | string | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
+    enquiryDate?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
     createdAt?: DateTimeFilter<"Enquiry"> | Date | string
     updatedAt?: DateTimeFilter<"Enquiry"> | Date | string
     isConverted?: BoolFilter<"Enquiry"> | boolean
@@ -59603,6 +59679,7 @@ export namespace Prisma {
     doneAt?: Date | string | null
     remark: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     followUpStatus?: $Enums.FollowUpStatus
     notification?: NotificationCreateNestedOneWithoutFollowUpInput
   }
@@ -59613,6 +59690,7 @@ export namespace Prisma {
     doneAt?: Date | string | null
     remark: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     followUpStatus?: $Enums.FollowUpStatus
     notification?: NotificationUncheckedCreateNestedOneWithoutFollowUpInput
   }
@@ -59631,20 +59709,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
     feeStructures?: FeeStructureCreateNestedManyWithoutStudentInput
@@ -59664,20 +59744,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutStudentInput
@@ -59872,6 +59954,7 @@ export namespace Prisma {
     doneAt?: DateTimeNullableFilter<"FollowUp"> | Date | string | null
     remark?: StringFilter<"FollowUp"> | string
     createdAt?: DateTimeFilter<"FollowUp"> | Date | string
+    updatedAt?: DateTimeFilter<"FollowUp"> | Date | string
     followUpStatus?: EnumFollowUpStatusFilter<"FollowUp"> | $Enums.FollowUpStatus
   }
 
@@ -59890,20 +59973,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutStudentNestedInput
@@ -59923,20 +60008,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutStudentNestedInput
@@ -60123,6 +60210,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -60148,6 +60236,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -60338,6 +60427,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -60363,6 +60453,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -60549,6 +60640,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -60574,6 +60666,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -60640,6 +60733,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -60665,6 +60759,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -60711,6 +60806,7 @@ export namespace Prisma {
     doneAt?: Date | string | null
     remark: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     followUpStatus?: $Enums.FollowUpStatus
     enquiry: EnquiryCreateNestedOneWithoutFollowUpsInput
   }
@@ -60722,6 +60818,7 @@ export namespace Prisma {
     doneAt?: Date | string | null
     remark: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     followUpStatus?: $Enums.FollowUpStatus
   }
 
@@ -60746,6 +60843,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -60771,6 +60869,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -60788,29 +60887,34 @@ export namespace Prisma {
   export type StudentFeeCreateWithoutNotificationInput = {
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     student: StudentCreateNestedOneWithoutFeeRecordsInput
-    course: CourseCreateNestedOneWithoutStudentFeesInput
+    course?: CourseCreateNestedOneWithoutStudentFeesInput
     feeLogs?: StudentFeeLogCreateNestedManyWithoutStudentFeeInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutStudentFeesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
   }
 
   export type StudentFeeUncheckedCreateWithoutNotificationInput = {
     id?: number
     studentId: number
-    courseId: number
+    courseId?: number | null
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     clientAdminId: string
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
   }
@@ -60940,6 +61044,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
     enquiry?: EnquiryUpdateOneRequiredWithoutFollowUpsNestedInput
   }
@@ -60951,6 +61056,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
   }
 
@@ -60981,6 +61087,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -61006,6 +61113,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -61031,27 +61139,32 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
-    course?: CourseUpdateOneRequiredWithoutStudentFeesNestedInput
+    course?: CourseUpdateOneWithoutStudentFeesNestedInput
     feeLogs?: StudentFeeLogUpdateManyWithoutStudentFeeNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutStudentFeesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
   }
 
   export type StudentFeeUncheckedUpdateWithoutNotificationInput = {
     id?: IntFieldUpdateOperationsInput | number
     studentId?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
+    courseId?: NullableIntFieldUpdateOperationsInput | number | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
   }
@@ -61181,6 +61294,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -61206,6 +61320,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -61288,7 +61403,6 @@ export namespace Prisma {
     installmentCount?: number | null
     course: CourseCreateNestedOneWithoutFeeStructuresInput
     installment?: InstallmentDetailCreateNestedOneWithoutFeeStructuresInput
-    studentFees?: StudentFeeCreateNestedManyWithoutFeeStructureInput
     clientAdmin: ClientAdminCreateNestedOneWithoutFeeStructuresInput
   }
 
@@ -61300,7 +61414,6 @@ export namespace Prisma {
     installmentCount?: number | null
     installmentTypeId?: number | null
     clientAdminId: string
-    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutFeeStructureInput
   }
 
   export type FeeStructureCreateOrConnectWithoutStudentInput = {
@@ -61316,28 +61429,33 @@ export namespace Prisma {
   export type StudentFeeCreateWithoutStudentInput = {
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
-    course: CourseCreateNestedOneWithoutStudentFeesInput
+    isOpeningBalance?: boolean
+    sourceType?: string | null
+    course?: CourseCreateNestedOneWithoutStudentFeesInput
     feeLogs?: StudentFeeLogCreateNestedManyWithoutStudentFeeInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutStudentFeesInput
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
   }
 
   export type StudentFeeUncheckedCreateWithoutStudentInput = {
     id?: number
-    courseId: number
+    courseId?: number | null
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     clientAdminId: string
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
@@ -61701,6 +61819,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -61726,6 +61845,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -62104,7 +62224,6 @@ export namespace Prisma {
     installmentCount?: number | null
     student: StudentCreateNestedOneWithoutFeeStructuresInput
     installment?: InstallmentDetailCreateNestedOneWithoutFeeStructuresInput
-    studentFees?: StudentFeeCreateNestedManyWithoutFeeStructureInput
     clientAdmin: ClientAdminCreateNestedOneWithoutFeeStructuresInput
   }
 
@@ -62116,7 +62235,6 @@ export namespace Prisma {
     installmentCount?: number | null
     installmentTypeId?: number | null
     clientAdminId: string
-    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutFeeStructureInput
   }
 
   export type FeeStructureCreateOrConnectWithoutCourseInput = {
@@ -62161,14 +62279,16 @@ export namespace Prisma {
   export type StudentFeeCreateWithoutCourseInput = {
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     student: StudentCreateNestedOneWithoutFeeRecordsInput
     feeLogs?: StudentFeeLogCreateNestedManyWithoutStudentFeeInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutStudentFeesInput
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
   }
@@ -62178,11 +62298,14 @@ export namespace Prisma {
     studentId: number
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     clientAdminId: string
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
@@ -65030,7 +65153,6 @@ export namespace Prisma {
     installmentCount?: number | null
     student: StudentCreateNestedOneWithoutFeeStructuresInput
     course: CourseCreateNestedOneWithoutFeeStructuresInput
-    studentFees?: StudentFeeCreateNestedManyWithoutFeeStructureInput
     clientAdmin: ClientAdminCreateNestedOneWithoutFeeStructuresInput
   }
 
@@ -65042,7 +65164,6 @@ export namespace Prisma {
     paymentType: $Enums.PaymentType
     installmentCount?: number | null
     clientAdminId: string
-    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutFeeStructureInput
   }
 
   export type FeeStructureCreateOrConnectWithoutInstallmentInput = {
@@ -65147,20 +65268,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
     feeStructures?: FeeStructureCreateNestedManyWithoutStudentInput
@@ -65180,20 +65303,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutStudentInput
@@ -65363,20 +65488,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutStudentNestedInput
@@ -65396,20 +65523,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutStudentNestedInput
@@ -65537,20 +65666,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     feeStructures?: FeeStructureCreateNestedManyWithoutStudentInput
@@ -65570,20 +65701,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -65842,20 +65975,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutStudentNestedInput
@@ -65875,20 +66010,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -66144,20 +66281,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -66177,20 +66316,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -66272,45 +66413,6 @@ export namespace Prisma {
   export type InstallmentDetailCreateOrConnectWithoutFeeStructuresInput = {
     where: InstallmentDetailWhereUniqueInput
     create: XOR<InstallmentDetailCreateWithoutFeeStructuresInput, InstallmentDetailUncheckedCreateWithoutFeeStructuresInput>
-  }
-
-  export type StudentFeeCreateWithoutFeeStructureInput = {
-    dueDate: Date | string
-    amountDue: number
-    amountPaid: number
-    paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
-    paymentStatus?: $Enums.PaymentStatus
-    student: StudentCreateNestedOneWithoutFeeRecordsInput
-    course: CourseCreateNestedOneWithoutStudentFeesInput
-    feeLogs?: StudentFeeLogCreateNestedManyWithoutStudentFeeInput
-    notification?: NotificationCreateNestedOneWithoutPaymentInput
-    clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
-  }
-
-  export type StudentFeeUncheckedCreateWithoutFeeStructureInput = {
-    id?: number
-    dueDate: Date | string
-    amountDue: number
-    amountPaid: number
-    paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
-    paymentStatus?: $Enums.PaymentStatus
-    clientAdminId: string
-    feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
-    notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
-  }
-
-  export type StudentFeeCreateOrConnectWithoutFeeStructureInput = {
-    where: StudentFeeWhereUniqueInput
-    create: XOR<StudentFeeCreateWithoutFeeStructureInput, StudentFeeUncheckedCreateWithoutFeeStructureInput>
-  }
-
-  export type StudentFeeCreateManyFeeStructureInputEnvelope = {
-    data: StudentFeeCreateManyFeeStructureInput | StudentFeeCreateManyFeeStructureInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutFeeStructuresInput = {
@@ -66431,20 +66533,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -66464,20 +66568,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -66566,22 +66672,6 @@ export namespace Prisma {
     CourseFeeStructureId?: IntFieldUpdateOperationsInput | number
     number?: IntFieldUpdateOperationsInput | number
     amount?: FloatFieldUpdateOperationsInput | number
-  }
-
-  export type StudentFeeUpsertWithWhereUniqueWithoutFeeStructureInput = {
-    where: StudentFeeWhereUniqueInput
-    update: XOR<StudentFeeUpdateWithoutFeeStructureInput, StudentFeeUncheckedUpdateWithoutFeeStructureInput>
-    create: XOR<StudentFeeCreateWithoutFeeStructureInput, StudentFeeUncheckedCreateWithoutFeeStructureInput>
-  }
-
-  export type StudentFeeUpdateWithWhereUniqueWithoutFeeStructureInput = {
-    where: StudentFeeWhereUniqueInput
-    data: XOR<StudentFeeUpdateWithoutFeeStructureInput, StudentFeeUncheckedUpdateWithoutFeeStructureInput>
-  }
-
-  export type StudentFeeUpdateManyWithWhereWithoutFeeStructureInput = {
-    where: StudentFeeScalarWhereInput
-    data: XOR<StudentFeeUpdateManyMutationInput, StudentFeeUncheckedUpdateManyWithoutFeeStructureInput>
   }
 
   export type ClientAdminUpsertWithoutFeeStructuresInput = {
@@ -66696,14 +66786,16 @@ export namespace Prisma {
   export type StudentFeeCreateWithoutFeeLogsInput = {
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     student: StudentCreateNestedOneWithoutFeeRecordsInput
-    course: CourseCreateNestedOneWithoutStudentFeesInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutStudentFeesInput
+    course?: CourseCreateNestedOneWithoutStudentFeesInput
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
   }
@@ -66711,14 +66803,17 @@ export namespace Prisma {
   export type StudentFeeUncheckedCreateWithoutFeeLogsInput = {
     id?: number
     studentId: number
-    courseId: number
+    courseId?: number | null
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     clientAdminId: string
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
   }
@@ -66744,12 +66839,14 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
-    course?: CourseUpdateOneRequiredWithoutStudentFeesNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutStudentFeesNestedInput
+    course?: CourseUpdateOneWithoutStudentFeesNestedInput
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
   }
@@ -66757,14 +66854,17 @@ export namespace Prisma {
   export type StudentFeeUncheckedUpdateWithoutFeeLogsInput = {
     id?: IntFieldUpdateOperationsInput | number
     studentId?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
+    courseId?: NullableIntFieldUpdateOperationsInput | number | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
   }
@@ -66773,20 +66873,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -66806,20 +66908,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -66908,32 +67012,6 @@ export namespace Prisma {
   export type StudentFeeLogCreateManyStudentFeeInputEnvelope = {
     data: StudentFeeLogCreateManyStudentFeeInput | StudentFeeLogCreateManyStudentFeeInput[]
     skipDuplicates?: boolean
-  }
-
-  export type FeeStructureCreateWithoutStudentFeesInput = {
-    totalAmount: number
-    paymentType: $Enums.PaymentType
-    installmentCount?: number | null
-    student: StudentCreateNestedOneWithoutFeeStructuresInput
-    course: CourseCreateNestedOneWithoutFeeStructuresInput
-    installment?: InstallmentDetailCreateNestedOneWithoutFeeStructuresInput
-    clientAdmin: ClientAdminCreateNestedOneWithoutFeeStructuresInput
-  }
-
-  export type FeeStructureUncheckedCreateWithoutStudentFeesInput = {
-    id?: number
-    studentId: number
-    courseId: number
-    totalAmount: number
-    paymentType: $Enums.PaymentType
-    installmentCount?: number | null
-    installmentTypeId?: number | null
-    clientAdminId: string
-  }
-
-  export type FeeStructureCreateOrConnectWithoutStudentFeesInput = {
-    where: FeeStructureWhereUniqueInput
-    create: XOR<FeeStructureCreateWithoutStudentFeesInput, FeeStructureUncheckedCreateWithoutStudentFeesInput>
   }
 
   export type NotificationCreateWithoutPaymentInput = {
@@ -67079,20 +67157,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -67112,20 +67192,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -67218,38 +67300,6 @@ export namespace Prisma {
     paymentDate?: DateTimeFilter<"StudentFeeLog"> | Date | string
     paymentMode?: EnumPaymentModeFilter<"StudentFeeLog"> | $Enums.PaymentMode
     receiptNo?: StringFilter<"StudentFeeLog"> | string
-  }
-
-  export type FeeStructureUpsertWithoutStudentFeesInput = {
-    update: XOR<FeeStructureUpdateWithoutStudentFeesInput, FeeStructureUncheckedUpdateWithoutStudentFeesInput>
-    create: XOR<FeeStructureCreateWithoutStudentFeesInput, FeeStructureUncheckedCreateWithoutStudentFeesInput>
-    where?: FeeStructureWhereInput
-  }
-
-  export type FeeStructureUpdateToOneWithWhereWithoutStudentFeesInput = {
-    where?: FeeStructureWhereInput
-    data: XOR<FeeStructureUpdateWithoutStudentFeesInput, FeeStructureUncheckedUpdateWithoutStudentFeesInput>
-  }
-
-  export type FeeStructureUpdateWithoutStudentFeesInput = {
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: EnumPaymentTypeFieldUpdateOperationsInput | $Enums.PaymentType
-    installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
-    student?: StudentUpdateOneRequiredWithoutFeeStructuresNestedInput
-    course?: CourseUpdateOneRequiredWithoutFeeStructuresNestedInput
-    installment?: InstallmentDetailUpdateOneWithoutFeeStructuresNestedInput
-    clientAdmin?: ClientAdminUpdateOneRequiredWithoutFeeStructuresNestedInput
-  }
-
-  export type FeeStructureUncheckedUpdateWithoutStudentFeesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    studentId?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: EnumPaymentTypeFieldUpdateOperationsInput | $Enums.PaymentType
-    installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
-    installmentTypeId?: NullableIntFieldUpdateOperationsInput | number | null
-    clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
   export type NotificationUpsertWithoutPaymentInput = {
@@ -67653,20 +67703,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -67686,20 +67738,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -67903,20 +67957,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -67936,20 +67992,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -68155,20 +68213,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -68188,20 +68248,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -68431,20 +68493,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -68464,20 +68528,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -69130,20 +69196,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -69163,20 +69231,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -69428,20 +69498,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -69461,20 +69533,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -70151,20 +70225,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -70184,20 +70260,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -70403,20 +70481,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -70436,20 +70516,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -70689,20 +70771,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -70722,20 +70806,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -70911,20 +70997,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -70944,20 +71032,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -71085,20 +71175,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -71118,20 +71210,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -71347,20 +71441,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -71380,20 +71476,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -71611,20 +71709,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
     studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
@@ -71644,20 +71744,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     clientAdminId: string
     enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
     labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
@@ -71911,20 +72013,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -71944,20 +72048,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientAdminId?: StringFieldUpdateOperationsInput | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
@@ -72297,20 +72403,22 @@ export namespace Prisma {
     serialNumber: number
     studentCode: string
     fullName: string
-    fatherName: string
-    motherName: string
+    fatherName?: string | null
+    motherName?: string | null
     photoUrl?: string | null
     contact: string
-    parentsContact: string
+    parentsContact?: string | null
     email?: string | null
     residentialAddress?: string | null
     permenantAddress?: string | null
     dob?: Date | string | null
-    gender: string
+    gender?: string | null
     religion?: string | null
     idProofType?: string | null
     idProofNumber?: string | null
-    admissionDate: Date | string
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ActivityLogCreateManyClientAdminInput = {
@@ -72347,14 +72455,17 @@ export namespace Prisma {
   export type StudentFeeCreateManyClientAdminInput = {
     id?: number
     studentId: number
-    courseId: number
+    courseId?: number | null
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
   }
 
   export type StationeryIssueCreateManyClientAdminInput = {
@@ -72457,6 +72568,7 @@ export namespace Prisma {
     source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
@@ -72776,20 +72888,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
@@ -72809,20 +72923,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
     labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutStudentNestedInput
@@ -72842,20 +72958,22 @@ export namespace Prisma {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
-    parentsContact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
     permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     idProofType?: NullableStringFieldUpdateOperationsInput | string | null
     idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ActivityLogUpdateWithoutClientAdminInput = {
@@ -72931,7 +73049,6 @@ export namespace Prisma {
     student?: StudentUpdateOneRequiredWithoutFeeStructuresNestedInput
     course?: CourseUpdateOneRequiredWithoutFeeStructuresNestedInput
     installment?: InstallmentDetailUpdateOneWithoutFeeStructuresNestedInput
-    studentFees?: StudentFeeUpdateManyWithoutFeeStructureNestedInput
   }
 
   export type FeeStructureUncheckedUpdateWithoutClientAdminInput = {
@@ -72942,7 +73059,6 @@ export namespace Prisma {
     paymentType?: EnumPaymentTypeFieldUpdateOperationsInput | $Enums.PaymentType
     installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
     installmentTypeId?: NullableIntFieldUpdateOperationsInput | number | null
-    studentFees?: StudentFeeUncheckedUpdateManyWithoutFeeStructureNestedInput
   }
 
   export type FeeStructureUncheckedUpdateManyWithoutClientAdminInput = {
@@ -72960,27 +73076,32 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
-    course?: CourseUpdateOneRequiredWithoutStudentFeesNestedInput
+    course?: CourseUpdateOneWithoutStudentFeesNestedInput
     feeLogs?: StudentFeeLogUpdateManyWithoutStudentFeeNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutStudentFeesNestedInput
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
   }
 
   export type StudentFeeUncheckedUpdateWithoutClientAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
     studentId?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
+    courseId?: NullableIntFieldUpdateOperationsInput | number | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
   }
@@ -72988,14 +73109,17 @@ export namespace Prisma {
   export type StudentFeeUncheckedUpdateManyWithoutClientAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
     studentId?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
+    courseId?: NullableIntFieldUpdateOperationsInput | number | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StationeryIssueUpdateWithoutClientAdminInput = {
@@ -73261,6 +73385,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -73286,6 +73411,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -73311,6 +73437,7 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
@@ -73425,6 +73552,7 @@ export namespace Prisma {
     doneAt?: Date | string | null
     remark: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     followUpStatus?: $Enums.FollowUpStatus
   }
 
@@ -73440,6 +73568,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
     notification?: NotificationUpdateOneWithoutFollowUpNestedInput
   }
@@ -73450,6 +73579,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
     notification?: NotificationUncheckedUpdateOneWithoutFollowUpNestedInput
   }
@@ -73460,6 +73590,7 @@ export namespace Prisma {
     doneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remark?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
   }
 
@@ -73512,14 +73643,17 @@ export namespace Prisma {
 
   export type StudentFeeCreateManyStudentInput = {
     id?: number
-    courseId: number
+    courseId?: number | null
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     clientAdminId: string
   }
 
@@ -73668,7 +73802,6 @@ export namespace Prisma {
     installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
     course?: CourseUpdateOneRequiredWithoutFeeStructuresNestedInput
     installment?: InstallmentDetailUpdateOneWithoutFeeStructuresNestedInput
-    studentFees?: StudentFeeUpdateManyWithoutFeeStructureNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutFeeStructuresNestedInput
   }
 
@@ -73680,7 +73813,6 @@ export namespace Prisma {
     installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
     installmentTypeId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
-    studentFees?: StudentFeeUncheckedUpdateManyWithoutFeeStructureNestedInput
   }
 
   export type FeeStructureUncheckedUpdateManyWithoutStudentInput = {
@@ -73698,26 +73830,31 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    course?: CourseUpdateOneRequiredWithoutStudentFeesNestedInput
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: CourseUpdateOneWithoutStudentFeesNestedInput
     feeLogs?: StudentFeeLogUpdateManyWithoutStudentFeeNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutStudentFeesNestedInput
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
   }
 
   export type StudentFeeUncheckedUpdateWithoutStudentInput = {
     id?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
+    courseId?: NullableIntFieldUpdateOperationsInput | number | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
@@ -73725,14 +73862,17 @@ export namespace Prisma {
 
   export type StudentFeeUncheckedUpdateManyWithoutStudentInput = {
     id?: IntFieldUpdateOperationsInput | number
-    courseId?: IntFieldUpdateOperationsInput | number
+    courseId?: NullableIntFieldUpdateOperationsInput | number | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -74004,11 +74144,14 @@ export namespace Prisma {
     studentId: number
     dueDate: Date | string
     amountDue: number
-    amountPaid: number
+    amountPaid?: number
     paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
+    createdAt?: Date | string
+    paymentMode?: $Enums.PaymentMode | null
+    receiptNo?: string | null
     paymentStatus?: $Enums.PaymentStatus
+    isOpeningBalance?: boolean
+    sourceType?: string | null
     clientAdminId: string
   }
 
@@ -74154,7 +74297,6 @@ export namespace Prisma {
     installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
     student?: StudentUpdateOneRequiredWithoutFeeStructuresNestedInput
     installment?: InstallmentDetailUpdateOneWithoutFeeStructuresNestedInput
-    studentFees?: StudentFeeUpdateManyWithoutFeeStructureNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutFeeStructuresNestedInput
   }
 
@@ -74166,7 +74308,6 @@ export namespace Prisma {
     installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
     installmentTypeId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
-    studentFees?: StudentFeeUncheckedUpdateManyWithoutFeeStructureNestedInput
   }
 
   export type FeeStructureUncheckedUpdateManyWithoutCourseInput = {
@@ -74213,12 +74354,14 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
     feeLogs?: StudentFeeLogUpdateManyWithoutStudentFeeNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutStudentFeesNestedInput
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
   }
@@ -74230,9 +74373,12 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
@@ -74245,9 +74391,12 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paymentMode?: NullableEnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode | null
+    receiptNo?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -75007,7 +75156,6 @@ export namespace Prisma {
     installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
     student?: StudentUpdateOneRequiredWithoutFeeStructuresNestedInput
     course?: CourseUpdateOneRequiredWithoutFeeStructuresNestedInput
-    studentFees?: StudentFeeUpdateManyWithoutFeeStructureNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutFeeStructuresNestedInput
   }
 
@@ -75019,7 +75167,6 @@ export namespace Prisma {
     paymentType?: EnumPaymentTypeFieldUpdateOperationsInput | $Enums.PaymentType
     installmentCount?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
-    studentFees?: StudentFeeUncheckedUpdateManyWithoutFeeStructureNestedInput
   }
 
   export type FeeStructureUncheckedUpdateManyWithoutInstallmentInput = {
@@ -75064,59 +75211,6 @@ export namespace Prisma {
     completionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    clientAdminId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type StudentFeeCreateManyFeeStructureInput = {
-    id?: number
-    dueDate: Date | string
-    amountDue: number
-    amountPaid: number
-    paymentDate?: Date | string | null
-    paymentMode: $Enums.PaymentMode
-    receiptNo: string
-    paymentStatus?: $Enums.PaymentStatus
-    clientAdminId: string
-  }
-
-  export type StudentFeeUpdateWithoutFeeStructureInput = {
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    amountDue?: FloatFieldUpdateOperationsInput | number
-    amountPaid?: FloatFieldUpdateOperationsInput | number
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
-    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
-    course?: CourseUpdateOneRequiredWithoutStudentFeesNestedInput
-    feeLogs?: StudentFeeLogUpdateManyWithoutStudentFeeNestedInput
-    notification?: NotificationUpdateOneWithoutPaymentNestedInput
-    clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
-  }
-
-  export type StudentFeeUncheckedUpdateWithoutFeeStructureInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    amountDue?: FloatFieldUpdateOperationsInput | number
-    amountPaid?: FloatFieldUpdateOperationsInput | number
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
-    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    clientAdminId?: StringFieldUpdateOperationsInput | string
-    feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
-    notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
-  }
-
-  export type StudentFeeUncheckedUpdateManyWithoutFeeStructureInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    amountDue?: FloatFieldUpdateOperationsInput | number
-    amountPaid?: FloatFieldUpdateOperationsInput | number
-    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
-    receiptNo?: StringFieldUpdateOperationsInput | string
-    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 

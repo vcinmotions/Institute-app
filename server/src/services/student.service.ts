@@ -6,6 +6,7 @@ import { buildStudentOrderBy } from "../filters/student.sort";
 import { studentQuerySchema } from "../validators/student.query";
 import { Student } from "../domain/student/student";
 import { parseDate, parseDateISO } from "../helpers/date";
+import { ensureUniqueEnquiry, ensureUniqueStudent } from "../domain/enquiry/enquiryRules";
 
 type StudentQuery = z.infer<typeof studentQuerySchema>;
 
@@ -325,6 +326,78 @@ export async function createStudentService({
 
   return { student, allStudentCourses, allFees };
 }
+
+export async function createStudentOpeningBalanceService({
+  prisma,
+  clientAdminId,
+  data,
+}: {
+  prisma: any;
+  clientAdminId: string;
+  data: any;
+}) {
+  const { name, contact, dueAmount, admissionDate } = data;
+
+   if (name) {
+      const existingEmail = await prisma.student.findFirst({
+        where: { fullName: name, clientAdminId },
+      });
+      ensureUniqueStudent(!!existingEmail, false);
+    }
+  
+    if (contact) {
+      const existingContact = await prisma.student.findFirst({
+        where: { contact, clientAdminId },
+      });
+      ensureUniqueStudent(false, !!existingContact);
+    }
+
+  return await prisma.$transaction(async (tx: any) => {
+
+    const lastStudent = await tx.student.findFirst({
+      orderBy: { id: "desc" },
+      select: { studentCode: true, serialNumber: true },
+    });
+
+    const studentCode =
+      Student.generateStudentCode(lastStudent?.studentCode);
+    const serialNumber =
+      Student.nextSerialNumber(lastStudent?.serialNumber);
+
+    const parsedAdmissionDate = parseDate(admissionDate);
+
+    const student = await tx.student.create({
+      data: {
+        serialNumber,
+        studentCode,
+        admissionDate: parsedAdmissionDate ? new Date(parsedAdmissionDate) : null,
+        fullName: name,
+        contact,
+        clientAdminId,
+      },
+    });
+
+    if (dueAmount && dueAmount > 0) {
+      await tx.studentFee.create({
+        data: {
+          studentId: student.id,
+          courseId: null,
+          dueDate: new Date(),
+          amountDue: dueAmount,
+          amountPaid: 0,
+          receiptNo: `RCP${Date.now()}`,
+          paymentStatus: "PENDING",
+          isOpeningBalance: true,
+          sourceType: "DIRECT_CREATION",
+          clientAdminId,
+        },
+      });
+    }
+
+    return student;
+  });
+}
+
 export async function editStudentService({
   prisma,
   clientAdminId,

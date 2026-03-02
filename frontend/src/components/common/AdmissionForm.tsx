@@ -240,20 +240,20 @@ const AdmissionForm: React.FC<Props> = ({
               <tr className="border">
                 <td className="border p-2">
                   <strong>Full Name:</strong>{" "}
-                  {student.fullName.toLocaleUpperCase()}
+                  {student.fullName?.toLocaleUpperCase()}
                 </td>
                 <td className="border p-2">
                   <strong>Father's Name:</strong>{" "}
-                  {student.fatherName.toLocaleUpperCase()}
+                  {student.fatherName?.toLocaleUpperCase()}
                 </td>
               </tr>
               <tr className="border">
                 <td className="border p-2">
                   <strong>Mother's Name:</strong>{" "}
-                  {student.motherName.toLocaleUpperCase()}
+                  {student.motherName?.toLocaleUpperCase()}
                 </td>
                 <td className="border p-2">
-                  <strong>Gender:</strong> {student.gender.toLocaleUpperCase()}
+                  <strong>Gender:</strong> {student.gender?.toLocaleUpperCase()}
                 </td>
               </tr>
               <tr className="border">
@@ -262,7 +262,7 @@ const AdmissionForm: React.FC<Props> = ({
                 </td>
                 <td className="border p-2">
                   <strong>Religion:</strong>{" "}
-                  {student.religion.toLocaleUpperCase()}
+                  {student.religion?.toLocaleUpperCase()}
                 </td>
               </tr>
               <tr className="border">
@@ -279,18 +279,18 @@ const AdmissionForm: React.FC<Props> = ({
                 </td>
                 <td className="border p-2">
                   <strong>ID Proof:</strong> <br />
-                  {student.idProofType.toLocaleUpperCase()} -{" "}
+                  {student.idProofType?.toLocaleUpperCase()} -{" "}
                   {student.idProofNumber}
                 </td>
               </tr>
               <tr className="border">
                 <td className="border p-2">
                   <strong>Residential Address:</strong>{" "}
-                  {student.residentialAddress.toLocaleUpperCase()}
+                  {student.residentialAddress?.toLocaleUpperCase()}
                 </td>
                 <td className="border p-2">
                   <strong>Permanent Address:</strong>{" "}
-                  {student.permenantAddress.toLocaleUpperCase()}
+                  {student.permenantAddress?.toLocaleUpperCase()}
                 </td>
               </tr>
             </tbody>
@@ -313,7 +313,7 @@ const AdmissionForm: React.FC<Props> = ({
                   <tr className="border">
                     <td className="w-1/2 border p-2">
                       <strong>Course Name:</strong>{" "}
-                      {course?.name.toLocaleUpperCase()}
+                      {course?.name?.toLocaleUpperCase()}
                     </td>
                     <td className="border p-2">
                       <strong>Duration:</strong> {course?.durationWeeks ?? "--"}{" "}

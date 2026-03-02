@@ -11,6 +11,7 @@ interface EnquiryFormData {
   location: string,
   gender: string,
   dob: string,
+  enquiryDate: string,
   referedBy: string,
   // ---- add your fields here ----
 }

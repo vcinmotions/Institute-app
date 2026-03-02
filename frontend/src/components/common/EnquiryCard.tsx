@@ -27,36 +27,6 @@ const EnquiryCard: React.FC<EnquiryCardProps> = ({
         <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
           {title}
         </h3>
-        {/* <div className="md:flex gap-4">
-        <Badge
-                      size="sm"
-                      color="success" 
-                    >
-                      COLD
-                    </Badge>
-        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">Complete</h3>
-        <Badge
-                      size="sm"
-                      color="error"
-                    >
-                      BURN
-                    </Badge>
-        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">Failed</h3>
-        <Badge
-                      size="sm"
-                      color="warning"
-                    >
-                      HOT
-                    </Badge>
-                    <h3 className="text-base font-medium text-gray-800 dark:text-white/90">In Process</h3>
-                    <Badge
-                      size="sm"
-                      color="info"
-                    >
-                      COLD
-                    </Badge>
-                    <h3 className="text-base font-medium text-gray-800 dark:text-white/90">Not Initiated</h3>
-        </div> */}
         <Button size="sm" className="rounded bg-gray-900 px-4 py-2 text-white text-sm hover:bg-gray-700 transition" onClick={onCreateClick}>+ New</Button>
         {desc && (
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">

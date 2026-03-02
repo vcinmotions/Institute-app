@@ -186,6 +186,7 @@ exports.Prisma.EnquiryScalarFieldEnum = {
   source: 'source',
   referedBy: 'referedBy',
   leadStatus: 'leadStatus',
+  enquiryDate: 'enquiryDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isConverted: 'isConverted',
@@ -207,6 +208,7 @@ exports.Prisma.FollowUpScalarFieldEnum = {
   doneAt: 'doneAt',
   remark: 'remark',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   followUpStatus: 'followUpStatus'
 };
 
@@ -240,6 +242,8 @@ exports.Prisma.StudentScalarFieldEnum = {
   idProofType: 'idProofType',
   idProofNumber: 'idProofNumber',
   admissionDate: 'admissionDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   clientAdminId: 'clientAdminId'
 };
 
@@ -374,9 +378,12 @@ exports.Prisma.StudentFeeScalarFieldEnum = {
   amountDue: 'amountDue',
   amountPaid: 'amountPaid',
   paymentDate: 'paymentDate',
+  createdAt: 'createdAt',
   paymentMode: 'paymentMode',
   receiptNo: 'receiptNo',
   paymentStatus: 'paymentStatus',
+  isOpeningBalance: 'isOpeningBalance',
+  sourceType: 'sourceType',
   clientAdminId: 'clientAdminId'
 };
 

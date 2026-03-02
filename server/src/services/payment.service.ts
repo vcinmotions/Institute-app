@@ -37,7 +37,6 @@ export async function getPayment({
       include: {
         student: true,
         course: true,
-        feeStructure: true,
         feeLogs: true,
       },
     }),
@@ -45,8 +44,52 @@ export async function getPayment({
   ]);
 
   // Optional: enrich with detailed fee structure
+  // const detailedPayments = await Promise.all(
+  //   payments.map(async (p) => {
+  //     // const feeStructure = await prisma.feeStructure.findUnique({
+  //     //   where: {
+  //     //     studentId_courseId: {
+  //     //       studentId: p.studentId,
+  //     //       courseId: p.courseId,
+  //     //     },
+  //     //   },
+  //     // });
+
+  //     let feeStructure = null;
+
+  //     if (p.courseId !== null) {
+  //       feeStructure = await prisma.feeStructure.findUnique({
+  //         where: {
+  //           studentId_courseId: {
+  //             studentId: p.studentId,
+  //             courseId: p.courseId,
+  //           },
+  //         },
+  //       });
+  //     }
+
+  //     const feeRecords = await prisma.studentFee.findMany({
+  //       where: { studentId: p.studentId, courseId: p.courseId },
+  //     });
+
+  //     return {
+  //       studentPayment: p,
+  //       feeStructure,
+  //       feeRecords,
+  //     };
+  //   })
+  // );
+
   const detailedPayments = await Promise.all(
     payments.map(async (p) => {
+      if (!p.courseId) {
+        return {
+          studentPayment: p,
+          feeStructure: null,
+          feeRecords: [],
+        };
+      }
+
       const feeStructure = await prisma.feeStructure.findUnique({
         where: {
           studentId_courseId: {
@@ -57,7 +100,10 @@ export async function getPayment({
       });
 
       const feeRecords = await prisma.studentFee.findMany({
-        where: { studentId: p.studentId, courseId: p.courseId },
+        where: {
+          studentId: p.studentId,
+          courseId: p.courseId,
+        },
       });
 
       return {

@@ -146,7 +146,7 @@ export async function processDuePayments(dbUrl: string) {
     if (exists) continue;
 
     const message = `Payment overdue for ${payment.student.fullName}
-Course: ${payment.course.name}
+Course: ${payment.course?.name ?? "N/A"}
 Amount: ₹${payment.amountDue}
 Due Date: ${dayjs(payment.dueDate).format("DD MMM YYYY")}
 Overdue by: ${dayjs().diff(dayjs(payment.dueDate), "day")} days`;

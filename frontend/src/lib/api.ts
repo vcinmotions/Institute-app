@@ -298,6 +298,15 @@ export const createLabApi = async (token: string, newLabData: any) => {
   return response.data;
 };
 
+export const createOpeningBalanceApi = async (token: string, newStudent: any) => {
+  const response = await apiClient.post(`/create-op`, newStudent, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
 export const editLabApi = async (token: string, newLabData: any, id: any) => {
   const response = await apiClient.put(`/edit-lab/${id}`, newLabData, {
     headers: {

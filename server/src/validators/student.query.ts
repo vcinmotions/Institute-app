@@ -47,6 +47,17 @@ export const studentCreateSchema = z.object({
     .min(1, "At least one course must be provided"),
   photoUrl: z.string().optional(), // for uploaded photo
 });
+
+export const studentOpeningBalanceSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  contact: z.string().min(1, "Contact is required"),
+  dueAmount: z.number().positive("Amount must be greater than 0"),
+  admissionDate: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().optional()
+  ),
+});
+
 export const studentEditSchema = z.object({
   id: z.number().min(1, "Enquiry ID is required"),
   name: z.string().min(1, "Name is required"),

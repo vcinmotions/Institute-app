@@ -47,6 +47,10 @@ export const enquiryCreateSchema = z.object({
     (val) => (val === "" || val === null ? undefined : val),
     z.string().optional()
   ),
+  enquiryDate: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().optional()
+  ),
   referedBy: z.preprocess(
     (val) => (val === "" || val === null ? undefined : val),
     z.string().optional()

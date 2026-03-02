@@ -90,7 +90,7 @@ export async function createEnquiryService({
       : null,
   };
 
-  const { name, contact, email, dob, courseId } = normalizedData;
+  const { name, contact, email, dob, courseId, enquiryDate } = normalizedData;
   
   // const { name, contact, email, dob, courseId } = data;
 
@@ -110,6 +110,7 @@ export async function createEnquiryService({
   }
 
   const parsedDob = parseDate(dob);
+  const parsedEnquirydate = parseDate(enquiryDate);
 
 const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
 
@@ -136,6 +137,7 @@ const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
       email,
       age: age ?? null,
       dob: parsedDob ? new Date(parsedDob) : null,
+      enquiryDate: parsedEnquirydate ? new Date(parsedEnquirydate) : null,
       source: normalizedData.source || null,
       alternateContact: normalizedData.alternateContact || null,
       location: normalizedData.location || null,

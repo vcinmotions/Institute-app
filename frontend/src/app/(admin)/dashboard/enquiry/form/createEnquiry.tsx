@@ -42,6 +42,7 @@ interface EnquiryData {
   city: string,
   gender: string,
   dob: string,
+  enquiryDate: string,
   referedBy: string,
   source: string;
   contact: string;
@@ -58,6 +59,7 @@ export default function EnquiryForm() {
     city: "",
     gender: "",
     dob: "",
+    enquiryDate: "",
     referedBy: "",
     source: "",
     contact: "",
@@ -365,7 +367,7 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
     createEnquiry(normalizedEnquiry, {
       onSuccess: () => {
 
-        setNewEnquiry({ name: "", email: "", courseId: [], source: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
+        setNewEnquiry({ name: "", email: "", courseId: [], source: "", enquiryDate: "", alternateContact: "", location: "", city: "", gender: "", dob: "", referedBy: "", contact: "" });
 
         window.scrollTo({
           top: 0, behavior: "smooth"
@@ -529,6 +531,20 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
             onChange={(e) => handleDateChange("dob", e.target.value)}
           />
           {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
+        </div>
+
+          <div>
+          <Label>Enquiry Date</Label>
+
+          <Input
+            type="text"
+            tabIndex={6}
+            placeholder="Enter DoB"
+            className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+            value={newEnquiry.enquiryDate}
+            onChange={(e) => handleDateChange("enquiryDate", e.target.value)}
+          />
+          {errors.enquiryDate && <p className="text-sm text-red-500">{errors.enquiryDate}</p>}
         </div>
 
        <div>
