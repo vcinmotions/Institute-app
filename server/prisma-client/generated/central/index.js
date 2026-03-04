@@ -170,7 +170,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\demo\\vcinmotions-application\\server\\prisma-client\\generated\\central",
+      "value": "D:\\SHOBHA\\vcinmotions-application\\server\\prisma-client\\generated\\central",
       "fromEnvVar": null
     },
     "config": {
@@ -184,7 +184,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\demo\\vcinmotions-application\\server\\prisma\\central\\schema.prisma",
+    "sourceFilePath": "D:\\SHOBHA\\vcinmotions-application\\server\\prisma\\central\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

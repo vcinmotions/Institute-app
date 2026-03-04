@@ -3,7 +3,9 @@ import { createCentralDB } from "../utils/createCentralDB";
 
 export async function setupCentralController(req: Request, res: Response) {
   try {
-    const { clientId, dbHost, dbPort, dbUser, dbPass, password, name, email } = req.body;
+    const { clientId, password, name, email } = req.body;
+
+    console.log("REQ BODY FOR CREATE MASTER:", req.body);
 
     if (!clientId) {
       return res.status(400).json({ error: "clientId is required" });
@@ -13,11 +15,10 @@ export async function setupCentralController(req: Request, res: Response) {
       return res.status(400).json({ error: "Licsenced Info is required" });
     }
 
-    // set env dynamically
-    process.env.DB_HOST = dbHost;
-    process.env.DB_PORT = dbPort;
-    process.env.DB_USER = dbUser;
-    process.env.DB_PASS = dbPass;
+    console.log("DB_HOST in DB CREATION CONTROLLER::", process.env.DB_HOST); 
+    console.log("DB_USER in DB CREATION CONTROLLER::", process.env.DB_USER); 
+    console.log("DB_PASS in DB CREATION CONTROLLER::", process.env.DB_PASS); 
+    console.log("DB_PORT in DB CREATION CONTROLLER::", process.env.DB_PORT);
 
     // ✅ STEP 1: Verify license (REMOTE SERVER)
     // const licenseRes = await fetch(

@@ -281,14 +281,13 @@ const rootDir = isPackaged
 const envFile =
   process.env.APP_ENV === "prod" ? ".env.prod" : ".env.dev";
 
-// Load active env
-dotenv.config({ path: path.join(rootDir, envFile) });
 
-// Load root .env for runtime persistence (CENTRAL_DATABASE_URL)
-dotenv.config({
-  path: path.join(rootDir, ".env"),
-  override: false,
-});
+  console.log("envFile:", envFile);
+  console.log("DB_HOST:", process.env.DB_HOST);
+  console.log("DB_USER:", process.env.DB_USER);
+  console.log("DB_PASS:", process.env.DB_PASS);
+  console.log("DB_PORT:", process.env.DB_PORT);
+// Load active env
 
 const isProd = process.env.APP_ENV === "prod";
 const isSqlite = process.env.DB_PROVIDER === "sqlite";
@@ -409,9 +408,18 @@ export async function createCentralDB(clientId: string, options?: any) {
      DEV (Postgres) → MIGRATIONS
   =============================== */
   else {
+
+
+    console.log("DEV DB CREATION CALLED", envFile);
     dbUrl =
       `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}` +
       `@${process.env.DB_HOST}:${process.env.DB_PORT}/${dbName}`;
+
+      console.log("dbURL in DB CREATION:", dbUrl);
+        console.log("DB_HOST in DB CREATION::", process.env.DB_HOST);
+  console.log("DB_USER in DB CREATION::", process.env.DB_USER);
+  console.log("DB_PASS in DB CREATION::", process.env.DB_PASS);
+  console.log("DB_PORT in DB CREATION::", process.env.DB_PORT);
 
     const admin = new Client({
       user: process.env.DB_USER,
