@@ -11,7 +11,26 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-export default function MonthlySalesChart() {
+export default function MonthlySalesChart({ monthlySales }: any) {
+
+  console.log("monthlySales in monthlySales:", monthlySales);
+
+  const monthsOrder = [
+    "jan", "feb", "mar", "apr", "may", "jun",
+    "jul", "aug", "sep", "oct", "nov", "dec"
+  ];
+
+  const monthMap: Record<string, number> = {};
+
+  // convert [{mar:3},{feb:1}] → {mar:3,feb:1}
+  monthlySales.forEach((item: any) => {
+    const key = Object.keys(item)[0];
+    monthMap[key] = item[key];
+  });
+
+  // create 12 month array
+  const chartData = monthsOrder.map(month => monthMap[month] || 0);
+
   const options: ApexOptions = {
     colors: ["#465fff"],
     chart: {
@@ -94,7 +113,7 @@ export default function MonthlySalesChart() {
   const series = [
     {
       name: "Sales",
-      data: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
+      data: chartData, //[16, 38, 20, 29, 18, 19, 29, 11, 21, 39, 28, 11],
     },
   ];
   const [isOpen, setIsOpen] = useState(false);

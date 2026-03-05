@@ -5,6 +5,7 @@ interface AnalyticsState {
   summary: Record<string, any>;
   breakdown: Record<string, any>;
   birthdays: any;
+  monthlySales: any;
   loading: boolean;
   error: string | null;
 }
@@ -13,6 +14,7 @@ const initialState: AnalyticsState = {
   summary: {},
   breakdown: {},
   birthdays: {},
+  monthlySales: [],
   loading: false,
   error: null,
 };
@@ -30,6 +32,9 @@ const analyticsSlice = createSlice({
     setBirthdays(state, action: PayloadAction<any>) {
       state.birthdays = action.payload;
     },
+    setMonthlySales(state, action: PayloadAction<any>) {
+      state.monthlySales = action.payload;
+    },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     },
@@ -44,7 +49,8 @@ export const {
   setAnalyticsBreakdown,
   setLoading,
   setError,
-  setBirthdays
+  setBirthdays,
+  setMonthlySales
 } = analyticsSlice.actions;
 
 export default analyticsSlice.reducer;

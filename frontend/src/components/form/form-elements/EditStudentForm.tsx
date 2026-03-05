@@ -107,7 +107,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
   });
 
   console.log("Filled Data at Start of initialioze:", filledEnquiryData);
- const modalBodyRef = useRef<HTMLDivElement>(null);
+  const modalBodyRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { id: enquiryId } = useParams();
   const { data, isLoading } = useFetchEnquiryById(enquiryId as string);
@@ -152,36 +152,36 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
 
   console.log("GET ID BY PARAMS IN URL:", enquiryId);
 
-    useEffect(() => {
+  useEffect(() => {
     if (!student) return;
 
     // Basic student info
     setNewEnquiry({
-        id: String(student.id ?? ""),
-        name: student.fullName ?? "",
-        email: student.email ?? "",
-        contact: student.contact ?? "",
+      id: String(student.id ?? ""),
+      name: student.fullName ?? "",
+      email: student.email ?? "",
+      contact: student.contact ?? "",
     });
 
     // Extended details
     setFilledEnquiryData({
-        idProofType: student.idProofType ?? "",
-        idProofNumber: student.idProofNumber ?? "",
-        address: "",
-        admissionDate: student.admissionDate ?? "",
+      idProofType: student.idProofType ?? "",
+      idProofNumber: student.idProofNumber ?? "",
+      address: "",
+      admissionDate: student.admissionDate ?? "",
 
-        gender: student.gender ?? "",
-        dob: student.dob ?? "",
-        residentialAddress: student.residentialAddress ?? "",
-        permenantAddress: student.permenantAddress ?? "",
-        parentsContact: student.parentsContact ?? "",
-        fatherName: student.fatherName ?? "",
-        motherName: student.motherName ?? "",
-        religion: student.religion ?? "",
+      gender: student.gender ?? "",
+      dob: student.dob ?? "",
+      residentialAddress: student.residentialAddress ?? "",
+      permenantAddress: student.permenantAddress ?? "",
+      parentsContact: student.parentsContact ?? "",
+      fatherName: student.fatherName ?? "",
+      motherName: student.motherName ?? "",
+      religion: student.religion ?? "",
 
-        facultyId: "",
+      facultyId: "",
     });
-    }, [student]);
+  }, [student]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -196,7 +196,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
         });
 
         dispatch(setBatches(responseBatch.batch));
-      } catch (error) {}
+      } catch (error) { }
     };
 
     fetchData();
@@ -296,126 +296,184 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
   };
 
   const handleBasicChange = (
-  field: keyof EnquiryData,
-  value: string
-) => {
-  setNewEnquiry((prev) => ({
-    ...prev,
-    [field]: value,
-  }));
-
-  setErrors((prev) => ({ ...prev, [field]: "" }));
-};
-
-const handleExtendedChange = (
-  field: keyof NewEnquiryData,
-  value: string
-) => {
-  setFilledEnquiryData((prev) => ({
-    ...prev,
-    [field]: value,
-  }));
-
-  setErrors((prev) => ({ ...prev, [field]: "" }));
-};
-
-const handlePhoneNumberChange = (
-  phoneNumber: string,
-  field: "contact" | "parentsContact",
-  countryCode: string
-) => {
-  let digitsOnly = phoneNumber.replace(/\D/g, "");
-
-  const countryDigits = countryCode.replace("+", "");
-
-  if (digitsOnly.startsWith(countryDigits)) {
-    digitsOnly = digitsOnly.slice(countryDigits.length);
-  }
-
-  digitsOnly = digitsOnly.slice(0, 10);
-
-  const formattedNumber =
-    digitsOnly.length > 0 ? `${countryCode}${digitsOnly}` : "";
-
-  if (field === "contact") {
+    field: keyof EnquiryData,
+    value: string
+  ) => {
     setNewEnquiry((prev) => ({
       ...prev,
-      contact: formattedNumber,
+      [field]: value,
     }));
-  }
 
-  if (field === "parentsContact") {
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const handleExtendedChange = (
+    field: keyof NewEnquiryData,
+    value: string
+  ) => {
+
+    let formattedValue = value;
+
+    // Try to parse the entered value as a Date
+    const parsedDate = new Date(value);
+
+    // If valid date, format to dd/MM/yyyy
+    if (!isNaN(parsedDate.getTime())) {
+      const day = String(parsedDate.getDate()).padStart(2, "0");
+      const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+      const year = parsedDate.getFullYear();
+      formattedValue = `${day}-${month}-${year}`;
+    }
+
     setFilledEnquiryData((prev) => ({
       ...prev,
-      parentsContact: formattedNumber,
+      [field]: value,
     }));
-  }
 
-  setErrors((prev) => ({
-    ...prev,
-    [field]:
-      digitsOnly.length === 0 || digitsOnly.length === 10
-        ? ""
-        : "Phone number must be 10 digits",
-  }));
-};
+    // Optional: validate or reset error
+    if (field === "dob") {
+      if (isNaN(parsedDate.getTime())) {
+        setErrors((prev) => ({ ...prev, dob: "Invalid date format" }));
+      } else {
+        setErrors((prev) => ({ ...prev, dob: "" }));
+      }
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  // const handleChange = (field: keyof NewEnquiryData, value: string) => {
+  //     let formattedValue = value;
+
+  //     // Try to parse the entered value as a Date
+  //     const parsedDate = new Date(value);
+
+  //     // If valid date, format to dd/MM/yyyy
+  //     if (!isNaN(parsedDate.getTime())) {
+  //       const day = String(parsedDate.getDate()).padStart(2, "0");
+  //       const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+  //       const year = parsedDate.getFullYear();
+  //       formattedValue = `${day}/${month}/${year}`;
+  //     }
+
+  //     setFilledEnquiryData((prev) => ({
+  //       ...prev,
+  //       [field]: value,
+  //     }));
+
+  //     // Clear error on change
+  //     setErrors((prev) => ({
+  //       ...prev,
+  //       [field]: "",
+  //     }));
+
+  //     // Optional: validate or reset error
+  //     if (field === "dob") {
+  //       if (isNaN(parsedDate.getTime())) {
+  //         setErrors((prev) => ({ ...prev, dob: "Invalid date format" }));
+  //       } else {
+  //         setErrors((prev) => ({ ...prev, dob: "" }));
+  //       }
+  //     }
+  //   };
+
+  const handlePhoneNumberChange = (
+    phoneNumber: string,
+    field: "contact" | "parentsContact",
+    countryCode: string
+  ) => {
+    let digitsOnly = phoneNumber.replace(/\D/g, "");
+
+    const countryDigits = countryCode.replace("+", "");
+
+    if (digitsOnly.startsWith(countryDigits)) {
+      digitsOnly = digitsOnly.slice(countryDigits.length);
+    }
+
+    digitsOnly = digitsOnly.slice(0, 10);
+
+    const formattedNumber =
+      digitsOnly.length > 0 ? `${countryCode}${digitsOnly}` : "";
+
+    if (field === "contact") {
+      setNewEnquiry((prev) => ({
+        ...prev,
+        contact: formattedNumber,
+      }));
+    }
+
+    if (field === "parentsContact") {
+      setFilledEnquiryData((prev) => ({
+        ...prev,
+        parentsContact: formattedNumber,
+      }));
+    }
+
+    setErrors((prev) => ({
+      ...prev,
+      [field]:
+        digitsOnly.length === 0 || digitsOnly.length === 10
+          ? ""
+          : "Phone number must be 10 digits",
+    }));
+  };
 
 
-// const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
-//   let digitsOnly = phoneNumber.replace(/\D/g, "");
+  // const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+  //   let digitsOnly = phoneNumber.replace(/\D/g, "");
 
-//   // Remove country code digits if already present
-//   const countryDigits = code.replace("+", "");
-//   if (digitsOnly.startsWith(countryDigits)) {
-//     digitsOnly = digitsOnly.slice(countryDigits.length);
-//   }
+  //   // Remove country code digits if already present
+  //   const countryDigits = code.replace("+", "");
+  //   if (digitsOnly.startsWith(countryDigits)) {
+  //     digitsOnly = digitsOnly.slice(countryDigits.length);
+  //   }
 
-//   digitsOnly = digitsOnly.slice(0, 10);
+  //   digitsOnly = digitsOnly.slice(0, 10);
 
-//   const formattedNumber = digitsOnly
-//     ? `${code}${digitsOnly}`
-//     : "";
+  //   const formattedNumber = digitsOnly
+  //     ? `${code}${digitsOnly}`
+  //     : "";
 
-//   setNewEnquiry((prev) => ({
-//     ...prev,
-//     contact: formattedNumber,
-//   }));
+  //   setNewEnquiry((prev) => ({
+  //     ...prev,
+  //     contact: formattedNumber,
+  //   }));
 
-//   setErrors((prev) => ({
-//     ...prev,
-//     contact:
-//       digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
-//   }));
-// };
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     contact:
+  //       digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+  //   }));
+  // };
 
-// const handleAlternatePhoneNumberChange = (
-//   phoneNumber: string,
-//   code: string
-// ) => {
-//   let digitsOnly = phoneNumber.replace(/\D/g, "");
+  // const handleAlternatePhoneNumberChange = (
+  //   phoneNumber: string,
+  //   code: string
+  // ) => {
+  //   let digitsOnly = phoneNumber.replace(/\D/g, "");
 
-//   const countryDigits = code.replace("+", "");
-//   if (digitsOnly.startsWith(countryDigits)) {
-//     digitsOnly = digitsOnly.slice(countryDigits.length);
-//   }
+  //   const countryDigits = code.replace("+", "");
+  //   if (digitsOnly.startsWith(countryDigits)) {
+  //     digitsOnly = digitsOnly.slice(countryDigits.length);
+  //   }
 
-//   digitsOnly = digitsOnly.slice(0, 10);
+  //   digitsOnly = digitsOnly.slice(0, 10);
 
-//   const formattedNumber = digitsOnly
-//     ? `${code}${digitsOnly}`
-//     : "";
+  //   const formattedNumber = digitsOnly
+  //     ? `${code}${digitsOnly}`
+  //     : "";
 
-//   setNewEnquiry((prev) => ({
-//     ...prev,
-//     alternateContact: formattedNumber,
-//   }));
+  //   setNewEnquiry((prev) => ({
+  //     ...prev,
+  //     alternateContact: formattedNumber,
+  //   }));
 
-//   setErrors((prev) => ({
-//     ...prev,
-//     alternateContact:
-//       digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
-//   }));
-// };
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     alternateContact:
+  //       digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+  //   }));
+  // };
 
 
   const handleDateChange = (field: keyof NewEnquiryData, value: string) => {
@@ -507,7 +565,7 @@ const handlePhoneNumberChange = (
   };
 
   const handleConfirmUpdate = async (reason: string) => {
-      if (!pendingPayload) return;
+    if (!pendingPayload) return;
 
     try {
       await editStudent({
@@ -527,7 +585,7 @@ const handlePhoneNumberChange = (
       setTimeout(() => {
         onCloseModal();
       }, 100);
-    } catch (error) { 
+    } catch (error) {
       console.error(error);
     }
   };
@@ -574,7 +632,6 @@ const handlePhoneNumberChange = (
       email: newEnquiry.email,
       contact: newEnquiry.contact,
 
-
       idProofType: filledEnquiryData.idProofType,
       idProofNumber: filledEnquiryData.idProofNumber,
       address: filledEnquiryData.address,
@@ -587,14 +644,13 @@ const handlePhoneNumberChange = (
       motherName: filledEnquiryData.motherName,
       dob: filledEnquiryData.dob,
       religion: filledEnquiryData.religion,
-
     };
 
     // 🔥 DO NOT CALL API HERE
-      setPendingPayload(editStudentPayload);
-      setShowChangeLog(true);
+    setPendingPayload(editStudentPayload);
+    setShowChangeLog(true);
 
-      return;
+    return;
 
     // try {
     //   await editStudent(editStudentPayload);
@@ -617,7 +673,7 @@ const handlePhoneNumberChange = (
     // }
   };
 
-  console.log("get All Admission form data:", newEnquiry);
+  console.log("get All EDIT Admission form data:", newEnquiry);
   console.log("get All Admission form editable data:", filledEnquiryData);
   console.log("get All PAYMENT TYPE OPTIONS::", paymentTypeOption);
 
@@ -740,7 +796,7 @@ const handlePhoneNumberChange = (
           <Label>Date Of Birth</Label>
           <Input
             tabIndex={7}
-            type="text"
+            type="date"
             placeholder="30-02-2002"
             //maxLength={10} // e.g. 12:30 PM
             value={filledEnquiryData.dob}
@@ -808,7 +864,7 @@ const handlePhoneNumberChange = (
             <span className="capitalize">
               {filledEnquiryData.idProofType
                 ? filledEnquiryData.idProofType.charAt(0).toUpperCase() +
-                  filledEnquiryData.idProofType.slice(1).toLowerCase()
+                filledEnquiryData.idProofType.slice(1).toLowerCase()
                 : ""}
             </span>{" "}
             Number
@@ -851,7 +907,7 @@ const handlePhoneNumberChange = (
             <p className="text-sm text-red-500">{errors.permenantAddress}</p>
           )}
         </div>
- 
+
         <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
           <Button size="sm" variant="outline" tabIndex={12} onClick={onCloseModal}>
             Close

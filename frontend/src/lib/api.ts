@@ -81,9 +81,9 @@ export const loginUser = async (userData: {
     console.error("❌ Login API failed:", err.response?.data || err.message);
     throw new Error(
       err.response?.data?.error ||
-        err.response?.data ||
-        err.response?.data?.message ||
-        "Login failed.",
+      err.response?.data ||
+      err.response?.data?.message ||
+      "Login failed.",
     );
   }
 };
@@ -106,9 +106,9 @@ export const createMasterUser = async (userData: {
     console.error("❌ Login API failed:", err.response?.data || err.message);
     throw new Error(
       err.response?.data?.message ||
-        err.response?.data ||
-        err.message ||
-        "Login failed.",
+      err.response?.data ||
+      err.message ||
+      "Login failed.",
     );
   }
 };
@@ -194,29 +194,29 @@ export const createCompanyApi = async (token: string, newCompanyData: any) => {
 //   return response.data;
 // };
 
-  export const getLab = async ({
-    token,
-    page = 1,
-    limit = 5,
-    search = "",
-    sortField,
-    sortOrder,
-  }: GetLabParams) => {
-    const response = await apiClient.get("/all-lab", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        page,
-        limit,
-        search,
-        sortField,
-        sortOrder,
-      },
-    });
+export const getLab = async ({
+  token,
+  page = 1,
+  limit = 5,
+  search = "",
+  sortField,
+  sortOrder,
+}: GetLabParams) => {
+  const response = await apiClient.get("/all-lab", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page,
+      limit,
+      search,
+      sortField,
+      sortOrder,
+    },
+  });
 
-    return response.data;
-  };
+  return response.data;
+};
 
 export const getAnalytics = async (token: string) => {
   const response = await apiClient.get("/profit", {

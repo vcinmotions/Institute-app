@@ -176,9 +176,9 @@ const AdmissionForm: React.FC<Props> = ({
                   src={
                     user.logo
                       ? `${(
-                          process.env.NEXT_PUBLIC_API_BASE_URL ??
-                          "http://localhost:5001/api"
-                        ).replace("/api", "")}/${user.logo.replace(/\\/g, "/")}`
+                        process.env.NEXT_PUBLIC_API_BASE_URL ??
+                        "http://localhost:5001/api"
+                      ).replace("/api", "")}/${user.logo.replace(/\\/g, "/")}`
                       : "/images/logo/institute-logo.png"
                   }
                   alt="user"
@@ -189,13 +189,13 @@ const AdmissionForm: React.FC<Props> = ({
               ) : (
                 <div className="flex-1 text-center">
                   <h1 className="text-2xl font-bold tracking-wide uppercase">
-                    {user.name}
+                    {user.clientAdmin ? user.clientAdmin?.name : user.name}
                   </h1>
                   <p className="mt-1 text-sm wrap-break-word whitespace-normal">
-                    {user.fullAddress}
+                    {user.clientAdmin ? user.clientAdmin?.fullAddress : user.fullAddress}
                   </p>
                   <p className="text-sm">
-                    Phone: +91 {user.contact} | Email: {user.email}
+                    Phone: +91 {user.clientAdmin ? user.clientAdmin?.contact : user.contact} | Email: {user.clientAdmin ? user.clientAdmin?.email : user.email}
                   </p>
                 </div>
               )}
@@ -206,9 +206,9 @@ const AdmissionForm: React.FC<Props> = ({
                       src={
                         student.photoUrl
                           ? `${(
-                              process.env.NEXT_PUBLIC_API_BASE_URL ??
-                              "http://localhost:5001/api"
-                            ).replace("/api", "")}${student.photoUrl}`
+                            process.env.NEXT_PUBLIC_API_BASE_URL ??
+                            "http://localhost:5001/api"
+                          ).replace("/api", "")}${student.photoUrl}`
                           : "/images/user/user-02.png"
                       }
                       alt={student.fullName || "Student"}
@@ -258,7 +258,12 @@ const AdmissionForm: React.FC<Props> = ({
               </tr>
               <tr className="border">
                 <td className="border p-2">
-                  <strong>Date of Birth:</strong> {student.dob}
+                  <strong>Date of Birth:</strong> {" "}
+                  {new Date(student.dob).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                  })}
                 </td>
                 <td className="border p-2">
                   <strong>Religion:</strong>{" "}
@@ -375,12 +380,12 @@ const AdmissionForm: React.FC<Props> = ({
                   src={
                     user.stamp
                       ? `${(
-                          process.env.NEXT_PUBLIC_API_BASE_URL ??
-                          "http://localhost:5001/api"
-                        ).replace(
-                          "/api",
-                          "",
-                        )}/${user.stamp.replace(/\\/g, "/")}`
+                        process.env.NEXT_PUBLIC_API_BASE_URL ??
+                        "http://localhost:5001/api"
+                      ).replace(
+                        "/api",
+                        "",
+                      )}/${user.stamp.replace(/\\/g, "/")}`
                       : "/images/logo/institute-stamp.png"
                   }
                   alt="user"

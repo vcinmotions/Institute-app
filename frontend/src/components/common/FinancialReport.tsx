@@ -118,7 +118,7 @@ const FinancialReport = () => {
     }).format(amount);
 
   return (
-    <div className=" bg-gwhite border rounded-2xl px-6 py-10">
+    <div className=" bg-white border rounded-2xl px-6 py-10">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-10">

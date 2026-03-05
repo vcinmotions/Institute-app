@@ -249,6 +249,14 @@ async function calculateTotalPaidByStudent(prisma: any, clientAdminId: string) {
 
   console.log("ALL STIUDENT feeStructure IN calculateTotalPaidByStudent:", allStructures);
 
+      const totalAmountPaid = allFees.reduce((sum: any, fee: { amountPaid: any; }) => {
+      return sum + fee.amountPaid;
+    }, 0);
+
+    console.log(totalAmountPaid);
+
+    console.log("get All Fee Object Entries:", totalAmountPaid);
+  //const totalPaidAmountByStudent =
 
   // 3️⃣ Create lookup map for quick access
   const structureMap = new Map<string, any>();
@@ -342,6 +350,7 @@ export async function profitAnalyticsController(req: Request, res: Response) {
     // =============================================
     // 1️⃣ TOTAL INCOME (correct way, including installments)
     // =============================================
+    
     const perStudentTotals = await calculateTotalPaidByStudent(tenantPrisma, clientAdminId);
 
     const totalIncome = Array.from(perStudentTotals.values()).reduce(
@@ -363,11 +372,39 @@ export async function profitAnalyticsController(req: Request, res: Response) {
       where: { clientAdminId, paymentStatus: "SUCCESS" },
     });
 
-    //const perStudentTotals = await calculateTotalPaidByStudent(tenantPrisma, clientAdminId);
+    // const perStudentTotals = await calculateTotalPaidByStudent(tenantPrisma, clientAdminId);
 
     const studentDetails = await tenantPrisma.student.findMany({
       where: { id: { in: Array.from(perStudentTotals.keys()) } },
-      select: { id: true, fullName: true },
+      select: { id: true, fullName: true, admissionDate: true },
+    });
+
+    console.log("GET ALL STUDNET IN NALYTICS CONTROLLER:", studentDetails);
+
+    const monthlyCounts: Record<string, number> = {};
+
+    studentDetails.forEach(student => {
+      if (!student.admissionDate) return;
+
+      const month = new Date(student.admissionDate)
+        .toLocaleString("en-US", { month: "short" })
+        .toLowerCase();
+
+      monthlyCounts[month] = (monthlyCounts[month] || 0) + 1;
+    });
+
+    console.log("monthlyCounts:", monthlyCounts);
+
+    const result = Object.entries(monthlyCounts).map(([month, count]) => ({
+      [month]: count
+    }));
+
+    console.log("RESULTS:", result); 
+
+    // 1️⃣ Get all student fees with logs
+    const allFees = await tenantPrisma.studentFee.findMany({
+      where: { clientAdminId },
+      include: { feeLogs: true },
     });
 
     const perStudent = Array.from(perStudentTotals.entries()).map(([studentId, data]) => {
@@ -381,9 +418,16 @@ export async function profitAnalyticsController(req: Request, res: Response) {
       };
     });
 
+    const totalAmountPaid = allFees.reduce((sum: any, fee: { amountPaid: any; }) => {
+      return sum + fee.amountPaid;
+    }, 0);
+
+    const totalAmountOutstanding = allFees.reduce((sum: any, fee: { amountDue: any; }) => {
+      return sum + fee.amountDue;
+    }, 0);
+
     const totalStudentIncome = perStudent.reduce((sum, s) => sum + s.totalPaid, 0);
     //const totalOutstanding = perStudent.reduce((sum, s) => sum + s.outstanding, 0);
-
 
     // =============================================
     // 3️⃣ INCOME PER COURSE
@@ -534,15 +578,16 @@ export async function profitAnalyticsController(req: Request, res: Response) {
     // =============================================
     return res.json({
       summary: {
-        totalIncome,
+        totalIncome: totalAmountPaid,
         totalPCs,
         totalPCIncome,
-        totalStudentIncome,
+        totalStudentIncome: totalAmountPaid,
         totalCourseIncome,
         totalBatchIncome,
         totalFacultyIncome,
-        totalOutstanding,
+        totalOutstanding: totalAmountOutstanding,
       },
+      monthlySales: result ,
       breakdown: {
         perStudent,
         perCourse,
@@ -819,13 +864,6 @@ export async function financialSummaryController(req: Request, res: Response) {
     return res.status(401).json({ error: "Unauthorized request" });
   }
 
-  // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-  //   where: { email: user.email },
-  // });
-  // if (!clientAdmin) return res.status(404).json({ error: "Client admin not found" });
-
-  // const clientAdminId = clientAdmin.id;
-
   const clientAdminId = user.clientAdminId;
 
   // Optional query filters: ?from=2025-01-01&to=2025-12-31&export=excel
@@ -838,6 +876,7 @@ export async function financialSummaryController(req: Request, res: Response) {
     if (to) dateFilter.date.lte = new Date(to as string);
   }
 
+
   const [income, expense] = await Promise.all([
     tenantPrisma.financialRecord.aggregate({
       _sum: { amount: true },
@@ -849,6 +888,9 @@ export async function financialSummaryController(req: Request, res: Response) {
     }),
   ]);
 
+  console.log("get finanicial Record Report:", income, expense);
+
+
   const totalIncome = income._sum.amount ?? 0;
   const totalExpense = expense._sum.amount ?? 0;
   const profit = totalIncome - totalExpense;
@@ -858,6 +900,9 @@ export async function financialSummaryController(req: Request, res: Response) {
     _sum: { amount: true },
     where: { clientAdminId },
   });
+
+  console.log("get finanicial breakdown", breakdown);
+  
 
   const records = await tenantPrisma.financialRecord.findMany({
       where: { clientAdminId, ...dateFilter },
@@ -871,6 +916,8 @@ export async function financialSummaryController(req: Request, res: Response) {
         date: true,
       },
     });
+
+  console.log("get finanicial records", records);
 
   // -------------------------------
   // 🧾 If Excel export requested
@@ -946,13 +993,6 @@ export async function outstandingReportController(req: Request, res: Response) {
   if (!tenantPrisma || !user || typeof user === "string") {
     return res.status(401).json({ error: "Unauthorized request" });
   }
-
-  // const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-  //   where: { email: user.email },
-  // });
-  // if (!clientAdmin) return res.status(404).json({ error: "Client admin not found" });
-
-  // const clientAdminId = clientAdmin.id;
 
   const clientAdminId = user.clientAdminId;
 

@@ -424,7 +424,9 @@ export async function editStudentService({
     parentsContact,
   } = data;
 
-  console.log("FIND THE STUDNE EDIT DATA IN SERVICE:", data);
+  const parsedDOB = parseDateISO(dob);
+
+  console.log("FIND THE STUDENT EDIT DATA IN SERVICE:", data);
   // 2️⃣ Create student
   const student = await prisma.student.update({
     where: {
@@ -442,7 +444,7 @@ export async function editStudentService({
       fatherName,
       motherName,
       parentsContact,
-      dob: dob, // ✅ full ISO
+      dob: parsedDOB ? new Date(parsedDOB) : null, // ✅ full ISO
       gender,
     },
   });

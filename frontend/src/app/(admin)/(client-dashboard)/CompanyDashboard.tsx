@@ -16,6 +16,7 @@ import {
   setAnalytics,
   setAnalyticsBreakdown,
   setBirthdays,
+  setMonthlySales,
 } from "@/store/slices/analyticsSlice";
 import { exportAnalyticsToExcel } from "@/app/utils/exportToExcel";
 
@@ -49,6 +50,7 @@ export default function CompanyDashboard() {
   const summary = useSelector((state: RootState) => state.analytic.summary);
   const breakdown = useSelector((state: RootState) => state.analytic.breakdown);
   const birthdays = useSelector((state: RootState) => state.analytic.birthdays);
+  const monthlySales = useSelector((state: RootState) => state.analytic.monthlySales);
   const totalConverted = useSelector(
     (state: RootState) => state.enquiry.totalConverted,
   );
@@ -68,23 +70,23 @@ export default function CompanyDashboard() {
 
   console.log("ENQUIRIES IN DASHBOARD:", data);
 
-  
-    useEffect(() => {
-      console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
-      if (data) {
-        dispatch(setEnquiries(data.data || []));
-        dispatch(setTotal(data.total || 0));
-        dispatch(setTotalConverted(data.convertedCount || 0));
-        dispatch(setTotalNotConverted(data.notConvertedCount || 0));
-      }
-    }, [data, dispatch]);
 
-     useEffect(() => {
-      console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
-      if (student) {
-        dispatch(setBirthday(student.birthday || []));
-      }
-    }, [student, dispatch]);
+  useEffect(() => {
+    console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
+    if (data) {
+      dispatch(setEnquiries(data.data || []));
+      dispatch(setTotal(data.total || 0));
+      dispatch(setTotalConverted(data.convertedCount || 0));
+      dispatch(setTotalNotConverted(data.notConvertedCount || 0));
+    }
+  }, [data, dispatch]);
+
+  useEffect(() => {
+    console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
+    if (student) {
+      dispatch(setBirthday(student.birthday || []));
+    }
+  }, [student, dispatch]);
 
   // 1️⃣ Fetch user & role
   useEffect(() => {
@@ -106,7 +108,8 @@ export default function CompanyDashboard() {
 
           dispatch(setAnalytics(responseAnalytics.summary || {}));
           dispatch(setAnalyticsBreakdown(responseAnalytics.breakdown || {}));
-          
+          dispatch(setMonthlySales(responseAnalytics.monthlySales || {}));
+
         }
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -125,9 +128,9 @@ export default function CompanyDashboard() {
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className="col-span-12 space-y-6 xl:col-span-7">
         <EcommerceMetrics user={user} summary={summary} breakdown={breakdown} />
-        
+
         {userRole === "ADMIN" && <FinancialReport />}
-        <MonthlySalesChart />
+        <MonthlySalesChart monthlySales={monthlySales} />
       </div>
 
       <div className="col-span-12 space-y-6 xl:col-span-5">
@@ -140,8 +143,8 @@ export default function CompanyDashboard() {
           />
         )}
         <MonthlyBirthdayCard birthdays={birthday}
-            convertedCount={totalConverted}
-            notConvertedCount={totalNotConverted} />
+          convertedCount={totalConverted}
+          notConvertedCount={totalNotConverted} />
       </div>
 
       <div className="col-span-12">
