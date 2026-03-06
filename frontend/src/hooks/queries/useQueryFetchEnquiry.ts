@@ -37,7 +37,7 @@ export const useFetchEnquiry = ({
     queryFn: async ({ signal }) => {
       if (!token) throw new Error("Missing token");
 
-      
+
       const data = await getEnquiry({
         token,
         page: currentPage,
@@ -55,6 +55,7 @@ export const useFetchEnquiry = ({
     },
     enabled: !!token,
     staleTime: 30 * 1000,   // ⭐ caching (30s)
+
   });
 };
 

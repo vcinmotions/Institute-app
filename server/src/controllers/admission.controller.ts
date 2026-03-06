@@ -1232,3 +1232,91 @@ export async function getStudentCourseController(req: Request, res: Response) {
     return res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export async function createAdmissionNumberConfigController(req: Request, res: Response) {
+  try {
+    const prisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!prisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized request" });
+    }
+
+    const { prefix, suffix, numberLength } = req.body;
+
+    // Check if config already exists
+    const existingConfig = await prisma.admissionNumberConfig.findUnique({
+      where: { clientAdminId: user.clientAdminId },
+    });
+
+    if (existingConfig) {
+      return res.status(400).json({
+        error: "Admission number configuration already exists",
+      });
+    }
+
+    const config = await prisma.admissionNumberConfig.create({
+      data: {
+        prefix: prefix || null,
+        suffix: suffix || null,
+        numberLength: numberLength ? Number(numberLength) : 4,
+        clientAdminId: user.clientAdminId,
+      },
+    });
+
+    return res.status(201).json({
+      message: "Admission number configuration created successfully",
+      config,
+    });
+
+  } catch (err) {
+    console.error("❌ Create Admission Config Error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function updateAdmissionNumberConfigController(req: Request, res: Response) {
+  try {
+    const prisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!prisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized request" });
+    }
+
+    const { prefix, suffix, numberLength, currentNumber } = req.body;
+
+    const existingConfig = await prisma.admissionNumberConfig.findUnique({
+      where: { clientAdminId: user.clientAdminId },
+    });
+
+    if (!existingConfig) {
+      return res.status(404).json({
+        error: "Admission number configuration not found",
+      });
+    }
+
+    const updatedConfig = await prisma.admissionNumberConfig.update({
+      where: { clientAdminId: user.clientAdminId },
+      data: {
+        prefix: prefix ?? existingConfig.prefix,
+        suffix: suffix ?? existingConfig.suffix,
+        numberLength: numberLength
+          ? Number(numberLength)
+          : existingConfig.numberLength,
+        currentNumber: currentNumber
+          ? Number(currentNumber)
+          : existingConfig.currentNumber,
+      },
+    });
+
+    return res.status(200).json({
+      message: "Admission number configuration updated successfully",
+      config: updatedConfig,
+    });
+
+  } catch (err) {
+    console.error("❌ Update Admission Config Error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}

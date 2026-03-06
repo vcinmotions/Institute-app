@@ -28,6 +28,16 @@ const add401Interceptor = (client: any) => {
   );
 };
 
+apiClient.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
 // Apply to BOTH clients
 add401Interceptor(apiClient);
 add401Interceptor(apiClientNew);

@@ -176,10 +176,25 @@ model Notification {
   clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
 }
 
+model AdmissionNumberConfig {
+  id            String   @id @default(uuid())
+
+  prefix        String?  // ADM-
+  suffix        String?  // optional
+  numberLength  Int      @default(4) // 4 = 0001
+  currentNumber Int      @default(0)
+
+  clientAdminId String   @unique
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+
+  createdAt     DateTime @default(now())
+}
+
 model Student {
   id            Int             @id @default(autoincrement())
   serialNumber     Int          @unique // ✅ New field
   studentCode   String          @unique
+  admissionNumber   String      @unique
   fullName      String
   fatherName    String?
   motherName    String?
