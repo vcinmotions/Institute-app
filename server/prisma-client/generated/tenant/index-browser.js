@@ -223,10 +223,21 @@ exports.Prisma.NotificationScalarFieldEnum = {
   clientAdminId: 'clientAdminId'
 };
 
+exports.Prisma.AdmissionNumberConfigScalarFieldEnum = {
+  id: 'id',
+  prefix: 'prefix',
+  suffix: 'suffix',
+  numberLength: 'numberLength',
+  currentNumber: 'currentNumber',
+  clientAdminId: 'clientAdminId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.StudentScalarFieldEnum = {
   id: 'id',
   serialNumber: 'serialNumber',
   studentCode: 'studentCode',
+  admissionNumber: 'admissionNumber',
   fullName: 'fullName',
   fatherName: 'fatherName',
   motherName: 'motherName',
@@ -577,6 +588,7 @@ exports.Prisma.ModelName = {
   EnquiryCourse: 'EnquiryCourse',
   FollowUp: 'FollowUp',
   Notification: 'Notification',
+  AdmissionNumberConfig: 'AdmissionNumberConfig',
   Student: 'Student',
   Course: 'Course',
   CourseFeeStructure: 'CourseFeeStructure',

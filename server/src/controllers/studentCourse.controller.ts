@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { studentCourseQuerySchema } from '../validators/student.course.query';
 import { getStudentsCourses } from '../services/student.course.service';
+import { generateAdmissionNumber } from '../utils/admissionFormConfig';
 
 export async function addStudentCourseController(req: Request, res: Response) {
   const {
@@ -108,12 +109,16 @@ export async function addStudentCourseController(req: Request, res: Response) {
       serialNumber = lastStudent.serialNumber + 1;
     }
 
+    // 2️⃣ Generate Admission Number
+        const admissionNumber = await generateAdmissionNumber(tenantPrisma, clientAdminId);
+
     // 👤 4. Create student
     // 👤 4. Create student
     const student = await tenantPrisma.student.create({
       data: {
         serialNumber, // ✅ Include this
         studentCode,
+        admissionNumber,
         fullName: name,
         contact: contact,
         email,

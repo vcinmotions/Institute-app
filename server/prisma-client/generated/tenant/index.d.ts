@@ -49,6 +49,11 @@ export type FollowUp = $Result.DefaultSelection<Prisma.$FollowUpPayload>
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
+ * Model AdmissionNumberConfig
+ * 
+ */
+export type AdmissionNumberConfig = $Result.DefaultSelection<Prisma.$AdmissionNumberConfigPayload>
+/**
  * Model Student
  * 
  */
@@ -487,6 +492,16 @@ export class PrismaClient<
     * ```
     */
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.admissionNumberConfig`: Exposes CRUD operations for the **AdmissionNumberConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdmissionNumberConfigs
+    * const admissionNumberConfigs = await prisma.admissionNumberConfig.findMany()
+    * ```
+    */
+  get admissionNumberConfig(): Prisma.AdmissionNumberConfigDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.student`: Exposes CRUD operations for the **Student** model.
@@ -1184,6 +1199,7 @@ export namespace Prisma {
     EnquiryCourse: 'EnquiryCourse',
     FollowUp: 'FollowUp',
     Notification: 'Notification',
+    AdmissionNumberConfig: 'AdmissionNumberConfig',
     Student: 'Student',
     Course: 'Course',
     CourseFeeStructure: 'CourseFeeStructure',
@@ -1227,7 +1243,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "clientAdmin" | "roleUser" | "activityLog" | "enquiry" | "enquiryCourse" | "followUp" | "notification" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
+      modelProps: "clientAdmin" | "roleUser" | "activityLog" | "enquiry" | "enquiryCourse" | "followUp" | "notification" | "admissionNumberConfig" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1746,6 +1762,80 @@ export namespace Prisma {
           count: {
             args: Prisma.NotificationCountArgs<ExtArgs>
             result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdmissionNumberConfig: {
+        payload: Prisma.$AdmissionNumberConfigPayload<ExtArgs>
+        fields: Prisma.AdmissionNumberConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdmissionNumberConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdmissionNumberConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.AdmissionNumberConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdmissionNumberConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>
+          }
+          findMany: {
+            args: Prisma.AdmissionNumberConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>[]
+          }
+          create: {
+            args: Prisma.AdmissionNumberConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>
+          }
+          createMany: {
+            args: Prisma.AdmissionNumberConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdmissionNumberConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.AdmissionNumberConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>
+          }
+          update: {
+            args: Prisma.AdmissionNumberConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdmissionNumberConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdmissionNumberConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdmissionNumberConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdmissionNumberConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdmissionNumberConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.AdmissionNumberConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdmissionNumberConfig>
+          }
+          groupBy: {
+            args: Prisma.AdmissionNumberConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdmissionNumberConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdmissionNumberConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<AdmissionNumberConfigCountAggregateOutputType> | number
           }
         }
       }
@@ -3702,6 +3792,7 @@ export namespace Prisma {
     enquiryCourse?: EnquiryCourseOmit
     followUp?: FollowUpOmit
     notification?: NotificationOmit
+    admissionNumberConfig?: AdmissionNumberConfigOmit
     student?: StudentOmit
     course?: CourseOmit
     courseFeeStructure?: CourseFeeStructureOmit
@@ -13847,6 +13938,1065 @@ export namespace Prisma {
 
 
   /**
+   * Model AdmissionNumberConfig
+   */
+
+  export type AggregateAdmissionNumberConfig = {
+    _count: AdmissionNumberConfigCountAggregateOutputType | null
+    _avg: AdmissionNumberConfigAvgAggregateOutputType | null
+    _sum: AdmissionNumberConfigSumAggregateOutputType | null
+    _min: AdmissionNumberConfigMinAggregateOutputType | null
+    _max: AdmissionNumberConfigMaxAggregateOutputType | null
+  }
+
+  export type AdmissionNumberConfigAvgAggregateOutputType = {
+    numberLength: number | null
+    currentNumber: number | null
+  }
+
+  export type AdmissionNumberConfigSumAggregateOutputType = {
+    numberLength: number | null
+    currentNumber: number | null
+  }
+
+  export type AdmissionNumberConfigMinAggregateOutputType = {
+    id: string | null
+    prefix: string | null
+    suffix: string | null
+    numberLength: number | null
+    currentNumber: number | null
+    clientAdminId: string | null
+    createdAt: Date | null
+  }
+
+  export type AdmissionNumberConfigMaxAggregateOutputType = {
+    id: string | null
+    prefix: string | null
+    suffix: string | null
+    numberLength: number | null
+    currentNumber: number | null
+    clientAdminId: string | null
+    createdAt: Date | null
+  }
+
+  export type AdmissionNumberConfigCountAggregateOutputType = {
+    id: number
+    prefix: number
+    suffix: number
+    numberLength: number
+    currentNumber: number
+    clientAdminId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AdmissionNumberConfigAvgAggregateInputType = {
+    numberLength?: true
+    currentNumber?: true
+  }
+
+  export type AdmissionNumberConfigSumAggregateInputType = {
+    numberLength?: true
+    currentNumber?: true
+  }
+
+  export type AdmissionNumberConfigMinAggregateInputType = {
+    id?: true
+    prefix?: true
+    suffix?: true
+    numberLength?: true
+    currentNumber?: true
+    clientAdminId?: true
+    createdAt?: true
+  }
+
+  export type AdmissionNumberConfigMaxAggregateInputType = {
+    id?: true
+    prefix?: true
+    suffix?: true
+    numberLength?: true
+    currentNumber?: true
+    clientAdminId?: true
+    createdAt?: true
+  }
+
+  export type AdmissionNumberConfigCountAggregateInputType = {
+    id?: true
+    prefix?: true
+    suffix?: true
+    numberLength?: true
+    currentNumber?: true
+    clientAdminId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AdmissionNumberConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdmissionNumberConfig to aggregate.
+     */
+    where?: AdmissionNumberConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdmissionNumberConfigs to fetch.
+     */
+    orderBy?: AdmissionNumberConfigOrderByWithRelationInput | AdmissionNumberConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdmissionNumberConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdmissionNumberConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdmissionNumberConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdmissionNumberConfigs
+    **/
+    _count?: true | AdmissionNumberConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdmissionNumberConfigAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdmissionNumberConfigSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdmissionNumberConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdmissionNumberConfigMaxAggregateInputType
+  }
+
+  export type GetAdmissionNumberConfigAggregateType<T extends AdmissionNumberConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdmissionNumberConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdmissionNumberConfig[P]>
+      : GetScalarType<T[P], AggregateAdmissionNumberConfig[P]>
+  }
+
+
+
+
+  export type AdmissionNumberConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdmissionNumberConfigWhereInput
+    orderBy?: AdmissionNumberConfigOrderByWithAggregationInput | AdmissionNumberConfigOrderByWithAggregationInput[]
+    by: AdmissionNumberConfigScalarFieldEnum[] | AdmissionNumberConfigScalarFieldEnum
+    having?: AdmissionNumberConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdmissionNumberConfigCountAggregateInputType | true
+    _avg?: AdmissionNumberConfigAvgAggregateInputType
+    _sum?: AdmissionNumberConfigSumAggregateInputType
+    _min?: AdmissionNumberConfigMinAggregateInputType
+    _max?: AdmissionNumberConfigMaxAggregateInputType
+  }
+
+  export type AdmissionNumberConfigGroupByOutputType = {
+    id: string
+    prefix: string | null
+    suffix: string | null
+    numberLength: number
+    currentNumber: number
+    clientAdminId: string
+    createdAt: Date
+    _count: AdmissionNumberConfigCountAggregateOutputType | null
+    _avg: AdmissionNumberConfigAvgAggregateOutputType | null
+    _sum: AdmissionNumberConfigSumAggregateOutputType | null
+    _min: AdmissionNumberConfigMinAggregateOutputType | null
+    _max: AdmissionNumberConfigMaxAggregateOutputType | null
+  }
+
+  type GetAdmissionNumberConfigGroupByPayload<T extends AdmissionNumberConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdmissionNumberConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdmissionNumberConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdmissionNumberConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], AdmissionNumberConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdmissionNumberConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    prefix?: boolean
+    suffix?: boolean
+    numberLength?: boolean
+    currentNumber?: boolean
+    clientAdminId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["admissionNumberConfig"]>
+
+  export type AdmissionNumberConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    prefix?: boolean
+    suffix?: boolean
+    numberLength?: boolean
+    currentNumber?: boolean
+    clientAdminId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["admissionNumberConfig"]>
+
+  export type AdmissionNumberConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    prefix?: boolean
+    suffix?: boolean
+    numberLength?: boolean
+    currentNumber?: boolean
+    clientAdminId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["admissionNumberConfig"]>
+
+  export type AdmissionNumberConfigSelectScalar = {
+    id?: boolean
+    prefix?: boolean
+    suffix?: boolean
+    numberLength?: boolean
+    currentNumber?: boolean
+    clientAdminId?: boolean
+    createdAt?: boolean
+  }
+
+  export type AdmissionNumberConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "prefix" | "suffix" | "numberLength" | "currentNumber" | "clientAdminId" | "createdAt", ExtArgs["result"]["admissionNumberConfig"]>
+
+  export type $AdmissionNumberConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdmissionNumberConfig"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      prefix: string | null
+      suffix: string | null
+      numberLength: number
+      currentNumber: number
+      clientAdminId: string
+      createdAt: Date
+    }, ExtArgs["result"]["admissionNumberConfig"]>
+    composites: {}
+  }
+
+  type AdmissionNumberConfigGetPayload<S extends boolean | null | undefined | AdmissionNumberConfigDefaultArgs> = $Result.GetResult<Prisma.$AdmissionNumberConfigPayload, S>
+
+  type AdmissionNumberConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdmissionNumberConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdmissionNumberConfigCountAggregateInputType | true
+    }
+
+  export interface AdmissionNumberConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdmissionNumberConfig'], meta: { name: 'AdmissionNumberConfig' } }
+    /**
+     * Find zero or one AdmissionNumberConfig that matches the filter.
+     * @param {AdmissionNumberConfigFindUniqueArgs} args - Arguments to find a AdmissionNumberConfig
+     * @example
+     * // Get one AdmissionNumberConfig
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdmissionNumberConfigFindUniqueArgs>(args: SelectSubset<T, AdmissionNumberConfigFindUniqueArgs<ExtArgs>>): Prisma__AdmissionNumberConfigClient<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdmissionNumberConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdmissionNumberConfigFindUniqueOrThrowArgs} args - Arguments to find a AdmissionNumberConfig
+     * @example
+     * // Get one AdmissionNumberConfig
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdmissionNumberConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, AdmissionNumberConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdmissionNumberConfigClient<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdmissionNumberConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdmissionNumberConfigFindFirstArgs} args - Arguments to find a AdmissionNumberConfig
+     * @example
+     * // Get one AdmissionNumberConfig
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdmissionNumberConfigFindFirstArgs>(args?: SelectSubset<T, AdmissionNumberConfigFindFirstArgs<ExtArgs>>): Prisma__AdmissionNumberConfigClient<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdmissionNumberConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdmissionNumberConfigFindFirstOrThrowArgs} args - Arguments to find a AdmissionNumberConfig
+     * @example
+     * // Get one AdmissionNumberConfig
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdmissionNumberConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, AdmissionNumberConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdmissionNumberConfigClient<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdmissionNumberConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdmissionNumberConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdmissionNumberConfigs
+     * const admissionNumberConfigs = await prisma.admissionNumberConfig.findMany()
+     * 
+     * // Get first 10 AdmissionNumberConfigs
+     * const admissionNumberConfigs = await prisma.admissionNumberConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const admissionNumberConfigWithIdOnly = await prisma.admissionNumberConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdmissionNumberConfigFindManyArgs>(args?: SelectSubset<T, AdmissionNumberConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdmissionNumberConfig.
+     * @param {AdmissionNumberConfigCreateArgs} args - Arguments to create a AdmissionNumberConfig.
+     * @example
+     * // Create one AdmissionNumberConfig
+     * const AdmissionNumberConfig = await prisma.admissionNumberConfig.create({
+     *   data: {
+     *     // ... data to create a AdmissionNumberConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdmissionNumberConfigCreateArgs>(args: SelectSubset<T, AdmissionNumberConfigCreateArgs<ExtArgs>>): Prisma__AdmissionNumberConfigClient<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdmissionNumberConfigs.
+     * @param {AdmissionNumberConfigCreateManyArgs} args - Arguments to create many AdmissionNumberConfigs.
+     * @example
+     * // Create many AdmissionNumberConfigs
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdmissionNumberConfigCreateManyArgs>(args?: SelectSubset<T, AdmissionNumberConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdmissionNumberConfigs and returns the data saved in the database.
+     * @param {AdmissionNumberConfigCreateManyAndReturnArgs} args - Arguments to create many AdmissionNumberConfigs.
+     * @example
+     * // Create many AdmissionNumberConfigs
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdmissionNumberConfigs and only return the `id`
+     * const admissionNumberConfigWithIdOnly = await prisma.admissionNumberConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdmissionNumberConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, AdmissionNumberConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdmissionNumberConfig.
+     * @param {AdmissionNumberConfigDeleteArgs} args - Arguments to delete one AdmissionNumberConfig.
+     * @example
+     * // Delete one AdmissionNumberConfig
+     * const AdmissionNumberConfig = await prisma.admissionNumberConfig.delete({
+     *   where: {
+     *     // ... filter to delete one AdmissionNumberConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdmissionNumberConfigDeleteArgs>(args: SelectSubset<T, AdmissionNumberConfigDeleteArgs<ExtArgs>>): Prisma__AdmissionNumberConfigClient<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdmissionNumberConfig.
+     * @param {AdmissionNumberConfigUpdateArgs} args - Arguments to update one AdmissionNumberConfig.
+     * @example
+     * // Update one AdmissionNumberConfig
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdmissionNumberConfigUpdateArgs>(args: SelectSubset<T, AdmissionNumberConfigUpdateArgs<ExtArgs>>): Prisma__AdmissionNumberConfigClient<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdmissionNumberConfigs.
+     * @param {AdmissionNumberConfigDeleteManyArgs} args - Arguments to filter AdmissionNumberConfigs to delete.
+     * @example
+     * // Delete a few AdmissionNumberConfigs
+     * const { count } = await prisma.admissionNumberConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdmissionNumberConfigDeleteManyArgs>(args?: SelectSubset<T, AdmissionNumberConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdmissionNumberConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdmissionNumberConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdmissionNumberConfigs
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdmissionNumberConfigUpdateManyArgs>(args: SelectSubset<T, AdmissionNumberConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdmissionNumberConfigs and returns the data updated in the database.
+     * @param {AdmissionNumberConfigUpdateManyAndReturnArgs} args - Arguments to update many AdmissionNumberConfigs.
+     * @example
+     * // Update many AdmissionNumberConfigs
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdmissionNumberConfigs and only return the `id`
+     * const admissionNumberConfigWithIdOnly = await prisma.admissionNumberConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdmissionNumberConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, AdmissionNumberConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdmissionNumberConfig.
+     * @param {AdmissionNumberConfigUpsertArgs} args - Arguments to update or create a AdmissionNumberConfig.
+     * @example
+     * // Update or create a AdmissionNumberConfig
+     * const admissionNumberConfig = await prisma.admissionNumberConfig.upsert({
+     *   create: {
+     *     // ... data to create a AdmissionNumberConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdmissionNumberConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdmissionNumberConfigUpsertArgs>(args: SelectSubset<T, AdmissionNumberConfigUpsertArgs<ExtArgs>>): Prisma__AdmissionNumberConfigClient<$Result.GetResult<Prisma.$AdmissionNumberConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdmissionNumberConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdmissionNumberConfigCountArgs} args - Arguments to filter AdmissionNumberConfigs to count.
+     * @example
+     * // Count the number of AdmissionNumberConfigs
+     * const count = await prisma.admissionNumberConfig.count({
+     *   where: {
+     *     // ... the filter for the AdmissionNumberConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdmissionNumberConfigCountArgs>(
+      args?: Subset<T, AdmissionNumberConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdmissionNumberConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdmissionNumberConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdmissionNumberConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdmissionNumberConfigAggregateArgs>(args: Subset<T, AdmissionNumberConfigAggregateArgs>): Prisma.PrismaPromise<GetAdmissionNumberConfigAggregateType<T>>
+
+    /**
+     * Group by AdmissionNumberConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdmissionNumberConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdmissionNumberConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdmissionNumberConfigGroupByArgs['orderBy'] }
+        : { orderBy?: AdmissionNumberConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdmissionNumberConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdmissionNumberConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdmissionNumberConfig model
+   */
+  readonly fields: AdmissionNumberConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdmissionNumberConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdmissionNumberConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdmissionNumberConfig model
+   */
+  interface AdmissionNumberConfigFieldRefs {
+    readonly id: FieldRef<"AdmissionNumberConfig", 'String'>
+    readonly prefix: FieldRef<"AdmissionNumberConfig", 'String'>
+    readonly suffix: FieldRef<"AdmissionNumberConfig", 'String'>
+    readonly numberLength: FieldRef<"AdmissionNumberConfig", 'Int'>
+    readonly currentNumber: FieldRef<"AdmissionNumberConfig", 'Int'>
+    readonly clientAdminId: FieldRef<"AdmissionNumberConfig", 'String'>
+    readonly createdAt: FieldRef<"AdmissionNumberConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdmissionNumberConfig findUnique
+   */
+  export type AdmissionNumberConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AdmissionNumberConfig to fetch.
+     */
+    where: AdmissionNumberConfigWhereUniqueInput
+  }
+
+  /**
+   * AdmissionNumberConfig findUniqueOrThrow
+   */
+  export type AdmissionNumberConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AdmissionNumberConfig to fetch.
+     */
+    where: AdmissionNumberConfigWhereUniqueInput
+  }
+
+  /**
+   * AdmissionNumberConfig findFirst
+   */
+  export type AdmissionNumberConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AdmissionNumberConfig to fetch.
+     */
+    where?: AdmissionNumberConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdmissionNumberConfigs to fetch.
+     */
+    orderBy?: AdmissionNumberConfigOrderByWithRelationInput | AdmissionNumberConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdmissionNumberConfigs.
+     */
+    cursor?: AdmissionNumberConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdmissionNumberConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdmissionNumberConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdmissionNumberConfigs.
+     */
+    distinct?: AdmissionNumberConfigScalarFieldEnum | AdmissionNumberConfigScalarFieldEnum[]
+  }
+
+  /**
+   * AdmissionNumberConfig findFirstOrThrow
+   */
+  export type AdmissionNumberConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AdmissionNumberConfig to fetch.
+     */
+    where?: AdmissionNumberConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdmissionNumberConfigs to fetch.
+     */
+    orderBy?: AdmissionNumberConfigOrderByWithRelationInput | AdmissionNumberConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdmissionNumberConfigs.
+     */
+    cursor?: AdmissionNumberConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdmissionNumberConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdmissionNumberConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdmissionNumberConfigs.
+     */
+    distinct?: AdmissionNumberConfigScalarFieldEnum | AdmissionNumberConfigScalarFieldEnum[]
+  }
+
+  /**
+   * AdmissionNumberConfig findMany
+   */
+  export type AdmissionNumberConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AdmissionNumberConfigs to fetch.
+     */
+    where?: AdmissionNumberConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdmissionNumberConfigs to fetch.
+     */
+    orderBy?: AdmissionNumberConfigOrderByWithRelationInput | AdmissionNumberConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdmissionNumberConfigs.
+     */
+    cursor?: AdmissionNumberConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdmissionNumberConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdmissionNumberConfigs.
+     */
+    skip?: number
+    distinct?: AdmissionNumberConfigScalarFieldEnum | AdmissionNumberConfigScalarFieldEnum[]
+  }
+
+  /**
+   * AdmissionNumberConfig create
+   */
+  export type AdmissionNumberConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AdmissionNumberConfig.
+     */
+    data: XOR<AdmissionNumberConfigCreateInput, AdmissionNumberConfigUncheckedCreateInput>
+  }
+
+  /**
+   * AdmissionNumberConfig createMany
+   */
+  export type AdmissionNumberConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdmissionNumberConfigs.
+     */
+    data: AdmissionNumberConfigCreateManyInput | AdmissionNumberConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdmissionNumberConfig createManyAndReturn
+   */
+  export type AdmissionNumberConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdmissionNumberConfigs.
+     */
+    data: AdmissionNumberConfigCreateManyInput | AdmissionNumberConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdmissionNumberConfig update
+   */
+  export type AdmissionNumberConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AdmissionNumberConfig.
+     */
+    data: XOR<AdmissionNumberConfigUpdateInput, AdmissionNumberConfigUncheckedUpdateInput>
+    /**
+     * Choose, which AdmissionNumberConfig to update.
+     */
+    where: AdmissionNumberConfigWhereUniqueInput
+  }
+
+  /**
+   * AdmissionNumberConfig updateMany
+   */
+  export type AdmissionNumberConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdmissionNumberConfigs.
+     */
+    data: XOR<AdmissionNumberConfigUpdateManyMutationInput, AdmissionNumberConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which AdmissionNumberConfigs to update
+     */
+    where?: AdmissionNumberConfigWhereInput
+    /**
+     * Limit how many AdmissionNumberConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdmissionNumberConfig updateManyAndReturn
+   */
+  export type AdmissionNumberConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update AdmissionNumberConfigs.
+     */
+    data: XOR<AdmissionNumberConfigUpdateManyMutationInput, AdmissionNumberConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which AdmissionNumberConfigs to update
+     */
+    where?: AdmissionNumberConfigWhereInput
+    /**
+     * Limit how many AdmissionNumberConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdmissionNumberConfig upsert
+   */
+  export type AdmissionNumberConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AdmissionNumberConfig to update in case it exists.
+     */
+    where: AdmissionNumberConfigWhereUniqueInput
+    /**
+     * In case the AdmissionNumberConfig found by the `where` argument doesn't exist, create a new AdmissionNumberConfig with this data.
+     */
+    create: XOR<AdmissionNumberConfigCreateInput, AdmissionNumberConfigUncheckedCreateInput>
+    /**
+     * In case the AdmissionNumberConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdmissionNumberConfigUpdateInput, AdmissionNumberConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * AdmissionNumberConfig delete
+   */
+  export type AdmissionNumberConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+    /**
+     * Filter which AdmissionNumberConfig to delete.
+     */
+    where: AdmissionNumberConfigWhereUniqueInput
+  }
+
+  /**
+   * AdmissionNumberConfig deleteMany
+   */
+  export type AdmissionNumberConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdmissionNumberConfigs to delete
+     */
+    where?: AdmissionNumberConfigWhereInput
+    /**
+     * Limit how many AdmissionNumberConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdmissionNumberConfig without action
+   */
+  export type AdmissionNumberConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionNumberConfig
+     */
+    select?: AdmissionNumberConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionNumberConfig
+     */
+    omit?: AdmissionNumberConfigOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model Student
    */
 
@@ -13872,6 +15022,7 @@ export namespace Prisma {
     id: number | null
     serialNumber: number | null
     studentCode: string | null
+    admissionNumber: string | null
     fullName: string | null
     fatherName: string | null
     motherName: string | null
@@ -13896,6 +15047,7 @@ export namespace Prisma {
     id: number | null
     serialNumber: number | null
     studentCode: string | null
+    admissionNumber: string | null
     fullName: string | null
     fatherName: string | null
     motherName: string | null
@@ -13920,6 +15072,7 @@ export namespace Prisma {
     id: number
     serialNumber: number
     studentCode: number
+    admissionNumber: number
     fullName: number
     fatherName: number
     motherName: number
@@ -13956,6 +15109,7 @@ export namespace Prisma {
     id?: true
     serialNumber?: true
     studentCode?: true
+    admissionNumber?: true
     fullName?: true
     fatherName?: true
     motherName?: true
@@ -13980,6 +15134,7 @@ export namespace Prisma {
     id?: true
     serialNumber?: true
     studentCode?: true
+    admissionNumber?: true
     fullName?: true
     fatherName?: true
     motherName?: true
@@ -14004,6 +15159,7 @@ export namespace Prisma {
     id?: true
     serialNumber?: true
     studentCode?: true
+    admissionNumber?: true
     fullName?: true
     fatherName?: true
     motherName?: true
@@ -14115,6 +15271,7 @@ export namespace Prisma {
     id: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName: string | null
     motherName: string | null
@@ -14158,6 +15315,7 @@ export namespace Prisma {
     id?: boolean
     serialNumber?: boolean
     studentCode?: boolean
+    admissionNumber?: boolean
     fullName?: boolean
     fatherName?: boolean
     motherName?: boolean
@@ -14196,6 +15354,7 @@ export namespace Prisma {
     id?: boolean
     serialNumber?: boolean
     studentCode?: boolean
+    admissionNumber?: boolean
     fullName?: boolean
     fatherName?: boolean
     motherName?: boolean
@@ -14221,6 +15380,7 @@ export namespace Prisma {
     id?: boolean
     serialNumber?: boolean
     studentCode?: boolean
+    admissionNumber?: boolean
     fullName?: boolean
     fatherName?: boolean
     motherName?: boolean
@@ -14246,6 +15406,7 @@ export namespace Prisma {
     id?: boolean
     serialNumber?: boolean
     studentCode?: boolean
+    admissionNumber?: boolean
     fullName?: boolean
     fatherName?: boolean
     motherName?: boolean
@@ -14266,7 +15427,7 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serialNumber" | "studentCode" | "fullName" | "fatherName" | "motherName" | "photoUrl" | "contact" | "parentsContact" | "email" | "residentialAddress" | "permenantAddress" | "dob" | "gender" | "religion" | "idProofType" | "idProofNumber" | "admissionDate" | "createdAt" | "updatedAt" | "clientAdminId", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serialNumber" | "studentCode" | "admissionNumber" | "fullName" | "fatherName" | "motherName" | "photoUrl" | "contact" | "parentsContact" | "email" | "residentialAddress" | "permenantAddress" | "dob" | "gender" | "religion" | "idProofType" | "idProofNumber" | "admissionDate" | "createdAt" | "updatedAt" | "clientAdminId", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enquiry?: boolean | Student$enquiryArgs<ExtArgs>
     labAllocations?: boolean | Student$labAllocationsArgs<ExtArgs>
@@ -14311,6 +15472,7 @@ export namespace Prisma {
       id: number
       serialNumber: number
       studentCode: string
+      admissionNumber: string
       fullName: string
       fatherName: string | null
       motherName: string | null
@@ -14768,6 +15930,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Student", 'Int'>
     readonly serialNumber: FieldRef<"Student", 'Int'>
     readonly studentCode: FieldRef<"Student", 'String'>
+    readonly admissionNumber: FieldRef<"Student", 'String'>
     readonly fullName: FieldRef<"Student", 'String'>
     readonly fatherName: FieldRef<"Student", 'String'>
     readonly motherName: FieldRef<"Student", 'String'>
@@ -44260,10 +45423,24 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+  export const AdmissionNumberConfigScalarFieldEnum: {
+    id: 'id',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    numberLength: 'numberLength',
+    currentNumber: 'currentNumber',
+    clientAdminId: 'clientAdminId',
+    createdAt: 'createdAt'
+  };
+
+  export type AdmissionNumberConfigScalarFieldEnum = (typeof AdmissionNumberConfigScalarFieldEnum)[keyof typeof AdmissionNumberConfigScalarFieldEnum]
+
+
   export const StudentScalarFieldEnum: {
     id: 'id',
     serialNumber: 'serialNumber',
     studentCode: 'studentCode',
+    admissionNumber: 'admissionNumber',
     fullName: 'fullName',
     fatherName: 'fatherName',
     motherName: 'motherName',
@@ -45564,6 +46741,70 @@ export namespace Prisma {
     clientAdminId?: StringWithAggregatesFilter<"Notification"> | string
   }
 
+  export type AdmissionNumberConfigWhereInput = {
+    AND?: AdmissionNumberConfigWhereInput | AdmissionNumberConfigWhereInput[]
+    OR?: AdmissionNumberConfigWhereInput[]
+    NOT?: AdmissionNumberConfigWhereInput | AdmissionNumberConfigWhereInput[]
+    id?: StringFilter<"AdmissionNumberConfig"> | string
+    prefix?: StringNullableFilter<"AdmissionNumberConfig"> | string | null
+    suffix?: StringNullableFilter<"AdmissionNumberConfig"> | string | null
+    numberLength?: IntFilter<"AdmissionNumberConfig"> | number
+    currentNumber?: IntFilter<"AdmissionNumberConfig"> | number
+    clientAdminId?: StringFilter<"AdmissionNumberConfig"> | string
+    createdAt?: DateTimeFilter<"AdmissionNumberConfig"> | Date | string
+  }
+
+  export type AdmissionNumberConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    prefix?: SortOrderInput | SortOrder
+    suffix?: SortOrderInput | SortOrder
+    numberLength?: SortOrder
+    currentNumber?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdmissionNumberConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    clientAdminId?: string
+    AND?: AdmissionNumberConfigWhereInput | AdmissionNumberConfigWhereInput[]
+    OR?: AdmissionNumberConfigWhereInput[]
+    NOT?: AdmissionNumberConfigWhereInput | AdmissionNumberConfigWhereInput[]
+    prefix?: StringNullableFilter<"AdmissionNumberConfig"> | string | null
+    suffix?: StringNullableFilter<"AdmissionNumberConfig"> | string | null
+    numberLength?: IntFilter<"AdmissionNumberConfig"> | number
+    currentNumber?: IntFilter<"AdmissionNumberConfig"> | number
+    createdAt?: DateTimeFilter<"AdmissionNumberConfig"> | Date | string
+  }, "id" | "clientAdminId">
+
+  export type AdmissionNumberConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    prefix?: SortOrderInput | SortOrder
+    suffix?: SortOrderInput | SortOrder
+    numberLength?: SortOrder
+    currentNumber?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+    _count?: AdmissionNumberConfigCountOrderByAggregateInput
+    _avg?: AdmissionNumberConfigAvgOrderByAggregateInput
+    _max?: AdmissionNumberConfigMaxOrderByAggregateInput
+    _min?: AdmissionNumberConfigMinOrderByAggregateInput
+    _sum?: AdmissionNumberConfigSumOrderByAggregateInput
+  }
+
+  export type AdmissionNumberConfigScalarWhereWithAggregatesInput = {
+    AND?: AdmissionNumberConfigScalarWhereWithAggregatesInput | AdmissionNumberConfigScalarWhereWithAggregatesInput[]
+    OR?: AdmissionNumberConfigScalarWhereWithAggregatesInput[]
+    NOT?: AdmissionNumberConfigScalarWhereWithAggregatesInput | AdmissionNumberConfigScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdmissionNumberConfig"> | string
+    prefix?: StringNullableWithAggregatesFilter<"AdmissionNumberConfig"> | string | null
+    suffix?: StringNullableWithAggregatesFilter<"AdmissionNumberConfig"> | string | null
+    numberLength?: IntWithAggregatesFilter<"AdmissionNumberConfig"> | number
+    currentNumber?: IntWithAggregatesFilter<"AdmissionNumberConfig"> | number
+    clientAdminId?: StringWithAggregatesFilter<"AdmissionNumberConfig"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AdmissionNumberConfig"> | Date | string
+  }
+
   export type StudentWhereInput = {
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
@@ -45571,6 +46812,7 @@ export namespace Prisma {
     id?: IntFilter<"Student"> | number
     serialNumber?: IntFilter<"Student"> | number
     studentCode?: StringFilter<"Student"> | string
+    admissionNumber?: StringFilter<"Student"> | string
     fullName?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
     motherName?: StringNullableFilter<"Student"> | string | null
@@ -45608,6 +46850,7 @@ export namespace Prisma {
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
+    admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrderInput | SortOrder
     motherName?: SortOrderInput | SortOrder
@@ -45645,6 +46888,7 @@ export namespace Prisma {
     id?: number
     serialNumber?: number
     studentCode?: string
+    admissionNumber?: string
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
@@ -45679,12 +46923,13 @@ export namespace Prisma {
     certificates?: CertificateListRelationFilter
     financialRecords?: FinancialRecordListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
-  }, "id" | "serialNumber" | "studentCode">
+  }, "id" | "serialNumber" | "studentCode" | "admissionNumber">
 
   export type StudentOrderByWithAggregationInput = {
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
+    admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrderInput | SortOrder
     motherName?: SortOrderInput | SortOrder
@@ -45717,6 +46962,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Student"> | number
     serialNumber?: IntWithAggregatesFilter<"Student"> | number
     studentCode?: StringWithAggregatesFilter<"Student"> | string
+    admissionNumber?: StringWithAggregatesFilter<"Student"> | string
     fullName?: StringWithAggregatesFilter<"Student"> | string
     fatherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
     motherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -48452,9 +49698,80 @@ export namespace Prisma {
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type AdmissionNumberConfigCreateInput = {
+    id?: string
+    prefix?: string | null
+    suffix?: string | null
+    numberLength?: number
+    currentNumber?: number
+    clientAdminId: string
+    createdAt?: Date | string
+  }
+
+  export type AdmissionNumberConfigUncheckedCreateInput = {
+    id?: string
+    prefix?: string | null
+    suffix?: string | null
+    numberLength?: number
+    currentNumber?: number
+    clientAdminId: string
+    createdAt?: Date | string
+  }
+
+  export type AdmissionNumberConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    numberLength?: IntFieldUpdateOperationsInput | number
+    currentNumber?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdmissionNumberConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    numberLength?: IntFieldUpdateOperationsInput | number
+    currentNumber?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdmissionNumberConfigCreateManyInput = {
+    id?: string
+    prefix?: string | null
+    suffix?: string | null
+    numberLength?: number
+    currentNumber?: number
+    clientAdminId: string
+    createdAt?: Date | string
+  }
+
+  export type AdmissionNumberConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    numberLength?: IntFieldUpdateOperationsInput | number
+    currentNumber?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdmissionNumberConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    numberLength?: IntFieldUpdateOperationsInput | number
+    currentNumber?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StudentCreateInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -48491,6 +49808,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -48526,6 +49844,7 @@ export namespace Prisma {
   export type StudentUpdateInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48562,6 +49881,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48598,6 +49918,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -48621,6 +49942,7 @@ export namespace Prisma {
   export type StudentUpdateManyMutationInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48644,6 +49966,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51324,10 +52647,51 @@ export namespace Prisma {
     paymentId?: SortOrder
   }
 
+  export type AdmissionNumberConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    prefix?: SortOrder
+    suffix?: SortOrder
+    numberLength?: SortOrder
+    currentNumber?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdmissionNumberConfigAvgOrderByAggregateInput = {
+    numberLength?: SortOrder
+    currentNumber?: SortOrder
+  }
+
+  export type AdmissionNumberConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    prefix?: SortOrder
+    suffix?: SortOrder
+    numberLength?: SortOrder
+    currentNumber?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdmissionNumberConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    prefix?: SortOrder
+    suffix?: SortOrder
+    numberLength?: SortOrder
+    currentNumber?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdmissionNumberConfigSumOrderByAggregateInput = {
+    numberLength?: SortOrder
+    currentNumber?: SortOrder
+  }
+
   export type StudentCountOrderByAggregateInput = {
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
+    admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrder
     motherName?: SortOrder
@@ -51357,6 +52721,7 @@ export namespace Prisma {
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
+    admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrder
     motherName?: SortOrder
@@ -51381,6 +52746,7 @@ export namespace Prisma {
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
+    admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrder
     motherName?: SortOrder
@@ -57813,6 +59179,7 @@ export namespace Prisma {
   export type StudentCreateWithoutClientAdminInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -57848,6 +59215,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -58702,6 +60070,7 @@ export namespace Prisma {
     id?: IntFilter<"Student"> | number
     serialNumber?: IntFilter<"Student"> | number
     studentCode?: StringFilter<"Student"> | string
+    admissionNumber?: StringFilter<"Student"> | string
     fullName?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
     motherName?: StringNullableFilter<"Student"> | string | null
@@ -59708,6 +61077,7 @@ export namespace Prisma {
   export type StudentCreateWithoutEnquiryInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -59743,6 +61113,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -59972,6 +61343,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutEnquiryInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60007,6 +61379,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65267,6 +66640,7 @@ export namespace Prisma {
   export type StudentCreateWithoutLabAllocationsInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -65302,6 +66676,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -65487,6 +66862,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutLabAllocationsInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65522,6 +66898,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65665,6 +67042,7 @@ export namespace Prisma {
   export type StudentCreateWithoutStudentCoursesInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -65700,6 +67078,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -65974,6 +67353,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutStudentCoursesInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66009,6 +67389,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66280,6 +67661,7 @@ export namespace Prisma {
   export type StudentCreateWithoutFeeStructuresInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -66315,6 +67697,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -66532,6 +67915,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutFeeStructuresInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66567,6 +67951,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66872,6 +68257,7 @@ export namespace Prisma {
   export type StudentCreateWithoutFeeRecordsInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -66907,6 +68293,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -67156,6 +68543,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutFeeRecordsInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67191,6 +68579,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67702,6 +69091,7 @@ export namespace Prisma {
   export type StudentCreateWithoutStationeryInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -67737,6 +69127,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -67956,6 +69347,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutStationeryInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67991,6 +69383,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68212,6 +69605,7 @@ export namespace Prisma {
   export type StudentCreateWithoutAttendanceInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -68247,6 +69641,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -68492,6 +69887,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutAttendanceInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68527,6 +69923,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69195,6 +70592,7 @@ export namespace Prisma {
   export type StudentCreateWithoutTasksInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -69230,6 +70628,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -69497,6 +70896,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutTasksInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69532,6 +70932,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70224,6 +71625,7 @@ export namespace Prisma {
   export type StudentCreateWithoutTestsInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -70259,6 +71661,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -70480,6 +71883,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutTestsInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70515,6 +71919,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70770,6 +72175,7 @@ export namespace Prisma {
   export type StudentCreateWithoutCompletionsInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -70805,6 +72211,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -70996,6 +72403,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutCompletionsInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71031,6 +72439,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71174,6 +72583,7 @@ export namespace Prisma {
   export type StudentCreateWithoutCertificatesInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -71209,6 +72619,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -71440,6 +72851,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutCertificatesInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71475,6 +72887,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71708,6 +73121,7 @@ export namespace Prisma {
   export type StudentCreateWithoutFinancialRecordsInput = {
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -71743,6 +73157,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -72012,6 +73427,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutFinancialRecordsInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72047,6 +73463,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72402,6 +73819,7 @@ export namespace Prisma {
     id?: number
     serialNumber: number
     studentCode: string
+    admissionNumber: string
     fullName: string
     fatherName?: string | null
     motherName?: string | null
@@ -72887,6 +74305,7 @@ export namespace Prisma {
   export type StudentUpdateWithoutClientAdminInput = {
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72922,6 +74341,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72957,6 +74377,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null

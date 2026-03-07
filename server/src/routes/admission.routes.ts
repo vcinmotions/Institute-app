@@ -4,7 +4,6 @@ import multer, { FileFilterCallback } from "multer";
 import fs from "fs";
 import path from "path";
 import {
-  addStudentController,
   addStudentControllerNew,
   createstudentOpeningBalanceController,
   editStudentController,
@@ -64,11 +63,11 @@ const upload = multer({
 });
 
 //router.post('/admission', addStudentController);
-router.post(
-  "/admission",
-  upload.single("profilePicture"),
-  addStudentController
-);
+// router.post(
+//   "/admission",
+//   upload.single("profilePicture"),
+//   addStudentController
+// );
 router.post(
   "/admission-new",
   upload.single("profilePicture"),

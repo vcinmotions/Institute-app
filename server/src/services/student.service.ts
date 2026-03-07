@@ -7,6 +7,7 @@ import { studentQuerySchema } from "../validators/student.query";
 import { Student } from "../domain/student/student";
 import { parseDate, parseDateISO } from "../helpers/date";
 import { ensureUniqueEnquiry, ensureUniqueStudent } from "../domain/enquiry/enquiryRules";
+import { generateAdmissionNumber } from "../utils/admissionFormConfig";
 
 type StudentQuery = z.infer<typeof studentQuerySchema>;
 

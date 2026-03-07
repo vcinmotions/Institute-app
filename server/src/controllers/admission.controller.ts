@@ -4,346 +4,349 @@ import { logActivity } from "../utils/activityLogger";
 import { studentCreateSchema, studentEditSchema, studentOpeningBalanceSchema, studentQuerySchema } from "../validators/student.query";
 import { createStudentOpeningBalanceService, createStudentService, editStudentService, getStudents } from "../services/student.service";
 
-export async function addStudentController(req: Request, res: Response) {
-  const {
-    id,
-    name,
-    contact,
-    email,
-    courseId,
-    batchId,
-    residentialAddress,
-    permenantAddress,
-    idProofType,
-    idProofNumber,
-    admissionDate,
-    feeAmount,
-    paymentType,
-    religion,
-    fatherName,
-    motherName,
-    dob,
-    gender,
-    parentsContact,
-    installmentTypeId,
-  } = req.body;
+// export async function addStudentController(req: Request, res: Response) {
+//   const {
+//     id,
+//     name,
+//     contact,
+//     email,
+//     courseId,
+//     batchId,
+//     residentialAddress,
+//     permenantAddress,
+//     idProofType,
+//     idProofNumber,
+//     admissionDate,
+//     feeAmount,
+//     paymentType,
+//     religion,
+//     fatherName,
+//     motherName,
+//     dob,
+//     gender,
+//     parentsContact,
+//     installmentTypeId,
+//   } = req.body;
 
-  console.log("Student data in addAdmission Controller >>>>>>>>>>>>>>>>>>>>>>>>>>>>>", req.body);
+//   console.log("Student data in addAdmission Controller >>>>>>>>>>>>>>>>>>>>>>>>>>>>>", req.body);
 
-  if (
-    !name ||
-    !contact ||
-    !email ||
-    !idProofType ||
-    !idProofNumber ||
-    !id ||
-    !residentialAddress ||
-    !permenantAddress ||
-    !feeAmount ||
-    !paymentType ||
-    !religion ||
-    !fatherName ||
-    !motherName ||
-    !parentsContact ||
-    !admissionDate ||
-    !courseId ||
-    !fatherName ||
-    !dob ||
-    !gender ||
-    !batchId ||
-    !installmentTypeId
-  ) {
-    return res
-      .status(400)
-      .json({ error: "Missing required student information" });
-  }
+//   if (
+//     !name ||
+//     !contact ||
+//     !email ||
+//     !idProofType ||
+//     !idProofNumber ||
+//     !id ||
+//     !residentialAddress ||
+//     !permenantAddress ||
+//     !feeAmount ||
+//     !paymentType ||
+//     !religion ||
+//     !fatherName ||
+//     !motherName ||
+//     !parentsContact ||
+//     !admissionDate ||
+//     !courseId ||
+//     !fatherName ||
+//     !dob ||
+//     !gender ||
+//     !batchId ||
+//     !installmentTypeId
+//   ) {
+//     return res
+//       .status(400)
+//       .json({ error: "Missing required student information" });
+//   }
 
-  if (!feeAmount || !paymentType) {
-    return res
-      .status(400)
-      .json({ error: "Fee amount and payment type are required" });
-  }
+//   if (!feeAmount || !paymentType) {
+//     return res
+//       .status(400)
+//       .json({ error: "Fee amount and payment type are required" });
+//   }
 
-  try {
-    const tenantPrisma = req.tenantPrisma;
-    const user = req.user;
+//   try {
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
 
-    if (!tenantPrisma || !user || typeof user === "string") {
-      return res.status(401).json({ error: "Unauthorized request" });
-    }
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
 
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email: user.email },
-    });
+//     const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
+//       where: { email: user.email },
+//     });
 
-    if (!clientAdmin) {
-      return res.status(404).json({ error: "Client admin not found" });
-    }
+//     if (!clientAdmin) {
+//       return res.status(404).json({ error: "Client admin not found" });
+//     }
 
-    const clientAdminId = clientAdmin.id;
+//     const clientAdminId = clientAdmin.id;
 
-    const photoFile = req.file;
-    let photoUrl: string | null = null;
+//     const photoFile = req.file;
+//     let photoUrl: string | null = null;
 
-    if (photoFile) {
-      photoUrl = `/uploads/students/${photoFile.filename}`;
-      console.log("Photo URL:", photoUrl);
-    }
+//     if (photoFile) {
+//       photoUrl = `/uploads/students/${photoFile.filename}`;
+//       console.log("Photo URL:", photoUrl);
+//     }
 
-    // 🔍 1. Check if course with the given name exists
-    const courseExists = await tenantPrisma.course.findUnique({
-      where: { id: Number(courseId) },
-    });
-    if (!courseExists)
-      return res.status(404).json({ error: "Course does not exist" });
+//     // 🔍 1. Check if course with the given name exists
+//     const courseExists = await tenantPrisma.course.findUnique({
+//       where: { id: Number(courseId) },
+//     });
+//     if (!courseExists)
+//       return res.status(404).json({ error: "Course does not exist" });
 
-    const batchExists = await tenantPrisma.batch.findUnique({
-      where: { id: Number(batchId) },
-    });
-    if (!batchExists)
-      return res.status(404).json({ error: "Batch does not exist" });
+//     const batchExists = await tenantPrisma.batch.findUnique({
+//       where: { id: Number(batchId) },
+//     });
+//     if (!batchExists)
+//       return res.status(404).json({ error: "Batch does not exist" });
 
-    // 🧩 2. Ensure BatchCourse relation exists
-    let batchCourse = await tenantPrisma.batchCourse.findFirst({
-      where: {
-        batchId: Number(batchId),
-        courseId: Number(courseId),
-      },
-    });
+//     // 🧩 2. Ensure BatchCourse relation exists
+//     let batchCourse = await tenantPrisma.batchCourse.findFirst({
+//       where: {
+//         batchId: Number(batchId),
+//         courseId: Number(courseId),
+//       },
+//     });
 
-    if (!batchCourse) {
-      batchCourse = await tenantPrisma.batchCourse.create({
-        data: {
-          batchId: Number(batchId),
-          courseId: Number(courseId),
-        },
-      });
-      console.log("✅ Created BatchCourse relation dynamically");
-    }
+//     if (!batchCourse) {
+//       batchCourse = await tenantPrisma.batchCourse.create({
+//         data: {
+//           batchId: Number(batchId),
+//           courseId: Number(courseId),
+//         },
+//       });
+//       console.log("✅ Created BatchCourse relation dynamically");
+//     }
 
-    // 🎓 3. Generate unique student code
-    const lastStudent = await tenantPrisma.student.findFirst({
-      orderBy: { id: "desc" },
-      select: { studentCode: true, serialNumber: true },
-    });
+//     // 🎓 3. Generate unique student code
+//     const lastStudent = await tenantPrisma.student.findFirst({
+//       orderBy: { id: "desc" },
+//       select: { studentCode: true, serialNumber: true },
+//     });
 
-    let studentCode = "SD001";
-    let serialNumber = 1;
+//     let studentCode = "SD001";
+//     let serialNumber = 1;
 
-    if (lastStudent?.studentCode) {
-      const num = parseInt(lastStudent.studentCode.slice(2)) + 1;
-      studentCode = `SD${num.toString().padStart(3, "0")}`;
-    }
+//     if (lastStudent?.studentCode) {
+//       const num = parseInt(lastStudent.studentCode.slice(2)) + 1;
+//       studentCode = `SD${num.toString().padStart(3, "0")}`;
+//     }
 
-    if (lastStudent?.serialNumber) {
-      serialNumber = lastStudent.serialNumber + 1;
-    }
+//     if (lastStudent?.serialNumber) {
+//       serialNumber = lastStudent.serialNumber + 1;
+//     }
 
-    const parsedDOB = new Date(dob.split("/").reverse().join("-"));
+//     const parsedDOB = new Date(dob.split("/").reverse().join("-"));
 
-    // ✅ Create Student Record
-    const student = await tenantPrisma.student.create({
-      data: {
-        serialNumber,
-        studentCode,
-        fullName: name,
-        contact: contact,
-        email,
-        residentialAddress,
-        permenantAddress,
-        idProofType,
-        idProofNumber,
-        admissionDate: new Date(admissionDate),
-        religion,
-        fatherName,
-        motherName,
-        parentsContact,
-        dob,
-        photoUrl, // ✅ store file path
-        gender,
-        clientAdminId,
-      },
-    });
+//     const admissionNumber = await generateAdmissionNumber(tenantPrisma, clientAdminId);
 
-    // 🧮 Calculate endDate from course duration
-    const startDate = new Date(admissionDate);
-    let endDate = new Date(startDate); // copy start date
+//     // ✅ Create Student Record
+//     const student = await tenantPrisma.student.create({
+//       data: {
+//         serialNumber,
+//         studentCode,
+//         admissionNumber,
+//         fullName: name,
+//         contact: contact,
+//         email,
+//         residentialAddress,
+//         permenantAddress,
+//         idProofType,
+//         idProofNumber,
+//         admissionDate: new Date(admissionDate),
+//         religion,
+//         fatherName,
+//         motherName,
+//         parentsContact,
+//         dob,
+//         photoUrl, // ✅ store file path
+//         gender,
+//         clientAdminId,
+//       },
+//     });
 
-    console.log("get endDate Befoe calcultion:", endDate);
+//     // 🧮 Calculate endDate from course duration
+//     const startDate = new Date(admissionDate);
+//     let endDate = new Date(startDate); // copy start date
 
-    if (courseExists.durationWeeks && !isNaN(courseExists.durationWeeks)) {
-      endDate.setDate(startDate.getDate() + courseExists.durationWeeks * 7);
-    } else {
-      console.warn(
-        "⚠️ Course has no valid durationWeeks — using admissionDate as endDate"
-      );
-    }
+//     console.log("get endDate Befoe calcultion:", endDate);
 
-    console.log("get endDate After calcultion:", endDate);
+//     if (courseExists.durationWeeks && !isNaN(courseExists.durationWeeks)) {
+//       endDate.setDate(startDate.getDate() + courseExists.durationWeeks * 7);
+//     } else {
+//       console.warn(
+//         "⚠️ Course has no valid durationWeeks — using admissionDate as endDate"
+//       );
+//     }
 
-    const courseFeeStructure = await tenantPrisma.courseFeeStructure.findUnique(
-      {
-        where: {
-          id: Number(courseId),
-        },
-        include: {
-          installments: {
-            where: {
-              id: Number(installmentTypeId),
-            },
-          },
-        },
-      }
-    );
+//     console.log("get endDate After calcultion:", endDate);
 
-    console.log(
-      "GET CPURSE FEE STURCURE FOR STUDENT INPORTANT:",
-      courseFeeStructure
-    );
+//     const courseFeeStructure = await tenantPrisma.courseFeeStructure.findUnique(
+//       {
+//         where: {
+//           id: Number(courseId),
+//         },
+//         include: {
+//           installments: {
+//             where: {
+//               id: Number(installmentTypeId),
+//             },
+//           },
+//         },
+//       }
+//     );
 
-    if (!courseFeeStructure) {
-      return res
-        .status(402)
-        .json({ message: "Course Fee Structure not Found!" });
-    }
+//     console.log(
+//       "GET CPURSE FEE STURCURE FOR STUDENT INPORTANT:",
+//       courseFeeStructure
+//     );
 
-    let installmentCount = null;
+//     if (!courseFeeStructure) {
+//       return res
+//         .status(402)
+//         .json({ message: "Course Fee Structure not Found!" });
+//     }
 
-    if (paymentType === "INSTALLMENT") {
-      installmentCount = courseFeeStructure.installments[0]?.number || null;
-    }
+//     let installmentCount = null;
 
-    // 🔗 5. Attach student to course
-    const studentCourse = await tenantPrisma.studentCourse.create({
-      data: {
-        studentId: student.id,
-        courseId: Number(courseId),
-        batchId: Number(batchId),
-        studentCode: student.studentCode,
-        startDate: new Date(admissionDate),
-        endDate: endDate,
-        status: "ACTIVE",
-        clientAdminId,
-      },
-    });
+//     if (paymentType === "INSTALLMENT") {
+//       installmentCount = courseFeeStructure.installments[0]?.number || null;
+//     }
 
-    // 💰 6. Create FeeStructure
-    const feeStructure = await tenantPrisma.feeStructure.create({
-      data: {
-        studentId: student.id,
-        courseId: Number(courseId),
-        totalAmount: parseFloat(feeAmount), // from req.body
-        paymentType, // from req.body ('ONE_TIME' or 'INSTALLMENT')
-        installmentTypeId: Number(installmentTypeId || null),
-        installmentCount: installmentCount || null,
-        clientAdminId,
-      },
-    });
+//     // 🔗 5. Attach student to course
+//     const studentCourse = await tenantPrisma.studentCourse.create({
+//       data: {
+//         studentId: student.id,
+//         courseId: Number(courseId),
+//         batchId: Number(batchId),
+//         studentCode: student.studentCode,
+//         startDate: new Date(admissionDate),
+//         endDate: endDate,
+//         status: "ACTIVE",
+//         clientAdminId,
+//       },
+//     });
 
-    // 🗓️ Calculate due date = admission date + 21 days
-    const dueDate = new Date(admissionDate);
-    dueDate.setDate(dueDate.getDate() + 21);
+//     // 💰 6. Create FeeStructure
+//     const feeStructure = await tenantPrisma.feeStructure.create({
+//       data: {
+//         studentId: student.id,
+//         courseId: Number(courseId),
+//         totalAmount: parseFloat(feeAmount), // from req.body
+//         paymentType, // from req.body ('ONE_TIME' or 'INSTALLMENT')
+//         installmentTypeId: Number(installmentTypeId || null),
+//         installmentCount: installmentCount || null,
+//         clientAdminId,
+//       },
+//     });
 
-    console.log("Get Due date for Payment", dueDate);
+//     // 🗓️ Calculate due date = admission date + 21 days
+//     const dueDate = new Date(admissionDate);
+//     dueDate.setDate(dueDate.getDate() + 21);
 
-    // 💳 7. Create StudentFee
-    const studentFee = await tenantPrisma.studentFee.create({
-      data: {
-        studentId: student.id,
-        courseId: Number(courseId),
-        dueDate: dueDate,
-        amountDue: feeStructure.totalAmount,
-        amountPaid: 0,
-        paymentMode: "CASH",
-        receiptNo: `RCP${Date.now()}`,
-        paymentStatus: "PENDING",
-        clientAdminId,
-      },
-    });
-    // 🧩 Inside addStudentController, replace allocation section with:
-    if (batchExists.labTimeSlotId) {
-      await tenantPrisma.$transaction(async (tx) => {
-        // 🧠 Step 1: Get the timeslot + its lab + current allocations
-        const labTimeSlot = await tx.labTimeSlot.findUnique({
-          where: { id: batchExists.labTimeSlotId },
-          include: { allocations: true, lab: true },
-        });
+//     console.log("Get Due date for Payment", dueDate);
 
-        if (!labTimeSlot) throw new Error("Lab time slot not found");
+//     // 💳 7. Create StudentFee
+//     const studentFee = await tenantPrisma.studentFee.create({
+//       data: {
+//         studentId: student.id,
+//         courseId: Number(courseId),
+//         dueDate: dueDate,
+//         amountDue: feeStructure.totalAmount,
+//         amountPaid: 0,
+//         paymentMode: "CASH",
+//         receiptNo: `RCP${Date.now()}`,
+//         paymentStatus: "PENDING",
+//         clientAdminId,
+//       },
+//     });
+//     // 🧩 Inside addStudentController, replace allocation section with:
+//     if (batchExists.labTimeSlotId) {
+//       await tenantPrisma.$transaction(async (tx) => {
+//         // 🧠 Step 1: Get the timeslot + its lab + current allocations
+//         const labTimeSlot = await tx.labTimeSlot.findUnique({
+//           where: { id: batchExists.labTimeSlotId },
+//           include: { allocations: true, lab: true },
+//         });
 
-        const totalPCs = labTimeSlot.lab.totalPCs; // from the Lab model
-        const usedPCs = labTimeSlot.allocations.length;
-        const freePCs = labTimeSlot.availablePCs; // how many PCs are left unallocated
+//         if (!labTimeSlot) throw new Error("Lab time slot not found");
 
-        console.log(
-          "💻 Lab PCs — Total:",
-          totalPCs,
-          "Used:",
-          usedPCs,
-          "Free:",
-          freePCs
-        );
+//         const totalPCs = labTimeSlot.lab.totalPCs; // from the Lab model
+//         const usedPCs = labTimeSlot.allocations.length;
+//         const freePCs = labTimeSlot.availablePCs; // how many PCs are left unallocated
 
-        // 🧩 Safety check
-        if (freePCs <= 0 || usedPCs >= totalPCs) {
-          throw new Error("No free PCs available in this lab time slot");
-        }
+//         console.log(
+//           "💻 Lab PCs — Total:",
+//           totalPCs,
+//           "Used:",
+//           usedPCs,
+//           "Free:",
+//           freePCs
+//         );
 
-        // 💻 Step 2: Allocate one PC
-        await tx.labAllocation.create({
-          data: {
-            labTimeSlotId: labTimeSlot.id,
-            studentId: student.id,
-            pcNumber: usedPCs + 1, // next available PC number
-            clientAdminId,
-          },
-        });
+//         // 🧩 Safety check
+//         if (freePCs <= 0 || usedPCs >= totalPCs) {
+//           throw new Error("No free PCs available in this lab time slot");
+//         }
 
-        // 🔁 Step 3: Update availablePCs count (decrement by 1)
-        await tx.labTimeSlot.update({
-          where: { id: labTimeSlot.id },
-          data: {
-            availablePCs: { decrement: 1 },
-          },
-        });
-      });
-    }
+//         // 💻 Step 2: Allocate one PC
+//         await tx.labAllocation.create({
+//           data: {
+//             labTimeSlotId: labTimeSlot.id,
+//             studentId: student.id,
+//             pcNumber: usedPCs + 1, // next available PC number
+//             clientAdminId,
+//           },
+//         });
 
-    // 🔄 Update enquiry (if exists)
-    if (id) {
-      await tenantPrisma.enquiry.update({
-        where: { id: id },
-        data: {
-          studentId: student.id,
-          isConverted: true,
-        },
-      });
-    }
+//         // 🔁 Step 3: Update availablePCs count (decrement by 1)
+//         await tx.labTimeSlot.update({
+//           where: { id: labTimeSlot.id },
+//           data: {
+//             availablePCs: { decrement: 1 },
+//           },
+//         });
+//       });
+//     }
 
-    // ✅ Log the creation
-    await logActivity({
-      clientAdminId,
-      entity: "Student",
-      entityId: student.id.toString(),
-      action: "CREATE",
-      message: `New student admitted: ${student.fullName}`,
-      dbUrl: user.dbUrl,
-    });
+//     // 🔄 Update enquiry (if exists)
+//     if (id) {
+//       await tenantPrisma.enquiry.update({
+//         where: { id: id },
+//         data: {
+//           studentId: student.id,
+//           isConverted: true,
+//         },
+//       });
+//     }
 
-    const getAllStudent = await tenantPrisma.student.findMany();
+//     // ✅ Log the creation
+//     await logActivity({
+//       clientAdminId,
+//       entity: "Student",
+//       entityId: student.id.toString(),
+//       action: "CREATE",
+//       message: `New student admitted: ${student.fullName}`,
+//       dbUrl: user.dbUrl,
+//     });
 
-    return res.status(201).json({
-      message: "Student admission created successfully",
-      student,
-      studentCourse,
-      studentFee,
-      getAllStudent,
-    });
-  } catch (err) {
-    console.error("❌ Error creating student:", err);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-}
+//     const getAllStudent = await tenantPrisma.student.findMany();
+
+//     return res.status(201).json({
+//       message: "Student admission created successfully",
+//       student,
+//       studentCourse,
+//       studentFee,
+//       getAllStudent,
+//     });
+//   } catch (err) {
+//     console.error("❌ Error creating student:", err);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// }
 
 // export async function addStudentControllerNew(req: Request, res: Response) {
 //   const {

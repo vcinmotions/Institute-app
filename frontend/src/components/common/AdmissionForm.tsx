@@ -161,12 +161,13 @@ const AdmissionForm: React.FC<Props> = ({
             {pdfLoading ? 'Generating PDF...' : '⬇️ Download PDF'}
           </button> */}
         </div>
-        <div
+
+        {/* <div
           ref={formRef}
           className="print-a4 rounded border border-gray-500 bg-white p-8 font-serif text-sm leading-6 text-black"
           style={{ fontFamily: "'Times New Roman', Times, serif" }}
         >
-          {/* Header */}
+
           <div className="mb-6 border-b pb-4 text-center">
             <div className="flex items-center justify-between">
               {printConfig.showLogo && (
@@ -223,7 +224,6 @@ const AdmissionForm: React.FC<Props> = ({
             </h2>
           </div>
 
-          {/* Student Information */}
           <h3 className="mb-2 text-base font-semibold underline">
             Student Information
           </h3>
@@ -301,7 +301,6 @@ const AdmissionForm: React.FC<Props> = ({
             </tbody>
           </table>
 
-          {/* Course Details */}
           <h3 className="mb-2 text-base font-semibold underline">
             Course Information
           </h3>
@@ -339,7 +338,7 @@ const AdmissionForm: React.FC<Props> = ({
             );
           })}
 
-          {/* Declaration */}
+
           {printConfig.showDeclaration && (
             <div className="mt-6">
               <h3 className="mb-2 text-base font-semibold underline">
@@ -353,7 +352,7 @@ const AdmissionForm: React.FC<Props> = ({
             </div>
           )}
 
-          {/* Footer Section */}
+
           <div className="mt-4 grid grid-cols-3 items-end gap-4">
             <div>
               <p className="text-sm">
@@ -362,16 +361,7 @@ const AdmissionForm: React.FC<Props> = ({
                 {new Date(student.admissionDate).toLocaleDateString()}
               </p>
             </div>
-            {/* {printConfig.showLogo && (
-              <div className="text-center">
-                <img
-                  src="/images/logo/institute-stamp.png"
-                  alt="Institute Stamp"
-                  className="mx-auto h-20 w-20"
-                />
-                <p className="mt-1 text-xs">Institute Stamp</p>
-              </div>
-            )} */}
+
             {printConfig.showStamp && (
               <div className="flex flex-col items-center justify-center text-center">
                 <img
@@ -400,6 +390,299 @@ const AdmissionForm: React.FC<Props> = ({
               </div>
             )}
           </div>
+        </div> */}
+
+        <div
+          ref={formRef}
+          className="print-a4 bg-white p-6 text-[13px] text-black border border-gray-500"
+          style={{ fontFamily: "Times New Roman" }}
+        >
+
+          {/* HEADER */}
+          <div className="flex justify-between items-start border-b pb-2">
+
+            <div>
+              <h1 className="text-2xl font-bold text-red-700">
+                SHREE JEE
+              </h1>
+              <p className="text-sm">Technical Institute</p>
+            </div>
+
+            <div className="text-sm space-y-1">
+              <p><b>Reg. Form No :</b> {student.admissionNumber}</p>
+              <p><b>Admission Date :</b> {new Date(student.admissionDate).toLocaleDateString()}</p>
+              <p><b>Reg. Branch :</b> {student.fullName}</p>
+            </div>
+
+            <img
+              src={
+                student.photoUrl
+                  ? `${process.env.NEXT_PUBLIC_API_BASE_URL?.replace("/api", "")}${student.photoUrl}`
+                  : "/images/user/user-02.png"
+              }
+              className="h-24 w-24 border"
+            />
+
+          </div>
+
+
+          {/* STUDENT PERSONAL DETAILS */}
+
+          <h2 className="mt-4 bg-red-700 text-white px-2 py-1 text-sm">
+            STUDENT'S PERSONAL DETAILS
+          </h2>
+
+          <div className="border border-gray-400 p-2 space-y-1">
+
+            <div className="flex gap-10">
+              <p>
+                <b>Student's Name :</b> {student.fullName}
+              </p>
+              <p>
+                <b>Father's Name :</b> {student.fatherName}
+              </p>
+
+            </div>
+
+            <div className="flex gap-10">
+
+              <p>
+                <b>Date Of Birth :</b> {new Date(student.dob).toLocaleDateString()}
+              </p>
+
+              <p>
+                <b>Qualification :</b> {student.fullName}
+              </p>
+
+            </div>
+
+            <p>
+              <b>Residential Address :</b> {student.residentialAddress}
+            </p>
+
+            <p>
+              <b>Permanent Address :</b> {student.permenantAddress}
+            </p>
+
+          </div>
+
+
+          {/* CONTACT DETAILS */}
+
+          <h2 className="mt-3 bg-red-700 text-white px-2 py-1 text-sm">
+            CONTACT DETAILS
+          </h2>
+
+          <div className="border border-gray-400 p-2 space-y-1">
+
+            <p>
+              <b>Student Mobile Number :</b> {student.contact}
+            </p>
+
+            <p>
+              <b>Email ID :</b> {student.email}
+            </p>
+
+            <p>
+              <b>Alternate Contact :</b> {student.parentsContact}
+            </p>
+
+            <p>
+              <b>Reference Details :</b> {student?.fullName ?? ""}
+            </p>
+
+          </div>
+
+
+          {/* DOCUMENTS */}
+
+          <h2 className="mt-3 bg-red-700 text-white px-2 py-1 text-sm">
+            SUBMITTED DOCUMENTS
+          </h2>
+
+          <div className="border border-gray-400 p-2 flex gap-6">
+
+            <label>
+              <input type="checkbox" /> Aadhaar Card
+            </label>
+
+            <label>
+              <input type="checkbox" /> Driving License
+            </label>
+
+            <label>
+              <input type="checkbox" /> PAN Card
+            </label>
+
+            <label>
+              <input type="checkbox" /> Others
+            </label>
+
+          </div>
+
+
+          {/* COURSE TABLE */}
+
+          <h2 className="mt-3 bg-red-700 text-white px-2 py-1 text-sm">
+            COURSE DETAILS
+          </h2>
+
+          <table className="w-full border border-gray-400 text-sm">
+            <thead>
+              <tr className="bg-gray-100">
+
+                <th className="border p-1">Sr</th>
+                <th className="border p-1">Course Name</th>
+                <th className="border p-1">Date</th>
+                <th className="border p-1">Course Fees</th>
+                <th className="border p-1">Discount</th>
+                <th className="border p-1">Advance</th>
+                <th className="border p-1">Rec No</th>
+                <th className="border p-1">Installment</th>
+                <th className="border p-1">Receipt No</th>
+
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {courseDetails?.detailedCourses?.map((item: any, index: number) => {
+
+                const course = item.studentCourse?.course
+                const fee = item.feeStructure
+
+                return (
+
+                  <tr key={index}>
+
+                    <td className="border p-1">{index + 1}</td>
+                    <td className="border p-1">{course?.name}</td>
+                    <td className="border p-1">
+                      {new Date(student.admissionDate).toLocaleDateString()}
+                    </td>
+                    <td className="border p-1">{fee?.totalAmount}</td>
+                    <td className="border p-1">{fee?.discount ?? "-"}</td>
+                    <td className="border p-1">{fee?.advance ?? "-"}</td>
+                    <td className="border p-1">-</td>
+                    <td className="border p-1">{fee?.installment ?? "-"}</td>
+                    <td className="border p-1">-</td>
+
+                  </tr>
+
+                )
+
+              })}
+
+            </tbody>
+          </table>
+
+
+          {/* BATCH INSTRUCTIONS */}
+
+          <h2 className="mt-3 bg-red-700 text-white px-2 py-1 text-sm">
+            BATCH INSTRUCTIONS
+          </h2>
+
+          <div className="flex gap-4 border border-gray-400 p-2">
+            {courseDetails?.detailedCourses?.map((sc: any, index: number) => {
+              const course = sc.studentCourse?.course;
+
+              return (
+                <div key={index} className="mb-2">
+                  <p>
+                    ({index + 1}) Course : {course?.name}
+                  </p>
+
+                  <p>
+                    Time : ________
+                  </p>
+
+                  <p>
+                    Duration : ________
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+
+          {/* REMARKS */}
+
+          <h2 className="mt-3 bg-red-700 text-white px-2 py-1 text-sm">
+            REMARKS
+          </h2>
+
+          <div className="border border-gray-400 h-16"></div>
+
+
+          {/* DECLARATION */}
+
+          <div className="mt-4 text-xs">
+
+            <p>
+              I accept that I am liable to pay the fees before I will complete my course.
+              Otherwise ABI Institute can take strict action for recovery of fees.
+              Fees once paid will not be refundable under any circumstances.
+            </p>
+
+          </div>
+
+
+          {/* FOOTER */}
+
+          <div className="flex justify-between mt-6">
+
+            <div>
+
+              <p>Student Signature</p>
+
+            </div>
+
+            <div>
+
+              <p>Staff Sign</p>
+
+            </div>
+
+          </div>
+
+
+          {/* TRACKING */}
+
+          <div className="mt-4 grid grid-cols-3 border border-gray-400 text-xs">
+
+            <div className="border p-2">
+              <b>I-Card Tracking</b>
+
+              <div className="flex gap-2 mt-1">
+                <label><input type="checkbox" /> Yes</label>
+                <label><input type="checkbox" /> No</label>
+                <label><input type="checkbox" /> NA</label>
+              </div>
+            </div>
+
+            <div className="border p-2">
+              <b>Exam Tracking</b>
+            </div>
+
+            <div className="flex gap-5 border p-2">
+              <div>
+                <b>Bag Required</b>
+
+                <div className="flex gap-2 mt-1">
+                  <label><input type="checkbox" /> Yes</label>
+                  <label><input type="checkbox" /> No</label>
+                  <label><input type="checkbox" /> NA</label>
+                </div>
+              </div>
+              <div>
+                <b>Student sign</b>
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
 
         {showConfigModal && (

@@ -1,5 +1,6 @@
 export interface Student {
   serialNumber: number;
+  admissionNumber: number;
   parentsContact: string;
   id: number;
   fullName: string;

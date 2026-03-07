@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { getPayment } from "../services/payment.service";
 import { paymentQuerySchema } from "../validators/payment.query";
 import { parseDate } from "../helpers/date";
+import { generateAdmissionNumber } from "../utils/admissionFormConfig";
 
 export async function addStudentPaymentController(req: Request, res: Response) {
   const {
@@ -119,12 +120,16 @@ export async function addStudentPaymentController(req: Request, res: Response) {
       serialNumber = lastStudent.serialNumber + 1;
     }
 
+     // 2️⃣ Generate Admission Number
+            const admissionNumber = await generateAdmissionNumber(tenantPrisma, clientAdminId);
+
     // 👤 4. Create student
     // 👤 4. Create student
     const student = await tenantPrisma.student.create({
       data: {
         serialNumber, // ✅ Include this
         studentCode,
+        admissionNumber,
         fullName: name,
         contact: contact,
         email,
