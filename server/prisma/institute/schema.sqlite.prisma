@@ -185,7 +185,6 @@ model AdmissionNumberConfig {
   currentNumber Int      @default(0)
 
   clientAdminId String   @unique
-  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
 
   createdAt     DateTime @default(now())
 }

@@ -17,6 +17,7 @@ import Button from "../ui/button/Button";
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
 import { Student } from "@/types/student";
 import CourseCompletionForm from "../form/form-elements/CourseCompletionForm";
+import Avatar from "../common/Avatar";
 
 type FollowUpModalType = "completeCourse" | "update" | "complete" | null;
 
@@ -173,7 +174,7 @@ export default function StudentCourseDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                 Download
+                  Download
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -184,19 +185,25 @@ export default function StudentCourseDataTable({
                     <TableCell className="px-5 py-4 text-start sm:px-6">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 overflow-hidden rounded-full">
-                          <img
-                          src={
-                            item?.studentCourse?.student?.photoUrl?.startsWith("http")
-                              ? item?.studentCourse?.student?.photoUrl
-                              : `http://localhost:5001${item?.studentCourse?.student?.photoUrl || ""}`
-                          }
-                          alt="student"
-                          className="h-10 w-10 rounded-full object-cover"
-                          onError={(e) =>
-                            ((e.target as HTMLImageElement).src =
-                              "/images/user/user-21.jpg")
-                          }
-                        />
+
+
+                          {item?.studentCourse?.student?.photoUrl ? (
+                            <img
+                              src={
+                                item?.studentCourse?.student?.photoUrl?.startsWith("http")
+                                  ? item.photoUrl
+                                  : `http://localhost:5001${item?.studentCourse?.student?.photoUrl}`
+                              }
+                              alt="student"
+                              className="h-10 w-10 rounded-full object-cover"
+                              onError={(e) =>
+                                ((e.target as HTMLImageElement).src = "/images/user/user-21.jpg")
+                              }
+                            />
+                          ) : (
+                            <Avatar name={item?.studentCourse?.student?.fullName} size={38} />
+                          )}
+
                         </div>
                         <div>
                           <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
@@ -239,24 +246,24 @@ export default function StudentCourseDataTable({
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.studentCourse?.startDate
                         ? new Date(
-                            item.studentCourse.startDate,
-                          ).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })
+                          item.studentCourse.startDate,
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })
                         : "N/A"}
                     </TableCell>
 
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.studentCourse?.endDate
                         ? new Date(
-                            item.studentCourse.endDate,
-                          ).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })
+                          item.studentCourse.endDate,
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })
                         : "N/A"}
                     </TableCell>
 
@@ -274,7 +281,7 @@ export default function StudentCourseDataTable({
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.studentCourse?.certificate?.certificateUrl ? (
                         <Button
-                        size="sm"
+                          size="sm"
                           onClick={() =>
                             handleDownload(
                               item.studentCourse.certificate.certificateUrl,

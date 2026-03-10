@@ -50,6 +50,7 @@ interface EnquiryData {
   city: string,
   gender: string,
   dob: string,
+  enquiryDate: string,
   referedBy: string,
   source: string;
   contact: string;
@@ -70,6 +71,7 @@ export default function EditEnquiryForm({
     city: "",
     gender: "",
     dob: "",
+    enquiryDate: "",
     referedBy: "",
     source: "",
     contact: "",
@@ -97,9 +99,9 @@ export default function EditEnquiryForm({
   const { inputRefs, scrollToError } = useScrollToError();
 
   const branchState = useSelector((state: RootState) => state.auth.statelocation);
-    const branchCountry = useSelector((state: RootState) => state.auth.country);
-     const [state, setState] = useState<IState[]>([]);
-      const [city, setCity] = useState<ICity[]>([]);
+  const branchCountry = useSelector((state: RootState) => state.auth.country);
+  const [state, setState] = useState<IState[]>([]);
+  const [city, setCity] = useState<ICity[]>([]);
 
   const {
     data: courseData,
@@ -108,11 +110,11 @@ export default function EditEnquiryForm({
   } = useFetchAllCourses();
 
   useEffect(() => {
-      setState(State.getStatesOfCountry(branchCountry));
-      const countryIso = branchCountry;
-      const cities = City.getCitiesOfState(countryIso, branchState);
-      setCity(cities);
-    }, [])
+    setState(State.getStatesOfCountry(branchCountry));
+    const countryIso = branchCountry;
+    const cities = City.getCitiesOfState(countryIso, branchState);
+    setCity(cities);
+  }, [])
 
   useEffect(() => {
     if (courseData?.course) {
@@ -188,35 +190,36 @@ export default function EditEnquiryForm({
   // }, [enquiryData]);
 
   useEffect(() => {
-  if (!enquiryData) return;
+    if (!enquiryData) return;
 
-  const courseIds = enquiryData.enquiryCourse
-    ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
-    : [];
+    const courseIds = enquiryData.enquiryCourse
+      ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
+      : [];
 
-  const splicedContact = enquiryData.contact
-    ? enquiryData.contact.slice(-10) // last 10 digits
-    : "";
+    const splicedContact = enquiryData.contact
+      ? enquiryData.contact.slice(-10) // last 10 digits
+      : "";
 
-  const splicedAlternateContact = enquiryData.alternateContact
-    ? enquiryData.alternateContact.slice(-10) // last 10 digits
-    : "";
+    const splicedAlternateContact = enquiryData.alternateContact
+      ? enquiryData.alternateContact.slice(-10) // last 10 digits
+      : "";
 
-  setNewEnquiry({
-    id: enquiryData.id,
-    name: enquiryData.name ?? "",
-    email: enquiryData.email ?? "",
-    contact: enquiryData.contact,
-    alternateContact: enquiryData.alternateContact,
-    location: enquiryData.location ?? "",
-    city: enquiryData.city ?? "",
-    gender: enquiryData.gender ?? "",
-    dob: enquiryData.dob ? enquiryData.dob.split("T")[0] : "",
-    referedBy: enquiryData.referedBy ?? "",
-    source: enquiryData.source ?? "",
-    courseId: courseIds,
-  });
-}, [enquiryData]);
+    setNewEnquiry({
+      id: enquiryData.id,
+      name: enquiryData.name ?? "",
+      email: enquiryData.email ?? "",
+      contact: enquiryData.contact,
+      alternateContact: enquiryData.alternateContact,
+      location: enquiryData.location ?? "",
+      city: enquiryData.city ?? "",
+      gender: enquiryData.gender ?? "",
+      dob: enquiryData.dob ? enquiryData.dob.split("T")[0] : "",
+      enquiryDate: enquiryData.enquiryDate ? enquiryData.enquiryDate.split("T")[0] : "",
+      referedBy: enquiryData.referedBy ?? "",
+      source: enquiryData.source ?? "",
+      courseId: courseIds,
+    });
+  }, [enquiryData]);
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -249,31 +252,31 @@ export default function EditEnquiryForm({
 
 
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
-  let digitsOnly = phoneNumber.replace(/\D/g, "");
+    let digitsOnly = phoneNumber.replace(/\D/g, "");
 
-  // Remove country code digits if already present
-  const countryDigits = code.replace("+", "");
-  if (digitsOnly.startsWith(countryDigits)) {
-    digitsOnly = digitsOnly.slice(countryDigits.length);
-  }
+    // Remove country code digits if already present
+    const countryDigits = code.replace("+", "");
+    if (digitsOnly.startsWith(countryDigits)) {
+      digitsOnly = digitsOnly.slice(countryDigits.length);
+    }
 
-  digitsOnly = digitsOnly.slice(0, 10);
+    digitsOnly = digitsOnly.slice(0, 10);
 
-  const formattedNumber = digitsOnly
-    ? `${code}${digitsOnly}`
-    : "";
+    const formattedNumber = digitsOnly
+      ? `${code}${digitsOnly}`
+      : "";
 
-  setNewEnquiry((prev) => ({
-    ...prev,
-    contact: formattedNumber,
-  }));
+    setNewEnquiry((prev) => ({
+      ...prev,
+      contact: formattedNumber,
+    }));
 
-  setErrors((prev) => ({
-    ...prev,
-    contact:
-      digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
-  }));
-};
+    setErrors((prev) => ({
+      ...prev,
+      contact:
+        digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+    }));
+  };
 
   const handleAlternatePhoneNumberChange = (
     phoneNumber: string,
@@ -333,22 +336,13 @@ export default function EditEnquiryForm({
       newErrors.name = "Name is required.";
     }
 
-    if (!newEnquiry.email.trim()) {
-      newErrors.email = "Email is required.";
-    }
-
     if (!newEnquiry.contact.trim()) {
       newErrors.contact = "Contact number is required.";
     }
 
-     if (newEnquiry.courseId.length === 0) {
+    if (newEnquiry.courseId.length === 0) {
       newErrors.courseId = "Select at least one course.";
     }
-
-    // setErrors(newErrors);
-
-    // setTimeout(() => setErrors({}), 1000);
-    // return Object.keys(newErrors).length === 0;
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 2000);
@@ -385,8 +379,8 @@ export default function EditEnquiryForm({
       scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
       return; // ⛔ mutation never runs
     }
@@ -430,6 +424,7 @@ export default function EditEnquiryForm({
           city: "",
           gender: "",
           dob: "",
+          enquiryDate: "",
           referedBy: "",
           source: "",
           contact: "",
@@ -474,9 +469,9 @@ export default function EditEnquiryForm({
             showLink={false}
           />
         )}
-        <div  ref={(el) => {
-                inputRefs.current.name = el;
-              }}>
+        <div ref={(el) => {
+          inputRefs.current.name = el;
+        }}>
           <Label>Name</Label>
           <Input
             ref={firstInputRef}
@@ -488,9 +483,9 @@ export default function EditEnquiryForm({
           />
           {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
         </div>
-        <div  ref={(el) => {
-                inputRefs.current.email = el;
-              }}>
+        <div ref={(el) => {
+          inputRefs.current.email = el;
+        }}>
           <Label>Email</Label>
           <div className="relative">
             <Input
@@ -509,14 +504,14 @@ export default function EditEnquiryForm({
             </span>
           </div>
         </div>
-        <div  ref={(el) => {
-                inputRefs.current.contact = el;
-              }}>
+        <div ref={(el) => {
+          inputRefs.current.contact = el;
+        }}>
           <Label>Contact No.</Label>
           <PhoneInput
             selectPosition="start"
             countries={countries}
-             tabIndex={3}
+            tabIndex={3}
             value={newEnquiry.contact}
             placeholder="Enter Contact"
             onChange={handlePhoneNumberChange}
@@ -526,17 +521,17 @@ export default function EditEnquiryForm({
           )}
         </div>{" "}
 
-        
-          <div>
+
+        <div>
           <Label>Alternate Conatct No.</Label>
           <PhoneInput
-           tabIndex={4}
-           countries={countries}
-           value={newEnquiry.alternateContact} // ← fixed // <-- THIS FIXES IT
-           placeholder="Enter alternate Contact" 
-           onChange={handleAlternatePhoneNumberChange}
+            tabIndex={4}
+            countries={countries}
+            value={newEnquiry.alternateContact ?? ""} // ← fixed // <-- THIS FIXES IT
+            placeholder="Enter alternate Contact"
+            onChange={handleAlternatePhoneNumberChange}
           />
-           {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
+          {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}
 
         <div>
@@ -559,6 +554,18 @@ export default function EditEnquiryForm({
         </div>
 
         <div>
+          <Label>Enquiry Date</Label>
+          <Input
+            tabIndex={6}
+            type="date"
+            placeholder="Enter Enquiry Date"
+            //maxLength={10} // e.g. 12:30 PM
+            value={newEnquiry.enquiryDate}
+            onChange={(e) => handleChange("enquiryDate", e.target.value)}
+          />
+          {errors.dob && <p className="text-sm text-red-500">{errors.enquiryDate}</p>}
+        </div>
+        <div>
           <Label>Date Of Birth</Label>
           <Input
             tabIndex={6}
@@ -571,7 +578,7 @@ export default function EditEnquiryForm({
           {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
         </div>
 
-       <div>
+        <div>
           <Label>Gender</Label>
 
           <div className="relative">
@@ -595,25 +602,25 @@ export default function EditEnquiryForm({
           )}
         </div>
 
-        
+
 
         {/* CITY */}
-          <div>
-            <Label>City *</Label>
-            <Select
-              options={city.map((c) => ({
-                label: c.name,
-                value: c.name, // city name is fine
-              }))}
-               tabIndex={8}
-              placeholder="Select City"
-              onChange={(value) => handleChange("city", value)}
-              value={newEnquiry.city}
-            />
-            {errors.city && (
-              <p className="text-sm text-red-500">{errors.city}</p>
-            )}
-          </div>
+        <div>
+          <Label>City *</Label>
+          <Select
+            options={city.map((c) => ({
+              label: c.name,
+              value: c.name, // city name is fine
+            }))}
+            tabIndex={8}
+            placeholder="Select City"
+            onChange={(value) => handleChange("city", value)}
+            value={newEnquiry.city}
+          />
+          {errors.city && (
+            <p className="text-sm text-red-500">{errors.city}</p>
+          )}
+        </div>
 
         <div>
           <Label>Location</Label>
@@ -622,33 +629,33 @@ export default function EditEnquiryForm({
             placeholder="Enter Location"
             value={normalizeToLowercase(newEnquiry.location)}
             tabIndex={9}
-            onChange={(e) => handleChange("location", e.target.value)}         />
-            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
+            onChange={(e) => handleChange("location", e.target.value)} />
+          {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
 
-        
 
-         <div>
+
+        <div>
           <Label>Source</Label>
           <Input
             type="text"
             placeholder="Enter Source"
             value={newEnquiry.source}
             tabIndex={10}
-            onChange={(e) => handleChange("source", e.target.value)}         />
-            {errors.source && <p className="text-red-500 text-sm">{errors.source}</p>}
+            onChange={(e) => handleChange("source", e.target.value)} />
+          {errors.source && <p className="text-red-500 text-sm">{errors.source}</p>}
         </div>
-        
 
-         <div>
+
+        <div>
           <Label>Refered By</Label>
           <Input
             type="text"
             placeholder="Enter Refered Name"
             value={newEnquiry.referedBy}
             tabIndex={11}
-            onChange={(e) => handleChange("referedBy", e.target.value)}         />
-            {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
+            onChange={(e) => handleChange("referedBy", e.target.value)} />
+          {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
         </div>
 
         <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">

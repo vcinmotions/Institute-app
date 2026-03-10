@@ -24,6 +24,7 @@ import { RootState } from "@/store";
 import { getUser } from "@/lib/api";
 import { setLoading, setUser } from "@/store/slices/authSlice";
 import EditStudentForm from "../form/form-elements/EditStudentForm";
+import Avatar from "../common/Avatar";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
@@ -279,20 +280,20 @@ export default function StudentDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                    Add New Course
+                  Add New Course
                 </TableCell>
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                    Admission Form
+                  Admission Form
                 </TableCell>
                 <TableCell
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                    Edit Details
-                
+                  Edit Details
+
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -304,19 +305,22 @@ export default function StudentDataTable({
                     <TableCell className="px-5 py-4 text-start sm:px-6">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 overflow-hidden rounded-full">
-                          <img
-                          src={
-                            item?.photoUrl?.startsWith("http")
-                              ? item.photoUrl
-                              : `http://localhost:5001${item?.photoUrl || ""}`
-                          }
-                          alt="student"
-                          className="h-10 w-10 rounded-full object-cover"
-                          onError={(e) =>
-                            ((e.target as HTMLImageElement).src =
-                              "/images/user/user-21.jpg")
-                          }
-                        />
+                          {item?.photoUrl ? (
+                            <img
+                              src={
+                                item.photoUrl.startsWith("http")
+                                  ? item.photoUrl
+                                  : `http://localhost:5001${item.photoUrl}`
+                              }
+                              alt="student"
+                              className="h-10 w-10 rounded-full object-cover"
+                              onError={(e) =>
+                                ((e.target as HTMLImageElement).src = "/images/user/user-21.jpg")
+                              }
+                            />
+                          ) : (
+                            <Avatar name={item?.fullName} size={38} />
+                          )}
                         </div>
                         <div>
                           <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
@@ -343,7 +347,7 @@ export default function StudentDataTable({
                       {item.studentCode}
                     </TableCell> */}
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                     {item.contact ? item.contact.split('91')[1] : "-"}
+                      {item.contact ? item.contact.split('91')[1] : "-"}
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       {/* {new Date(item.admissionDate).toISOString().split("T")[0]} */}

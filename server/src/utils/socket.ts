@@ -1,13 +1,10 @@
 import { Server } from "socket.io";
+import { Server as HTTPServer } from "http";
 
 let io: Server;
 
-export function initSocket(server: any) {
+export function initSocket(server: HTTPServer) {
   io = new Server(server, {
-    // cors: {
-    //   origin: '*', // Replace with your frontend origin in prod
-    // },
-
     cors: {
       origin: "*", // Or your frontend URL in production
       methods: ["GET", "POST", "PUT", "DELETE"],
@@ -17,16 +14,16 @@ export function initSocket(server: any) {
   });
 
   io.on("connection", (socket) => {
-    console.log("🔌 New client connected");
+    console.log("🔌 New client connected", socket.id);
 
     // Store user ID in socket room for targeted messages
-    socket.on("join", (clientAdminId) => {
+    socket.on("join", (clientAdminId: string) => {
       socket.join(clientAdminId);
       console.log(`🧑 Client joined room: ${clientAdminId}`);
     });
 
     socket.on("disconnect", () => {
-      console.log("❌ Client disconnected");
+      console.log("❌ Client disconnected", socket.id);
     });
   });
 

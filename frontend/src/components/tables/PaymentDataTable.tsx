@@ -16,6 +16,7 @@ import CreateStudentPaymentModal from "../form/form-elements/CreateStudentPaymen
 import { downloadReceipt } from "@/app/utils/ReceiptDownload";
 import { singleDownloadReceipt } from "@/app/utils/SingleReceiptDownload";
 import { PAYMENTSTATUS_COLOR_MAP, STATUS_COLOR_MAP } from "../common/BadgeStatus";
+import Avatar from "../common/Avatar";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
@@ -105,7 +106,7 @@ export default function PaymentDataTable({
                   <button
                     type="button"
                     className="flex items-center gap-1"
-                    // onClick={() => onPaymentType("paymentType")}
+                  // onClick={() => onPaymentType("paymentType")}
                   >
                     Payment Type
                     {/* <span>
@@ -173,19 +174,22 @@ export default function PaymentDataTable({
                       <TableCell className="px-5 py-4 text-start sm:px-6">
                         <div className="flex items-center gap-3">
                           <div className="h-10 w-10 overflow-hidden rounded-full">
-                             <img
-                          src={
-                            item?.student?.photoUrl?.startsWith("http")
-                              ? item?.student?.photoUrl
-                              : `http://localhost:5001${item?.student?.photoUrl || ""}`
-                          }
-                          alt="student"
-                          className="h-10 w-10 rounded-full object-cover"
-                          onError={(e) =>
-                            ((e.target as HTMLImageElement).src =
-                              "/images/user/user-21.jpg")
-                          }
-                        />
+                            {item?.student?.photoUrl ? (
+                              <img
+                                src={
+                                  item.student.photoUrl.startsWith("http")
+                                    ? item.student.photoUrl
+                                    : `http://localhost:5001${item.student.photoUrl}`
+                                }
+                                alt="student"
+                                className="h-10 w-10 rounded-full object-cover"
+                                onError={(e) =>
+                                  ((e.target as HTMLImageElement).src = "/images/user/user-21.jpg")
+                                }
+                              />
+                            ) : (
+                              <Avatar name={item?.student?.fullName} size={38} />
+                            )}
                           </div>
                           <div>
                             <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
@@ -311,8 +315,8 @@ export default function PaymentDataTable({
                                         <td className="px-4 py-2">
                                           {log.paymentDate
                                             ? new Date(log.paymentDate)
-                                                .toISOString()
-                                                .split("T")[0]
+                                              .toISOString()
+                                              .split("T")[0]
                                             : "N/A"}
                                         </td>
                                         <td className="px-4 py-2">

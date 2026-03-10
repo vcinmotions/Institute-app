@@ -4,7 +4,7 @@ import { Enquiry } from "../domain/enquiry/enquiry";
 import { ensureUniqueEnquiry } from "../domain/enquiry/enquiryRules";
 import { buildEnquiryWhere } from "../filters/enquiry.filter";
 import { buildEnquiryOrderBy } from "../filters/enquiry.sort";
-import { parseDate } from "../helpers/date";
+import { parseDate, parseDateISO } from "../helpers/date";
 import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "../utils/Normalize";
 
 export async function getEnquiries({
@@ -186,7 +186,7 @@ export async function editEnquiryService({
       : null,
   };
 
-  const { id, name, contact, email, dob, courseId } = normalizedData;
+  const { id, name, contact, email, dob, courseId, enquiryDate } = normalizedData;
   //const { id, name, contact, email, dob, courseId } = data;
 
   console.log("GET ENIT DATA:", normalizedData);
@@ -244,7 +244,8 @@ export async function editEnquiryService({
       contact,
       email,
       age: age,
-      dob: parseDate(dob),
+      dob: parseDateISO(dob),
+      enquiryDate: parseDateISO(enquiryDate),
       source: normalizedData.source || null,
       alternateContact: normalizedData.alternateContact || null,
       location: normalizedData.location || null,

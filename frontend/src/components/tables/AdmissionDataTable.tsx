@@ -13,6 +13,7 @@ import { RootState } from "@/store";
 import { useRouter } from "next/navigation";
 import Avatar from "../common/Avatar";
 import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
+import { formatDate } from "../common/Formatdate";
 
 
 type AdmissionDataTableProps = {
@@ -124,7 +125,7 @@ export default function AdmissionDataTable({
                     className="flex items-center gap-1"
                     onClick={() => onSort("createdAt")}
                   >
-                    Created At
+                    Enquiry At
                     <span>
                       {sortField === "createdAt" && sortOrder === "asc"
                         ? "▲"
@@ -170,7 +171,7 @@ export default function AdmissionDataTable({
                       {item.email ? item.email : "-"}
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.contact }
+                      {item.contact}
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.enquiryCourse.map((cr: any, index: number) => (
@@ -186,11 +187,7 @@ export default function AdmissionDataTable({
                       </Badge>
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {new Date(item.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
+                      {formatDate(item.enquiryDate)}
                     </TableCell>
 
                     <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">

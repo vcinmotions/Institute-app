@@ -312,7 +312,7 @@
 //     },
 //     [courses]
 //   );
-  
+
 //   useEffect(() => {
 //     if (!enquiryData || !enquiryData.enquiryCourse) return;
 
@@ -932,7 +932,7 @@
 //               <Input
 //                 type="text"
 //                 tabIndex={2}
-          
+
 //                 placeholder="Enter Father Name"
 //                 value={titleCase(filledEnquiryData.fatherName)}
 //                 onChange={(e) => handleChange("fatherName", e.target.value)}
@@ -1027,7 +1027,7 @@
 //                 onChange={(e) => handleChange("dob", e.target.value)}
 //               />
 
-           
+
 //                {errors.dob && (
 //                 <p className="text-sm text-red-500">{errors.dob}</p>
 //               )}
@@ -1533,7 +1533,7 @@ export default function AdmissionForm() {
   const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
   const { mutate: createAdmission } = useCreateAdmission();
 
-   const firstInputRef = useRef<HTMLInputElement>(null);
+  const firstInputRef = useRef<HTMLInputElement>(null);
 
   // useEffect(() => {
   //   if (newEnquiry.name !== undefined && firstInputRef.current) {
@@ -1650,7 +1650,7 @@ export default function AdmissionForm() {
     },
     [courses]
   );
-  
+
   useEffect(() => {
     if (!enquiryData || !enquiryData.enquiryCourse) return;
 
@@ -1677,42 +1677,42 @@ export default function AdmissionForm() {
       location: enquiryData.location || "",
       gender: enquiryData.gender || "",
       dob: enquiryData.dob
-      ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
-      : "",
+        ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+        : "",
       referedBy: enquiryData.referedBy || "",
       courseId: courseIds, // -------------------------- FIXED
     });
   }, [enquiryData]);
 
   useEffect(() => {
-      if (!enquiryData) return;
+    if (!enquiryData) return;
 
-      let dobValue = "";
-      if (enquiryData.dob) {
-        const date = new Date(enquiryData.dob);
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = date.getFullYear();
-        dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
-      }
+    let dobValue = "";
+    if (enquiryData.dob) {
+      const date = new Date(enquiryData.dob);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      dobValue = `${day}/${month}/${year}`; // DD-MM-YYYY
+    }
 
-      const dobISO = enquiryData.dob
-        ? enquiryData.dob.split("T")[0] // ✅ YYYY-MM-DD
-        : "";
+    const dobISO = enquiryData.dob
+      ? enquiryData.dob.split("T")[0] // ✅ YYYY-MM-DD
+      : "";
 
-      setFilledEnquiryData((prev) => ({
-        ...prev,
-        dob: dobISO,
-        gender: enquiryData.gender || "",
-        parentsContact: enquiryData.alternateContact || "", // default to ""
-      }));
+    setFilledEnquiryData((prev) => ({
+      ...prev,
+      dob: dobISO,
+      gender: enquiryData.gender || "",
+      parentsContact: enquiryData.alternateContact || "", // default to ""
+    }));
 
-      // Also set in newEnquiry if needed for internal use
-      setNewEnquiry((prev) => ({
-        ...prev,
-        dob: dobValue,
-      }));
-    }, [enquiryData]);
+    // Also set in newEnquiry if needed for internal use
+    setNewEnquiry((prev) => ({
+      ...prev,
+      dob: dobValue,
+    }));
+  }, [enquiryData]);
 
 
   useEffect(() => {
@@ -1733,13 +1733,13 @@ export default function AdmissionForm() {
         name: enquiryData.name || "",
         email: enquiryData.email || "",
         courseId: courseIds, // ✅ set extracted course IDs
-         alternateContact: enquiryData.alternateContact || "",
+        alternateContact: enquiryData.alternateContact || "",
         age: enquiryData.age || "",
         location: enquiryData.location || "",
         gender: enquiryData.gender || "",
         dob: enquiryData.dob
-        ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
-        : "",
+          ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
+          : "",
         referedBy: enquiryData.referedBy || "",
         contact: enquiryData.contact || "",
       });
@@ -1840,7 +1840,7 @@ export default function AdmissionForm() {
 
   useEffect(() => {
     console.log("get all batches data;", batchData);
-    if (batchData?.batch) { 
+    if (batchData?.batch) {
       dispatch(setBatches(batchData.batch || []));
       setLoading(false);
     };
@@ -1895,7 +1895,7 @@ export default function AdmissionForm() {
   //   }
   // };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
       !/[0-9]/.test(e.key) &&
       e.key !== "+" &&
@@ -1909,7 +1909,7 @@ export default function AdmissionForm() {
     }
   };
 
- const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
+  const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
     // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
     //const formattedNumber = code + phoneNumber;
 
@@ -1959,7 +1959,7 @@ export default function AdmissionForm() {
   };
 
 
-  if(loading === true) return null;
+  if (loading === true) return null;
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -2178,22 +2178,22 @@ export default function AdmissionForm() {
   const handleSubmit = async () => {
     const { isValid, errors: validationErrors } = validate();
 
-  if (!isValid) {
-    setAlert({
-      show: true,
-      title: "Validation Error",
-      message: "Please enter all inputs.",
-      variant: "error",
-    });
+    if (!isValid) {
+      setAlert({
+        show: true,
+        title: "Validation Error",
+        message: "Please enter all inputs.",
+        variant: "error",
+      });
 
-    scrollToError(validationErrors); // ✅ ALWAYS WORKS
+      scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
-     setTimeout(() => {
+      setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 2000);
 
-    return; // ⛔ mutation never runs
-  }
+      return; // ⛔ mutation never runs
+    }
 
     const token = sessionStorage.getItem("token");
     if (!token) {
@@ -2273,11 +2273,11 @@ export default function AdmissionForm() {
         })
 
         setAlert({
-        show: true,
-        title: "Admission Successful",
-        message: "Student admission has been successfully submitted.",
-        variant: "success",
-      });
+          show: true,
+          title: "Admission Successful",
+          message: "Student admission has been successfully submitted.",
+          variant: "success",
+        });
 
         setTimeout(() => {
           router.back();
@@ -2313,7 +2313,7 @@ export default function AdmissionForm() {
                 showLink={false}
               />
             )}
-            <div  
+            <div
               ref={(el) => {
                 inputRefs.current.name = el;
               }}
@@ -2341,7 +2341,7 @@ export default function AdmissionForm() {
               <Input
                 type="text"
                 tabIndex={2}
-          
+
                 placeholder="Enter Father Name"
                 value={titleCase(filledEnquiryData.fatherName)}
                 onChange={(e) => handleChange("fatherName", e.target.value)}
@@ -2391,8 +2391,8 @@ export default function AdmissionForm() {
               </div>
             </div>
             <div ref={(el) => {
-                inputRefs.current.contact = el; // ✅ different key
-              }}>
+              inputRefs.current.contact = el; // ✅ different key
+            }}>
               <Label>Student Contact</Label>
               <PhoneInput
                 tabIndex={5}
@@ -2408,8 +2408,8 @@ export default function AdmissionForm() {
               )}
             </div>
             <div ref={(el) => {
-                inputRefs.current.parentsContact = el; // ✅ different key
-              }}>
+              inputRefs.current.parentsContact = el; // ✅ different key
+            }}>
               <Label>Alternate Contact</Label>
               <PhoneInput
                 tabIndex={6}
@@ -2426,8 +2426,8 @@ export default function AdmissionForm() {
             </div>{" "}
 
             <div ref={(el) => {
-                inputRefs.current.dob = el; // ✅ different key
-              }}>
+              inputRefs.current.dob = el; // ✅ different key
+            }}>
               <Label>Date Of Birth</Label>
               <Input
                 tabIndex={7}
@@ -2437,14 +2437,14 @@ export default function AdmissionForm() {
                 value={filledEnquiryData.dob}
                 onChange={(e) => handleChange("dob", e.target.value)}
               />
-               {errors.dob && (
+              {errors.dob && (
                 <p className="text-sm text-red-500">{errors.dob}</p>
               )}
             </div>
 
             <div ref={(el) => {
-                inputRefs.current.gender = el; // ✅ different key
-              }}>
+              inputRefs.current.gender = el; // ✅ different key
+            }}>
               <Label>Gender</Label>
 
               <div className="relative">
@@ -2468,8 +2468,8 @@ export default function AdmissionForm() {
               )}
             </div>
             <div ref={(el) => {
-                inputRefs.current.religion = el; // ✅ different key
-              }}>
+              inputRefs.current.religion = el; // ✅ different key
+            }}>
               <Label>Religion</Label>
               <Input
                 tabIndex={9}
@@ -2484,8 +2484,8 @@ export default function AdmissionForm() {
             </div>
             {/* Select Course */}
             <div ref={(el) => {
-                inputRefs.current.courseId = el; // ✅ different key
-              }}>
+              inputRefs.current.courseId = el; // ✅ different key
+            }}>
               <div className="relative" data-master="course">
                 <MultiSelect
                   tabIndex={10}
@@ -2525,8 +2525,8 @@ export default function AdmissionForm() {
 
                   {/* Payment Type */}
                   <div ref={(el) => {
-                inputRefs.current.paymentType = el; // ✅ different key
-              }}>
+                    inputRefs.current.paymentType = el; // ✅ different key
+                  }}>
                     <Label>Select Payment Type</Label>
                     <div className="relative">
                       <Select
@@ -2582,19 +2582,19 @@ export default function AdmissionForm() {
                       value={
                         row.paymentType === "ONE_TIME"
                           ? selectedCourse?.courseFeeStructure?.totalAmount ||
-                            ""
+                          ""
                           : row.paymentType === "INSTALLMENT"
                             ? installmentTypes.find(
-                                (i: any) =>
-                                  i.id.toString() === row.installmentTypeId,
-                              )?.amount || ""
+                              (i: any) =>
+                                i.id.toString() === row.installmentTypeId,
+                            )?.amount || ""
                             : ""
                       }
                     />
                   </div>
 
                   {/* Batch */}
-                  <div className="mt-3">  
+                  <div className="mt-3">
                     <Label>Select Batch</Label>
                     <div className="relative" data-master="lab">
                       <Select
@@ -2620,8 +2620,8 @@ export default function AdmissionForm() {
               );
             })}
             <div ref={(el) => {
-                inputRefs.current.idProofType = el; // ✅ different key
-              }}>
+              inputRefs.current.idProofType = el; // ✅ different key
+            }}>
               <Label>Select Id Proof</Label>
               <div className="relative">
                 <Select
@@ -2640,13 +2640,13 @@ export default function AdmissionForm() {
               )}
             </div>
             <div ref={(el) => {
-                inputRefs.current.idProofNumber = el; // ✅ different key
-              }}>
+              inputRefs.current.idProofNumber = el; // ✅ different key
+            }}>
               <Label>
                 <span className="capitalize">
                   {filledEnquiryData.idProofType
                     ? filledEnquiryData.idProofType.charAt(0).toUpperCase() +
-                      filledEnquiryData.idProofType.slice(1).toLowerCase()
+                    filledEnquiryData.idProofType.slice(1).toLowerCase()
                     : ""}
                 </span>{" "}
                 Number
@@ -2663,8 +2663,8 @@ export default function AdmissionForm() {
               )}
             </div>
             <div ref={(el) => {
-                inputRefs.current.residentialAddress = el; // ✅ different key
-              }}>
+              inputRefs.current.residentialAddress = el; // ✅ different key
+            }}>
               <Label>Residential Address</Label>
               <TextArea
                 tabIndex={14}
@@ -2681,8 +2681,8 @@ export default function AdmissionForm() {
               )}
             </div>
             <div ref={(el) => {
-                inputRefs.current.permenantAddress = el; // ✅ different key
-              }}>
+              inputRefs.current.permenantAddress = el; // ✅ different key
+            }}>
               <Label>Permenant Address</Label>
 
               <TextArea
@@ -2700,8 +2700,8 @@ export default function AdmissionForm() {
               )}
             </div>
             <div ref={(el) => {
-                inputRefs.current.admissionDate = el; // ✅ different key
-              }}>
+              inputRefs.current.admissionDate = el; // ✅ different key
+            }}>
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                 Admission Date
               </label>
@@ -2733,7 +2733,7 @@ export default function AdmissionForm() {
               <Button size="sm" variant="outline" tabIndex={19}>
                 Clear
               </Button>
-              <Button size="sm" tabIndex={18} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+              <Button size="sm" tabIndex={18} variant="primary" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
                 Save
               </Button>
             </div>
