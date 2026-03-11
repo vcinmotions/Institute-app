@@ -1,15 +1,15 @@
 // routes/tenantRoutes.ts
 import { Router } from "express";
-import { addTestController } from "../controllers/test.controller";
+import { addTestController, getTestController } from "../controllers/test.controller";
 
 const router = Router();
 
 // router.post("/add-course", addCourseToExistingStudent);
 
 router.post("/create-test", addTestController);
-// router.put("/edit-task/:id", updateCourseController);
+// router.put("/edit-test/:id", updateCourseController);
 
-// router.get("/task", getCourseController);
+router.get("/test", getTestController);
 
 // router.get("/task/all", getAllCourseController);
 

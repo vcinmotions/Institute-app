@@ -2,11 +2,11 @@
 import { PrismaClient } from "../../prisma-client/generated/tenant";
 import { titleCase } from "../utils/Normalize";
 
-type TaskWhere = NonNullable<
-  Parameters<PrismaClient["task"]["findMany"]>[0]
+type TestWhere = NonNullable<
+  Parameters<PrismaClient["test"]["findMany"]>[0]
 >["where"];
 
-export function buildTaskWhere({
+export function buildTestWhere({
   clientAdminId,
   search,
   createdAt,
@@ -14,9 +14,9 @@ export function buildTaskWhere({
   clientAdminId: string; // ✅ matches schema
   search?: string;
   createdAt?: string;
-}): TaskWhere {
+}): TestWhere {
 
-  const where: TaskWhere = {
+  const where: TestWhere = {
     clientAdminId,
   };
 

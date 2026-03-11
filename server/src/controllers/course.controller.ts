@@ -4,6 +4,7 @@ import path from "path";
 import { courseQuerySchema } from "../validators/course.query";
 import { getCourses } from "../services/course.service";
 import { titleCase } from "../utils/Normalize";
+import { parseDate } from "../helpers/date";
 
 function calculateTimePerDay(schedule: { startTime: string; endTime: string }) {
   const [startH, startM] = schedule.startTime.split(":").map(Number);
@@ -1022,7 +1023,7 @@ export async function getAllCourseController(req: Request, res: Response) {
 
 export async function markCourseAsCompleted(req: Request, res: Response) {
   try {
-    const { studentId, studentCourseId, feedback, remarks } = req.body;
+    const { studentId, studentCourseId, feedback, remarks, completionDate } = req.body;
     const tenantPrisma = req.tenantPrisma;
     const user = req.user;
 
@@ -1075,12 +1076,14 @@ export async function markCourseAsCompleted(req: Request, res: Response) {
       });
     }
 
+    const parsedCompletionDate = parseDate(completionDate);
+
     // ✅ Create new completion record
     const completion = await tenantPrisma.courseCompletion.create({
       data: {
         studentId: Number(studentId),
         studentCourseId: Number(studentCourseId),
-        completionDate: new Date(),
+        completionDate: parsedCompletionDate ?? new Date(),
         feedback: feedback || null,
         remarks: remarks || null,
         clientAdminId,

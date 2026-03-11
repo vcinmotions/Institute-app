@@ -366,7 +366,7 @@ export default function StudentDataTable({
                         size="sm"
                         className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
                       >
-                        Add Course
+                        Add
                       </Button>
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
@@ -375,7 +375,7 @@ export default function StudentDataTable({
                         size="sm"
                         className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
                       >
-                        Admission
+                        View
                       </Button>
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">

@@ -30,6 +30,7 @@ import rolesRoute from "../src/routes/roles.routes";
 import stationaryRoute from "../src/routes/stationary.routes";
 import attendanceRoute from "./routes/attendance.routes";
 import taskRoute from "./routes/task.routes";
+import testRoute from "./routes/test.routes";
 
 const app = express();
 app.use(cors());
@@ -118,6 +119,7 @@ app.use("/api", AnalyticsRoute);
 app.use("/api", LogRoute);
 app.use("/api", rolesRoute);
 app.use("/api", taskRoute);
+app.use("/api", testRoute);
 app.use("/api", stationaryRoute);
 
 export default app;

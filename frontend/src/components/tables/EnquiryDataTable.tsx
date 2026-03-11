@@ -311,7 +311,7 @@ export default function EnquiryDataTable({
                       <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                         {item.srNo}
                       </TableCell>
-                      <TableCell className="px-5 py-2 text-start sm:px-6">
+                      <TableCell className="px-5 py-3 text-start sm:px-6">
                         <div className="flex items-center">
                           <div className="overflow-hidden rounded-full">
                             {/* <Avatar name={item.name} size={30} /> */}

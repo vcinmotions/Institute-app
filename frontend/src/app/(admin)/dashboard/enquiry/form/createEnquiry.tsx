@@ -87,8 +87,8 @@ export default function EnquiryForm() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const { mutate: createEnquiry } = useCreateEnquiry();
-  
-   const genders = [
+
+  const genders = [
     { value: "female", label: "Female" },
     { value: "male", label: "Male" },
     { value: "other", label: "Other" },
@@ -259,20 +259,20 @@ export default function EnquiryForm() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  if (
-    !/[0-9]/.test(e.key) &&
-    e.key !== "+" &&
-    e.key !== "Backspace" &&
-    e.key !== "Delete" &&
-    e.key !== "ArrowLeft" &&
-    e.key !== "ArrowRight" &&
-    e.key !== "Tab"
-  ) {
-    e.preventDefault();
-  }
-};
+    if (
+      !/[0-9]/.test(e.key) &&
+      e.key !== "+" &&
+      e.key !== "Backspace" &&
+      e.key !== "Delete" &&
+      e.key !== "ArrowLeft" &&
+      e.key !== "ArrowRight" &&
+      e.key !== "Tab"
+    ) {
+      e.preventDefault();
+    }
+  };
 
-const handleDateChange = (field: keyof EnquiryData, value: string) => {
+  const handleDateChange = (field: keyof EnquiryData, value: string) => {
     // Allow only digits
     let digits = value.replace(/\D/g, "");
 
@@ -329,8 +329,8 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
       scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
       return; // ⛔ mutation never runs
     }
@@ -344,9 +344,9 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
         variant: "error",
       });
 
-       window.scrollTo({
-          top: 0, behavior: "smooth"
-        })
+      window.scrollTo({
+        top: 0, behavior: "smooth"
+      })
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
@@ -465,38 +465,38 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
               inputRefs.current.contact = el;
             }}
           >
-          <Label>Contact No. *</Label>
-          <div className="relative">
+            <Label>Contact No. *</Label>
+            <div className="relative">
+              <PhoneInput
+                selectPosition="start"
+                countries={countries}
+                tabIndex={3}
+                onKeyDown={handleKeyDown}
+                placeholder="Enter Contact"
+                onChange={handlePhoneNumberChange}
+              />
+              {errors.contact && (
+                <p className="text-sm text-red-500">{errors.contact}</p>
+              )}
+            </div>
+          </div>{" "}
+
+          <div>
+            <Label>Alternate Conatct No.</Label>
             <PhoneInput
               selectPosition="start"
               countries={countries}
-              tabIndex={3}
+              tabIndex={4}
               onKeyDown={handleKeyDown}
-              placeholder="Enter Contact"
-              onChange={handlePhoneNumberChange}
+              placeholder="Enter Alternate Conatact"
+              onChange={handleAlternatePhoneNumberChange}
             />
-            {errors.contact && (
-              <p className="text-sm text-red-500">{errors.contact}</p>
-            )}
-          </div>
-        </div>{" "}     
+            {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
+          </div>{" "}
 
-          <div>
-          <Label>Alternate Conatct No.</Label>
-          <PhoneInput
-            selectPosition="start"
-            countries={countries}
-            tabIndex={4}
-            onKeyDown={handleKeyDown}
-            placeholder="Enter Alternate Conatact"
-            onChange={handleAlternatePhoneNumberChange}
-          />
-           {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
-        </div>{" "}
-
-         <div ref={(el) => {
-                inputRefs.current.courseId = el;
-              }}>
+          <div ref={(el) => {
+            inputRefs.current.courseId = el;
+          }}>
             <div className="relative" data-master="course">
               <MultiSelect
                 ref={jumpInputRef}
@@ -512,7 +512,7 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
                 value={newEnquiry.courseId}
                 onChange={(value) => handleChange("courseId", value)}
               />
-              
+
             </div>
             {errors.courseId && (
               <p className="text-sm text-red-500">{errors.courseId}</p>
@@ -520,58 +520,58 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
           </div>
 
           <div>
-          <Label>Date Of Birth</Label>
+            <Label>Date Of Birth</Label>
 
-          <Input
-            type="text"
-            tabIndex={6}
-            placeholder="Enter DoB"
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-            value={newEnquiry.dob}
-            onChange={(e) => handleDateChange("dob", e.target.value)}
-          />
-          {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
-        </div>
+            <Input
+              type="text"
+              tabIndex={6}
+              placeholder="Enter DoB"
+              className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+              value={newEnquiry.dob}
+              onChange={(e) => handleDateChange("dob", e.target.value)}
+            />
+            {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
+          </div>
 
           <div>
-          <Label>Enquiry Date</Label>
+            <Label>Enquiry Date</Label>
 
-          <Input
-            type="text"
-            tabIndex={6}
-            placeholder="Enter DoB"
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-            value={newEnquiry.enquiryDate}
-            onChange={(e) => handleDateChange("enquiryDate", e.target.value)}
-          />
-          {errors.enquiryDate && <p className="text-sm text-red-500">{errors.enquiryDate}</p>}
-        </div>
-
-       <div>
-          <Label>Gender</Label>
-
-          <div className="relative">
-            <Select
-              tabIndex={7}
-              options={genders.map((item) => ({
-                label: item.label,
-                value: item.value,
-              }))}
-              placeholder="Select Gender"
-              onChange={(value) => handleChange("gender", value)}
-              value={newEnquiry.gender} // just the courseId string
-              className="dark:bg-dark-900"
+            <Input
+              type="text"
+              tabIndex={6}
+              placeholder="Enter DoB"
+              className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+              value={newEnquiry.enquiryDate}
+              onChange={(e) => handleDateChange("enquiryDate", e.target.value)}
             />
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
+            {errors.enquiryDate && <p className="text-sm text-red-500">{errors.enquiryDate}</p>}
           </div>
-          {errors.gender && (
-            <p className="text-sm text-red-500">{errors.gender}</p>
-          )}
-        </div>
 
-        {/* CITY */}
+          <div>
+            <Label>Gender</Label>
+
+            <div className="relative">
+              <Select
+                tabIndex={7}
+                options={genders.map((item) => ({
+                  label: item.label,
+                  value: item.value,
+                }))}
+                placeholder="Select Gender"
+                onChange={(value) => handleChange("gender", value)}
+                value={newEnquiry.gender} // just the courseId string
+                className="dark:bg-dark-900"
+              />
+              <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                <ChevronDownIcon />
+              </span>
+            </div>
+            {errors.gender && (
+              <p className="text-sm text-red-500">{errors.gender}</p>
+            )}
+          </div>
+
+          {/* CITY */}
           <div>
             <Label>City </Label>
             <Select
@@ -589,44 +589,44 @@ const handleDateChange = (field: keyof EnquiryData, value: string) => {
             )}
           </div>
 
-        <div>
-          <Label>Locality</Label>
-          <Input
-            type="text"
-            placeholder="Enter Locality"
-            value={normalizeToLowercase(newEnquiry.location)}
-            tabIndex={9}
-            onChange={(e) => handleChange("location", e.target.value)}         />
-            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
-        </div>
-         
-        <div>
-          <Label>Source </Label>
-          <div className="relative">
+          <div>
+            <Label>Locality</Label>
             <Input
-              placeholder="Enter Source"
-              onChange={(e) => handleChange("source", e.target.value)}
-              className="dark:bg-dark-900"
-              value={newEnquiry.source} // Bind selected course
-              tabIndex={10}
-            />
+              type="text"
+              placeholder="Enter Locality"
+              value={normalizeToLowercase(newEnquiry.location)}
+              tabIndex={9}
+              onChange={(e) => handleChange("location", e.target.value)} />
+            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
           </div>
-          {errors.source && (
-            <p className="text-sm text-red-500">{errors.source}</p>
-          )}
-        </div>
 
-         <div>
-          <Label>Referred By</Label>
-          <Input
-            type="text"
-            placeholder="Enter Reference"
-            value={newEnquiry.referedBy}
-            tabIndex={11}
-            onChange={(e) => handleChange("referedBy", e.target.value)}         />
+          <div>
+            <Label>Source </Label>
+            <div className="relative">
+              <Input
+                placeholder="Enter Source"
+                onChange={(e) => handleChange("source", e.target.value)}
+                className="dark:bg-dark-900"
+                value={newEnquiry.source} // Bind selected course
+                tabIndex={10}
+              />
+            </div>
+            {errors.source && (
+              <p className="text-sm text-red-500">{errors.source}</p>
+            )}
+          </div>
+
+          <div>
+            <Label>Referred By</Label>
+            <Input
+              type="text"
+              placeholder="Enter Reference"
+              value={newEnquiry.referedBy}
+              tabIndex={11}
+              onChange={(e) => handleChange("referedBy", e.target.value)} />
             {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
-        </div>
-          
+          </div>
+
           <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
             {/* <Button
               size="sm"

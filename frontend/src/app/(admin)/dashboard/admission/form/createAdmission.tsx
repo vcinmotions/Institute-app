@@ -2707,7 +2707,7 @@ export default function AdmissionForm() {
               </label>
               <Input
                 tabIndex={16}
-                type="datetime-local"
+                type="date"
                 placeholder="Enter Admission Date"
                 value={filledEnquiryData.admissionDate}
                 onChange={(e) => handleChange("admissionDate", e.target.value)}

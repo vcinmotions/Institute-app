@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { titleCase } from "../utils/Normalize";
+import { testQuerySchema } from "../validators/test.query";
+import { getTests } from "../services/test.service";
 
 export async function addTestController(
   req: Request,
@@ -206,5 +208,41 @@ export async function editTestController(
     return res.status(500).json({
       error: "Internal server error",
     });
+  }
+}
+
+export async function getTestController(req: Request, res: Response) {
+  try {
+    const prisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!prisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const query = testQuerySchema.parse(req.query);
+
+    const result = await getTests({
+      prisma,
+      clientAdminId: user.clientAdminId,
+      query,
+    });
+
+    return res.status(200).json({
+      message: "Test fetched successfully",
+      test: result.data,
+      total: result.total,
+      totalPages: result.totalPages,
+      page: query.page,
+      limit: query.limit,
+    });
+
+  } catch (err: any) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({ error: err.errors });
+    }
+
+    console.error(err);
+    return res.status(500).json({ error: "Internal server error" });
   }
 }

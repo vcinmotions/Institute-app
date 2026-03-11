@@ -406,7 +406,7 @@
 //             <Input
 //               type="number"
 //               min={0}              // ✅ Prevents negatives
-             
+
 //               placeholder="Enter Duration"
 //               value={newCourse.durationWeeks}
 //               onChange={(e) => handleChange("durationWeeks", e.target.value)}
@@ -423,7 +423,7 @@
 //             <Input
 //               type="number"
 //               min={0}
-              
+
 //               placeholder="Enter Amount"
 //               value={newCourse.totalAmount}
 //               onChange={(e) => handleChange("totalAmount", e.target.value)}
@@ -564,15 +564,14 @@
 // }
 
 import { Metadata } from "next";
-import CourseForm from "../form/createCourse";
-
+import TestForm from "../form/createTest";
 
 export const metadata: Metadata = {
-  title: "Create Course",
+  title: "Create Test",
 };
 
-export default function CreateCourse() {
+export default function CreateTest() {
   return (
-    <CourseForm/>
+    <TestForm />
   );
 }

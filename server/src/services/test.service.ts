@@ -1,22 +1,21 @@
 // services/enquiry.service.ts
+import { buildTestWhere } from "../filters/test.filter";
 
-import { buildTaskWhere } from "../filters/task.filter";
-
-export async function getTasks({
+export async function getTests({
   prisma,
   clientAdminId,
   query,
 }: any) {
   const skip = (query.page - 1) * query.limit;
 
-  const where = buildTaskWhere({
+  const where = buildTestWhere({
     clientAdminId,
     search: query.search,
   });
 
 
   const [data, total] = await prisma.$transaction([
-    prisma.task.findMany({
+    prisma.test.findMany({
       where,
       skip,
       take: query.limit,
@@ -25,7 +24,7 @@ export async function getTasks({
         course: true,
       }
     }),
-    prisma.task.count({ where }),
+    prisma.test.count({ where }),
   ]);
 
   return {

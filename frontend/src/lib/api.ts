@@ -748,6 +748,26 @@ export const getTask = async ({
   return response.data;
 };
 
+export const getTest = async ({
+  token,
+  page = 1,
+  limit = 5,
+  search = "",
+}: GetEnquiryParams) => {
+  const response = await apiClient.get("/test", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page,
+      limit,
+      search,
+    },
+  });
+
+  return response.data;
+};
+
 export const getBatch = async ({
   token,
   page,
@@ -873,6 +893,16 @@ export const createTaskAPI = async (token: string, newTaskData: any) => {
 };
 
 // 🔧 FIXED getUser API with token header
+export const createTestAPI = async (token: string, newTestData: any) => {
+  const response = await apiClient.post(`/create-test`, newTestData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🔧 FIXED getUser API with token header
 export const editCourseAPI = async (
   token: string,
   newCourseData: any,
@@ -907,6 +937,20 @@ export const editTaskAPI = async (
   id: any,
 ) => {
   const response = await apiClient.put(`/edit-task/${id}`, newTask, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🔧 FIXED getUser API with token header
+export const editTestAPI = async (
+  token: string,
+  newTest: any,
+  id: any,
+) => {
+  const response = await apiClient.put(`/edit-test/${id}`, newTest, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

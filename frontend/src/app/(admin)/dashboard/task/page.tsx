@@ -9,11 +9,9 @@ export const metadata: Metadata = {
 
 export default function Task() {
   return (
-    <RoleProtected allowedRoles={["ADMIN", "FRONT_DESK"]}>
-        <PageBreadcrumb pageTitle="Task" />
-        
-            <TaskTable />
-        
+    <RoleProtected allowedRoles={["ADMIN", "FACULTY"]}>
+      <PageBreadcrumb pageTitle="Task" />
+      <TaskTable />
     </RoleProtected>
   );
 }
