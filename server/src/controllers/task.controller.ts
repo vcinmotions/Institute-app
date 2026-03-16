@@ -222,8 +222,6 @@ export async function addStudentTaskController(
   const {
     studentId,
     taskId,
-    assignedDate,
-    dueDate,
     description,
     facultyId,
   } = req.body;
@@ -231,7 +229,7 @@ export async function addStudentTaskController(
   console.log("ADD STUDENT TASK DATA in REQ.BODY:", req.body);
 
   // ✅ Validation
-  if (!studentId || !taskId || !assignedDate || !dueDate || !description) {
+  if (!studentId || !taskId || !description) {
     return res.status(400).json({
       error: "studentId, taskId, assignedDate, dueDate and description are required ❌",
     });
@@ -273,6 +271,7 @@ export async function addStudentTaskController(
     const task = await tenantPrisma.task.findFirst({
       where: {
         id: parsedTaskId,
+        status: "DRAFT",
         clientAdminId: user.clientAdminId,
       },
     });
@@ -303,8 +302,8 @@ export async function addStudentTaskController(
         studentId: parsedStudentId,
         taskId: parsedTaskId,
         courseId: task.courseId,
-        assignedDate: new Date(assignedDate),
-        dueDate: new Date(dueDate),
+        assignedDate: new Date(),
+        dueDate: new Date(),
         description,
         status: "PENDING",
         facultyId: parsedFacultyId,
@@ -326,7 +325,6 @@ export async function addStudentTaskController(
     });
   }
 }
-
 
 export async function getTaskController(req: Request, res: Response) {
   try {

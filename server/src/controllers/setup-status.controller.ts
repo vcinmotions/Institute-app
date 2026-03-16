@@ -85,13 +85,13 @@ export async function setupStatusController(req: Request, res: Response) {
 
   try {
     const isProd = process.env.APP_ENV === "prod";
-    console.log("isProd:", isProd);
+    console.log("isProd in setup status:", isProd);
 
     let prisma: PrismaClient;
 
     /* ---------- PROD (Electron + SQLite) ---------- */
     if (isProd) {
-      const dbPath = path.join(getUserDataPath(), "central.db");
+      const dbPath = path.join(getUserDataPath(), "data", "central.db");
 
       if (!fs.existsSync(dbPath)) {
         return res.json({ setupComplete: "NOT_STARTED" });

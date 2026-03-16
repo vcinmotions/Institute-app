@@ -563,7 +563,7 @@ model StudentTask {
   courseId      Int
   assignedDate  DateTime
   dueDate       DateTime
-  description   String
+  description   String?
   status        String
   facultyRemarks String?
   grade         String?
@@ -603,14 +603,17 @@ model StudentTest {
   courseId      Int
   testName      String
   testDate      DateTime
-  totalMarks    Int
-  marksObtained Int
-  grade         String
+  assignedDate  DateTime
+  description   String
+  status        String
+  totalMarks    Int?
+  marksObtained Int?
+  grade         String?
 
   test     Test @relation(fields: [testId], references: [id])
   testId   Int
 
-  // ✅ Required relation to ClientAdmin
+  // Required relation to ClientAdmin
   clientAdminId  String
   clientAdmin    ClientAdmin @relation(fields: [clientAdminId], references: [id])
 }

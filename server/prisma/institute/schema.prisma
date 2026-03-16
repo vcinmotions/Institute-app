@@ -601,9 +601,12 @@ model StudentTest {
   courseId      Int
   testName      String
   testDate      DateTime
-  totalMarks    Int
-  marksObtained Int
-  grade         String
+  assignedDate  DateTime
+  description   String
+  status        String
+  totalMarks    Int?
+  marksObtained Int?
+  grade         String?
 
   test     Test @relation(fields: [testId], references: [id])
   testId   Int

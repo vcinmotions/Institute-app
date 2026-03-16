@@ -38,6 +38,7 @@ export async function getPayment({
         student: true,
         course: true,
         feeLogs: true,
+        
       },
     }),
     prisma.studentFee.count({ where }),

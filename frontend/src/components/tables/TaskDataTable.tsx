@@ -46,11 +46,8 @@ export default function TaskDataTable({
   };
 
   const handlePublish = (item: any) => {
-    console.log("Get EnquiryId to Deleted Enquiry", item.id);
-    console.log("Get EDIT COURSE DATA Enquiry", item);
-    setSelectedId(item.id);
-    setBatchDetail(true);
-    setBatchData(item);
+    console.log("PUBLISH TAST DATA:", item);
+
   };
 
   return (
@@ -118,7 +115,7 @@ export default function TaskDataTable({
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.batch?.name || "-"}
                     </TableCell>
-    
+
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.course?.name || "-"}
                     </TableCell>
@@ -131,20 +128,16 @@ export default function TaskDataTable({
                       </Badge>
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
-                      <span
-                        className={`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${"cursor-pointer"}`}
-                        onClick={() => handleEditLab(item)}
+
+                      <Button
+                        onClick={() => handlePublish(item)}
+                        size="sm"
+                        allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]} // hide for others
+                        className="rounded bg-gray-100 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
                       >
-                       <Button
-                          onClick={() => handlePublish(item.id)}
-                          disabled
-                          size="sm"
-                          allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]} // hide for others
-                          className="rounded bg-gray-100 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
-                        >
-                          Publish
-                        </Button>
-                      </span>
+                        Publish
+                      </Button>
+
                     </TableCell>
                     <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
                       <span

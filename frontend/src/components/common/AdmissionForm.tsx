@@ -16,7 +16,7 @@ import PrintConfigModal from "./PrintConfigModal";
 
 interface Props {
   student: Student;
-  companyDetails: any[];
+  companyDetails: any;
   onCloseModal: () => void;
 }
 
@@ -403,7 +403,7 @@ const AdmissionForm: React.FC<Props> = ({
 
             <div>
               <h1 className="text-2xl font-bold text-red-700">
-                SHREE JEE
+                {companyDetails?.name}
               </h1>
               <p className="text-sm">Technical Institute</p>
             </div>
@@ -411,7 +411,7 @@ const AdmissionForm: React.FC<Props> = ({
             <div className="text-sm space-y-1">
               <p><b>Reg. Form No :</b> {student.admissionNumber}</p>
               <p><b>Admission Date :</b> {new Date(student.admissionDate).toLocaleDateString()}</p>
-              <p><b>Reg. Branch :</b> {student.fullName}</p>
+              <p><b>Reg. Branch :</b> {companyDetails.city}</p>
             </div>
 
             <img
@@ -451,7 +451,7 @@ const AdmissionForm: React.FC<Props> = ({
               </p>
 
               <p>
-                <b>Qualification :</b> {student.fullName}
+                <b>Qualification :</b> -
               </p>
 
             </div>
@@ -488,7 +488,7 @@ const AdmissionForm: React.FC<Props> = ({
             </p>
 
             <p>
-              <b>Reference Details :</b> {student?.fullName ?? ""}
+              <b>Reference Details :</b> -
             </p>
 
           </div>

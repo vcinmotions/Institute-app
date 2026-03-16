@@ -28,7 +28,7 @@ import { Tooltip } from "@heroui/react";
 import ShowForRoles from "@/app/utils/ShowForRoles";
 import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
 import { canEditEnquiry, canHoldEnquiry, canMarkLost, canMarkWon } from "@/domain/enquiry/rules";
-import { formatDate } from "@fullcalendar/core";
+import { formatDate } from "../common/Formatdate";
 
 type FollowUpModalType =
   | "createNew"
@@ -338,7 +338,7 @@ export default function EnquiryDataTable({
                       </TableCell>
                       <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
                         <span>
-                          {formatDate(item.enquiryData) || "—"}
+                          {formatDate(item.enquiryDate)}
                         </span>
                       </TableCell>
                       <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">

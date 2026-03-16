@@ -249,7 +249,6 @@
 import { exec } from "child_process";
 import { Client } from "pg";
 import path from "path";
-import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import fs from "fs";
 import { getCentralPrisma } from "../prisma-client/central-client";
@@ -282,7 +281,8 @@ const envFile =
   process.env.APP_ENV === "prod" ? ".env.prod" : ".env.dev";
 
 
-  console.log("envFile:", envFile);
+  console.log("envFile in CREATE CENTRAL CONTROLLER:", envFile);
+  console.log("DB_PROVIDER in CREATE CENTRAL CONTROLLER:", process.env.DB_PROVIDER);
   console.log("DB_HOST:", process.env.DB_HOST);
   console.log("DB_USER:", process.env.DB_USER);
   console.log("DB_PASS:", process.env.DB_PASS);
@@ -292,7 +292,7 @@ const envFile =
 const isProd = process.env.APP_ENV === "prod";
 const isSqlite = process.env.DB_PROVIDER === "sqlite";
 
-
+console.log("is sqlite in central controller:", isSqlite);
 /* -------------------------------------------------------
    PATHS
 ------------------------------------------------------- */
@@ -308,6 +308,16 @@ const centralSchemaPathProd = path.join(
   rootDir,
   "prisma/central/schema.sqlite.prisma"
 );
+
+const centralSchema = path.join(
+  __dirname,
+  "..",
+  "..",
+  "prisma",
+  "central",
+  "schema.sqlite.prisma"
+);
+
 
 const schemaPathToUse = isProd
   ? centralSchemaPathProd
@@ -381,21 +391,22 @@ export async function createCentralDB(clientId: string, options?: any) {
   const dbDir = getUserDataPath();
   console.log("DB directory:", dbDir); // <- debug
 
-  fs.mkdirSync(dbDir, { recursive: true });
+  const dataDir = path.join(getUserDataPath(), "data");
+  fs.mkdirSync(dataDir, { recursive: true });
 
-  const userDbPath = path.join(dbDir, "central.db");
+  const userDbPath = path.join(dataDir, "central.db");
   console.log("User DB path:", userDbPath); // <- debug
 
-  const templatePath = path.join(getResourcePath(), "central_template.db");
-  console.log("Template DB path:", templatePath); // <- debug
+  // const templatePath = path.join(getResourcePath(), "central_template.db");
+  // console.log("Template DB path:", templatePath); // <- debug
 
-  if (!fs.existsSync(templatePath)) {
-    throw new Error("central_template.db missing from resources");
-  }
+  // if (!fs.existsSync(templatePath)) {
+  //   throw new Error("central_template.db missing from resources");
+  // }
 
-  if (!fs.existsSync(userDbPath)) {
-    fs.copyFileSync(templatePath, userDbPath);
-  }
+  // if (!fs.existsSync(userDbPath)) {
+  //   fs.copyFileSync(templatePath, userDbPath);
+  // }
 
   dbUrl = `file:${userDbPath.replace(/\\/g, "/")}`;
   console.log("DB URL being used:", dbUrl); // <- debug
@@ -448,7 +459,7 @@ export async function createCentralDB(clientId: string, options?: any) {
     //const envVar = isProd && isSqlite ? "CENTRAL_DATABASE_URL" : "DATABASE_URL";
 
     exec(
-      `npx prisma migrate deploy --schema="${centralSchemaPath}"`,
+      `npx prisma db push --schema="${centralSchemaPath}"`,
       {
         env: {
           ...process.env,
@@ -471,33 +482,32 @@ export async function createCentralDB(clientId: string, options?: any) {
   }
 
   /* ---------- MIGRATIONS ---------- */
-  // await new Promise<void>((resolve, reject) => {
-  //   exec(
-  //     `npx prisma migrate deploy --schema="${schemaPathToUse}"`,
-  //     {
-  //       env: {
-  //         ...process.env,
-  //         DATABASE_URL: dbUrl,
-  //       },
-  //     },
-  //     (err, stdout, stderr) => {
-  //       if (err) {
-  //         console.error(stderr);
-  //         reject(err);
-  //       } else {
-  //         console.log(stdout);
-  //         resolve();
-  //       }
-  //     }
-  //   );
-  // });
+  await new Promise<void>((resolve, reject) => {
+    exec(
+      `npx prisma db push --accept-data-loss --schema="${centralSchema}"`,
+      {
+        env: {
+          ...process.env,
+          CENTRAL_DATABASE_URL: dbUrl,
+        },
+      },
+      (err, stdout, stderr) => {
+        if (err) {
+          console.error(stderr);
+          reject(err);
+        } else {
+          console.log(stdout);
+          resolve();
+        }
+      }
+    );
+  });
 
   console.log(
-  isProd
-    ? "✅ Central DB ready (template copied)"
-    : "✅ Central DB migration successful"
-);
-
+    isProd
+      ? "✅ Central DB ready (template copied)"
+      : "✅ Central DB migration successful"
+  );
 
 
   /* ---------- SAVE URL ---------- */

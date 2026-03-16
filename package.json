@@ -53,11 +53,11 @@
         "to": "node/node.exe"
       },
       {
-      "from": "server/dist/prisma/central/dist/prisma/central/data/central.db",
+      "from": "server/dist/prisma/central/data/central.db",
       "to": "server/db/central_template.db"
     },
     {
-      "from": "server/dist/prisma/institute/dist/prisma/institute/data/tenant.db",
+      "from": "server/dist/prisma/institute/data/tenant.db",
       "to": "server/db/tenant_template.db"
     } 
     ],

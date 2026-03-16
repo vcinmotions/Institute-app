@@ -14,7 +14,7 @@
     ]
   },
   "scripts": {
-    "build": "tsc && cpx \"prisma-client/generated/**/*\" dist/prisma-client/generated && cpx \"prisma/**/*\" dist/prisma && cpx \"prisma/central/.env\" dist/prisma/central && cpx \"prisma/institute/.env\" dist/prisma/institute && cpx \".env\" dist && cpx \".env.dev\" dist && cpx \".env.prod\" dist && cpx \".env.dev\" dist/prisma/central && cpx \".env.prod\" dist/prisma/central",
+    "build": "tsc && cpx \"prisma-client/generated/**/*\" dist/prisma-client/generated && cpx \"prisma/**/*\" dist/prisma && cpx \"prisma/central/.env\" dist/prisma/central && cpx \"prisma/institute/.env\" dist/prisma/institute && cpx \".env\" dist && cpx \".env.dev\" dist && cpx \".env.prod\" dist",
     "dev": "electron .",
     "start-prod": "node dist/server.js",
     "start": "ts-node-dev --respawn server.ts",
@@ -25,9 +25,9 @@
     "generate:central": "npx prisma generate --schema=prisma/central/schema.prisma",
     "generate:tenant": "npx prisma generate --schema=prisma/institute/schema.prisma",
     "generate:central-prod": "npx prisma generate --schema=prisma/central/schema.sqlite.prisma",
-    "generate:tenant-prod": "npx prisma generate --schema=prisma/tenant/schema.sqlite.prisma",
-    "migrate:central": "npx prisma migrate dev --schema=prisma/central/schema.prisma",
-    "migrate:tenant": "npx prisma migrate dev --schema=prisma/institute/schema.prisma",
+    "generate:tenant-prod": "npx prisma generate --schema=prisma/institute/schema.sqlite.prisma",
+    "migrate:central": "npx prisma migrate dev --schema=prisma/central/schema.sqlite.prisma",
+    "migrate:tenant": "npx prisma migrate dev --schema=prisma/institute/schema.sqlite.prisma",
     "deploy:central": "cross-env DATABASE_URL=$CENTRAL_DATABASE_URL prisma migrate deploy --schema=prisma/central/schema.prisma",
     "deploy:tenant": "cross-env DATABASE_URL=$TENANT_DATABASE_URL prisma migrate deploy --schema=prisma/tenant/schema.prisma",
     "followup-cron": "ts-node src/cronJobs/cron-jon-runner.ts",

@@ -601,6 +601,15 @@ const schemaPathProd = path.join(
   "prisma/institute/schema.sqlite.prisma"
 );
 
+const tenantSchema = path.join(
+  __dirname,
+  "..",
+  "..",
+  "prisma",
+  "institute",
+  "schema.sqlite.prisma"
+);
+
 const schemaPathToUse = isProd ? schemaPathProd : schemaPath;
 
 /* -------------------------------------------------------
@@ -635,7 +644,7 @@ function upsertEnvVariable(key: string, value: string) {
 
 
       exec(
-        `npx prisma migrate deploy --schema="${schemaPath}"`,
+        `npx prisma db push --accept-data-loss --schema="${schemaPath}"`,
         {
           env: { ...process.env, DATABASE_URL: url },
         },
@@ -705,7 +714,7 @@ export async function createTenant(
 
     // dbUrl = `file:${tenantDbPath.replace(/\\/g, "/")}`;
 
-    const tenantsDir = path.join(getUserDataPath(), "tenants");
+    const tenantsDir = path.join(getUserDataPath(), "data", "tenants");
     console.log("tenants directory:", tenantsDir); // <- debug
 
     fs.mkdirSync(tenantsDir, { recursive: true });
@@ -713,12 +722,12 @@ export async function createTenant(
     const tenantDbPath = path.join(tenantsDir, `${dbName}.db`);
     console.log("tenants DB PATH:", tenantDbPath); // <- debug
 
-    const templatePath = path.join(getResourcePath(), "tenant_template.db");
+    // const templatePath = path.join(getResourcePath(), "tenant_template.db");
 
-    console.log("tenants directory PATH:", templatePath); // <- debug
+    // console.log("tenants directory PATH:", templatePath); // <- debug
 
-    if (!fs.existsSync(templatePath)) throw new Error("tenant_template.db missing from resources");
-    if (!fs.existsSync(tenantDbPath)) fs.copyFileSync(templatePath, tenantDbPath);
+    // if (!fs.existsSync(templatePath)) throw new Error("tenant_template.db missing from resources");
+    // if (!fs.existsSync(tenantDbPath)) fs.copyFileSync(templatePath, tenantDbPath);
 
     dbUrl = `file:${tenantDbPath.replace(/\\/g, "/")}`;
       
@@ -749,35 +758,34 @@ export async function createTenant(
 
 
     
-  await runMigration(dbUrl);
-  if (backupDbUrl) await runMigration(backupDbUrl);
+    await runMigration(dbUrl);
+    if (backupDbUrl) await runMigration(backupDbUrl);
   }
 
   // /* ---------- MIGRATIONS ---------- */
-  // const runMigration = (url: string) =>
-  //   new Promise<void>((resolve, reject) => {
-  //   const envVar = isProd && isSqlite ? "TENANT_DATABASE_URL" : "DATABASE_URL";
+  const runMigrationProd = (url: string) =>
+    new Promise<void>((resolve, reject) => {
 
 
-  //     exec(
-  //       `npx prisma migrate deploy --schema="${schemaPathToUse}"`,
-  //       {
-  //         env: { ...process.env, [envVar]: url },
-  //       },
-  //       (err, stdout, stderr) => {
-  //         if (err) {
-  //           console.error(stderr);
-  //           reject(err);
-  //         } else {
-  //           console.log(stdout);
-  //           resolve();
-  //         }
-  //       }
-  //     );
-  //   });
+      exec(
+        `npx prisma db push --accept-data-loss --schema="${tenantSchema}"`,
+        {
+          env: { ...process.env, TENANT_DATABASE_URL: url, },
+        },
+        (err, stdout, stderr) => {
+          if (err) {
+            console.error(stderr);
+            reject(err);
+          } else {
+            console.log(stdout);
+            resolve();
+          }
+        }
+      );
+    });
 
-  // await runMigration(dbUrl);
-  // if (backupDbUrl) await runMigration(backupDbUrl);
+  await runMigrationProd(dbUrl);
+  if (backupDbUrl) await runMigrationProd(backupDbUrl);
 
   /* ---------- SAVE ENV ---------- */
   upsertEnvVariable(`${instituteName}_CLIENT_DATABASE_URL`, dbUrl);

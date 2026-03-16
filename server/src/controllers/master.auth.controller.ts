@@ -9,7 +9,6 @@ import * as jwt from "jsonwebtoken";
 import path from "path";
 import dotenv from "dotenv";
 import { generateToken } from "../utils/jwt";
-import { sendEmail } from "../utils/email";
 import { generateLoginEmailTemplate } from "../utils/templates/login-notification";
 
 dotenv.config({ path: ".env" });
@@ -70,8 +69,6 @@ export async function masterLoginController(req: Request, res: Response) {
       new Date().toLocaleString(),
       "192.168.0.1"
     );
-
-    await sendEmail(getMasterAdmin.email, "Login Notification", emailHtml);
 
     // 6. Return success response with token
     return res.status(200).json({

@@ -40530,6 +40530,9 @@ export namespace Prisma {
     courseId: number | null
     testName: string | null
     testDate: Date | null
+    assignedDate: Date | null
+    description: string | null
+    status: string | null
     totalMarks: number | null
     marksObtained: number | null
     grade: string | null
@@ -40543,6 +40546,9 @@ export namespace Prisma {
     courseId: number | null
     testName: string | null
     testDate: Date | null
+    assignedDate: Date | null
+    description: string | null
+    status: string | null
     totalMarks: number | null
     marksObtained: number | null
     grade: string | null
@@ -40556,6 +40562,9 @@ export namespace Prisma {
     courseId: number
     testName: number
     testDate: number
+    assignedDate: number
+    description: number
+    status: number
     totalMarks: number
     marksObtained: number
     grade: number
@@ -40589,6 +40598,9 @@ export namespace Prisma {
     courseId?: true
     testName?: true
     testDate?: true
+    assignedDate?: true
+    description?: true
+    status?: true
     totalMarks?: true
     marksObtained?: true
     grade?: true
@@ -40602,6 +40614,9 @@ export namespace Prisma {
     courseId?: true
     testName?: true
     testDate?: true
+    assignedDate?: true
+    description?: true
+    status?: true
     totalMarks?: true
     marksObtained?: true
     grade?: true
@@ -40615,6 +40630,9 @@ export namespace Prisma {
     courseId?: true
     testName?: true
     testDate?: true
+    assignedDate?: true
+    description?: true
+    status?: true
     totalMarks?: true
     marksObtained?: true
     grade?: true
@@ -40715,9 +40733,12 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date
+    description: string
+    status: string
+    totalMarks: number | null
+    marksObtained: number | null
+    grade: string | null
     testId: number
     clientAdminId: string
     _count: StudentTestCountAggregateOutputType | null
@@ -40747,6 +40768,9 @@ export namespace Prisma {
     courseId?: boolean
     testName?: boolean
     testDate?: boolean
+    assignedDate?: boolean
+    description?: boolean
+    status?: boolean
     totalMarks?: boolean
     marksObtained?: boolean
     grade?: boolean
@@ -40764,6 +40788,9 @@ export namespace Prisma {
     courseId?: boolean
     testName?: boolean
     testDate?: boolean
+    assignedDate?: boolean
+    description?: boolean
+    status?: boolean
     totalMarks?: boolean
     marksObtained?: boolean
     grade?: boolean
@@ -40781,6 +40808,9 @@ export namespace Prisma {
     courseId?: boolean
     testName?: boolean
     testDate?: boolean
+    assignedDate?: boolean
+    description?: boolean
+    status?: boolean
     totalMarks?: boolean
     marksObtained?: boolean
     grade?: boolean
@@ -40798,6 +40828,9 @@ export namespace Prisma {
     courseId?: boolean
     testName?: boolean
     testDate?: boolean
+    assignedDate?: boolean
+    description?: boolean
+    status?: boolean
     totalMarks?: boolean
     marksObtained?: boolean
     grade?: boolean
@@ -40805,7 +40838,7 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type StudentTestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "testName" | "testDate" | "totalMarks" | "marksObtained" | "grade" | "testId" | "clientAdminId", ExtArgs["result"]["studentTest"]>
+  export type StudentTestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "testName" | "testDate" | "assignedDate" | "description" | "status" | "totalMarks" | "marksObtained" | "grade" | "testId" | "clientAdminId", ExtArgs["result"]["studentTest"]>
   export type StudentTestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -40839,9 +40872,12 @@ export namespace Prisma {
       courseId: number
       testName: string
       testDate: Date
-      totalMarks: number
-      marksObtained: number
-      grade: string
+      assignedDate: Date
+      description: string
+      status: string
+      totalMarks: number | null
+      marksObtained: number | null
+      grade: string | null
       testId: number
       clientAdminId: string
     }, ExtArgs["result"]["studentTest"]>
@@ -41276,6 +41312,9 @@ export namespace Prisma {
     readonly courseId: FieldRef<"StudentTest", 'Int'>
     readonly testName: FieldRef<"StudentTest", 'String'>
     readonly testDate: FieldRef<"StudentTest", 'DateTime'>
+    readonly assignedDate: FieldRef<"StudentTest", 'DateTime'>
+    readonly description: FieldRef<"StudentTest", 'String'>
+    readonly status: FieldRef<"StudentTest", 'String'>
     readonly totalMarks: FieldRef<"StudentTest", 'Int'>
     readonly marksObtained: FieldRef<"StudentTest", 'Int'>
     readonly grade: FieldRef<"StudentTest", 'String'>
@@ -45733,6 +45772,9 @@ export namespace Prisma {
     courseId: 'courseId',
     testName: 'testName',
     testDate: 'testDate',
+    assignedDate: 'assignedDate',
+    description: 'description',
+    status: 'status',
     totalMarks: 'totalMarks',
     marksObtained: 'marksObtained',
     grade: 'grade',
@@ -48541,9 +48583,12 @@ export namespace Prisma {
     courseId?: IntFilter<"StudentTest"> | number
     testName?: StringFilter<"StudentTest"> | string
     testDate?: DateTimeFilter<"StudentTest"> | Date | string
-    totalMarks?: IntFilter<"StudentTest"> | number
-    marksObtained?: IntFilter<"StudentTest"> | number
-    grade?: StringFilter<"StudentTest"> | string
+    assignedDate?: DateTimeFilter<"StudentTest"> | Date | string
+    description?: StringFilter<"StudentTest"> | string
+    status?: StringFilter<"StudentTest"> | string
+    totalMarks?: IntNullableFilter<"StudentTest"> | number | null
+    marksObtained?: IntNullableFilter<"StudentTest"> | number | null
+    grade?: StringNullableFilter<"StudentTest"> | string | null
     testId?: IntFilter<"StudentTest"> | number
     clientAdminId?: StringFilter<"StudentTest"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -48558,9 +48603,12 @@ export namespace Prisma {
     courseId?: SortOrder
     testName?: SortOrder
     testDate?: SortOrder
-    totalMarks?: SortOrder
-    marksObtained?: SortOrder
-    grade?: SortOrder
+    assignedDate?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    totalMarks?: SortOrderInput | SortOrder
+    marksObtained?: SortOrderInput | SortOrder
+    grade?: SortOrderInput | SortOrder
     testId?: SortOrder
     clientAdminId?: SortOrder
     student?: StudentOrderByWithRelationInput
@@ -48578,9 +48626,12 @@ export namespace Prisma {
     courseId?: IntFilter<"StudentTest"> | number
     testName?: StringFilter<"StudentTest"> | string
     testDate?: DateTimeFilter<"StudentTest"> | Date | string
-    totalMarks?: IntFilter<"StudentTest"> | number
-    marksObtained?: IntFilter<"StudentTest"> | number
-    grade?: StringFilter<"StudentTest"> | string
+    assignedDate?: DateTimeFilter<"StudentTest"> | Date | string
+    description?: StringFilter<"StudentTest"> | string
+    status?: StringFilter<"StudentTest"> | string
+    totalMarks?: IntNullableFilter<"StudentTest"> | number | null
+    marksObtained?: IntNullableFilter<"StudentTest"> | number | null
+    grade?: StringNullableFilter<"StudentTest"> | string | null
     testId?: IntFilter<"StudentTest"> | number
     clientAdminId?: StringFilter<"StudentTest"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -48595,9 +48646,12 @@ export namespace Prisma {
     courseId?: SortOrder
     testName?: SortOrder
     testDate?: SortOrder
-    totalMarks?: SortOrder
-    marksObtained?: SortOrder
-    grade?: SortOrder
+    assignedDate?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    totalMarks?: SortOrderInput | SortOrder
+    marksObtained?: SortOrderInput | SortOrder
+    grade?: SortOrderInput | SortOrder
     testId?: SortOrder
     clientAdminId?: SortOrder
     _count?: StudentTestCountOrderByAggregateInput
@@ -48616,9 +48670,12 @@ export namespace Prisma {
     courseId?: IntWithAggregatesFilter<"StudentTest"> | number
     testName?: StringWithAggregatesFilter<"StudentTest"> | string
     testDate?: DateTimeWithAggregatesFilter<"StudentTest"> | Date | string
-    totalMarks?: IntWithAggregatesFilter<"StudentTest"> | number
-    marksObtained?: IntWithAggregatesFilter<"StudentTest"> | number
-    grade?: StringWithAggregatesFilter<"StudentTest"> | string
+    assignedDate?: DateTimeWithAggregatesFilter<"StudentTest"> | Date | string
+    description?: StringWithAggregatesFilter<"StudentTest"> | string
+    status?: StringWithAggregatesFilter<"StudentTest"> | string
+    totalMarks?: IntNullableWithAggregatesFilter<"StudentTest"> | number | null
+    marksObtained?: IntNullableWithAggregatesFilter<"StudentTest"> | number | null
+    grade?: StringNullableWithAggregatesFilter<"StudentTest"> | string | null
     testId?: IntWithAggregatesFilter<"StudentTest"> | number
     clientAdminId?: StringWithAggregatesFilter<"StudentTest"> | string
   }
@@ -51443,9 +51500,12 @@ export namespace Prisma {
   export type StudentTestCreateInput = {
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     student: StudentCreateNestedOneWithoutTestsInput
     course: CourseCreateNestedOneWithoutStudentTestsInput
     test: TestCreateNestedOneWithoutStudentTestInput
@@ -51458,9 +51518,12 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     testId: number
     clientAdminId: string
   }
@@ -51468,9 +51531,12 @@ export namespace Prisma {
   export type StudentTestUpdateInput = {
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutTestsNestedInput
     course?: CourseUpdateOneRequiredWithoutStudentTestsNestedInput
     test?: TestUpdateOneRequiredWithoutStudentTestNestedInput
@@ -51483,9 +51549,12 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -51496,9 +51565,12 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     testId: number
     clientAdminId: string
   }
@@ -51506,9 +51578,12 @@ export namespace Prisma {
   export type StudentTestUpdateManyMutationInput = {
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentTestUncheckedUpdateManyInput = {
@@ -51517,9 +51592,12 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -53917,6 +53995,9 @@ export namespace Prisma {
     courseId?: SortOrder
     testName?: SortOrder
     testDate?: SortOrder
+    assignedDate?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
     totalMarks?: SortOrder
     marksObtained?: SortOrder
     grade?: SortOrder
@@ -53939,6 +54020,9 @@ export namespace Prisma {
     courseId?: SortOrder
     testName?: SortOrder
     testDate?: SortOrder
+    assignedDate?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
     totalMarks?: SortOrder
     marksObtained?: SortOrder
     grade?: SortOrder
@@ -53952,6 +54036,9 @@ export namespace Prisma {
     courseId?: SortOrder
     testName?: SortOrder
     testDate?: SortOrder
+    assignedDate?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
     totalMarks?: SortOrder
     marksObtained?: SortOrder
     grade?: SortOrder
@@ -59494,9 +59581,12 @@ export namespace Prisma {
   export type StudentTestCreateWithoutClientAdminInput = {
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     student: StudentCreateNestedOneWithoutTestsInput
     course: CourseCreateNestedOneWithoutStudentTestsInput
     test: TestCreateNestedOneWithoutStudentTestInput
@@ -59508,9 +59598,12 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     testId: number
   }
 
@@ -60337,9 +60430,12 @@ export namespace Prisma {
     courseId?: IntFilter<"StudentTest"> | number
     testName?: StringFilter<"StudentTest"> | string
     testDate?: DateTimeFilter<"StudentTest"> | Date | string
-    totalMarks?: IntFilter<"StudentTest"> | number
-    marksObtained?: IntFilter<"StudentTest"> | number
-    grade?: StringFilter<"StudentTest"> | string
+    assignedDate?: DateTimeFilter<"StudentTest"> | Date | string
+    description?: StringFilter<"StudentTest"> | string
+    status?: StringFilter<"StudentTest"> | string
+    totalMarks?: IntNullableFilter<"StudentTest"> | number | null
+    marksObtained?: IntNullableFilter<"StudentTest"> | number | null
+    grade?: StringNullableFilter<"StudentTest"> | string | null
     testId?: IntFilter<"StudentTest"> | number
     clientAdminId?: StringFilter<"StudentTest"> | string
   }
@@ -62913,9 +63009,12 @@ export namespace Prisma {
   export type StudentTestCreateWithoutStudentInput = {
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     course: CourseCreateNestedOneWithoutStudentTestsInput
     test: TestCreateNestedOneWithoutStudentTestInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTestsInput
@@ -62926,9 +63025,12 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     testId: number
     clientAdminId: string
   }
@@ -63763,9 +63865,12 @@ export namespace Prisma {
   export type StudentTestCreateWithoutCourseInput = {
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     student: StudentCreateNestedOneWithoutTestsInput
     test: TestCreateNestedOneWithoutStudentTestInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTestsInput
@@ -63776,9 +63881,12 @@ export namespace Prisma {
     studentId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     testId: number
     clientAdminId: string
   }
@@ -71383,9 +71491,12 @@ export namespace Prisma {
   export type StudentTestCreateWithoutTestInput = {
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     student: StudentCreateNestedOneWithoutTestsInput
     course: CourseCreateNestedOneWithoutStudentTestsInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentTestsInput
@@ -71397,9 +71508,12 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     clientAdminId: string
   }
 
@@ -73926,9 +74040,12 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     testId: number
   }
 
@@ -74645,9 +74762,12 @@ export namespace Prisma {
   export type StudentTestUpdateWithoutClientAdminInput = {
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutTestsNestedInput
     course?: CourseUpdateOneRequiredWithoutStudentTestsNestedInput
     test?: TestUpdateOneRequiredWithoutStudentTestNestedInput
@@ -74659,9 +74779,12 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     testId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -74671,9 +74794,12 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     testId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -75107,9 +75233,12 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     testId: number
     clientAdminId: string
   }
@@ -75370,9 +75499,12 @@ export namespace Prisma {
   export type StudentTestUpdateWithoutStudentInput = {
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     course?: CourseUpdateOneRequiredWithoutStudentTestsNestedInput
     test?: TestUpdateOneRequiredWithoutStudentTestNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTestsNestedInput
@@ -75383,9 +75515,12 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -75395,9 +75530,12 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -75605,9 +75743,12 @@ export namespace Prisma {
     studentId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     testId: number
     clientAdminId: string
   }
@@ -75894,9 +76035,12 @@ export namespace Prisma {
   export type StudentTestUpdateWithoutCourseInput = {
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutTestsNestedInput
     test?: TestUpdateOneRequiredWithoutStudentTestNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTestsNestedInput
@@ -75907,9 +76051,12 @@ export namespace Prisma {
     studentId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -75919,9 +76066,12 @@ export namespace Prisma {
     studentId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     testId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -76766,18 +76916,24 @@ export namespace Prisma {
     courseId: number
     testName: string
     testDate: Date | string
-    totalMarks: number
-    marksObtained: number
-    grade: string
+    assignedDate: Date | string
+    description: string
+    status: string
+    totalMarks?: number | null
+    marksObtained?: number | null
+    grade?: string | null
     clientAdminId: string
   }
 
   export type StudentTestUpdateWithoutTestInput = {
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutTestsNestedInput
     course?: CourseUpdateOneRequiredWithoutStudentTestsNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentTestsNestedInput
@@ -76789,9 +76945,12 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -76801,9 +76960,12 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     testName?: StringFieldUpdateOperationsInput | string
     testDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    totalMarks?: IntFieldUpdateOperationsInput | number
-    marksObtained?: IntFieldUpdateOperationsInput | number
-    grade?: StringFieldUpdateOperationsInput | string
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
+    grade?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 

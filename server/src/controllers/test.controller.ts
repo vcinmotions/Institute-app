@@ -92,7 +92,7 @@ export async function addTestController(
       return res.status(409).json({
         error: "Duplicate test entry ❌",
       });
-    }
+    } 
 
     return res.status(500).json({
       error: "Internal server error",
@@ -207,6 +207,119 @@ export async function editTestController(
 
     return res.status(500).json({
       error: "Internal server error",
+    });
+  }
+}
+
+export async function addStudentTestController(
+  req: Request,
+  res: Response
+) {
+  const {
+    studentId,
+    testId,
+    assignedDate,
+    testDate,
+    description,
+    facultyId,
+  } = req.body;
+
+  console.log("ADD STUDENT TASK DATA in REQ.BODY:", req.body);
+
+  // ✅ Validation
+  if (!studentId || !testId || !assignedDate || !testDate || !description) {
+    return res.status(400).json({
+      error: "studentId, taskId, assignedDate, dueDate and description are required ❌",
+    });
+  }
+
+  const parsedStudentId = Number(studentId);
+  const parsedTestIdId = Number(testId);
+  const parsedFacultyId = facultyId ? Number(facultyId) : null;
+
+  if (isNaN(parsedStudentId) || isNaN(parsedTestIdId)) {
+    return res.status(400).json({
+      error: "studentId and taskId must be valid numbers ❌",
+    });
+  }
+
+  try {
+    const tenantPrisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!tenantPrisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized request" });
+    }
+
+    // ✅ Step 1: Check if Student Exists
+    const student = await tenantPrisma.student.findFirst({
+      where: {
+        id: parsedStudentId,
+        clientAdminId: user.clientAdminId,
+      },
+    });
+
+    if (!student) {
+      return res.status(404).json({
+        error: "Student not found ❌",
+      });
+    }
+
+    // ✅ Step 2: Check if Task Exists
+    const test = await tenantPrisma.test.findFirst({
+      where: {
+        id: parsedTestIdId,
+        status: "DRAFT",
+        clientAdminId: user.clientAdminId,
+      },
+    });
+
+    if (!test) {
+      return res.status(404).json({
+        error: "Test not found ❌",
+      });
+    }
+
+    // ✅ Step 3: Prevent Duplicate Assignment
+    const existingStudentTest = await tenantPrisma.studentTest.findFirst({
+      where: {
+        studentId: parsedStudentId,
+        testId: parsedTestIdId,
+      },
+    });
+
+    if (existingStudentTest) {
+      return res.status(409).json({
+        error: "Test already assigned to this student ❌",
+      });
+    }
+
+    // ✅ Step 4: Create StudentTask
+    const studentTest = await tenantPrisma.studentTest.create({
+      data: {
+        studentId: parsedStudentId,
+        testId: parsedTestIdId,
+        testName: test.name,
+        courseId: test.courseId,
+        assignedDate: new Date(assignedDate),
+        testDate: new Date(testDate),
+        description,
+        status: "PENDING",
+        clientAdminId: user.clientAdminId,
+      },
+    });
+
+    console.log("STUDENT TASK CREATED:", studentTest);
+
+    return res.status(201).json({
+      message: "Student test created successfully ✅",
+      studentTest,
+    });
+  } catch (err: any) {
+    console.error("Error creating student test:", err);
+
+    return res.status(500).json({
+      error: "Internal server error ❌",
     });
   }
 }

@@ -10,11 +10,18 @@ try {
 }
 
 export const isElectron = !!electronApp;
-export const isPackaged = isElectron && electronApp.isPackaged;
+//export const isPackaged = isElectron && electronApp.isPackaged;
+
+export const isPackaged = !!process.env.NODE_ENV && process.env.NODE_ENV === "production";
 
 export function getUserDataPath() {
-  if (isElectron && electronApp) {
-    return electronApp.getPath("userData");
+  // if (isElectron && electronApp) {
+  //   return electronApp.getPath("userData");
+  // }
+
+  // Use Electron path if passed via env
+  if (process.env.USER_DATA_PATH) {
+     return process.env.USER_DATA_PATH || path.join(electronApp.getPath("userData"), "VC Inmotions");
   }
 
   // fallback for pure Node

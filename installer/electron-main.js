@@ -86,6 +86,7 @@ function startBackend() {
   console.log("Backend Dir    :", backendDir);
   console.log("Node Path      :", nodePath);
   console.log("Backend File   :", backendFile);
+  console.log("userDataPath   :", userDataPath);
   console.log("==================================");
 
   console.log("GET NODE PATH:", nodePath);
@@ -107,6 +108,7 @@ function startBackend() {
         PORT: BACKEND_PORT,
         APP_ENV: "prod",
         NODE_ENV: "production",
+        USER_DATA_PATH: userDataPath, // 👈 pass the Electron userData path
       },
       windowsHide: false,
     });

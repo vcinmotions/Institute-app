@@ -36,10 +36,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-console.log("APP_ENV:", process.env.APP_ENV);
-console.log("DB_PROVIDER:", process.env.DB_PROVIDER);
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
-console.log("IS_PACKED:", isPackaged);
+console.log("APP_ENV in APP:", process.env.APP_ENV);
+console.log("DB_PROVIDER in APP:", process.env.DB_PROVIDER);
+console.log("DATABASE_URL in APP:", process.env.DATABASE_URL);
+console.log("CENTRAL_DATABASE_URL in APP:", process.env.CENTRAL_DATABASE_URL);
+console.log("TENANT_DATABASE_URL in APP:", process.env.TENANT_DATABASE_URL);
+console.log("IS_PACKED in APP:", isPackaged);
 
 
 // Serve static files from the 'uploads' directory
