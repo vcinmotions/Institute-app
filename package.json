@@ -53,13 +53,13 @@
         "to": "node/node.exe"
       },
       {
-      "from": "server/dist/prisma/central/data/central.db",
-      "to": "server/db/central_template.db"
-    },
-    {
-      "from": "server/dist/prisma/institute/data/tenant.db",
-      "to": "server/db/tenant_template.db"
-    } 
+        "from": "server/dist/prisma/central/data/central.db",
+        "to": "server/db/central_template.db"
+      },
+      {
+        "from": "server/dist/prisma/institute/data/tenant.db",
+        "to": "server/db/tenant_template.db"
+      }
     ],
     "directories": {
       "output": "dist"
@@ -74,6 +74,7 @@
     "electron-builder": "^25.1.8"
   },
   "dependencies": {
+    "dotenv": "^17.3.1",
     "electron-log": "^5.4.3",
     "express": "^5.2.1"
   }

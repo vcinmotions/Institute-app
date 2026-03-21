@@ -1,10 +1,57 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const { spawn } = require("child_process");
 const path = require("path");
 const net = require("net");
 const fs = require("fs");
 
+function loadEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) {
+    console.error("❌ ENV NOT FOUND:", filePath);
+    return;
+  }
+
+  const envContent = fs.readFileSync(filePath, "utf-8");
+
+  envContent.split("\n").forEach((line) => {
+    if (!line || line.startsWith("#")) return;
+
+    const index = line.indexOf("=");
+    if (index === -1) return;
+
+    const key = line.substring(0, index).trim();
+    const value = line.substring(index + 1).trim().replace(/^"|"$/g, "");
+
+    if (key && value) {
+      process.env[key] = value;
+    }
+  });
+}
+
+function loadGlobalEnv() {
+  const basePath = app.isPackaged
+    ? path.join(process.resourcesPath, "server", "dist")
+    : path.join(__dirname, "../server");
+
+  const globalEnv = path.join(basePath, ".env");
+  const prodEnv = path.join(basePath, ".env.prod");
+
+  console.log("Loading ENV:", globalEnv);
+  loadEnvFile(globalEnv);
+
+  console.log("Loading ENV:", prodEnv);
+  loadEnvFile(prodEnv);
+
+  if (!process.env.BACKUP_SECRET) {
+    throw new Error("❌ BACKUP_SECRET not loaded");
+  }
+
+  console.log("✅ BACKUP_SECRET:", process.env.BACKUP_SECRET);
+}
+
 const userDataPath = path.join(app.getPath("userData"), "VC Inmotions");
+
+console.log("ELECTRON USER DATA PATH:", userDataPath);
+
 if (!fs.existsSync(userDataPath)) fs.mkdirSync(userDataPath, { recursive: true });
 
 // -------------------- LOG SETUP --------------------
@@ -109,6 +156,7 @@ function startBackend() {
         APP_ENV: "prod",
         NODE_ENV: "production",
         USER_DATA_PATH: userDataPath, // 👈 pass the Electron userData path
+        BACKUP_SECRET: process.env.BACKUP_SECRET, // ✅ FORCE IT
       },
       windowsHide: false,
     });
@@ -273,7 +321,13 @@ async function createWindow() {
   }
 }
 
-app.whenReady().then(createWindow);
+// app.whenReady().then(createWindow);
+
+app.whenReady().then(() => {
+  loadGlobalEnv();   // ✅ VERY IMPORTANT
+
+  createWindow();
+});
 
 app.on("window-all-closed", () => {
   if (backendProcess) backendProcess.kill();
@@ -284,4 +338,91 @@ app.on("window-all-closed", () => {
 ipcMain.on("restart-app", () => {
   app.relaunch();
   app.exit();
+});
+
+/* ---------------- SELECT BACKUP FILE ---------------- */
+ipcMain.handle("select-backup-file", async () => {
+  try {
+    const result = await dialog.showOpenDialog({
+      title: "Select Backup File",
+      properties: ["openFile"],
+      filters: [{ name: "Backup Files", extensions: ["enc"] }],
+    });
+
+    if (result.canceled) return null;
+
+    return result.filePaths[0];
+  } catch (err) {
+    console.error("Select backup file failed:", err);
+    throw err;
+  }
+});
+
+ipcMain.handle("perform-restore", async (_, filePath) => {
+  try {
+    console.log("🔄 Restore triggered from UI");
+
+    /* ---------------- KILL RUNNING PROCESSES ---------------- */
+    if (backendProcess) {
+      backendProcess.kill();
+      backendProcess = null;
+    }
+
+    if (frontendProcess) {
+      frontendProcess.kill();
+      frontendProcess = null;
+    }
+
+    // 2. Call your backend restore logic DIRECTLY
+    const restoreModulePath = isDev
+    ? path.join(__dirname, "../server/dist/src/utils/restoreBackUp.js")
+    : path.join(process.resourcesPath, "server", "dist", "src", "utils", "restoreBackUp.js");
+
+    const { restoreBackup } = require(restoreModulePath);
+
+    await restoreBackup(filePath);
+
+    console.log("✅ Restore completed");
+
+    // 3. Restart app
+    app.relaunch();
+    app.exit();
+
+  } catch (err) {
+    console.error("❌ Restore failed:", err);
+    throw err;
+  }
+});
+
+/* ---------------- SAVE BACKUP FILE ---------------- */
+ipcMain.handle("save-backup-file", async (_, sourcePath) => {
+  try {
+    if (!fs.existsSync(sourcePath)) {
+      throw new Error("Backup file not found");
+    }
+
+    const result = await dialog.showSaveDialog({
+      title: "Save Backup",
+      defaultPath: "backup.enc",
+    });
+
+    if (result.canceled) return null;
+
+    await new Promise((resolve, reject) => {
+      const readStream = fs.createReadStream(sourcePath);
+      const writeStream = fs.createWriteStream(result.filePath);
+
+      readStream.on("error", reject);
+      writeStream.on("error", reject);
+      writeStream.on("finish", resolve);
+
+      readStream.pipe(writeStream);
+    });
+
+    return result.filePath;
+
+  } catch (err) {
+    console.error("Backup save failed:", err);
+    throw err;
+  }
 });

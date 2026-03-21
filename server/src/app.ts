@@ -31,6 +31,9 @@ import stationaryRoute from "../src/routes/stationary.routes";
 import attendanceRoute from "./routes/attendance.routes";
 import taskRoute from "./routes/task.routes";
 import testRoute from "./routes/test.routes";
+import systemRoute from "./routes/system.backup.routes";
+import { backupFullSystem } from "./utils/backUp";
+import { restoreBackup } from "./utils/restoreBackUp";
 
 const app = express();
 app.use(cors());
@@ -89,13 +92,14 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // app.use(express.json());
 
 // Schedule to run every 15 minutes
-cron.schedule("*/* * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
   console.log(`⏰ Cron Job Triggered at ${new Date().toLocaleString()}`);
   await runAllTenantFollowUps();
 });
 
 app.use("/api", tenantRoutes);
 app.use("/api", MasterRoute);
+app.use("/api", systemRoute);
 
 //app.use(tenantResolverMiddleware);
 // Apply rate limiter middleware globally or to specific routes

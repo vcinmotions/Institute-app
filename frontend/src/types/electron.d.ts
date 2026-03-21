@@ -26,7 +26,7 @@
 // }
 
 
-export {};
+export { };
 
 interface ElectronAuthAPI {
   setSession: (data: {
@@ -52,6 +52,9 @@ interface ElectronAuthAPI {
 
 interface ElectronAPI {
   restartApp: () => void;
+  selectBackupFile: () => Promise<string | null>;
+  saveBackupFile: (sourcePath: string) => Promise<void>;
+  performRestore: (filePath: string) => Promise<void>;
   auth: ElectronAuthAPI;
 }
 

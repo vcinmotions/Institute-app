@@ -346,7 +346,7 @@ export async function loginController(req: Request, res: Response) {
     //   data: {
     //     currentSessionToken: token,
     //     lastLoginAt: new Date(),
-    //   },
+    //   }, 
     // });
 
     if (userType === "ADMIN") {

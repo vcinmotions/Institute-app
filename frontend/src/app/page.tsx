@@ -13,15 +13,20 @@ export default function Home() {
   useEffect(() => {
     async function boot() {
       try {
-        
+
         // 1️⃣ Check setup status
         const res = await apiClient.get("/setup/status");
         console.log("GET SETUP STATUS IN FRONTEDN:", res);
 
         const status = res.data.setupComplete;
 
+        // if (status === "NOT_STARTED") {
+        //   router.replace("/setup");
+        //   return;
+        // }
+
         if (status === "NOT_STARTED") {
-          router.replace("/setup");
+          router.replace("/setup-choice"); // ✅ IMPORTANT
           return;
         }
 
@@ -30,27 +35,27 @@ export default function Home() {
           return;
         }
 
-      // 2️⃣ Restore session
-      console.log("WINDOW:", window);
-      const raw = window.localStorage.getItem("auth");
+        // 2️⃣ Restore session
+        console.log("WINDOW:", window);
+        const raw = window.localStorage.getItem("auth");
 
-      if (raw) {
-        const session = JSON.parse(raw);
+        if (raw) {
+          const session = JSON.parse(raw);
 
-        if (session?.token) {
-          dispatch(setUser(session));
-          dispatch(setToken(session.token));
+          if (session?.token) {
+            dispatch(setUser(session));
+            dispatch(setToken(session.token));
 
-          router.replace(
-            session.role === "MASTER_ADMIN"
-              ? "/master-dashboard"
-              : "/dashboard"
-          );
-          return;
+            router.replace(
+              session.role === "MASTER_ADMIN"
+                ? "/master-dashboard"
+                : "/dashboard"
+            );
+            return;
+          }
         }
-      }
 
-     
+
         // 3️⃣ Fallback: check token in sessionStorage (optional)
         const token = sessionStorage.getItem("token");
         if (!token) {

@@ -280,6 +280,12 @@ const navItems: NavItem[] = [
     path: "/master-dashboard/profile",
     roles: ["MASTER_ADMIN"], // allowed roles
   },
+  {
+    icon: <EnvelopeIcon />,
+    name: "Settings",
+    path: "/master-dashboard/settings",
+    roles: ["MASTER_ADMIN"], // allowed roles
+  },
 ];
 
 const othersItems: NavItem[] = [

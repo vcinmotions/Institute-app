@@ -20,11 +20,21 @@ export function getUserDataPath() {
   // }
 
   // Use Electron path if passed via env
+  // if (process.env.USER_DATA_PATH) {
+  //    return process.env.USER_DATA_PATH || path.join(electronApp.getPath("userData"), "VC Inmotions");
+  // }
+
+  // ✅ Always prefer Electron-passed path
   if (process.env.USER_DATA_PATH) {
-     return process.env.USER_DATA_PATH || path.join(electronApp.getPath("userData"), "VC Inmotions");
+    return process.env.USER_DATA_PATH;
   }
 
-  // fallback for pure Node
+  // ✅ If Electron available (dev fallback)
+  if (isElectron && electronApp) {
+    return path.join(electronApp.getPath("userData"), "VC Inmotions");
+  }
+
+  // ⚠️ Last fallback (non-electron)
   return path.join(process.cwd(), "data");
 }
 
