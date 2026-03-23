@@ -303,7 +303,6 @@ async function createWindow() {
     `data:text/html;charset=utf-8,${encodeURIComponent(loadingHTML)}`
   );
 
-  //newComment
 
   try {
     await startBackend();
