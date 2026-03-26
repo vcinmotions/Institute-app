@@ -197,19 +197,19 @@ export default function EditEnquiryForm({
       : [];
 
     const splicedContact = enquiryData.contact
-      ? enquiryData.contact.slice(-10) // last 10 digits
+      ? enquiryData.contact.slice(-10)
       : "";
 
     const splicedAlternateContact = enquiryData.alternateContact
-      ? enquiryData.alternateContact.slice(-10) // last 10 digits
+      ? enquiryData.alternateContact.slice(-10)
       : "";
 
     setNewEnquiry({
       id: enquiryData.id,
       name: enquiryData.name ?? "",
       email: enquiryData.email ?? "",
-      contact: enquiryData.contact,
-      alternateContact: enquiryData.alternateContact,
+      contact: splicedContact,                 // ✅ FIXED
+      alternateContact: splicedAlternateContact, // ✅ FIXED
       location: enquiryData.location ?? "",
       city: enquiryData.city ?? "",
       gender: enquiryData.gender ?? "",
@@ -252,10 +252,12 @@ export default function EditEnquiryForm({
 
 
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
-    let digitsOnly = phoneNumber.replace(/\D/g, "");
+    const safePhone = phoneNumber || ""; // 🛡️
 
-    // Remove country code digits if already present
-    const countryDigits = code.replace("+", "");
+    let digitsOnly = safePhone.replace(/\D/g, "");
+
+    const countryDigits = (code || "").replace("+", "");
+
     if (digitsOnly.startsWith(countryDigits)) {
       digitsOnly = digitsOnly.slice(countryDigits.length);
     }

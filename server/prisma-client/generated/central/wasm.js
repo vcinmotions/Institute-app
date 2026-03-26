@@ -86,6 +86,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -138,6 +141,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -175,7 +183,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\SHOBHA\\vcinmotions-application\\server\\prisma\\central\\schema.sqlite.prisma",
+    "sourceFilePath": "D:\\SHOBHA\\vcinmotions-application\\server\\prisma\\central\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -188,18 +196,18 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
   "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": "CENTRAL_DATABASE_URL",
+        "fromEnvVar": "DATABASE_URL",
         "value": null
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../../prisma-client/generated/central\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"CENTRAL_DATABASE_URL\")\n}\n\n// ✅ Copy all models from Postgres schema here\nmodel SuperAdmin {\n  id          String   @id @default(uuid())\n  name        String\n  email       String   @unique\n  password    String\n  contact     String?\n  position    String\n  country     String?\n  state       String?\n  city        String?\n  zipCode     String?\n  fullAddress String?\n  createdAt   DateTime @default(now())\n\n  currentSessionToken String?\n  lastLoginAt         DateTime?\n\n  role Role @default(MASTER_ADMIN)\n\n  // 🆕 ADD THESE (MUST MATCH POSTGRES)\n  basicComplete   Boolean @default(false)\n  addressComplete Boolean @default(false)\n}\n\nmodel Tenant {\n  id                String   @id @default(uuid())\n  name              String\n  contact           String\n  fullAddress       String\n  logo              String?\n  certificateName   String?\n  stamp             String?\n  sign              String?\n  position          String\n  country           String\n  state             String\n  city              String\n  zipCode           String\n  instituteName     String   @unique\n  tenantId          String   @unique\n  slug              String   @unique\n  email             String?  @unique\n  password          String?\n  encryptedPassword String\n  dbUrl             String\n  createdAt         DateTime @default(now())\n}\n\nenum Role {\n  MASTER_ADMIN\n}\n",
-  "inlineSchemaHash": "444632c89e57eeebef7c4fb8b0be9faf5b719fa391a4eae2850fe14d9ee19012",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../../prisma-client/generated/central\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel SuperAdmin {\n  id          String   @id @default(uuid())\n  name        String\n  email       String   @unique\n  password    String\n  contact     String?\n  position    String\n  country     String?\n  state       String?\n  city        String?\n  zipCode     String?\n  fullAddress String?\n  createdAt   DateTime @default(now())\n\n  currentSessionToken String?\n  lastLoginAt         DateTime?\n\n  role Role @default(MASTER_ADMIN)\n\n  // 🆕 ADD THESE\n  basicComplete   Boolean @default(false)\n  addressComplete Boolean @default(false)\n}\n\nmodel Tenant {\n  id                String   @id @default(uuid())\n  name              String\n  contact           String\n  fullAddress       String\n  logo              String?\n  certificateName   String?\n  stamp             String?\n  sign              String?\n  position          String\n  country           String\n  state             String\n  city              String\n  zipCode           String\n  instituteName     String   @unique\n  tenantId          String   @unique\n  slug              String   @unique // 👈 REQUIRED\n  email             String?  @unique // add this line\n  password          String?\n  encryptedPassword String\n  dbUrl             String\n  createdAt         DateTime @default(now())\n}\n\nenum Role {\n  MASTER_ADMIN\n}\n",
+  "inlineSchemaHash": "b599bce6d06940b7935a923dea6fb3efdd41455ab7ea2d37a995df1aeeb1136f",
   "copyEngine": true
 }
 config.dirname = '/'
@@ -218,7 +226,7 @@ config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({
   parsed: {
-    CENTRAL_DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['CENTRAL_DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.CENTRAL_DATABASE_URL || undefined
+    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
   }
 })
 

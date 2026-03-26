@@ -134,6 +134,7 @@ function startBackend() {
   console.log("Node Path      :", nodePath);
   console.log("Backend File   :", backendFile);
   console.log("userDataPath   :", userDataPath);
+  console.log("process.resourcesPath   :", process.resourcesPath);
   console.log("==================================");
 
   console.log("GET NODE PATH:", nodePath);
@@ -157,6 +158,7 @@ function startBackend() {
         NODE_ENV: "production",
         USER_DATA_PATH: userDataPath, // 👈 pass the Electron userData path
         BACKUP_SECRET: process.env.BACKUP_SECRET, // ✅ FORCE IT
+        RESOURCES_PATH: process.resourcesPath
       },
       windowsHide: false,
     });

@@ -267,6 +267,26 @@ const rootDir = isPackaged
   ? process.cwd()
   : path.resolve(__dirname, "../../");
 
+  /* ---------------- BASE PATH ---------------- */
+  const isProd = process.env.APP_ENV === "prod";
+  
+  if (isProd && !process.env.RESOURCES_PATH) {
+    throw new Error("❌ RESOURCES_PATH is not defined in production");
+  }
+  
+  const basePath = isProd
+    ? process.env.RESOURCES_PATH!   // ✅ MUST pass from Electron
+    : path.join(__dirname, "..", "..");
+  
+  /* ---------------- PATHS ---------------- */
+  
+  const nodePath = isProd
+    ? path.join(basePath, "node", "node.exe")
+    : "node";
+  
+  const prismaCLI = isProd
+    ? path.join(basePath, "server", "dist", "node_modules", "prisma", "build", "index.js")
+    : path.join(basePath, "node_modules", "prisma", "build", "index.js");
 
 /* -------------------------------------------------------
    ENV LOADING (SINGLE SOURCE OF TRUTH)
@@ -289,7 +309,7 @@ const envFile =
   console.log("DB_PORT:", process.env.DB_PORT);
 // Load active env
 
-const isProd = process.env.APP_ENV === "prod";
+// const isProd = process.env.APP_ENV === "prod";
 const isSqlite = process.env.DB_PROVIDER === "sqlite";
 
 console.log("is sqlite in central controller:", isSqlite);
@@ -459,7 +479,7 @@ export async function createCentralDB(clientId: string, options?: any) {
     //const envVar = isProd && isSqlite ? "CENTRAL_DATABASE_URL" : "DATABASE_URL";
 
     exec(
-      `npx prisma db push --schema="${centralSchemaPath}"`,
+      `"${nodePath}" "${prismaCLI}" db push --schema="${centralSchemaPath}"`,
       {
         env: {
           ...process.env,
@@ -484,7 +504,7 @@ export async function createCentralDB(clientId: string, options?: any) {
   /* ---------- MIGRATIONS ---------- */
   await new Promise<void>((resolve, reject) => {
     exec(
-      `npx prisma db push --accept-data-loss --schema="${centralSchema}"`,
+      `"${nodePath}" "${prismaCLI}" db push --accept-data-loss --schema="${centralSchema}"`,
       {
         env: {
           ...process.env,

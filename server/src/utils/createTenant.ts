@@ -570,6 +570,26 @@ const rootDir = isPackaged
   ? process.cwd() // Electron prod
   : path.resolve(__dirname, "../../"); // dev / node
 
+/* ---------------- BASE PATH ---------------- */
+const isProd = process.env.APP_ENV === "prod";
+
+if (isProd && !process.env.RESOURCES_PATH) {
+  throw new Error("❌ RESOURCES_PATH is not defined in production");
+}
+
+const basePath = isProd
+  ? process.env.RESOURCES_PATH!   // ✅ MUST pass from Electron
+  : path.join(__dirname, "..", "..");
+
+/* ---------------- PATHS ---------------- */
+
+const nodePath = isProd
+  ? path.join(basePath, "node", "node.exe")
+  : "node";
+
+const prismaCLI = isProd
+  ? path.join(basePath, "server", "dist", "node_modules", "prisma", "build", "index.js")
+  : path.join(basePath, "node_modules", "prisma", "build", "index.js");
 
 const envFile =
   process.env.APP_ENV === "prod" ? ".env.prod" : ".env.dev";
@@ -581,7 +601,7 @@ dotenv.config({
   override: false,
 });
 
-const isProd = process.env.APP_ENV === "prod";
+// const isProd = process.env.APP_ENV === "prod";
 const isSqlite = process.env.DB_PROVIDER === "sqlite";
 
 
@@ -644,7 +664,7 @@ function upsertEnvVariable(key: string, value: string) {
 
 
       exec(
-        `npx prisma db push --accept-data-loss --schema="${schemaPath}"`,
+        `"${nodePath}" "${prismaCLI}" db push --accept-data-loss --schema="${schemaPath}"`,
         {
           env: { ...process.env, DATABASE_URL: url },
         },
@@ -768,7 +788,7 @@ export async function createTenant(
 
 
       exec(
-        `npx prisma db push --accept-data-loss --schema="${tenantSchema}"`,
+        `"${nodePath}" "${prismaCLI}" db push --accept-data-loss --schema="${tenantSchema}"`,
         {
           env: { ...process.env, TENANT_DATABASE_URL: url, },
         },

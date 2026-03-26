@@ -22,12 +22,36 @@ const tenantSchema = path.join(
   "schema.sqlite.prisma"
 );
 
+/* ---------------- BASE PATH ---------------- */
+const isProd = process.env.APP_ENV === "prod";
+
+if (isProd && !process.env.RESOURCES_PATH) {
+  throw new Error("❌ RESOURCES_PATH is not defined in production");
+}
+
+const basePath = isProd
+  ? process.env.RESOURCES_PATH!   // ✅ MUST pass from Electron
+  : path.join(__dirname, "..", "..");
+
+/* ---------------- PATHS ---------------- */
+
+const nodePath = isProd
+  ? path.join(basePath, "node", "node.exe")
+  : "node";
+
+const prismaCLI = isProd
+  ? path.join(basePath, "server", "dist", "node_modules", "prisma", "build", "index.js")
+  : path.join(basePath, "node_modules", "prisma", "build", "index.js");
+
 export function runCentralMigrations() {
   const dbUrl = getCentralDbUrl();
 
   console.log("📦 Running CENTRAL migrations:", dbUrl);
+  console.log("basePath:", basePath);
+  console.log("nodePath:", nodePath);
+  console.log("prismaCLI:", prismaCLI);
 
-  execSync(`npx prisma db push --accept-data-loss --schema="${centralSchema}"`, {
+  execSync(`"${nodePath}" "${prismaCLI}" db push --accept-data-loss --schema="${centralSchema}"`, {
     env: {
       ...process.env,
       CENTRAL_DATABASE_URL: dbUrl,
@@ -60,7 +84,7 @@ export function runTenantMigrations() {
 
     console.log("📦 Migrating tenant DB:", dbUrl);
 
-    execSync(`npx prisma db push --accept-data-loss --schema="${tenantSchema}"`, {
+    execSync(`"${nodePath}" "${prismaCLI}" db push --accept-data-loss --schema="${tenantSchema}"`, {
       env: {
         ...process.env,
         TENANT_DATABASE_URL: dbUrl,

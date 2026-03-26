@@ -114,6 +114,9 @@ Prisma.NullTypes = {
  */
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -172,15 +175,15 @@ exports.Prisma.EnquiryScalarFieldEnum = {
   srNo: 'srNo',
   name: 'name',
   contact: 'contact',
-  email: 'email',
-  course: 'course',
-  source: 'source',
   alternateContact: 'alternateContact',
+  email: 'email',
   age: 'age',
   location: 'location',
   city: 'city',
+  course: 'course',
   gender: 'gender',
   dob: 'dob',
+  source: 'source',
   referedBy: 'referedBy',
   leadStatus: 'leadStatus',
   enquiryDate: 'enquiryDate',
@@ -513,24 +516,14 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.JsonNullValueInput = {
-  JsonNull: Prisma.JsonNull
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
-};
-
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
 };
 exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN',
