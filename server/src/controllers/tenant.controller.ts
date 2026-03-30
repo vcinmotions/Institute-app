@@ -27,6 +27,8 @@ export async function createTenantController(req: Request, res: Response) {
     zipCode,
     certificateName,
     fullAddress,
+    financialStartDate,   // ✅ ADD
+    financialEndDate      // ✅ ADD
   } = req.body;
 
   const files = req.files as {
@@ -57,7 +59,9 @@ export async function createTenantController(req: Request, res: Response) {
     !state ||
     !city ||
     !zipCode ||
-    !fullAddress
+    !fullAddress ||
+    !financialStartDate ||   // ✅ ADD
+    !financialEndDate        // ✅ ADD
   ) {
     return res.status(400).json({ error: "Missing required fields." });
   }
@@ -105,6 +109,8 @@ export async function createTenantController(req: Request, res: Response) {
       city,
       zipCode,
       fullAddress,
+      financialStartDate,   // ✅ ADD
+      financialEndDate,      // ✅ ADD
       logo ?? "", // logo is required
       stamp ?? "", // convert null → ""
       sign ?? "",

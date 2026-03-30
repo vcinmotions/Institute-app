@@ -19,7 +19,7 @@ interface DefaultInputsProps {
 
 interface CourseData {
   description: string;
-  durationWeeks: string;
+  durationMonths: string;
   name: string; // ✅ this matches backend
   paymentType: string;
   totalAmount: string;
@@ -30,13 +30,13 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
   const [newCourse, setNewCourse] = useState<CourseData>({
     name: "",
     description: "",
-    durationWeeks: "",
+    durationMonths: "",
     paymentType: "",
     totalAmount: "",
     installmentCount: "",
   });
 
-    // New state for alert
+  // New state for alert
   const [alert, setAlert] = useState<{ show: boolean; title: string; message: string; variant: string }>({
     show: false,
     title: '',
@@ -46,7 +46,7 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
 
   const [errors, setErrors] = useState<Partial<CourseData>>({});
   const { mutate: createCourse } = useCreateCourse();
-   const countries = [
+  const countries = [
     { code: "IN", label: "+91" },
     { code: "US", label: "+1" },
     { code: "GB", label: "+44" },
@@ -60,17 +60,17 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
   }, []);
 
   const handlePhoneNumberChange = (phoneNumber: string) => {
-  setNewCourse((prev) => ({
-    ...prev,
-    contact: phoneNumber,
-  }));
+    setNewCourse((prev) => ({
+      ...prev,
+      contact: phoneNumber,
+    }));
 
-  // Clear error if any
-  setErrors((prev) => ({
-    ...prev,
-    contact: "",
-  }));
-};
+    // Clear error if any
+    setErrors((prev) => ({
+      ...prev,
+      contact: "",
+    }));
+  };
 
   const paymentType = [
     { value: "ONE_TIME", label: "One Time" },
@@ -84,8 +84,8 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
       newErrors.description = "Name is required.";
     }
 
-    if (!newCourse.durationWeeks.trim()) {
-      newErrors.durationWeeks = "Name is required.";
+    if (!newCourse.durationMonths.trim()) {
+      newErrors.durationMonths = "Name is required.";
     }
 
     if (!newCourse.name.trim()) {
@@ -167,32 +167,32 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
     }
 
     createCourse(newCourse, {
-    onSuccess: () => {
-       setNewCourse({ description: "", durationWeeks: "", name: "", paymentType: "", totalAmount: "", installmentCount: ""});
+      onSuccess: () => {
+        setNewCourse({ description: "", durationMonths: "", name: "", paymentType: "", totalAmount: "", installmentCount: "" });
 
-      setAlert({
+        setAlert({
           show: true,
           title: "Enquiry Created",
           message: "Your enquiry has been successfully submitted.",
           variant: "success",
         });
 
-      setTimeout(() => {
-        onCloseModal();
-      }, 3000);
-    },
+        setTimeout(() => {
+          onCloseModal();
+        }, 3000);
+      },
 
-    onError: () => {
-      // You already handle error via redux + toast
-    },
-  });
+      onError: () => {
+        // You already handle error via redux + toast
+      },
+    });
   };
 
   return (
     <ModalCard title="Create New Course" oncloseModal={onCloseModal}>
       <div className="space-y-6">
-        {alert.show && 
-        (<Alert
+        {alert.show &&
+          (<Alert
             variant={alert.title === "Enquiry Created" ? "success" : "error"}
             title={alert.title}
             message={alert.message}
@@ -207,12 +207,12 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
             type="text"
             placeholder="Ex. Full Stack Developer"
             value={newCourse.name}
-            onChange={(e) => handleChange("name", e.target.value)}        />
+            onChange={(e) => handleChange("name", e.target.value)} />
           {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
         </div>
 
 
-        
+
 
         <div>
           <Label>Duration Weeks</Label>
@@ -220,12 +220,12 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
             type="text"
             tabIndex={2}
             placeholder="12"
-            value={newCourse.durationWeeks}
-            onChange={(e) => handleChange("durationWeeks", e.target.value)}         />
-          {errors.durationWeeks && <p className="text-red-500 text-sm">{errors.durationWeeks}</p>}
+            value={newCourse.durationMonths}
+            onChange={(e) => handleChange("durationMonths", e.target.value)} />
+          {errors.durationMonths && <p className="text-red-500 text-sm">{errors.durationMonths}</p>}
         </div>
 
-        
+
         <div>
           <Label>Description</Label>
           <Input
@@ -233,11 +233,11 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
             tabIndex={3}
             placeholder="Course..."
             value={newCourse.description}
-            onChange={(e) => handleChange("description", e.target.value)}         />
+            onChange={(e) => handleChange("description", e.target.value)} />
           {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
         </div>
 
-        
+
 
         <div>
           <Label>Course Amount</Label>
@@ -246,7 +246,7 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
             tabIndex={4}
             placeholder="12000"
             value={newCourse.totalAmount}
-            onChange={(e) => handleChange("totalAmount", e.target.value)}         />
+            onChange={(e) => handleChange("totalAmount", e.target.value)} />
           {errors.totalAmount && <p className="text-red-500 text-sm">{errors.totalAmount}</p>}
         </div>
 
@@ -263,7 +263,7 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
             <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
               <ChevronDownIcon />
             </span>
-          </div>  
+          </div>
           {errors.paymentType && <p className="text-red-500 text-sm">{errors.paymentType}</p>}
         </div>
 

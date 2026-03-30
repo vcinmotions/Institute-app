@@ -66,7 +66,7 @@ import { getEnquiry } from "@/lib/api/enquiry";
 export interface Enquiry {
   id: string;
   name: string;
-  durationWeeks: string;
+  durationMonths: string;
   description: string;
 }
 

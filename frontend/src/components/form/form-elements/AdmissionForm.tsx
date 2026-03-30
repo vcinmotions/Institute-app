@@ -61,7 +61,7 @@ interface NewEnquiryData {
   permenantAddress: string;
   parentsContact: string;
   fatherName: string;
-  motherName: string;
+  qualification: string;
   religion: string;
 }
 
@@ -84,7 +84,7 @@ interface NewEnquiryDataAll {
   permenantAddress: string;
   parentsContact: string;
   fatherName: string;
-  motherName: string;
+  qualification: string;
   religion: string;
   installmentTypeId: string;
   selectedProfilePicture: any[];
@@ -133,7 +133,7 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
     permenantAddress: "",
     parentsContact: "",
     fatherName: "",
-    motherName: "",
+    qualification: "",
     dob: "",
     religion: "",
 
@@ -201,7 +201,7 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
         });
 
         dispatch(setBatches(responseBatch.batch));
-      } catch (error) {}
+      } catch (error) { }
     };
 
     fetchData();
@@ -434,17 +434,19 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
 
     const formattedNumber = countryCode + digitsOnly;
 
-    if(field == "contact"){
-    setEnquiryData((prev) => ({
-      ...prev,
-      [field]: formattedNumber,
-    }));}
+    if (field == "contact") {
+      setEnquiryData((prev) => ({
+        ...prev,
+        [field]: formattedNumber,
+      }));
+    }
 
-    if(field == "contact"){
-    setFilledEnquiryData((prev) => ({
-      ...prev,
-      [field]: formattedNumber,
-    }));}
+    if (field == "contact") {
+      setFilledEnquiryData((prev) => ({
+        ...prev,
+        [field]: formattedNumber,
+      }));
+    }
 
     setErrors((prev) => ({
       ...prev,
@@ -526,8 +528,8 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
     // 🔹 Extended Admission Details
     if (!filledEnquiryData.fatherName.trim())
       newErrors.fatherName = "Father's name is required.";
-    if (!filledEnquiryData.motherName.trim())
-      newErrors.motherName = "Mother's name is required.";
+    if (!filledEnquiryData.qualification.trim())
+      newErrors.qualification = "qualification is required.";
     if (!filledEnquiryData.gender.trim())
       newErrors.gender = "Gender is required.";
 
@@ -809,7 +811,7 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
       permenantAddress: filledEnquiryData.permenantAddress,
       parentsContact: filledEnquiryData.parentsContact,
       fatherName: filledEnquiryData.fatherName,
-      motherName: filledEnquiryData.motherName,
+      qualification: filledEnquiryData.qualification,
       dob: filledEnquiryData.dob,
       religion: filledEnquiryData.religion,
 
@@ -892,7 +894,7 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
         </div>
         <div
           ref={(el) => {
-            inputRefs.current["motherName"] = el;
+            inputRefs.current["mothqualificationerName"] = el;
           }}
         >
           <Label>Mother's Name</Label>
@@ -900,11 +902,11 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
             type="text"
             tabIndex={3}
             placeholder="Ex. Mumbai, Maharashtra"
-            value={filledEnquiryData.motherName}
-            onChange={(e) => handleChange("motherName", e.target.value)}
+            value={filledEnquiryData.qualification}
+            onChange={(e) => handleChange("qualification", e.target.value)}
           />
-          {errors.motherName && (
-            <p className="text-sm text-red-500">{errors.motherName}</p>
+          {errors.qualification && (
+            <p className="text-sm text-red-500">{errors.qualification}</p>
           )}
         </div>
         <div
@@ -1104,9 +1106,9 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
                       ? selectedCourse?.courseFeeStructure?.totalAmount || ""
                       : row.paymentType === "INSTALLMENT"
                         ? installmentTypes.find(
-                            (i: any) =>
-                              i.id.toString() === row.installmentTypeId,
-                          )?.amount || ""
+                          (i: any) =>
+                            i.id.toString() === row.installmentTypeId,
+                        )?.amount || ""
                         : ""
                   }
                 />
@@ -1162,7 +1164,7 @@ export default function AdmissionForm({ onCloseModal }: DefaultInputsProps) {
             <span className="capitalize">
               {filledEnquiryData.idProofType
                 ? filledEnquiryData.idProofType.charAt(0).toUpperCase() +
-                  filledEnquiryData.idProofType.slice(1).toLowerCase()
+                filledEnquiryData.idProofType.slice(1).toLowerCase()
                 : ""}
             </span>{" "}
             Number

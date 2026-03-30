@@ -128,11 +128,11 @@ export default function CourseDataTable({
                       </div>
                     </TableCell>
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.durationWeeks} Weeks
+                      {item.durationMonths} Weeks
                     </TableCell>
-    
+
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-    
+
                       {new Intl.NumberFormat("en-IN").format(
                         item.courseFeeStructure?.totalAmount ?? 0,
                       )}{" "}

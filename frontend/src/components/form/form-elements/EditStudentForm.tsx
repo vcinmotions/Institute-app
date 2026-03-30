@@ -50,7 +50,7 @@ interface NewEnquiryData {
   permenantAddress: string;
   parentsContact: string;
   fatherName: string;
-  motherName: string;
+  qualification: string;
   religion: string;
 }
 
@@ -67,7 +67,7 @@ interface NewEnquiryDataAll {
   permenantAddress: string;
   parentsContact: string;
   fatherName: string;
-  motherName: string;
+  qualification: string;
   religion: string;
 }
 
@@ -99,7 +99,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
     permenantAddress: "",
     parentsContact: "",
     fatherName: "",
-    motherName: "",
+    qualification: "",
     dob: "",
     religion: "",
 
@@ -176,7 +176,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
       permenantAddress: student.permenantAddress ?? "",
       parentsContact: student.parentsContact ?? "",
       fatherName: student.fatherName ?? "",
-      motherName: student.motherName ?? "",
+      qualification: student.qualification ?? "",
       religion: student.religion ?? "",
 
       facultyId: "",
@@ -239,8 +239,8 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
     // 🔹 Extended Admission Details
     if (!filledEnquiryData.fatherName.trim())
       newErrors.fatherName = "Father's name is required.";
-    if (!filledEnquiryData.motherName.trim())
-      newErrors.motherName = "Mother's name is required.";
+    if (!filledEnquiryData.qualification.trim())
+      newErrors.qualification = "Qualification is required.";
     if (!filledEnquiryData.gender.trim())
       newErrors.gender = "Gender is required.";
 
@@ -641,7 +641,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
       permenantAddress: filledEnquiryData.permenantAddress,
       parentsContact: filledEnquiryData.parentsContact,
       fatherName: filledEnquiryData.fatherName,
-      motherName: filledEnquiryData.motherName,
+      qualification: filledEnquiryData.qualification,
       dob: filledEnquiryData.dob,
       religion: filledEnquiryData.religion,
     };
@@ -726,7 +726,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
         </div>
         <div
           ref={(el) => {
-            inputRefs.current["motherName"] = el;
+            inputRefs.current["qualification"] = el;
           }}
         >
           <Label>Mother's Name</Label>
@@ -734,11 +734,11 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             type="text"
             tabIndex={3}
             placeholder="Ex. Mumbai, Maharashtra"
-            value={filledEnquiryData.motherName}
-            onChange={(e) => handleExtendedChange("motherName", e.target.value)}
+            value={filledEnquiryData.qualification}
+            onChange={(e) => handleExtendedChange("qualification", e.target.value)}
           />
-          {errors.motherName && (
-            <p className="text-sm text-red-500">{errors.motherName}</p>
+          {errors.qualification && (
+            <p className="text-sm text-red-500">{errors.qualification}</p>
           )}
         </div>
         <div

@@ -2,7 +2,7 @@
 
 export const computerDataOperatorCourse = {
   courseName: "Computer Data Operator",
-  durationWeeks: 24,
+  durationMonths: 24,
   description:
     "A complete training program designed to equip students with skills in computer operations, data management, office productivity tools, and advanced data handling for real-world office environments.",
 

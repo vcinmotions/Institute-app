@@ -320,7 +320,7 @@ const AdmissionForm: React.FC<Props> = ({
                       {course?.name?.toLocaleUpperCase()}
                     </td>
                     <td className="border p-2">
-                      <strong>Duration:</strong> {course?.durationWeeks ?? "--"}{" "}
+                      <strong>Duration:</strong> {course?.durationMonths ?? "--"}{" "}
                       Weeks
                     </td>
                   </tr>

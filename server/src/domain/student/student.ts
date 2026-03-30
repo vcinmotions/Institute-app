@@ -12,7 +12,7 @@ export class Student {
   admissionDate!: Date;
   religion!: string;
   fatherName!: string;
-  motherName!: string;
+  qualification!: string;
   dob!: Date;
   gender!: "MALE" | "FEMALE" | "OTHER";
   parentsContact!: string;

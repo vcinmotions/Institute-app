@@ -21,7 +21,7 @@ type EditStudentPayload = {
   permenantAddress?: string;
   parentsContact?: string;
   fatherName: string;
-  motherName?: string;
+  qualification?: string;
   dob: string;
   gender: string;
   religion?: string;

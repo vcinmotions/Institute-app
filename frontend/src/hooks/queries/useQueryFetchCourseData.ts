@@ -5,7 +5,7 @@ import { apiClient } from "@/lib/apiClient";
 export interface Course {
   id: string;
   name: string;
-  durationWeeks: string;
+  durationMonths: string;
   description: string;
 }
 

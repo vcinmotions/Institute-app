@@ -19,7 +19,7 @@
 
 // interface CourseData {
 //   description: string;
-//   durationWeeks: string;
+//   durationMonths: string;
 //   name: string; // ✅ this matches backend
 //   paymentType: string[];
 //   totalAmount: string;
@@ -36,7 +36,7 @@
 //   const [newCourse, setNewCourse] = useState<CourseData>({
 //     name: "",
 //     description: "",
-//     durationWeeks: "",
+//     durationMonths: "",
 //     paymentType: [],
 //     totalAmount: "",
 //   });
@@ -95,7 +95,7 @@
 //   //   setNewCourse((prev) => ({
 //   //     name: form.name || prev.name,
 //   //     description: form.description || prev.description,
-//   //     durationWeeks: form.durationWeeks || prev.durationWeeks,
+//   //     durationMonths: form.durationMonths || prev.durationMonths,
 //   //     paymentType: form.paymentType?.length
 //   //       ? form.paymentType
 //   //       : prev.paymentType,
@@ -110,7 +110,7 @@
 //       ...prev,
 //       name: form.name ?? prev.name,
 //       description: form.description ?? prev.description,
-//       durationWeeks: form.durationWeeks ?? prev.durationWeeks,
+//       durationMonths: form.durationMonths ?? prev.durationMonths,
 //       totalAmount: form.totalAmount ?? prev.totalAmount,
 //       paymentType: form && form.paymentType
 //       ? Array.isArray(form.paymentType) && form.paymentType.length > 0
@@ -127,7 +127,7 @@
 //   //   setNewCourse({
 //   //     name: form.name || "",
 //   //     description: form.description || "",
-//   //     durationWeeks: form.durationWeeks || "",
+//   //     durationMonths: form.durationMonths || "",
 //   //     paymentType: form.paymentType || "",
 //   //     totalAmount: form.totalAmount || "",
 //   //   });
@@ -189,8 +189,8 @@
 //   const validate = () => {
 //     const newErrors: FormErrors = {};
 
-//     if (!newCourse.durationWeeks.trim()) {
-//       newErrors.durationWeeks = "Name is required.";
+//     if (!newCourse.durationMonths.trim()) {
+//       newErrors.durationMonths = "Name is required.";
 //     }
 
 //     if (!newCourse.name.trim()) {
@@ -251,7 +251,7 @@
 //   const handleChange = (field: keyof CourseData, value: string) => {
 
 //     // ✅ Ensure non-negative
-//   if (["durationWeeks", "totalAmount"].includes(field)) {
+//   if (["durationMonths", "totalAmount"].includes(field)) {
 //     const numericValue = Number(value);
 //     if (numericValue < 0) return; // ignore negative
 //   }
@@ -335,7 +335,7 @@
 //       onSuccess: () => {
 //         setNewCourse({
 //           description: "",
-//           durationWeeks: "",
+//           durationMonths: "",
 //           name: "",
 //           paymentType: [],
 //           totalAmount: "",
@@ -400,19 +400,19 @@
 //           </div>
 
 //           <div ref={(el) => {
-//                 inputRefs.current.durationWeeks = el;
+//                 inputRefs.current.durationMonths = el;
 //               }}>
 //             <Label>Duration Weeks *</Label>
 //             <Input
 //               type="number"
 //               min={0}              // ✅ Prevents negatives
-             
+
 //               placeholder="Enter Duration"
-//               value={newCourse.durationWeeks}
-//               onChange={(e) => handleChange("durationWeeks", e.target.value)}
+//               value={newCourse.durationMonths}
+//               onChange={(e) => handleChange("durationMonths", e.target.value)}
 //             />
-//             {errors.durationWeeks && (
-//               <p className="text-sm text-red-500">{errors.durationWeeks}</p>
+//             {errors.durationMonths && (
+//               <p className="text-sm text-red-500">{errors.durationMonths}</p>
 //             )}
 //           </div>
 
@@ -423,7 +423,7 @@
 //             <Input
 //               type="number"
 //               min={0}
-              
+
 //               placeholder="Enter Amount"
 //               value={newCourse.totalAmount}
 //               onChange={(e) => handleChange("totalAmount", e.target.value)}
@@ -573,6 +573,6 @@ export const metadata: Metadata = {
 
 export default function CreateCourse() {
   return (
-    <CourseForm/>
+    <CourseForm />
   );
 }

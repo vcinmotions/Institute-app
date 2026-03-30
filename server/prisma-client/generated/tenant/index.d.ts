@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type ClientAdmin = $Result.DefaultSelection<Prisma.$ClientAdminPayload>
 /**
+ * Model FinancialYear
+ * 
+ */
+export type FinancialYear = $Result.DefaultSelection<Prisma.$FinancialYearPayload>
+/**
  * Model RoleUser
  * 
  */
@@ -432,6 +437,16 @@ export class PrismaClient<
     * ```
     */
   get clientAdmin(): Prisma.ClientAdminDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.financialYear`: Exposes CRUD operations for the **FinancialYear** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FinancialYears
+    * const financialYears = await prisma.financialYear.findMany()
+    * ```
+    */
+  get financialYear(): Prisma.FinancialYearDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.roleUser`: Exposes CRUD operations for the **RoleUser** model.
@@ -1193,6 +1208,7 @@ export namespace Prisma {
 
   export const ModelName: {
     ClientAdmin: 'ClientAdmin',
+    FinancialYear: 'FinancialYear',
     RoleUser: 'RoleUser',
     ActivityLog: 'ActivityLog',
     Enquiry: 'Enquiry',
@@ -1243,7 +1259,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "clientAdmin" | "roleUser" | "activityLog" | "enquiry" | "enquiryCourse" | "followUp" | "notification" | "admissionNumberConfig" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
+      modelProps: "clientAdmin" | "financialYear" | "roleUser" | "activityLog" | "enquiry" | "enquiryCourse" | "followUp" | "notification" | "admissionNumberConfig" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1318,6 +1334,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ClientAdminCountArgs<ExtArgs>
             result: $Utils.Optional<ClientAdminCountAggregateOutputType> | number
+          }
+        }
+      }
+      FinancialYear: {
+        payload: Prisma.$FinancialYearPayload<ExtArgs>
+        fields: Prisma.FinancialYearFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FinancialYearFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FinancialYearFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>
+          }
+          findFirst: {
+            args: Prisma.FinancialYearFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FinancialYearFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>
+          }
+          findMany: {
+            args: Prisma.FinancialYearFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>[]
+          }
+          create: {
+            args: Prisma.FinancialYearCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>
+          }
+          createMany: {
+            args: Prisma.FinancialYearCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FinancialYearCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>[]
+          }
+          delete: {
+            args: Prisma.FinancialYearDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>
+          }
+          update: {
+            args: Prisma.FinancialYearUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>
+          }
+          deleteMany: {
+            args: Prisma.FinancialYearDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FinancialYearUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FinancialYearUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>[]
+          }
+          upsert: {
+            args: Prisma.FinancialYearUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinancialYearPayload>
+          }
+          aggregate: {
+            args: Prisma.FinancialYearAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFinancialYear>
+          }
+          groupBy: {
+            args: Prisma.FinancialYearGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FinancialYearGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FinancialYearCountArgs<ExtArgs>
+            result: $Utils.Optional<FinancialYearCountAggregateOutputType> | number
           }
         }
       }
@@ -3786,6 +3876,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     clientAdmin?: ClientAdminOmit
+    financialYear?: FinancialYearOmit
     roleUser?: RoleUserOmit
     activityLog?: ActivityLogOmit
     enquiry?: EnquiryOmit
@@ -3898,6 +3989,7 @@ export namespace Prisma {
    */
 
   export type ClientAdminCountOutputType = {
+    financialYears: number
     roleUsers: number
     faculties: number
     batches: number
@@ -3918,15 +4010,16 @@ export namespace Prisma {
     courseCompletions: number
     certificates: number
     financialRecords: number
-    StationeryItems: number
     enquiries: number
     notifications: number
     courseFeeStructures: number
     tasks: number
     tests: number
+    StationeryItems: number
   }
 
   export type ClientAdminCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    financialYears?: boolean | ClientAdminCountOutputTypeCountFinancialYearsArgs
     roleUsers?: boolean | ClientAdminCountOutputTypeCountRoleUsersArgs
     faculties?: boolean | ClientAdminCountOutputTypeCountFacultiesArgs
     batches?: boolean | ClientAdminCountOutputTypeCountBatchesArgs
@@ -3947,12 +4040,12 @@ export namespace Prisma {
     courseCompletions?: boolean | ClientAdminCountOutputTypeCountCourseCompletionsArgs
     certificates?: boolean | ClientAdminCountOutputTypeCountCertificatesArgs
     financialRecords?: boolean | ClientAdminCountOutputTypeCountFinancialRecordsArgs
-    StationeryItems?: boolean | ClientAdminCountOutputTypeCountStationeryItemsArgs
     enquiries?: boolean | ClientAdminCountOutputTypeCountEnquiriesArgs
     notifications?: boolean | ClientAdminCountOutputTypeCountNotificationsArgs
     courseFeeStructures?: boolean | ClientAdminCountOutputTypeCountCourseFeeStructuresArgs
     tasks?: boolean | ClientAdminCountOutputTypeCountTasksArgs
     tests?: boolean | ClientAdminCountOutputTypeCountTestsArgs
+    StationeryItems?: boolean | ClientAdminCountOutputTypeCountStationeryItemsArgs
   }
 
   // Custom InputTypes
@@ -3964,6 +4057,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the ClientAdminCountOutputType
      */
     select?: ClientAdminCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ClientAdminCountOutputType without action
+   */
+  export type ClientAdminCountOutputTypeCountFinancialYearsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FinancialYearWhereInput
   }
 
   /**
@@ -4109,13 +4209,6 @@ export namespace Prisma {
   /**
    * ClientAdminCountOutputType without action
    */
-  export type ClientAdminCountOutputTypeCountStationeryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: StationeryItemWhereInput
-  }
-
-  /**
-   * ClientAdminCountOutputType without action
-   */
   export type ClientAdminCountOutputTypeCountEnquiriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EnquiryWhereInput
   }
@@ -4146,6 +4239,13 @@ export namespace Prisma {
    */
   export type ClientAdminCountOutputTypeCountTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TestWhereInput
+  }
+
+  /**
+   * ClientAdminCountOutputType without action
+   */
+  export type ClientAdminCountOutputTypeCountStationeryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StationeryItemWhereInput
   }
 
 
@@ -5158,6 +5258,7 @@ export namespace Prisma {
     role?: boolean
     currentSessionToken?: boolean
     lastLoginAt?: boolean
+    financialYears?: boolean | ClientAdmin$financialYearsArgs<ExtArgs>
     roleUsers?: boolean | ClientAdmin$roleUsersArgs<ExtArgs>
     faculties?: boolean | ClientAdmin$facultiesArgs<ExtArgs>
     batches?: boolean | ClientAdmin$batchesArgs<ExtArgs>
@@ -5178,12 +5279,12 @@ export namespace Prisma {
     courseCompletions?: boolean | ClientAdmin$courseCompletionsArgs<ExtArgs>
     certificates?: boolean | ClientAdmin$certificatesArgs<ExtArgs>
     financialRecords?: boolean | ClientAdmin$financialRecordsArgs<ExtArgs>
-    StationeryItems?: boolean | ClientAdmin$StationeryItemsArgs<ExtArgs>
     enquiries?: boolean | ClientAdmin$enquiriesArgs<ExtArgs>
     notifications?: boolean | ClientAdmin$notificationsArgs<ExtArgs>
     courseFeeStructures?: boolean | ClientAdmin$courseFeeStructuresArgs<ExtArgs>
     tasks?: boolean | ClientAdmin$tasksArgs<ExtArgs>
     tests?: boolean | ClientAdmin$testsArgs<ExtArgs>
+    StationeryItems?: boolean | ClientAdmin$StationeryItemsArgs<ExtArgs>
     _count?: boolean | ClientAdminCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clientAdmin"]>
 
@@ -5261,6 +5362,7 @@ export namespace Prisma {
 
   export type ClientAdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "instituteName" | "slug" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "contact" | "position" | "country" | "state" | "city" | "zipCode" | "createdAt" | "role" | "currentSessionToken" | "lastLoginAt", ExtArgs["result"]["clientAdmin"]>
   export type ClientAdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    financialYears?: boolean | ClientAdmin$financialYearsArgs<ExtArgs>
     roleUsers?: boolean | ClientAdmin$roleUsersArgs<ExtArgs>
     faculties?: boolean | ClientAdmin$facultiesArgs<ExtArgs>
     batches?: boolean | ClientAdmin$batchesArgs<ExtArgs>
@@ -5281,12 +5383,12 @@ export namespace Prisma {
     courseCompletions?: boolean | ClientAdmin$courseCompletionsArgs<ExtArgs>
     certificates?: boolean | ClientAdmin$certificatesArgs<ExtArgs>
     financialRecords?: boolean | ClientAdmin$financialRecordsArgs<ExtArgs>
-    StationeryItems?: boolean | ClientAdmin$StationeryItemsArgs<ExtArgs>
     enquiries?: boolean | ClientAdmin$enquiriesArgs<ExtArgs>
     notifications?: boolean | ClientAdmin$notificationsArgs<ExtArgs>
     courseFeeStructures?: boolean | ClientAdmin$courseFeeStructuresArgs<ExtArgs>
     tasks?: boolean | ClientAdmin$tasksArgs<ExtArgs>
     tests?: boolean | ClientAdmin$testsArgs<ExtArgs>
+    StationeryItems?: boolean | ClientAdmin$StationeryItemsArgs<ExtArgs>
     _count?: boolean | ClientAdminCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ClientAdminIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5295,6 +5397,7 @@ export namespace Prisma {
   export type $ClientAdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClientAdmin"
     objects: {
+      financialYears: Prisma.$FinancialYearPayload<ExtArgs>[]
       roleUsers: Prisma.$RoleUserPayload<ExtArgs>[]
       faculties: Prisma.$FacultyPayload<ExtArgs>[]
       batches: Prisma.$BatchPayload<ExtArgs>[]
@@ -5315,12 +5418,12 @@ export namespace Prisma {
       courseCompletions: Prisma.$CourseCompletionPayload<ExtArgs>[]
       certificates: Prisma.$CertificatePayload<ExtArgs>[]
       financialRecords: Prisma.$FinancialRecordPayload<ExtArgs>[]
-      StationeryItems: Prisma.$StationeryItemPayload<ExtArgs>[]
       enquiries: Prisma.$EnquiryPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       courseFeeStructures: Prisma.$CourseFeeStructurePayload<ExtArgs>[]
       tasks: Prisma.$TaskPayload<ExtArgs>[]
       tests: Prisma.$TestPayload<ExtArgs>[]
+      StationeryItems: Prisma.$StationeryItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5738,6 +5841,7 @@ export namespace Prisma {
    */
   export interface Prisma__ClientAdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    financialYears<T extends ClientAdmin$financialYearsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$financialYearsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     roleUsers<T extends ClientAdmin$roleUsersArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$roleUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoleUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     faculties<T extends ClientAdmin$facultiesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$facultiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batches<T extends ClientAdmin$batchesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5758,12 +5862,12 @@ export namespace Prisma {
     courseCompletions<T extends ClientAdmin$courseCompletionsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$courseCompletionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificates<T extends ClientAdmin$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     financialRecords<T extends ClientAdmin$financialRecordsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$financialRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    StationeryItems<T extends ClientAdmin$StationeryItemsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$StationeryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StationeryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     enquiries<T extends ClientAdmin$enquiriesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$enquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends ClientAdmin$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     courseFeeStructures<T extends ClientAdmin$courseFeeStructuresArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$courseFeeStructuresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseFeeStructurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tasks<T extends ClientAdmin$tasksArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tests<T extends ClientAdmin$testsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    StationeryItems<T extends ClientAdmin$StationeryItemsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$StationeryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StationeryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6043,7 +6147,6 @@ export namespace Prisma {
      * The data used to create many ClientAdmins.
      */
     data: ClientAdminCreateManyInput | ClientAdminCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -6062,7 +6165,6 @@ export namespace Prisma {
      * The data used to create many ClientAdmins.
      */
     data: ClientAdminCreateManyInput | ClientAdminCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -6199,6 +6301,30 @@ export namespace Prisma {
      * Limit how many ClientAdmins to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ClientAdmin.financialYears
+   */
+  export type ClientAdmin$financialYearsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    where?: FinancialYearWhereInput
+    orderBy?: FinancialYearOrderByWithRelationInput | FinancialYearOrderByWithRelationInput[]
+    cursor?: FinancialYearWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FinancialYearScalarFieldEnum | FinancialYearScalarFieldEnum[]
   }
 
   /**
@@ -6682,30 +6808,6 @@ export namespace Prisma {
   }
 
   /**
-   * ClientAdmin.StationeryItems
-   */
-  export type ClientAdmin$StationeryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StationeryItem
-     */
-    select?: StationeryItemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StationeryItem
-     */
-    omit?: StationeryItemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StationeryItemInclude<ExtArgs> | null
-    where?: StationeryItemWhereInput
-    orderBy?: StationeryItemOrderByWithRelationInput | StationeryItemOrderByWithRelationInput[]
-    cursor?: StationeryItemWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: StationeryItemScalarFieldEnum | StationeryItemScalarFieldEnum[]
-  }
-
-  /**
    * ClientAdmin.enquiries
    */
   export type ClientAdmin$enquiriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6826,6 +6928,30 @@ export namespace Prisma {
   }
 
   /**
+   * ClientAdmin.StationeryItems
+   */
+  export type ClientAdmin$StationeryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StationeryItem
+     */
+    select?: StationeryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StationeryItem
+     */
+    omit?: StationeryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StationeryItemInclude<ExtArgs> | null
+    where?: StationeryItemWhereInput
+    orderBy?: StationeryItemOrderByWithRelationInput | StationeryItemOrderByWithRelationInput[]
+    cursor?: StationeryItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StationeryItemScalarFieldEnum | StationeryItemScalarFieldEnum[]
+  }
+
+  /**
    * ClientAdmin without action
    */
   export type ClientAdminDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6841,6 +6967,1088 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ClientAdminInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FinancialYear
+   */
+
+  export type AggregateFinancialYear = {
+    _count: FinancialYearCountAggregateOutputType | null
+    _min: FinancialYearMinAggregateOutputType | null
+    _max: FinancialYearMaxAggregateOutputType | null
+  }
+
+  export type FinancialYearMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    startDate: Date | null
+    endDate: Date | null
+    isActive: boolean | null
+    clientAdminId: string | null
+    createdAt: Date | null
+  }
+
+  export type FinancialYearMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    startDate: Date | null
+    endDate: Date | null
+    isActive: boolean | null
+    clientAdminId: string | null
+    createdAt: Date | null
+  }
+
+  export type FinancialYearCountAggregateOutputType = {
+    id: number
+    name: number
+    startDate: number
+    endDate: number
+    isActive: number
+    clientAdminId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FinancialYearMinAggregateInputType = {
+    id?: true
+    name?: true
+    startDate?: true
+    endDate?: true
+    isActive?: true
+    clientAdminId?: true
+    createdAt?: true
+  }
+
+  export type FinancialYearMaxAggregateInputType = {
+    id?: true
+    name?: true
+    startDate?: true
+    endDate?: true
+    isActive?: true
+    clientAdminId?: true
+    createdAt?: true
+  }
+
+  export type FinancialYearCountAggregateInputType = {
+    id?: true
+    name?: true
+    startDate?: true
+    endDate?: true
+    isActive?: true
+    clientAdminId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FinancialYearAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FinancialYear to aggregate.
+     */
+    where?: FinancialYearWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinancialYears to fetch.
+     */
+    orderBy?: FinancialYearOrderByWithRelationInput | FinancialYearOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FinancialYearWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinancialYears from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinancialYears.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FinancialYears
+    **/
+    _count?: true | FinancialYearCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FinancialYearMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FinancialYearMaxAggregateInputType
+  }
+
+  export type GetFinancialYearAggregateType<T extends FinancialYearAggregateArgs> = {
+        [P in keyof T & keyof AggregateFinancialYear]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFinancialYear[P]>
+      : GetScalarType<T[P], AggregateFinancialYear[P]>
+  }
+
+
+
+
+  export type FinancialYearGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FinancialYearWhereInput
+    orderBy?: FinancialYearOrderByWithAggregationInput | FinancialYearOrderByWithAggregationInput[]
+    by: FinancialYearScalarFieldEnum[] | FinancialYearScalarFieldEnum
+    having?: FinancialYearScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FinancialYearCountAggregateInputType | true
+    _min?: FinancialYearMinAggregateInputType
+    _max?: FinancialYearMaxAggregateInputType
+  }
+
+  export type FinancialYearGroupByOutputType = {
+    id: string
+    name: string
+    startDate: Date
+    endDate: Date
+    isActive: boolean
+    clientAdminId: string
+    createdAt: Date
+    _count: FinancialYearCountAggregateOutputType | null
+    _min: FinancialYearMinAggregateOutputType | null
+    _max: FinancialYearMaxAggregateOutputType | null
+  }
+
+  type GetFinancialYearGroupByPayload<T extends FinancialYearGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FinancialYearGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FinancialYearGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FinancialYearGroupByOutputType[P]>
+            : GetScalarType<T[P], FinancialYearGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FinancialYearSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    isActive?: boolean
+    clientAdminId?: boolean
+    createdAt?: boolean
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["financialYear"]>
+
+  export type FinancialYearSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    isActive?: boolean
+    clientAdminId?: boolean
+    createdAt?: boolean
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["financialYear"]>
+
+  export type FinancialYearSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    isActive?: boolean
+    clientAdminId?: boolean
+    createdAt?: boolean
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["financialYear"]>
+
+  export type FinancialYearSelectScalar = {
+    id?: boolean
+    name?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    isActive?: boolean
+    clientAdminId?: boolean
+    createdAt?: boolean
+  }
+
+  export type FinancialYearOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startDate" | "endDate" | "isActive" | "clientAdminId" | "createdAt", ExtArgs["result"]["financialYear"]>
+  export type FinancialYearInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+  export type FinancialYearIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+  export type FinancialYearIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+
+  export type $FinancialYearPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FinancialYear"
+    objects: {
+      clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      startDate: Date
+      endDate: Date
+      isActive: boolean
+      clientAdminId: string
+      createdAt: Date
+    }, ExtArgs["result"]["financialYear"]>
+    composites: {}
+  }
+
+  type FinancialYearGetPayload<S extends boolean | null | undefined | FinancialYearDefaultArgs> = $Result.GetResult<Prisma.$FinancialYearPayload, S>
+
+  type FinancialYearCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FinancialYearFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FinancialYearCountAggregateInputType | true
+    }
+
+  export interface FinancialYearDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FinancialYear'], meta: { name: 'FinancialYear' } }
+    /**
+     * Find zero or one FinancialYear that matches the filter.
+     * @param {FinancialYearFindUniqueArgs} args - Arguments to find a FinancialYear
+     * @example
+     * // Get one FinancialYear
+     * const financialYear = await prisma.financialYear.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FinancialYearFindUniqueArgs>(args: SelectSubset<T, FinancialYearFindUniqueArgs<ExtArgs>>): Prisma__FinancialYearClient<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FinancialYear that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FinancialYearFindUniqueOrThrowArgs} args - Arguments to find a FinancialYear
+     * @example
+     * // Get one FinancialYear
+     * const financialYear = await prisma.financialYear.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FinancialYearFindUniqueOrThrowArgs>(args: SelectSubset<T, FinancialYearFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FinancialYearClient<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FinancialYear that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialYearFindFirstArgs} args - Arguments to find a FinancialYear
+     * @example
+     * // Get one FinancialYear
+     * const financialYear = await prisma.financialYear.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FinancialYearFindFirstArgs>(args?: SelectSubset<T, FinancialYearFindFirstArgs<ExtArgs>>): Prisma__FinancialYearClient<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FinancialYear that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialYearFindFirstOrThrowArgs} args - Arguments to find a FinancialYear
+     * @example
+     * // Get one FinancialYear
+     * const financialYear = await prisma.financialYear.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FinancialYearFindFirstOrThrowArgs>(args?: SelectSubset<T, FinancialYearFindFirstOrThrowArgs<ExtArgs>>): Prisma__FinancialYearClient<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FinancialYears that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialYearFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FinancialYears
+     * const financialYears = await prisma.financialYear.findMany()
+     * 
+     * // Get first 10 FinancialYears
+     * const financialYears = await prisma.financialYear.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const financialYearWithIdOnly = await prisma.financialYear.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FinancialYearFindManyArgs>(args?: SelectSubset<T, FinancialYearFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FinancialYear.
+     * @param {FinancialYearCreateArgs} args - Arguments to create a FinancialYear.
+     * @example
+     * // Create one FinancialYear
+     * const FinancialYear = await prisma.financialYear.create({
+     *   data: {
+     *     // ... data to create a FinancialYear
+     *   }
+     * })
+     * 
+     */
+    create<T extends FinancialYearCreateArgs>(args: SelectSubset<T, FinancialYearCreateArgs<ExtArgs>>): Prisma__FinancialYearClient<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FinancialYears.
+     * @param {FinancialYearCreateManyArgs} args - Arguments to create many FinancialYears.
+     * @example
+     * // Create many FinancialYears
+     * const financialYear = await prisma.financialYear.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FinancialYearCreateManyArgs>(args?: SelectSubset<T, FinancialYearCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FinancialYears and returns the data saved in the database.
+     * @param {FinancialYearCreateManyAndReturnArgs} args - Arguments to create many FinancialYears.
+     * @example
+     * // Create many FinancialYears
+     * const financialYear = await prisma.financialYear.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FinancialYears and only return the `id`
+     * const financialYearWithIdOnly = await prisma.financialYear.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FinancialYearCreateManyAndReturnArgs>(args?: SelectSubset<T, FinancialYearCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FinancialYear.
+     * @param {FinancialYearDeleteArgs} args - Arguments to delete one FinancialYear.
+     * @example
+     * // Delete one FinancialYear
+     * const FinancialYear = await prisma.financialYear.delete({
+     *   where: {
+     *     // ... filter to delete one FinancialYear
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FinancialYearDeleteArgs>(args: SelectSubset<T, FinancialYearDeleteArgs<ExtArgs>>): Prisma__FinancialYearClient<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FinancialYear.
+     * @param {FinancialYearUpdateArgs} args - Arguments to update one FinancialYear.
+     * @example
+     * // Update one FinancialYear
+     * const financialYear = await prisma.financialYear.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FinancialYearUpdateArgs>(args: SelectSubset<T, FinancialYearUpdateArgs<ExtArgs>>): Prisma__FinancialYearClient<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FinancialYears.
+     * @param {FinancialYearDeleteManyArgs} args - Arguments to filter FinancialYears to delete.
+     * @example
+     * // Delete a few FinancialYears
+     * const { count } = await prisma.financialYear.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FinancialYearDeleteManyArgs>(args?: SelectSubset<T, FinancialYearDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FinancialYears.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialYearUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FinancialYears
+     * const financialYear = await prisma.financialYear.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FinancialYearUpdateManyArgs>(args: SelectSubset<T, FinancialYearUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FinancialYears and returns the data updated in the database.
+     * @param {FinancialYearUpdateManyAndReturnArgs} args - Arguments to update many FinancialYears.
+     * @example
+     * // Update many FinancialYears
+     * const financialYear = await prisma.financialYear.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FinancialYears and only return the `id`
+     * const financialYearWithIdOnly = await prisma.financialYear.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FinancialYearUpdateManyAndReturnArgs>(args: SelectSubset<T, FinancialYearUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FinancialYear.
+     * @param {FinancialYearUpsertArgs} args - Arguments to update or create a FinancialYear.
+     * @example
+     * // Update or create a FinancialYear
+     * const financialYear = await prisma.financialYear.upsert({
+     *   create: {
+     *     // ... data to create a FinancialYear
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FinancialYear we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FinancialYearUpsertArgs>(args: SelectSubset<T, FinancialYearUpsertArgs<ExtArgs>>): Prisma__FinancialYearClient<$Result.GetResult<Prisma.$FinancialYearPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FinancialYears.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialYearCountArgs} args - Arguments to filter FinancialYears to count.
+     * @example
+     * // Count the number of FinancialYears
+     * const count = await prisma.financialYear.count({
+     *   where: {
+     *     // ... the filter for the FinancialYears we want to count
+     *   }
+     * })
+    **/
+    count<T extends FinancialYearCountArgs>(
+      args?: Subset<T, FinancialYearCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FinancialYearCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FinancialYear.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialYearAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FinancialYearAggregateArgs>(args: Subset<T, FinancialYearAggregateArgs>): Prisma.PrismaPromise<GetFinancialYearAggregateType<T>>
+
+    /**
+     * Group by FinancialYear.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinancialYearGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FinancialYearGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FinancialYearGroupByArgs['orderBy'] }
+        : { orderBy?: FinancialYearGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FinancialYearGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFinancialYearGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FinancialYear model
+   */
+  readonly fields: FinancialYearFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FinancialYear.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FinancialYearClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FinancialYear model
+   */
+  interface FinancialYearFieldRefs {
+    readonly id: FieldRef<"FinancialYear", 'String'>
+    readonly name: FieldRef<"FinancialYear", 'String'>
+    readonly startDate: FieldRef<"FinancialYear", 'DateTime'>
+    readonly endDate: FieldRef<"FinancialYear", 'DateTime'>
+    readonly isActive: FieldRef<"FinancialYear", 'Boolean'>
+    readonly clientAdminId: FieldRef<"FinancialYear", 'String'>
+    readonly createdAt: FieldRef<"FinancialYear", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FinancialYear findUnique
+   */
+  export type FinancialYearFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialYear to fetch.
+     */
+    where: FinancialYearWhereUniqueInput
+  }
+
+  /**
+   * FinancialYear findUniqueOrThrow
+   */
+  export type FinancialYearFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialYear to fetch.
+     */
+    where: FinancialYearWhereUniqueInput
+  }
+
+  /**
+   * FinancialYear findFirst
+   */
+  export type FinancialYearFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialYear to fetch.
+     */
+    where?: FinancialYearWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinancialYears to fetch.
+     */
+    orderBy?: FinancialYearOrderByWithRelationInput | FinancialYearOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FinancialYears.
+     */
+    cursor?: FinancialYearWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinancialYears from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinancialYears.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinancialYears.
+     */
+    distinct?: FinancialYearScalarFieldEnum | FinancialYearScalarFieldEnum[]
+  }
+
+  /**
+   * FinancialYear findFirstOrThrow
+   */
+  export type FinancialYearFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialYear to fetch.
+     */
+    where?: FinancialYearWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinancialYears to fetch.
+     */
+    orderBy?: FinancialYearOrderByWithRelationInput | FinancialYearOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FinancialYears.
+     */
+    cursor?: FinancialYearWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinancialYears from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinancialYears.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinancialYears.
+     */
+    distinct?: FinancialYearScalarFieldEnum | FinancialYearScalarFieldEnum[]
+  }
+
+  /**
+   * FinancialYear findMany
+   */
+  export type FinancialYearFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * Filter, which FinancialYears to fetch.
+     */
+    where?: FinancialYearWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinancialYears to fetch.
+     */
+    orderBy?: FinancialYearOrderByWithRelationInput | FinancialYearOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FinancialYears.
+     */
+    cursor?: FinancialYearWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinancialYears from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinancialYears.
+     */
+    skip?: number
+    distinct?: FinancialYearScalarFieldEnum | FinancialYearScalarFieldEnum[]
+  }
+
+  /**
+   * FinancialYear create
+   */
+  export type FinancialYearCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FinancialYear.
+     */
+    data: XOR<FinancialYearCreateInput, FinancialYearUncheckedCreateInput>
+  }
+
+  /**
+   * FinancialYear createMany
+   */
+  export type FinancialYearCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FinancialYears.
+     */
+    data: FinancialYearCreateManyInput | FinancialYearCreateManyInput[]
+  }
+
+  /**
+   * FinancialYear createManyAndReturn
+   */
+  export type FinancialYearCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * The data used to create many FinancialYears.
+     */
+    data: FinancialYearCreateManyInput | FinancialYearCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FinancialYear update
+   */
+  export type FinancialYearUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FinancialYear.
+     */
+    data: XOR<FinancialYearUpdateInput, FinancialYearUncheckedUpdateInput>
+    /**
+     * Choose, which FinancialYear to update.
+     */
+    where: FinancialYearWhereUniqueInput
+  }
+
+  /**
+   * FinancialYear updateMany
+   */
+  export type FinancialYearUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FinancialYears.
+     */
+    data: XOR<FinancialYearUpdateManyMutationInput, FinancialYearUncheckedUpdateManyInput>
+    /**
+     * Filter which FinancialYears to update
+     */
+    where?: FinancialYearWhereInput
+    /**
+     * Limit how many FinancialYears to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FinancialYear updateManyAndReturn
+   */
+  export type FinancialYearUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * The data used to update FinancialYears.
+     */
+    data: XOR<FinancialYearUpdateManyMutationInput, FinancialYearUncheckedUpdateManyInput>
+    /**
+     * Filter which FinancialYears to update
+     */
+    where?: FinancialYearWhereInput
+    /**
+     * Limit how many FinancialYears to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FinancialYear upsert
+   */
+  export type FinancialYearUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FinancialYear to update in case it exists.
+     */
+    where: FinancialYearWhereUniqueInput
+    /**
+     * In case the FinancialYear found by the `where` argument doesn't exist, create a new FinancialYear with this data.
+     */
+    create: XOR<FinancialYearCreateInput, FinancialYearUncheckedCreateInput>
+    /**
+     * In case the FinancialYear was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FinancialYearUpdateInput, FinancialYearUncheckedUpdateInput>
+  }
+
+  /**
+   * FinancialYear delete
+   */
+  export type FinancialYearDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
+    /**
+     * Filter which FinancialYear to delete.
+     */
+    where: FinancialYearWhereUniqueInput
+  }
+
+  /**
+   * FinancialYear deleteMany
+   */
+  export type FinancialYearDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FinancialYears to delete
+     */
+    where?: FinancialYearWhereInput
+    /**
+     * Limit how many FinancialYears to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FinancialYear without action
+   */
+  export type FinancialYearDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinancialYear
+     */
+    select?: FinancialYearSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinancialYear
+     */
+    omit?: FinancialYearOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinancialYearInclude<ExtArgs> | null
   }
 
 
@@ -7821,7 +9029,6 @@ export namespace Prisma {
      * The data used to create many RoleUsers.
      */
     data: RoleUserCreateManyInput | RoleUserCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -7840,7 +9047,6 @@ export namespace Prisma {
      * The data used to create many RoleUsers.
      */
     data: RoleUserCreateManyInput | RoleUserCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8905,7 +10111,6 @@ export namespace Prisma {
      * The data used to create many ActivityLogs.
      */
     data: ActivityLogCreateManyInput | ActivityLogCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -8924,7 +10129,6 @@ export namespace Prisma {
      * The data used to create many ActivityLogs.
      */
     data: ActivityLogCreateManyInput | ActivityLogCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9119,15 +10323,15 @@ export namespace Prisma {
     srNo: number | null
     name: string | null
     contact: string | null
-    alternateContact: string | null
     email: string | null
+    course: string | null
+    source: string | null
+    alternateContact: string | null
     age: number | null
     location: string | null
     city: string | null
-    course: string | null
     gender: string | null
     dob: Date | null
-    source: string | null
     referedBy: string | null
     leadStatus: $Enums.LeadStatus | null
     enquiryDate: Date | null
@@ -9143,15 +10347,15 @@ export namespace Prisma {
     srNo: number | null
     name: string | null
     contact: string | null
-    alternateContact: string | null
     email: string | null
+    course: string | null
+    source: string | null
+    alternateContact: string | null
     age: number | null
     location: string | null
     city: string | null
-    course: string | null
     gender: string | null
     dob: Date | null
-    source: string | null
     referedBy: string | null
     leadStatus: $Enums.LeadStatus | null
     enquiryDate: Date | null
@@ -9167,15 +10371,15 @@ export namespace Prisma {
     srNo: number
     name: number
     contact: number
-    alternateContact: number
     email: number
+    course: number
+    source: number
+    alternateContact: number
     age: number
     location: number
     city: number
-    course: number
     gender: number
     dob: number
-    source: number
     referedBy: number
     leadStatus: number
     enquiryDate: number
@@ -9205,15 +10409,15 @@ export namespace Prisma {
     srNo?: true
     name?: true
     contact?: true
-    alternateContact?: true
     email?: true
+    course?: true
+    source?: true
+    alternateContact?: true
     age?: true
     location?: true
     city?: true
-    course?: true
     gender?: true
     dob?: true
-    source?: true
     referedBy?: true
     leadStatus?: true
     enquiryDate?: true
@@ -9229,15 +10433,15 @@ export namespace Prisma {
     srNo?: true
     name?: true
     contact?: true
-    alternateContact?: true
     email?: true
+    course?: true
+    source?: true
+    alternateContact?: true
     age?: true
     location?: true
     city?: true
-    course?: true
     gender?: true
     dob?: true
-    source?: true
     referedBy?: true
     leadStatus?: true
     enquiryDate?: true
@@ -9253,15 +10457,15 @@ export namespace Prisma {
     srNo?: true
     name?: true
     contact?: true
-    alternateContact?: true
     email?: true
+    course?: true
+    source?: true
+    alternateContact?: true
     age?: true
     location?: true
     city?: true
-    course?: true
     gender?: true
     dob?: true
-    source?: true
     referedBy?: true
     leadStatus?: true
     enquiryDate?: true
@@ -9364,15 +10568,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact: string | null
     email: string | null
+    course: string | null
+    source: string | null
+    alternateContact: string | null
     age: number | null
     location: string | null
     city: string | null
-    course: string | null
     gender: string | null
     dob: Date | null
-    source: string | null
     referedBy: string | null
     leadStatus: $Enums.LeadStatus
     enquiryDate: Date | null
@@ -9407,15 +10611,15 @@ export namespace Prisma {
     srNo?: boolean
     name?: boolean
     contact?: boolean
-    alternateContact?: boolean
     email?: boolean
+    course?: boolean
+    source?: boolean
+    alternateContact?: boolean
     age?: boolean
     location?: boolean
     city?: boolean
-    course?: boolean
     gender?: boolean
     dob?: boolean
-    source?: boolean
     referedBy?: boolean
     leadStatus?: boolean
     enquiryDate?: boolean
@@ -9437,15 +10641,15 @@ export namespace Prisma {
     srNo?: boolean
     name?: boolean
     contact?: boolean
-    alternateContact?: boolean
     email?: boolean
+    course?: boolean
+    source?: boolean
+    alternateContact?: boolean
     age?: boolean
     location?: boolean
     city?: boolean
-    course?: boolean
     gender?: boolean
     dob?: boolean
-    source?: boolean
     referedBy?: boolean
     leadStatus?: boolean
     enquiryDate?: boolean
@@ -9463,15 +10667,15 @@ export namespace Prisma {
     srNo?: boolean
     name?: boolean
     contact?: boolean
-    alternateContact?: boolean
     email?: boolean
+    course?: boolean
+    source?: boolean
+    alternateContact?: boolean
     age?: boolean
     location?: boolean
     city?: boolean
-    course?: boolean
     gender?: boolean
     dob?: boolean
-    source?: boolean
     referedBy?: boolean
     leadStatus?: boolean
     enquiryDate?: boolean
@@ -9489,15 +10693,15 @@ export namespace Prisma {
     srNo?: boolean
     name?: boolean
     contact?: boolean
-    alternateContact?: boolean
     email?: boolean
+    course?: boolean
+    source?: boolean
+    alternateContact?: boolean
     age?: boolean
     location?: boolean
     city?: boolean
-    course?: boolean
     gender?: boolean
     dob?: boolean
-    source?: boolean
     referedBy?: boolean
     leadStatus?: boolean
     enquiryDate?: boolean
@@ -9508,7 +10712,7 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "city" | "course" | "gender" | "dob" | "source" | "referedBy" | "leadStatus" | "enquiryDate" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
+  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "email" | "course" | "source" | "alternateContact" | "age" | "location" | "city" | "gender" | "dob" | "referedBy" | "leadStatus" | "enquiryDate" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
   export type EnquiryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     followUps?: boolean | Enquiry$followUpsArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
@@ -9540,15 +10744,15 @@ export namespace Prisma {
       srNo: number
       name: string
       contact: string
-      alternateContact: string | null
       email: string | null
+      course: string | null
+      source: string | null
+      alternateContact: string | null
       age: number | null
       location: string | null
       city: string | null
-      course: string | null
       gender: string | null
       dob: Date | null
-      source: string | null
       referedBy: string | null
       leadStatus: $Enums.LeadStatus
       enquiryDate: Date | null
@@ -9989,15 +11193,15 @@ export namespace Prisma {
     readonly srNo: FieldRef<"Enquiry", 'Int'>
     readonly name: FieldRef<"Enquiry", 'String'>
     readonly contact: FieldRef<"Enquiry", 'String'>
-    readonly alternateContact: FieldRef<"Enquiry", 'String'>
     readonly email: FieldRef<"Enquiry", 'String'>
+    readonly course: FieldRef<"Enquiry", 'String'>
+    readonly source: FieldRef<"Enquiry", 'String'>
+    readonly alternateContact: FieldRef<"Enquiry", 'String'>
     readonly age: FieldRef<"Enquiry", 'Int'>
     readonly location: FieldRef<"Enquiry", 'String'>
     readonly city: FieldRef<"Enquiry", 'String'>
-    readonly course: FieldRef<"Enquiry", 'String'>
     readonly gender: FieldRef<"Enquiry", 'String'>
     readonly dob: FieldRef<"Enquiry", 'DateTime'>
-    readonly source: FieldRef<"Enquiry", 'String'>
     readonly referedBy: FieldRef<"Enquiry", 'String'>
     readonly leadStatus: FieldRef<"Enquiry", 'LeadStatus'>
     readonly enquiryDate: FieldRef<"Enquiry", 'DateTime'>
@@ -10235,7 +11439,6 @@ export namespace Prisma {
      * The data used to create many Enquiries.
      */
     data: EnquiryCreateManyInput | EnquiryCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -10254,7 +11457,6 @@ export namespace Prisma {
      * The data used to create many Enquiries.
      */
     data: EnquiryCreateManyInput | EnquiryCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11420,7 +12622,6 @@ export namespace Prisma {
      * The data used to create many EnquiryCourses.
      */
     data: EnquiryCourseCreateManyInput | EnquiryCourseCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -11439,7 +12640,6 @@ export namespace Prisma {
      * The data used to create many EnquiryCourses.
      */
     data: EnquiryCourseCreateManyInput | EnquiryCourseCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12521,7 +13721,6 @@ export namespace Prisma {
      * The data used to create many FollowUps.
      */
     data: FollowUpCreateManyInput | FollowUpCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -12540,7 +13739,6 @@ export namespace Prisma {
      * The data used to create many FollowUps.
      */
     data: FollowUpCreateManyInput | FollowUpCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -13695,7 +14893,6 @@ export namespace Prisma {
      * The data used to create many Notifications.
      */
     data: NotificationCreateManyInput | NotificationCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -13714,7 +14911,6 @@ export namespace Prisma {
      * The data used to create many Notifications.
      */
     data: NotificationCreateManyInput | NotificationCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -14835,7 +16031,6 @@ export namespace Prisma {
      * The data used to create many AdmissionNumberConfigs.
      */
     data: AdmissionNumberConfigCreateManyInput | AdmissionNumberConfigCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -14854,7 +16049,6 @@ export namespace Prisma {
      * The data used to create many AdmissionNumberConfigs.
      */
     data: AdmissionNumberConfigCreateManyInput | AdmissionNumberConfigCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -15025,7 +16219,7 @@ export namespace Prisma {
     admissionNumber: string | null
     fullName: string | null
     fatherName: string | null
-    motherName: string | null
+    qualification: string | null
     photoUrl: string | null
     contact: string | null
     parentsContact: string | null
@@ -15050,7 +16244,7 @@ export namespace Prisma {
     admissionNumber: string | null
     fullName: string | null
     fatherName: string | null
-    motherName: string | null
+    qualification: string | null
     photoUrl: string | null
     contact: string | null
     parentsContact: string | null
@@ -15075,7 +16269,7 @@ export namespace Prisma {
     admissionNumber: number
     fullName: number
     fatherName: number
-    motherName: number
+    qualification: number
     photoUrl: number
     contact: number
     parentsContact: number
@@ -15112,7 +16306,7 @@ export namespace Prisma {
     admissionNumber?: true
     fullName?: true
     fatherName?: true
-    motherName?: true
+    qualification?: true
     photoUrl?: true
     contact?: true
     parentsContact?: true
@@ -15137,7 +16331,7 @@ export namespace Prisma {
     admissionNumber?: true
     fullName?: true
     fatherName?: true
-    motherName?: true
+    qualification?: true
     photoUrl?: true
     contact?: true
     parentsContact?: true
@@ -15162,7 +16356,7 @@ export namespace Prisma {
     admissionNumber?: true
     fullName?: true
     fatherName?: true
-    motherName?: true
+    qualification?: true
     photoUrl?: true
     contact?: true
     parentsContact?: true
@@ -15274,7 +16468,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName: string | null
-    motherName: string | null
+    qualification: string | null
     photoUrl: string | null
     contact: string
     parentsContact: string | null
@@ -15318,7 +16512,7 @@ export namespace Prisma {
     admissionNumber?: boolean
     fullName?: boolean
     fatherName?: boolean
-    motherName?: boolean
+    qualification?: boolean
     photoUrl?: boolean
     contact?: boolean
     parentsContact?: boolean
@@ -15357,7 +16551,7 @@ export namespace Prisma {
     admissionNumber?: boolean
     fullName?: boolean
     fatherName?: boolean
-    motherName?: boolean
+    qualification?: boolean
     photoUrl?: boolean
     contact?: boolean
     parentsContact?: boolean
@@ -15383,7 +16577,7 @@ export namespace Prisma {
     admissionNumber?: boolean
     fullName?: boolean
     fatherName?: boolean
-    motherName?: boolean
+    qualification?: boolean
     photoUrl?: boolean
     contact?: boolean
     parentsContact?: boolean
@@ -15409,7 +16603,7 @@ export namespace Prisma {
     admissionNumber?: boolean
     fullName?: boolean
     fatherName?: boolean
-    motherName?: boolean
+    qualification?: boolean
     photoUrl?: boolean
     contact?: boolean
     parentsContact?: boolean
@@ -15427,7 +16621,7 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serialNumber" | "studentCode" | "admissionNumber" | "fullName" | "fatherName" | "motherName" | "photoUrl" | "contact" | "parentsContact" | "email" | "residentialAddress" | "permenantAddress" | "dob" | "gender" | "religion" | "idProofType" | "idProofNumber" | "admissionDate" | "createdAt" | "updatedAt" | "clientAdminId", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serialNumber" | "studentCode" | "admissionNumber" | "fullName" | "fatherName" | "qualification" | "photoUrl" | "contact" | "parentsContact" | "email" | "residentialAddress" | "permenantAddress" | "dob" | "gender" | "religion" | "idProofType" | "idProofNumber" | "admissionDate" | "createdAt" | "updatedAt" | "clientAdminId", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enquiry?: boolean | Student$enquiryArgs<ExtArgs>
     labAllocations?: boolean | Student$labAllocationsArgs<ExtArgs>
@@ -15475,7 +16669,7 @@ export namespace Prisma {
       admissionNumber: string
       fullName: string
       fatherName: string | null
-      motherName: string | null
+      qualification: string | null
       photoUrl: string | null
       contact: string
       parentsContact: string | null
@@ -15933,7 +17127,7 @@ export namespace Prisma {
     readonly admissionNumber: FieldRef<"Student", 'String'>
     readonly fullName: FieldRef<"Student", 'String'>
     readonly fatherName: FieldRef<"Student", 'String'>
-    readonly motherName: FieldRef<"Student", 'String'>
+    readonly qualification: FieldRef<"Student", 'String'>
     readonly photoUrl: FieldRef<"Student", 'String'>
     readonly contact: FieldRef<"Student", 'String'>
     readonly parentsContact: FieldRef<"Student", 'String'>
@@ -16178,7 +17372,6 @@ export namespace Prisma {
      * The data used to create many Students.
      */
     data: StudentCreateManyInput | StudentCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -16197,7 +17390,6 @@ export namespace Prisma {
      * The data used to create many Students.
      */
     data: StudentCreateManyInput | StudentCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -16660,18 +17852,18 @@ export namespace Prisma {
 
   export type CourseAvgAggregateOutputType = {
     id: number | null
-    durationWeeks: number | null
+    durationMonths: number | null
   }
 
   export type CourseSumAggregateOutputType = {
     id: number | null
-    durationWeeks: number | null
+    durationMonths: number | null
   }
 
   export type CourseMinAggregateOutputType = {
     id: number | null
     name: string | null
-    durationWeeks: number | null
+    durationMonths: number | null
     description: string | null
     clientAdminId: string | null
   }
@@ -16679,7 +17871,7 @@ export namespace Prisma {
   export type CourseMaxAggregateOutputType = {
     id: number | null
     name: string | null
-    durationWeeks: number | null
+    durationMonths: number | null
     description: string | null
     clientAdminId: string | null
   }
@@ -16687,7 +17879,7 @@ export namespace Prisma {
   export type CourseCountAggregateOutputType = {
     id: number
     name: number
-    durationWeeks: number
+    durationMonths: number
     description: number
     clientAdminId: number
     _all: number
@@ -16696,18 +17888,18 @@ export namespace Prisma {
 
   export type CourseAvgAggregateInputType = {
     id?: true
-    durationWeeks?: true
+    durationMonths?: true
   }
 
   export type CourseSumAggregateInputType = {
     id?: true
-    durationWeeks?: true
+    durationMonths?: true
   }
 
   export type CourseMinAggregateInputType = {
     id?: true
     name?: true
-    durationWeeks?: true
+    durationMonths?: true
     description?: true
     clientAdminId?: true
   }
@@ -16715,7 +17907,7 @@ export namespace Prisma {
   export type CourseMaxAggregateInputType = {
     id?: true
     name?: true
-    durationWeeks?: true
+    durationMonths?: true
     description?: true
     clientAdminId?: true
   }
@@ -16723,7 +17915,7 @@ export namespace Prisma {
   export type CourseCountAggregateInputType = {
     id?: true
     name?: true
-    durationWeeks?: true
+    durationMonths?: true
     description?: true
     clientAdminId?: true
     _all?: true
@@ -16818,7 +18010,7 @@ export namespace Prisma {
   export type CourseGroupByOutputType = {
     id: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description: string | null
     clientAdminId: string
     _count: CourseCountAggregateOutputType | null
@@ -16845,7 +18037,7 @@ export namespace Prisma {
   export type CourseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    durationWeeks?: boolean
+    durationMonths?: boolean
     description?: boolean
     clientAdminId?: boolean
     courseFeeStructure?: boolean | Course$courseFeeStructureArgs<ExtArgs>
@@ -16869,7 +18061,7 @@ export namespace Prisma {
   export type CourseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    durationWeeks?: boolean
+    durationMonths?: boolean
     description?: boolean
     clientAdminId?: boolean
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
@@ -16878,7 +18070,7 @@ export namespace Prisma {
   export type CourseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    durationWeeks?: boolean
+    durationMonths?: boolean
     description?: boolean
     clientAdminId?: boolean
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
@@ -16887,12 +18079,12 @@ export namespace Prisma {
   export type CourseSelectScalar = {
     id?: boolean
     name?: boolean
-    durationWeeks?: boolean
+    durationMonths?: boolean
     description?: boolean
     clientAdminId?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "durationWeeks" | "description" | "clientAdminId", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "durationMonths" | "description" | "clientAdminId", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     courseFeeStructure?: boolean | Course$courseFeeStructureArgs<ExtArgs>
     studentCourses?: boolean | Course$studentCoursesArgs<ExtArgs>
@@ -16940,7 +18132,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
-      durationWeeks: number
+      durationMonths: number
       description: string | null
       clientAdminId: string
     }, ExtArgs["result"]["course"]>
@@ -17383,7 +18575,7 @@ export namespace Prisma {
   interface CourseFieldRefs {
     readonly id: FieldRef<"Course", 'Int'>
     readonly name: FieldRef<"Course", 'String'>
-    readonly durationWeeks: FieldRef<"Course", 'Int'>
+    readonly durationMonths: FieldRef<"Course", 'Int'>
     readonly description: FieldRef<"Course", 'String'>
     readonly clientAdminId: FieldRef<"Course", 'String'>
   }
@@ -17615,7 +18807,6 @@ export namespace Prisma {
      * The data used to create many Courses.
      */
     data: CourseCreateManyInput | CourseCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -17634,7 +18825,6 @@ export namespace Prisma {
      * The data used to create many Courses.
      */
     data: CourseCreateManyInput | CourseCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -18304,7 +19494,7 @@ export namespace Prisma {
     id: number
     courseId: number
     totalAmount: number
-    paymentType: string[]
+    paymentType: JsonValue
     clientAdminId: string
     _count: CourseFeeStructureCountAggregateOutputType | null
     _avg: CourseFeeStructureAvgAggregateOutputType | null
@@ -18394,7 +19584,7 @@ export namespace Prisma {
       id: number
       courseId: number
       totalAmount: number
-      paymentType: string[]
+      paymentType: Prisma.JsonValue
       clientAdminId: string
     }, ExtArgs["result"]["courseFeeStructure"]>
     composites: {}
@@ -18825,7 +20015,7 @@ export namespace Prisma {
     readonly id: FieldRef<"CourseFeeStructure", 'Int'>
     readonly courseId: FieldRef<"CourseFeeStructure", 'Int'>
     readonly totalAmount: FieldRef<"CourseFeeStructure", 'Float'>
-    readonly paymentType: FieldRef<"CourseFeeStructure", 'String[]'>
+    readonly paymentType: FieldRef<"CourseFeeStructure", 'Json'>
     readonly clientAdminId: FieldRef<"CourseFeeStructure", 'String'>
   }
     
@@ -19056,7 +20246,6 @@ export namespace Prisma {
      * The data used to create many CourseFeeStructures.
      */
     data: CourseFeeStructureCreateManyInput | CourseFeeStructureCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -19075,7 +20264,6 @@ export namespace Prisma {
      * The data used to create many CourseFeeStructures.
      */
     data: CourseFeeStructureCreateManyInput | CourseFeeStructureCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -20214,7 +21402,6 @@ export namespace Prisma {
      * The data used to create many Batches.
      */
     data: BatchCreateManyInput | BatchCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -20233,7 +21420,6 @@ export namespace Prisma {
      * The data used to create many Batches.
      */
     data: BatchCreateManyInput | BatchCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -21428,7 +22614,6 @@ export namespace Prisma {
      * The data used to create many BatchCourses.
      */
     data: BatchCourseCreateManyInput | BatchCourseCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -21447,7 +22632,6 @@ export namespace Prisma {
      * The data used to create many BatchCourses.
      */
     data: BatchCourseCreateManyInput | BatchCourseCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -22668,7 +23852,6 @@ export namespace Prisma {
      * The data used to create many Faculties.
      */
     data: FacultyCreateManyInput | FacultyCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -22687,7 +23870,6 @@ export namespace Prisma {
      * The data used to create many Faculties.
      */
     data: FacultyCreateManyInput | FacultyCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -23883,7 +25065,6 @@ export namespace Prisma {
      * The data used to create many Labs.
      */
     data: LabCreateManyInput | LabCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -23902,7 +25083,6 @@ export namespace Prisma {
      * The data used to create many Labs.
      */
     data: LabCreateManyInput | LabCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -25075,7 +26255,6 @@ export namespace Prisma {
      * The data used to create many LabTimeSlots.
      */
     data: LabTimeSlotCreateManyInput | LabTimeSlotCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -25094,7 +26273,6 @@ export namespace Prisma {
      * The data used to create many LabTimeSlots.
      */
     data: LabTimeSlotCreateManyInput | LabTimeSlotCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -26154,7 +27332,6 @@ export namespace Prisma {
      * The data used to create many PaymentStructureTypes.
      */
     data: PaymentStructureTypeCreateManyInput | PaymentStructureTypeCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -26173,7 +27350,6 @@ export namespace Prisma {
      * The data used to create many PaymentStructureTypes.
      */
     data: PaymentStructureTypeCreateManyInput | PaymentStructureTypeCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -27227,7 +28403,6 @@ export namespace Prisma {
      * The data used to create many InstallmentDetails.
      */
     data: InstallmentDetailCreateManyInput | InstallmentDetailCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -27246,7 +28421,6 @@ export namespace Prisma {
      * The data used to create many InstallmentDetails.
      */
     data: InstallmentDetailCreateManyInput | InstallmentDetailCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -28384,7 +29558,6 @@ export namespace Prisma {
      * The data used to create many LabAllocations.
      */
     data: LabAllocationCreateManyInput | LabAllocationCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -28403,7 +29576,6 @@ export namespace Prisma {
      * The data used to create many LabAllocations.
      */
     data: LabAllocationCreateManyInput | LabAllocationCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -29587,7 +30759,6 @@ export namespace Prisma {
      * The data used to create many StudentCourses.
      */
     data: StudentCourseCreateManyInput | StudentCourseCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -29606,7 +30777,6 @@ export namespace Prisma {
      * The data used to create many StudentCourses.
      */
     data: StudentCourseCreateManyInput | StudentCourseCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -30824,7 +31994,6 @@ export namespace Prisma {
      * The data used to create many FeeStructures.
      */
     data: FeeStructureCreateManyInput | FeeStructureCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -30843,7 +32012,6 @@ export namespace Prisma {
      * The data used to create many FeeStructures.
      */
     data: FeeStructureCreateManyInput | FeeStructureCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -31956,7 +33124,6 @@ export namespace Prisma {
      * The data used to create many StudentFeeLogs.
      */
     data: StudentFeeLogCreateManyInput | StudentFeeLogCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -31975,7 +33142,6 @@ export namespace Prisma {
      * The data used to create many StudentFeeLogs.
      */
     data: StudentFeeLogCreateManyInput | StudentFeeLogCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -33207,7 +34373,6 @@ export namespace Prisma {
      * The data used to create many StudentFees.
      */
     data: StudentFeeCreateManyInput | StudentFeeCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -33226,7 +34391,6 @@ export namespace Prisma {
      * The data used to create many StudentFees.
      */
     data: StudentFeeCreateManyInput | StudentFeeCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -34375,7 +35539,6 @@ export namespace Prisma {
      * The data used to create many StationeryItems.
      */
     data: StationeryItemCreateManyInput | StationeryItemCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -34394,7 +35557,6 @@ export namespace Prisma {
      * The data used to create many StationeryItems.
      */
     data: StationeryItemCreateManyInput | StationeryItemCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -35570,7 +36732,6 @@ export namespace Prisma {
      * The data used to create many StationeryIssues.
      */
     data: StationeryIssueCreateManyInput | StationeryIssueCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -35589,7 +36750,6 @@ export namespace Prisma {
      * The data used to create many StationeryIssues.
      */
     data: StationeryIssueCreateManyInput | StationeryIssueCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -36741,7 +37901,6 @@ export namespace Prisma {
      * The data used to create many AttendanceRecords.
      */
     data: AttendanceRecordCreateManyInput | AttendanceRecordCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -36760,7 +37919,6 @@ export namespace Prisma {
      * The data used to create many AttendanceRecords.
      */
     data: AttendanceRecordCreateManyInput | AttendanceRecordCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -37876,7 +39034,6 @@ export namespace Prisma {
      * The data used to create many Tasks.
      */
     data: TaskCreateManyInput | TaskCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -37895,7 +39052,6 @@ export namespace Prisma {
      * The data used to create many Tasks.
      */
     data: TaskCreateManyInput | TaskCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -38314,7 +39470,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date
     dueDate: Date
-    description: string
+    description: string | null
     status: string
     facultyRemarks: string | null
     grade: string | null
@@ -38455,7 +39611,7 @@ export namespace Prisma {
       courseId: number
       assignedDate: Date
       dueDate: Date
-      description: string
+      description: string | null
       status: string
       facultyRemarks: string | null
       grade: string | null
@@ -39131,7 +40287,6 @@ export namespace Prisma {
      * The data used to create many StudentTasks.
      */
     data: StudentTaskCreateManyInput | StudentTaskCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -39150,7 +40305,6 @@ export namespace Prisma {
      * The data used to create many StudentTasks.
      */
     data: StudentTaskCreateManyInput | StudentTaskCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -40285,7 +41439,6 @@ export namespace Prisma {
      * The data used to create many Tests.
      */
     data: TestCreateManyInput | TestCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -40304,7 +41457,6 @@ export namespace Prisma {
      * The data used to create many Tests.
      */
     data: TestCreateManyInput | TestCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -41549,7 +42701,6 @@ export namespace Prisma {
      * The data used to create many StudentTests.
      */
     data: StudentTestCreateManyInput | StudentTestCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -41568,7 +42719,6 @@ export namespace Prisma {
      * The data used to create many StudentTests.
      */
     data: StudentTestCreateManyInput | StudentTestCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -42691,7 +43841,6 @@ export namespace Prisma {
      * The data used to create many CourseCompletions.
      */
     data: CourseCompletionCreateManyInput | CourseCompletionCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -42710,7 +43859,6 @@ export namespace Prisma {
      * The data used to create many CourseCompletions.
      */
     data: CourseCompletionCreateManyInput | CourseCompletionCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -43845,7 +44993,6 @@ export namespace Prisma {
      * The data used to create many Certificates.
      */
     data: CertificateCreateManyInput | CertificateCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -43864,7 +45011,6 @@ export namespace Prisma {
      * The data used to create many Certificates.
      */
     data: CertificateCreateManyInput | CertificateCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -45063,7 +46209,6 @@ export namespace Prisma {
      * The data used to create many FinancialRecords.
      */
     data: FinancialRecordCreateManyInput | FinancialRecordCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -45082,7 +46227,6 @@ export namespace Prisma {
      * The data used to create many FinancialRecords.
      */
     data: FinancialRecordCreateManyInput | FinancialRecordCreateManyInput[]
-    skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -45329,9 +46473,6 @@ export namespace Prisma {
    */
 
   export const TransactionIsolationLevel: {
-    ReadUncommitted: 'ReadUncommitted',
-    ReadCommitted: 'ReadCommitted',
-    RepeatableRead: 'RepeatableRead',
     Serializable: 'Serializable'
   };
 
@@ -45363,6 +46504,19 @@ export namespace Prisma {
   };
 
   export type ClientAdminScalarFieldEnum = (typeof ClientAdminScalarFieldEnum)[keyof typeof ClientAdminScalarFieldEnum]
+
+
+  export const FinancialYearScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    isActive: 'isActive',
+    clientAdminId: 'clientAdminId',
+    createdAt: 'createdAt'
+  };
+
+  export type FinancialYearScalarFieldEnum = (typeof FinancialYearScalarFieldEnum)[keyof typeof FinancialYearScalarFieldEnum]
 
 
   export const RoleUserScalarFieldEnum: {
@@ -45402,15 +46556,15 @@ export namespace Prisma {
     srNo: 'srNo',
     name: 'name',
     contact: 'contact',
-    alternateContact: 'alternateContact',
     email: 'email',
+    course: 'course',
+    source: 'source',
+    alternateContact: 'alternateContact',
     age: 'age',
     location: 'location',
     city: 'city',
-    course: 'course',
     gender: 'gender',
     dob: 'dob',
-    source: 'source',
     referedBy: 'referedBy',
     leadStatus: 'leadStatus',
     enquiryDate: 'enquiryDate',
@@ -45482,7 +46636,7 @@ export namespace Prisma {
     admissionNumber: 'admissionNumber',
     fullName: 'fullName',
     fatherName: 'fatherName',
-    motherName: 'motherName',
+    qualification: 'qualification',
     photoUrl: 'photoUrl',
     contact: 'contact',
     parentsContact: 'parentsContact',
@@ -45506,7 +46660,7 @@ export namespace Prisma {
   export const CourseScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    durationWeeks: 'durationWeeks',
+    durationMonths: 'durationMonths',
     description: 'description',
     clientAdminId: 'clientAdminId'
   };
@@ -45836,12 +46990,11 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
   };
 
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const NullsOrder: {
@@ -45850,6 +47003,23 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   /**
@@ -45865,23 +47035,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'String[]'
-   */
-  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -45893,9 +47049,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'UserRole[]'
+   * Reference to a field of type 'Boolean'
    */
-  export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -45907,30 +47063,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'LeadStatus'
    */
   export type EnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'LeadStatus[]'
-   */
-  export type ListEnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -45942,13 +47077,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'FollowUpStatus[]'
-   */
-  export type ListEnumFollowUpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FollowUpStatus[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -45956,9 +47084,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Float[]'
+   * Reference to a field of type 'Json'
    */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -45970,23 +47105,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'PaymentType[]'
-   */
-  export type ListEnumPaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentType[]'>
-    
-
-
-  /**
    * Reference to a field of type 'PaymentMode'
    */
   export type EnumPaymentModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMode'>
-    
-
-
-  /**
-   * Reference to a field of type 'PaymentMode[]'
-   */
-  export type ListEnumPaymentModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMode[]'>
     
 
 
@@ -45998,23 +47119,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'PaymentStatus[]'
-   */
-  export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
-    
-
-
-  /**
    * Reference to a field of type 'TaskStatus'
    */
   export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskStatus[]'
-   */
-  export type ListEnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus[]'>
     
 
 
@@ -46026,23 +47133,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'TestStatus[]'
-   */
-  export type ListEnumTestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TestStatus[]'>
-    
-
-
-  /**
    * Reference to a field of type 'RecordType'
    */
   export type EnumRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecordType'>
-    
-
-
-  /**
-   * Reference to a field of type 'RecordType[]'
-   */
-  export type ListEnumRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecordType[]'>
     
   /**
    * Deep Input Types
@@ -46074,6 +47167,7 @@ export namespace Prisma {
     role?: EnumUserRoleFilter<"ClientAdmin"> | $Enums.UserRole
     currentSessionToken?: StringNullableFilter<"ClientAdmin"> | string | null
     lastLoginAt?: DateTimeNullableFilter<"ClientAdmin"> | Date | string | null
+    financialYears?: FinancialYearListRelationFilter
     roleUsers?: RoleUserListRelationFilter
     faculties?: FacultyListRelationFilter
     batches?: BatchListRelationFilter
@@ -46094,12 +47188,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionListRelationFilter
     certificates?: CertificateListRelationFilter
     financialRecords?: FinancialRecordListRelationFilter
-    StationeryItems?: StationeryItemListRelationFilter
     enquiries?: EnquiryListRelationFilter
     notifications?: NotificationListRelationFilter
     courseFeeStructures?: CourseFeeStructureListRelationFilter
     tasks?: TaskListRelationFilter
     tests?: TestListRelationFilter
+    StationeryItems?: StationeryItemListRelationFilter
   }
 
   export type ClientAdminOrderByWithRelationInput = {
@@ -46124,6 +47218,7 @@ export namespace Prisma {
     role?: SortOrder
     currentSessionToken?: SortOrderInput | SortOrder
     lastLoginAt?: SortOrderInput | SortOrder
+    financialYears?: FinancialYearOrderByRelationAggregateInput
     roleUsers?: RoleUserOrderByRelationAggregateInput
     faculties?: FacultyOrderByRelationAggregateInput
     batches?: BatchOrderByRelationAggregateInput
@@ -46144,12 +47239,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionOrderByRelationAggregateInput
     certificates?: CertificateOrderByRelationAggregateInput
     financialRecords?: FinancialRecordOrderByRelationAggregateInput
-    StationeryItems?: StationeryItemOrderByRelationAggregateInput
     enquiries?: EnquiryOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     courseFeeStructures?: CourseFeeStructureOrderByRelationAggregateInput
     tasks?: TaskOrderByRelationAggregateInput
     tests?: TestOrderByRelationAggregateInput
+    StationeryItems?: StationeryItemOrderByRelationAggregateInput
   }
 
   export type ClientAdminWhereUniqueInput = Prisma.AtLeast<{
@@ -46177,6 +47272,7 @@ export namespace Prisma {
     role?: EnumUserRoleFilter<"ClientAdmin"> | $Enums.UserRole
     currentSessionToken?: StringNullableFilter<"ClientAdmin"> | string | null
     lastLoginAt?: DateTimeNullableFilter<"ClientAdmin"> | Date | string | null
+    financialYears?: FinancialYearListRelationFilter
     roleUsers?: RoleUserListRelationFilter
     faculties?: FacultyListRelationFilter
     batches?: BatchListRelationFilter
@@ -46197,12 +47293,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionListRelationFilter
     certificates?: CertificateListRelationFilter
     financialRecords?: FinancialRecordListRelationFilter
-    StationeryItems?: StationeryItemListRelationFilter
     enquiries?: EnquiryListRelationFilter
     notifications?: NotificationListRelationFilter
     courseFeeStructures?: CourseFeeStructureListRelationFilter
     tasks?: TaskListRelationFilter
     tests?: TestListRelationFilter
+    StationeryItems?: StationeryItemListRelationFilter
   }, "id" | "email" | "slug">
 
   export type ClientAdminOrderByWithAggregationInput = {
@@ -46257,6 +47353,72 @@ export namespace Prisma {
     role?: EnumUserRoleWithAggregatesFilter<"ClientAdmin"> | $Enums.UserRole
     currentSessionToken?: StringNullableWithAggregatesFilter<"ClientAdmin"> | string | null
     lastLoginAt?: DateTimeNullableWithAggregatesFilter<"ClientAdmin"> | Date | string | null
+  }
+
+  export type FinancialYearWhereInput = {
+    AND?: FinancialYearWhereInput | FinancialYearWhereInput[]
+    OR?: FinancialYearWhereInput[]
+    NOT?: FinancialYearWhereInput | FinancialYearWhereInput[]
+    id?: StringFilter<"FinancialYear"> | string
+    name?: StringFilter<"FinancialYear"> | string
+    startDate?: DateTimeFilter<"FinancialYear"> | Date | string
+    endDate?: DateTimeFilter<"FinancialYear"> | Date | string
+    isActive?: BoolFilter<"FinancialYear"> | boolean
+    clientAdminId?: StringFilter<"FinancialYear"> | string
+    createdAt?: DateTimeFilter<"FinancialYear"> | Date | string
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+  }
+
+  export type FinancialYearOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    isActive?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+    clientAdmin?: ClientAdminOrderByWithRelationInput
+  }
+
+  export type FinancialYearWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    clientAdminId_name?: FinancialYearClientAdminIdNameCompoundUniqueInput
+    AND?: FinancialYearWhereInput | FinancialYearWhereInput[]
+    OR?: FinancialYearWhereInput[]
+    NOT?: FinancialYearWhereInput | FinancialYearWhereInput[]
+    name?: StringFilter<"FinancialYear"> | string
+    startDate?: DateTimeFilter<"FinancialYear"> | Date | string
+    endDate?: DateTimeFilter<"FinancialYear"> | Date | string
+    isActive?: BoolFilter<"FinancialYear"> | boolean
+    clientAdminId?: StringFilter<"FinancialYear"> | string
+    createdAt?: DateTimeFilter<"FinancialYear"> | Date | string
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+  }, "id" | "clientAdminId_name">
+
+  export type FinancialYearOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    isActive?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+    _count?: FinancialYearCountOrderByAggregateInput
+    _max?: FinancialYearMaxOrderByAggregateInput
+    _min?: FinancialYearMinOrderByAggregateInput
+  }
+
+  export type FinancialYearScalarWhereWithAggregatesInput = {
+    AND?: FinancialYearScalarWhereWithAggregatesInput | FinancialYearScalarWhereWithAggregatesInput[]
+    OR?: FinancialYearScalarWhereWithAggregatesInput[]
+    NOT?: FinancialYearScalarWhereWithAggregatesInput | FinancialYearScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FinancialYear"> | string
+    name?: StringWithAggregatesFilter<"FinancialYear"> | string
+    startDate?: DateTimeWithAggregatesFilter<"FinancialYear"> | Date | string
+    endDate?: DateTimeWithAggregatesFilter<"FinancialYear"> | Date | string
+    isActive?: BoolWithAggregatesFilter<"FinancialYear"> | boolean
+    clientAdminId?: StringWithAggregatesFilter<"FinancialYear"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FinancialYear"> | Date | string
   }
 
   export type RoleUserWhereInput = {
@@ -46427,15 +47589,15 @@ export namespace Prisma {
     srNo?: IntFilter<"Enquiry"> | number
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
-    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     email?: StringNullableFilter<"Enquiry"> | string | null
+    course?: StringNullableFilter<"Enquiry"> | string | null
+    source?: StringNullableFilter<"Enquiry"> | string | null
+    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     age?: IntNullableFilter<"Enquiry"> | number | null
     location?: StringNullableFilter<"Enquiry"> | string | null
     city?: StringNullableFilter<"Enquiry"> | string | null
-    course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
-    source?: StringNullableFilter<"Enquiry"> | string | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
     enquiryDate?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
@@ -46456,15 +47618,15 @@ export namespace Prisma {
     srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
-    alternateContact?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    course?: SortOrderInput | SortOrder
+    source?: SortOrderInput | SortOrder
+    alternateContact?: SortOrderInput | SortOrder
     age?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
-    course?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
-    source?: SortOrderInput | SortOrder
     referedBy?: SortOrderInput | SortOrder
     leadStatus?: SortOrder
     enquiryDate?: SortOrderInput | SortOrder
@@ -46491,15 +47653,15 @@ export namespace Prisma {
     NOT?: EnquiryWhereInput | EnquiryWhereInput[]
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
-    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     email?: StringNullableFilter<"Enquiry"> | string | null
+    course?: StringNullableFilter<"Enquiry"> | string | null
+    source?: StringNullableFilter<"Enquiry"> | string | null
+    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     age?: IntNullableFilter<"Enquiry"> | number | null
     location?: StringNullableFilter<"Enquiry"> | string | null
     city?: StringNullableFilter<"Enquiry"> | string | null
-    course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
-    source?: StringNullableFilter<"Enquiry"> | string | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
     enquiryDate?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
@@ -46519,15 +47681,15 @@ export namespace Prisma {
     srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
-    alternateContact?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    course?: SortOrderInput | SortOrder
+    source?: SortOrderInput | SortOrder
+    alternateContact?: SortOrderInput | SortOrder
     age?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
-    course?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
-    source?: SortOrderInput | SortOrder
     referedBy?: SortOrderInput | SortOrder
     leadStatus?: SortOrder
     enquiryDate?: SortOrderInput | SortOrder
@@ -46551,15 +47713,15 @@ export namespace Prisma {
     srNo?: IntWithAggregatesFilter<"Enquiry"> | number
     name?: StringWithAggregatesFilter<"Enquiry"> | string
     contact?: StringWithAggregatesFilter<"Enquiry"> | string
-    alternateContact?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     email?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    course?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    source?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    alternateContact?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     age?: IntNullableWithAggregatesFilter<"Enquiry"> | number | null
     location?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     city?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
-    course?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     gender?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"Enquiry"> | Date | string | null
-    source?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     referedBy?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusWithAggregatesFilter<"Enquiry"> | $Enums.LeadStatus
     enquiryDate?: DateTimeNullableWithAggregatesFilter<"Enquiry"> | Date | string | null
@@ -46857,7 +48019,7 @@ export namespace Prisma {
     admissionNumber?: StringFilter<"Student"> | string
     fullName?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
-    motherName?: StringNullableFilter<"Student"> | string | null
+    qualification?: StringNullableFilter<"Student"> | string | null
     photoUrl?: StringNullableFilter<"Student"> | string | null
     contact?: StringFilter<"Student"> | string
     parentsContact?: StringNullableFilter<"Student"> | string | null
@@ -46895,7 +48057,7 @@ export namespace Prisma {
     admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrderInput | SortOrder
-    motherName?: SortOrderInput | SortOrder
+    qualification?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
     contact?: SortOrder
     parentsContact?: SortOrderInput | SortOrder
@@ -46936,7 +48098,7 @@ export namespace Prisma {
     NOT?: StudentWhereInput | StudentWhereInput[]
     fullName?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
-    motherName?: StringNullableFilter<"Student"> | string | null
+    qualification?: StringNullableFilter<"Student"> | string | null
     photoUrl?: StringNullableFilter<"Student"> | string | null
     contact?: StringFilter<"Student"> | string
     parentsContact?: StringNullableFilter<"Student"> | string | null
@@ -46974,7 +48136,7 @@ export namespace Prisma {
     admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrderInput | SortOrder
-    motherName?: SortOrderInput | SortOrder
+    qualification?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
     contact?: SortOrder
     parentsContact?: SortOrderInput | SortOrder
@@ -47007,7 +48169,7 @@ export namespace Prisma {
     admissionNumber?: StringWithAggregatesFilter<"Student"> | string
     fullName?: StringWithAggregatesFilter<"Student"> | string
     fatherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    motherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    qualification?: StringNullableWithAggregatesFilter<"Student"> | string | null
     photoUrl?: StringNullableWithAggregatesFilter<"Student"> | string | null
     contact?: StringWithAggregatesFilter<"Student"> | string
     parentsContact?: StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -47031,7 +48193,7 @@ export namespace Prisma {
     NOT?: CourseWhereInput | CourseWhereInput[]
     id?: IntFilter<"Course"> | number
     name?: StringFilter<"Course"> | string
-    durationWeeks?: IntFilter<"Course"> | number
+    durationMonths?: IntFilter<"Course"> | number
     description?: StringNullableFilter<"Course"> | string | null
     clientAdminId?: StringFilter<"Course"> | string
     courseFeeStructure?: XOR<CourseFeeStructureNullableScalarRelationFilter, CourseFeeStructureWhereInput> | null
@@ -47054,7 +48216,7 @@ export namespace Prisma {
   export type CourseOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    durationWeeks?: SortOrder
+    durationMonths?: SortOrder
     description?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
     courseFeeStructure?: CourseFeeStructureOrderByWithRelationInput
@@ -47080,7 +48242,7 @@ export namespace Prisma {
     OR?: CourseWhereInput[]
     NOT?: CourseWhereInput | CourseWhereInput[]
     name?: StringFilter<"Course"> | string
-    durationWeeks?: IntFilter<"Course"> | number
+    durationMonths?: IntFilter<"Course"> | number
     description?: StringNullableFilter<"Course"> | string | null
     clientAdminId?: StringFilter<"Course"> | string
     courseFeeStructure?: XOR<CourseFeeStructureNullableScalarRelationFilter, CourseFeeStructureWhereInput> | null
@@ -47103,7 +48265,7 @@ export namespace Prisma {
   export type CourseOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    durationWeeks?: SortOrder
+    durationMonths?: SortOrder
     description?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
     _count?: CourseCountOrderByAggregateInput
@@ -47119,7 +48281,7 @@ export namespace Prisma {
     NOT?: CourseScalarWhereWithAggregatesInput | CourseScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Course"> | number
     name?: StringWithAggregatesFilter<"Course"> | string
-    durationWeeks?: IntWithAggregatesFilter<"Course"> | number
+    durationMonths?: IntWithAggregatesFilter<"Course"> | number
     description?: StringNullableWithAggregatesFilter<"Course"> | string | null
     clientAdminId?: StringWithAggregatesFilter<"Course"> | string
   }
@@ -47131,7 +48293,7 @@ export namespace Prisma {
     id?: IntFilter<"CourseFeeStructure"> | number
     courseId?: IntFilter<"CourseFeeStructure"> | number
     totalAmount?: FloatFilter<"CourseFeeStructure"> | number
-    paymentType?: StringNullableListFilter<"CourseFeeStructure">
+    paymentType?: JsonFilter<"CourseFeeStructure">
     clientAdminId?: StringFilter<"CourseFeeStructure"> | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     installments?: InstallmentDetailListRelationFilter
@@ -47156,7 +48318,7 @@ export namespace Prisma {
     OR?: CourseFeeStructureWhereInput[]
     NOT?: CourseFeeStructureWhereInput | CourseFeeStructureWhereInput[]
     totalAmount?: FloatFilter<"CourseFeeStructure"> | number
-    paymentType?: StringNullableListFilter<"CourseFeeStructure">
+    paymentType?: JsonFilter<"CourseFeeStructure">
     clientAdminId?: StringFilter<"CourseFeeStructure"> | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     installments?: InstallmentDetailListRelationFilter
@@ -47183,7 +48345,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"CourseFeeStructure"> | number
     courseId?: IntWithAggregatesFilter<"CourseFeeStructure"> | number
     totalAmount?: FloatWithAggregatesFilter<"CourseFeeStructure"> | number
-    paymentType?: StringNullableListFilter<"CourseFeeStructure">
+    paymentType?: JsonWithAggregatesFilter<"CourseFeeStructure">
     clientAdminId?: StringWithAggregatesFilter<"CourseFeeStructure"> | string
   }
 
@@ -48408,7 +49570,7 @@ export namespace Prisma {
     courseId?: IntFilter<"StudentTask"> | number
     assignedDate?: DateTimeFilter<"StudentTask"> | Date | string
     dueDate?: DateTimeFilter<"StudentTask"> | Date | string
-    description?: StringFilter<"StudentTask"> | string
+    description?: StringNullableFilter<"StudentTask"> | string | null
     status?: StringFilter<"StudentTask"> | string
     facultyRemarks?: StringNullableFilter<"StudentTask"> | string | null
     grade?: StringNullableFilter<"StudentTask"> | string | null
@@ -48428,7 +49590,7 @@ export namespace Prisma {
     courseId?: SortOrder
     assignedDate?: SortOrder
     dueDate?: SortOrder
-    description?: SortOrder
+    description?: SortOrderInput | SortOrder
     status?: SortOrder
     facultyRemarks?: SortOrderInput | SortOrder
     grade?: SortOrderInput | SortOrder
@@ -48451,7 +49613,7 @@ export namespace Prisma {
     courseId?: IntFilter<"StudentTask"> | number
     assignedDate?: DateTimeFilter<"StudentTask"> | Date | string
     dueDate?: DateTimeFilter<"StudentTask"> | Date | string
-    description?: StringFilter<"StudentTask"> | string
+    description?: StringNullableFilter<"StudentTask"> | string | null
     status?: StringFilter<"StudentTask"> | string
     facultyRemarks?: StringNullableFilter<"StudentTask"> | string | null
     grade?: StringNullableFilter<"StudentTask"> | string | null
@@ -48471,7 +49633,7 @@ export namespace Prisma {
     courseId?: SortOrder
     assignedDate?: SortOrder
     dueDate?: SortOrder
-    description?: SortOrder
+    description?: SortOrderInput | SortOrder
     status?: SortOrder
     facultyRemarks?: SortOrderInput | SortOrder
     grade?: SortOrderInput | SortOrder
@@ -48494,7 +49656,7 @@ export namespace Prisma {
     courseId?: IntWithAggregatesFilter<"StudentTask"> | number
     assignedDate?: DateTimeWithAggregatesFilter<"StudentTask"> | Date | string
     dueDate?: DateTimeWithAggregatesFilter<"StudentTask"> | Date | string
-    description?: StringWithAggregatesFilter<"StudentTask"> | string
+    description?: StringNullableWithAggregatesFilter<"StudentTask"> | string | null
     status?: StringWithAggregatesFilter<"StudentTask"> | string
     facultyRemarks?: StringNullableWithAggregatesFilter<"StudentTask"> | string | null
     grade?: StringNullableWithAggregatesFilter<"StudentTask"> | string | null
@@ -48950,6 +50112,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -48970,12 +50133,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateInput = {
@@ -49000,6 +50163,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -49020,12 +50184,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUpdateInput = {
@@ -49050,6 +50214,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -49070,12 +50235,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateInput = {
@@ -49100,6 +50265,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -49120,12 +50286,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminCreateManyInput = {
@@ -49198,6 +50364,75 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type FinancialYearCreateInput = {
+    id?: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    clientAdmin: ClientAdminCreateNestedOneWithoutFinancialYearsInput
+  }
+
+  export type FinancialYearUncheckedCreateInput = {
+    id?: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    isActive?: boolean
+    clientAdminId: string
+    createdAt?: Date | string
+  }
+
+  export type FinancialYearUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutFinancialYearsNestedInput
+  }
+
+  export type FinancialYearUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialYearCreateManyInput = {
+    id?: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    isActive?: boolean
+    clientAdminId: string
+    createdAt?: Date | string
+  }
+
+  export type FinancialYearUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialYearUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RoleUserCreateInput = {
@@ -49385,15 +50620,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -49412,15 +50647,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -49439,15 +50674,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -49466,15 +50701,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -49493,15 +50728,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -49517,15 +50752,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -49539,15 +50774,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -49831,7 +51066,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -49868,7 +51103,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -49904,7 +51139,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49941,7 +51176,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49978,7 +51213,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -50002,7 +51237,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50026,7 +51261,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50046,7 +51281,7 @@ export namespace Prisma {
 
   export type CourseCreateInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -50068,7 +51303,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -50089,7 +51324,7 @@ export namespace Prisma {
 
   export type CourseUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -50111,7 +51346,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -50133,28 +51368,28 @@ export namespace Prisma {
   export type CourseCreateManyInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
   }
 
   export type CourseUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CourseUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
   export type CourseFeeStructureCreateInput = {
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     course: CourseCreateNestedOneWithoutCourseFeeStructureInput
     installments?: InstallmentDetailCreateNestedManyWithoutCourseFeeStructureInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCourseFeeStructuresInput
@@ -50164,14 +51399,14 @@ export namespace Prisma {
     id?: number
     courseId: number
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     clientAdminId: string
     installments?: InstallmentDetailUncheckedCreateNestedManyWithoutCourseFeeStructureInput
   }
 
   export type CourseFeeStructureUpdateInput = {
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     course?: CourseUpdateOneRequiredWithoutCourseFeeStructureNestedInput
     installments?: InstallmentDetailUpdateManyWithoutCourseFeeStructureNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCourseFeeStructuresNestedInput
@@ -50181,7 +51416,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     clientAdminId?: StringFieldUpdateOperationsInput | string
     installments?: InstallmentDetailUncheckedUpdateManyWithoutCourseFeeStructureNestedInput
   }
@@ -50190,20 +51425,20 @@ export namespace Prisma {
     id?: number
     courseId: number
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     clientAdminId: string
   }
 
   export type CourseFeeStructureUpdateManyMutationInput = {
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
   }
 
   export type CourseFeeStructureUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -51342,7 +52577,7 @@ export namespace Prisma {
   export type StudentTaskCreateInput = {
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -51359,7 +52594,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -51371,7 +52606,7 @@ export namespace Prisma {
   export type StudentTaskUpdateInput = {
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51388,7 +52623,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51403,7 +52638,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -51415,7 +52650,7 @@ export namespace Prisma {
   export type StudentTaskUpdateManyMutationInput = {
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51427,7 +52662,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51824,8 +53059,8 @@ export namespace Prisma {
 
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -51833,14 +53068,13 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -51848,14 +53082,13 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -51865,20 +53098,26 @@ export namespace Prisma {
 
   export type EnumUserRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[]
+    notIn?: $Enums.UserRole[]
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type FinancialYearListRelationFilter = {
+    every?: FinancialYearWhereInput
+    some?: FinancialYearWhereInput
+    none?: FinancialYearWhereInput
   }
 
   export type RoleUserListRelationFilter = {
@@ -52001,12 +53240,6 @@ export namespace Prisma {
     none?: FinancialRecordWhereInput
   }
 
-  export type StationeryItemListRelationFilter = {
-    every?: StationeryItemWhereInput
-    some?: StationeryItemWhereInput
-    none?: StationeryItemWhereInput
-  }
-
   export type EnquiryListRelationFilter = {
     every?: EnquiryWhereInput
     some?: EnquiryWhereInput
@@ -52037,9 +53270,19 @@ export namespace Prisma {
     none?: TestWhereInput
   }
 
+  export type StationeryItemListRelationFilter = {
+    every?: StationeryItemWhereInput
+    some?: StationeryItemWhereInput
+    none?: StationeryItemWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type FinancialYearOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type RoleUserOrderByRelationAggregateInput = {
@@ -52122,10 +53365,6 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type StationeryItemOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type EnquiryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -52143,6 +53382,10 @@ export namespace Prisma {
   }
 
   export type TestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StationeryItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -52220,8 +53463,8 @@ export namespace Prisma {
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -52229,7 +53472,6 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
     not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
@@ -52238,8 +53480,8 @@ export namespace Prisma {
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -52247,7 +53489,6 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
     not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
@@ -52256,8 +53497,8 @@ export namespace Prisma {
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -52270,8 +53511,8 @@ export namespace Prisma {
 
   export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[]
+    notIn?: $Enums.UserRole[]
     not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
@@ -52280,8 +53521,8 @@ export namespace Prisma {
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -52292,9 +53533,57 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type ClientAdminScalarRelationFilter = {
     is?: ClientAdminWhereInput
     isNot?: ClientAdminWhereInput
+  }
+
+  export type FinancialYearClientAdminIdNameCompoundUniqueInput = {
+    clientAdminId: string
+    name: string
+  }
+
+  export type FinancialYearCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    isActive?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FinancialYearMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    isActive?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FinancialYearMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    isActive?: SortOrder
+    clientAdminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type RoleUserCountOrderByAggregateInput = {
@@ -52377,8 +53666,8 @@ export namespace Prisma {
 
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -52388,8 +53677,8 @@ export namespace Prisma {
 
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -52399,14 +53688,9 @@ export namespace Prisma {
 
   export type EnumLeadStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[]
+    notIn?: $Enums.LeadStatus[]
     not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type FollowUpListRelationFilter = {
@@ -52444,15 +53728,15 @@ export namespace Prisma {
     srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
-    alternateContact?: SortOrder
     email?: SortOrder
+    course?: SortOrder
+    source?: SortOrder
+    alternateContact?: SortOrder
     age?: SortOrder
     location?: SortOrder
     city?: SortOrder
-    course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    source?: SortOrder
     referedBy?: SortOrder
     leadStatus?: SortOrder
     enquiryDate?: SortOrder
@@ -52474,15 +53758,15 @@ export namespace Prisma {
     srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
-    alternateContact?: SortOrder
     email?: SortOrder
+    course?: SortOrder
+    source?: SortOrder
+    alternateContact?: SortOrder
     age?: SortOrder
     location?: SortOrder
     city?: SortOrder
-    course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    source?: SortOrder
     referedBy?: SortOrder
     leadStatus?: SortOrder
     enquiryDate?: SortOrder
@@ -52498,15 +53782,15 @@ export namespace Prisma {
     srNo?: SortOrder
     name?: SortOrder
     contact?: SortOrder
-    alternateContact?: SortOrder
     email?: SortOrder
+    course?: SortOrder
+    source?: SortOrder
+    alternateContact?: SortOrder
     age?: SortOrder
     location?: SortOrder
     city?: SortOrder
-    course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    source?: SortOrder
     referedBy?: SortOrder
     leadStatus?: SortOrder
     enquiryDate?: SortOrder
@@ -52525,8 +53809,8 @@ export namespace Prisma {
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -52541,8 +53825,8 @@ export namespace Prisma {
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -52557,20 +53841,12 @@ export namespace Prisma {
 
   export type EnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[]
+    notIn?: $Enums.LeadStatus[]
     not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLeadStatusFilter<$PrismaModel>
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnquiryScalarRelationFilter = {
@@ -52621,8 +53897,8 @@ export namespace Prisma {
 
   export type EnumFollowUpStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.FollowUpStatus | EnumFollowUpStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FollowUpStatus[]
+    notIn?: $Enums.FollowUpStatus[]
     not?: NestedEnumFollowUpStatusFilter<$PrismaModel> | $Enums.FollowUpStatus
   }
 
@@ -52661,8 +53937,8 @@ export namespace Prisma {
 
   export type EnumFollowUpStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.FollowUpStatus | EnumFollowUpStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FollowUpStatus[]
+    notIn?: $Enums.FollowUpStatus[]
     not?: NestedEnumFollowUpStatusWithAggregatesFilter<$PrismaModel> | $Enums.FollowUpStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumFollowUpStatusFilter<$PrismaModel>
@@ -52772,7 +54048,7 @@ export namespace Prisma {
     admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrder
-    motherName?: SortOrder
+    qualification?: SortOrder
     photoUrl?: SortOrder
     contact?: SortOrder
     parentsContact?: SortOrder
@@ -52802,7 +54078,7 @@ export namespace Prisma {
     admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrder
-    motherName?: SortOrder
+    qualification?: SortOrder
     photoUrl?: SortOrder
     contact?: SortOrder
     parentsContact?: SortOrder
@@ -52827,7 +54103,7 @@ export namespace Prisma {
     admissionNumber?: SortOrder
     fullName?: SortOrder
     fatherName?: SortOrder
-    motherName?: SortOrder
+    qualification?: SortOrder
     photoUrl?: SortOrder
     contact?: SortOrder
     parentsContact?: SortOrder
@@ -52868,20 +54144,20 @@ export namespace Prisma {
   export type CourseCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    durationWeeks?: SortOrder
+    durationMonths?: SortOrder
     description?: SortOrder
     clientAdminId?: SortOrder
   }
 
   export type CourseAvgOrderByAggregateInput = {
     id?: SortOrder
-    durationWeeks?: SortOrder
+    durationMonths?: SortOrder
   }
 
   export type CourseMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    durationWeeks?: SortOrder
+    durationMonths?: SortOrder
     description?: SortOrder
     clientAdminId?: SortOrder
   }
@@ -52889,33 +54165,43 @@ export namespace Prisma {
   export type CourseMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    durationWeeks?: SortOrder
+    durationMonths?: SortOrder
     description?: SortOrder
     clientAdminId?: SortOrder
   }
 
   export type CourseSumOrderByAggregateInput = {
     id?: SortOrder
-    durationWeeks?: SortOrder
+    durationMonths?: SortOrder
   }
 
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
   }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type InstallmentDetailListRelationFilter = {
@@ -52964,8 +54250,8 @@ export namespace Prisma {
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -52976,6 +54262,27 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type FacultyNullableScalarRelationFilter = {
@@ -53222,8 +54529,8 @@ export namespace Prisma {
 
   export type EnumPaymentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentType | EnumPaymentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentType[]
+    notIn?: $Enums.PaymentType[]
     not?: NestedEnumPaymentTypeFilter<$PrismaModel> | $Enums.PaymentType
   }
 
@@ -53257,8 +54564,8 @@ export namespace Prisma {
 
   export type EnumPaymentTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentType | EnumPaymentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentType[]
+    notIn?: $Enums.PaymentType[]
     not?: NestedEnumPaymentTypeWithAggregatesFilter<$PrismaModel> | $Enums.PaymentType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentTypeFilter<$PrismaModel>
@@ -53487,8 +54794,8 @@ export namespace Prisma {
 
   export type EnumPaymentModeFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMode[]
+    notIn?: $Enums.PaymentMode[]
     not?: NestedEnumPaymentModeFilter<$PrismaModel> | $Enums.PaymentMode
   }
 
@@ -53538,8 +54845,8 @@ export namespace Prisma {
 
   export type EnumPaymentModeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMode[]
+    notIn?: $Enums.PaymentMode[]
     not?: NestedEnumPaymentModeWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentModeFilter<$PrismaModel>
@@ -53548,15 +54855,15 @@ export namespace Prisma {
 
   export type EnumPaymentModeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentMode[] | null
+    notIn?: $Enums.PaymentMode[] | null
     not?: NestedEnumPaymentModeNullableFilter<$PrismaModel> | $Enums.PaymentMode | null
   }
 
   export type EnumPaymentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[]
+    notIn?: $Enums.PaymentStatus[]
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
@@ -53644,8 +54951,8 @@ export namespace Prisma {
 
   export type EnumPaymentModeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentMode[] | null
+    notIn?: $Enums.PaymentMode[] | null
     not?: NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
@@ -53654,8 +54961,8 @@ export namespace Prisma {
 
   export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[]
+    notIn?: $Enums.PaymentStatus[]
     not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
@@ -53808,8 +55115,8 @@ export namespace Prisma {
 
   export type EnumTaskStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[]
+    notIn?: $Enums.TaskStatus[]
     not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
   }
 
@@ -53854,8 +55161,8 @@ export namespace Prisma {
 
   export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[]
+    notIn?: $Enums.TaskStatus[]
     not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskStatusFilter<$PrismaModel>
@@ -53930,8 +55237,8 @@ export namespace Prisma {
 
   export type EnumTestStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TestStatus | EnumTestStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TestStatus[]
+    notIn?: $Enums.TestStatus[]
     not?: NestedEnumTestStatusFilter<$PrismaModel> | $Enums.TestStatus
   }
 
@@ -53976,8 +55283,8 @@ export namespace Prisma {
 
   export type EnumTestStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TestStatus | EnumTestStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TestStatus[]
+    notIn?: $Enums.TestStatus[]
     not?: NestedEnumTestStatusWithAggregatesFilter<$PrismaModel> | $Enums.TestStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTestStatusFilter<$PrismaModel>
@@ -54148,8 +55455,8 @@ export namespace Prisma {
 
   export type EnumRecordTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.RecordType | EnumRecordTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecordType[]
+    notIn?: $Enums.RecordType[]
     not?: NestedEnumRecordTypeFilter<$PrismaModel> | $Enums.RecordType
   }
 
@@ -54218,12 +55525,19 @@ export namespace Prisma {
 
   export type EnumRecordTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.RecordType | EnumRecordTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecordType[]
+    notIn?: $Enums.RecordType[]
     not?: NestedEnumRecordTypeWithAggregatesFilter<$PrismaModel> | $Enums.RecordType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRecordTypeFilter<$PrismaModel>
     _max?: NestedEnumRecordTypeFilter<$PrismaModel>
+  }
+
+  export type FinancialYearCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<FinancialYearCreateWithoutClientAdminInput, FinancialYearUncheckedCreateWithoutClientAdminInput> | FinancialYearCreateWithoutClientAdminInput[] | FinancialYearUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: FinancialYearCreateOrConnectWithoutClientAdminInput | FinancialYearCreateOrConnectWithoutClientAdminInput[]
+    createMany?: FinancialYearCreateManyClientAdminInputEnvelope
+    connect?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
   }
 
   export type RoleUserCreateNestedManyWithoutClientAdminInput = {
@@ -54366,13 +55680,6 @@ export namespace Prisma {
     connect?: FinancialRecordWhereUniqueInput | FinancialRecordWhereUniqueInput[]
   }
 
-  export type StationeryItemCreateNestedManyWithoutClientAdminInput = {
-    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
-    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
-    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
-    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-  }
-
   export type EnquiryCreateNestedManyWithoutClientAdminInput = {
     create?: XOR<EnquiryCreateWithoutClientAdminInput, EnquiryUncheckedCreateWithoutClientAdminInput> | EnquiryCreateWithoutClientAdminInput[] | EnquiryUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: EnquiryCreateOrConnectWithoutClientAdminInput | EnquiryCreateOrConnectWithoutClientAdminInput[]
@@ -54406,6 +55713,20 @@ export namespace Prisma {
     connectOrCreate?: TestCreateOrConnectWithoutClientAdminInput | TestCreateOrConnectWithoutClientAdminInput[]
     createMany?: TestCreateManyClientAdminInputEnvelope
     connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+  }
+
+  export type StationeryItemCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
+    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
+    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+  }
+
+  export type FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<FinancialYearCreateWithoutClientAdminInput, FinancialYearUncheckedCreateWithoutClientAdminInput> | FinancialYearCreateWithoutClientAdminInput[] | FinancialYearUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: FinancialYearCreateOrConnectWithoutClientAdminInput | FinancialYearCreateOrConnectWithoutClientAdminInput[]
+    createMany?: FinancialYearCreateManyClientAdminInputEnvelope
+    connect?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
   }
 
   export type RoleUserUncheckedCreateNestedManyWithoutClientAdminInput = {
@@ -54548,13 +55869,6 @@ export namespace Prisma {
     connect?: FinancialRecordWhereUniqueInput | FinancialRecordWhereUniqueInput[]
   }
 
-  export type StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput = {
-    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
-    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
-    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
-    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-  }
-
   export type EnquiryUncheckedCreateNestedManyWithoutClientAdminInput = {
     create?: XOR<EnquiryCreateWithoutClientAdminInput, EnquiryUncheckedCreateWithoutClientAdminInput> | EnquiryCreateWithoutClientAdminInput[] | EnquiryUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: EnquiryCreateOrConnectWithoutClientAdminInput | EnquiryCreateOrConnectWithoutClientAdminInput[]
@@ -54590,6 +55904,13 @@ export namespace Prisma {
     connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
   }
 
+  export type StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
+    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
+    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -54608,6 +55929,20 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type FinancialYearUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<FinancialYearCreateWithoutClientAdminInput, FinancialYearUncheckedCreateWithoutClientAdminInput> | FinancialYearCreateWithoutClientAdminInput[] | FinancialYearUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: FinancialYearCreateOrConnectWithoutClientAdminInput | FinancialYearCreateOrConnectWithoutClientAdminInput[]
+    upsert?: FinancialYearUpsertWithWhereUniqueWithoutClientAdminInput | FinancialYearUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: FinancialYearCreateManyClientAdminInputEnvelope
+    set?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
+    disconnect?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
+    delete?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
+    connect?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
+    update?: FinancialYearUpdateWithWhereUniqueWithoutClientAdminInput | FinancialYearUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: FinancialYearUpdateManyWithWhereWithoutClientAdminInput | FinancialYearUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: FinancialYearScalarWhereInput | FinancialYearScalarWhereInput[]
   }
 
   export type RoleUserUpdateManyWithoutClientAdminNestedInput = {
@@ -54890,20 +56225,6 @@ export namespace Prisma {
     deleteMany?: FinancialRecordScalarWhereInput | FinancialRecordScalarWhereInput[]
   }
 
-  export type StationeryItemUpdateManyWithoutClientAdminNestedInput = {
-    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
-    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
-    upsert?: StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput | StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput[]
-    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
-    set?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-    disconnect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-    delete?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-    update?: StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput | StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput[]
-    updateMany?: StationeryItemUpdateManyWithWhereWithoutClientAdminInput | StationeryItemUpdateManyWithWhereWithoutClientAdminInput[]
-    deleteMany?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
-  }
-
   export type EnquiryUpdateManyWithoutClientAdminNestedInput = {
     create?: XOR<EnquiryCreateWithoutClientAdminInput, EnquiryUncheckedCreateWithoutClientAdminInput> | EnquiryCreateWithoutClientAdminInput[] | EnquiryUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: EnquiryCreateOrConnectWithoutClientAdminInput | EnquiryCreateOrConnectWithoutClientAdminInput[]
@@ -54972,6 +56293,34 @@ export namespace Prisma {
     update?: TestUpdateWithWhereUniqueWithoutClientAdminInput | TestUpdateWithWhereUniqueWithoutClientAdminInput[]
     updateMany?: TestUpdateManyWithWhereWithoutClientAdminInput | TestUpdateManyWithWhereWithoutClientAdminInput[]
     deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
+  }
+
+  export type StationeryItemUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
+    upsert?: StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput | StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
+    set?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    disconnect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    delete?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    update?: StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput | StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: StationeryItemUpdateManyWithWhereWithoutClientAdminInput | StationeryItemUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
+  }
+
+  export type FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<FinancialYearCreateWithoutClientAdminInput, FinancialYearUncheckedCreateWithoutClientAdminInput> | FinancialYearCreateWithoutClientAdminInput[] | FinancialYearUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: FinancialYearCreateOrConnectWithoutClientAdminInput | FinancialYearCreateOrConnectWithoutClientAdminInput[]
+    upsert?: FinancialYearUpsertWithWhereUniqueWithoutClientAdminInput | FinancialYearUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: FinancialYearCreateManyClientAdminInputEnvelope
+    set?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
+    disconnect?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
+    delete?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
+    connect?: FinancialYearWhereUniqueInput | FinancialYearWhereUniqueInput[]
+    update?: FinancialYearUpdateWithWhereUniqueWithoutClientAdminInput | FinancialYearUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: FinancialYearUpdateManyWithWhereWithoutClientAdminInput | FinancialYearUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: FinancialYearScalarWhereInput | FinancialYearScalarWhereInput[]
   }
 
   export type RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput = {
@@ -55254,20 +56603,6 @@ export namespace Prisma {
     deleteMany?: FinancialRecordScalarWhereInput | FinancialRecordScalarWhereInput[]
   }
 
-  export type StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput = {
-    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
-    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
-    upsert?: StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput | StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput[]
-    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
-    set?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-    disconnect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-    delete?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
-    update?: StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput | StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput[]
-    updateMany?: StationeryItemUpdateManyWithWhereWithoutClientAdminInput | StationeryItemUpdateManyWithWhereWithoutClientAdminInput[]
-    deleteMany?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
-  }
-
   export type EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput = {
     create?: XOR<EnquiryCreateWithoutClientAdminInput, EnquiryUncheckedCreateWithoutClientAdminInput> | EnquiryCreateWithoutClientAdminInput[] | EnquiryUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: EnquiryCreateOrConnectWithoutClientAdminInput | EnquiryCreateOrConnectWithoutClientAdminInput[]
@@ -55336,6 +56671,38 @@ export namespace Prisma {
     update?: TestUpdateWithWhereUniqueWithoutClientAdminInput | TestUpdateWithWhereUniqueWithoutClientAdminInput[]
     updateMany?: TestUpdateManyWithWhereWithoutClientAdminInput | TestUpdateManyWithWhereWithoutClientAdminInput[]
     deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
+  }
+
+  export type StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput> | StationeryItemCreateWithoutClientAdminInput[] | StationeryItemUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: StationeryItemCreateOrConnectWithoutClientAdminInput | StationeryItemCreateOrConnectWithoutClientAdminInput[]
+    upsert?: StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput | StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: StationeryItemCreateManyClientAdminInputEnvelope
+    set?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    disconnect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    delete?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    connect?: StationeryItemWhereUniqueInput | StationeryItemWhereUniqueInput[]
+    update?: StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput | StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: StationeryItemUpdateManyWithWhereWithoutClientAdminInput | StationeryItemUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
+  }
+
+  export type ClientAdminCreateNestedOneWithoutFinancialYearsInput = {
+    create?: XOR<ClientAdminCreateWithoutFinancialYearsInput, ClientAdminUncheckedCreateWithoutFinancialYearsInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutFinancialYearsInput
+    connect?: ClientAdminWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type ClientAdminUpdateOneRequiredWithoutFinancialYearsNestedInput = {
+    create?: XOR<ClientAdminCreateWithoutFinancialYearsInput, ClientAdminUncheckedCreateWithoutFinancialYearsInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutFinancialYearsInput
+    upsert?: ClientAdminUpsertWithoutFinancialYearsInput
+    connect?: ClientAdminWhereUniqueInput
+    update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutFinancialYearsInput, ClientAdminUpdateWithoutFinancialYearsInput>, ClientAdminUncheckedUpdateWithoutFinancialYearsInput>
   }
 
   export type ClientAdminCreateNestedOneWithoutRoleUsersInput = {
@@ -55436,10 +56803,6 @@ export namespace Prisma {
 
   export type EnumLeadStatusFieldUpdateOperationsInput = {
     set?: $Enums.LeadStatus
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type FollowUpUpdateManyWithoutEnquiryNestedInput = {
@@ -56790,10 +58153,6 @@ export namespace Prisma {
     deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
   }
 
-  export type CourseFeeStructureCreatepaymentTypeInput = {
-    set: string[]
-  }
-
   export type CourseCreateNestedOneWithoutCourseFeeStructureInput = {
     create?: XOR<CourseCreateWithoutCourseFeeStructureInput, CourseUncheckedCreateWithoutCourseFeeStructureInput>
     connectOrCreate?: CourseCreateOrConnectWithoutCourseFeeStructureInput
@@ -56826,11 +58185,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type CourseFeeStructureUpdatepaymentTypeInput = {
-    set?: string[]
-    push?: string | string[]
   }
 
   export type CourseUpdateOneRequiredWithoutCourseFeeStructureNestedInput = {
@@ -58599,8 +59953,8 @@ export namespace Prisma {
 
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -58613,8 +59967,8 @@ export namespace Prisma {
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -58627,8 +59981,8 @@ export namespace Prisma {
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -58638,15 +59992,15 @@ export namespace Prisma {
 
   export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[]
+    notIn?: $Enums.UserRole[]
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -58656,8 +60010,8 @@ export namespace Prisma {
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -58673,8 +60027,8 @@ export namespace Prisma {
 
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -58684,8 +60038,8 @@ export namespace Prisma {
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -58701,8 +60055,8 @@ export namespace Prisma {
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -58712,8 +60066,8 @@ export namespace Prisma {
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -58726,8 +60080,8 @@ export namespace Prisma {
 
   export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[]
+    notIn?: $Enums.UserRole[]
     not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
@@ -58736,8 +60090,8 @@ export namespace Prisma {
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -58748,22 +60102,30 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[]
+    notIn?: $Enums.LeadStatus[]
+    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -58778,8 +60140,8 @@ export namespace Prisma {
 
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -58789,8 +60151,8 @@ export namespace Prisma {
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -58805,8 +60167,8 @@ export namespace Prisma {
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -58816,33 +60178,25 @@ export namespace Prisma {
 
   export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[]
+    notIn?: $Enums.LeadStatus[]
     not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLeadStatusFilter<$PrismaModel>
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedEnumFollowUpStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.FollowUpStatus | EnumFollowUpStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FollowUpStatus[]
+    notIn?: $Enums.FollowUpStatus[]
     not?: NestedEnumFollowUpStatusFilter<$PrismaModel> | $Enums.FollowUpStatus
   }
 
   export type NestedEnumFollowUpStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.FollowUpStatus | EnumFollowUpStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FollowUpStatus[]
+    notIn?: $Enums.FollowUpStatus[]
     not?: NestedEnumFollowUpStatusWithAggregatesFilter<$PrismaModel> | $Enums.FollowUpStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumFollowUpStatusFilter<$PrismaModel>
@@ -58851,8 +60205,8 @@ export namespace Prisma {
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -58864,18 +60218,36 @@ export namespace Prisma {
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
   }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumPaymentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentType | EnumPaymentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentType[]
+    notIn?: $Enums.PaymentType[]
     not?: NestedEnumPaymentTypeFilter<$PrismaModel> | $Enums.PaymentType
   }
 
   export type NestedEnumPaymentTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentType | EnumPaymentTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentType[] | ListEnumPaymentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentType[]
+    notIn?: $Enums.PaymentType[]
     not?: NestedEnumPaymentTypeWithAggregatesFilter<$PrismaModel> | $Enums.PaymentType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentTypeFilter<$PrismaModel>
@@ -58884,15 +60256,15 @@ export namespace Prisma {
 
   export type NestedEnumPaymentModeFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMode[]
+    notIn?: $Enums.PaymentMode[]
     not?: NestedEnumPaymentModeFilter<$PrismaModel> | $Enums.PaymentMode
   }
 
   export type NestedEnumPaymentModeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMode[]
+    notIn?: $Enums.PaymentMode[]
     not?: NestedEnumPaymentModeWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentModeFilter<$PrismaModel>
@@ -58901,22 +60273,22 @@ export namespace Prisma {
 
   export type NestedEnumPaymentModeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentMode[] | null
+    notIn?: $Enums.PaymentMode[] | null
     not?: NestedEnumPaymentModeNullableFilter<$PrismaModel> | $Enums.PaymentMode | null
   }
 
   export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[]
+    notIn?: $Enums.PaymentStatus[]
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
   export type NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentMode[] | null
+    notIn?: $Enums.PaymentMode[] | null
     not?: NestedEnumPaymentModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumPaymentModeNullableFilter<$PrismaModel>
@@ -58925,8 +60297,8 @@ export namespace Prisma {
 
   export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[]
+    notIn?: $Enums.PaymentStatus[]
     not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
@@ -58935,15 +60307,15 @@ export namespace Prisma {
 
   export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[]
+    notIn?: $Enums.TaskStatus[]
     not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
   }
 
   export type NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[]
+    notIn?: $Enums.TaskStatus[]
     not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskStatusFilter<$PrismaModel>
@@ -58952,15 +60324,15 @@ export namespace Prisma {
 
   export type NestedEnumTestStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TestStatus | EnumTestStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TestStatus[]
+    notIn?: $Enums.TestStatus[]
     not?: NestedEnumTestStatusFilter<$PrismaModel> | $Enums.TestStatus
   }
 
   export type NestedEnumTestStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TestStatus | EnumTestStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TestStatus[] | ListEnumTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TestStatus[]
+    notIn?: $Enums.TestStatus[]
     not?: NestedEnumTestStatusWithAggregatesFilter<$PrismaModel> | $Enums.TestStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTestStatusFilter<$PrismaModel>
@@ -58969,19 +60341,46 @@ export namespace Prisma {
 
   export type NestedEnumRecordTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.RecordType | EnumRecordTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecordType[]
+    notIn?: $Enums.RecordType[]
     not?: NestedEnumRecordTypeFilter<$PrismaModel> | $Enums.RecordType
   }
 
   export type NestedEnumRecordTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.RecordType | EnumRecordTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RecordType[] | ListEnumRecordTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecordType[]
+    notIn?: $Enums.RecordType[]
     not?: NestedEnumRecordTypeWithAggregatesFilter<$PrismaModel> | $Enums.RecordType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRecordTypeFilter<$PrismaModel>
     _max?: NestedEnumRecordTypeFilter<$PrismaModel>
+  }
+
+  export type FinancialYearCreateWithoutClientAdminInput = {
+    id?: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type FinancialYearUncheckedCreateWithoutClientAdminInput = {
+    id?: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type FinancialYearCreateOrConnectWithoutClientAdminInput = {
+    where: FinancialYearWhereUniqueInput
+    create: XOR<FinancialYearCreateWithoutClientAdminInput, FinancialYearUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type FinancialYearCreateManyClientAdminInputEnvelope = {
+    data: FinancialYearCreateManyClientAdminInput | FinancialYearCreateManyClientAdminInput[]
   }
 
   export type RoleUserCreateWithoutClientAdminInput = {
@@ -59021,7 +60420,6 @@ export namespace Prisma {
 
   export type RoleUserCreateManyClientAdminInputEnvelope = {
     data: RoleUserCreateManyClientAdminInput | RoleUserCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type FacultyCreateWithoutClientAdminInput = {
@@ -59072,7 +60470,6 @@ export namespace Prisma {
 
   export type FacultyCreateManyClientAdminInputEnvelope = {
     data: FacultyCreateManyClientAdminInput | FacultyCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type BatchCreateWithoutClientAdminInput = {
@@ -59103,12 +60500,11 @@ export namespace Prisma {
 
   export type BatchCreateManyClientAdminInputEnvelope = {
     data: BatchCreateManyClientAdminInput | BatchCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type CourseCreateWithoutClientAdminInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -59129,7 +60525,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutClientAdminInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutCourseInput
@@ -59154,7 +60550,6 @@ export namespace Prisma {
 
   export type CourseCreateManyClientAdminInputEnvelope = {
     data: CourseCreateManyClientAdminInput | CourseCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type EnquiryCourseCreateWithoutClientAdminInput = {
@@ -59175,7 +60570,6 @@ export namespace Prisma {
 
   export type EnquiryCourseCreateManyClientAdminInputEnvelope = {
     data: EnquiryCourseCreateManyClientAdminInput | EnquiryCourseCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type LabCreateWithoutClientAdminInput = {
@@ -59204,7 +60598,6 @@ export namespace Prisma {
 
   export type LabCreateManyClientAdminInputEnvelope = {
     data: LabCreateManyClientAdminInput | LabCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type LabTimeSlotCreateWithoutClientAdminInput = {
@@ -59235,7 +60628,6 @@ export namespace Prisma {
 
   export type LabTimeSlotCreateManyClientAdminInputEnvelope = {
     data: LabTimeSlotCreateManyClientAdminInput | LabTimeSlotCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type LabAllocationCreateWithoutClientAdminInput = {
@@ -59260,7 +60652,6 @@ export namespace Prisma {
 
   export type LabAllocationCreateManyClientAdminInputEnvelope = {
     data: LabAllocationCreateManyClientAdminInput | LabAllocationCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentCreateWithoutClientAdminInput = {
@@ -59269,7 +60660,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -59305,7 +60696,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -59341,7 +60732,6 @@ export namespace Prisma {
 
   export type StudentCreateManyClientAdminInputEnvelope = {
     data: StudentCreateManyClientAdminInput | StudentCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type ActivityLogCreateWithoutClientAdminInput = {
@@ -59369,7 +60759,6 @@ export namespace Prisma {
 
   export type ActivityLogCreateManyClientAdminInputEnvelope = {
     data: ActivityLogCreateManyClientAdminInput | ActivityLogCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentCourseCreateWithoutClientAdminInput = {
@@ -59406,7 +60795,6 @@ export namespace Prisma {
 
   export type StudentCourseCreateManyClientAdminInputEnvelope = {
     data: StudentCourseCreateManyClientAdminInput | StudentCourseCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type FeeStructureCreateWithoutClientAdminInput = {
@@ -59435,7 +60823,6 @@ export namespace Prisma {
 
   export type FeeStructureCreateManyClientAdminInputEnvelope = {
     data: FeeStructureCreateManyClientAdminInput | FeeStructureCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentFeeCreateWithoutClientAdminInput = {
@@ -59480,7 +60867,6 @@ export namespace Prisma {
 
   export type StudentFeeCreateManyClientAdminInputEnvelope = {
     data: StudentFeeCreateManyClientAdminInput | StudentFeeCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type StationeryIssueCreateWithoutClientAdminInput = {
@@ -59509,7 +60895,6 @@ export namespace Prisma {
 
   export type StationeryIssueCreateManyClientAdminInputEnvelope = {
     data: StationeryIssueCreateManyClientAdminInput | StationeryIssueCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type AttendanceRecordCreateWithoutClientAdminInput = {
@@ -59538,13 +60923,12 @@ export namespace Prisma {
 
   export type AttendanceRecordCreateManyClientAdminInputEnvelope = {
     data: AttendanceRecordCreateManyClientAdminInput | AttendanceRecordCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentTaskCreateWithoutClientAdminInput = {
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -59560,7 +60944,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -59575,7 +60959,6 @@ export namespace Prisma {
 
   export type StudentTaskCreateManyClientAdminInputEnvelope = {
     data: StudentTaskCreateManyClientAdminInput | StudentTaskCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentTestCreateWithoutClientAdminInput = {
@@ -59614,7 +60997,6 @@ export namespace Prisma {
 
   export type StudentTestCreateManyClientAdminInputEnvelope = {
     data: StudentTestCreateManyClientAdminInput | StudentTestCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type CourseCompletionCreateWithoutClientAdminInput = {
@@ -59641,7 +61023,6 @@ export namespace Prisma {
 
   export type CourseCompletionCreateManyClientAdminInputEnvelope = {
     data: CourseCompletionCreateManyClientAdminInput | CourseCompletionCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type CertificateCreateWithoutClientAdminInput = {
@@ -59668,7 +61049,6 @@ export namespace Prisma {
 
   export type CertificateCreateManyClientAdminInputEnvelope = {
     data: CertificateCreateManyClientAdminInput | CertificateCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type FinancialRecordCreateWithoutClientAdminInput = {
@@ -59704,32 +61084,6 @@ export namespace Prisma {
 
   export type FinancialRecordCreateManyClientAdminInputEnvelope = {
     data: FinancialRecordCreateManyClientAdminInput | FinancialRecordCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type StationeryItemCreateWithoutClientAdminInput = {
-    name: string
-    totalQuantity: number
-    quantityAvailable: number
-    stationeryIssues?: StationeryIssueCreateNestedManyWithoutItemInput
-  }
-
-  export type StationeryItemUncheckedCreateWithoutClientAdminInput = {
-    id?: number
-    name: string
-    totalQuantity: number
-    quantityAvailable: number
-    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutItemInput
-  }
-
-  export type StationeryItemCreateOrConnectWithoutClientAdminInput = {
-    where: StationeryItemWhereUniqueInput
-    create: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput>
-  }
-
-  export type StationeryItemCreateManyClientAdminInputEnvelope = {
-    data: StationeryItemCreateManyClientAdminInput | StationeryItemCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type EnquiryCreateWithoutClientAdminInput = {
@@ -59737,15 +61091,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -59763,15 +61117,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -59791,7 +61145,6 @@ export namespace Prisma {
 
   export type EnquiryCreateManyClientAdminInputEnvelope = {
     data: EnquiryCreateManyClientAdminInput | EnquiryCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type NotificationCreateWithoutClientAdminInput = {
@@ -59821,12 +61174,11 @@ export namespace Prisma {
 
   export type NotificationCreateManyClientAdminInputEnvelope = {
     data: NotificationCreateManyClientAdminInput | NotificationCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type CourseFeeStructureCreateWithoutClientAdminInput = {
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     course: CourseCreateNestedOneWithoutCourseFeeStructureInput
     installments?: InstallmentDetailCreateNestedManyWithoutCourseFeeStructureInput
   }
@@ -59835,7 +61187,7 @@ export namespace Prisma {
     id?: number
     courseId: number
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     installments?: InstallmentDetailUncheckedCreateNestedManyWithoutCourseFeeStructureInput
   }
 
@@ -59846,7 +61198,6 @@ export namespace Prisma {
 
   export type CourseFeeStructureCreateManyClientAdminInputEnvelope = {
     data: CourseFeeStructureCreateManyClientAdminInput | CourseFeeStructureCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type TaskCreateWithoutClientAdminInput = {
@@ -59873,7 +61224,6 @@ export namespace Prisma {
 
   export type TaskCreateManyClientAdminInputEnvelope = {
     data: TaskCreateManyClientAdminInput | TaskCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
   }
 
   export type TestCreateWithoutClientAdminInput = {
@@ -59900,7 +61250,59 @@ export namespace Prisma {
 
   export type TestCreateManyClientAdminInputEnvelope = {
     data: TestCreateManyClientAdminInput | TestCreateManyClientAdminInput[]
-    skipDuplicates?: boolean
+  }
+
+  export type StationeryItemCreateWithoutClientAdminInput = {
+    name: string
+    totalQuantity: number
+    quantityAvailable: number
+    stationeryIssues?: StationeryIssueCreateNestedManyWithoutItemInput
+  }
+
+  export type StationeryItemUncheckedCreateWithoutClientAdminInput = {
+    id?: number
+    name: string
+    totalQuantity: number
+    quantityAvailable: number
+    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutItemInput
+  }
+
+  export type StationeryItemCreateOrConnectWithoutClientAdminInput = {
+    where: StationeryItemWhereUniqueInput
+    create: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type StationeryItemCreateManyClientAdminInputEnvelope = {
+    data: StationeryItemCreateManyClientAdminInput | StationeryItemCreateManyClientAdminInput[]
+  }
+
+  export type FinancialYearUpsertWithWhereUniqueWithoutClientAdminInput = {
+    where: FinancialYearWhereUniqueInput
+    update: XOR<FinancialYearUpdateWithoutClientAdminInput, FinancialYearUncheckedUpdateWithoutClientAdminInput>
+    create: XOR<FinancialYearCreateWithoutClientAdminInput, FinancialYearUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type FinancialYearUpdateWithWhereUniqueWithoutClientAdminInput = {
+    where: FinancialYearWhereUniqueInput
+    data: XOR<FinancialYearUpdateWithoutClientAdminInput, FinancialYearUncheckedUpdateWithoutClientAdminInput>
+  }
+
+  export type FinancialYearUpdateManyWithWhereWithoutClientAdminInput = {
+    where: FinancialYearScalarWhereInput
+    data: XOR<FinancialYearUpdateManyMutationInput, FinancialYearUncheckedUpdateManyWithoutClientAdminInput>
+  }
+
+  export type FinancialYearScalarWhereInput = {
+    AND?: FinancialYearScalarWhereInput | FinancialYearScalarWhereInput[]
+    OR?: FinancialYearScalarWhereInput[]
+    NOT?: FinancialYearScalarWhereInput | FinancialYearScalarWhereInput[]
+    id?: StringFilter<"FinancialYear"> | string
+    name?: StringFilter<"FinancialYear"> | string
+    startDate?: DateTimeFilter<"FinancialYear"> | Date | string
+    endDate?: DateTimeFilter<"FinancialYear"> | Date | string
+    isActive?: BoolFilter<"FinancialYear"> | boolean
+    clientAdminId?: StringFilter<"FinancialYear"> | string
+    createdAt?: DateTimeFilter<"FinancialYear"> | Date | string
   }
 
   export type RoleUserUpsertWithWhereUniqueWithoutClientAdminInput = {
@@ -60024,7 +61426,7 @@ export namespace Prisma {
     NOT?: CourseScalarWhereInput | CourseScalarWhereInput[]
     id?: IntFilter<"Course"> | number
     name?: StringFilter<"Course"> | string
-    durationWeeks?: IntFilter<"Course"> | number
+    durationMonths?: IntFilter<"Course"> | number
     description?: StringNullableFilter<"Course"> | string | null
     clientAdminId?: StringFilter<"Course"> | string
   }
@@ -60166,7 +61568,7 @@ export namespace Prisma {
     admissionNumber?: StringFilter<"Student"> | string
     fullName?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
-    motherName?: StringNullableFilter<"Student"> | string | null
+    qualification?: StringNullableFilter<"Student"> | string | null
     photoUrl?: StringNullableFilter<"Student"> | string | null
     contact?: StringFilter<"Student"> | string
     parentsContact?: StringNullableFilter<"Student"> | string | null
@@ -60396,7 +61798,7 @@ export namespace Prisma {
     courseId?: IntFilter<"StudentTask"> | number
     assignedDate?: DateTimeFilter<"StudentTask"> | Date | string
     dueDate?: DateTimeFilter<"StudentTask"> | Date | string
-    description?: StringFilter<"StudentTask"> | string
+    description?: StringNullableFilter<"StudentTask"> | string | null
     status?: StringFilter<"StudentTask"> | string
     facultyRemarks?: StringNullableFilter<"StudentTask"> | string | null
     grade?: StringNullableFilter<"StudentTask"> | string | null
@@ -60531,33 +61933,6 @@ export namespace Prisma {
     labId?: IntNullableFilter<"FinancialRecord"> | number | null
   }
 
-  export type StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput = {
-    where: StationeryItemWhereUniqueInput
-    update: XOR<StationeryItemUpdateWithoutClientAdminInput, StationeryItemUncheckedUpdateWithoutClientAdminInput>
-    create: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput>
-  }
-
-  export type StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput = {
-    where: StationeryItemWhereUniqueInput
-    data: XOR<StationeryItemUpdateWithoutClientAdminInput, StationeryItemUncheckedUpdateWithoutClientAdminInput>
-  }
-
-  export type StationeryItemUpdateManyWithWhereWithoutClientAdminInput = {
-    where: StationeryItemScalarWhereInput
-    data: XOR<StationeryItemUpdateManyMutationInput, StationeryItemUncheckedUpdateManyWithoutClientAdminInput>
-  }
-
-  export type StationeryItemScalarWhereInput = {
-    AND?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
-    OR?: StationeryItemScalarWhereInput[]
-    NOT?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
-    id?: IntFilter<"StationeryItem"> | number
-    name?: StringFilter<"StationeryItem"> | string
-    totalQuantity?: IntFilter<"StationeryItem"> | number
-    quantityAvailable?: IntFilter<"StationeryItem"> | number
-    clientAdminId?: StringFilter<"StationeryItem"> | string
-  }
-
   export type EnquiryUpsertWithWhereUniqueWithoutClientAdminInput = {
     where: EnquiryWhereUniqueInput
     update: XOR<EnquiryUpdateWithoutClientAdminInput, EnquiryUncheckedUpdateWithoutClientAdminInput>
@@ -60582,15 +61957,15 @@ export namespace Prisma {
     srNo?: IntFilter<"Enquiry"> | number
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
-    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     email?: StringNullableFilter<"Enquiry"> | string | null
+    course?: StringNullableFilter<"Enquiry"> | string | null
+    source?: StringNullableFilter<"Enquiry"> | string | null
+    alternateContact?: StringNullableFilter<"Enquiry"> | string | null
     age?: IntNullableFilter<"Enquiry"> | number | null
     location?: StringNullableFilter<"Enquiry"> | string | null
     city?: StringNullableFilter<"Enquiry"> | string | null
-    course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
-    source?: StringNullableFilter<"Enquiry"> | string | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
     enquiryDate?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
@@ -60654,7 +62029,7 @@ export namespace Prisma {
     id?: IntFilter<"CourseFeeStructure"> | number
     courseId?: IntFilter<"CourseFeeStructure"> | number
     totalAmount?: FloatFilter<"CourseFeeStructure"> | number
-    paymentType?: StringNullableListFilter<"CourseFeeStructure">
+    paymentType?: JsonFilter<"CourseFeeStructure">
     clientAdminId?: StringFilter<"CourseFeeStructure"> | string
   }
 
@@ -60714,6 +62089,249 @@ export namespace Prisma {
     clientAdminId?: StringFilter<"Test"> | string
   }
 
+  export type StationeryItemUpsertWithWhereUniqueWithoutClientAdminInput = {
+    where: StationeryItemWhereUniqueInput
+    update: XOR<StationeryItemUpdateWithoutClientAdminInput, StationeryItemUncheckedUpdateWithoutClientAdminInput>
+    create: XOR<StationeryItemCreateWithoutClientAdminInput, StationeryItemUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type StationeryItemUpdateWithWhereUniqueWithoutClientAdminInput = {
+    where: StationeryItemWhereUniqueInput
+    data: XOR<StationeryItemUpdateWithoutClientAdminInput, StationeryItemUncheckedUpdateWithoutClientAdminInput>
+  }
+
+  export type StationeryItemUpdateManyWithWhereWithoutClientAdminInput = {
+    where: StationeryItemScalarWhereInput
+    data: XOR<StationeryItemUpdateManyMutationInput, StationeryItemUncheckedUpdateManyWithoutClientAdminInput>
+  }
+
+  export type StationeryItemScalarWhereInput = {
+    AND?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
+    OR?: StationeryItemScalarWhereInput[]
+    NOT?: StationeryItemScalarWhereInput | StationeryItemScalarWhereInput[]
+    id?: IntFilter<"StationeryItem"> | number
+    name?: StringFilter<"StationeryItem"> | string
+    totalQuantity?: IntFilter<"StationeryItem"> | number
+    quantityAvailable?: IntFilter<"StationeryItem"> | number
+    clientAdminId?: StringFilter<"StationeryItem"> | string
+  }
+
+  export type ClientAdminCreateWithoutFinancialYearsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyCreateNestedManyWithoutClientAdminInput
+    batches?: BatchCreateNestedManyWithoutClientAdminInput
+    courses?: CourseCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutClientAdminInput
+    labs?: LabCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationCreateNestedManyWithoutClientAdminInput
+    students?: StudentCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminUncheckedCreateWithoutFinancialYearsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
+    batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
+    courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    labs?: LabUncheckedCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutClientAdminInput
+    students?: StudentUncheckedCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminCreateOrConnectWithoutFinancialYearsInput = {
+    where: ClientAdminWhereUniqueInput
+    create: XOR<ClientAdminCreateWithoutFinancialYearsInput, ClientAdminUncheckedCreateWithoutFinancialYearsInput>
+  }
+
+  export type ClientAdminUpsertWithoutFinancialYearsInput = {
+    update: XOR<ClientAdminUpdateWithoutFinancialYearsInput, ClientAdminUncheckedUpdateWithoutFinancialYearsInput>
+    create: XOR<ClientAdminCreateWithoutFinancialYearsInput, ClientAdminUncheckedCreateWithoutFinancialYearsInput>
+    where?: ClientAdminWhereInput
+  }
+
+  export type ClientAdminUpdateToOneWithWhereWithoutFinancialYearsInput = {
+    where?: ClientAdminWhereInput
+    data: XOR<ClientAdminUpdateWithoutFinancialYearsInput, ClientAdminUncheckedUpdateWithoutFinancialYearsInput>
+  }
+
+  export type ClientAdminUpdateWithoutFinancialYearsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type ClientAdminUncheckedUpdateWithoutFinancialYearsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUncheckedUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUncheckedUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUncheckedUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUncheckedUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUncheckedUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
+  }
+
   export type ClientAdminCreateWithoutRoleUsersInput = {
     id?: string
     name: string
@@ -60736,6 +62354,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
     courses?: CourseCreateNestedManyWithoutClientAdminInput
@@ -60755,12 +62374,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutRoleUsersInput = {
@@ -60785,6 +62404,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
     courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
@@ -60804,12 +62424,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutRoleUsersInput = {
@@ -60850,6 +62470,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
     courses?: CourseUpdateManyWithoutClientAdminNestedInput
@@ -60869,12 +62490,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutRoleUsersInput = {
@@ -60899,6 +62520,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
     courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -60918,12 +62540,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminCreateWithoutActivitiesInput = {
@@ -60948,6 +62570,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -60967,12 +62590,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutActivitiesInput = {
@@ -60997,6 +62620,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -61016,12 +62640,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutActivitiesInput = {
@@ -61062,6 +62686,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -61081,12 +62706,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutActivitiesInput = {
@@ -61111,6 +62736,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -61130,12 +62756,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type FollowUpCreateWithoutEnquiryInput = {
@@ -61167,7 +62793,6 @@ export namespace Prisma {
 
   export type FollowUpCreateManyEnquiryInputEnvelope = {
     data: FollowUpCreateManyEnquiryInput | FollowUpCreateManyEnquiryInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentCreateWithoutEnquiryInput = {
@@ -61176,7 +62801,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -61212,7 +62837,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -61264,7 +62889,6 @@ export namespace Prisma {
 
   export type EnquiryCourseCreateManyEnquiryInputEnvelope = {
     data: EnquiryCourseCreateManyEnquiryInput | EnquiryCourseCreateManyEnquiryInput[]
-    skipDuplicates?: boolean
   }
 
   export type NotificationCreateWithoutEnquiryInput = {
@@ -61314,6 +62938,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -61334,11 +62959,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutEnquiriesInput = {
@@ -61363,6 +62988,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -61383,11 +63009,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutEnquiriesInput = {
@@ -61442,7 +63068,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61478,7 +63104,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61587,6 +63213,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -61607,11 +63234,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutEnquiriesInput = {
@@ -61636,6 +63263,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -61656,11 +63284,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type EnquiryCreateWithoutEnquiryCourseInput = {
@@ -61668,15 +63296,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -61694,15 +63322,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -61722,7 +63350,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutEnquiryCourseInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -61743,7 +63371,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutEnquiryCourseInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -61788,6 +63416,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -61807,12 +63436,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutEnquiryCourseInput = {
@@ -61837,6 +63466,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -61856,12 +63486,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutEnquiryCourseInput = {
@@ -61885,15 +63515,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61911,15 +63541,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61945,7 +63575,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutEnquiryCourseInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -61966,7 +63596,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutEnquiryCourseInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -62017,6 +63647,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -62036,12 +63667,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutEnquiryCourseInput = {
@@ -62066,6 +63697,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -62085,12 +63717,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type EnquiryCreateWithoutFollowUpsInput = {
@@ -62098,15 +63730,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -62124,15 +63756,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -62191,15 +63823,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62217,15 +63849,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62301,15 +63933,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -62327,15 +63959,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -62415,6 +64047,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -62435,11 +64068,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutNotificationsInput = {
@@ -62464,6 +64097,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -62484,11 +64118,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutNotificationsInput = {
@@ -62545,15 +64179,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62571,15 +64205,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62671,6 +64305,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -62691,11 +64326,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutNotificationsInput = {
@@ -62720,6 +64355,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -62740,11 +64376,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type EnquiryCreateWithoutStudentInput = {
@@ -62752,15 +64388,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -62778,15 +64414,15 @@ export namespace Prisma {
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -62826,7 +64462,6 @@ export namespace Prisma {
 
   export type LabAllocationCreateManyStudentInputEnvelope = {
     data: LabAllocationCreateManyStudentInput | LabAllocationCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentCourseCreateWithoutStudentInput = {
@@ -62863,7 +64498,6 @@ export namespace Prisma {
 
   export type StudentCourseCreateManyStudentInputEnvelope = {
     data: StudentCourseCreateManyStudentInput | StudentCourseCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type FeeStructureCreateWithoutStudentInput = {
@@ -62892,7 +64526,6 @@ export namespace Prisma {
 
   export type FeeStructureCreateManyStudentInputEnvelope = {
     data: FeeStructureCreateManyStudentInput | FeeStructureCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentFeeCreateWithoutStudentInput = {
@@ -62937,7 +64570,6 @@ export namespace Prisma {
 
   export type StudentFeeCreateManyStudentInputEnvelope = {
     data: StudentFeeCreateManyStudentInput | StudentFeeCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type AttendanceRecordCreateWithoutStudentInput = {
@@ -62966,13 +64598,12 @@ export namespace Prisma {
 
   export type AttendanceRecordCreateManyStudentInputEnvelope = {
     data: AttendanceRecordCreateManyStudentInput | AttendanceRecordCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentTaskCreateWithoutStudentInput = {
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -62987,7 +64618,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -63003,7 +64634,6 @@ export namespace Prisma {
 
   export type StudentTaskCreateManyStudentInputEnvelope = {
     data: StudentTaskCreateManyStudentInput | StudentTaskCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentTestCreateWithoutStudentInput = {
@@ -63042,7 +64672,6 @@ export namespace Prisma {
 
   export type StudentTestCreateManyStudentInputEnvelope = {
     data: StudentTestCreateManyStudentInput | StudentTestCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type CourseCompletionCreateWithoutStudentInput = {
@@ -63069,7 +64698,6 @@ export namespace Prisma {
 
   export type CourseCompletionCreateManyStudentInputEnvelope = {
     data: CourseCompletionCreateManyStudentInput | CourseCompletionCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type StationeryIssueCreateWithoutStudentInput = {
@@ -63098,7 +64726,6 @@ export namespace Prisma {
 
   export type StationeryIssueCreateManyStudentInputEnvelope = {
     data: StationeryIssueCreateManyStudentInput | StationeryIssueCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type CertificateCreateWithoutStudentInput = {
@@ -63125,7 +64752,6 @@ export namespace Prisma {
 
   export type CertificateCreateManyStudentInputEnvelope = {
     data: CertificateCreateManyStudentInput | CertificateCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type FinancialRecordCreateWithoutStudentInput = {
@@ -63161,7 +64787,6 @@ export namespace Prisma {
 
   export type FinancialRecordCreateManyStudentInputEnvelope = {
     data: FinancialRecordCreateManyStudentInput | FinancialRecordCreateManyStudentInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutStudentsInput = {
@@ -63186,6 +64811,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -63205,12 +64831,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentsInput = {
@@ -63235,6 +64861,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -63254,12 +64881,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentsInput = {
@@ -63283,15 +64910,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63309,15 +64936,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63539,6 +65166,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -63558,12 +65186,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentsInput = {
@@ -63588,6 +65216,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -63607,17 +65236,17 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type CourseFeeStructureCreateWithoutCourseInput = {
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     installments?: InstallmentDetailCreateNestedManyWithoutCourseFeeStructureInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCourseFeeStructuresInput
   }
@@ -63625,7 +65254,7 @@ export namespace Prisma {
   export type CourseFeeStructureUncheckedCreateWithoutCourseInput = {
     id?: number
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     clientAdminId: string
     installments?: InstallmentDetailUncheckedCreateNestedManyWithoutCourseFeeStructureInput
   }
@@ -63669,7 +65298,6 @@ export namespace Prisma {
 
   export type StudentCourseCreateManyCourseInputEnvelope = {
     data: StudentCourseCreateManyCourseInput | StudentCourseCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type EnquiryCourseCreateWithoutCourseInput = {
@@ -63690,7 +65318,6 @@ export namespace Prisma {
 
   export type EnquiryCourseCreateManyCourseInputEnvelope = {
     data: EnquiryCourseCreateManyCourseInput | EnquiryCourseCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type FeeStructureCreateWithoutCourseInput = {
@@ -63719,7 +65346,6 @@ export namespace Prisma {
 
   export type FeeStructureCreateManyCourseInputEnvelope = {
     data: FeeStructureCreateManyCourseInput | FeeStructureCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type StationeryIssueCreateWithoutCourseInput = {
@@ -63748,7 +65374,6 @@ export namespace Prisma {
 
   export type StationeryIssueCreateManyCourseInputEnvelope = {
     data: StationeryIssueCreateManyCourseInput | StationeryIssueCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentFeeCreateWithoutCourseInput = {
@@ -63793,7 +65418,6 @@ export namespace Prisma {
 
   export type StudentFeeCreateManyCourseInputEnvelope = {
     data: StudentFeeCreateManyCourseInput | StudentFeeCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type AttendanceRecordCreateWithoutCourseInput = {
@@ -63822,13 +65446,12 @@ export namespace Prisma {
 
   export type AttendanceRecordCreateManyCourseInputEnvelope = {
     data: AttendanceRecordCreateManyCourseInput | AttendanceRecordCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentTaskCreateWithoutCourseInput = {
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -63843,7 +65466,7 @@ export namespace Prisma {
     studentId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -63859,7 +65482,6 @@ export namespace Prisma {
 
   export type StudentTaskCreateManyCourseInputEnvelope = {
     data: StudentTaskCreateManyCourseInput | StudentTaskCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentTestCreateWithoutCourseInput = {
@@ -63898,7 +65520,6 @@ export namespace Prisma {
 
   export type StudentTestCreateManyCourseInputEnvelope = {
     data: StudentTestCreateManyCourseInput | StudentTestCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type CertificateCreateWithoutCourseInput = {
@@ -63925,7 +65546,6 @@ export namespace Prisma {
 
   export type CertificateCreateManyCourseInputEnvelope = {
     data: CertificateCreateManyCourseInput | CertificateCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type FinancialRecordCreateWithoutCourseInput = {
@@ -63961,7 +65581,6 @@ export namespace Prisma {
 
   export type FinancialRecordCreateManyCourseInputEnvelope = {
     data: FinancialRecordCreateManyCourseInput | FinancialRecordCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type TaskCreateWithoutCourseInput = {
@@ -63988,7 +65607,6 @@ export namespace Prisma {
 
   export type TaskCreateManyCourseInputEnvelope = {
     data: TaskCreateManyCourseInput | TaskCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type TestCreateWithoutCourseInput = {
@@ -64015,7 +65633,6 @@ export namespace Prisma {
 
   export type TestCreateManyCourseInputEnvelope = {
     data: TestCreateManyCourseInput | TestCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type BatchCourseCreateWithoutCourseInput = {
@@ -64036,7 +65653,6 @@ export namespace Prisma {
 
   export type BatchCourseCreateManyCourseInputEnvelope = {
     data: BatchCourseCreateManyCourseInput | BatchCourseCreateManyCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutCoursesInput = {
@@ -64061,6 +65677,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -64080,12 +65697,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutCoursesInput = {
@@ -64110,6 +65727,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -64129,12 +65747,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutCoursesInput = {
@@ -64155,7 +65773,7 @@ export namespace Prisma {
 
   export type CourseFeeStructureUpdateWithoutCourseInput = {
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     installments?: InstallmentDetailUpdateManyWithoutCourseFeeStructureNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCourseFeeStructuresNestedInput
   }
@@ -64163,7 +65781,7 @@ export namespace Prisma {
   export type CourseFeeStructureUncheckedUpdateWithoutCourseInput = {
     id?: IntFieldUpdateOperationsInput | number
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     clientAdminId?: StringFieldUpdateOperationsInput | string
     installments?: InstallmentDetailUncheckedUpdateManyWithoutCourseFeeStructureNestedInput
   }
@@ -64419,6 +66037,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -64438,12 +66057,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutCoursesInput = {
@@ -64468,6 +66087,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -64487,17 +66107,17 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type CourseCreateWithoutCourseFeeStructureInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutCourseInput
@@ -64518,7 +66138,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutCourseFeeStructureInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutCourseInput
@@ -64561,7 +66181,6 @@ export namespace Prisma {
 
   export type InstallmentDetailCreateManyCourseFeeStructureInputEnvelope = {
     data: InstallmentDetailCreateManyCourseFeeStructureInput | InstallmentDetailCreateManyCourseFeeStructureInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutCourseFeeStructuresInput = {
@@ -64586,6 +66205,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -64606,11 +66226,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutCourseFeeStructuresInput = {
@@ -64635,6 +66255,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -64655,11 +66276,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutCourseFeeStructuresInput = {
@@ -64680,7 +66301,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutCourseFeeStructureInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutCourseNestedInput
@@ -64701,7 +66322,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutCourseFeeStructureInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutCourseNestedInput
@@ -64778,6 +66399,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -64798,11 +66420,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutCourseFeeStructuresInput = {
@@ -64827,6 +66449,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -64847,11 +66470,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type FacultyCreateWithoutBatchesInput = {
@@ -64960,7 +66583,6 @@ export namespace Prisma {
 
   export type StudentCourseCreateManyBatchInputEnvelope = {
     data: StudentCourseCreateManyBatchInput | StudentCourseCreateManyBatchInput[]
-    skipDuplicates?: boolean
   }
 
   export type BatchCourseCreateWithoutBatchInput = {
@@ -64981,7 +66603,6 @@ export namespace Prisma {
 
   export type BatchCourseCreateManyBatchInputEnvelope = {
     data: BatchCourseCreateManyBatchInput | BatchCourseCreateManyBatchInput[]
-    skipDuplicates?: boolean
   }
 
   export type TaskCreateWithoutBatchInput = {
@@ -65008,7 +66629,6 @@ export namespace Prisma {
 
   export type TaskCreateManyBatchInputEnvelope = {
     data: TaskCreateManyBatchInput | TaskCreateManyBatchInput[]
-    skipDuplicates?: boolean
   }
 
   export type TestCreateWithoutBatchInput = {
@@ -65035,7 +66655,6 @@ export namespace Prisma {
 
   export type TestCreateManyBatchInputEnvelope = {
     data: TestCreateManyBatchInput | TestCreateManyBatchInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutBatchesInput = {
@@ -65060,6 +66679,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     courses?: CourseCreateNestedManyWithoutClientAdminInput
@@ -65079,12 +66699,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutBatchesInput = {
@@ -65109,6 +66729,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
@@ -65128,12 +66749,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutBatchesInput = {
@@ -65322,6 +66943,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     courses?: CourseUpdateManyWithoutClientAdminNestedInput
@@ -65341,12 +66963,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutBatchesInput = {
@@ -65371,6 +66993,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -65390,12 +67013,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type BatchCreateWithoutBatchCoursesInput = {
@@ -65426,7 +67049,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutBatchCoursesInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -65447,7 +67070,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutBatchCoursesInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -65515,7 +67138,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutBatchCoursesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -65536,7 +67159,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutBatchCoursesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -65582,7 +67205,6 @@ export namespace Prisma {
 
   export type BatchCreateManyFacultyInputEnvelope = {
     data: BatchCreateManyFacultyInput | BatchCreateManyFacultyInput[]
-    skipDuplicates?: boolean
   }
 
   export type AttendanceRecordCreateWithoutMarkedByInput = {
@@ -65611,13 +67233,12 @@ export namespace Prisma {
 
   export type AttendanceRecordCreateManyMarkedByInputEnvelope = {
     data: AttendanceRecordCreateManyMarkedByInput | AttendanceRecordCreateManyMarkedByInput[]
-    skipDuplicates?: boolean
   }
 
   export type StudentTaskCreateWithoutFacultyInput = {
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -65633,7 +67254,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -65648,7 +67269,6 @@ export namespace Prisma {
 
   export type StudentTaskCreateManyFacultyInputEnvelope = {
     data: StudentTaskCreateManyFacultyInput | StudentTaskCreateManyFacultyInput[]
-    skipDuplicates?: boolean
   }
 
   export type FinancialRecordCreateWithoutFacultyInput = {
@@ -65684,7 +67304,6 @@ export namespace Prisma {
 
   export type FinancialRecordCreateManyFacultyInputEnvelope = {
     data: FinancialRecordCreateManyFacultyInput | FinancialRecordCreateManyFacultyInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutFacultiesInput = {
@@ -65709,6 +67328,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
     courses?: CourseCreateNestedManyWithoutClientAdminInput
@@ -65728,12 +67348,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutFacultiesInput = {
@@ -65758,6 +67378,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
     courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
@@ -65777,12 +67398,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutFacultiesInput = {
@@ -65887,6 +67508,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
     courses?: CourseUpdateManyWithoutClientAdminNestedInput
@@ -65906,12 +67528,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutFacultiesInput = {
@@ -65936,6 +67558,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
     courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -65955,12 +67578,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type LabTimeSlotCreateWithoutLabInput = {
@@ -65991,7 +67614,6 @@ export namespace Prisma {
 
   export type LabTimeSlotCreateManyLabInputEnvelope = {
     data: LabTimeSlotCreateManyLabInput | LabTimeSlotCreateManyLabInput[]
-    skipDuplicates?: boolean
   }
 
   export type FinancialRecordCreateWithoutLabInput = {
@@ -66027,7 +67649,6 @@ export namespace Prisma {
 
   export type FinancialRecordCreateManyLabInputEnvelope = {
     data: FinancialRecordCreateManyLabInput | FinancialRecordCreateManyLabInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutLabsInput = {
@@ -66052,6 +67673,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -66071,12 +67693,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutLabsInput = {
@@ -66101,6 +67723,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -66120,12 +67743,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutLabsInput = {
@@ -66198,6 +67821,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -66217,12 +67841,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabsInput = {
@@ -66247,6 +67871,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -66266,12 +67891,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type LabCreateWithoutTimeSlotsInput = {
@@ -66326,7 +67951,6 @@ export namespace Prisma {
 
   export type BatchCreateManyLabTimeSlotInputEnvelope = {
     data: BatchCreateManyLabTimeSlotInput | BatchCreateManyLabTimeSlotInput[]
-    skipDuplicates?: boolean
   }
 
   export type LabAllocationCreateWithoutLabTimeSlotInput = {
@@ -66351,7 +67975,6 @@ export namespace Prisma {
 
   export type LabAllocationCreateManyLabTimeSlotInputEnvelope = {
     data: LabAllocationCreateManyLabTimeSlotInput | LabAllocationCreateManyLabTimeSlotInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutLabTimeSlotsInput = {
@@ -66376,6 +67999,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -66395,12 +68019,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutLabTimeSlotsInput = {
@@ -66425,6 +68049,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -66444,12 +68069,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutLabTimeSlotsInput = {
@@ -66552,6 +68177,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -66571,12 +68197,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabTimeSlotsInput = {
@@ -66601,6 +68227,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -66620,12 +68247,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type FeeStructureCreateWithoutInstallmentInput = {
@@ -66654,12 +68281,11 @@ export namespace Prisma {
 
   export type FeeStructureCreateManyInstallmentInputEnvelope = {
     data: FeeStructureCreateManyInstallmentInput | FeeStructureCreateManyInstallmentInput[]
-    skipDuplicates?: boolean
   }
 
   export type CourseFeeStructureCreateWithoutInstallmentsInput = {
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     course: CourseCreateNestedOneWithoutCourseFeeStructureInput
     clientAdmin: ClientAdminCreateNestedOneWithoutCourseFeeStructuresInput
   }
@@ -66668,7 +68294,7 @@ export namespace Prisma {
     id?: number
     courseId: number
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
     clientAdminId: string
   }
 
@@ -66706,7 +68332,7 @@ export namespace Prisma {
 
   export type CourseFeeStructureUpdateWithoutInstallmentsInput = {
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     course?: CourseUpdateOneRequiredWithoutCourseFeeStructureNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutCourseFeeStructuresNestedInput
   }
@@ -66715,7 +68341,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -66751,7 +68377,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -66787,7 +68413,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -66843,6 +68469,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -66862,12 +68489,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutLabAllocationsInput = {
@@ -66892,6 +68519,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -66911,12 +68539,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutLabAllocationsInput = {
@@ -66973,7 +68601,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67009,7 +68637,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67071,6 +68699,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -67090,12 +68719,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabAllocationsInput = {
@@ -67120,6 +68749,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -67139,12 +68769,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutStudentCoursesInput = {
@@ -67153,7 +68783,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -67189,7 +68819,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -67225,7 +68855,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStudentCoursesInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutCourseInput
@@ -67246,7 +68876,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStudentCoursesInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -67341,7 +68971,6 @@ export namespace Prisma {
 
   export type CourseCompletionCreateManyStudentCourseInputEnvelope = {
     data: CourseCompletionCreateManyStudentCourseInput | CourseCompletionCreateManyStudentCourseInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutStudentCoursesInput = {
@@ -67366,6 +68995,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -67385,12 +69015,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentCoursesInput = {
@@ -67415,6 +69045,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -67434,12 +69065,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentCoursesInput = {
@@ -67464,7 +69095,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67500,7 +69131,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67542,7 +69173,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStudentCoursesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutCourseNestedInput
@@ -67563,7 +69194,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStudentCoursesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -67690,6 +69321,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -67709,12 +69341,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentCoursesInput = {
@@ -67739,6 +69371,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -67758,12 +69391,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutFeeStructuresInput = {
@@ -67772,7 +69405,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -67808,7 +69441,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -67844,7 +69477,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutFeeStructuresInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -67865,7 +69498,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutFeeStructuresInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -67928,6 +69561,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -67947,12 +69581,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutFeeStructuresInput = {
@@ -67977,6 +69611,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -67996,12 +69631,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutFeeStructuresInput = {
@@ -68026,7 +69661,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68062,7 +69697,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68104,7 +69739,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutFeeStructuresInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -68125,7 +69760,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutFeeStructuresInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -68200,6 +69835,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -68219,12 +69855,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutFeeStructuresInput = {
@@ -68249,6 +69885,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -68268,12 +69905,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentFeeCreateWithoutFeeLogsInput = {
@@ -68368,7 +70005,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -68404,7 +70041,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -68440,7 +70077,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStudentFeesInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -68461,7 +70098,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStudentFeesInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -68506,7 +70143,6 @@ export namespace Prisma {
 
   export type StudentFeeLogCreateManyStudentFeeInputEnvelope = {
     data: StudentFeeLogCreateManyStudentFeeInput | StudentFeeLogCreateManyStudentFeeInput[]
-    skipDuplicates?: boolean
   }
 
   export type NotificationCreateWithoutPaymentInput = {
@@ -68556,6 +70192,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -68575,12 +70212,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentFeesInput = {
@@ -68605,6 +70242,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -68624,12 +70262,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentFeesInput = {
@@ -68654,7 +70292,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68690,7 +70328,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68732,7 +70370,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStudentFeesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -68753,7 +70391,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStudentFeesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -68863,6 +70501,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -68882,12 +70521,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentFeesInput = {
@@ -68912,6 +70551,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -68931,12 +70571,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StationeryIssueCreateWithoutItemInput = {
@@ -68965,7 +70605,6 @@ export namespace Prisma {
 
   export type StationeryIssueCreateManyItemInputEnvelope = {
     data: StationeryIssueCreateManyItemInput | StationeryIssueCreateManyItemInput[]
-    skipDuplicates?: boolean
   }
 
   export type ClientAdminCreateWithoutStationeryItemsInput = {
@@ -68990,6 +70629,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -69039,6 +70679,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -69120,6 +70761,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -69169,6 +70811,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -69202,7 +70845,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -69238,7 +70881,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -69274,7 +70917,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStationeryInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -69295,7 +70938,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStationeryInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -69360,6 +71003,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -69379,12 +71023,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStationeryIssuesInput = {
@@ -69409,6 +71053,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -69428,12 +71073,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStationeryIssuesInput = {
@@ -69458,7 +71103,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69494,7 +71139,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69536,7 +71181,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStationeryInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -69557,7 +71202,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStationeryInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -69634,6 +71279,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -69653,12 +71299,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStationeryIssuesInput = {
@@ -69683,6 +71329,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -69702,12 +71349,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutAttendanceInput = {
@@ -69716,7 +71363,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -69752,7 +71399,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -69788,7 +71435,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutAttendanceRecordsInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -69809,7 +71456,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutAttendanceRecordsInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -69900,6 +71547,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -69919,12 +71567,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutAttendanceRecordsInput = {
@@ -69949,6 +71597,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -69968,12 +71617,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutAttendanceRecordsInput = {
@@ -69998,7 +71647,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70034,7 +71683,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70076,7 +71725,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutAttendanceRecordsInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -70097,7 +71746,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutAttendanceRecordsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -70200,6 +71849,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -70219,12 +71869,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutAttendanceRecordsInput = {
@@ -70249,6 +71899,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -70268,12 +71919,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type BatchCreateWithoutTasksInput = {
@@ -70304,7 +71955,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutTasksInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -70325,7 +71976,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutTasksInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -70370,6 +72021,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -70390,11 +72042,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutTasksInput = {
@@ -70419,6 +72071,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -70439,11 +72092,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutTasksInput = {
@@ -70454,7 +72107,7 @@ export namespace Prisma {
   export type StudentTaskCreateWithoutTaskInput = {
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -70470,7 +72123,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -70485,7 +72138,6 @@ export namespace Prisma {
 
   export type StudentTaskCreateManyTaskInputEnvelope = {
     data: StudentTaskCreateManyTaskInput | StudentTaskCreateManyTaskInput[]
-    skipDuplicates?: boolean
   }
 
   export type BatchUpsertWithoutTasksInput = {
@@ -70533,7 +72185,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutTasksInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -70554,7 +72206,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutTasksInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -70605,6 +72257,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -70625,11 +72278,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutTasksInput = {
@@ -70654,6 +72307,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -70674,11 +72328,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentTaskUpsertWithWhereUniqueWithoutTaskInput = {
@@ -70703,7 +72357,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -70739,7 +72393,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -70775,7 +72429,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStudentTasksInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -70796,7 +72450,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStudentTasksInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -70909,6 +72563,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -70928,12 +72583,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentTasksInput = {
@@ -70958,6 +72613,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -70977,12 +72633,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentTasksInput = {
@@ -71007,7 +72663,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71043,7 +72699,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71085,7 +72741,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStudentTasksInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -71106,7 +72762,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStudentTasksInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -71237,6 +72893,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -71256,12 +72913,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentTasksInput = {
@@ -71286,6 +72943,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -71305,12 +72963,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type BatchCreateWithoutTestsInput = {
@@ -71341,7 +72999,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutTestsInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -71362,7 +73020,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutTestsInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -71407,6 +73065,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -71427,11 +73086,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutTestsInput = {
@@ -71456,6 +73115,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -71476,11 +73136,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutTestsInput = {
@@ -71524,7 +73184,6 @@ export namespace Prisma {
 
   export type StudentTestCreateManyTestInputEnvelope = {
     data: StudentTestCreateManyTestInput | StudentTestCreateManyTestInput[]
-    skipDuplicates?: boolean
   }
 
   export type BatchUpsertWithoutTestsInput = {
@@ -71572,7 +73231,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutTestsInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -71593,7 +73252,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutTestsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -71644,6 +73303,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -71664,11 +73324,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutTestsInput = {
@@ -71693,6 +73353,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -71713,11 +73374,11 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentTestUpsertWithWhereUniqueWithoutTestInput = {
@@ -71742,7 +73403,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -71778,7 +73439,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -71814,7 +73475,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStudentTestsInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -71835,7 +73496,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStudentTestsInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -71902,6 +73563,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -71921,12 +73583,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentTestsInput = {
@@ -71951,6 +73613,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -71970,12 +73633,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutStudentTestsInput = {
@@ -72000,7 +73663,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72036,7 +73699,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72078,7 +73741,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStudentTestsInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -72099,7 +73762,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStudentTestsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -72178,6 +73841,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -72197,12 +73861,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentTestsInput = {
@@ -72227,6 +73891,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -72246,12 +73911,12 @@ export namespace Prisma {
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCourseCreateWithoutCompletionsInput = {
@@ -72292,7 +73957,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -72328,7 +73993,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -72384,6 +74049,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -72403,12 +74069,12 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutCourseCompletionsInput = {
@@ -72433,6 +74099,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -72452,12 +74119,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutCourseCompletionsInput = {
@@ -72520,7 +74187,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72556,7 +74223,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72618,6 +74285,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -72637,12 +74305,12 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutCourseCompletionsInput = {
@@ -72667,6 +74335,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -72686,12 +74355,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutCertificatesInput = {
@@ -72700,7 +74369,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -72736,7 +74405,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -72772,7 +74441,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutCertificatesInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -72793,7 +74462,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutCertificatesInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -72870,6 +74539,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -72889,12 +74559,12 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutCertificatesInput = {
@@ -72919,6 +74589,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -72938,12 +74609,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutCertificatesInput = {
@@ -72968,7 +74639,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73004,7 +74675,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73046,7 +74717,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutCertificatesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -73067,7 +74738,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutCertificatesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -73156,6 +74827,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -73175,12 +74847,12 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutCertificatesInput = {
@@ -73205,6 +74877,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -73224,12 +74897,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
   export type StudentCreateWithoutFinancialRecordsInput = {
@@ -73238,7 +74911,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -73274,7 +74947,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -73310,7 +74983,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutFinancialRecordsInput = {
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -73331,7 +75004,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutFinancialRecordsInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -73446,6 +75119,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -73465,12 +75139,12 @@ export namespace Prisma {
     studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
     courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
     tasks?: TaskCreateNestedManyWithoutClientAdminInput
     tests?: TestCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminUncheckedCreateWithoutFinancialRecordsInput = {
@@ -73495,6 +75169,7 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
     roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -73514,12 +75189,12 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
     courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
-    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
     enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
     courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
     tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
     tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
   }
 
   export type ClientAdminCreateOrConnectWithoutFinancialRecordsInput = {
@@ -73544,7 +75219,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73580,7 +75255,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73622,7 +75297,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutFinancialRecordsInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -73643,7 +75318,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutFinancialRecordsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -73776,6 +75451,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -73795,12 +75471,12 @@ export namespace Prisma {
     studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
     courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUpdateManyWithoutClientAdminNestedInput
     tests?: TestUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
   }
 
   export type ClientAdminUncheckedUpdateWithoutFinancialRecordsInput = {
@@ -73825,6 +75501,7 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
     roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -73844,12 +75521,21 @@ export namespace Prisma {
     studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
     courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
-    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
     enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
     courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type FinancialYearCreateManyClientAdminInput = {
+    id?: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
   }
 
   export type RoleUserCreateManyClientAdminInput = {
@@ -73894,7 +75580,7 @@ export namespace Prisma {
   export type CourseCreateManyClientAdminInput = {
     id?: number
     name: string
-    durationWeeks: number
+    durationMonths: number
     description?: string | null
   }
 
@@ -73936,7 +75622,7 @@ export namespace Prisma {
     admissionNumber: string
     fullName: string
     fatherName?: string | null
-    motherName?: string | null
+    qualification?: string | null
     photoUrl?: string | null
     contact: string
     parentsContact?: string | null
@@ -74026,7 +75712,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -74080,27 +75766,20 @@ export namespace Prisma {
     labId?: number | null
   }
 
-  export type StationeryItemCreateManyClientAdminInput = {
-    id?: number
-    name: string
-    totalQuantity: number
-    quantityAvailable: number
-  }
-
   export type EnquiryCreateManyClientAdminInput = {
     id?: string
     srNo: number
     name: string
     contact: string
-    alternateContact?: string | null
     email?: string | null
+    course?: string | null
+    source?: string | null
+    alternateContact?: string | null
     age?: number | null
     location?: string | null
     city?: string | null
-    course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     leadStatus?: $Enums.LeadStatus
     enquiryDate?: Date | string | null
@@ -74124,7 +75803,7 @@ export namespace Prisma {
     id?: number
     courseId: number
     totalAmount: number
-    paymentType?: CourseFeeStructureCreatepaymentTypeInput | string[]
+    paymentType: JsonNullValueInput | InputJsonValue
   }
 
   export type TaskCreateManyClientAdminInput = {
@@ -74141,6 +75820,40 @@ export namespace Prisma {
     status?: $Enums.TestStatus
     batchId: number
     courseId: number
+  }
+
+  export type StationeryItemCreateManyClientAdminInput = {
+    id?: number
+    name: string
+    totalQuantity: number
+    quantityAvailable: number
+  }
+
+  export type FinancialYearUpdateWithoutClientAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialYearUncheckedUpdateWithoutClientAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinancialYearUncheckedUpdateManyWithoutClientAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RoleUserUpdateWithoutClientAdminInput = {
@@ -74276,7 +75989,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutClientAdminInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -74297,7 +76010,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutClientAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutCourseNestedInput
@@ -74318,7 +76031,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateManyWithoutClientAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationWeeks?: IntFieldUpdateOperationsInput | number
+    durationMonths?: IntFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -74425,7 +76138,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74461,7 +76174,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74497,7 +76210,7 @@ export namespace Prisma {
     admissionNumber?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: StringFieldUpdateOperationsInput | string
     parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74721,7 +76434,7 @@ export namespace Prisma {
   export type StudentTaskUpdateWithoutClientAdminInput = {
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74737,7 +76450,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74751,7 +76464,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74894,42 +76607,20 @@ export namespace Prisma {
     labId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
-  export type StationeryItemUpdateWithoutClientAdminInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    totalQuantity?: IntFieldUpdateOperationsInput | number
-    quantityAvailable?: IntFieldUpdateOperationsInput | number
-    stationeryIssues?: StationeryIssueUpdateManyWithoutItemNestedInput
-  }
-
-  export type StationeryItemUncheckedUpdateWithoutClientAdminInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    totalQuantity?: IntFieldUpdateOperationsInput | number
-    quantityAvailable?: IntFieldUpdateOperationsInput | number
-    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutItemNestedInput
-  }
-
-  export type StationeryItemUncheckedUpdateManyWithoutClientAdminInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    totalQuantity?: IntFieldUpdateOperationsInput | number
-    quantityAvailable?: IntFieldUpdateOperationsInput | number
-  }
-
   export type EnquiryUpdateWithoutClientAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -74947,15 +76638,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -74973,15 +76664,15 @@ export namespace Prisma {
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
     age?: NullableIntFieldUpdateOperationsInput | number | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
-    course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75023,7 +76714,7 @@ export namespace Prisma {
 
   export type CourseFeeStructureUpdateWithoutClientAdminInput = {
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     course?: CourseUpdateOneRequiredWithoutCourseFeeStructureNestedInput
     installments?: InstallmentDetailUpdateManyWithoutCourseFeeStructureNestedInput
   }
@@ -75032,7 +76723,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
     installments?: InstallmentDetailUncheckedUpdateManyWithoutCourseFeeStructureNestedInput
   }
 
@@ -75040,7 +76731,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     totalAmount?: FloatFieldUpdateOperationsInput | number
-    paymentType?: CourseFeeStructureUpdatepaymentTypeInput | string[]
+    paymentType?: JsonNullValueInput | InputJsonValue
   }
 
   export type TaskUpdateWithoutClientAdminInput = {
@@ -75091,6 +76782,28 @@ export namespace Prisma {
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
     batchId?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StationeryItemUpdateWithoutClientAdminInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
+    quantityAvailable?: IntFieldUpdateOperationsInput | number
+    stationeryIssues?: StationeryIssueUpdateManyWithoutItemNestedInput
+  }
+
+  export type StationeryItemUncheckedUpdateWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
+    quantityAvailable?: IntFieldUpdateOperationsInput | number
+    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutItemNestedInput
+  }
+
+  export type StationeryItemUncheckedUpdateManyWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: IntFieldUpdateOperationsInput | number
+    quantityAvailable?: IntFieldUpdateOperationsInput | number
   }
 
   export type FollowUpCreateManyEnquiryInput = {
@@ -75219,7 +76932,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -75458,7 +77171,7 @@ export namespace Prisma {
   export type StudentTaskUpdateWithoutStudentInput = {
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75473,7 +77186,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75487,7 +77200,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75729,7 +77442,7 @@ export namespace Prisma {
     studentId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -75994,7 +77707,7 @@ export namespace Prisma {
   export type StudentTaskUpdateWithoutCourseInput = {
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76009,7 +77722,7 @@ export namespace Prisma {
     studentId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76023,7 +77736,7 @@ export namespace Prisma {
     studentId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76396,7 +78109,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -76477,7 +78190,7 @@ export namespace Prisma {
   export type StudentTaskUpdateWithoutFacultyInput = {
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76493,7 +78206,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76507,7 +78220,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76861,7 +78574,7 @@ export namespace Prisma {
     courseId: number
     assignedDate: Date | string
     dueDate: Date | string
-    description: string
+    description?: string | null
     status: string
     facultyRemarks?: string | null
     grade?: string | null
@@ -76872,7 +78585,7 @@ export namespace Prisma {
   export type StudentTaskUpdateWithoutTaskInput = {
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76888,7 +78601,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76902,7 +78615,7 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
     assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     facultyRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null

@@ -3,7 +3,7 @@ import { create } from "zustand";
 interface CourseFormData {
   name: string;
   description: string;
-  durationWeeks: string;
+  durationMonths: string;
   paymentType: string;
   totalAmount: string;
   installmentCount: string;

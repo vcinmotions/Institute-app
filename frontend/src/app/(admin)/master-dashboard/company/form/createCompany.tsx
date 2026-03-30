@@ -64,6 +64,8 @@ const CompanySchema = z.object({
         .string()
         .min(5, "Zipcode must be at least 5 digits")
         .regex(/^[0-9]+$/, "Zipcode must be numeric"),
+    financialStartDate: z.string().min(1, "Financial Year is required"), // ✅ ADD THIS
+    financialEndDate: z.string().min(1, "Financial Year is required"), // ✅ ADD THIS
 });
 
 type CompanyData = z.infer<typeof CompanySchema>;
@@ -82,6 +84,8 @@ export default function CompanyForm() {
         city: "",
         zipCode: "",
         fullAddress: "",
+        financialStartDate: "",
+        financialEndDate: "",
     });
 
     const [selectedLogo, setSelectedLogo] = useState<File | null>(null);
@@ -173,6 +177,8 @@ export default function CompanyForm() {
             city: "",
             zipCode: "",
             fullAddress: "",
+            financialStartDate: "",
+            financialEndDate: "",
         });
     };
 
@@ -431,6 +437,7 @@ export default function CompanyForm() {
 
             return;
         }
+        const financialYear = `${new Date(newCompany.financialStartDate).getFullYear()}-${new Date(newCompany.financialEndDate).getFullYear()}`;
 
         // Combine all data
         const admissionPayload = {
@@ -440,6 +447,11 @@ export default function CompanyForm() {
             instituteName: newCompany.instituteName,
             password: newCompany.password,
             country: newCompany.country,
+
+            financialYear, // ✅ generated
+            financialStartDate: newCompany.financialStartDate,
+            financialEndDate: newCompany.financialEndDate,
+
             state: newCompany.state,
             city: newCompany.city,
             zipCode: newCompany.zipCode,
@@ -464,6 +476,8 @@ export default function CompanyForm() {
                     city: "",
                     zipCode: "",
                     fullAddress: "",
+                    financialStartDate: "",
+                    financialEndDate: "",
                 });
 
                 setAlert({
@@ -634,6 +648,42 @@ export default function CompanyForm() {
                             {errors.contact && (
                                 <p className="text-sm text-red-500">{errors.contact}</p>
                             )}
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            {/* START DATE */}
+                            <div>
+                                <Label>Financial Start Date *</Label>
+                                <Input
+                                    type="date"
+                                    value={newCompany.financialStartDate}
+                                    onChange={(e) =>
+                                        handleChange("financialStartDate", e.target.value)
+                                    }
+                                />
+                                {errors.financialStartDate && (
+                                    <p className="text-sm text-red-500">
+                                        {errors.financialStartDate}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* END DATE */}
+                            <div>
+                                <Label>Financial End Date *</Label>
+                                <Input
+                                    type="date"
+                                    value={newCompany.financialEndDate}
+                                    onChange={(e) =>
+                                        handleChange("financialEndDate", e.target.value)
+                                    }
+                                />
+                                {errors.financialEndDate && (
+                                    <p className="text-sm text-red-500">
+                                        {errors.financialEndDate}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     </div>
 

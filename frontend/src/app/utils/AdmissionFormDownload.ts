@@ -158,7 +158,7 @@ export const downloadAdmissionForm = async (student: any, courseDetails: any) =>
       return [
         i + 1,
         course?.name || 'N/A',
-        course?.durationWeeks ? `${course.durationWeeks} Weeks` : 'N/A',
+        course?.durationMonths ? `${course.durationMonths} Weeks` : 'N/A',
         fee?.totalAmount ? `₹${fee.totalAmount}` : 'N/A',
         fee?.paymentType || 'N/A',
       ];

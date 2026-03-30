@@ -353,7 +353,7 @@ export async function createStudentService({
       admissionDate,
       religion,
       fatherName,
-      motherName,
+      qualification,
       dob,
       gender,
       parentsContact,
@@ -391,7 +391,7 @@ export async function createStudentService({
         admissionDate: new Date(admissionDate),
         religion,
         fatherName,
-        motherName,
+        qualification,
         parentsContact,
         dob: parsedDOB ? new Date(parsedDOB) : null,
         gender,
@@ -444,13 +444,19 @@ export async function createStudentService({
         });
       }
 
-      // StudentCourse
-      const startDate = new Date(admissionDate);
-      const endDate = new Date(startDate);
+    // StudentCourse
+    const startDate = new Date(admissionDate);
+    const endDate = new Date(startDate);
 
-      if (courseExists.durationWeeks) {
-        endDate.setDate(startDate.getDate() + courseExists.durationWeeks * 7);
+    if (courseExists.durationMonths) {
+      const targetMonth = startDate.getMonth() + courseExists.durationMonths;
+      endDate.setMonth(targetMonth);
+
+      // Fix overflow (e.g., Feb issue)
+      if (endDate.getDate() !== startDate.getDate()) {
+        endDate.setDate(0); // last day of previous month
       }
+    }
 
       const studentCourse = await tx.studentCourse.create({
         data: {
@@ -684,7 +690,7 @@ export async function editStudentService({
     idProofNumber,
     religion,
     fatherName,
-    motherName,
+    qualification,
     dob,
     gender,
     parentsContact,
@@ -708,7 +714,7 @@ export async function editStudentService({
       idProofNumber,
       religion,
       fatherName,
-      motherName,
+      qualification,
       parentsContact,
       dob: parsedDOB ? new Date(parsedDOB) : null, // ✅ full ISO
       gender,

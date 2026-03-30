@@ -224,8 +224,14 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
      // Create StudentCourse
     const startDate = new Date(admissionDate);
     const endDate = new Date(startDate);
-    if (courseExists.durationWeeks) {
-      endDate.setDate(startDate.getDate() + courseExists.durationWeeks * 7);
+    if (courseExists.durationMonths) {
+      const targetMonth = startDate.getMonth() + courseExists.durationMonths;
+      endDate.setMonth(targetMonth);
+
+      // Fix overflow (e.g., Feb issue)
+      if (endDate.getDate() !== startDate.getDate()) {
+        endDate.setDate(0); // last day of previous month
+      }
     }
 
     // 🔗 5. Attach student to course
@@ -389,7 +395,7 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
 export async function addCourseController(req: Request, res: Response) {
   const {
     name,
-    durationWeeks,
+    durationMonths,
     description,
     totalAmount,
     paymentType,
@@ -399,9 +405,9 @@ export async function addCourseController(req: Request, res: Response) {
 
   console.log("GET COURSE DATA in REQ>BODY:", req.body);
 
-  if (!name || !durationWeeks || !totalAmount) {
+  if (!name || !durationMonths || !totalAmount) {
     return res.status(400).json({
-      error: "name, durationWeeks, totalAmount & paymentType are required",
+      error: "name, durationMonths, totalAmount & paymentType are required",
     });
   }
 
@@ -419,7 +425,7 @@ export async function addCourseController(req: Request, res: Response) {
     const course = await tenantPrisma.course.create({
       data: {
         name: normalizeCourseName,
-        durationWeeks: parseInt(durationWeeks),
+        durationMonths: parseInt(durationMonths),
         description,
         clientAdminId: user.clientAdminId,
       },
@@ -472,7 +478,7 @@ export async function addCourseController(req: Request, res: Response) {
 export async function updateCourseController(req: Request, res: Response) {
   const {
     name,
-    durationWeeks,
+    durationMonths,
     description,
     totalAmount,
     paymentType,
@@ -481,9 +487,9 @@ export async function updateCourseController(req: Request, res: Response) {
 
   const { id } = req.params;
 
-  if (!name || !durationWeeks || !totalAmount || !paymentType) {
+  if (!name || !durationMonths || !totalAmount || !paymentType) {
     return res.status(400).json({
-      error: "name, durationWeeks, totalAmount & paymentType are required",
+      error: "name, durationMonths, totalAmount & paymentType are required",
     });
   }
   console.log("GET UPDATE COURSE DATA In UPDATE COURSE CONTROLLER:", req.body);
@@ -529,7 +535,7 @@ export async function updateCourseController(req: Request, res: Response) {
       },
       data: {
         name,
-        durationWeeks: parseInt(durationWeeks),
+        durationMonths: parseInt(durationMonths),
         description,
         clientAdminId: user.clientAdminId,
       },

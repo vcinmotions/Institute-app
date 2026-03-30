@@ -26,6 +26,9 @@ export async function getClientAdmin(req: Request, res: Response) {
     if (user.userType === "ADMIN") {
       clientAdminData = await tenantPrisma.clientAdmin.findUnique({
         where: { email },
+        include: {
+          financialYears: true
+        }
       });
     } else if (user.userType === "ROLE_USER") {
       const roleUser = await tenantPrisma.roleUser.findUnique({

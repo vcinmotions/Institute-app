@@ -114,9 +114,6 @@ Prisma.NullTypes = {
  */
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -142,6 +139,16 @@ exports.Prisma.ClientAdminScalarFieldEnum = {
   role: 'role',
   currentSessionToken: 'currentSessionToken',
   lastLoginAt: 'lastLoginAt'
+};
+
+exports.Prisma.FinancialYearScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isActive: 'isActive',
+  clientAdminId: 'clientAdminId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.RoleUserScalarFieldEnum = {
@@ -175,15 +182,15 @@ exports.Prisma.EnquiryScalarFieldEnum = {
   srNo: 'srNo',
   name: 'name',
   contact: 'contact',
-  alternateContact: 'alternateContact',
   email: 'email',
+  course: 'course',
+  source: 'source',
+  alternateContact: 'alternateContact',
   age: 'age',
   location: 'location',
   city: 'city',
-  course: 'course',
   gender: 'gender',
   dob: 'dob',
-  source: 'source',
   referedBy: 'referedBy',
   leadStatus: 'leadStatus',
   enquiryDate: 'enquiryDate',
@@ -240,7 +247,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   admissionNumber: 'admissionNumber',
   fullName: 'fullName',
   fatherName: 'fatherName',
-  motherName: 'motherName',
+  qualification: 'qualification',
   photoUrl: 'photoUrl',
   contact: 'contact',
   parentsContact: 'parentsContact',
@@ -261,7 +268,7 @@ exports.Prisma.StudentScalarFieldEnum = {
 exports.Prisma.CourseScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  durationWeeks: 'durationWeeks',
+  durationMonths: 'durationMonths',
   description: 'description',
   clientAdminId: 'clientAdminId'
 };
@@ -516,14 +523,24 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN',
@@ -585,6 +602,7 @@ exports.RecordType = exports.$Enums.RecordType = {
 
 exports.Prisma.ModelName = {
   ClientAdmin: 'ClientAdmin',
+  FinancialYear: 'FinancialYear',
   RoleUser: 'RoleUser',
   ActivityLog: 'ActivityLog',
   Enquiry: 'Enquiry',

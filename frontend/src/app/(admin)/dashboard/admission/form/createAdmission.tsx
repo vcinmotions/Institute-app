@@ -1407,8 +1407,7 @@ interface NewEnquiryData {
   permenantAddress: string;
   parentsContact: string;
   fatherName: string;
-  motherName: string;
-  religion: string;
+  qualification: string;
 }
 
 interface NewEnquiryDataAll {
@@ -1430,8 +1429,7 @@ interface NewEnquiryDataAll {
   permenantAddress: string;
   parentsContact: string;
   fatherName: string;
-  motherName: string;
-  religion: string;
+  qualification: string;
   installmentTypeId: string;
   selectedProfilePicture: any[];
 }
@@ -1493,9 +1491,8 @@ export default function AdmissionForm() {
     permenantAddress: "",
     parentsContact: "",
     fatherName: "",
-    motherName: "",
+    qualification: "",
     dob: "",
-    religion: "",
 
     facultyId: "",
   });
@@ -1977,34 +1974,32 @@ export default function AdmissionForm() {
     if (!newEnquiry.courseId) newErrors.courseId = "Please select a course.";
 
     // 🔹 Extended Admission Details
-    if (!filledEnquiryData.fatherName.trim())
-      newErrors.fatherName = "Father's name is required.";
-    if (!filledEnquiryData.motherName.trim())
-      newErrors.motherName = "Mother's name is required.";
-    if (!filledEnquiryData.gender.trim())
-      newErrors.gender = "Gender is required.";
+    // if (!filledEnquiryData.fatherName.trim())
+    //   newErrors.fatherName = "Father's name is required.";
+    // if (!filledEnquiryData.qualification.trim())
+    //   newErrors.qualification = "Qualification is required.";
+    // if (!filledEnquiryData.gender.trim())
+    //   newErrors.gender = "Gender is required.";
 
-    if (!filledEnquiryData.dob.trim())
-      newErrors.dob = "Date of birth is required.";
-    else if (!/^\d{4}-\d{2}-\d{2}$/.test(filledEnquiryData.dob))
-      newErrors.dob = "Date of birth must be in DD/MM/YYYY format.";
+    // if (!filledEnquiryData.dob.trim())
+    //   newErrors.dob = "Date of birth is required.";
+    // else if (!/^\d{4}-\d{2}-\d{2}$/.test(filledEnquiryData.dob))
+    //   newErrors.dob = "Date of birth must be in DD/MM/YYYY format.";
 
-    if (!filledEnquiryData.idProofType.trim())
-      newErrors.idProofType = "Select an ID proof type.";
-    if (!filledEnquiryData.idProofNumber.trim())
-      newErrors.idProofNumber = "ID proof number is required.";
+    // if (!filledEnquiryData.idProofType.trim())
+    //   newErrors.idProofType = "Select an ID proof type.";
+    // if (!filledEnquiryData.idProofNumber.trim())
+    //   newErrors.idProofNumber = "ID proof number is required.";
 
-    if (!filledEnquiryData.residentialAddress.trim())
-      newErrors.residentialAddress = "Residential address is required.";
+    // if (!filledEnquiryData.residentialAddress.trim())
+    //   newErrors.residentialAddress = "Residential address is required.";
 
-    if (!filledEnquiryData.permenantAddress.trim())
-      newErrors.permenantAddress = "Permanent address is required.";
+    // if (!filledEnquiryData.permenantAddress.trim())
+    //   newErrors.permenantAddress = "Permanent address is required.";
 
-    if (!filledEnquiryData.parentsContact.trim())
-      newErrors.parentsContact = "Parent's contact number is required.";
+    // if (!filledEnquiryData.parentsContact.trim())
+    //   newErrors.parentsContact = "Parent's contact number is required.";
 
-    if (!filledEnquiryData.religion.trim())
-      newErrors.religion = "Religion is required.";
 
     // if (!filledEnquiryData.feeAmount.trim())
     //   newErrors.feeAmount = "Fee amount is required.";
@@ -2023,21 +2018,21 @@ export default function AdmissionForm() {
       newErrors.admissionDate = "Admission date is required.";
 
     // Optional: validate ID proof type/number pattern
-    if (
-      filledEnquiryData.idProofType === "aadhar card" &&
-      !/^\d{12}$/.test(filledEnquiryData.idProofNumber)
-    )
-      newErrors.idProofNumber = "Aadhar number must be 12 digits.";
+    // if (
+    //   filledEnquiryData.idProofType === "aadhar card" &&
+    //   !/^\d{12}$/.test(filledEnquiryData.idProofNumber)
+    // )
+    //   newErrors.idProofNumber = "Aadhar number must be 12 digits.";
 
-    // Optional: validate ID proof type/number pattern
-    if (
-      filledEnquiryData.idProofType === "pan card" &&
-      !/^\d{10}$/.test(filledEnquiryData.idProofNumber)
-    )
-      newErrors.idProofNumber = "Pan number must be 10 digits.";
+    // // Optional: validate ID proof type/number pattern
+    // if (
+    //   filledEnquiryData.idProofType === "pan card" &&
+    //   !/^\d{10}$/.test(filledEnquiryData.idProofNumber)
+    // )
+    //   newErrors.idProofNumber = "Pan number must be 10 digits.";
 
-    if (!selectedProfilePicture)
-      newErrors.selectedProfilePicture = "Profiloe Picture is required.";
+    // if (!selectedProfilePicture)
+    //   newErrors.selectedProfilePicture = "Profiloe Picture is required.";
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 2000);
@@ -2235,9 +2230,8 @@ export default function AdmissionForm() {
       permenantAddress: filledEnquiryData.permenantAddress,
       parentsContact: filledEnquiryData.parentsContact,
       fatherName: filledEnquiryData.fatherName,
-      motherName: filledEnquiryData.motherName,
+      qualification: filledEnquiryData.qualification,
       dob: filledEnquiryData.dob,
-      religion: filledEnquiryData.religion,
 
       profilePicture: selectedProfilePicture, // you'll need to track this in state
     };
@@ -2352,19 +2346,19 @@ export default function AdmissionForm() {
             </div>
             <div
               ref={(el) => {
-                inputRefs.current.motherName = el; // ✅ different key
+                inputRefs.current.qualification = el; // ✅ different key
               }}
             >
-              <Label>Mother's Name</Label>
+              <Label>Qualification</Label>
               <Input
                 type="text"
                 tabIndex={3}
-                placeholder="Enter Mother Name"
-                value={titleCase(filledEnquiryData.motherName)}
-                onChange={(e) => handleChange("motherName", e.target.value)}
+                placeholder="Enter Qualification"
+                value={titleCase(filledEnquiryData.qualification)}
+                onChange={(e) => handleChange("qualification", e.target.value)}
               />
-              {errors.motherName && (
-                <p className="text-sm text-red-500">{errors.motherName}</p>
+              {errors.qualification && (
+                <p className="text-sm text-red-500">{errors.qualification}</p>
               )}
             </div>
             <div
@@ -2467,7 +2461,7 @@ export default function AdmissionForm() {
                 <p className="text-sm text-red-500">{errors.gender}</p>
               )}
             </div>
-            <div ref={(el) => {
+            {/* <div ref={(el) => {
               inputRefs.current.religion = el; // ✅ different key
             }}>
               <Label>Religion</Label>
@@ -2481,7 +2475,7 @@ export default function AdmissionForm() {
               {errors.religion && (
                 <p className="text-sm text-red-500">{errors.religion}</p>
               )}
-            </div>
+            </div> */}
             {/* Select Course */}
             <div ref={(el) => {
               inputRefs.current.courseId = el; // ✅ different key

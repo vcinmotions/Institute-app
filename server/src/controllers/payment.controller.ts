@@ -21,7 +21,7 @@ export async function addStudentPaymentController(req: Request, res: Response) {
     paymentType, // e.g., 'ONE_TIME' or 'INSTALLMENT'
     religion,
     fatherName,
-    motherName,
+    qualification,
     dob,
     gender,
     parentsContact,
@@ -79,7 +79,7 @@ export async function addStudentPaymentController(req: Request, res: Response) {
       courseRecord = await tenantPrisma.course.create({
         data: {
           name: course,
-          durationWeeks: 12, // default duration — change if needed
+          durationMonths: 12, // default duration — change if needed
           description: `${course} course`,
           clientAdminId,
         },
@@ -143,7 +143,7 @@ export async function addStudentPaymentController(req: Request, res: Response) {
         // ✅ Add the missing required fields
         religion: req.body.religion,
         fatherName: req.body.fatherName,
-        motherName: req.body.motherName,
+        qualification: req.body.qualification,
         parentsContact: req.body.parentsContact,
         dob: req.body.dob, // Make sure this is a valid string (e.g., '2003-05-25')
         gender: req.body.gender,

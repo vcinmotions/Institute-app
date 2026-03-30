@@ -128,7 +128,7 @@ export default function EditTestForm({
             ...prev,
             name: form.name ?? prev.name,
             batchId: form.description ?? prev.batchId,
-            courseId: form.durationWeeks ?? prev.courseId,
+            courseId: form.durationMonths ?? prev.courseId,
         }));
     }, [form]);
 

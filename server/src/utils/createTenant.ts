@@ -664,7 +664,7 @@ function upsertEnvVariable(key: string, value: string) {
 
 
       exec(
-        `"${nodePath}" "${prismaCLI}" db push --accept-data-loss --schema="${schemaPath}"`,
+        `"${nodePath}" "${prismaCLI}" db push --accept-data-loss --skip-generate --schema="${schemaPathToUse}"`,
         {
           env: { ...process.env, DATABASE_URL: url },
         },
@@ -696,6 +696,8 @@ export async function createTenant(
   city: string,
   zipCode: string,
   fullAddress: string,
+  financialStartDate: string,   // ✅ ADD
+  financialEndDate: string,      // ✅ ADD
   logo: string,
   stamp: string,
   sign: string,
@@ -711,15 +713,22 @@ export async function createTenant(
     !country ||
     !state ||
     !zipCode ||
-    !fullAddress
+    !fullAddress ||
+    !financialStartDate ||
+    !financialEndDate
   ) {
     throw new Error("All required tenant fields must be provided");
   }
 
-  console.log("GET ALL CREATE TENANT DATA HERE :::::::::", name, instituteName, email);
+  console.log("GET ALL CREATE TENANT DATA HERE :::::::::", name, instituteName, email, financialStartDate, financialEndDate);
 
   const tenantId = Math.floor(100000000 + Math.random() * 900000000);
   const dbName = `tenant_${tenantId}`;
+
+  const start = new Date(financialStartDate);
+  const end = new Date(financialEndDate);
+
+  const financialYearName = `${start.getFullYear()}-${end.getFullYear()}`;
 
   let dbUrl: string;
   let backupDbUrl: string | null = null;
@@ -776,10 +785,10 @@ export async function createTenant(
     await admin.query(`CREATE DATABASE "${backupDbName}"`);
     await admin.end();
 
-
-    
-    await runMigration(dbUrl);
-    if (backupDbUrl) await runMigration(backupDbUrl);
+    /* =======================================================
+   ✅ 👉 PUT YOUR CONDITION HERE (IMPORTANT)
+  ======================================================= */
+ 
   }
 
   // /* ---------- MIGRATIONS ---------- */
@@ -804,8 +813,19 @@ export async function createTenant(
       );
     });
 
-  await runMigrationProd(dbUrl);
-  if (backupDbUrl) await runMigrationProd(backupDbUrl);
+    /* =======================================================
+      ✅ 👉 PUT YOUR CONDITION HERE (IMPORTANT)
+    ======================================================= */
+
+    if (isProd && isSqlite) {
+      // SQLite (production)
+      await runMigrationProd(dbUrl);
+      if (backupDbUrl) await runMigrationProd(backupDbUrl);
+    } else {
+      // PostgreSQL (dev)
+      await runMigration(dbUrl);
+      if (backupDbUrl) await runMigration(backupDbUrl);
+    }
 
   /* ---------- SAVE ENV ---------- */
   upsertEnvVariable(`${instituteName}_CLIENT_DATABASE_URL`, dbUrl);
@@ -824,7 +844,7 @@ export async function createTenant(
   const tenantPrisma = getTenantPrisma(dbUrl);
   const centralPrisma = getCentralPrisma();
 
-  await tenantPrisma.clientAdmin.create({
+  const admin = await tenantPrisma.clientAdmin.create({
     data: {
       name,
       email,
@@ -846,7 +866,19 @@ export async function createTenant(
     },
   });
 
-  await centralPrisma.tenant.create({
+  if (!admin) throw new Error("Admin not found after creation");
+
+  await tenantPrisma.financialYear.create({
+    data: {
+      name: financialYearName,
+      startDate: start,
+      endDate: end,
+      isActive: true,
+      clientAdminId: admin.id,
+    },
+  });
+
+  await centralPrisma.tenant.create({ 
     data: {
       tenantId: tenantId.toString(),
       name,
@@ -865,6 +897,7 @@ export async function createTenant(
       dbUrl,
     },
   });
+  
 
   await tenantPrisma.$disconnect();
   await centralPrisma.$disconnect();

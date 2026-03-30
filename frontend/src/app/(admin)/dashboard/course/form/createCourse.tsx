@@ -19,7 +19,7 @@ type FormErrors = Partial<Record<keyof CourseData, string>>;
 
 interface CourseData {
   description: string;
-  durationWeeks: string;
+  durationMonths: string;
   name: string; // ✅ this matches backend
   paymentType: string[];
   totalAmount: string;
@@ -36,7 +36,7 @@ export default function CourseForm() {
   const [newCourse, setNewCourse] = useState<CourseData>({
     name: "",
     description: "",
-    durationWeeks: "",
+    durationMonths: "",
     paymentType: [],
     totalAmount: "",
   });
@@ -95,7 +95,7 @@ export default function CourseForm() {
   //   setNewCourse((prev) => ({
   //     name: form.name || prev.name,
   //     description: form.description || prev.description,
-  //     durationWeeks: form.durationWeeks || prev.durationWeeks,
+  //     durationMonths: form.durationMonths || prev.durationMonths,
   //     paymentType: form.paymentType?.length
   //       ? form.paymentType
   //       : prev.paymentType,
@@ -110,13 +110,13 @@ export default function CourseForm() {
       ...prev,
       name: form.name ?? prev.name,
       description: form.description ?? prev.description,
-      durationWeeks: form.durationWeeks ?? prev.durationWeeks,
+      durationMonths: form.durationMonths ?? prev.durationMonths,
       totalAmount: form.totalAmount ?? prev.totalAmount,
       paymentType: form && form.paymentType
-      ? Array.isArray(form.paymentType) && form.paymentType.length > 0
-        ? form.paymentType
-        : [form.paymentType]  // convert single string to array
-      : prev.paymentType
+        ? Array.isArray(form.paymentType) && form.paymentType.length > 0
+          ? form.paymentType
+          : [form.paymentType]  // convert single string to array
+        : prev.paymentType
 
     }));
   }, [form]);
@@ -127,7 +127,7 @@ export default function CourseForm() {
   //   setNewCourse({
   //     name: form.name || "",
   //     description: form.description || "",
-  //     durationWeeks: form.durationWeeks || "",
+  //     durationMonths: form.durationMonths || "",
   //     paymentType: form.paymentType || "",
   //     totalAmount: form.totalAmount || "",
   //   });
@@ -189,8 +189,8 @@ export default function CourseForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newCourse.durationWeeks.trim()) {
-      newErrors.durationWeeks = "Name is required.";
+    if (!newCourse.durationMonths.trim()) {
+      newErrors.durationMonths = "Name is required.";
     }
 
     if (!newCourse.name.trim()) {
@@ -251,10 +251,10 @@ export default function CourseForm() {
   const handleChange = (field: keyof CourseData, value: string) => {
 
     // ✅ Ensure non-negative
-  if (["durationWeeks", "totalAmount"].includes(field)) {
-    const numericValue = Number(value);
-    if (numericValue < 0) return; // ignore negative
-  }
+    if (["durationMonths", "totalAmount"].includes(field)) {
+      const numericValue = Number(value);
+      if (numericValue < 0) return; // ignore negative
+    }
 
     // setNewCourse((prev) => ({
     //   ...prev,
@@ -272,7 +272,7 @@ export default function CourseForm() {
         : {}),
     }));
 
-     setField(field, value); // <-- IMPORTANT
+    setField(field, value); // <-- IMPORTANT
 
     // Clear error on change
     setErrors((prev) => ({
@@ -295,8 +295,8 @@ export default function CourseForm() {
       scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
       return; // ⛔ mutation never runs
     }
@@ -335,7 +335,7 @@ export default function CourseForm() {
       onSuccess: () => {
         setNewCourse({
           description: "",
-          durationWeeks: "",
+          durationMonths: "",
           name: "",
           paymentType: [],
           totalAmount: "",
@@ -384,8 +384,8 @@ export default function CourseForm() {
           )}
 
           <div ref={(el) => {
-                inputRefs.current.name = el;
-              }}>
+            inputRefs.current.name = el;
+          }}>
             <Label>Course *</Label>
             <Input
               ref={firstInputRef}
@@ -400,30 +400,30 @@ export default function CourseForm() {
           </div>
 
           <div ref={(el) => {
-                inputRefs.current.durationWeeks = el;
-              }}>
+            inputRefs.current.durationMonths = el;
+          }}>
             <Label>Duration Weeks *</Label>
             <Input
               type="number"
               min={0}              // ✅ Prevents negatives
-             
+
               placeholder="Enter Duration"
-              value={newCourse.durationWeeks}
-              onChange={(e) => handleChange("durationWeeks", e.target.value)}
+              value={newCourse.durationMonths}
+              onChange={(e) => handleChange("durationMonths", e.target.value)}
             />
-            {errors.durationWeeks && (
-              <p className="text-sm text-red-500">{errors.durationWeeks}</p>
+            {errors.durationMonths && (
+              <p className="text-sm text-red-500">{errors.durationMonths}</p>
             )}
           </div>
 
           <div ref={(el) => {
-                inputRefs.current.totalAmount = el;
-              }}>
+            inputRefs.current.totalAmount = el;
+          }}>
             <Label>Course Amount *</Label>
             <Input
               type="number"
               min={0}
-              
+
               placeholder="Enter Amount"
               value={newCourse.totalAmount}
               onChange={(e) => handleChange("totalAmount", e.target.value)}
@@ -434,8 +434,8 @@ export default function CourseForm() {
           </div>
 
           <div ref={(el) => {
-                inputRefs.current.paymentType = el;
-              }}>
+            inputRefs.current.paymentType = el;
+          }}>
             <Label> Payment Type *</Label>
 
             <div className="flex gap-4">
@@ -553,7 +553,7 @@ export default function CourseForm() {
             >
               Clear
             </Button> */}
-            <Button size="sm" variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+            <Button size="sm" variant="primary" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>

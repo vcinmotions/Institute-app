@@ -33,6 +33,7 @@ model ClientAdmin {
   lastLoginAt   DateTime?
 
   // 👇 Relations
+  financialYears FinancialYear[]   // ← ADD THIS
   roleUsers     RoleUser[]       // All sub-admins under this institute
   faculties     Faculty[]        // All faculty of this institute
   batches Batch[]
@@ -61,6 +62,21 @@ model ClientAdmin {
   tasks Task[]
   tests Test[]
   StationeryItems   StationeryItem[]
+}
+
+model FinancialYear {
+  id        String   @id @default(uuid())
+  name      String   // "2025-2026"
+  startDate DateTime // 2025-04-01
+  endDate   DateTime // 2026-03-31
+  isActive  Boolean  @default(false)
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([clientAdminId, name])
 }
 
 model RoleUser {
@@ -196,7 +212,7 @@ model Student {
   admissionNumber   String      @unique
   fullName      String
   fatherName    String?
-  motherName    String?
+  qualification    String?
   photoUrl      String?
   contact       String
   parentsContact String?
@@ -232,7 +248,7 @@ model Student {
 model Course {
   id             Int              @id @default(autoincrement())
   name           String
-  durationWeeks  Int
+  durationMonths  Int
   description    String?
   courseFeeStructure CourseFeeStructure? // 👈 added
   studentCourses StudentCourse[]

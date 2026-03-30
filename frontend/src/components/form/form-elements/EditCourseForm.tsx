@@ -21,7 +21,7 @@ interface DefaultInputsProps {
 interface CourseData {
   id: string;
   description: string;
-  durationWeeks: string;
+  durationMonths: string;
   name: string;
   paymentType: any; // should ideally be string[]
   totalAmount: string;
@@ -51,7 +51,7 @@ export default function EditCourseForm({
     id: "",
     name: "",
     description: "",
-    durationWeeks: "",
+    durationMonths: "",
     paymentType: "",
     totalAmount: "",
     installments: [],
@@ -73,13 +73,13 @@ export default function EditCourseForm({
   console.log("GET BATCH DATA IN EDIT COURSE FORM:", batchData);
 
   const { inputRefs, scrollToError } = useScrollToError();
-  
+
   // Installments State (Array)
   const [installments, setInstallments] = useState<InstallmentDetail[]>([
     { installment: "2", addAmount: "" },
   ]);
-    const [errors, setErrors] = useState<FormErrors>({});
-  
+  const [errors, setErrors] = useState<FormErrors>({});
+
   const [oneTime, setOneTime] = useState<boolean>(false);
   const [installment, setInstallment] = useState<boolean>(false);
   const { mutate: editCourse } = useEditCourse();
@@ -100,8 +100,8 @@ export default function EditCourseForm({
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newCourse.durationWeeks.trim()) {
-      newErrors.durationWeeks = "Name is required.";
+    if (!newCourse.durationMonths.trim()) {
+      newErrors.durationMonths = "Name is required.";
     }
 
     if (!newCourse.name.trim()) {
@@ -131,7 +131,7 @@ export default function EditCourseForm({
   //     setNewCourse({
   //       id: batchData.id || "",
   //       description: batchData.description || "",
-  //       durationWeeks: batchData.durationWeeks?.toString() || "",
+  //       durationMonths: batchData.durationMonths?.toString() || "",
   //       name: batchData.name || "",
   //       paymentType: batchData?.courseFeeStructure?.paymentType || "",
   //       totalAmount:
@@ -159,7 +159,7 @@ export default function EditCourseForm({
       id: String(batchData.id || ""),
       name: batchData.name || "",
       description: batchData.description || "",
-      durationWeeks: String(batchData.durationWeeks || ""),
+      durationMonths: String(batchData.durationMonths || ""),
       totalAmount: String(batchData?.courseFeeStructure?.totalAmount || ""),
       paymentType: pt,
       installments: mappedInstallments,
@@ -328,7 +328,7 @@ export default function EditCourseForm({
     //     ...prev,
     //     [field]: value,
     //   };
-      
+
 
     //   // if payment type changed to ONE_TIME → reset installmentCount
 
@@ -361,8 +361,8 @@ export default function EditCourseForm({
       scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
       return; // ⛔ mutation never runs
     }
@@ -376,9 +376,9 @@ export default function EditCourseForm({
         variant: "error",
       });
 
-       window.scrollTo({
-            top: 0, behavior: "smooth"
-          })
+      window.scrollTo({
+        top: 0, behavior: "smooth"
+      })
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
@@ -403,7 +403,7 @@ export default function EditCourseForm({
           setNewCourse({
             id: "",
             description: "",
-            durationWeeks: "",
+            durationMonths: "",
             name: "",
             paymentType: "",
             totalAmount: "",
@@ -469,11 +469,11 @@ export default function EditCourseForm({
             tabIndex={2}
             min={0}
             placeholder="12"
-            value={newCourse.durationWeeks}
-            onChange={(e) => handleChange("durationWeeks", e.target.value)}
+            value={newCourse.durationMonths}
+            onChange={(e) => handleChange("durationMonths", e.target.value)}
           />
-          {errors.durationWeeks && (
-            <p className="text-sm text-red-500">{errors.durationWeeks}</p>
+          {errors.durationMonths && (
+            <p className="text-sm text-red-500">{errors.durationMonths}</p>
           )}
         </div>
 
@@ -510,7 +510,7 @@ export default function EditCourseForm({
             />
             <Label> INSTALLMENTS</Label>
           </div>
-           {errors.paymentType && (
+          {errors.paymentType && (
             <p className="text-sm text-red-500">{errors.paymentType}</p>
           )}
         </div>

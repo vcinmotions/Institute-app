@@ -67,41 +67,41 @@ export default function TaskForm() {
     firstInputRef.current?.focus();
   }, []);
 
-   const {
-        data: courseData,
-        isLoading: courseLoading,
-        isError: courseError,
-      } = useFetchAllCourses();
-    
-      const {
-        data: batchData,
-        isLoading: batchLoading,
-        isError: batchError,
-      } = useFetchAllBatches();
-  
-      useEffect(() => {
-        if (courseData?.course) {
-          dispatch(setCourses(courseData.course));
-        };
-      }, [courseData, dispatch]);
-    
-      useEffect(() => {
-        console.log("get all batches data;", batchData);
-        if (batchData?.batch) { 
-          dispatch(setBatches(batchData.batch));
-        };
-      }, [batchData, dispatch]);
-      console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
-  
-      const batchOptions = batch.map((b: any) => ({
-      value: b.id.toString(),
-      label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
-    }));
-  
-     const courseOptions = course.map((course: any) => ({
-      value: course.id.toString(),
-      label: course.name,
-    }));
+  const {
+    data: courseData,
+    isLoading: courseLoading,
+    isError: courseError,
+  } = useFetchAllCourses();
+
+  const {
+    data: batchData,
+    isLoading: batchLoading,
+    isError: batchError,
+  } = useFetchAllBatches();
+
+  useEffect(() => {
+    if (courseData?.course) {
+      dispatch(setCourses(courseData.course));
+    };
+  }, [courseData, dispatch]);
+
+  useEffect(() => {
+    console.log("get all batches data;", batchData);
+    if (batchData?.batch) {
+      dispatch(setBatches(batchData.batch));
+    };
+  }, [batchData, dispatch]);
+  console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
+
+  const batchOptions = batch.map((b: any) => ({
+    value: b.id.toString(),
+    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+  }));
+
+  const courseOptions = course.map((course: any) => ({
+    value: course.id.toString(),
+    label: course.name,
+  }));
 
   useEffect(() => {
     if (!form || Object.keys(form).length === 0) return;
@@ -110,7 +110,7 @@ export default function TaskForm() {
       ...prev,
       name: form.name ?? prev.name,
       batchId: form.description ?? prev.batchId,
-      courseId: form.durationWeeks ?? prev.courseId,
+      courseId: form.durationMonths ?? prev.courseId,
     }));
   }, [form]);
 
@@ -145,7 +145,7 @@ export default function TaskForm() {
       [field]: value,
     }));
 
-     setField(field, value); // <-- IMPORTANT
+    setField(field, value); // <-- IMPORTANT
 
     // Clear error on change
     setErrors((prev) => ({
@@ -168,8 +168,8 @@ export default function TaskForm() {
       scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
       return; // ⛔ mutation never runs
     }
@@ -247,8 +247,8 @@ export default function TaskForm() {
           )}
 
           <div ref={(el) => {
-                inputRefs.current.name = el;
-              }}>
+            inputRefs.current.name = el;
+          }}>
             <Label>Task Name *</Label>
             <Input
               ref={firstInputRef}
@@ -262,7 +262,7 @@ export default function TaskForm() {
             )}
           </div>
 
-           <div>
+          <div>
             <Label>
               Select Course *{" "}
             </Label>
@@ -284,8 +284,8 @@ export default function TaskForm() {
           </div>
 
           <div ref={(el) => {
-                inputRefs.current.batchId = el;
-              }}>
+            inputRefs.current.batchId = el;
+          }}>
             <Label>Select Batch *</Label>
             <div className="relative" data-master="batch">
               <Select
@@ -313,7 +313,7 @@ export default function TaskForm() {
             >
               Clear
             </Button> */}
-            <Button size="sm" variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+            <Button size="sm" variant="primary" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
               Save
             </Button>
           </div>
