@@ -18010,7 +18010,7 @@ export namespace Prisma {
   export type CourseGroupByOutputType = {
     id: number
     name: string
-    durationMonths: number
+    durationMonths: number | null
     description: string | null
     clientAdminId: string
     _count: CourseCountAggregateOutputType | null
@@ -18132,7 +18132,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
-      durationMonths: number
+      durationMonths: number | null
       description: string | null
       clientAdminId: string
     }, ExtArgs["result"]["course"]>
@@ -48193,7 +48193,7 @@ export namespace Prisma {
     NOT?: CourseWhereInput | CourseWhereInput[]
     id?: IntFilter<"Course"> | number
     name?: StringFilter<"Course"> | string
-    durationMonths?: IntFilter<"Course"> | number
+    durationMonths?: IntNullableFilter<"Course"> | number | null
     description?: StringNullableFilter<"Course"> | string | null
     clientAdminId?: StringFilter<"Course"> | string
     courseFeeStructure?: XOR<CourseFeeStructureNullableScalarRelationFilter, CourseFeeStructureWhereInput> | null
@@ -48216,7 +48216,7 @@ export namespace Prisma {
   export type CourseOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    durationMonths?: SortOrder
+    durationMonths?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
     courseFeeStructure?: CourseFeeStructureOrderByWithRelationInput
@@ -48242,7 +48242,7 @@ export namespace Prisma {
     OR?: CourseWhereInput[]
     NOT?: CourseWhereInput | CourseWhereInput[]
     name?: StringFilter<"Course"> | string
-    durationMonths?: IntFilter<"Course"> | number
+    durationMonths?: IntNullableFilter<"Course"> | number | null
     description?: StringNullableFilter<"Course"> | string | null
     clientAdminId?: StringFilter<"Course"> | string
     courseFeeStructure?: XOR<CourseFeeStructureNullableScalarRelationFilter, CourseFeeStructureWhereInput> | null
@@ -48265,7 +48265,7 @@ export namespace Prisma {
   export type CourseOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    durationMonths?: SortOrder
+    durationMonths?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
     _count?: CourseCountOrderByAggregateInput
@@ -48281,7 +48281,7 @@ export namespace Prisma {
     NOT?: CourseScalarWhereWithAggregatesInput | CourseScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Course"> | number
     name?: StringWithAggregatesFilter<"Course"> | string
-    durationMonths?: IntWithAggregatesFilter<"Course"> | number
+    durationMonths?: IntNullableWithAggregatesFilter<"Course"> | number | null
     description?: StringNullableWithAggregatesFilter<"Course"> | string | null
     clientAdminId?: StringWithAggregatesFilter<"Course"> | string
   }
@@ -51281,7 +51281,7 @@ export namespace Prisma {
 
   export type CourseCreateInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -51303,7 +51303,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -51324,7 +51324,7 @@ export namespace Prisma {
 
   export type CourseUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -51346,7 +51346,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -51368,21 +51368,21 @@ export namespace Prisma {
   export type CourseCreateManyInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
   }
 
   export type CourseUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CourseUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -60504,7 +60504,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutClientAdminInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -60525,7 +60525,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutClientAdminInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutCourseInput
@@ -61426,7 +61426,7 @@ export namespace Prisma {
     NOT?: CourseScalarWhereInput | CourseScalarWhereInput[]
     id?: IntFilter<"Course"> | number
     name?: StringFilter<"Course"> | string
-    durationMonths?: IntFilter<"Course"> | number
+    durationMonths?: IntNullableFilter<"Course"> | number | null
     description?: StringNullableFilter<"Course"> | string | null
     clientAdminId?: StringFilter<"Course"> | string
   }
@@ -63350,7 +63350,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutEnquiryCourseInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -63371,7 +63371,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutEnquiryCourseInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -63575,7 +63575,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutEnquiryCourseInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -63596,7 +63596,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutEnquiryCourseInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -66117,7 +66117,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutCourseFeeStructureInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutCourseInput
@@ -66138,7 +66138,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutCourseFeeStructureInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutCourseInput
@@ -66301,7 +66301,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutCourseFeeStructureInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutCourseNestedInput
@@ -66322,7 +66322,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutCourseFeeStructureInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutCourseNestedInput
@@ -67049,7 +67049,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutBatchCoursesInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -67070,7 +67070,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutBatchCoursesInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -67138,7 +67138,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutBatchCoursesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -67159,7 +67159,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutBatchCoursesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -68855,7 +68855,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStudentCoursesInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutCourseInput
@@ -68876,7 +68876,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStudentCoursesInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -69173,7 +69173,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStudentCoursesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutCourseNestedInput
@@ -69194,7 +69194,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStudentCoursesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -69477,7 +69477,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutFeeStructuresInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -69498,7 +69498,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutFeeStructuresInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -69739,7 +69739,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutFeeStructuresInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -69760,7 +69760,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutFeeStructuresInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -70077,7 +70077,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStudentFeesInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -70098,7 +70098,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStudentFeesInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -70370,7 +70370,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStudentFeesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -70391,7 +70391,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStudentFeesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -70917,7 +70917,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStationeryInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -70938,7 +70938,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStationeryInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -71181,7 +71181,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStationeryInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -71202,7 +71202,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStationeryInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -71435,7 +71435,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutAttendanceRecordsInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -71456,7 +71456,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutAttendanceRecordsInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -71725,7 +71725,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutAttendanceRecordsInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -71746,7 +71746,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutAttendanceRecordsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -71955,7 +71955,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutTasksInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -71976,7 +71976,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutTasksInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -72185,7 +72185,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutTasksInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -72206,7 +72206,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutTasksInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -72429,7 +72429,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStudentTasksInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -72450,7 +72450,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStudentTasksInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -72741,7 +72741,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStudentTasksInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -72762,7 +72762,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStudentTasksInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -72999,7 +72999,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutTestsInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -73020,7 +73020,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutTestsInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -73231,7 +73231,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutTestsInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -73252,7 +73252,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutTestsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -73475,7 +73475,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutStudentTestsInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -73496,7 +73496,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutStudentTestsInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -73741,7 +73741,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutStudentTestsInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -73762,7 +73762,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutStudentTestsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -74441,7 +74441,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutCertificatesInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -74462,7 +74462,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutCertificatesInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -74717,7 +74717,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutCertificatesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -74738,7 +74738,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutCertificatesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -74983,7 +74983,7 @@ export namespace Prisma {
 
   export type CourseCreateWithoutFinancialRecordsInput = {
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     courseFeeStructure?: CourseFeeStructureCreateNestedOneWithoutCourseInput
     studentCourses?: StudentCourseCreateNestedManyWithoutCourseInput
@@ -75004,7 +75004,7 @@ export namespace Prisma {
   export type CourseUncheckedCreateWithoutFinancialRecordsInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
     clientAdminId: string
     courseFeeStructure?: CourseFeeStructureUncheckedCreateNestedOneWithoutCourseInput
@@ -75297,7 +75297,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutFinancialRecordsInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -75318,7 +75318,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutFinancialRecordsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
@@ -75580,7 +75580,7 @@ export namespace Prisma {
   export type CourseCreateManyClientAdminInput = {
     id?: number
     name: string
-    durationMonths: number
+    durationMonths?: number | null
     description?: string | null
   }
 
@@ -75989,7 +75989,7 @@ export namespace Prisma {
 
   export type CourseUpdateWithoutClientAdminInput = {
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUpdateManyWithoutCourseNestedInput
@@ -76010,7 +76010,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateWithoutClientAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     courseFeeStructure?: CourseFeeStructureUncheckedUpdateOneWithoutCourseNestedInput
     studentCourses?: StudentCourseUncheckedUpdateManyWithoutCourseNestedInput
@@ -76031,7 +76031,7 @@ export namespace Prisma {
   export type CourseUncheckedUpdateManyWithoutClientAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    durationMonths?: IntFieldUpdateOperationsInput | number
+    durationMonths?: NullableIntFieldUpdateOperationsInput | number | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 

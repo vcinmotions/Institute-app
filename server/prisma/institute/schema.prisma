@@ -225,7 +225,7 @@ model Course {
   name               String
   description        String?
   clientAdminId      String
-  durationMonths     Int
+  durationMonths     Int?
   attendanceRecords  AttendanceRecord[]
   batchCourses       BatchCourse[]
   certificates       Certificate[]

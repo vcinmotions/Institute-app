@@ -248,7 +248,7 @@ model Student {
 model Course {
   id             Int              @id @default(autoincrement())
   name           String
-  durationMonths  Int
+  durationMonths  Int?
   description    String?
   courseFeeStructure CourseFeeStructure? // 👈 added
   studentCourses StudentCourse[]
