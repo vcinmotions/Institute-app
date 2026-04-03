@@ -420,7 +420,7 @@ ipcMain.handle("save-backup-file", async (_, sourcePath) => {
       writeStream.on("finish", resolve);
 
       readStream.pipe(writeStream);
-    }); // add new text
+    }); 
 
     return result.filePath;
 
