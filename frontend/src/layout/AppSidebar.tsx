@@ -205,11 +205,18 @@ const navItems: NavItem[] = [
     icon: <LockIcon />,
     name: "Stationary",
     path: "/dashboard/stationary",
-    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+    roles: [], // allowed roles
     subItems: [
       { name: "Stationary List", path: "/dashboard/stationary" },
       { name: "Create Stationary", path: "/dashboard/stationary/create" },
     ],
+  },
+  {
+    icon: <LockIcon />,
+    name: "Admission-Config",
+    path: "/dashboard/admission-config",
+    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+
   },
   {
     icon: <LockIcon />,

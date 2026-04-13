@@ -87,6 +87,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { getUserDataPath, isPackaged } from "./runtimePaths";
 import { getTenantDbUrl } from "../utils/envLoader";
+import { normalizeEmailInput, normalizeLoginInput } from "../utils/normalizer/loginNormalizer";
 
 // Decide environment
 const envFile =
@@ -111,8 +112,14 @@ export async function tenantResolverMiddleware(
   try {
     const { email } = req.body;
 
+    console.log("login data:", email,);
+    
+      const normalizeEmail = normalizeEmailInput({ email });
+
+      console.log("normalizeEmail:", normalizeEmail);
+
     // 1️⃣ Skip middleware for master admin login
-    if (!email) return next();
+    if (!normalizeEmail.email) return next();
 
     // 🧠 If email belongs to the master admin -> skip tenant lookup
     // if (email.toLowerCase().includes("@master")) {
@@ -128,7 +135,7 @@ export async function tenantResolverMiddleware(
 
     // 1️⃣ Check master admin FIRST
     const masterAdmin = await centralPrisma.superAdmin.findUnique({
-      where: { email },
+      where: { email: normalizeEmail.email },
     });
 
     if (masterAdmin) {
@@ -150,7 +157,7 @@ export async function tenantResolverMiddleware(
 
     // 2️⃣ Check if email directly matches a client admin in central DB
     const tenant = await centralPrisma.tenant.findFirst({
-      where: { email },
+      where: { email: normalizeEmail.email },
     });
 
     // if (tenant) {
@@ -174,13 +181,13 @@ export async function tenantResolverMiddleware(
     }
 
     // 3️⃣ Extract institute name from email domain
-    const slug = email.split("@")[1]?.toLowerCase(); // e.g. "doki.com"
+    const slug = normalizeEmail.email.split("@")[1]?.toLowerCase(); // e.g. "doki.com"
     //const slug = domainPart?.split(".")[0]?.toLowerCase(); // e.g. "doki"
 
     console.log("GET slug NAME; in tenant Resolver middleware", slug);
 
     if (!slug) {
-      console.log("❌ Could not extract slug name from email:", email);
+      console.log("❌ Could not extract slug name from email:", normalizeEmail.email);
       return next();
     }
 

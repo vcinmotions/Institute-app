@@ -1,8 +1,46 @@
+const { autoUpdater } = require("electron-updater");
+
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const { spawn } = require("child_process");
 const path = require("path");
 const net = require("net");
 const fs = require("fs");
+
+// ✅ ADD THIS LINE HERE FOR RELEASE BUILD
+function setupAutoUpdater(win) {
+  autoUpdater.autoDownload = true;
+
+  autoUpdater.on("update-available", () => {
+    console.log("Update available");
+  });
+
+  autoUpdater.on("update-downloaded", async () => {
+    console.log("Update downloaded");
+
+    const result = await dialog.showMessageBox({
+      type: "info",
+      title: "Update Ready",
+      message: "New version downloaded. Restart now?",
+      buttons: ["Restart", "Later"]
+    });
+
+    if (result.response === 0) {
+      if (backendProcess) backendProcess.kill();
+      if (frontendProcess) frontendProcess.kill();
+
+      autoUpdater.quitAndInstall();
+    }
+  });
+
+  autoUpdater.on("error", (err) => {
+    console.error("Update error:", err);
+  });
+
+  // check after app starts
+  setTimeout(() => {
+    autoUpdater.checkForUpdates();
+  }, 5000);
+}
 
 function loadEnvFile(filePath) {
   if (!fs.existsSync(filePath)) {
@@ -309,6 +347,11 @@ async function createWindow() {
   try {
     await startBackend();
     await startFrontend();
+
+    // ✅ ADD THIS LINE HERE FOR RELEASE BUILD
+    if (!isDev && app.isPackaged) {
+      setupAutoUpdater(win);
+    }
 
     const url = isDev
       ? "http://localhost:3000"

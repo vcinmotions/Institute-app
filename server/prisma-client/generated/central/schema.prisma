@@ -4,11 +4,10 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("CENTRAL_DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-// ✅ Copy all models from Postgres schema here
 model SuperAdmin {
   id          String   @id @default(uuid())
   name        String
@@ -28,7 +27,7 @@ model SuperAdmin {
 
   role Role @default(MASTER_ADMIN)
 
-  // 🆕 ADD THESE (MUST MATCH POSTGRES)
+  // 🆕 ADD THESE
   basicComplete   Boolean @default(false)
   addressComplete Boolean @default(false)
 }
@@ -49,8 +48,8 @@ model Tenant {
   zipCode           String
   instituteName     String   @unique
   tenantId          String   @unique
-  slug              String   @unique
-  email             String?  @unique
+  slug              String   @unique // 👈 REQUIRED
+  email             String?  @unique // add this line
   password          String?
   encryptedPassword String
   dbUrl             String

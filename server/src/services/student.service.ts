@@ -350,6 +350,11 @@ export async function createStudentService({
       permenantAddress,
       idProofType,
       idProofNumber,
+      localAddressProofType,      
+      localAddressProofNumber,   
+      referedBy,             
+      idCard,                
+      bag,                     
       admissionDate,
       religion,
       fatherName,
@@ -360,6 +365,8 @@ export async function createStudentService({
       courseData,
       photoUrl,
     } = data;
+
+    console.log("STUDEMT ADMISSION DATA IN STUDENT SERVICE:", data);
 
     // 1️⃣ Get last student
     const lastStudent = await tx.student.findFirst({
@@ -388,6 +395,11 @@ export async function createStudentService({
         permenantAddress,
         idProofType,
         idProofNumber,
+        localAddressProofType,      
+        localAddressProofNumber,   
+        referedBy,             
+        idCard,                
+        bag,   
         admissionDate: new Date(admissionDate),
         religion,
         fatherName,

@@ -729,7 +729,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             inputRefs.current["qualification"] = el;
           }}
         >
-          <Label>Mother's Name</Label>
+          <Label>Qualification</Label>
           <Input
             type="text"
             tabIndex={3}
@@ -779,7 +779,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
           )}
         </div>
         <div>
-          <Label>Parents Contact</Label>
+          <Label>Alternate Contact</Label>
           <PhoneInput
             tabIndex={6}
             selectPosition="start"
@@ -827,7 +827,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <p className="text-sm text-red-500">{errors.gender}</p>
           )}
         </div>
-        <div>
+        {/* <div>
           <Label>Religion</Label>
           <Input
             tabIndex={9}
@@ -839,7 +839,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
           {errors.religion && (
             <p className="text-sm text-red-500">{errors.religion}</p>
           )}
-        </div>
+        </div> */}
         <div>
           <Label>Select Id Proof</Label>
           <div className="relative">

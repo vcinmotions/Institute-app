@@ -17,6 +17,11 @@ type AdmissionPayload = {
   contact: string;
   idProofType?: string;
   idProofNumber?: string;
+  localAddressProofType: string;
+  localAddressProofNumber: string;
+  idCard: boolean;
+  bag: boolean;
+  referedBy: string,
   admissionDate: string;
   courseData: any[];
   residentialAddress?: string;

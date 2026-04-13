@@ -7,9 +7,14 @@ import { MoreDotIcon } from "@/icons";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import IndiaMap from "./IndiaMap";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 export default function DemographicCard() {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  console.log("API called", user);
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -78,7 +83,7 @@ export default function DemographicCard() {
             </div>
             <div>
               <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
-                USA
+                {user?.city}
               </p>
               <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
                 2,379 Customers
@@ -96,7 +101,7 @@ export default function DemographicCard() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="items-center w-full rounded-full max-w-8">
               <Image
@@ -125,7 +130,7 @@ export default function DemographicCard() {
               23%
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

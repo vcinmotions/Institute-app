@@ -7,8 +7,10 @@ import {
   addStudentControllerNew,
   createstudentOpeningBalanceController,
   editStudentController,
+  getAdmissionConfig,
   getStudentController,
   getStudentCourseController,
+  upsertAdmissionConfig,
 } from "../controllers/admission.controller";
 
 const router = Router();
@@ -77,6 +79,9 @@ router.get("/student", getStudentController);
 router.get("/students/:id/courses", getStudentCourseController);
 router.put("/edit-student/:id", editStudentController);
 router.post("/create-op", createstudentOpeningBalanceController);
+
+router.post("/admission-config", upsertAdmissionConfig);
+router.get("/admission-config", getAdmissionConfig);
 
 // Test Route
 router.post("/test-upload", upload.single("profilePicture"), (req, res) => {

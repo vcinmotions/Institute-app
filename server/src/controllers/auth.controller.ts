@@ -208,11 +208,18 @@ import { getCentralPrisma } from "../prisma-client/central-client";
 import { getTenantPrisma } from "../prisma-client/tenant-client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { normalizeLoginInput } from "../utils/normalizer/loginNormalizer";
 
 export async function loginController(req: Request, res: Response) {
+
   const { email, password } = req.body;
 
-  if (!email || !password)
+  console.log("login data:", email, password);
+
+  const normalizeEmail = normalizeLoginInput({ email });
+  console.log("normalizeEmail:", normalizeEmail);
+
+  if (!normalizeEmail.email || !password)
     return res.status(400).json({ error: "Email and password required" });
 
   try {
@@ -220,7 +227,7 @@ export async function loginController(req: Request, res: Response) {
 
     // 1️⃣ MASTER ADMIN LOGIN
     const master = await centralPrisma.superAdmin.findUnique({
-      where: { email },
+      where: { email: normalizeEmail.email },
     });
 
     if (master) {
@@ -228,7 +235,7 @@ export async function loginController(req: Request, res: Response) {
       if (!valid) return res.status(401).json({ error: "Invalid password" });
 
       const token = jwt.sign(
-        { id: master.id, role: "MASTER_ADMIN", email },
+        { id: master.id, role: "MASTER_ADMIN", email: normalizeEmail.email },
         process.env.JWT_SECRET!,
         { expiresIn: "30d" }
       );
@@ -270,13 +277,13 @@ export async function loginController(req: Request, res: Response) {
     let user = null;
 
     // a) Client Admin
-    user = await tenantPrisma.clientAdmin.findUnique({ where: { email } });
+    user = await tenantPrisma.clientAdmin.findUnique({ where: { email: normalizeEmail.email } });
     if (user) userType = "ADMIN";
 
     // b) Role User
     if (!user) {
       user = await tenantPrisma.roleUser.findUnique({
-        where: { email },
+        where: { email: normalizeEmail.email },
         include: { clientAdmin: true },
       });
       if (user) userType = "ROLE_USER";
@@ -285,7 +292,7 @@ export async function loginController(req: Request, res: Response) {
     // c) Faculty
     if (!user) {
       user = await tenantPrisma.faculty.findUnique({
-        where: { email },
+        where: { email: normalizeEmail.email },
         include: { clientAdmin: true },
       });
       if (user) userType = "FACULTY";
@@ -326,7 +333,7 @@ export async function loginController(req: Request, res: Response) {
 
     const payload = {
       id: user.id,
-      email,
+      email: normalizeEmail.email,
       userType,
       role: user.role,
       dbUrl: tenantInfo.dbUrl,

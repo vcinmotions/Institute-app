@@ -118,7 +118,7 @@ const FinancialReport = () => {
     }).format(amount);
 
   return (
-    <div className=" bg-white border rounded-2xl px-6 py-10">
+    <div className=" bg-white dark:bg-white/[0.03] border border-white/[0.03] rounded-2xl px-6 py-10">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-10">
@@ -161,7 +161,7 @@ const FinancialReport = () => {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={loadSummary}
-              className="px-4 py-2 text-sm font-medium rounded-lg border border-neutral-300 bg-white hover:bg-neutral-50 transition"
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition"
             >
               {loading ? "Refreshing..." : "Refresh"}
             </button>

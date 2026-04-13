@@ -11,14 +11,36 @@ export const studentQuerySchema = z.object({
 });
 
 export const studentCreateSchema = z.object({
-  id: z.string().min(1, "Enquiry ID is required"),
-  name: z.string().min(1, "Name is required"),
-  contact: z.string().min(1, "Contact is required"),
-  email: z.string().email("Invalid email").min(1),
+  id: z.string(),
 
-  admissionDate: z.string().min(1), // can parse to Date in service
+  name: z.string(),
+  contact: z.string(),
+  email: z.string(),
 
-  qualification: z.string().min(1),
+  admissionDate: z.string(),
+  qualification: z.string(),
+
+  fatherName: z.string().optional(),
+  gender: z.string().optional(),
+  residentialAddress: z.string().optional(),
+  permenantAddress: z.string().optional(),
+
+  idProofType: z.string().optional(),
+  idProofNumber: z.string().optional(),
+
+  localAddressProofType: z.string().optional(),
+  localAddressProofNumber: z.string().optional(),
+
+  referedBy: z.string().optional(),
+  parentsContact: z.string().optional(),
+
+  religion: z.string().optional(),
+  dob: z.string().optional(),
+
+  idCard: z.union([z.boolean(), z.string()]).optional(),
+  bag: z.union([z.boolean(), z.string()]).optional(),
+
+  photoUrl: z.string().optional().nullable(),
  
   courseData: z
     .array(

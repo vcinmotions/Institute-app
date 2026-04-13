@@ -6,6 +6,7 @@ import { buildEnquiryWhere } from "../filters/enquiry.filter";
 import { buildEnquiryOrderBy } from "../filters/enquiry.sort";
 import { parseDate, parseDateISO } from "../helpers/date";
 import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "../utils/Normalize";
+import { normalizeEnquiryInput } from "../utils/normalizer/enquiryNormalizer";
 
 export async function getEnquiries({
   prisma,
@@ -76,19 +77,21 @@ export async function createEnquiryService({
   data: any;
 }) {
 
-   // ✅ Normalize FIRST (backend is source of truth)
-  const normalizedData = {
-    ...data,
-    name: data.name ? titleCase(data.name) : null,
-    email: data.email ? normalizeEmail(data.email) : null,
-    contact: data.contact ? normalizePhone(data.contact) : null,
-    alternateContact: data.alternateContact
-      ? normalizePhone(data.alternateContact)
-      : null,
-    location: data.location
-      ? normalizeToLowercase(data.location)
-      : null,
-  };
+  // ✅ Normalize FIRST (backend is source of truth)
+  // const normalizedData = {
+  //   ...data,
+  //   name: data.name ? titleCase(data.name) : null,
+  //   email: data.email ? normalizeEmail(data.email) : null,
+  //   contact: data.contact ? normalizePhone(data.contact) : null,
+  //   alternateContact: data.alternateContact
+  //     ? normalizePhone(data.alternateContact)
+  //     : null,
+  //   location: data.location
+  //     ? normalizeToLowercase(data.location)
+  //     : null,
+  // };
+
+  const normalizedData = normalizeEnquiryInput(data);
 
   const { name, contact, email, dob, courseId, enquiryDate } = normalizedData;
   
@@ -144,6 +147,7 @@ const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
       city: normalizedData.city || null,
       gender: normalizedData.gender || null,
       referedBy: normalizedData.referedBy || null,
+      takenBy: normalizedData.takenBy || null,
       clientAdminId,
     },
   });
@@ -252,6 +256,7 @@ export async function editEnquiryService({
       city: normalizedData.city || null,
       gender: normalizedData.gender || null,
       referedBy: normalizedData.referedBy || null,
+      takenBy: normalizedData.takenBy || null,
       clientAdminId,
     },
   });

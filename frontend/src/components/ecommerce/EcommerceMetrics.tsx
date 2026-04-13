@@ -19,64 +19,64 @@ interface EcommerceMetricsProps {
   user: any;
 }
 
-export const EcommerceMetrics = ({user, summary, breakdown }: EcommerceMetricsProps) => {
-  
+export const EcommerceMetrics = ({ user, summary, breakdown }: EcommerceMetricsProps) => {
+
   console.log("Get SUMMARY AND BREAKDOWN IN ECOMMARECE:", summary, breakdown);
   return (
-    <div className=" bg-gwhite border rounded-2xl px-6 py-10">
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
-      {/* <!-- Metric Item Start --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
-        </div>
-
-        <div className="flex items-end justify-between mt-5">
-          <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Income By Students
-            </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {summary.totalStudentIncome
-              ? new Intl.NumberFormat('en-IN').format(summary.totalStudentIncome)
-              : 0} INR
-            </h4>
+    <div className=" bg-white/[0.03] border border-white/[0.03] rounded-2xl px-6 py-10">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
+        {/* <!-- Metric Item Start --> */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
           </div>
-          <Badge color="success">
-            <ArrowUpIcon />
-            11.01%
-          </Badge>
-        </div>
-      </div>
-      {/* <!-- Metric Item End --> */}
 
-      {/* <!-- Metric Item Start --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
-        </div>
-
-        <div className="flex items-end justify-between mt-5">
-          <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Income By Course
-            </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {summary.totalCourseIncome
-              ? new Intl.NumberFormat('en-IN').format(summary.totalCourseIncome)
-              : 0} INR
-            </h4>
+          <div className="flex items-end justify-between mt-5">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Income By Students
+              </span>
+              <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+                {summary.totalStudentIncome
+                  ? new Intl.NumberFormat('en-IN').format(summary.totalStudentIncome)
+                  : 0} INR
+              </h4>
+            </div>
+            <Badge color="success">
+              <ArrowUpIcon />
+              11.01%
+            </Badge>
           </div>
-          <Badge color="success">
-            <ArrowUpIcon />
-            11.01%
-          </Badge>
         </div>
-      </div>
-      {/* <!-- Metric Item End --> */}
+        {/* <!-- Metric Item End --> */}
 
-      {/* <!-- Metric Item Start --> */}
-      {/* <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        {/* <!-- Metric Item Start --> */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
+          </div>
+
+          <div className="flex items-end justify-between mt-5">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Income By Course
+              </span>
+              <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+                {summary.totalCourseIncome
+                  ? new Intl.NumberFormat('en-IN').format(summary.totalCourseIncome)
+                  : 0} INR
+              </h4>
+            </div>
+            <Badge color="success">
+              <ArrowUpIcon />
+              11.01%
+            </Badge>
+          </div>
+        </div>
+        {/* <!-- Metric Item End --> */}
+
+        {/* <!-- Metric Item Start --> */}
+        {/* <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
           <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
         </div>
@@ -98,10 +98,10 @@ export const EcommerceMetrics = ({user, summary, breakdown }: EcommerceMetricsPr
           </Badge>
         </div>
       </div> */}
-      {/* <!-- Metric Item End --> */}
+        {/* <!-- Metric Item End --> */}
 
-      {/* <!-- Metric Item Start --> */}
-      {/* <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        {/* <!-- Metric Item Start --> */}
+        {/* <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
           <BoxIconLine className="text-gray-800 dark:text-white/90" />
         </div>
@@ -123,58 +123,58 @@ export const EcommerceMetrics = ({user, summary, breakdown }: EcommerceMetricsPr
           </Badge>
         </div>
       </div> */}
-      {/* <!-- Metric Item End --> */}
+        {/* <!-- Metric Item End --> */}
 
-      {/* <!-- Metric Item Start --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <BoxIconLine className="text-gray-800 dark:text-white/90" />
-        </div>
-        <div className="flex items-end justify-between mt-5">
-          <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Total Outstanding
-            </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {summary.totalOutstanding
-              ? new Intl.NumberFormat('en-IN').format(summary.totalOutstanding)
-              : 0} INR
-            </h4>
+        {/* <!-- Metric Item Start --> */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            <BoxIconLine className="text-gray-800 dark:text-white/90" />
           </div>
+          <div className="flex items-end justify-between mt-5">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Total Outstanding
+              </span>
+              <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+                {summary.totalOutstanding
+                  ? new Intl.NumberFormat('en-IN').format(summary.totalOutstanding)
+                  : 0} INR
+              </h4>
+            </div>
 
-          <Badge color="error">
-            <ArrowDownIcon className="text-error-500" />
-            9.05%
-          </Badge>
-        </div>
-      </div>
-      {/* <!-- Metric Item End --> */}
-
-      {/* <!-- Metric Item Start --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <BoxIconLine className="text-gray-800 dark:text-white/90" />
-        </div>
-        <div className="flex items-end justify-between mt-5">
-          <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Total Income
-            </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {summary.totalIncome
-              ? new Intl.NumberFormat('en-IN').format(summary.totalIncome)
-              : 0} INR
-            </h4>
+            <Badge color="error">
+              <ArrowDownIcon className="text-error-500" />
+              9.05%
+            </Badge>
           </div>
-
-          <Badge color="error">
-            <ArrowDownIcon className="text-error-500" />
-            9.05%
-          </Badge>
         </div>
-      </div>
-      {/* <!-- Metric Item End --> */}
-      {user.role === "ADMIN" && (
+        {/* <!-- Metric Item End --> */}
+
+        {/* <!-- Metric Item Start --> */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+            <BoxIconLine className="text-gray-800 dark:text-white/90" />
+          </div>
+          <div className="flex items-end justify-between mt-5">
+            <div>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Total Income
+              </span>
+              <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+                {summary.totalIncome
+                  ? new Intl.NumberFormat('en-IN').format(summary.totalIncome)
+                  : 0} INR
+              </h4>
+            </div>
+
+            <Badge color="error">
+              <ArrowDownIcon className="text-error-500" />
+              9.05%
+            </Badge>
+          </div>
+        </div>
+        {/* <!-- Metric Item End --> */}
+        {user.role === "ADMIN" && (
           <Button
             onClick={() => exportAnalyticsToExcel(summary, breakdown)}
             className="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition"
@@ -182,7 +182,7 @@ export const EcommerceMetrics = ({user, summary, breakdown }: EcommerceMetricsPr
             Export to Excel
           </Button>
         )}
-        </div>
+      </div>
     </div>
   );
 };

@@ -724,9 +724,14 @@ export async function addStudentControllerNew(req: any, res: any) {
 
 
     console.log("STUDENTADMISSION:", req.body);
+    console.log("STUDENTADMISSION FILE:", req.file);
       // ✅ Validate input
       const data = studentCreateSchema.parse({
       ...req.body,
+
+       idCard: req.body.idCard === "true",
+       bag: req.body.bag === "true",
+
       photoUrl: req.file ? `/uploads/students/${req.file.filename}` : null,
       courseData: (typeof req.body.courseData === "string" 
         ? JSON.parse(req.body.courseData) 
@@ -821,6 +826,66 @@ export async function createstudentOpeningBalanceController(req: any, res: any) 
       return res.status(400).json({ error: err.errors });
     }
     console.error("❌ Admission Error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function upsertAdmissionConfig(req: any, res: any) {
+  try {
+    const prisma = req.tenantPrisma;
+    const user = req.user;
+
+    const { prefix, suffix, separator, numberLength } = req.body;
+
+    const config = await prisma.admissionNumberConfig.upsert({
+      where: { clientAdminId: user.clientAdminId },
+
+      update: {
+        prefix,
+        suffix,
+        separator,
+        numberLength: Number(numberLength),
+      },
+
+      create: {
+        clientAdminId: user.clientAdminId,
+        prefix,
+        suffix,
+        separator,
+        numberLength: Number(numberLength),
+        currentNumber: 1,
+      },
+    });
+
+    return res.json({
+      message: "Admission config saved",
+      config,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to save config" });
+  }
+}
+
+export async function getAdmissionConfig(req: any, res: any) {
+  try {
+    console.log("USER:", req.user);
+    console.log("PRISMA:", !!req.tenantPrisma);
+
+    const prisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!prisma || !user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const config = await prisma.admissionNumberConfig.findUnique({
+      where: { clientAdminId: user.clientAdminId },
+    });
+
+    return res.json(config);
+  } catch (err) {
+    console.error("GET CONFIG ERROR:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -1258,18 +1323,19 @@ export async function createAdmissionNumberConfigController(req: Request, res: R
       });
     }
 
-    const config = await prisma.admissionNumberConfig.create({
-      data: {
-        prefix: prefix || null,
-        suffix: suffix || null,
-        numberLength: numberLength ? Number(numberLength) : 4,
-        clientAdminId: user.clientAdminId,
-      },
-    });
+    // const config = await prisma.admissionNumberConfig.create({
+    //   data: {
+    //     prefix: prefix || null,
+    //     suffix: suffix || null,
+        
+    //     numberLength: numberLength ? Number(numberLength) : 4,
+    //     clientAdminId: user.clientAdminId,
+    //   },
+    // });
 
     return res.status(201).json({
       message: "Admission number configuration created successfully",
-      config,
+    
     });
 
   } catch (err) {

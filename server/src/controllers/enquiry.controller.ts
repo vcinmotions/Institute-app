@@ -278,7 +278,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
     // ✅ Validate input
     const data = enquiryCreateSchema.parse(req.body);
 
-    console.log("SUCCESSFUL ENQURY CREATE BODY PARSED!");
+    console.log("SUCCESSFUL ENQURY CREATE BODY PARSED!", req.body);
 
     // ✅ Call service layer
     const enquiry = await createEnquiryService({
@@ -287,7 +287,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
       data,
     });
 
-    console.log("SUCCESSFUL ENQURY CREATED!");
+    console.log("SUCCESSFUL ENQURY CREATED!", enquiry);
 
     // ✅ Side effects
     // await logNotification({

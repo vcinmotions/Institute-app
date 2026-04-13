@@ -1,6 +1,6 @@
 {
   "name": "vcinmotions-application",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "installer/electron-main.js",
   "private": true,
   "scripts": {
@@ -11,6 +11,13 @@
     "appId": "com.vcinmotions.app",
     "productName": "VC Inmotions",
     "asar": true,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "vcinmotions",
+        "repo": "Institute-app"
+      }
+    ],
     "files": [
       "installer/**",
       "server/dist/**",
@@ -76,6 +83,7 @@
   "dependencies": {
     "dotenv": "^17.3.1",
     "electron-log": "^5.4.3",
+    "electron-updater": "^6.8.3",
     "express": "^5.2.1"
   }
 }

@@ -55,6 +55,10 @@ export const enquiryCreateSchema = z.object({
     (val) => (val === "" || val === null ? undefined : val),
     z.string().optional()
   ),
+  takenBy: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().optional()
+  ),
 });
 
 
@@ -98,6 +102,10 @@ export const enquiryEditSchema = z.object({
     z.string().optional()
   ),
   referedBy: z.preprocess(
+    (val) => (val === "" || val === null ? undefined : val),
+    z.string().optional()
+  ),
+  takenBy: z.preprocess(
     (val) => (val === "" || val === null ? undefined : val),
     z.string().optional()
   ),

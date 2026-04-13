@@ -115,6 +115,7 @@ model Enquiry {
   dob              DateTime?
   source           String?
   referedBy        String?
+  takenBy          String?
   leadStatus       LeadStatus      @default(WARM)
   enquiryDate      DateTime?
   createdAt        DateTime        @default(now())
@@ -173,13 +174,18 @@ model Notification {
 }
 
 model AdmissionNumberConfig {
-  id            String   @id @default(uuid())
-  prefix        String?
-  suffix        String?
-  numberLength  Int      @default(4)
-  currentNumber Int      @default(0)
-  clientAdminId String   @unique
+  id            String @id @default(uuid())
+  clientAdminId String @unique
+
+  prefix        String?   // ABI
+  suffix        String?   // 2627
+  separator     String @default("-") // -
+
+  currentNumber Int
+  numberLength  Int @default(4)
+
   createdAt     DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Student {
@@ -198,8 +204,13 @@ model Student {
   dob                DateTime?
   gender             String?
   religion           String?
-  idProofType        String?
-  idProofNumber      String?
+  idProofType                 String?
+  idProofNumber               String?
+  localAddressProofType       String?
+  localAddressProofNumber     String?
+  referedBy                   String?
+  idCard                      Boolean @default(false)
+  bag                         Boolean @default(false)
   admissionDate      DateTime?
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt

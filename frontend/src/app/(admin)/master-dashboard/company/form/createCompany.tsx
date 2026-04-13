@@ -34,6 +34,7 @@ import PhoneInput from "@/components/form/group-input/PhoneInput";
 import { countries } from "@/components/common/CountriesCode";
 import { normalizeEmail, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { fieldNormalizers } from "@/app/utils/formNormalizer";
 
 // interface CompanyData {
 //   name: string;
@@ -383,6 +384,39 @@ export default function CompanyForm() {
         setErrors((prev) => ({ ...prev, [field]: "" }));
     };
 
+    // const handleChange = (field: keyof CompanyData, value: string) => {
+    //     const normalizer = fieldNormalizers[field];
+
+    //     const finalValue =
+    //         typeof value === "string" && normalizer
+    //             ? normalizer(value)
+    //             : value;
+
+    //     // ✅ special rule
+    //     if (field === "instituteName") {
+    //         const displayName = titleCase(value);
+
+    //         setNewCompany((prev) => ({
+    //             ...prev,
+    //             instituteName: finalValue,
+    //             name: displayName,
+    //         }));
+
+    //         setField("instituteName", finalValue);
+    //         setField("name", displayName);
+    //         return;
+    //     }
+
+    //     setNewCompany((prev) => ({
+    //         ...prev,
+    //         [field]: finalValue,
+    //     }));
+
+    //     setField(field, finalValue);
+
+    //     setErrors((prev) => ({ ...prev, [field]: "" }));
+    // };
+
     const handleSubmit = async () => {
         // if (!validate()) {
         //   setAlert({
@@ -437,15 +471,16 @@ export default function CompanyForm() {
 
             return;
         }
+
         const financialYear = `${new Date(newCompany.financialStartDate).getFullYear()}-${new Date(newCompany.financialEndDate).getFullYear()}`;
 
         // Combine all data
         const admissionPayload = {
-            name: titleCase(newCompany.name),
-            email: normalizeEmail(newCompany.email),
+            name: titleCase(newCompany.name).trim(),
+            email: normalizeEmail(newCompany.email).trim(),
             contact: newCompany.contact,
-            instituteName: newCompany.instituteName,
-            password: newCompany.password,
+            instituteName: newCompany.instituteName.trim(),
+            password: newCompany.password.trim(),
             country: newCompany.country,
 
             financialYear, // ✅ generated
@@ -633,11 +668,11 @@ export default function CompanyForm() {
                         }}>
                             <Label>Contact </Label>
                             {/* <Input
-                type="text"
-                placeholder="Enter Contact"
-                value={newCompany.contact}
-                onChange={(e) => handleChange("contact", e.target.value)}
-              /> */}
+                                type="text"
+                                placeholder="Enter Contact"
+                                value={newCompany.contact}
+                                onChange={(e) => handleChange("contact", e.target.value)}
+                            /> */}
                             <PhoneInput
                                 selectPosition="start"
                                 countries={countries}
@@ -792,62 +827,63 @@ export default function CompanyForm() {
 
                     {/* <h2 className="border-y py-6">Institute Infomation</h2>
 
-          <div className="space-y-2">
-      
-            <div className="flex w-full gap-2">
-              <div className="w-full">
-                <DropzonBoxComponent
-                  title="Institute Logo"
-                  selectedFile={selectedLogo}
-                  setSelectedFile={setSelectedLogo}
-                />
-              </div>
+                        <div className="space-y-2">
+                    
+                            <div className="flex w-full gap-2">
+                            <div className="w-full">
+                                <DropzonBoxComponent
+                                title="Institute Logo"
+                                selectedFile={selectedLogo}
+                                setSelectedFile={setSelectedLogo}
+                                />
+                            </div>
 
-              <div className="w-full">
-                <DropzonBoxComponent
-                  title="Institute Stamp"
-                  selectedFile={selectedStamp}
-                  setSelectedFile={setSelectedStamp}
-                />
-              </div>
-            </div>
+                            <div className="w-full">
+                                <DropzonBoxComponent
+                                title="Institute Stamp"
+                                selectedFile={selectedStamp}
+                                setSelectedFile={setSelectedStamp}
+                                />
+                            </div>
+                            </div>
 
-            <div className="w-full pb-3">
-              <DropzonBoxComponent
-                title="Institute Sign"
-                selectedFile={selectedSign}
-                setSelectedFile={setSelectedSign}
-              />
-            </div>
+                            <div className="w-full pb-3">
+                            <DropzonBoxComponent
+                                title="Institute Sign"
+                                selectedFile={selectedSign}
+                                setSelectedFile={setSelectedSign}
+                            />
+                            </div>
 
-            <h2 className="border-y py-6">Institute Certificate</h2>
+                            <h2 className="border-y py-6">Institute Certificate</h2>
 
-            <div className="grid grid-cols-4 gap-4">
-              {certificateTemplates.map((item, i) => (
-                <div
-                  key={i}
-                  className={`cursor-pointer rounded-lg border p-1 transition ${selectedCertificate === item.alt ? "border-blue-600 shadow-md" : "border-gray-300"}`}
-                  onClick={() => setSelectedCertificate(item.alt)}
-                >
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className="h-auto w-full rounded"
-                  />
-                </div>
-              ))}
-            </div>
-          </div> */}
+                            <div className="grid grid-cols-4 gap-4">
+                            {certificateTemplates.map((item, i) => (
+                                <div
+                                key={i}
+                                className={`cursor-pointer rounded-lg border p-1 transition ${selectedCertificate === item.alt ? "border-blue-600 shadow-md" : "border-gray-300"}`}
+                                onClick={() => setSelectedCertificate(item.alt)}
+                                >
+                                <img
+                                    src={item.src}
+                                    alt={item.alt}
+                                    className="h-auto w-full rounded"
+                                />
+                                </div>
+                            ))}
+                            </div>
+                        </div> 
+                    */}
 
                     {/* BUTTONS */}
                     <div className="mt-6 flex justify-end gap-3">
                         {/* <Button
-              variant="outline"
-              disabled={loading === true}
-              onClick={handleResetForm}
-            >
-              Clear
-            </Button> */}
+                        variant="outline"
+                        disabled={loading === true}
+                        onClick={handleResetForm}
+                        >
+                        Clear
+                        </Button> */}
                         <Button disabled={loading === true} size="sm" className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
                             {loading === true ? "Creating..." : "Save"}
                         </Button>

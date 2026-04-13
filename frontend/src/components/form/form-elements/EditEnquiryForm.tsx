@@ -52,6 +52,7 @@ interface EnquiryData {
   dob: string,
   enquiryDate: string,
   referedBy: string,
+  takenBy: string,
   source: string;
   contact: string;
 }
@@ -73,6 +74,7 @@ export default function EditEnquiryForm({
     dob: "",
     enquiryDate: "",
     referedBy: "",
+    takenBy: "",
     source: "",
     contact: "",
   });
@@ -216,6 +218,7 @@ export default function EditEnquiryForm({
       dob: enquiryData.dob ? enquiryData.dob.split("T")[0] : "",
       enquiryDate: enquiryData.enquiryDate ? enquiryData.enquiryDate.split("T")[0] : "",
       referedBy: enquiryData.referedBy ?? "",
+      takenBy: enquiryData.takenBy ?? "",
       source: enquiryData.source ?? "",
       courseId: courseIds,
     });
@@ -428,6 +431,7 @@ export default function EditEnquiryForm({
           dob: "",
           enquiryDate: "",
           referedBy: "",
+          takenBy: "",
           source: "",
           contact: "",
         });
@@ -658,6 +662,17 @@ export default function EditEnquiryForm({
             tabIndex={11}
             onChange={(e) => handleChange("referedBy", e.target.value)} />
           {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
+        </div>
+
+        <div>
+          <Label>Taken By</Label>
+          <Input
+            type="text"
+            placeholder="Taken by"
+            value={newEnquiry.takenBy}
+            tabIndex={11}
+            onChange={(e) => handleChange("takenBy", e.target.value)} />
+          {errors.takenBy && <p className="text-red-500 text-sm">{errors.takenBy}</p>}
         </div>
 
         <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">

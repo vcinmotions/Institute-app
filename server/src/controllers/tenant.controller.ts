@@ -5,6 +5,7 @@ import { createTenant } from "../utils/createTenant";
 import { getCentralPrisma } from "../prisma-client/central-client";
 
 import { createTenantOnServer } from "../utils/tenants";
+import { normalizeTenantInput } from "../utils/normalizer/tenantNormalizer";
 
 // At the very entry of your app (e.g. index.ts or app.ts)
 
@@ -15,6 +16,24 @@ import { createTenantOnServer } from "../utils/tenants";
 //dotenv.config({ path: path.resolve(__dirname, '../../prisma/institute/.env') });
 
 export async function createTenantController(req: Request, res: Response) {
+  // const {
+  //   name,
+  //   instituteName,
+  //   email,
+  //   password,
+  //   contact,
+  //   country,
+  //   state,
+  //   city,
+  //   zipCode,
+  //   certificateName,
+  //   fullAddress,
+  //   financialStartDate,   // ✅ ADD
+  //   financialEndDate      // ✅ ADD
+  // } = req.body;
+
+  const normalized = normalizeTenantInput(req.body);
+
   const {
     name,
     instituteName,
@@ -27,9 +46,9 @@ export async function createTenantController(req: Request, res: Response) {
     zipCode,
     certificateName,
     fullAddress,
-    financialStartDate,   // ✅ ADD
-    financialEndDate      // ✅ ADD
-  } = req.body;
+    financialStartDate,
+    financialEndDate,
+  } = normalized;
 
   const files = req.files as {
     [fieldname: string]: Express.Multer.File[];
