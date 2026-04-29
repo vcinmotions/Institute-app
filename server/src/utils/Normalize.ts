@@ -52,7 +52,7 @@ export function normalizeToLowercase(str: string = ""): string {
  * Removes all non-digits and limits to 10 digits
  */
 export function normalizePhone(phone: string = ""): string {
-  return phone.replace(/\D/g, "").slice(0, 10);
+  return phone.replace(/\D/g, "").slice(0, 12);
 }
 
 /**

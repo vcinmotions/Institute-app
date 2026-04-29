@@ -42,6 +42,55 @@ function setupAutoUpdater(win) {
   }, 5000);
 }
 
+// function setupAutoUpdater(win) {
+//   autoUpdater.logger = log;
+//   autoUpdater.logger.transports.file.level = "info";
+
+//   autoUpdater.autoDownload = true;
+
+//   autoUpdater.on("checking-for-update", () => {
+//     log.info("🔍 Checking for update...");
+//   });
+
+//   autoUpdater.on("update-available", (info) => {
+//     log.info("✅ Update available:", info);
+//   });
+
+//   autoUpdater.on("update-not-available", (info) => {
+//     log.info("❌ No update available:", info);
+//   });
+
+//   autoUpdater.on("error", (err) => {
+//     log.error("🔥 Update error:", err);
+//   });
+
+//   autoUpdater.on("download-progress", (progress) => {
+//     log.info(`⬇️ Downloading: ${progress.percent}%`);
+//   });
+
+//   autoUpdater.on("update-downloaded", async () => {
+//     log.info("🎉 Update downloaded");
+
+//     const result = await dialog.showMessageBox({
+//       type: "info",
+//       title: "Update Ready",
+//       message: "New version downloaded. Restart now?",
+//       buttons: ["Restart", "Later"]
+//     });
+
+//     if (result.response === 0) {
+//       if (backendProcess) backendProcess.kill();
+//       if (frontendProcess) frontendProcess.kill();
+
+//       autoUpdater.quitAndInstall();
+//     }
+//   });
+
+//   setTimeout(() => {
+//     autoUpdater.checkForUpdates();
+//   }, 5000);
+// }
+
 function loadEnvFile(filePath) {
   if (!fs.existsSync(filePath)) {
     console.error("❌ ENV NOT FOUND:", filePath);
@@ -104,12 +153,14 @@ log.transports.file.resolvePath = () =>
 log.transports.file.format = "{y}-{m}-{d} {h}:{i}:{s} [{level}] {text}";
 
 // Backend log
-const backendLog = require("electron-log");
+
+// Create scoped logs (clean way)
+const backendLog = log.create({ logId: "backend" });
 backendLog.transports.file.resolvePath = () =>
   path.join(app.getPath("userData"), "logs/backend.log");
 
 // Frontend log
-const frontendLog = require("electron-log");
+const frontendLog = log.create({ logId: "frontend" });
 frontendLog.transports.file.resolvePath = () =>
   path.join(app.getPath("userData"), "logs/frontend.log");
 
