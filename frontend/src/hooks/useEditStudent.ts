@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createAdmission, editStudent, getEnquiry, getWonEnquiry } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { setStudents } from "@/store/slices/studentSlice";
@@ -30,15 +30,25 @@ type EditStudentPayload = {
 export const useEditStudent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const token = useSelector((state: RootState) => state.auth.token);
+  const currentPage = useSelector((state: RootState) => state.student.currentPage);
+  const searchQuery = useSelector((state: RootState) => state.student.searchQuery);
+  const {
+    filters,
+    sortField,
+    sortOrder,
+  } = useSelector((state: RootState) => state.student);
   const admissionCurrentPage = useSelector((state: RootState) => state.admission.currentPage);
   const enquiryCurrentPage = useSelector((state: RootState) => state.enquiry.currentPage);
 
   return useMutation({
     mutationFn: async (payload: EditStudentPayload) => {
       const { token, id, ...rest } = payload;
+      
+      if (!token) throw new Error("Missing Token for edit student");
 
-      console.log("🔥 Received Payload:", payload);
-      console.log("Raw Jwt Token:", payload.token);
+      console.log("EDIT STUDENT PAYLOAD WITH NORMALIZATION", payload);
 
       const formData = new FormData();
 
@@ -61,16 +71,21 @@ export const useEditStudent = () => {
         }
       }
 
-      // Call your backend API
-      return await editStudent(token, formData, id);
+      await editStudent(token, formData, id);
+
+      // Return token for use in onSuccess
+      return { token };
     },
 
-    // ✅ Make onSuccess async so you can await inside it
-    onSuccess: async (data, variables) => {
-      console.log("✅ Admission Created Successfully:", data);
+    onSuccess: async ({ token }) => {
+      // Refetch latest students (keeps current page and search automatically)
+      queryClient.invalidateQueries({
+        queryKey: ["student"],
+        exact: false,
+      });
 
-      // Update students
-      dispatch(setStudents(data.getAllStudent));
+      console.log("INVALIDATEQUERIES TRIGGERED IN EDIT STUDENT!");
+      console.log("MUTATION SUCCESSFUL");
     },
 
     onError: (error: any) => {

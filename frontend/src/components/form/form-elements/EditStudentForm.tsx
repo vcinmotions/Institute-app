@@ -232,9 +232,9 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
     // 🔹 Basic Enquiry Info
     if (!newEnquiry.name.trim()) newErrors.name = "Student name is required.";
 
-    if (!newEnquiry.email.trim()) newErrors.email = "Email is required.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEnquiry.email))
-      newErrors.email = "Please enter a valid email address.";
+    // if (!newEnquiry.email.trim()) newErrors.email = "Email is required.";
+    // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEnquiry.email))
+    //   newErrors.email = "Please enter a valid email address.";
 
     if (!newEnquiry.contact.trim())
       newErrors.contact = "Contact number is required.";
@@ -245,8 +245,8 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
     // if (!filledEnquiryData.fatherName.trim())
     //   newErrors.fatherName = "Father's name is required.";
 
-    if (!filledEnquiryData.qualification.trim())
-      newErrors.qualification = "Qualification is required.";
+    // if (!filledEnquiryData.qualification.trim())
+    //   newErrors.qualification = "Qualification is required.";
 
     // if (!filledEnquiryData.gender.trim())
     //   newErrors.gender = "Gender is required.";

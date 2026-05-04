@@ -11,14 +11,15 @@ export const studentQuerySchema = z.object({
 });
 
 export const studentCreateSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
 
   name: z.string(),
   contact: z.string(),
-  email: z.string(),
 
-  admissionDate: z.string(),
-  qualification: z.string(),
+  email: z.string().optional(),
+
+  admissionDate: z.string().optional(),
+  qualification: z.string().optional(),
 
   fatherName: z.string().optional(),
   gender: z.string().optional(),
@@ -41,33 +42,33 @@ export const studentCreateSchema = z.object({
   bag: z.union([z.boolean(), z.string()]).optional(),
 
   photoUrl: z.string().optional().nullable(),
- 
+
   courseData: z
     .array(
       z.object({
-        courseId: z.union([z.number(), z.string()]),
-        batchId: z.union([z.number(), z.string()]),
-        feeAmount: z.number(),
-        paymentType: z.enum(["INSTALLMENT", "ONE_TIME"]),
+        courseId: z.union([z.number(), z.string()]).optional(),
+        batchId: z.union([z.number(), z.string()]).optional(),
+        feeAmount: z.number().optional(),
+        paymentType: z.enum(["INSTALLMENT", "ONE_TIME"]).optional(),
         installmentTypeId: z.number().optional(),
         installments: z
           .array(
             z.object({
-              dueDate: z.string(),
-              amount: z.number(),
+              dueDate: z.string().optional(),
+              amount: z.number().optional(),
             })
           )
           .optional(),
       })
     )
-    .min(1, "At least one course must be provided"),
+    .optional(),
 
   advancePayments: z
     .array(
       z.object({
-        courseId: z.union([z.number(), z.string()]),
-        courseName: z.string(),
-        advanceAmount: z.number(),
+        courseId: z.union([z.number(), z.string()]).optional(),
+        courseName: z.string().optional(),
+        advanceAmount: z.number().optional(),
         paymentMode: z.string().optional(),
         paymentDate: z.string().optional(),
       })
@@ -90,7 +91,7 @@ export const studentEditSchema = z.object({
 
   name: z.string().min(1, "Name is required"),
   contact: z.string().min(1, "Contact is required"),
-  email: z.string().email("Invalid email").min(1),
+  email: z.string("Invalid email").optional(),
 
   residentialAddress: z.string().optional(),
   permenantAddress: z.string().optional(),
