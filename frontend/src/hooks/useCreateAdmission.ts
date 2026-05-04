@@ -24,6 +24,7 @@ type AdmissionPayload = {
   referedBy: string,
   admissionDate: string;
   courseData: any[];
+  advancePayments: any[];
   residentialAddress?: string;
   permenantAddress?: string;
   parentsContact?: string;
@@ -43,7 +44,7 @@ export const useCreateAdmission = () => {
 
   return useMutation({
     mutationFn: async (payload: AdmissionPayload) => {
-      const { token, profilePicture, courseData, ...rest } = payload;
+      const { token, profilePicture, advancePayments, courseData, ...rest } = payload;
 
       console.log("🔥 Received Payload:", payload);
       console.log("Raw Jwt Token:", payload.token);
@@ -69,6 +70,10 @@ export const useCreateAdmission = () => {
       if (payload.courseData) {
         // 🔑 Stringify courseData array
         formData.append("courseData", JSON.stringify(payload.courseData));
+      }
+      if (payload.advancePayments) {
+        // 🔑 Stringify advancePayment array
+        formData.append("advancePayments", JSON.stringify(payload.advancePayments));
       }
 
       // Debug

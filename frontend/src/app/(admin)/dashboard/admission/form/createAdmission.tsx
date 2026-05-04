@@ -5,6 +5,7 @@ import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { ChevronDownIcon, EnvelopeIcon } from "@/icons";
 import { useCreateAdmission } from "@/hooks/useCreateAdmission";
+import { useCreateAdvancePayment } from "@/hooks/mutations/useMutationAdvancePayment";
 import { useDispatch, useSelector } from "react-redux";
 import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { setCourses } from "@/store/slices/courseSlice";
@@ -131,6 +132,7 @@ export default function AdmissionForm() {
       installmentTypeId: "",
       feeAmount: "",
       batchId: "",
+      advanceAmount: "",
     },
   ]);
 
@@ -194,6 +196,8 @@ export default function AdmissionForm() {
     message: "",
     variant: "",
   });
+
+  const [showAdvancePayment, setShowAdvancePayment] = useState(false);
   const batch = useSelector((state: RootState) => state.batch.batches ?? []);
 
   const courses = useSelector((state: RootState) => state.course.courses ?? []);
@@ -206,6 +210,7 @@ export default function AdmissionForm() {
   const [paymentTypeOption, setpaymentTypeOption] = useState<any>([]);
   const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
   const { mutate: createAdmission } = useCreateAdmission();
+  const { mutate: createAdvancePayment } = useCreateAdvancePayment();
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -244,6 +249,7 @@ export default function AdmissionForm() {
       installmentTypeId: "",
       feeAmount: "",
       batchId: "",
+      advanceAmount: "",
     }));
 
     setCourseRows(rows);
@@ -856,6 +862,89 @@ export default function AdmissionForm() {
     }
   };
 
+  const handleAdvancePayment = async () => {
+    // Validate that at least one course has advance amount
+    const hasAdvancePayment = courseRows.some(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0);
+    
+    if (!hasAdvancePayment) {
+      setAlert({
+        show: true,
+        title: "Validation Error",
+        message: "Please enter advance amount for at least one course.",
+        variant: "error",
+      });
+      return;
+    }
+
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      setAlert({
+        show: true,
+        title: "Unauthorized",
+        message: "Token not found. Please log in again.",
+        variant: "error",
+      });
+      return;
+    }
+
+    try {
+      // Create advance payment data for courses with advance amounts
+      const advancePayments = courseRows
+        .filter(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0)
+        .map(row => {
+          const selectedCourse = courses.find(c => c.id.toString() === row.courseId);
+          return {
+            courseId: row.courseId,
+            courseName: selectedCourse?.name || "",
+            advanceAmount: parseFloat(row.advanceAmount),
+            paymentMode: "CASH",
+            paymentDate: new Date().toISOString()
+          };
+        });
+
+      // Call API to process advance payments
+      createAdvancePayment(advancePayments, {
+        onSuccess: (response: any) => {
+          console.log("Advance payments processed:", response);
+          
+          setAlert({
+            show: true,
+            title: "Success",
+            message: response.message || `Advance payment processed for ${advancePayments.length} course(s)`,
+            variant: "success",
+          });
+
+          // Clear advance amounts after processing
+          setCourseRows(prev => 
+            prev.map(row => ({ ...row, advanceAmount: "" }))
+          );
+
+          setTimeout(() => {
+            setAlert({ show: false, title: "", message: "", variant: "" });
+          }, 3000);
+        },
+        onError: (error: any) => {
+          console.error("Advance payment error:", error);
+          setAlert({
+            show: true,
+            title: "Error",
+            message: error.message || "Failed to process advance payment. Please try again.",
+            variant: "error",
+          });
+        }
+      });
+
+    } catch (error) {
+      console.error("Advance payment error:", error);
+      setAlert({
+        show: true,
+        title: "Error",
+        message: "Failed to process advance payment. Please try again.",
+        variant: "error",
+      });
+    }
+  };
+
   const handleSubmit = async () => {
     const { isValid, errors: validationErrors } = validate();
 
@@ -896,6 +985,20 @@ export default function AdmissionForm() {
       return;
     }
 
+    // Prepare advance payment data
+    const advancePaymentData = courseRows
+      .filter(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0)
+      .map(row => {
+        const selectedCourse = courses.find(c => c.id.toString() === row.courseId);
+        return {
+          courseId: row.courseId,
+          courseName: selectedCourse?.name || "",
+          advanceAmount: parseFloat(row.advanceAmount),
+          paymentMode: "CASH",
+          paymentDate: new Date().toISOString()
+        };
+      });
+
     // Combine all data
     const admissionPayload = {
       token,
@@ -925,6 +1028,7 @@ export default function AdmissionForm() {
       bag: filledEnquiryData.bag,
 
       profilePicture: selectedProfilePicture, // you'll need to track this in state
+      advancePayments: advancePaymentData, // Add advance payment data
     };
 
     // try {
@@ -951,7 +1055,34 @@ export default function AdmissionForm() {
     // }
 
     createAdmission(admissionPayload, {
-      onSuccess: () => {
+      onSuccess: (response: any) => {
+        console.log("Student admission created:", response);
+
+        // After successful student creation, update any advance payment records
+        // const updateAdvancePayments = async () => {
+        //   try {
+        //     // Check if there are any advance payments to update
+        //     const hasAdvancePayments = courseRows.some(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0);
+            
+        //     if (hasAdvancePayments) {
+        //       // Create a service call to update advance payment records with student ID
+        //       const token = sessionStorage.getItem("token");
+        //       if (token) {
+        //         // For each course with advance payment, update the records
+        //         const coursesWithAdvance = courseRows.filter(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0);
+                
+        //         for (const course of coursesWithAdvance) {
+        //           // This would be handled by the backend service automatically
+        //           console.log(`Advance payment records for course ${course.courseId} will be updated with student ID`);
+        //         }
+        //       }
+        //     }
+        //   } catch (error) {
+        //     console.error("Error updating advance payments:", error);
+        //   }
+        // };
+
+        // updateAdvancePayments();
 
         window.scrollTo({
           top: 0, behavior: "smooth"
@@ -969,7 +1100,7 @@ export default function AdmissionForm() {
         }, 1000);
       },
 
-      onError: (error) => {
+      onError: (error: any) => {
         console.error("Error creating admission:", error);
         // You already handle error via redux + toast
         window.scrollTo({
@@ -1292,10 +1423,95 @@ export default function AdmissionForm() {
                         <ChevronDownIcon />
                       </span>
                     </div>
+                    </div>
+                  {/* Advance Payment */}
+                  <div className="mt-3">
+                    <Label>Advance Amount</Label>
+                    <Input
+                      type="number"
+                      placeholder="Enter Advance Amount"
+                      value={row.advanceAmount}
+                      onChange={(e) =>
+                        handleCourseRowChange(index, "advanceAmount", e.target.value)
+                      }
+                    />
                   </div>
                 </ComponentCard>
               );
             })}
+
+            {/* Advance Payment Section */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 p-4 border rounded-lg bg-gray-50">
+                <input
+                  type="checkbox"
+                  id="showAdvancePayment"
+                  checked={showAdvancePayment}
+                  onChange={(e) => setShowAdvancePayment(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="showAdvancePayment" className="text-sm font-medium text-gray-700 cursor-pointer">
+                  Enable Advance Payment Collection
+                </label>
+              </div>
+
+              {showAdvancePayment && (
+                <ComponentCard title="Advance Payment Summary">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold mb-3">Collect Advance Payments</h3>
+                    {courseRows.map((row, index) => {
+                      const selectedCourse = courses.find(
+                        (c) => c.id.toString() === row.courseId,
+                      );
+                      return (
+                        <div key={index} className="border rounded p-3 bg-gray-50">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <p className="font-medium">{selectedCourse?.name}</p>
+                              <p className="text-sm text-gray-600">
+                                Total Fee: ₹{row.feeAmount || "0"}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <Input
+                                type="number"
+                                placeholder="Advance Amount"
+                                value={row.advanceAmount}
+                                onChange={(e) =>
+                                  handleCourseRowChange(index, "advanceAmount", e.target.value)
+                                }
+                                className="w-32"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    
+                    <div className="flex justify-end mt-4 space-x-3">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => {
+                          // Clear advance amounts
+                          setCourseRows(prev => 
+                            prev.map(row => ({ ...row, advanceAmount: "" }))
+                          );
+                        }}
+                      >
+                        Clear Advances
+                      </Button>
+                      {/* <Button 
+                        variant="primary"
+                        onClick={handleAdvancePayment}
+                        disabled={courseRows.every(row => !row.advanceAmount || parseFloat(row.advanceAmount) <= 0)}
+                      >
+                        Take Advance Payment
+                      </Button> */}
+                    </div>
+                  </div>
+                </ComponentCard>
+              )}
+            </div>
 
             {/* Id Proof Type */}
             <ComponentCard title="Id Proof">

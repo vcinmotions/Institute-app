@@ -61,6 +61,18 @@ export const studentCreateSchema = z.object({
       })
     )
     .min(1, "At least one course must be provided"),
+
+  advancePayments: z
+    .array(
+      z.object({
+        courseId: z.union([z.number(), z.string()]),
+        courseName: z.string(),
+        advanceAmount: z.number(),
+        paymentMode: z.string().optional(),
+        paymentDate: z.string().optional(),
+      })
+    )
+    .optional(),
 });
 
 export const studentOpeningBalanceSchema = z.object({
@@ -74,19 +86,26 @@ export const studentOpeningBalanceSchema = z.object({
 });
 
 export const studentEditSchema = z.object({
-  id: z.number().min(1, "Enquiry ID is required"),
+  id: z.number().optional(), // usually still required, but making optional per your ask
+
   name: z.string().min(1, "Name is required"),
   contact: z.string().min(1, "Contact is required"),
   email: z.string().email("Invalid email").min(1),
-  residentialAddress: z.string().min(1),
-  changeReason: z.string().min(1),
-  permenantAddress: z.string().min(1),
-  idProofType: z.string().min(1),
-  idProofNumber: z.string().min(1),
-  religion: z.string().min(1),
-  fatherName: z.string().min(1),
-  qualification: z.string().min(1),
-  dob: z.string().min(1),
-  gender: z.enum(["male", "female", "other"]),
-  parentsContact: z.string().min(1),
+
+  residentialAddress: z.string().optional(),
+  permenantAddress: z.string().optional(),
+
+  idProofType: z.string().optional(),
+  idProofNumber: z.string().optional(),
+
+  religion: z.string().optional(),
+  fatherName: z.string().optional(),
+  qualification: z.string().optional(),
+
+  dob: z.string().optional(),
+  gender: z.enum(["male", "female", "other"]).optional(),
+
+  parentsContact: z.string().optional(),
+
+  changeReason: z.string().optional(),
 });

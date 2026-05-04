@@ -402,7 +402,7 @@ export default function CourseForm() {
           <div ref={(el) => {
             inputRefs.current.durationMonths = el;
           }}>
-            <Label>Duration Weeks *</Label>
+            <Label>Duration Months *</Label>
             <Input
               type="number"
               min={0}              // ✅ Prevents negatives

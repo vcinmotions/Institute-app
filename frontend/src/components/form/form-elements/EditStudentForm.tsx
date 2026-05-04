@@ -155,6 +155,11 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
   useEffect(() => {
     if (!student) return;
 
+    const formatDateForInput = (dateString: string) => {
+      if (!dateString) return "";
+      return new Date(dateString).toISOString().split("T")[0]; // ✅ KEY FIX
+    };
+
     // Basic student info
     setNewEnquiry({
       id: String(student.id ?? ""),
@@ -171,7 +176,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
       admissionDate: student.admissionDate ?? "",
 
       gender: student.gender ?? "",
-      dob: student.dob ?? "",
+      dob: formatDateForInput(student.dob), // ✅ FIX HERE
       residentialAddress: student.residentialAddress ?? "",
       permenantAddress: student.permenantAddress ?? "",
       parentsContact: student.parentsContact ?? "",
@@ -237,37 +242,36 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
     //   newErrors.contact = "Enter a valid phone number with country code.";
 
     // 🔹 Extended Admission Details
-    if (!filledEnquiryData.fatherName.trim())
-      newErrors.fatherName = "Father's name is required.";
+    // if (!filledEnquiryData.fatherName.trim())
+    //   newErrors.fatherName = "Father's name is required.";
+
     if (!filledEnquiryData.qualification.trim())
       newErrors.qualification = "Qualification is required.";
-    if (!filledEnquiryData.gender.trim())
-      newErrors.gender = "Gender is required.";
 
-    if (!filledEnquiryData.dob.trim())
-      newErrors.dob = "Date of birth is required.";
+    // if (!filledEnquiryData.gender.trim())
+    //   newErrors.gender = "Gender is required.";
+
+    // if (!filledEnquiryData.dob.trim())
+    //   newErrors.dob = "Date of birth is required.";
     // else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(filledEnquiryData.dob))
     //   newErrors.dob = "Date of birth must be in DD/MM/YYYY format.";
 
-    if (!filledEnquiryData.idProofType.trim())
-      newErrors.idProofType = "Select an ID proof type.";
-    if (!filledEnquiryData.idProofNumber.trim())
-      newErrors.idProofNumber = "ID proof number is required.";
+    // if (!filledEnquiryData.idProofType.trim())
+    //   newErrors.idProofType = "Select an ID proof type.";
+    // if (!filledEnquiryData.idProofNumber.trim())
+    //   newErrors.idProofNumber = "ID proof number is required.";
 
-    if (!filledEnquiryData.residentialAddress.trim())
-      newErrors.residentialAddress = "Residential address is required.";
+    // if (!filledEnquiryData.residentialAddress.trim())
+    //   newErrors.residentialAddress = "Residential address is required.";
 
-    if (!filledEnquiryData.permenantAddress.trim())
-      newErrors.permenantAddress = "Permanent address is required.";
+    // if (!filledEnquiryData.permenantAddress.trim())
+    //   newErrors.permenantAddress = "Permanent address is required.";
 
-    if (!filledEnquiryData.parentsContact.trim())
-      newErrors.parentsContact = "Parent's contact number is required.";
+    // if (!filledEnquiryData.parentsContact.trim())
+    //   newErrors.parentsContact = "Parent's contact number is required.";
     // else if (!/^\+\d{10,15}$/.test(filledEnquiryData.parentsContact))
     //   newErrors.parentsContact =
     //     "Enter a valid parent's phone number with country code.";
-
-    if (!filledEnquiryData.religion.trim())
-      newErrors.religion = "Religion is required.";
 
     // if (!filledEnquiryData.feeAmount.trim())
     //   newErrors.feeAmount = "Fee amount is required.";
@@ -283,11 +287,11 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
     //   newErrors.installmentType = "Installment Type is required.";
 
     // Optional: validate ID proof type/number pattern
-    if (
-      filledEnquiryData.idProofType === "aadhar card" &&
-      !/^\d{12}$/.test(filledEnquiryData.idProofNumber)
-    )
-      newErrors.idProofNumber = "Aadhar must be 12 digits.";
+    // if (
+    //   filledEnquiryData.idProofType === "aadhar card" &&
+    //   !/^\d{12}$/.test(filledEnquiryData.idProofNumber)
+    // )
+    //   newErrors.idProofNumber = "Aadhar must be 12 digits.";
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 3000);

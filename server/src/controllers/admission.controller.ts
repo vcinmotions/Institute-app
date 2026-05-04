@@ -743,6 +743,15 @@ export async function addStudentControllerNew(req: any, res: any) {
         feeAmount: Number(c.feeAmount),
         installmentTypeId: c.installmentTypeId ? Number(c.installmentTypeId) : undefined,
       })),
+      advancePayments: req.body.advancePayments ? 
+        (typeof req.body.advancePayments === "string" 
+          ? JSON.parse(req.body.advancePayments) 
+          : req.body.advancePayments
+        ).map((p: any) => ({
+          ...p,
+          courseId: Number(p.courseId),
+          advanceAmount: Number(p.advanceAmount),
+        })) : undefined,
     });
 
     // ✅ Call Service Layer

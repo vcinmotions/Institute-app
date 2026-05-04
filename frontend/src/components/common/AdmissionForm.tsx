@@ -221,7 +221,7 @@ const AdmissionForm: React.FC<Props> = ({
               </p>
 
               <p>
-                <b>Qualification :</b> -
+                <b>Qualification :</b> {student.qualification || "-"}
               </p>
 
             </div>
@@ -258,7 +258,7 @@ const AdmissionForm: React.FC<Props> = ({
             </p>
 
             <p>
-              <b>Reference Details :</b> -
+              <b>Reference Details :</b> {student.referedBy || "-"}
             </p>
 
           </div>
@@ -339,6 +339,7 @@ const AdmissionForm: React.FC<Props> = ({
 
                 const course = item.studentCourse?.course
                 const fee = item.feeStructure
+                const feeRecords = item.feeRecords
 
                 return (
 
@@ -352,9 +353,9 @@ const AdmissionForm: React.FC<Props> = ({
                     <td className="border p-1">{fee?.totalAmount}</td>
                     <td className="border p-1">{fee?.discount ?? "-"}</td>
                     <td className="border p-1">{fee?.advance ?? "-"}</td>
-                    <td className="border p-1">-</td>
+                    <td className="border p-1">{feeRecords?.[0]?.receiptNo || "-"}</td>
                     <td className="border p-1">{fee?.installment ?? "-"}</td>
-                    <td className="border p-1">-</td>
+                    <td className="border p-1">{feeRecords?.[0]?.receiptNo || "-"}</td>
 
                   </tr>
 

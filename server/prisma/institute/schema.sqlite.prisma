@@ -208,6 +208,21 @@ model AdmissionNumberConfig {
   updatedAt DateTime @default(now()) @updatedAt
 }
 
+model PaymentReceiptConfig {
+  id            String @id @default(uuid())
+  clientAdminId String @unique
+
+  prefix        String?   // RCP
+  suffix        String?   // 2627
+  separator     String @default("-") // -
+
+  currentNumber Int
+  numberLength  Int @default(4)
+
+  createdAt     DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
 model Student {
   id            Int             @id @default(autoincrement())
   serialNumber     Int          @unique // ✅ New field

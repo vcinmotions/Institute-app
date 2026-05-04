@@ -219,6 +219,13 @@ const navItems: NavItem[] = [
 
   },
   {
+    icon: <FileIcon />,
+    name: "Payment-Receipt-Config",
+    path: "/dashboard/payment-receipt-config",
+    roles: ["ADMIN", "FRONT_DESK"], // allowed roles
+
+  },
+  {
     icon: <LockIcon />,
     name: "Task",
     path: "/dashboard/task",

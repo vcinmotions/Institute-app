@@ -12,6 +12,11 @@ import {
   getStudentCourseController,
   upsertAdmissionConfig,
 } from "../controllers/admission.controller";
+import {
+  upsertPaymentReceiptConfig,
+  getPaymentReceiptConfig,
+} from "../controllers/paymentReceiptConfig.controller";
+import { createAdvancePaymentController, updateAdvancePaymentController } from "../controllers/advancePayment.controller";
 
 const router = Router();
 console.log("GETTING IN ADMISSION ROUTES >>>>>>>>>>>>>>>>>>>>>>>>");
@@ -82,6 +87,12 @@ router.post("/create-op", createstudentOpeningBalanceController);
 
 router.post("/admission-config", upsertAdmissionConfig);
 router.get("/admission-config", getAdmissionConfig);
+
+router.post("/payment-receipt-config", upsertPaymentReceiptConfig);
+router.get("/payment-receipt-config", getPaymentReceiptConfig);
+
+router.post("/advance-payment", createAdvancePaymentController);
+router.put("/advance-payment/:id", updateAdvancePaymentController);
 
 // Test Route
 router.post("/test-upload", upload.single("profilePicture"), (req, res) => {

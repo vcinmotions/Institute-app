@@ -4,6 +4,7 @@ import { getPayment } from "../services/payment.service";
 import { paymentQuerySchema } from "../validators/payment.query";
 import { parseDate } from "../helpers/date";
 import { generateAdmissionNumber } from "../utils/admissionFormConfig";
+import { generatePaymentReceiptNumber } from "../utils/paymentReceiptConfig";
 
 export async function addStudentPaymentController(req: Request, res: Response) {
   const {
@@ -175,6 +176,7 @@ export async function addStudentPaymentController(req: Request, res: Response) {
     });
 
     // 💳 7. Create StudentFee
+    const receiptNo = await generatePaymentReceiptNumber(tenantPrisma, clientAdminId);
     const studentFee = await tenantPrisma.studentFee.create({
       data: {
         studentId: student.id,
@@ -183,7 +185,7 @@ export async function addStudentPaymentController(req: Request, res: Response) {
         amountDue: feeStructure.totalAmount,
         amountPaid: 0,
         paymentMode: "CASH",
-        receiptNo: `RCP${Date.now()}`,
+        receiptNo,
         paymentStatus: "PENDING",
         clientAdminId,
       },
@@ -848,20 +850,39 @@ export async function updateStudentPaymentController(
       }
 
       // -----------------------------
-      // Prevent overpayment
+      // Get advance payments for this student and course
+      // -----------------------------
+      const advancePayments = await tx.studentFee.findMany({
+        where: {
+          studentId,
+          courseId: courseId!,
+          sourceType: "ADVANCE_PAYMENT",
+        },
+      });
+
+      const totalAdvancePaid = advancePayments.reduce(
+        (sum: number, advance: any) => sum + advance.amountPaid,
+        0
+      );
+
+      // -----------------------------
+      // Prevent overpayment (including advance payments)
       // -----------------------------
       const currentTotalPaid = studentFee.feeLogs.reduce(
         (sum: number, log: any) => sum + log.amountPaid,
         0
       );
 
-      if (currentTotalPaid + paidAmount > totalAmount) {
-        throw new Error("Payment exceeds remaining due amount");
+      const totalPaidIncludingAdvance = currentTotalPaid + totalAdvancePaid;
+
+      if (totalPaidIncludingAdvance + paidAmount > totalAmount) {
+        throw new Error(`Payment exceeds remaining due amount. Total paid (including advance): ₹${totalPaidIncludingAdvance}, Total fee: ₹${totalAmount}`);
       }
 
       // -----------------------------
       // Create payment log
       // -----------------------------
+      const receiptNo = await generatePaymentReceiptNumber(tx, clientAdminId);
       const log = await tx.studentFeeLog.create({
         data: {
            studentFee: {
@@ -870,12 +891,13 @@ export async function updateStudentPaymentController(
           amountPaid: paidAmount,
           paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : null,
           paymentMode,
-          receiptNo: `RCP${Date.now()}`,
+          receiptNo,
         },
       });
 
       const newTotalPaid = currentTotalPaid + paidAmount;
-      const remainingDue = Math.max(totalAmount - newTotalPaid, 0);
+      const totalPaidIncludingAdvanceAfterPayment = newTotalPaid + totalAdvancePaid;
+      const remainingDue = Math.max(totalAmount - totalPaidIncludingAdvanceAfterPayment, 0);
       const paymentStatus =
         remainingDue === 0 ? "SUCCESS" : "PENDING";
 
@@ -902,7 +924,7 @@ export async function updateStudentPaymentController(
           amount: paidAmount,
           paymentMode,
           date: parsedPaymentDate ? new Date(parsedPaymentDate) : new Date(),
-          description: `Fee payment of ₹${paidAmount} from ${studentFee.student.fullName} for ${courseName}`,
+          description: `Fee payment of ₹${paidAmount} from ${studentFee.student.fullName} for ${courseName}${totalAdvancePaid > 0 ? ` (Advance: ₹${totalAdvancePaid})` : ''}`,
           studentId: studentFee.student.id,
           courseId: courseId ?? undefined,
         },
