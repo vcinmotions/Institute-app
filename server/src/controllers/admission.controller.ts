@@ -754,6 +754,8 @@ export async function addStudentControllerNew(req: any, res: any) {
         })) : undefined,
     });
 
+    console.log("PARSED DATA:", data);
+
     // ✅ Call Service Layer
     const result = await createStudentService({
       prisma,
@@ -784,9 +786,15 @@ export async function addStudentControllerNew(req: any, res: any) {
       ...result,
     });
   } catch (err: any) {
-    if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
-    }
+    console.error("FULL ERROR:", err);
+
+  if (err.name === "ZodError") {
+    console.log(JSON.stringify(err.errors, null, 2));
+
+    return res.status(400).json({
+      error: err.errors,
+    });
+  }
     console.error("❌ Admission Error:", err);
     return res.status(500).json({ error: "Internal server error" });
   }

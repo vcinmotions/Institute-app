@@ -43,7 +43,19 @@ const prismaCLI = isProd
   ? path.join(basePath, "server", "dist", "node_modules", "prisma", "build", "index.js")
   : path.join(basePath, "node_modules", "prisma", "build", "index.js");
 
+function ensureProdDataDirs() {
+  if (!isProd) return;
+
+  const dataDir = path.join(getUserDataPath(), "data");
+  const tenantsDir = path.join(dataDir, "tenants");
+
+  fs.mkdirSync(dataDir, { recursive: true });
+  fs.mkdirSync(tenantsDir, { recursive: true });
+}
+
 export function runCentralMigrations() {
+  ensureProdDataDirs();
+
   const dbUrl = getCentralDbUrl();
 
   console.log("📦 Running CENTRAL migrations:", dbUrl);
@@ -61,6 +73,8 @@ export function runCentralMigrations() {
 }
 
 export function runTenantMigrations() {
+  ensureProdDataDirs();
+
   const tenantsDir = path.join(
     getUserDataPath(),
     "data",

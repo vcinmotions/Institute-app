@@ -181,9 +181,25 @@ let frontendProcess;
 const isDev = !app.isPackaged;
 const BACKEND_PORT = 5001;
 const FRONTEND_PORT = 3000;
+const STARTUP_TIMEOUT = 180000;
 
 /* ---------------- UTILS ---------------- */
-function waitForPort(port, timeout = 15000) {
+function prepareUserDataFolders() {
+  const dataDir = path.join(userDataPath, "data");
+  const tenantsDir = path.join(dataDir, "tenants");
+
+  fs.mkdirSync(userDataPath, { recursive: true });
+  fs.mkdirSync(dataDir, { recursive: true });
+  fs.mkdirSync(tenantsDir, { recursive: true });
+
+  console.log("Prepared user data folders:", {
+    userDataPath,
+    dataDir,
+    tenantsDir,
+  });
+}
+
+function waitForPort(port, timeout = STARTUP_TIMEOUT) {
   return new Promise((resolve, reject) => {
     const start = Date.now();
     const check = () => {
@@ -267,13 +283,17 @@ function startBackend() {
       log.error(`[BACKEND-ERR] ${d.toString().trim()}`)
     );
 
-    waitForPort(BACKEND_PORT, 60000).then(resolve).catch(reject);
+    backendProcess.once("exit", (code, signal) => {
+      reject(new Error(`Backend exited before startup completed. Code: ${code}, Signal: ${signal}`));
+    });
+
+    waitForPort(BACKEND_PORT, STARTUP_TIMEOUT).then(resolve).catch(reject);
   });
 }
 
 /* ---------------- FRONTEND ---------------- */
 function startFrontend() {
-  if (isDev) return Promise.resolve(); // Dev uses localhost:3000 automatically
+  if (isDev) return waitForPort(FRONTEND_PORT, STARTUP_TIMEOUT);
 
   const frontendDir = path.join(
     process.resourcesPath,
@@ -312,7 +332,11 @@ function startFrontend() {
       log.error(`[FRONTEND-ERR] ${d.toString().trim()}`)
     );
 
-    waitForPort(FRONTEND_PORT, 60000).then(resolve).catch(reject);
+    frontendProcess.once("exit", (code, signal) => {
+      reject(new Error(`Frontend exited before startup completed. Code: ${code}, Signal: ${signal}`));
+    });
+
+    waitForPort(FRONTEND_PORT, STARTUP_TIMEOUT).then(resolve).catch(reject);
   });
 }
 
@@ -393,6 +417,8 @@ async function createWindow() {
   await win.loadURL(
     `data:text/html;charset=utf-8,${encodeURIComponent(loadingHTML)}`
   );
+
+  prepareUserDataFolders();
 
 
   try {
