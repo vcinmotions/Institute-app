@@ -1,218 +1,123 @@
 const { autoUpdater } = require("electron-updater");
-
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const { spawn } = require("child_process");
+const { spawn, spawnSync } = require("child_process");
 const path = require("path");
 const net = require("net");
 const fs = require("fs");
 
-// ✅ ADD THIS LINE HERE FOR RELEASE BUILD
-function setupAutoUpdater(win) {
-  autoUpdater.autoDownload = true;
+// ─── CONSTANTS ───────────────────────────────────────────────────────────────
+const isDev = !app.isPackaged;
+const isWin = process.platform === "win32";
+const BACKEND_PORT = 5001;
+const FRONTEND_PORT = 3000;
+const STARTUP_TIMEOUT = 180_000;
+const RESTORE_TIMEOUT = 300_000; // 5-minute absolute deadlock safety guard
 
-  autoUpdater.on("update-available", () => {
-    console.log("Update available");
-  });
+const USER_DATA_PATH = path.join(app.getPath("userData"), "VC Inmotions");
+const RESOURCES_PATH = process.resourcesPath;
 
-  autoUpdater.on("update-downloaded", async () => {
-    console.log("Update downloaded");
+// Dynamic cross-platform Node binary resolution for production
+const NODE_PATH = path.join(RESOURCES_PATH, "node", isWin ? "node.exe" : "node");
 
-    const result = await dialog.showMessageBox({
-      type: "info",
-      title: "Update Ready",
-      message: "New version downloaded. Restart now?",
-      buttons: ["Restart", "Later"]
-    });
-
-    if (result.response === 0) {
-      if (backendProcess) backendProcess.kill();
-      if (frontendProcess) frontendProcess.kill();
-
-      autoUpdater.quitAndInstall();
-    }
-  });
-
-  autoUpdater.on("error", (err) => {
-    console.error("Update error:", err);
-  });
-
-  // check after app starts
-  setTimeout(() => {
-    autoUpdater.checkForUpdates();
-  }, 5000);
+// ─── LOG DIRECTORY GUARD ─────────────────────────────────────────────────────
+const LOG_DIR = path.join(app.getPath("userData"), "logs");
+if (!fs.existsSync(LOG_DIR)) {
+  fs.mkdirSync(LOG_DIR, { recursive: true });
 }
 
-// function setupAutoUpdater(win) {
-//   autoUpdater.logger = log;
-//   autoUpdater.logger.transports.file.level = "info";
+const log = require("electron-log");
+log.transports.file.resolvePath = () => path.join(LOG_DIR, "main.log");
+log.transports.file.format = "{y}-{m}-{d} {h}:{i}:{s} [{level}] {text}";
 
-//   autoUpdater.autoDownload = true;
+const backendLog = log.create({ logId: "backend" });
+backendLog.transports.file.resolvePath = () => path.join(LOG_DIR, "backend.log");
 
-//   autoUpdater.on("checking-for-update", () => {
-//     log.info("🔍 Checking for update...");
-//   });
+const frontendLog = log.create({ logId: "frontend" });
+frontendLog.transports.file.resolvePath = () => path.join(LOG_DIR, "frontend.log");
 
-//   autoUpdater.on("update-available", (info) => {
-//     log.info("✅ Update available:", info);
-//   });
+console.log = log.info.bind(log);
+console.error = log.error.bind(log);
 
-//   autoUpdater.on("update-not-available", (info) => {
-//     log.info("❌ No update available:", info);
-//   });
+process.on("uncaughtException", (err) => log.error("Uncaught Exception:", err));
+process.on("unhandledRejection", (reason) => log.error("Unhandled Rejection:", reason));
 
-//   autoUpdater.on("error", (err) => {
-//     log.error("🔥 Update error:", err);
-//   });
+// ─── PROCESS HANDLES ─────────────────────────────────────────────────────────
+let backendProcess = null;
+let frontendProcess = null;
 
-//   autoUpdater.on("download-progress", (progress) => {
-//     log.info(`⬇️ Downloading: ${progress.percent}%`);
-//   });
-
-//   autoUpdater.on("update-downloaded", async () => {
-//     log.info("🎉 Update downloaded");
-
-//     const result = await dialog.showMessageBox({
-//       type: "info",
-//       title: "Update Ready",
-//       message: "New version downloaded. Restart now?",
-//       buttons: ["Restart", "Later"]
-//     });
-
-//     if (result.response === 0) {
-//       if (backendProcess) backendProcess.kill();
-//       if (frontendProcess) frontendProcess.kill();
-
-//       autoUpdater.quitAndInstall();
-//     }
-//   });
-
-//   setTimeout(() => {
-//     autoUpdater.checkForUpdates();
-//   }, 5000);
-// }
-
+// ─── ENV LOADING ──────────────────────────────────────────────────────────────
 function loadEnvFile(filePath) {
   if (!fs.existsSync(filePath)) {
-    console.error("❌ ENV NOT FOUND:", filePath);
+    log.warn("ENV file not found (skipping):", filePath);
     return;
   }
-
-  const envContent = fs.readFileSync(filePath, "utf-8");
-
-  envContent.split("\n").forEach((line) => {
-    if (!line || line.startsWith("#")) return;
-
-    const index = line.indexOf("=");
-    if (index === -1) return;
-
-    const key = line.substring(0, index).trim();
-    const value = line.substring(index + 1).trim().replace(/^"|"$/g, "");
-
-    if (key && value) {
-      process.env[key] = value;
+  try {
+    const lines = fs.readFileSync(filePath, "utf-8").split(/\r?\n/);
+    for (const line of lines) {
+      if (!line || line.trim().startsWith("#")) continue;
+      const idx = line.indexOf("=");
+      if (idx === -1) continue;
+      const key = line.substring(0, idx).trim();
+      const value = line.substring(idx + 1).trim().replace(/^"|"$/g, "");
+      if (key && value && !process.env[key]) {
+        process.env[key] = value;
+      }
     }
-  });
+  } catch (err) {
+    log.error(`Failed to read env file: ${filePath}`, err);
+  }
 }
 
 function loadGlobalEnv() {
-  const basePath = app.isPackaged
-    ? path.join(process.resourcesPath, "server", "dist")
-    : path.join(__dirname, "../server");
+  const basePath = isDev
+    ? path.join(__dirname, "../server")
+    : path.join(RESOURCES_PATH, "server", "dist");
 
-  const globalEnv = path.join(basePath, ".env");
-  const prodEnv = path.join(basePath, ".env.prod");
-
-  console.log("Loading ENV:", globalEnv);
-  loadEnvFile(globalEnv);
-
-  console.log("Loading ENV:", prodEnv);
-  loadEnvFile(prodEnv);
+  loadEnvFile(path.join(basePath, ".env"));
+  loadEnvFile(path.join(basePath, ".env.prod"));
 
   if (!process.env.BACKUP_SECRET) {
-    throw new Error("❌ BACKUP_SECRET not loaded");
+    throw new Error("BACKUP_SECRET not loaded — check .env / .env.prod");
   }
-
-  console.log("✅ BACKUP_SECRET:", process.env.BACKUP_SECRET);
+  log.info("ENV loaded. BACKUP_SECRET present ✓");
 }
 
-const userDataPath = path.join(app.getPath("userData"), "VC Inmotions");
+// ─── RUNTIME VERIFICATION ────────────────────────────────────────────────────
+function verifyProductionRuntime() {
+  if (!isDev && !fs.existsSync(NODE_PATH)) {
+    throw new Error(`Bundled Node runtime missing at expected path: ${NODE_PATH}`);
+  }
+}
 
-console.log("ELECTRON USER DATA PATH:", userDataPath);
-
-if (!fs.existsSync(userDataPath)) fs.mkdirSync(userDataPath, { recursive: true });
-
-// -------------------- LOG SETUP --------------------
-const logDir = path.join(app.getPath("userData"), "logs");
-if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
-
-const log = require("electron-log");
-
-// Main process log
-log.transports.file.resolvePath = () =>
-  path.join(app.getPath("userData"), "logs/main.log");
-log.transports.file.format = "{y}-{m}-{d} {h}:{i}:{s} [{level}] {text}";
-
-// Backend log
-
-// Create scoped logs (clean way)
-const backendLog = log.create({ logId: "backend" });
-backendLog.transports.file.resolvePath = () =>
-  path.join(app.getPath("userData"), "logs/backend.log");
-
-// Frontend log
-const frontendLog = log.create({ logId: "frontend" });
-frontendLog.transports.file.resolvePath = () =>
-  path.join(app.getPath("userData"), "logs/frontend.log");
-
-// Optional: Replace console with main log
-console.log = log.info;
-console.error = log.error;
-
-// Global error handlers
-process.on("uncaughtException", (err) => log.error("Uncaught Exception:", err));
-process.on("unhandledRejection", (reason, promise) =>
-  log.error("Unhandled Rejection at:", promise, reason)
-);
-// -------------------- END LOG SETUP --------------------
-
-let backendProcess;
-let frontendProcess;
-
-const isDev = !app.isPackaged;
-const BACKEND_PORT = 5001;
-const FRONTEND_PORT = 3000;
-const STARTUP_TIMEOUT = 180000;
-
-/* ---------------- UTILS ---------------- */
+// ─── FOLDER PREP ─────────────────────────────────────────────────────────────
 function prepareUserDataFolders() {
-  const dataDir = path.join(userDataPath, "data");
-  const tenantsDir = path.join(dataDir, "tenants");
-
-  fs.mkdirSync(userDataPath, { recursive: true });
-  fs.mkdirSync(dataDir, { recursive: true });
-  fs.mkdirSync(tenantsDir, { recursive: true });
-
-  console.log("Prepared user data folders:", {
-    userDataPath,
-    dataDir,
-    tenantsDir,
-  });
+  const folders = [
+    USER_DATA_PATH,
+    path.join(USER_DATA_PATH, "data"),
+    path.join(USER_DATA_PATH, "data", "tenants"),
+  ];
+  for (const dir of folders) {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  }
+  log.info("User data folders ready:", USER_DATA_PATH);
 }
 
+// ─── PORT WAIT ───────────────────────────────────────────────────────────────
 function waitForPort(port, timeout = STARTUP_TIMEOUT) {
   return new Promise((resolve, reject) => {
-    const start = Date.now();
+    const deadline = Date.now() + timeout;
+    let delay = 250;
+
     const check = () => {
+      if (Date.now() > deadline) {
+        return reject(new Error(`Port ${port} not ready within ${timeout}ms`));
+      }
       const socket = new net.Socket();
-      socket.once("connect", () => {
-        socket.destroy();
-        resolve(true);
-      });
+      socket.once("connect", () => { socket.destroy(); resolve(); });
       socket.once("error", () => {
         socket.destroy();
-        if (Date.now() - start > timeout)
-          reject(new Error(`Port ${port} not ready`));
-        else setTimeout(check, 500);
+        delay = Math.min(delay * 1.5, 2000);
+        setTimeout(check, delay);
       });
       socket.connect(port, "127.0.0.1");
     };
@@ -220,332 +125,336 @@ function waitForPort(port, timeout = STARTUP_TIMEOUT) {
   });
 }
 
-/* ---------------- BACKEND ---------------- */
+// ─── BACKEND ─────────────────────────────────────────────────────────────────
 function startBackend() {
   const backendDir = isDev
     ? path.join(__dirname, "../server")
-    : path.join(process.resourcesPath, "server"); // remove /dist
+    : path.join(RESOURCES_PATH, "server");
 
-  const nodePath = isDev
-    ? "node"
-    : path.join(process.resourcesPath, "node", "node.exe");
+  const runtime = isDev ? (isWin ? "npx.cmd" : "npx") : NODE_PATH;
+  const args    = isDev ? ["ts-node", "server.ts"] : ["dist/server.js"];
 
-  //const nodePath = "node";
-  const backendFile = isDev ? "server.ts" : "dist/server.js";
-
-  console.log("========== BACKEND INFO ==========");
-  console.log("Mode           :", isDev ? "Development" : "Production");
-  console.log("Backend Dir    :", backendDir);
-  console.log("Node Path      :", nodePath);
-  console.log("Backend File   :", backendFile);
-  console.log("userDataPath   :", userDataPath);
-  console.log("process.resourcesPath   :", process.resourcesPath);
-  console.log("==================================");
-
-  console.log("GET NODE PATH:", nodePath);
+  log.info("Starting backend →", backendDir, runtime, args);
 
   return new Promise((resolve, reject) => {
-    console.log("GET BACKEND FILE:", backendFile);
-
-    // backendProcess = spawn(nodePath, [backendFile], {
-    //   cwd: backendDir,
-    //   env: { ...process.env, PORT: BACKEND_PORT },
-    //   APP_ENV: "prod", // 👈 add this
-    //   windowsHide: false,
-    // });
-
-    backendProcess = spawn(nodePath, [backendFile], {
+    backendProcess = spawn(runtime, args, {
       cwd: backendDir,
       env: {
         ...process.env,
-        PORT: BACKEND_PORT,
+        PORT: String(BACKEND_PORT),
         APP_ENV: "prod",
-        NODE_ENV: "production",
-        USER_DATA_PATH: userDataPath, // 👈 pass the Electron userData path
-        BACKUP_SECRET: process.env.BACKUP_SECRET, // ✅ FORCE IT
-        RESOURCES_PATH: process.resourcesPath
+        NODE_ENV: isDev ? "development" : "production",
+        USER_DATA_PATH,
+        BACKUP_SECRET: process.env.BACKUP_SECRET,
+        RESOURCES_PATH,
       },
-      windowsHide: false,
+      windowsHide: !isDev,
     });
 
-    console.log(
-      "GET BACKEND PROCESS:",
-      nodePath,
-      [backendFile],
-      backendFile,
-      backendDir
-    );
+    backendProcess.stdout.on("data", (d) => backendLog.info(d.toString().trimEnd()));
+    backendProcess.stderr.on("data", (d) => backendLog.error(d.toString().trimEnd()));
 
-    backendProcess.stdout.on("data", (d) =>
-      log.info(`[BACKEND] ${d.toString().trim()}`)
-    );
-    backendProcess.stderr.on("data", (d) =>
-      log.error(`[BACKEND-ERR] ${d.toString().trim()}`)
-    );
+    let started = false;
 
+    // Handles early boot failures exclusively
     backendProcess.once("exit", (code, signal) => {
-      reject(new Error(`Backend exited before startup completed. Code: ${code}, Signal: ${signal}`));
+      if (!started) {
+        reject(new Error(`Backend exited early — code: ${code}, signal: ${signal}`));
+      }
     });
 
-    waitForPort(BACKEND_PORT, STARTUP_TIMEOUT).then(resolve).catch(reject);
+    // Persistent runtime crash monitor
+    backendProcess.on("exit", (code, signal) => {
+      if (started && code !== 0 && code !== null) {
+        backendLog.error(`Backend crashed/exited unexpectedly. Code: ${code}, Signal: ${signal}`);
+      }
+    });
+
+    waitForPort(BACKEND_PORT, STARTUP_TIMEOUT)
+      .then(() => { started = true; resolve(); })
+      .catch(reject);
   });
 }
 
-/* ---------------- FRONTEND ---------------- */
+// ─── FRONTEND ────────────────────────────────────────────────────────────────
 function startFrontend() {
   if (isDev) return waitForPort(FRONTEND_PORT, STARTUP_TIMEOUT);
 
-  const frontendDir = path.join(
-    process.resourcesPath,
-    "frontend",
-    "standalone",
-    "frontend"
-  );
-
+  const frontendDir = path.join(RESOURCES_PATH, "frontend", "standalone", "frontend");
   const frontendServerPath = path.join(frontendDir, "server.js");
 
-  //const nodePath = process.execPath; // ✅ IMPORTANT
-  const nodePath = isDev
-    ? "node"
-    : path.join(process.resourcesPath, "node", "node.exe");
-
-  console.log("========== FRONTEND INFO =========");
-  console.log("Mode           :", "Production");
-  console.log("Frontend Dir   :", frontendDir);
-  console.log("Frontend Server:", frontendServerPath);
-  console.log("Node Path      :", nodePath); // ✅ ADD IT HERE
-  console.log("==================================");
-
-  console.log("GET frontendServerPath DIR:", frontendServerPath);
+  log.info("Starting frontend →", frontendServerPath);
 
   return new Promise((resolve, reject) => {
-    frontendProcess = spawn(nodePath, [frontendServerPath], {
+    frontendProcess = spawn(NODE_PATH, [frontendServerPath], {
       cwd: frontendDir,
-      env: { ...process.env, NODE_ENV: "production", PORT: FRONTEND_PORT },
-      windowsHide: false, // show console
+      env: { ...process.env, NODE_ENV: "production", PORT: String(FRONTEND_PORT) },
+      windowsHide: true,
     });
 
-    frontendProcess.stdout.on("data", (d) =>
-      log.info(`[FRONTEND] ${d.toString().trim()}`)
-    );
-    frontendProcess.stderr.on("data", (d) =>
-      log.error(`[FRONTEND-ERR] ${d.toString().trim()}`)
-    );
+    frontendProcess.stdout.on("data", (d) => frontendLog.info(d.toString().trimEnd()));
+    frontendProcess.stderr.on("data", (d) => frontendLog.error(d.toString().trimEnd()));
 
+    let started = false;
+
+    // Handles early boot failures exclusively
     frontendProcess.once("exit", (code, signal) => {
-      reject(new Error(`Frontend exited before startup completed. Code: ${code}, Signal: ${signal}`));
+      if (!started) {
+        reject(new Error(`Frontend exited early — code: ${code}, signal: ${signal}`));
+      }
     });
 
-    waitForPort(FRONTEND_PORT, STARTUP_TIMEOUT).then(resolve).catch(reject);
+    // Persistent runtime crash monitor
+    frontendProcess.on("exit", (code, signal) => {
+      if (started && code !== 0 && code !== null) {
+        frontendLog.error(`Frontend crashed/exited unexpectedly. Code: ${code}, Signal: ${signal}`);
+      }
+    });
+
+    waitForPort(FRONTEND_PORT, STARTUP_TIMEOUT)
+      .then(() => { started = true; resolve(); })
+      .catch(reject);
   });
 }
 
-/* ---------------- WINDOW ---------------- */
+// ─── AUTO UPDATER ─────────────────────────────────────────────────────────────
+function setupAutoUpdater() {
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  autoUpdater.on("checking-for-update", () => log.info("Checking for updates..."));
+  autoUpdater.on("update-available", (info) => log.info("Update available:", info.version));
+  autoUpdater.on("update-not-available", () => log.info("No updates available"));
+  autoUpdater.on("download-progress", (progress) => log.info(`Downloading update: ${progress.percent.toFixed(1)}%`));
+  
+  // Explicitly log channel communication errors
+  autoUpdater.on("error", (err) => log.error("Auto-updater failure caught:", err));
+
+  autoUpdater.on("update-downloaded", async () => {
+    log.info("Update downloaded — prompting user");
+    const { response } = await dialog.showMessageBox({
+      type: "info",
+      title: "Update Ready",
+      message: "A new version has been downloaded. Restart now to apply it?",
+      buttons: ["Restart Now", "Later"],
+    });
+    if (response === 0) {
+      killChildren();
+      autoUpdater.quitAndInstall();
+    }
+  });
+
+  setTimeout(() => autoUpdater.checkForUpdates(), 10_000);
+}
+
+// ─── LOADING SCREEN ──────────────────────────────────────────────────────────
+const LOADING_HTML = `data:text/html;charset=utf-8,${encodeURIComponent(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Loading</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      height:100vh;display:flex;flex-direction:column;
+      justify-content:center;align-items:center;
+      background:#0f0f10;font-family:system-ui,-apple-system,sans-serif;
+      color:#e2e2e5;gap:20px;
+    }
+    .brand{font-size:1.1rem;font-weight:600;letter-spacing:.02em;opacity:.9}
+    .bar-track{width:220px;height:3px;background:#1e1e22;border-radius:99px;overflow:hidden;margin-top:6px}
+    .bar-fill{height:100%;width:30%;background:linear-gradient(90deg,#6366f1,#8b5cf6);
+      border-radius:99px;animation:slide 1.4s ease-in-out infinite}
+    .sub{font-size:.75rem;color:#888;letter-spacing:.04em}
+    @keyframes slide{
+      0%{transform:translateX(-100%)}
+      50%{transform:translateX(250%)}
+      100%{transform:translateX(-100%)}
+    }
+  </style>
+</head>
+<body>
+  <div class="brand">VC Inmotions</div>
+  <div class="bar-track"><div class="bar-fill"></div></div>
+  <div class="sub">Starting services…</div>
+</body>
+</html>`)}`;
+
+// ─── WINDOW ──────────────────────────────────────────────────────────────────
 async function createWindow() {
   const win = new BrowserWindow({
     width: 1400,
     height: 900,
+    show: false,
+    backgroundColor: "#0f0f10",
     webPreferences: {
       contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true, 
       preload: path.join(__dirname, "preload.js"),
     },
   });
 
-  const loadingHTML = `
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <title>Loading</title>
-        <style>
-          body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #ffffff;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont;
-          }
+  win.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
 
-          .loader {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-          }
-
-          .icon {
-            height: 1.5rem;
-            width: 1.5rem;
-            animation: spin 1s linear infinite;
-            stroke: rgba(107, 114, 128, 1);
-          }
-
-          .loading-text {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: rgba(107, 114, 128, 1);
-          }
-
-          @keyframes spin {
-            to {
-              transform: rotate(360deg);
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <div aria-label="Loading..." role="status" class="loader">
-          <svg class="icon" viewBox="0 0 256 256" fill="none">
-            <line x1="128" y1="32" x2="128" y2="64" stroke-width="24" stroke-linecap="round"/>
-            <line x1="195.9" y1="60.1" x2="173.3" y2="82.7" stroke-width="24" stroke-linecap="round"/>
-            <line x1="224" y1="128" x2="192" y2="128" stroke-width="24" stroke-linecap="round"/>
-            <line x1="195.9" y1="195.9" x2="173.3" y2="173.3" stroke-width="24" stroke-linecap="round"/>
-            <line x1="128" y1="224" x2="128" y2="192" stroke-width="24" stroke-linecap="round"/>
-            <line x1="60.1" y1="195.9" x2="82.7" y2="173.3" stroke-width="24" stroke-linecap="round"/>
-            <line x1="32" y1="128" x2="64" y2="128" stroke-width="24" stroke-linecap="round"/>
-            <line x1="60.1" y1="60.1" x2="82.7" y2="82.7" stroke-width="24" stroke-linecap="round"/>
-          </svg>
-          <span class="loading-text">Starting VC Inmotions…</span>
-        </div>
-      </body>
-    </html>
-  `;
-
-  //await win.loadURL("data:text/html,<h2>Starting VC Inmotions...</h2>");
-
-  await win.loadURL(
-    `data:text/html;charset=utf-8,${encodeURIComponent(loadingHTML)}`
-  );
-
-  prepareUserDataFolders();
-
+  await win.loadURL(LOADING_HTML);
+  win.show();
 
   try {
+    prepareUserDataFolders();
     await startBackend();
     await startFrontend();
-
-    // ✅ ADD THIS LINE HERE FOR RELEASE BUILD
-    if (!isDev && app.isPackaged) {
-      setupAutoUpdater(win);
-    }
-
-    const url = isDev
-      ? "http://localhost:3000"
-      : `http://localhost:${FRONTEND_PORT}`;
-    await win.loadURL(url);
-
-    if (isDev) win.webContents.openDevTools();
   } catch (err) {
-    console.error(err);
+    log.error("Startup failed:", err);
+    
+    // Explicitly clean up any orphan background tasks if partial boot failed
+    killChildren();
+    
     await win.loadURL(
-      "data:text/html,<h2 style='color:red'>Startup failed</h2>"
+      `data:text/html;charset=utf-8,${encodeURIComponent(
+        `<body style="background:#0f0f10;color:#f87171;font-family:system-ui;padding:40px">
+          <h2>Startup failed</h2><pre>${String(err.message)}</pre>
+          <p style="color:#888;margin-top:16px">Check logs at: ${LOG_DIR}</p>
+        </body>`
+      )}`
     );
+    return;
+  }
+
+  await win.loadURL(`http://localhost:${FRONTEND_PORT}`);
+
+  if (isDev) win.webContents.openDevTools();
+  if (!isDev && app.isPackaged) setupAutoUpdater();
+}
+
+// ─── PROCESS TREE TERMINATION ────────────────────────────────────────────────
+function killProcessTree(proc) {
+  if (!proc || !proc.pid) return;
+
+  try {
+    if (isWin) {
+      spawnSync("taskkill", ["/pid", String(proc.pid), "/T", "/F"], { windowsHide: true });
+    } else {
+      proc.kill("SIGTERM");
+    }
+  } catch (err) {
+    try { proc.kill("SIGKILL"); } catch (e) { log.error("Process terminal kill failed:", e); }
   }
 }
 
-// app.whenReady().then(createWindow);
+function killChildren() {
+  if (backendProcess) { killProcessTree(backendProcess); backendProcess = null; }
+  if (frontendProcess) { killProcessTree(frontendProcess); frontendProcess = null; }
+}
 
+// ─── APP LIFECYCLE ────────────────────────────────────────────────────────────
 app.whenReady().then(() => {
-  loadGlobalEnv();   // ✅ VERY IMPORTANT
-
+  try {
+    verifyProductionRuntime();
+    loadGlobalEnv();
+  } catch (err) {
+    log.error(err.message);
+    dialog.showErrorBox("Configuration Error", String(err.message));
+    app.exit(1); 
+    return;
+  }
   createWindow();
 });
 
 app.on("window-all-closed", () => {
-  if (backendProcess) backendProcess.kill();
-  if (frontendProcess) frontendProcess.kill();
+  killChildren();
   app.quit();
 });
 
-ipcMain.on("restart-app", () => {
-  app.relaunch();
-  app.exit();
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-/* ---------------- SELECT BACKUP FILE ---------------- */
+process.on("SIGINT", () => {
+  killChildren();
+  process.exit(0);
+});
+
+process.on("SIGTERM", () => {
+  killChildren();
+  process.exit(0);
+});
+
+// ─── IPC HANDLERS ────────────────────────────────────────────────────────────
+ipcMain.on("restart-app", () => {
+  killChildren();
+  app.relaunch();
+  app.quit();
+});
+
 ipcMain.handle("select-backup-file", async () => {
-  try {
-    const result = await dialog.showOpenDialog({
-      title: "Select Backup File",
-      properties: ["openFile"],
-      filters: [{ name: "Backup Files", extensions: ["enc"] }],
-    });
-
-    if (result.canceled) return null;
-
-    return result.filePaths[0];
-  } catch (err) {
-    console.error("Select backup file failed:", err);
-    throw err;
-  }
+  const result = await dialog.showOpenDialog({
+    title: "Select Backup File",
+    properties: ["openFile"],
+    filters: [{ name: "Backup Files", extensions: ["enc"] }],
+  });
+  return result.canceled ? null : result.filePaths[0];
 });
 
 ipcMain.handle("perform-restore", async (_, filePath) => {
-  try {
-    console.log("🔄 Restore triggered from UI");
+  log.info("Restore triggered from UI:", filePath);
 
-    /* ---------------- KILL RUNNING PROCESSES ---------------- */
-    if (backendProcess) {
-      backendProcess.kill();
-      backendProcess = null;
-    }
-
-    if (frontendProcess) {
-      frontendProcess.kill();
-      frontendProcess = null;
-    }
-
-    // 2. Call your backend restore logic DIRECTLY
-    const restoreModulePath = isDev
+  const restoreModulePath = isDev
     ? path.join(__dirname, "../server/dist/src/utils/restoreBackUp.js")
-    : path.join(process.resourcesPath, "server", "dist", "src", "utils", "restoreBackUp.js");
+    : path.join(RESOURCES_PATH, "server", "dist", "src", "utils", "restoreBackUp.js");
 
-    const { restoreBackup } = require(restoreModulePath);
+  const restoreRuntime = isDev ? "node" : NODE_PATH;
 
-    await restoreBackup(filePath);
+  const restoreProcess = spawn(restoreRuntime, [restoreModulePath, filePath], {
+    env: { ...process.env, USER_DATA_PATH }
+  });
 
-    console.log("✅ Restore completed");
+  // Watchdog timer to prevent the application from hanging indefinitely on locked operations
+  const watchdog = setTimeout(() => {
+    log.error("Restore execution timed out! Forcing process termination.");
+    killProcessTree(restoreProcess);
+  }, RESTORE_TIMEOUT);
 
-    // 3. Restart app
-    app.relaunch();
-    app.exit();
+  // Pipe standard error streams over to primary diagnostic log files
+  restoreProcess.stderr.on("data", (d) => {
+    log.error("[RESTORE CRITICAL ERROR]", d.toString().trimEnd());
+  });
 
-  } catch (err) {
-    console.error("❌ Restore failed:", err);
-    throw err;
-  }
+  restoreProcess.on("error", (err) => {
+    clearTimeout(watchdog);
+    log.error("Failed to spawn restore script pipeline:", err);
+    dialog.showErrorBox("Restore Boot Failure", `Could not execute restore runtime: ${err.message}`);
+  });
+
+  restoreProcess.on("exit", (code) => {
+    clearTimeout(watchdog);
+    
+    if (code === 0) {
+      log.info(`Restore script completed successfully. Purging environment and relaunching.`);
+      // Only kill existing child runtime tree frames once recovery is authenticated!
+      killChildren();
+      app.relaunch();
+      app.quit();
+    } else {
+      log.error(`Restore routine failed with non-zero exit validation code: ${code}`);
+      dialog.showErrorBox(
+        "Restore Failed",
+        `The data restoration script terminated unexpectedly (Code: ${code}).\n\nYour existing server processes are still active. No state modifications were made.`
+      );
+    }
+  });
 });
 
-/* ---------------- SAVE BACKUP FILE ---------------- */
 ipcMain.handle("save-backup-file", async (_, sourcePath) => {
-  try {
-    if (!fs.existsSync(sourcePath)) {
-      throw new Error("Backup file not found");
-    }
+  if (!fs.existsSync(sourcePath)) throw new Error("Backup file not found");
 
-    const result = await dialog.showSaveDialog({
-      title: "Save Backup",
-      defaultPath: "backup.enc",
-    });
+  const result = await dialog.showSaveDialog({
+    title: "Save Backup",
+    defaultPath: "backup.enc",
+  });
+  if (result.canceled) return null;
 
-    if (result.canceled) return null;
-
-    await new Promise((resolve, reject) => {
-      const readStream = fs.createReadStream(sourcePath);
-      const writeStream = fs.createWriteStream(result.filePath);
-
-      readStream.on("error", reject);
-      writeStream.on("error", reject);
-      writeStream.on("finish", resolve);
-
-      readStream.pipe(writeStream);
-    }); 
-
-    return result.filePath;
-
-  } catch (err) {
-    console.error("Backup save failed:", err);
-    throw err;
-  }
+  await fs.promises.copyFile(sourcePath, result.filePath);
+  return result.filePath;
 });
