@@ -193,7 +193,7 @@ exports.Prisma.EnquiryScalarFieldEnum = {
   course: 'course',
   gender: 'gender',
   dob: 'dob',
-  source: 'source',
+  sourceId: 'sourceId',
   referedBy: 'referedBy',
   takenBy: 'takenBy',
   leadStatus: 'leadStatus',
@@ -203,6 +203,13 @@ exports.Prisma.EnquiryScalarFieldEnum = {
   isConverted: 'isConverted',
   studentId: 'studentId',
   clientAdminId: 'clientAdminId'
+};
+
+exports.Prisma.SourceTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.EnquiryCourseScalarFieldEnum = {
@@ -619,6 +626,7 @@ exports.Prisma.ModelName = {
   RoleUser: 'RoleUser',
   ActivityLog: 'ActivityLog',
   Enquiry: 'Enquiry',
+  SourceType: 'SourceType',
   EnquiryCourse: 'EnquiryCourse',
   FollowUp: 'FollowUp',
   Notification: 'Notification',

@@ -112,6 +112,15 @@ const navItems: NavItem[] = [
   },
   {
     icon: <UserIcon />,
+    name: "Master",
+    path: "/dashboard/Source",
+    roles: ["ADMIN"], // allowed roles
+    subItems: [
+      { name: "Source Config", path: "/dashboard/source" },
+    ],
+  },
+  {
+    icon: <UserIcon />,
     name: "Enquiry",
     path: "/dashboard/enquiry",
     roles: ["ADMIN", "FRONT_DESK"], // allowed roles

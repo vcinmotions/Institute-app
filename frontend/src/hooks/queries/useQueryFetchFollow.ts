@@ -3,14 +3,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { apiClient } from '@/lib/apiClient';
 
-// Define the expected type for the fetched data
-// interface FollowUpData {
-//   id: string;
-//   status: string;
-//   message: string;
-//   // ✅ Add more fields as needed
-// }
-
 interface FollowUpItem {
   id: string;
   remark: string;

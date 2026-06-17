@@ -23,7 +23,7 @@ export const EcommerceMetrics = ({ user, summary, breakdown }: EcommerceMetricsP
 
   console.log("Get SUMMARY AND BREAKDOWN IN ECOMMARECE:", summary, breakdown);
   return (
-    <div className=" bg-white/[0.03] border border-white/[0.03] rounded-2xl px-6 py-10">
+    <div className=" bg-white/[0.03] border border-gray-900/[0.09] rounded-2xl px-6 py-10">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
         {/* <!-- Metric Item Start --> */}
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">

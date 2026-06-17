@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useMemo, useState } from "react";
 import ModalCard from "@/components/common/ModalCard";
 import { RootState } from "@/store";
@@ -8,8 +9,13 @@ import CreateFollowUpModal from "@/components/form/form-elements/CreateFollowUpM
 import { PencilIcon } from "@/icons";
 import EditFollowUpModal from "@/components/form/form-elements/EditFollowUpModal";
 import { canEditFollowUp } from "@/domain/enquiry/rules";
-import { showCompletedFollowUpIcon, showMissedFollowUpIcon, showPendingFollowUpIcon } from "@/domain/follow-up/rules";
+import {
+  showCompletedFollowUpIcon,
+  showMissedFollowUpIcon,
+  showPendingFollowUpIcon,
+} from "@/domain/follow-up/rules";
 import { formatDate } from "@/components/common/Formatdate";
+
 interface TimelineDatatableProps {
   onClose: () => void;
   followUpData: any;
@@ -23,62 +29,28 @@ export default function TimelineDatatable({
   enquiryId,
   onCreateFollowUpForFollowUp,
 }: TimelineDatatableProps) {
+  const { enquiries } = useSelector((state: RootState) => state.enquiry);
 
-  const { enquiries, loading } = useSelector(
-    (state: RootState) => state.enquiry,
-  );
-  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
-    null,
-  );
-  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
-    null,
-  );
+  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(null);
+  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(null);
   const [showCreateNextModal, setShowCreateNextModal] = useState(false);
   const [showEditNextModal, setShowEditNextModal] = useState(false);
 
-  //const followups = followUpsByEnquiry[enquiryId] || [];
-  const { followupDetails, isLoading, refetch } = useFollowUp(enquiryId);
+  console.log("followUpData", followUpData);
+  console.log("enquiries", enquiryId)
+
+  const { followupDetails, refetch } = useFollowUp(enquiryId);
+
+  console.log("followupDetails", followupDetails);
 
   const refetchFollowup = () => {
     refetch();
-  }
-  // const fineEnquiryById = enquiries.find(
-  //   (data: { id: any | null }) => data.id === enquiryId,
-  // );
+  };
 
   const fineEnquiryById = useMemo(
-    () => enquiries.find(e => e.id === enquiryId),
+    () => enquiries.find((e) => e.id === enquiryId),
     [enquiries, enquiryId]
   );
-
-  //   const followups = followUpData?.followup ?? [];
-
-  // const followups = (followUpData?.followup ?? [])
-  // .sort(
-  //     (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-  // );
-
-  const handleCreateFollowUpForFollowUp = (followUpId: string) => {
-    setSelectedFollowUpId(followUpId);
-    setSelectedEnquiryId(enquiryId)
-    setShowCreateNextModal(true)
-    console.log(
-      "GetTing Follow Up Details After Creating Follow-Up Component Logic:",
-      followupDetails,
-    );
-  };
-
-  const handleEditFollowUpForFollowUp = (followUpId: string) => {
-    setSelectedFollowUpId(followUpId);
-    setSelectedEnquiryId(enquiryId)
-    setShowEditNextModal(true)
-  };
-
-  //IMPORTANT ONE
-  // const followups = [...(followupDetails?.followup || [])].sort(
-  //   (a: any, b: any) =>
-  //     new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  // );
 
   const followups = useMemo(() => {
     return [...(followupDetails?.followup || [])].sort(
@@ -87,534 +59,200 @@ export default function TimelineDatatable({
     );
   }, [followupDetails]);
 
-  // useEffect(() => {
-  //   setTriggered(false)
-  // }, [enquiryId]); // allows the state to reset for modal to reopen.
+  const handleCreateFollowUpForFollowUp = (followUpId: string) => {
+    setSelectedFollowUpId(followUpId);
+    setSelectedEnquiryId(enquiryId);
+    setShowCreateNextModal(true);
+  };
 
-  // useEffect(() => {
-  //   if (followups.length === 0 && enquiryId !== null && !triggered) {
-  //     onCreateFollowUpForEnquiry(enquiryId);
-  //     setTriggered(true);  // prevent repeated calls
-  //   }
-  // }, [followups, enquiryId, onCreateFollowUpForEnquiry, triggered]);
+  const handleEditFollowUpForFollowUp = (followUpId: string) => {
+    setSelectedFollowUpId(followUpId);
+    setSelectedEnquiryId(enquiryId);
+    setShowEditNextModal(true);
+  };
 
   if (!followups.length) return null;
 
-  // Separate first, middle, last
-  const firstItem = followups[0];
   const lastItem = followups[followups.length - 1];
-  const middleItems = followups.slice(1, -1);
 
-  console.log("get middle follow up", middleItems);
-  console.log("get last follow up", lastItem?.id);
-  console.log("canEditFollowUp(fineEnquiryById?.leadStatus)", canEditFollowUp(fineEnquiryById?.leadStatus));
+  // Helper function to get status colors
+  const getStatusColor = (status: string) => {
+    const s = status.toLowerCase();
+    if (s === "pending") return "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800/50";
+    if (s === "completed") return "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800/50";
+    if (s === "missed") return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800/50";
+    return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700";
+  };
 
   return (
-    <ModalCard title="Follow-Up " oncloseModal={onClose}>
-      <div>
-        <div className="mb-6 rounded-3xl border border-gray-200/60 bg-white px-8 py-10 shadow-sm dark:border-gray-800/60 dark:bg-white/[0.02]">
-          <h4 className="mb-6 text-center text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            Enquiry Details
+    <ModalCard title="Follow-Up Details" oncloseModal={onClose}>
+      <div className="flex flex-col gap-6">
+        
+        {/* =========================================
+            1. ENQUIRY SUMMARY DASHBOARD (ERP STYLE)
+        ========================================= */}
+        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-gray-800">
+          <div className="mb-6 flex flex-col items-start justify-between gap-4 border-b border-gray-100 pb-4 sm:flex-row sm:items-center dark:border-gray-800">
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {fineEnquiryById?.name || "Unknown Lead"}
+              </h4>
+              <p className="text-sm text-gray-500">ID: {fineEnquiryById?.srNo || "—"}</p>
+            </div>
+            <div className="flex gap-2">
+              <span className={`inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-semibold ${fineEnquiryById?.leadStatus === "WON" ? "bg-green-50 text-green-700 border-green-200" : "bg-blue-50 text-blue-700 border-blue-200"}`}>
+                {fineEnquiryById?.leadStatus === "WON" ? "Converted" : "Active Lead"}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-y-6 sm:grid-cols-4">
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500">Contact</span>
+              <span className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">{fineEnquiryById?.contact || "—"}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500">Email</span>
+              <span className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">{fineEnquiryById?.email || "—"}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500">Source</span>
+              <span className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">{fineEnquiryById?.source || "—"}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500">Location</span>
+              <span className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">{fineEnquiryById?.location || "—"}</span>
+            </div>
+          </div>
+
+          {/* Courses Tags */}
+          <div className="mt-6 flex flex-col">
+            <span className="mb-2 text-xs text-gray-500">Interested Courses</span>
+            <div className="flex flex-wrap gap-2">
+              {fineEnquiryById?.enquiryCourse?.length ? (
+                fineEnquiryById.enquiryCourse.map((cr: any, index: number) => (
+                  <span
+                    key={index}
+                    className="rounded-md bg-gray-100 px-3 py-1 text-xs font-medium capitalize text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                  >
+                    {cr.course?.name}
+                  </span>
+                ))
+              ) : (
+                <span className="text-sm text-gray-500">—</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* =========================================
+            2. VERTICAL TIMELINE (CLEANED UP)
+        ========================================= */}
+        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-gray-800">
+          <h4 className="mb-8 text-base font-semibold text-gray-900 dark:text-white">
+            Follow-Up Timeline
           </h4>
 
-          <div className="relative mx-auto max-w-4xl">
-            {/* Vertical Timeline Line */}
-            <div className="absolute left-4 top-0 h-full w-px bg-gradient-to-b from-gray-200 via-gray-200 to-transparent dark:from-gray-700 dark:via-gray-700" />
-
-            {/* ===== BASIC DETAILS ===== */}
-            <div className="relative mb-14 flex gap-8">
-              {/* Step Indicator */}
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
-                1
-              </div>
-
-              {/* Card */}
-              <div className="w-full rounded-3xl bg-gray-50/80 p-7 ring-1 ring-gray-200/60 dark:bg-gray-900/40 dark:ring-gray-700/60">
-                <h5 className="mb-6 text-base font-semibold text-gray-900 dark:text-white">
-                  Basic Details
-                </h5>
-
-                <div className="grid grid-cols-1 gap-x-10 gap-y-4 text-sm sm:grid-cols-2">
-                  {[
-                    ["Enquiry ID", fineEnquiryById?.srNo],
-                    ["Name", fineEnquiryById?.name],
-                    ["Email", fineEnquiryById?.email || "-"],
-                    ["DOB", fineEnquiryById?.dob?.split("T")[0] || "-"],
-                    ["Contact", ` ${fineEnquiryById?.contact}`],
-                    ["Alternate", ` ${fineEnquiryById?.alternateContact || "-"}`],
-                    ["Gender", fineEnquiryById?.gender || "-"],
-                    ["Location", fineEnquiryById?.location || "-"],
-                    ["Source", fineEnquiryById?.source || "-"],
-                    ["Referred By", fineEnquiryById?.referedBy || "-"],
-                  ].map(([label, value], idx) => (
-                    <div key={idx} className="flex flex-col">
-                      <span className="text-xs font-medium tracking-wide text-gray-500">
-                        {label}
-                      </span>
-                      <span className="mt-0.5 font-medium text-gray-900 dark:text-gray-100">
-                        {value}
-                      </span>
-                    </div>
-                  ))}
-
-                  {/* Follow-up Status */}
-                  <div className="flex flex-col">
-                    <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                      Follow-Up Status
-                    </span>
-                    <span
-                      className={`mt-1 inline-flex w-fit rounded-full px-3 py-1 text-xs font-medium ${fineEnquiryById?.leadStatus === "WON"
-                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                        : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                        }`}
-                    >
-                      {fineEnquiryById?.leadStatus === "WON" ? "Completed" : "Pending"}
-                    </span>
-                  </div>
-
-                  {/* Conversion Status */}
-                  <div className="flex flex-col">
-                    <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                      Conversion Status
-                    </span>
-                    <span
-                      className={`mt-1 inline-flex w-fit rounded-full px-3 py-1 text-xs font-medium ${fineEnquiryById?.isConverted
-                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                        : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400"
-                        }`}
-                    >
-                      {fineEnquiryById?.isConverted ? "Done" : "Nil"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* ===== COURSE DETAILS ===== */}
-            <div className="relative flex gap-8">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
-                2
-              </div>
-
-              <div className="w-full rounded-3xl bg-gray-50/80 p-7 ring-1 ring-gray-200/60 dark:bg-gray-900/40 dark:ring-gray-700/60">
-                <h5 className="mb-5 text-base font-semibold text-gray-900 dark:text-white">
-                  Courses Interested
-                </h5>
-
-                <div className="flex flex-wrap gap-2">
-                  {fineEnquiryById?.enquiryCourse?.length ? (
-                    fineEnquiryById.enquiryCourse.map((cr: any, index: number) => (
-                      <span
-                        key={index}
-                        className="rounded-full bg-gray-900 px-4 py-1.5 text-xs font-medium text-white dark:bg-white dark:text-gray-900 capitalize"
-                      >
-                        {cr.course?.name}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="text-sm text-gray-500">—</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ===== FOLLOW-UP & ASSIGNMENT ===== */}
-        {/* <div className="relative mb-10 flex gap-6">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white font-semibold">
-                3
-              </div>
-
-              <div className="w-full rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
-                <h5 className="mb-4 font-semibold text-gray-800 dark:text-white">
-                  Follow-up & Assignment
-                </h5>
-
-                <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
-                  <p><span className="text-gray-500">Assigned To:</span> {fineEnquiryById?.assignedTo?.name || "-"}</p>
-                  <p><span className="text-gray-500">Follow-up Date:</span> {fineEnquiryById?.followUpDate
-                    ? new Date(fineEnquiryById.followUpDate).toLocaleDateString()
-                    : "-"}</p>
-                  <p><span className="text-gray-500">Created At:</span> {new Date(fineEnquiryById?.createdAt).toLocaleString()}</p>
-                  <p><span className="text-gray-500">Last Updated:</span> {new Date(fineEnquiryById?.updatedAt).toLocaleString()}</p>
-                </div>
-              </div>
-            </div> */}
-
-        {/* ===== REMARKS ===== */}
-        {/* <div className="relative flex gap-6">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white font-semibold">
-                4
-              </div>
-
-              <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
-                <h5 className="mb-4 font-semibold text-gray-800 dark:text-white">
-                  Remarks / Notes
-                </h5>
-
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  {fineEnquiryById?.remarks || "No remarks added."}
-                </p>
-              </div>
-            </div> */}
-        {/* </div>
-        </div> */}
-
-
-        {/* <path
-  fillRule="evenodd"
-  d="M10 18a8 8 0 100-16 8 8 0 000 16zm2.53-10.47a.75.75 0 00-1.06-1.06L10 8.94 8.53 7.47a.75.75 0 00-1.06 1.06L8.94 10l-1.47 1.47a.75.75 0 101.06 1.06L10 11.06l1.47 1.47a.75.75 0 101.06-1.06L11.06 10l1.47-1.47z"
-  clipRule="evenodd"
-/> */}
-
-        <div className="h-max rounded-2xl border border-gray-200 bg-white px-5 py-7 xl:px-10 xl:py-12 dark:border-gray-800 dark:bg-white/[0.03]">
-          <div className="mx-auto w-full max-w-[630px] text-center">
-            <h4 className="text-lg font-semibold text-gray-800 lg:mb-6 dark:text-white/90">
-              Follow-Up Timeline
-            </h4>
-            <ul className="timeline timeline-vertical w-full sm:ml-[-160px] lg:ml-[-150px]">
-              <li>
-                <div className="timeline-middle">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
-                  >
-                    {showPendingFollowUpIcon(firstItem.followUpStatus) && (
-                      // ⏳ Pending Icon (Inverted i)
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-9.75a.75.75 0 01.75.75v4.25a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0-2.25a1 1 0 100 2 1 1 0 000-2z"
-                        clipRule="evenodd"
-                      />
+          {/* Custom Standard Tailwind Timeline */}
+          <div className="relative ml-4 border-l-2 border-gray-100 dark:border-gray-800">
+            {followups.map((item: any, index: number) => (
+              <div key={item.id || index} className="relative mb-8 last:mb-0 ml-8">
+                
+                {/* Timeline Icon / Dot */}
+                <span className="absolute -left-[49px] top-1 flex h-8 w-8 items-center justify-center rounded-full bg-white ring-4 ring-white dark:bg-gray-900 dark:ring-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="h-4 w-4 fill-gray-600 dark:fill-gray-300">
+                    {showPendingFollowUpIcon(item.followUpStatus) && (
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-9.75a.75.75 0 01.75.75v4.25a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0-2.25a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd"/>
                     )}
-
-                    {showCompletedFollowUpIcon(firstItem.followUpStatus) && (
-                      // ✅ Complete Icon (Checkmark)
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                        clipRule="evenodd"
-                      />
+                    {showCompletedFollowUpIcon(item.followUpStatus) && (
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd"/>
                     )}
-
-                    {showMissedFollowUpIcon(firstItem.followUpStatus) && (
-                      // ❌ Missed Icon (X inside circle)
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm2.53-10.47a.75.75 0 00-1.06-1.06L10 8.94 8.53 7.47a.75.75 0 00-1.06 1.06L8.94 10l-1.47 1.47a.75.75 0 101.06 1.06L10 11.06l1.47 1.47a.75.75 0 101.06-1.06L11.06 10l1.47-1.47z"
-                        clipRule="evenodd"
-                      />
+                    {showMissedFollowUpIcon(item.followUpStatus) && (
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm2.53-10.47a.75.75 0 00-1.06-1.06L10 8.94 8.53 7.47a.75.75 0 00-1.06 1.06L8.94 10l-1.47 1.47a.75.75 0 101.06 1.06L10 11.06l1.47 1.47a.75.75 0 101.06-1.06L11.06 10l1.47-1.47z" clipRule="evenodd"/>
                     )}
                   </svg>
-                </div>
-                {/* <div className="timeline-end timeline-box">First Macintosh computer</div> */}
-                <div className="timeline-end w-[400px] max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
-                  {/* Header */}
-                  <div className="mb-2 flex w-full items-center justify-between gap-4">
-                    <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
-                      {firstItem.remark}
-                    </h4>
+                </span>
 
-                    {canEditFollowUp(fineEnquiryById?.leadStatus) && <button
-                      onClick={() => handleEditFollowUpForFollowUp(firstItem.id)}
-                      className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
-                      aria-label="Edit follow-up"
-                    >
-                      <PencilIcon className="h-5 w-5" />
-                    </button>}
-                  </div>
-
-                  {/* Status */}
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                      Status
-                    </span>
-                    <span className="text-xs text-gray-600 dark:text-gray-400">:</span>
-
-                    <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${firstItem.followUpStatus.toLowerCase() === "pending"
-                        ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                        : firstItem.followUpStatus.toLowerCase() === "completed"
-                          ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                          : firstItem.followUpStatus.toLowerCase() === "missed"
-                            ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
-                            : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                        }`}
-                    >
-                      {firstItem.followUpStatus}
-                    </span>
-                  </div>
-
-                  {/* Meta Info */}
-                  <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-500">Scheduled</span>
-                      <span>:</span>
-                      <span>
-                        {formatDate(firstItem.scheduledAt) || "—"}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-500">Completed</span>
-                      <span>:</span>
-                      <span>{formatDate(firstItem.doneAt) || "—"}</span>
-                    </div>
-                  </div>
-                </div>
-                <hr className="dark:bg-gray-400" />
-              </li>
-
-              {middleItems.map((item: any, index: number) => {
-                return (
-                  <li key={item.id || index}>
-                    <hr className="dark:bg-gray-400" />
-                    <div className="timeline-middle">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
-                      >
-                        {showPendingFollowUpIcon(item.followUpStatus) && (
-                          // ⏳ Pending Icon (Inverted i)
-                          <path
-                            fillRule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-9.75a.75.75 0 01.75.75v4.25a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0-2.25a1 1 0 100 2 1 1 0 000-2z"
-                            clipRule="evenodd"
-                          />
-                        )}
-
-                        {showCompletedFollowUpIcon(item.followUpStatus) && (
-                          // ✅ Complete Icon (Checkmark)
-                          <path
-                            fillRule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                            clipRule="evenodd"
-                          />
-                        )}
-
-                        {showMissedFollowUpIcon(item.followUpStatus) && (
-                          // ❌ Missed Icon (X inside circle)
-                          <path
-                            fillRule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm2.53-10.47a.75.75 0 00-1.06-1.06L10 8.94 8.53 7.47a.75.75 0 00-1.06 1.06L8.94 10l-1.47 1.47a.75.75 0 101.06 1.06L10 11.06l1.47 1.47a.75.75 0 101.06-1.06L11.06 10l1.47-1.47z"
-                            clipRule="evenodd"
-                          />
-                        )}
-                      </svg>
-                    </div>
-                    <div className="timeline-end w-[400px] max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
-                      {/* Header */}
-                      <div className="mb-2 flex w-full items-center justify-between gap-4">
-                        <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
-                          {item.remark}
-                        </h4>
-
-                        {canEditFollowUp(fineEnquiryById?.leadStatus) &&
-                          <button
-                            onClick={() => handleEditFollowUpForFollowUp(item.id)}
-                            className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
-                            aria-label="Edit follow-up"
-                          >
-                            <PencilIcon className="h-5 w-5" />
-                          </button>
-                        }
-                      </div>
-
-                      {/* Status */}
-                      <div className="mb-2 flex items-center gap-2">
-                        <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                          Status
-                        </span>
-                        <span className="text-xs text-gray-600 dark:text-gray-400">:</span>
-
-                        <span
-                          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${item.followUpStatus.toLowerCase() === "pending"
-                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                            : item.followUpStatus.toLowerCase() === "completed"
-                              ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                              : item.followUpStatus.toLowerCase() === "missed"
-                                ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
-                                : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                            }`}
-                        >
+                {/* Timeline Card */}
+                <div className="group rounded-xl border border-gray-100 bg-gray-50/50 p-5 transition-all hover:bg-gray-50 hover:shadow-md dark:border-gray-800 dark:bg-gray-800/20 dark:hover:bg-gray-800/40">
+                  <div className="flex items-start justify-between gap-4">
+                    
+                    <div className="flex-1">
+                      <div className="mb-1 flex items-center gap-3">
+                        <span className={`inline-flex items-center rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${getStatusColor(item.followUpStatus)}`}>
                           {item.followUpStatus}
                         </span>
+                        {item.followUpStatus !== "COMPLETED" && (
+                          <span className="text-xs text-gray-500">
+                            Scheduled: <span className="font-medium text-gray-900 dark:text-gray-300">{formatDate(item.scheduledAt) || "—"}</span>
+                          </span>
+                        )}
                       </div>
-
-                      {/* Meta Info */}
-                      <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-gray-500">Scheduled</span>
-                          <span>:</span>
-                          <span>{formatDate(item.scheduledAt) || "—"}</span>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-gray-500">Completed</span>
-                          <span>:</span>
-                          <span>{formatDate(item.doneAt) || "—"}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <hr className="dark:bg-gray-400" />
-                  </li>
-                );
-              })}
-
-              {followups.length > 1 && (
-                <li>
-                  <hr className="dark:bg-gray-400" />
-                  <div className="timeline-middle">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      className="h-5 w-5 fill-gray-700 dark:fill-gray-50"
-                    >
-                      {showPendingFollowUpIcon(lastItem.followUpStatus) && (
-                        // ⏳ Pending Icon (Inverted i)
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-9.75a.75.75 0 01.75.75v4.25a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0-2.25a1 1 0 100 2 1 1 0 000-2z"
-                          clipRule="evenodd"
-                        />
-                      )}
-
-                      {showCompletedFollowUpIcon(lastItem.followUpStatus) && (
-                        // ✅ Complete Icon (Checkmark)
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                          clipRule="evenodd"
-                        />
-                      )}
-
-                      {showMissedFollowUpIcon(lastItem.followUpStatus) && (
-                        // ❌ Missed Icon (X inside circle)
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm2.53-10.47a.75.75 0 00-1.06-1.06L10 8.94 8.53 7.47a.75.75 0 00-1.06 1.06L8.94 10l-1.47 1.47a.75.75 0 101.06 1.06L10 11.06l1.47 1.47a.75.75 0 101.06-1.06L11.06 10l1.47-1.47z"
-                          clipRule="evenodd"
-                        />
-                      )}
-                    </svg>
-                  </div>
-                  <div className="timeline-end sm:w-full md:w-[400px] max-w-none rounded-3xl bg-white/90 p-6 ring-1 ring-gray-200/60 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-900/40 dark:ring-gray-700/60">
-                    {/* Header */}
-                    <div className="mb-2 flex w-full items-center justify-between gap-4">
-                      <h4 className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white capitalize">
-                        {lastItem.remark}
+                      <h4 className="text-sm font-semibold text-gray-900 dark:text-white capitalize mt-2">
+                        {item.remark}
                       </h4>
-
-                      {canEditFollowUp(fineEnquiryById?.leadStatus) &&
-                        <button
-                          onClick={() => handleEditFollowUpForFollowUp(lastItem.id)}
-                          className="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
-                          aria-label="Edit follow-up"
-                        >
-                          <PencilIcon className="h-5 w-5" />
-                        </button>
-                      }
-                    </div>
-
-                    {/* Status */}
-                    <div className="mb-2 flex items-center gap-2">
-                      <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                        Status
-                      </span>
-                      <span className="text-xs text-gray-600 dark:text-gray-400">:</span>
-
-                      <span
-                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${lastItem.followUpStatus.toLowerCase() === "pending"
-                          ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                          : lastItem.followUpStatus.toLowerCase() === "completed"
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                            : lastItem.followUpStatus.toLowerCase() === "missed"
-                              ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
-                              : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                          }`}
-                      >
-                        {lastItem.followUpStatus}
-                      </span>
-                    </div>
-
-                    {/* Meta Info */}
-                    <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
-                      {lastItem.followUpStatus !== "COMPLETED" && (
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-gray-500">Scheduled</span>
-                          <span>:</span>
-                          <span>{formatDate(lastItem.scheduledAt) || "—"}</span>
-                        </div>
+                      {item.followUpStatus === "COMPLETED" && (
+                         <span className="mt-2 block text-xs text-gray-500">
+                          Completed on: <span className="font-medium text-gray-900 dark:text-gray-300">{formatDate(item.doneAt) || "—"}</span>
+                         </span>
                       )}
-
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-500">Completed</span>
-                        <span>:</span>
-                        <span>{formatDate(lastItem.doneAt) || "—"}</span>
-                      </div>
                     </div>
-                  </div>
-                </li>
-              )}
-              {/* 🎯 Render buttons only if follow-up is NOT completed */}
-              {/* {lastItem.followUpStatus !== "COMPLETED" && (
-                <div className="mt-6 flex justify-end gap-4">
-                  <button
-                    className="rounded border border-gray-300 bg-white px-4 py-2 text-sm text-black transition hover:bg-gray-100"
-                    onClick={() => handleCreateFollowUpForFollowUp(lastItem.id)} // just call the prop here
-                  >
-                    Create Next Follow-Up
-                  </button>
-                </div>
-              )} */}
-              {/* 🎯 Render button only if follow-up is NOT completed AND enquiry is NOT LOST */}
-              {lastItem.followUpStatus !== "COMPLETED" &&
-                fineEnquiryById?.leadStatus !== "LOST" && (
-                  <div className="mt-6 flex justify-end gap-4 md:mr-[-100px]">
-                    <button
-                      className="rounded border border-gray-300 bg-white px-4 py-2 text-sm text-black transition hover:bg-gray-100"
-                      onClick={() => handleCreateFollowUpForFollowUp(lastItem.id)}
-                    >
-                      Create Next Follow-Up
-                    </button>
-                  </div>
-                )}
-            </ul>
-          </div>
-        </div>
-        {showCreateNextModal &&
-          selectedFollowUpId !== null &&
-          selectedEnquiryId !== null && (
-            <CreateFollowUpModal
-              enquiryId={selectedEnquiryId}
-              followUpId={selectedFollowUpId}
-              title="Create Next Follow-Up"
-              onClose={() => setShowCreateNextModal(false)} // only closes child
-              onSuccess={async () => {
-                refetchFollowup(); // wait for new follow-ups
-                console.log("Updated follow-ups after refetch:", followupDetails);
-              }}
-            />
-          )}
 
-        {showEditNextModal &&
-          selectedFollowUpId !== null &&
-          selectedEnquiryId !== null && (
-            <EditFollowUpModal
-              enquiryId={selectedEnquiryId}
-              followUpId={selectedFollowUpId}
-              title="Edit Follow-Up"
-              onClose={() => setShowEditNextModal(false)} // only closes child
-              onSuccess={async () => {
-                refetchFollowup(); // wait for new follow-ups
-                console.log("Updated follow-ups after refetch:", followupDetails);
-              }}
-            />
+                    {/* Edit Button */}
+                    {canEditFollowUp(fineEnquiryById?.leadStatus) && (
+                      <button
+                        onClick={() => handleEditFollowUpForFollowUp(item.id)}
+                        className="rounded-md p-2 text-gray-400 opacity-0 transition-all hover:bg-white hover:text-blue-600 hover:shadow-sm group-hover:opacity-100 dark:hover:bg-gray-700"
+                        title="Edit Follow-up"
+                      >
+                        <PencilIcon className="h-5 w-5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Create Next Follow-Up Action Area */}
+          {lastItem.followUpStatus !== "COMPLETED" && fineEnquiryById?.leadStatus !== "LOST" && (
+            <div className="mt-8 flex justify-end border-t border-gray-100 pt-6 dark:border-gray-800">
+              <button
+                className="inline-flex items-center justify-center rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 shadow-sm"
+                onClick={() => handleCreateFollowUpForFollowUp(lastItem.id)}
+              >
+                + Create Next Follow-Up
+              </button>
+            </div>
           )}
+        </div>
+
+        {/* =========================================
+            3. MODALS
+        ========================================= */}
+        {showCreateNextModal && selectedFollowUpId !== null && selectedEnquiryId !== null && (
+          <CreateFollowUpModal
+            enquiryId={selectedEnquiryId}
+            followUpId={selectedFollowUpId}
+            title="Create Next Follow-Up"
+            onClose={() => setShowCreateNextModal(false)}
+            onSuccess={async () => {
+              refetchFollowup();
+            }}
+          />
+        )}
+
+        {showEditNextModal && selectedFollowUpId !== null && selectedEnquiryId !== null && (
+          <EditFollowUpModal
+            enquiryId={selectedEnquiryId}
+            followUpId={selectedFollowUpId}
+            title="Edit Follow-Up"
+            onClose={() => setShowEditNextModal(false)}
+            onSuccess={async () => {
+              refetchFollowup();
+            }}
+          />
+        )}
       </div>
     </ModalCard>
   );

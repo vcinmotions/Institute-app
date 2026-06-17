@@ -39,6 +39,11 @@ export type ActivityLog = $Result.DefaultSelection<Prisma.$ActivityLogPayload>
  */
 export type Enquiry = $Result.DefaultSelection<Prisma.$EnquiryPayload>
 /**
+ * Model SourceType
+ * 
+ */
+export type SourceType = $Result.DefaultSelection<Prisma.$SourceTypePayload>
+/**
  * Model EnquiryCourse
  * 
  */
@@ -482,6 +487,16 @@ export class PrismaClient<
     * ```
     */
   get enquiry(): Prisma.EnquiryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sourceType`: Exposes CRUD operations for the **SourceType** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SourceTypes
+    * const sourceTypes = await prisma.sourceType.findMany()
+    * ```
+    */
+  get sourceType(): Prisma.SourceTypeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.enquiryCourse`: Exposes CRUD operations for the **EnquiryCourse** model.
@@ -1227,6 +1242,7 @@ export namespace Prisma {
     RoleUser: 'RoleUser',
     ActivityLog: 'ActivityLog',
     Enquiry: 'Enquiry',
+    SourceType: 'SourceType',
     EnquiryCourse: 'EnquiryCourse',
     FollowUp: 'FollowUp',
     Notification: 'Notification',
@@ -1275,7 +1291,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "clientAdmin" | "financialYear" | "roleUser" | "activityLog" | "enquiry" | "enquiryCourse" | "followUp" | "notification" | "admissionNumberConfig" | "paymentReceiptConfig" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
+      modelProps: "clientAdmin" | "financialYear" | "roleUser" | "activityLog" | "enquiry" | "sourceType" | "enquiryCourse" | "followUp" | "notification" | "admissionNumberConfig" | "paymentReceiptConfig" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1646,6 +1662,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EnquiryCountArgs<ExtArgs>
             result: $Utils.Optional<EnquiryCountAggregateOutputType> | number
+          }
+        }
+      }
+      SourceType: {
+        payload: Prisma.$SourceTypePayload<ExtArgs>
+        fields: Prisma.SourceTypeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SourceTypeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SourceTypeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>
+          }
+          findFirst: {
+            args: Prisma.SourceTypeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SourceTypeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>
+          }
+          findMany: {
+            args: Prisma.SourceTypeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>[]
+          }
+          create: {
+            args: Prisma.SourceTypeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>
+          }
+          createMany: {
+            args: Prisma.SourceTypeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SourceTypeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>[]
+          }
+          delete: {
+            args: Prisma.SourceTypeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>
+          }
+          update: {
+            args: Prisma.SourceTypeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>
+          }
+          deleteMany: {
+            args: Prisma.SourceTypeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SourceTypeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SourceTypeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>[]
+          }
+          upsert: {
+            args: Prisma.SourceTypeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SourceTypePayload>
+          }
+          aggregate: {
+            args: Prisma.SourceTypeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSourceType>
+          }
+          groupBy: {
+            args: Prisma.SourceTypeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SourceTypeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SourceTypeCountArgs<ExtArgs>
+            result: $Utils.Optional<SourceTypeCountAggregateOutputType> | number
           }
         }
       }
@@ -3970,6 +4060,7 @@ export namespace Prisma {
     roleUser?: RoleUserOmit
     activityLog?: ActivityLogOmit
     enquiry?: EnquiryOmit
+    sourceType?: SourceTypeOmit
     enquiryCourse?: EnquiryCourseOmit
     followUp?: FollowUpOmit
     notification?: NotificationOmit
@@ -4377,6 +4468,37 @@ export namespace Prisma {
    */
   export type EnquiryCountOutputTypeCountFollowUpsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FollowUpWhereInput
+  }
+
+
+  /**
+   * Count Type SourceTypeCountOutputType
+   */
+
+  export type SourceTypeCountOutputType = {
+    enquiries: number
+  }
+
+  export type SourceTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enquiries?: boolean | SourceTypeCountOutputTypeCountEnquiriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SourceTypeCountOutputType without action
+   */
+  export type SourceTypeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceTypeCountOutputType
+     */
+    select?: SourceTypeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SourceTypeCountOutputType without action
+   */
+  export type SourceTypeCountOutputTypeCountEnquiriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EnquiryWhereInput
   }
 
 
@@ -10408,12 +10530,14 @@ export namespace Prisma {
   export type EnquiryAvgAggregateOutputType = {
     srNo: number | null
     age: number | null
+    sourceId: number | null
     studentId: number | null
   }
 
   export type EnquirySumAggregateOutputType = {
     srNo: number | null
     age: number | null
+    sourceId: number | null
     studentId: number | null
   }
 
@@ -10430,7 +10554,7 @@ export namespace Prisma {
     course: string | null
     gender: string | null
     dob: Date | null
-    source: string | null
+    sourceId: number | null
     referedBy: string | null
     takenBy: string | null
     leadStatus: $Enums.LeadStatus | null
@@ -10455,7 +10579,7 @@ export namespace Prisma {
     course: string | null
     gender: string | null
     dob: Date | null
-    source: string | null
+    sourceId: number | null
     referedBy: string | null
     takenBy: string | null
     leadStatus: $Enums.LeadStatus | null
@@ -10480,7 +10604,7 @@ export namespace Prisma {
     course: number
     gender: number
     dob: number
-    source: number
+    sourceId: number
     referedBy: number
     takenBy: number
     leadStatus: number
@@ -10497,12 +10621,14 @@ export namespace Prisma {
   export type EnquiryAvgAggregateInputType = {
     srNo?: true
     age?: true
+    sourceId?: true
     studentId?: true
   }
 
   export type EnquirySumAggregateInputType = {
     srNo?: true
     age?: true
+    sourceId?: true
     studentId?: true
   }
 
@@ -10519,7 +10645,7 @@ export namespace Prisma {
     course?: true
     gender?: true
     dob?: true
-    source?: true
+    sourceId?: true
     referedBy?: true
     takenBy?: true
     leadStatus?: true
@@ -10544,7 +10670,7 @@ export namespace Prisma {
     course?: true
     gender?: true
     dob?: true
-    source?: true
+    sourceId?: true
     referedBy?: true
     takenBy?: true
     leadStatus?: true
@@ -10569,7 +10695,7 @@ export namespace Prisma {
     course?: true
     gender?: true
     dob?: true
-    source?: true
+    sourceId?: true
     referedBy?: true
     takenBy?: true
     leadStatus?: true
@@ -10681,7 +10807,7 @@ export namespace Prisma {
     course: string | null
     gender: string | null
     dob: Date | null
-    source: string | null
+    sourceId: number | null
     referedBy: string | null
     takenBy: string | null
     leadStatus: $Enums.LeadStatus
@@ -10725,7 +10851,7 @@ export namespace Prisma {
     course?: boolean
     gender?: boolean
     dob?: boolean
-    source?: boolean
+    sourceId?: boolean
     referedBy?: boolean
     takenBy?: boolean
     leadStatus?: boolean
@@ -10735,6 +10861,7 @@ export namespace Prisma {
     isConverted?: boolean
     studentId?: boolean
     clientAdminId?: boolean
+    source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
     enquiryCourse?: boolean | Enquiry$enquiryCourseArgs<ExtArgs>
@@ -10756,7 +10883,7 @@ export namespace Prisma {
     course?: boolean
     gender?: boolean
     dob?: boolean
-    source?: boolean
+    sourceId?: boolean
     referedBy?: boolean
     takenBy?: boolean
     leadStatus?: boolean
@@ -10766,6 +10893,7 @@ export namespace Prisma {
     isConverted?: boolean
     studentId?: boolean
     clientAdminId?: boolean
+    source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
   }, ExtArgs["result"]["enquiry"]>
@@ -10783,7 +10911,7 @@ export namespace Prisma {
     course?: boolean
     gender?: boolean
     dob?: boolean
-    source?: boolean
+    sourceId?: boolean
     referedBy?: boolean
     takenBy?: boolean
     leadStatus?: boolean
@@ -10793,6 +10921,7 @@ export namespace Prisma {
     isConverted?: boolean
     studentId?: boolean
     clientAdminId?: boolean
+    source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
   }, ExtArgs["result"]["enquiry"]>
@@ -10810,7 +10939,7 @@ export namespace Prisma {
     course?: boolean
     gender?: boolean
     dob?: boolean
-    source?: boolean
+    sourceId?: boolean
     referedBy?: boolean
     takenBy?: boolean
     leadStatus?: boolean
@@ -10822,8 +10951,9 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "city" | "course" | "gender" | "dob" | "source" | "referedBy" | "takenBy" | "leadStatus" | "enquiryDate" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
+  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "city" | "course" | "gender" | "dob" | "sourceId" | "referedBy" | "takenBy" | "leadStatus" | "enquiryDate" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
   export type EnquiryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
     enquiryCourse?: boolean | Enquiry$enquiryCourseArgs<ExtArgs>
@@ -10832,10 +10962,12 @@ export namespace Prisma {
     _count?: boolean | EnquiryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EnquiryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
   }
   export type EnquiryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
   }
@@ -10843,6 +10975,7 @@ export namespace Prisma {
   export type $EnquiryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Enquiry"
     objects: {
+      source: Prisma.$SourceTypePayload<ExtArgs> | null
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
       student: Prisma.$StudentPayload<ExtArgs> | null
       enquiryCourse: Prisma.$EnquiryCoursePayload<ExtArgs>[]
@@ -10862,7 +10995,7 @@ export namespace Prisma {
       course: string | null
       gender: string | null
       dob: Date | null
-      source: string | null
+      sourceId: number | null
       referedBy: string | null
       takenBy: string | null
       leadStatus: $Enums.LeadStatus
@@ -11266,6 +11399,7 @@ export namespace Prisma {
    */
   export interface Prisma__EnquiryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    source<T extends Enquiry$sourceArgs<ExtArgs> = {}>(args?: Subset<T, Enquiry$sourceArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     student<T extends Enquiry$studentArgs<ExtArgs> = {}>(args?: Subset<T, Enquiry$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     enquiryCourse<T extends Enquiry$enquiryCourseArgs<ExtArgs> = {}>(args?: Subset<T, Enquiry$enquiryCourseArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnquiryCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -11312,7 +11446,7 @@ export namespace Prisma {
     readonly course: FieldRef<"Enquiry", 'String'>
     readonly gender: FieldRef<"Enquiry", 'String'>
     readonly dob: FieldRef<"Enquiry", 'DateTime'>
-    readonly source: FieldRef<"Enquiry", 'String'>
+    readonly sourceId: FieldRef<"Enquiry", 'Int'>
     readonly referedBy: FieldRef<"Enquiry", 'String'>
     readonly takenBy: FieldRef<"Enquiry", 'String'>
     readonly leadStatus: FieldRef<"Enquiry", 'LeadStatus'>
@@ -11718,6 +11852,25 @@ export namespace Prisma {
   }
 
   /**
+   * Enquiry.source
+   */
+  export type Enquiry$sourceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    where?: SourceTypeWhereInput
+  }
+
+  /**
    * Enquiry.student
    */
   export type Enquiry$studentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11819,6 +11972,1097 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EnquiryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SourceType
+   */
+
+  export type AggregateSourceType = {
+    _count: SourceTypeCountAggregateOutputType | null
+    _avg: SourceTypeAvgAggregateOutputType | null
+    _sum: SourceTypeSumAggregateOutputType | null
+    _min: SourceTypeMinAggregateOutputType | null
+    _max: SourceTypeMaxAggregateOutputType | null
+  }
+
+  export type SourceTypeAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type SourceTypeSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type SourceTypeMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    slug: string | null
+    createdAt: Date | null
+  }
+
+  export type SourceTypeMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    slug: string | null
+    createdAt: Date | null
+  }
+
+  export type SourceTypeCountAggregateOutputType = {
+    id: number
+    name: number
+    slug: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SourceTypeAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type SourceTypeSumAggregateInputType = {
+    id?: true
+  }
+
+  export type SourceTypeMinAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    createdAt?: true
+  }
+
+  export type SourceTypeMaxAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    createdAt?: true
+  }
+
+  export type SourceTypeCountAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SourceTypeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SourceType to aggregate.
+     */
+    where?: SourceTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SourceTypes to fetch.
+     */
+    orderBy?: SourceTypeOrderByWithRelationInput | SourceTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SourceTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SourceTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SourceTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SourceTypes
+    **/
+    _count?: true | SourceTypeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SourceTypeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SourceTypeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SourceTypeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SourceTypeMaxAggregateInputType
+  }
+
+  export type GetSourceTypeAggregateType<T extends SourceTypeAggregateArgs> = {
+        [P in keyof T & keyof AggregateSourceType]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSourceType[P]>
+      : GetScalarType<T[P], AggregateSourceType[P]>
+  }
+
+
+
+
+  export type SourceTypeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SourceTypeWhereInput
+    orderBy?: SourceTypeOrderByWithAggregationInput | SourceTypeOrderByWithAggregationInput[]
+    by: SourceTypeScalarFieldEnum[] | SourceTypeScalarFieldEnum
+    having?: SourceTypeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SourceTypeCountAggregateInputType | true
+    _avg?: SourceTypeAvgAggregateInputType
+    _sum?: SourceTypeSumAggregateInputType
+    _min?: SourceTypeMinAggregateInputType
+    _max?: SourceTypeMaxAggregateInputType
+  }
+
+  export type SourceTypeGroupByOutputType = {
+    id: number
+    name: string
+    slug: string
+    createdAt: Date
+    _count: SourceTypeCountAggregateOutputType | null
+    _avg: SourceTypeAvgAggregateOutputType | null
+    _sum: SourceTypeSumAggregateOutputType | null
+    _min: SourceTypeMinAggregateOutputType | null
+    _max: SourceTypeMaxAggregateOutputType | null
+  }
+
+  type GetSourceTypeGroupByPayload<T extends SourceTypeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SourceTypeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SourceTypeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SourceTypeGroupByOutputType[P]>
+            : GetScalarType<T[P], SourceTypeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SourceTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    createdAt?: boolean
+    enquiries?: boolean | SourceType$enquiriesArgs<ExtArgs>
+    _count?: boolean | SourceTypeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sourceType"]>
+
+  export type SourceTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["sourceType"]>
+
+  export type SourceTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["sourceType"]>
+
+  export type SourceTypeSelectScalar = {
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    createdAt?: boolean
+  }
+
+  export type SourceTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "createdAt", ExtArgs["result"]["sourceType"]>
+  export type SourceTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enquiries?: boolean | SourceType$enquiriesArgs<ExtArgs>
+    _count?: boolean | SourceTypeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SourceTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type SourceTypeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $SourceTypePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SourceType"
+    objects: {
+      enquiries: Prisma.$EnquiryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      slug: string
+      createdAt: Date
+    }, ExtArgs["result"]["sourceType"]>
+    composites: {}
+  }
+
+  type SourceTypeGetPayload<S extends boolean | null | undefined | SourceTypeDefaultArgs> = $Result.GetResult<Prisma.$SourceTypePayload, S>
+
+  type SourceTypeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SourceTypeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SourceTypeCountAggregateInputType | true
+    }
+
+  export interface SourceTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SourceType'], meta: { name: 'SourceType' } }
+    /**
+     * Find zero or one SourceType that matches the filter.
+     * @param {SourceTypeFindUniqueArgs} args - Arguments to find a SourceType
+     * @example
+     * // Get one SourceType
+     * const sourceType = await prisma.sourceType.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SourceTypeFindUniqueArgs>(args: SelectSubset<T, SourceTypeFindUniqueArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SourceType that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SourceTypeFindUniqueOrThrowArgs} args - Arguments to find a SourceType
+     * @example
+     * // Get one SourceType
+     * const sourceType = await prisma.sourceType.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SourceTypeFindUniqueOrThrowArgs>(args: SelectSubset<T, SourceTypeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SourceType that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SourceTypeFindFirstArgs} args - Arguments to find a SourceType
+     * @example
+     * // Get one SourceType
+     * const sourceType = await prisma.sourceType.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SourceTypeFindFirstArgs>(args?: SelectSubset<T, SourceTypeFindFirstArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SourceType that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SourceTypeFindFirstOrThrowArgs} args - Arguments to find a SourceType
+     * @example
+     * // Get one SourceType
+     * const sourceType = await prisma.sourceType.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SourceTypeFindFirstOrThrowArgs>(args?: SelectSubset<T, SourceTypeFindFirstOrThrowArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SourceTypes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SourceTypeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SourceTypes
+     * const sourceTypes = await prisma.sourceType.findMany()
+     * 
+     * // Get first 10 SourceTypes
+     * const sourceTypes = await prisma.sourceType.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sourceTypeWithIdOnly = await prisma.sourceType.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SourceTypeFindManyArgs>(args?: SelectSubset<T, SourceTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SourceType.
+     * @param {SourceTypeCreateArgs} args - Arguments to create a SourceType.
+     * @example
+     * // Create one SourceType
+     * const SourceType = await prisma.sourceType.create({
+     *   data: {
+     *     // ... data to create a SourceType
+     *   }
+     * })
+     * 
+     */
+    create<T extends SourceTypeCreateArgs>(args: SelectSubset<T, SourceTypeCreateArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SourceTypes.
+     * @param {SourceTypeCreateManyArgs} args - Arguments to create many SourceTypes.
+     * @example
+     * // Create many SourceTypes
+     * const sourceType = await prisma.sourceType.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SourceTypeCreateManyArgs>(args?: SelectSubset<T, SourceTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SourceTypes and returns the data saved in the database.
+     * @param {SourceTypeCreateManyAndReturnArgs} args - Arguments to create many SourceTypes.
+     * @example
+     * // Create many SourceTypes
+     * const sourceType = await prisma.sourceType.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SourceTypes and only return the `id`
+     * const sourceTypeWithIdOnly = await prisma.sourceType.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SourceTypeCreateManyAndReturnArgs>(args?: SelectSubset<T, SourceTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SourceType.
+     * @param {SourceTypeDeleteArgs} args - Arguments to delete one SourceType.
+     * @example
+     * // Delete one SourceType
+     * const SourceType = await prisma.sourceType.delete({
+     *   where: {
+     *     // ... filter to delete one SourceType
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SourceTypeDeleteArgs>(args: SelectSubset<T, SourceTypeDeleteArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SourceType.
+     * @param {SourceTypeUpdateArgs} args - Arguments to update one SourceType.
+     * @example
+     * // Update one SourceType
+     * const sourceType = await prisma.sourceType.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SourceTypeUpdateArgs>(args: SelectSubset<T, SourceTypeUpdateArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SourceTypes.
+     * @param {SourceTypeDeleteManyArgs} args - Arguments to filter SourceTypes to delete.
+     * @example
+     * // Delete a few SourceTypes
+     * const { count } = await prisma.sourceType.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SourceTypeDeleteManyArgs>(args?: SelectSubset<T, SourceTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SourceTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SourceTypeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SourceTypes
+     * const sourceType = await prisma.sourceType.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SourceTypeUpdateManyArgs>(args: SelectSubset<T, SourceTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SourceTypes and returns the data updated in the database.
+     * @param {SourceTypeUpdateManyAndReturnArgs} args - Arguments to update many SourceTypes.
+     * @example
+     * // Update many SourceTypes
+     * const sourceType = await prisma.sourceType.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SourceTypes and only return the `id`
+     * const sourceTypeWithIdOnly = await prisma.sourceType.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SourceTypeUpdateManyAndReturnArgs>(args: SelectSubset<T, SourceTypeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SourceType.
+     * @param {SourceTypeUpsertArgs} args - Arguments to update or create a SourceType.
+     * @example
+     * // Update or create a SourceType
+     * const sourceType = await prisma.sourceType.upsert({
+     *   create: {
+     *     // ... data to create a SourceType
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SourceType we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SourceTypeUpsertArgs>(args: SelectSubset<T, SourceTypeUpsertArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SourceTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SourceTypeCountArgs} args - Arguments to filter SourceTypes to count.
+     * @example
+     * // Count the number of SourceTypes
+     * const count = await prisma.sourceType.count({
+     *   where: {
+     *     // ... the filter for the SourceTypes we want to count
+     *   }
+     * })
+    **/
+    count<T extends SourceTypeCountArgs>(
+      args?: Subset<T, SourceTypeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SourceTypeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SourceType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SourceTypeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SourceTypeAggregateArgs>(args: Subset<T, SourceTypeAggregateArgs>): Prisma.PrismaPromise<GetSourceTypeAggregateType<T>>
+
+    /**
+     * Group by SourceType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SourceTypeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SourceTypeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SourceTypeGroupByArgs['orderBy'] }
+        : { orderBy?: SourceTypeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SourceTypeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSourceTypeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SourceType model
+   */
+  readonly fields: SourceTypeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SourceType.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SourceTypeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    enquiries<T extends SourceType$enquiriesArgs<ExtArgs> = {}>(args?: Subset<T, SourceType$enquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SourceType model
+   */
+  interface SourceTypeFieldRefs {
+    readonly id: FieldRef<"SourceType", 'Int'>
+    readonly name: FieldRef<"SourceType", 'String'>
+    readonly slug: FieldRef<"SourceType", 'String'>
+    readonly createdAt: FieldRef<"SourceType", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SourceType findUnique
+   */
+  export type SourceTypeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which SourceType to fetch.
+     */
+    where: SourceTypeWhereUniqueInput
+  }
+
+  /**
+   * SourceType findUniqueOrThrow
+   */
+  export type SourceTypeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which SourceType to fetch.
+     */
+    where: SourceTypeWhereUniqueInput
+  }
+
+  /**
+   * SourceType findFirst
+   */
+  export type SourceTypeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which SourceType to fetch.
+     */
+    where?: SourceTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SourceTypes to fetch.
+     */
+    orderBy?: SourceTypeOrderByWithRelationInput | SourceTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SourceTypes.
+     */
+    cursor?: SourceTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SourceTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SourceTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SourceTypes.
+     */
+    distinct?: SourceTypeScalarFieldEnum | SourceTypeScalarFieldEnum[]
+  }
+
+  /**
+   * SourceType findFirstOrThrow
+   */
+  export type SourceTypeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which SourceType to fetch.
+     */
+    where?: SourceTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SourceTypes to fetch.
+     */
+    orderBy?: SourceTypeOrderByWithRelationInput | SourceTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SourceTypes.
+     */
+    cursor?: SourceTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SourceTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SourceTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SourceTypes.
+     */
+    distinct?: SourceTypeScalarFieldEnum | SourceTypeScalarFieldEnum[]
+  }
+
+  /**
+   * SourceType findMany
+   */
+  export type SourceTypeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which SourceTypes to fetch.
+     */
+    where?: SourceTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SourceTypes to fetch.
+     */
+    orderBy?: SourceTypeOrderByWithRelationInput | SourceTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SourceTypes.
+     */
+    cursor?: SourceTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SourceTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SourceTypes.
+     */
+    skip?: number
+    distinct?: SourceTypeScalarFieldEnum | SourceTypeScalarFieldEnum[]
+  }
+
+  /**
+   * SourceType create
+   */
+  export type SourceTypeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SourceType.
+     */
+    data: XOR<SourceTypeCreateInput, SourceTypeUncheckedCreateInput>
+  }
+
+  /**
+   * SourceType createMany
+   */
+  export type SourceTypeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SourceTypes.
+     */
+    data: SourceTypeCreateManyInput | SourceTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SourceType createManyAndReturn
+   */
+  export type SourceTypeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * The data used to create many SourceTypes.
+     */
+    data: SourceTypeCreateManyInput | SourceTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SourceType update
+   */
+  export type SourceTypeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SourceType.
+     */
+    data: XOR<SourceTypeUpdateInput, SourceTypeUncheckedUpdateInput>
+    /**
+     * Choose, which SourceType to update.
+     */
+    where: SourceTypeWhereUniqueInput
+  }
+
+  /**
+   * SourceType updateMany
+   */
+  export type SourceTypeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SourceTypes.
+     */
+    data: XOR<SourceTypeUpdateManyMutationInput, SourceTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which SourceTypes to update
+     */
+    where?: SourceTypeWhereInput
+    /**
+     * Limit how many SourceTypes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SourceType updateManyAndReturn
+   */
+  export type SourceTypeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * The data used to update SourceTypes.
+     */
+    data: XOR<SourceTypeUpdateManyMutationInput, SourceTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which SourceTypes to update
+     */
+    where?: SourceTypeWhereInput
+    /**
+     * Limit how many SourceTypes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SourceType upsert
+   */
+  export type SourceTypeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SourceType to update in case it exists.
+     */
+    where: SourceTypeWhereUniqueInput
+    /**
+     * In case the SourceType found by the `where` argument doesn't exist, create a new SourceType with this data.
+     */
+    create: XOR<SourceTypeCreateInput, SourceTypeUncheckedCreateInput>
+    /**
+     * In case the SourceType was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SourceTypeUpdateInput, SourceTypeUncheckedUpdateInput>
+  }
+
+  /**
+   * SourceType delete
+   */
+  export type SourceTypeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
+    /**
+     * Filter which SourceType to delete.
+     */
+    where: SourceTypeWhereUniqueInput
+  }
+
+  /**
+   * SourceType deleteMany
+   */
+  export type SourceTypeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SourceTypes to delete
+     */
+    where?: SourceTypeWhereInput
+    /**
+     * Limit how many SourceTypes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SourceType.enquiries
+   */
+  export type SourceType$enquiriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Enquiry
+     */
+    select?: EnquirySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Enquiry
+     */
+    omit?: EnquiryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EnquiryInclude<ExtArgs> | null
+    where?: EnquiryWhereInput
+    orderBy?: EnquiryOrderByWithRelationInput | EnquiryOrderByWithRelationInput[]
+    cursor?: EnquiryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EnquiryScalarFieldEnum | EnquiryScalarFieldEnum[]
+  }
+
+  /**
+   * SourceType without action
+   */
+  export type SourceTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SourceType
+     */
+    select?: SourceTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SourceType
+     */
+    omit?: SourceTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SourceTypeInclude<ExtArgs> | null
   }
 
 
@@ -47915,7 +49159,7 @@ export namespace Prisma {
     course: 'course',
     gender: 'gender',
     dob: 'dob',
-    source: 'source',
+    sourceId: 'sourceId',
     referedBy: 'referedBy',
     takenBy: 'takenBy',
     leadStatus: 'leadStatus',
@@ -47928,6 +49172,16 @@ export namespace Prisma {
   };
 
   export type EnquiryScalarFieldEnum = (typeof EnquiryScalarFieldEnum)[keyof typeof EnquiryScalarFieldEnum]
+
+
+  export const SourceTypeScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    slug: 'slug',
+    createdAt: 'createdAt'
+  };
+
+  export type SourceTypeScalarFieldEnum = (typeof SourceTypeScalarFieldEnum)[keyof typeof SourceTypeScalarFieldEnum]
 
 
   export const EnquiryCourseScalarFieldEnum: {
@@ -49032,7 +50286,7 @@ export namespace Prisma {
     course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
-    source?: StringNullableFilter<"Enquiry"> | string | null
+    sourceId?: IntNullableFilter<"Enquiry"> | number | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     takenBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
@@ -49042,6 +50296,7 @@ export namespace Prisma {
     isConverted?: BoolFilter<"Enquiry"> | boolean
     studentId?: IntNullableFilter<"Enquiry"> | number | null
     clientAdminId?: StringFilter<"Enquiry"> | string
+    source?: XOR<SourceTypeNullableScalarRelationFilter, SourceTypeWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     enquiryCourse?: EnquiryCourseListRelationFilter
@@ -49062,7 +50317,7 @@ export namespace Prisma {
     course?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
-    source?: SortOrderInput | SortOrder
+    sourceId?: SortOrderInput | SortOrder
     referedBy?: SortOrderInput | SortOrder
     takenBy?: SortOrderInput | SortOrder
     leadStatus?: SortOrder
@@ -49072,6 +50327,7 @@ export namespace Prisma {
     isConverted?: SortOrder
     studentId?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
+    source?: SourceTypeOrderByWithRelationInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
     student?: StudentOrderByWithRelationInput
     enquiryCourse?: EnquiryCourseOrderByRelationAggregateInput
@@ -49098,7 +50354,7 @@ export namespace Prisma {
     course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
-    source?: StringNullableFilter<"Enquiry"> | string | null
+    sourceId?: IntNullableFilter<"Enquiry"> | number | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     takenBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
@@ -49107,6 +50363,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Enquiry"> | Date | string
     isConverted?: BoolFilter<"Enquiry"> | boolean
     clientAdminId?: StringFilter<"Enquiry"> | string
+    source?: XOR<SourceTypeNullableScalarRelationFilter, SourceTypeWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     enquiryCourse?: EnquiryCourseListRelationFilter
@@ -49127,7 +50384,7 @@ export namespace Prisma {
     course?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
-    source?: SortOrderInput | SortOrder
+    sourceId?: SortOrderInput | SortOrder
     referedBy?: SortOrderInput | SortOrder
     takenBy?: SortOrderInput | SortOrder
     leadStatus?: SortOrder
@@ -49160,7 +50417,7 @@ export namespace Prisma {
     course?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     gender?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"Enquiry"> | Date | string | null
-    source?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
+    sourceId?: IntNullableWithAggregatesFilter<"Enquiry"> | number | null
     referedBy?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     takenBy?: StringNullableWithAggregatesFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusWithAggregatesFilter<"Enquiry"> | $Enums.LeadStatus
@@ -49170,6 +50427,58 @@ export namespace Prisma {
     isConverted?: BoolWithAggregatesFilter<"Enquiry"> | boolean
     studentId?: IntNullableWithAggregatesFilter<"Enquiry"> | number | null
     clientAdminId?: StringWithAggregatesFilter<"Enquiry"> | string
+  }
+
+  export type SourceTypeWhereInput = {
+    AND?: SourceTypeWhereInput | SourceTypeWhereInput[]
+    OR?: SourceTypeWhereInput[]
+    NOT?: SourceTypeWhereInput | SourceTypeWhereInput[]
+    id?: IntFilter<"SourceType"> | number
+    name?: StringFilter<"SourceType"> | string
+    slug?: StringFilter<"SourceType"> | string
+    createdAt?: DateTimeFilter<"SourceType"> | Date | string
+    enquiries?: EnquiryListRelationFilter
+  }
+
+  export type SourceTypeOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+    enquiries?: EnquiryOrderByRelationAggregateInput
+  }
+
+  export type SourceTypeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    slug?: string
+    AND?: SourceTypeWhereInput | SourceTypeWhereInput[]
+    OR?: SourceTypeWhereInput[]
+    NOT?: SourceTypeWhereInput | SourceTypeWhereInput[]
+    name?: StringFilter<"SourceType"> | string
+    createdAt?: DateTimeFilter<"SourceType"> | Date | string
+    enquiries?: EnquiryListRelationFilter
+  }, "id" | "slug">
+
+  export type SourceTypeOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+    _count?: SourceTypeCountOrderByAggregateInput
+    _avg?: SourceTypeAvgOrderByAggregateInput
+    _max?: SourceTypeMaxOrderByAggregateInput
+    _min?: SourceTypeMinOrderByAggregateInput
+    _sum?: SourceTypeSumOrderByAggregateInput
+  }
+
+  export type SourceTypeScalarWhereWithAggregatesInput = {
+    AND?: SourceTypeScalarWhereWithAggregatesInput | SourceTypeScalarWhereWithAggregatesInput[]
+    OR?: SourceTypeScalarWhereWithAggregatesInput[]
+    NOT?: SourceTypeScalarWhereWithAggregatesInput | SourceTypeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SourceType"> | number
+    name?: StringWithAggregatesFilter<"SourceType"> | string
+    slug?: StringWithAggregatesFilter<"SourceType"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SourceType"> | Date | string
   }
 
   export type EnquiryCourseWhereInput = {
@@ -52177,7 +53486,6 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -52185,6 +53493,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
@@ -52205,7 +53514,7 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
+    sourceId?: number | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -52233,7 +53542,6 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -52241,6 +53549,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
@@ -52261,7 +53570,7 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -52289,7 +53598,7 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
+    sourceId?: number | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -52314,7 +53623,6 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -52337,7 +53645,7 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -52347,6 +53655,56 @@ export namespace Prisma {
     isConverted?: BoolFieldUpdateOperationsInput | boolean
     studentId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SourceTypeCreateInput = {
+    name: string
+    slug: string
+    createdAt?: Date | string
+    enquiries?: EnquiryCreateNestedManyWithoutSourceInput
+  }
+
+  export type SourceTypeUncheckedCreateInput = {
+    id?: number
+    name: string
+    slug: string
+    createdAt?: Date | string
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutSourceInput
+  }
+
+  export type SourceTypeUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enquiries?: EnquiryUpdateManyWithoutSourceNestedInput
+  }
+
+  export type SourceTypeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enquiries?: EnquiryUncheckedUpdateManyWithoutSourceNestedInput
+  }
+
+  export type SourceTypeCreateManyInput = {
+    id?: number
+    name: string
+    slug: string
+    createdAt?: Date | string
+  }
+
+  export type SourceTypeUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SourceTypeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EnquiryCourseCreateInput = {
@@ -55386,6 +56744,11 @@ export namespace Prisma {
     not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
   }
 
+  export type SourceTypeNullableScalarRelationFilter = {
+    is?: SourceTypeWhereInput | null
+    isNot?: SourceTypeWhereInput | null
+  }
+
   export type StudentNullableScalarRelationFilter = {
     is?: StudentWhereInput | null
     isNot?: StudentWhereInput | null
@@ -55429,7 +56792,7 @@ export namespace Prisma {
     course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    source?: SortOrder
+    sourceId?: SortOrder
     referedBy?: SortOrder
     takenBy?: SortOrder
     leadStatus?: SortOrder
@@ -55444,6 +56807,7 @@ export namespace Prisma {
   export type EnquiryAvgOrderByAggregateInput = {
     srNo?: SortOrder
     age?: SortOrder
+    sourceId?: SortOrder
     studentId?: SortOrder
   }
 
@@ -55460,7 +56824,7 @@ export namespace Prisma {
     course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    source?: SortOrder
+    sourceId?: SortOrder
     referedBy?: SortOrder
     takenBy?: SortOrder
     leadStatus?: SortOrder
@@ -55485,7 +56849,7 @@ export namespace Prisma {
     course?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    source?: SortOrder
+    sourceId?: SortOrder
     referedBy?: SortOrder
     takenBy?: SortOrder
     leadStatus?: SortOrder
@@ -55500,6 +56864,7 @@ export namespace Prisma {
   export type EnquirySumOrderByAggregateInput = {
     srNo?: SortOrder
     age?: SortOrder
+    sourceId?: SortOrder
     studentId?: SortOrder
   }
 
@@ -55543,6 +56908,35 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLeadStatusFilter<$PrismaModel>
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
+  }
+
+  export type SourceTypeCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SourceTypeAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type SourceTypeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SourceTypeMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SourceTypeSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type CourseScalarRelationFilter = {
@@ -58465,6 +59859,12 @@ export namespace Prisma {
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutActivitiesInput, ClientAdminUpdateWithoutActivitiesInput>, ClientAdminUncheckedUpdateWithoutActivitiesInput>
   }
 
+  export type SourceTypeCreateNestedOneWithoutEnquiriesInput = {
+    create?: XOR<SourceTypeCreateWithoutEnquiriesInput, SourceTypeUncheckedCreateWithoutEnquiriesInput>
+    connectOrCreate?: SourceTypeCreateOrConnectWithoutEnquiriesInput
+    connect?: SourceTypeWhereUniqueInput
+  }
+
   export type ClientAdminCreateNestedOneWithoutEnquiriesInput = {
     create?: XOR<ClientAdminCreateWithoutEnquiriesInput, ClientAdminUncheckedCreateWithoutEnquiriesInput>
     connectOrCreate?: ClientAdminCreateOrConnectWithoutEnquiriesInput
@@ -58535,6 +59935,16 @@ export namespace Prisma {
 
   export type EnumLeadStatusFieldUpdateOperationsInput = {
     set?: $Enums.LeadStatus
+  }
+
+  export type SourceTypeUpdateOneWithoutEnquiriesNestedInput = {
+    create?: XOR<SourceTypeCreateWithoutEnquiriesInput, SourceTypeUncheckedCreateWithoutEnquiriesInput>
+    connectOrCreate?: SourceTypeCreateOrConnectWithoutEnquiriesInput
+    upsert?: SourceTypeUpsertWithoutEnquiriesInput
+    disconnect?: SourceTypeWhereInput | boolean
+    delete?: SourceTypeWhereInput | boolean
+    connect?: SourceTypeWhereUniqueInput
+    update?: XOR<XOR<SourceTypeUpdateToOneWithWhereWithoutEnquiriesInput, SourceTypeUpdateWithoutEnquiriesInput>, SourceTypeUncheckedUpdateWithoutEnquiriesInput>
   }
 
   export type ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput = {
@@ -58629,6 +60039,48 @@ export namespace Prisma {
     delete?: NotificationWhereInput | boolean
     connect?: NotificationWhereUniqueInput
     update?: XOR<XOR<NotificationUpdateToOneWithWhereWithoutEnquiryInput, NotificationUpdateWithoutEnquiryInput>, NotificationUncheckedUpdateWithoutEnquiryInput>
+  }
+
+  export type EnquiryCreateNestedManyWithoutSourceInput = {
+    create?: XOR<EnquiryCreateWithoutSourceInput, EnquiryUncheckedCreateWithoutSourceInput> | EnquiryCreateWithoutSourceInput[] | EnquiryUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: EnquiryCreateOrConnectWithoutSourceInput | EnquiryCreateOrConnectWithoutSourceInput[]
+    createMany?: EnquiryCreateManySourceInputEnvelope
+    connect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+  }
+
+  export type EnquiryUncheckedCreateNestedManyWithoutSourceInput = {
+    create?: XOR<EnquiryCreateWithoutSourceInput, EnquiryUncheckedCreateWithoutSourceInput> | EnquiryCreateWithoutSourceInput[] | EnquiryUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: EnquiryCreateOrConnectWithoutSourceInput | EnquiryCreateOrConnectWithoutSourceInput[]
+    createMany?: EnquiryCreateManySourceInputEnvelope
+    connect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+  }
+
+  export type EnquiryUpdateManyWithoutSourceNestedInput = {
+    create?: XOR<EnquiryCreateWithoutSourceInput, EnquiryUncheckedCreateWithoutSourceInput> | EnquiryCreateWithoutSourceInput[] | EnquiryUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: EnquiryCreateOrConnectWithoutSourceInput | EnquiryCreateOrConnectWithoutSourceInput[]
+    upsert?: EnquiryUpsertWithWhereUniqueWithoutSourceInput | EnquiryUpsertWithWhereUniqueWithoutSourceInput[]
+    createMany?: EnquiryCreateManySourceInputEnvelope
+    set?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    disconnect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    delete?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    connect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    update?: EnquiryUpdateWithWhereUniqueWithoutSourceInput | EnquiryUpdateWithWhereUniqueWithoutSourceInput[]
+    updateMany?: EnquiryUpdateManyWithWhereWithoutSourceInput | EnquiryUpdateManyWithWhereWithoutSourceInput[]
+    deleteMany?: EnquiryScalarWhereInput | EnquiryScalarWhereInput[]
+  }
+
+  export type EnquiryUncheckedUpdateManyWithoutSourceNestedInput = {
+    create?: XOR<EnquiryCreateWithoutSourceInput, EnquiryUncheckedCreateWithoutSourceInput> | EnquiryCreateWithoutSourceInput[] | EnquiryUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: EnquiryCreateOrConnectWithoutSourceInput | EnquiryCreateOrConnectWithoutSourceInput[]
+    upsert?: EnquiryUpsertWithWhereUniqueWithoutSourceInput | EnquiryUpsertWithWhereUniqueWithoutSourceInput[]
+    createMany?: EnquiryCreateManySourceInputEnvelope
+    set?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    disconnect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    delete?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    connect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    update?: EnquiryUpdateWithWhereUniqueWithoutSourceInput | EnquiryUpdateWithWhereUniqueWithoutSourceInput[]
+    updateMany?: EnquiryUpdateManyWithWhereWithoutSourceInput | EnquiryUpdateManyWithWhereWithoutSourceInput[]
+    deleteMany?: EnquiryScalarWhereInput | EnquiryScalarWhereInput[]
   }
 
   export type ClientAdminCreateNestedOneWithoutEnquiryCourseInput = {
@@ -62310,7 +63762,6 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -62318,6 +63769,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
     followUps?: FollowUpCreateNestedManyWithoutEnquiryInput
@@ -62337,7 +63789,7 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
+    sourceId?: number | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -63268,7 +64720,7 @@ export namespace Prisma {
     course?: StringNullableFilter<"Enquiry"> | string | null
     gender?: StringNullableFilter<"Enquiry"> | string | null
     dob?: DateTimeNullableFilter<"Enquiry"> | Date | string | null
-    source?: StringNullableFilter<"Enquiry"> | string | null
+    sourceId?: IntNullableFilter<"Enquiry"> | number | null
     referedBy?: StringNullableFilter<"Enquiry"> | string | null
     takenBy?: StringNullableFilter<"Enquiry"> | string | null
     leadStatus?: EnumLeadStatusFilter<"Enquiry"> | $Enums.LeadStatus
@@ -64532,6 +65984,24 @@ export namespace Prisma {
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
+  export type SourceTypeCreateWithoutEnquiriesInput = {
+    name: string
+    slug: string
+    createdAt?: Date | string
+  }
+
+  export type SourceTypeUncheckedCreateWithoutEnquiriesInput = {
+    id?: number
+    name: string
+    slug: string
+    createdAt?: Date | string
+  }
+
+  export type SourceTypeCreateOrConnectWithoutEnquiriesInput = {
+    where: SourceTypeWhereUniqueInput
+    create: XOR<SourceTypeCreateWithoutEnquiriesInput, SourceTypeUncheckedCreateWithoutEnquiriesInput>
+  }
+
   export type ClientAdminCreateWithoutEnquiriesInput = {
     id?: string
     name: string
@@ -64799,6 +66269,30 @@ export namespace Prisma {
   export type NotificationCreateOrConnectWithoutEnquiryInput = {
     where: NotificationWhereUniqueInput
     create: XOR<NotificationCreateWithoutEnquiryInput, NotificationUncheckedCreateWithoutEnquiryInput>
+  }
+
+  export type SourceTypeUpsertWithoutEnquiriesInput = {
+    update: XOR<SourceTypeUpdateWithoutEnquiriesInput, SourceTypeUncheckedUpdateWithoutEnquiriesInput>
+    create: XOR<SourceTypeCreateWithoutEnquiriesInput, SourceTypeUncheckedCreateWithoutEnquiriesInput>
+    where?: SourceTypeWhereInput
+  }
+
+  export type SourceTypeUpdateToOneWithWhereWithoutEnquiriesInput = {
+    where?: SourceTypeWhereInput
+    data: XOR<SourceTypeUpdateWithoutEnquiriesInput, SourceTypeUncheckedUpdateWithoutEnquiriesInput>
+  }
+
+  export type SourceTypeUpdateWithoutEnquiriesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SourceTypeUncheckedUpdateWithoutEnquiriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ClientAdminUpsertWithoutEnquiriesInput = {
@@ -65081,6 +66575,86 @@ export namespace Prisma {
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type EnquiryCreateWithoutSourceInput = {
+    id?: string
+    srNo: number
+    name: string
+    contact: string
+    alternateContact?: string | null
+    email?: string | null
+    age?: number | null
+    location?: string | null
+    city?: string | null
+    course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
+    referedBy?: string | null
+    takenBy?: string | null
+    leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isConverted?: boolean
+    clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
+    student?: StudentCreateNestedOneWithoutEnquiryInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
+    followUps?: FollowUpCreateNestedManyWithoutEnquiryInput
+    notification?: NotificationCreateNestedOneWithoutEnquiryInput
+  }
+
+  export type EnquiryUncheckedCreateWithoutSourceInput = {
+    id?: string
+    srNo: number
+    name: string
+    contact: string
+    alternateContact?: string | null
+    email?: string | null
+    age?: number | null
+    location?: string | null
+    city?: string | null
+    course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
+    referedBy?: string | null
+    takenBy?: string | null
+    leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isConverted?: boolean
+    studentId?: number | null
+    clientAdminId: string
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutEnquiryInput
+    followUps?: FollowUpUncheckedCreateNestedManyWithoutEnquiryInput
+    notification?: NotificationUncheckedCreateNestedOneWithoutEnquiryInput
+  }
+
+  export type EnquiryCreateOrConnectWithoutSourceInput = {
+    where: EnquiryWhereUniqueInput
+    create: XOR<EnquiryCreateWithoutSourceInput, EnquiryUncheckedCreateWithoutSourceInput>
+  }
+
+  export type EnquiryCreateManySourceInputEnvelope = {
+    data: EnquiryCreateManySourceInput | EnquiryCreateManySourceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EnquiryUpsertWithWhereUniqueWithoutSourceInput = {
+    where: EnquiryWhereUniqueInput
+    update: XOR<EnquiryUpdateWithoutSourceInput, EnquiryUncheckedUpdateWithoutSourceInput>
+    create: XOR<EnquiryCreateWithoutSourceInput, EnquiryUncheckedCreateWithoutSourceInput>
+  }
+
+  export type EnquiryUpdateWithWhereUniqueWithoutSourceInput = {
+    where: EnquiryWhereUniqueInput
+    data: XOR<EnquiryUpdateWithoutSourceInput, EnquiryUncheckedUpdateWithoutSourceInput>
+  }
+
+  export type EnquiryUpdateManyWithWhereWithoutSourceInput = {
+    where: EnquiryScalarWhereInput
+    data: XOR<EnquiryUpdateManyMutationInput, EnquiryUncheckedUpdateManyWithoutSourceInput>
+  }
+
   export type ClientAdminCreateWithoutEnquiryCourseInput = {
     id?: string
     name: string
@@ -65245,7 +66819,6 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -65253,6 +66826,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
     followUps?: FollowUpCreateNestedManyWithoutEnquiryInput
@@ -65272,7 +66846,7 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
+    sourceId?: number | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -65478,7 +67052,6 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -65486,6 +67059,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
     followUps?: FollowUpUpdateManyWithoutEnquiryNestedInput
@@ -65505,7 +67079,7 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -65532,7 +67106,6 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -65540,6 +67113,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
@@ -65559,7 +67133,7 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
+    sourceId?: number | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -65627,7 +67201,6 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -65635,6 +67208,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
@@ -65654,7 +67228,7 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -65817,7 +67391,6 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -65825,6 +67398,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
@@ -65844,7 +67418,7 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
+    sourceId?: number | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -66065,7 +67639,6 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -66073,6 +67646,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
@@ -66092,7 +67666,7 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -66281,7 +67855,6 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -66289,6 +67862,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
     followUps?: FollowUpCreateNestedManyWithoutEnquiryInput
@@ -66308,7 +67882,7 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
+    sourceId?: number | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -66781,7 +68355,6 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -66789,6 +68362,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
     followUps?: FollowUpUpdateManyWithoutEnquiryNestedInput
@@ -66808,7 +68382,7 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -77669,7 +79243,7 @@ export namespace Prisma {
     course?: string | null
     gender?: string | null
     dob?: Date | string | null
-    source?: string | null
+    sourceId?: number | null
     referedBy?: string | null
     takenBy?: string | null
     leadStatus?: $Enums.LeadStatus
@@ -78123,7 +79697,6 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -78131,6 +79704,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
     followUps?: FollowUpUpdateManyWithoutEnquiryNestedInput
@@ -78150,7 +79724,7 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -78177,7 +79751,7 @@ export namespace Prisma {
     course?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    source?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
     referedBy?: NullableStringFieldUpdateOperationsInput | string | null
     takenBy?: NullableStringFieldUpdateOperationsInput | string | null
     leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
@@ -78962,6 +80536,108 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     followUpStatus?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
+  }
+
+  export type EnquiryCreateManySourceInput = {
+    id?: string
+    srNo: number
+    name: string
+    contact: string
+    alternateContact?: string | null
+    email?: string | null
+    age?: number | null
+    location?: string | null
+    city?: string | null
+    course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
+    referedBy?: string | null
+    takenBy?: string | null
+    leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isConverted?: boolean
+    studentId?: number | null
+    clientAdminId: string
+  }
+
+  export type EnquiryUpdateWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    takenBy?: NullableStringFieldUpdateOperationsInput | string | null
+    leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isConverted?: BoolFieldUpdateOperationsInput | boolean
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
+    student?: StudentUpdateOneWithoutEnquiryNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
+    followUps?: FollowUpUpdateManyWithoutEnquiryNestedInput
+    notification?: NotificationUpdateOneWithoutEnquiryNestedInput
+  }
+
+  export type EnquiryUncheckedUpdateWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    takenBy?: NullableStringFieldUpdateOperationsInput | string | null
+    leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isConverted?: BoolFieldUpdateOperationsInput | boolean
+    studentId?: NullableIntFieldUpdateOperationsInput | number | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutEnquiryNestedInput
+    followUps?: FollowUpUncheckedUpdateManyWithoutEnquiryNestedInput
+    notification?: NotificationUncheckedUpdateOneWithoutEnquiryNestedInput
+  }
+
+  export type EnquiryUncheckedUpdateManyWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    takenBy?: NullableStringFieldUpdateOperationsInput | string | null
+    leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isConverted?: BoolFieldUpdateOperationsInput | boolean
+    studentId?: NullableIntFieldUpdateOperationsInput | number | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 
   export type AttendanceRecordCreateManyStudentInput = {

@@ -36,8 +36,6 @@ import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
 import { useFetchStudent } from "@/hooks/queries/useQueryFetchStudent";
 import { setBirthday } from "@/store/slices/studentSlice";
 
-//const EcommerceMetrics = dynamic(() => import("@/components/ecommerce/EcommerceMetrics"));
-
 export default function CompanyDashboard() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -151,13 +149,13 @@ export default function CompanyDashboard() {
         <StatisticsChart />
       </div>
 
-      <div className="col-span-12 xl:col-span-5">
+      {/* <div className="col-span-12 xl:col-span-5">
         <DemographicCard />
       </div>
 
       <div className="col-span-12 xl:col-span-7">
         <RecentOrders />
-      </div>
+      </div> */}
     </div>
   );
 }

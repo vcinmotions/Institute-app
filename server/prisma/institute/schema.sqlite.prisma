@@ -116,7 +116,9 @@ model Enquiry {
   contact      String
   email        String?
   course       String?
-  source       String?
+  sourceId         Int?
+  source           SourceType?     @relation(fields: [sourceId], references: [id])
+
   alternateContact      String?
   age          Int?
   location     String?
@@ -143,6 +145,16 @@ model Enquiry {
 
   @@unique([email, clientAdminId])
   @@unique([contact, clientAdminId])
+}
+
+model SourceType {
+  id           Int         @id @default(autoincrement())
+  name         String      
+  slug         String      @unique
+
+  createdAt      DateTime       @default(now())
+
+  enquiries Enquiry[]
 }
 
 model EnquiryCourse {

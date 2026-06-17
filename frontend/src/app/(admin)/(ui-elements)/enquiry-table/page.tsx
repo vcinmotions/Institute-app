@@ -26,25 +26,12 @@ import {
   setTotalPages,
 } from "@/store/slices/enquirySlice";
 import { setCourses } from "@/store/slices/courseSlice";
-import { selectEnquiries, selectEnquiryPage, selectEnquiryTotal, selectEnquiryTotalPages, selectFilters, selectLeadStatus, selectLoading, selectSearchQuery, selectSortField, selectSortOrder } from "@/store/selectors/enquirySelectors";
 import { LEAD_STATUS_FILTER_OPTIONS } from "@/components/common/LeadStatus";
 import { LEAD_STATUS_OPTIONS } from "@/domain/enquiry/leadStatus";
 import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
 
 export default function EnquiryTable() {
   const dispatch = useDispatch<AppDispatch>();
-
-  // --- State
-  // const enquiries = useSelector(selectEnquiries);
-  // const sortField = useSelector(selectSortField);
-  // const sortOrder = useSelector(selectSortOrder);
-  // const leadStatus = useSelector(selectLeadStatus);
-  // const filters = useSelector(selectFilters);
-  // const loading = useSelector(selectLoading);
-  // const searchQuery = useSelector(selectSearchQuery);
-  // const currentPage = useSelector(selectEnquiryPage);
-  // const totalPages = useSelector(selectEnquiryTotalPages);
-  // const total = useSelector(selectEnquiryTotal);
 
   const {
     enquiries,
@@ -66,7 +53,7 @@ export default function EnquiryTable() {
 
   const token = useSelector((state: RootState) => state.auth.token);
 
-  const { data, isLoading } = useFetchEnquiry({
+  const { data, isLoading, isFetching } = useFetchEnquiry({
     token,
     currentPage,
     searchQuery,
@@ -76,6 +63,11 @@ export default function EnquiryTable() {
     leadStatus,
     filters,
   });
+
+  // Use data directly instead of pulling 'enquiries' from Redux!
+  const enquiriesList = data?.data || [];
+  const totalCount = data?.total || 0;
+  const totalPagesCount = data?.totalPages || 1;
 
   // ✅ Reset page to 1 on navigation (mount)
   useEffect(() => {
@@ -109,40 +101,6 @@ export default function EnquiryTable() {
     }
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
-  // --- Fetch enquiries
-  // useEffect(() => {
-  //   const fetchEnquiries = async () => {
-  //     const token = sessionStorage.getItem("token");
-  //     if (!token) return;
-
-  //     dispatch(setLoading(true));
-  //     try {
-  //       const res = await getEnquiry({
-  //         token,
-  //         page: currentPage,
-  //         limit: PAGE_SIZE,
-  //         search: searchQuery,
-  //         sortField,
-  //         sortOrder,
-  //         leadStatus,
-  //         ...filters,
-  //       });
-
-  //       console.log("RESULTTTTT for the ENQUIRES:", res);
-
-  //       dispatch(setEnquiries(res.data || []));
-  //       dispatch(setTotal(res.total || 0));
-  //       dispatch(setTotalPages(res.totalPages || 1));
-  //     } catch (err) {
-  //       console.error("Error fetching enquiries:", err);
-  //     } finally {
-  //       dispatch(setLoading(false));
-  //     }
-  //   };
-
-  //   fetchEnquiries();
-  // }, [currentPage, searchQuery, sortField, sortOrder, leadStatus, filters]);
-
   // --- Handlers (memoized)
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -160,10 +118,6 @@ export default function EnquiryTable() {
 
   const clamp = (value: number, min: number, max: number) =>
     Math.min(Math.max(value, min), max);
-
-  // const handlePagination = useCallback((page: number) => {
-  //   if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
-  // }, [dispatch, totalPages]);
 
   const handlePagination = useCallback((page: number) => {
     const safePage = clamp(page, 1, totalPages);
@@ -188,9 +142,6 @@ export default function EnquiryTable() {
     const nextStatus = getNextLeadStatus(leadStatus);
     dispatch(setLeadStatus(nextStatus));
   }, [leadStatus, dispatch, getNextLeadStatus]);
-
-  // --- Course options for filter
-  // const courseOptions = courses.map(c => ({ label: c.name, value: c.id }));
 
   // --- Course options for filter (memoized)
   const courseOptions = useMemo(() => {
@@ -234,8 +185,8 @@ export default function EnquiryTable() {
           </div>
 
           <EnquiryDataTable
-            enquiries={enquiries}
-            loading={loading}
+            enquiries={enquiriesList} 
+            loading={isLoading || isFetching}
             onSort={handleSort}
             onLeadStatus={handleLeadStatus}
             sortField={sortField}

@@ -214,13 +214,6 @@ export default function AdmissionForm() {
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
-  // useEffect(() => {
-  //   if (newEnquiry.name !== undefined && firstInputRef.current) {
-  //     firstInputRef.current.focus();
-  //   }
-  // }, []);
-
-
   useEffect(() => {
     if (!isLoading && firstInputRef.current) {
       firstInputRef.current.focus();
@@ -258,47 +251,6 @@ export default function AdmissionForm() {
   useEffect(() => {
     if (!courses.length || !newEnquiry.courseId.length) return;
   }, [courses, newEnquiry.courseId]);
-
-  // const handleCourseRowChange = (index: number, field: string, value: any) => {
-  //   setCourseRows((prev) => {
-  //     const updated = [...prev];
-  //     updated[index] = { ...updated[index], [field]: value };
-
-  //     const row = updated[index];
-
-  //     // Find selected course
-  //     const selectedCourse = courses.find(
-  //       (c) => c.id.toString() === row.courseId,
-  //     );
-
-  //     const installmentTypes =
-  //       selectedCourse?.courseFeeStructure?.installments || [];
-
-  //     // Update feeAmount for ONE_TIME
-  //     if (field === "paymentType" && value === "ONE_TIME") {
-  //       updated[index].feeAmount =
-  //         selectedCourse?.courseFeeStructure?.totalAmount?.toString() || "";
-  //     }
-
-  //     // Reset fee + installment if switching paymentType
-  //     if (field === "paymentType" && value !== "INSTALLMENT") {
-  //       updated[index].installmentTypeId = "";
-  //     }
-
-  //     // Update feeAmount for INSTALLMENT
-  //     if (field === "installmentTypeId") {
-  //       const selectedInstallment = installmentTypes.find(
-  //         (i: any) => i.id.toString() === value.toString(),
-  //       );
-
-  //       updated[index].feeAmount = selectedInstallment
-  //         ? selectedInstallment.amount.toString()
-  //         : "";
-  //     }
-
-  //     return updated;
-  //   });
-  // };
 
   const handleCourseRowChange = useCallback(
     (index: number, field: string, value: any) => {
@@ -394,7 +346,6 @@ export default function AdmissionForm() {
     }));
   }, [enquiryData]);
 
-
   useEffect(() => {
     if (
       enquiryData &&
@@ -439,54 +390,6 @@ export default function AdmissionForm() {
     console.log("🎯 enquiryData changed:", enquiryData);
   }, [enquiryData, data]);
 
-  // useEffect(() => {
-  //   if (!enquiryData || !enquiryData.enquiryCourse) return;
-
-  //   // ----------------- Parse DOB -----------------
-  //   let dobForForm = "";
-  //   let dobForFilledData = "";
-
-  //   if (enquiryData.dob) {
-  //     const date = new Date(enquiryData.dob);
-  //     const day = String(date.getDate()).padStart(2, "0");
-  //     const month = String(date.getMonth() + 1).padStart(2, "0");
-  //     const year = date.getFullYear();
-
-  //     dobForForm = enquiryData.dob.split("T")[0]; // YYYY-MM-DD for inputs
-  //     dobForFilledData = `${day}/${month}/${year}`; // DD/MM/YYYY for display
-  //   }
-
-  //   // ----------------- Extract course IDs -----------------
-  //   const courseIds: string[] = enquiryData.enquiryCourse.map(
-  //     (c: any) => String(c.courseId)
-  //   );
-
-  //   // ----------------- Set newEnquiry -----------------
-  //   setNewEnquiry({
-  //     id: enquiryData.id,
-  //     name: enquiryData.name || "",
-  //     email: enquiryData.email || "",
-  //     contact: enquiryData.contact || "",
-  //     alternateContact: enquiryData.alternateContact || "",
-  //     age: enquiryData.age || "",
-  //     location: enquiryData.location || "",
-  //     gender: enquiryData.gender || "",
-  //     dob: dobForForm,
-  //     referedBy: enquiryData.referedBy || "",
-  //     courseId: courseIds,
-  //   });
-
-  //   // ----------------- Set filledEnquiryData -----------------
-  //   setFilledEnquiryData((prev) => ({
-  //     ...prev,
-  //     dob: dobForFilledData,
-  //     gender: enquiryData.gender || "",
-  //     parentsContact: enquiryData.alternateContact || "",
-  //   }));
-
-  //   console.log("🎯 enquiryData initialized:", enquiryData);
-  // }, [enquiryData]);
-
   useEffect(() => {
     if (!newEnquiry.courseId) return;
     if (!courses || courses.length === 0) return;
@@ -526,7 +429,6 @@ export default function AdmissionForm() {
     };
   }, [courseData, dispatch]);
 
-
   useEffect(() => {
     console.log("get all batches data;", batchData);
     if (batchData?.batch) {
@@ -534,8 +436,6 @@ export default function AdmissionForm() {
       setLoading(false);
     };
   }, [batchData, dispatch]);
-  console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData)
-  console.log("get all courses data::::::::::::::::::::::::::::::::::::::::::::::::;", courseData)
 
   // const batchOptions = batch.map((b: any) => ({
   //   value: b.id.toString(),
@@ -559,45 +459,6 @@ export default function AdmissionForm() {
     }
   }, [courseData, batchData, dispatch]);
 
-  // const handlePhoneNumberChange = (
-  //   field: "contact" | "parentsContact",
-  //   phoneNumber: string,
-  //   countryCode = "+91"
-  // ) => {
-  //   let formattedNumber = phoneNumber;
-  //   if (!phoneNumber.startsWith("+")) {
-  //     formattedNumber = countryCode + phoneNumber.replace(/^0+/, "");
-  //   }
-
-  //   if (field === "contact") {
-  //     setNewEnquiry((prev) => ({
-  //       ...prev,
-  //       contact: formattedNumber,
-  //     }));
-  //     setErrors((prev) => ({ ...prev, contact: "" }));
-  //   } else {
-  //     setFilledEnquiryData((prev) => ({
-  //       ...prev,
-  //       parentsContact: formattedNumber,
-  //     }));
-  //     setErrors((prev) => ({ ...prev, parentsContact: "" }));
-  //   }
-  // };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (
-      !/[0-9]/.test(e.key) &&
-      e.key !== "+" &&
-      e.key !== "Backspace" &&
-      e.key !== "Delete" &&
-      e.key !== "ArrowLeft" &&
-      e.key !== "ArrowRight" &&
-      e.key !== "Tab"
-    ) {
-      e.preventDefault();
-    }
-  };
-
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
     // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
     //const formattedNumber = code + phoneNumber;
@@ -611,7 +472,6 @@ export default function AdmissionForm() {
       ...prev,
       contact: formattedNumber,
     }));
-
 
     if (phoneNumber.length === 10) {
       setErrors((prev) => ({ ...prev, contact: "" }));
@@ -635,7 +495,6 @@ export default function AdmissionForm() {
       parentsContact: formattedNumber,
     }));
 
-
     // Validation
     if (phoneNumber.length === 10) {
       setErrors((prev) => ({ ...prev, parentsContact: "" }));
@@ -646,7 +505,6 @@ export default function AdmissionForm() {
       }));
     }
   };
-
 
   if (loading === true) return null;
 
@@ -692,7 +550,6 @@ export default function AdmissionForm() {
     // if (!filledEnquiryData.parentsContact.trim())
     //   newErrors.parentsContact = "Parent's contact number is required.";
 
-
     // if (!filledEnquiryData.feeAmount.trim())
     //   newErrors.feeAmount = "Fee amount is required.";
     // else if (isNaN(Number(filledEnquiryData.feeAmount)))
@@ -708,23 +565,6 @@ export default function AdmissionForm() {
 
     if (!filledEnquiryData.admissionDate)
       newErrors.admissionDate = "Admission date is required.";
-
-    // Optional: validate ID proof type/number pattern
-    // if (
-    //   filledEnquiryData.idProofType === "aadhar card" &&
-    //   !/^\d{12}$/.test(filledEnquiryData.idProofNumber)
-    // )
-    //   newErrors.idProofNumber = "Aadhar number must be 12 digits.";
-
-    // // Optional: validate ID proof type/number pattern
-    // if (
-    //   filledEnquiryData.idProofType === "pan card" &&
-    //   !/^\d{10}$/.test(filledEnquiryData.idProofNumber)
-    // )
-    //   newErrors.idProofNumber = "Pan number must be 10 digits.";
-
-    // if (!selectedProfilePicture)
-    //   newErrors.selectedProfilePicture = "Profiloe Picture is required.";
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 2000);
@@ -865,7 +705,7 @@ export default function AdmissionForm() {
   const handleAdvancePayment = async () => {
     // Validate that at least one course has advance amount
     const hasAdvancePayment = courseRows.some(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0);
-    
+
     if (!hasAdvancePayment) {
       setAlert({
         show: true,
@@ -906,7 +746,7 @@ export default function AdmissionForm() {
       createAdvancePayment(advancePayments, {
         onSuccess: (response: any) => {
           console.log("Advance payments processed:", response);
-          
+
           setAlert({
             show: true,
             title: "Success",
@@ -915,7 +755,7 @@ export default function AdmissionForm() {
           });
 
           // Clear advance amounts after processing
-          setCourseRows(prev => 
+          setCourseRows(prev =>
             prev.map(row => ({ ...row, advanceAmount: "" }))
           );
 
@@ -1031,58 +871,9 @@ export default function AdmissionForm() {
       advancePayments: advancePaymentData, // Add advance payment data
     };
 
-    // try {
-    //   await createAdmission(admissionPayload);
-    //   // reset form and show success alert as before
-    //   // Wait 3 seconds before showing alert
-    //   setAlert({
-    //     show: true,
-    //     title: "Admission Successful",
-    //     message: "Student admission has been successfully submitted.",
-    //     variant: "success",
-    //   });
-
-    //   window.scrollTo({
-    //     top: 0, behavior: "smooth"
-    //   })
-
-    //   // Close modal after showing alert for 2 seconds (for example)
-    //   setTimeout(() => {
-    //     router.back();
-    //   }, 1000);
-    // } catch (error) {
-    //   // handle error
-    // }
-
     createAdmission(admissionPayload, {
       onSuccess: (response: any) => {
         console.log("Student admission created:", response);
-
-        // After successful student creation, update any advance payment records
-        // const updateAdvancePayments = async () => {
-        //   try {
-        //     // Check if there are any advance payments to update
-        //     const hasAdvancePayments = courseRows.some(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0);
-            
-        //     if (hasAdvancePayments) {
-        //       // Create a service call to update advance payment records with student ID
-        //       const token = sessionStorage.getItem("token");
-        //       if (token) {
-        //         // For each course with advance payment, update the records
-        //         const coursesWithAdvance = courseRows.filter(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0);
-                
-        //         for (const course of coursesWithAdvance) {
-        //           // This would be handled by the backend service automatically
-        //           console.log(`Advance payment records for course ${course.courseId} will be updated with student ID`);
-        //         }
-        //       }
-        //     }
-        //   } catch (error) {
-        //     console.error("Error updating advance payments:", error);
-        //   }
-        // };
-
-        // updateAdvancePayments();
 
         window.scrollTo({
           top: 0, behavior: "smooth"
@@ -1113,188 +904,222 @@ export default function AdmissionForm() {
   return (
     <div>
       <PageBreadcrumb pageTitle="Create Student Admission" />
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3">
 
-        <div className="space-y-8">
-          <h2 className="border-b pb-6 text-gray-800 dark:text-gray-50 dark:border-gray-700">Student Infomation</h2>
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3 shadow-sm">
+        <div className="flex flex-col gap-6">
 
-          <div className="space-y-6">
-            {alert.show && (
-              <Alert
-                variant={
-                  alert.title === "Admission Successful" ? "success" : "error"
-                }
-                title={alert.title}
-                message={alert.message}
-                showLink={false}
-              />
-            )}
+          {/* Header & Alerts */}
+          <div className="border-b pb-4 dark:border-gray-700">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">Student Information</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to create a new student admission.</p>
+          </div>
 
-            <div
-              ref={(el) => {
-                inputRefs.current.name = el;
-              }}
-            >
-              <Label>Name</Label>
-              <Input
-                type="text"
-                autoFocus
-                ref={firstInputRef}
-                tabIndex={1}
-                placeholder="Enter Student Name"
-                value={titleCase(newEnquiry.name)}
-                onChange={(e) => handleChangeNew("name", e.target.value)}
-              />
-              {errors.name && (
-                <p className="text-sm text-red-500">{errors.name}</p>
-              )}
-            </div>
+          {alert.show && (
+            <Alert
+              variant={
+                alert.title === "Admission Successful" ? "success" : "error"
+              }
+              title={alert.title}
+              message={alert.message}
+              showLink={false}
+            />
+          )}
 
-            <div
-              ref={(el) => {
-                inputRefs.current.fatherName = el; // ✅ different key
-              }}
-            >
-              <Label>Father's Name</Label>
-              <Input
-                type="text"
-                tabIndex={2}
+          {/* Section 1: Personal Details */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Personal Details</h3>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 
-                placeholder="Enter Father Name"
-                value={titleCase(filledEnquiryData.fatherName)}
-                onChange={(e) => handleChange("fatherName", e.target.value)}
-              />
-              {errors.fatherName && (
-                <p className="text-sm text-red-500">{errors.fatherName}</p>
-              )}
-            </div>
-
-
-
-            <div
-              ref={(el) => {
-                inputRefs.current.email = el; // ✅ different key
-              }}
-            >
-              <Label>Email</Label>
-              <div className="relative">
+              <div
+                ref={(el) => {
+                  inputRefs.current.name = el;
+                }}
+              >
+                <Label>Name *</Label>
                 <Input
-                  tabIndex={4}
-                  placeholder="Enter Student Email"
                   type="text"
-                  className="pl-[62px]"
-                  value={newEnquiry.email}
-                  onChange={(e) => handleChangeNew("email", e.target.value)}
+                  autoFocus
+                  ref={firstInputRef}
+                  tabIndex={1}
+                  placeholder="Enter Student Name"
+                  value={titleCase(newEnquiry.name)}
+                  onChange={(e) => handleChangeNew("name", e.target.value)}
                 />
-                {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email}</p>
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-500">{errors.name}</p>
                 )}
-                <span className="absolute top-1/2 left-0 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                  <EnvelopeIcon />
-                </span>
               </div>
-            </div>
 
-            <div ref={(el) => {
-              inputRefs.current.contact = el; // ✅ different key
-            }}>
-              <Label>Student Contact</Label>
-              <PhoneInput
-                tabIndex={5}
-                selectPosition="start"
-                countries={countries}
-                placeholder="Enter Student Contact"
-                value={stripCountryCode(newEnquiry.contact)} // 👈 IMPORTANT
-                onChange={(value, country) => handlePhoneNumberChange(value, country)}
-              />
-
-              {errors.contact && (
-                <p className="text-sm text-red-500">{errors.contact}</p>
-              )}
-            </div>
-
-            <div ref={(el) => {
-              inputRefs.current.parentsContact = el; // ✅ different key
-            }}>
-              <Label>Alternate Contact</Label>
-              <PhoneInput
-                tabIndex={6}
-                selectPosition="start"
-                countries={countries}
-                value={stripCountryCode(filledEnquiryData.parentsContact)} // 👈 IMPORTANT
-                placeholder="Enter Alternate Contact"
-                onChange={(value, country) => handleAlternatePhoneNumberChange(value, country)}
-              />
-
-              {errors.parentsContact && (
-                <p className="text-sm text-red-500">{errors.parentsContact}</p>
-              )}
-            </div>{" "}
-
-            <div
-              ref={(el) => {
-                inputRefs.current.qualification = el; // ✅ different key
-              }}
-            >
-              <Label>Qualification</Label>
-              <Input
-                type="text"
-                tabIndex={3}
-                placeholder="Enter Qualification"
-                value={titleCase(filledEnquiryData.qualification)}
-                onChange={(e) => handleChange("qualification", e.target.value)}
-              />
-              {errors.qualification && (
-                <p className="text-sm text-red-500">{errors.qualification}</p>
-              )}
-            </div>
-
-            <div ref={(el) => {
-              inputRefs.current.dob = el; // ✅ different key
-            }}>
-              <Label>Date Of Birth</Label>
-              <Input
-                tabIndex={7}
-                type="date"
-                placeholder="Enter DoB"
-                //maxLength={10} // e.g. 12:30 PM
-                value={filledEnquiryData.dob}
-                onChange={(e) => handleChange("dob", e.target.value)}
-              />
-              {errors.dob && (
-                <p className="text-sm text-red-500">{errors.dob}</p>
-              )}
-            </div>
-
-            <div ref={(el) => {
-              inputRefs.current.gender = el; // ✅ different key
-            }}>
-              <Label>Gender</Label>
-
-              <div className="relative">
-                <Select
-                  tabIndex={8}
-                  options={genders.map((item) => ({
-                    label: item.label,
-                    value: item.value,
-                  }))}
-                  placeholder="Select Gender"
-                  onChange={(value) => handleChange("gender", value)}
-                  value={filledEnquiryData.gender} // just the courseId string
-                  className="dark:bg-dark-900"
+              <div
+                ref={(el) => {
+                  inputRefs.current.fatherName = el;
+                }}
+              >
+                <Label>Father's Name</Label>
+                <Input
+                  type="text"
+                  tabIndex={2}
+                  placeholder="Enter Father Name"
+                  value={titleCase(filledEnquiryData.fatherName)}
+                  onChange={(e) => handleChange("fatherName", e.target.value)}
                 />
-                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                  <ChevronDownIcon />
-                </span>
+                {errors.fatherName && (
+                  <p className="mt-1 text-sm text-red-500">{errors.fatherName}</p>
+                )}
               </div>
-              {errors.gender && (
-                <p className="text-sm text-red-500">{errors.gender}</p>
-              )}
-            </div>
 
-            {/* Select Course */}
-            <div ref={(el) => {
-              inputRefs.current.courseId = el; // ✅ different key
+              <div
+                ref={(el) => {
+                  inputRefs.current.qualification = el;
+                }}
+              >
+                <Label>Qualification</Label>
+                <Input
+                  type="text"
+                  tabIndex={3}
+                  placeholder="Enter Qualification"
+                  value={titleCase(filledEnquiryData.qualification)}
+                  onChange={(e) => handleChange("qualification", e.target.value)}
+                />
+                {errors.qualification && (
+                  <p className="mt-1 text-sm text-red-500">{errors.qualification}</p>
+                )}
+              </div>
+
+              <div ref={(el) => {
+                inputRefs.current.gender = el;
+              }}>
+                <Label>Gender</Label>
+                <div className="relative">
+                  <Select
+                    tabIndex={8}
+                    options={genders.map((item) => ({
+                      label: item.label,
+                      value: item.value,
+                    }))}
+                    placeholder="Select Gender"
+                    onChange={(value) => handleChange("gender", value)}
+                    value={filledEnquiryData.gender}
+                    className="dark:bg-dark-900"
+                  />
+                  <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
+                {errors.gender && (
+                  <p className="mt-1 text-sm text-red-500">{errors.gender}</p>
+                )}
+              </div>
+
+              <div ref={(el) => {
+                inputRefs.current.dob = el;
+              }}>
+                <Label>Date Of Birth</Label>
+                <Input
+                  tabIndex={7}
+                  type="date"
+                  placeholder="Enter DoB"
+                  value={filledEnquiryData.dob}
+                  onChange={(e) => handleChange("dob", e.target.value)}
+                />
+                {errors.dob && (
+                  <p className="mt-1 text-sm text-red-500">{errors.dob}</p>
+                )}
+              </div>
+
+            </div>
+          </div>
+
+          {/* Section 2: Contact Details */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Contact Details</h3>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+
+              <div ref={(el) => {
+                inputRefs.current.contact = el;
+              }}>
+                <Label>Student Contact</Label>
+                <PhoneInput
+                  tabIndex={5}
+                  selectPosition="start"
+                  countries={countries}
+                  placeholder="Enter Student Contact"
+                  value={stripCountryCode(newEnquiry.contact)}
+                  onChange={(value, country) => handlePhoneNumberChange(value, country)}
+                />
+                {errors.contact && (
+                  <p className="mt-1 text-sm text-red-500">{errors.contact}</p>
+                )}
+              </div>
+
+              <div ref={(el) => {
+                inputRefs.current.parentsContact = el;
+              }}>
+                <Label>Alternate Contact</Label>
+                <PhoneInput
+                  tabIndex={6}
+                  selectPosition="start"
+                  countries={countries}
+                  value={stripCountryCode(filledEnquiryData.parentsContact)}
+                  placeholder="Enter Alternate Contact"
+                  onChange={(value, country) => handleAlternatePhoneNumberChange(value, country)}
+                />
+                {errors.parentsContact && (
+                  <p className="mt-1 text-sm text-red-500">{errors.parentsContact}</p>
+                )}
+              </div>
+
+              <div
+                ref={(el) => {
+                  inputRefs.current.email = el;
+                }}
+              >
+                <Label>Email</Label>
+                <div className="relative">
+                  <Input
+                    tabIndex={4}
+                    placeholder="Enter Student Email"
+                    type="text"
+                    className="pl-[55px]"
+                    value={newEnquiry.email}
+                    onChange={(e) => handleChangeNew("email", e.target.value)}
+                  />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                  )}
+                  <span className="absolute top-1/2 left-0 -translate-y-1/2 border-r border-gray-200 px-3 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                    <EnvelopeIcon />
+                  </span>
+                </div>
+              </div>
+
+              <div
+                ref={(el) => {
+                  inputRefs.current.referedBy = el;
+                }}
+              >
+                <Label>Reference Name</Label>
+                <Input
+                  type="text"
+                  tabIndex={2}
+                  placeholder="Enter Reference"
+                  value={titleCase(newEnquiry.referedBy)}
+                  onChange={(e) => handleChangeNew("referedBy", e.target.value)}
+                />
+                {errors.referedBy && (
+                  <p className="mt-1 text-sm text-red-500">{errors.referedBy}</p>
+                )}
+              </div>
+
+            </div>
+          </div>
+
+          {/* Section 3: Course & Fee Details */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Course & Fee Details</h3>
+
+            <div className="mb-5" ref={(el) => {
+              inputRefs.current.courseId = el;
             }}>
               <div className="relative" data-master="course">
                 <MultiSelect
@@ -1310,197 +1135,203 @@ export default function AdmissionForm() {
                 />
               </div>
               {errors.courseId && (
-                <p className="text-sm text-red-500">{errors.courseId}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.courseId}</p>
               )}
             </div>
 
-            {/* Payment Type */}
-            {courseRows.map((row, index) => {
-              const selectedCourse = courses.find(
-                (c) => c.id.toString() === row.courseId,
-              );
+            <div className="flex flex-col gap-5">
+              {courseRows.map((row, index) => {
+                const selectedCourse = courses.find(
+                  (c) => c.id.toString() === row.courseId,
+                );
 
-              const paymentTypes =
-                selectedCourse?.courseFeeStructure?.paymentType || [];
-              const installmentTypes =
-                selectedCourse?.courseFeeStructure?.installments || [];
+                const paymentTypes =
+                  selectedCourse?.courseFeeStructure?.paymentType || [];
+                const installmentTypes =
+                  selectedCourse?.courseFeeStructure?.installments || [];
 
-              return (
-                <ComponentCard key={row.courseId || index} title="Course Selection">
-                  <h3 className="my-1 font-semibold text-gray-800 dark:text-gray-300">
-                    Course #{index + 1}: {selectedCourse?.name}
-                  </h3>
+                return (
+                  <div
+                    key={row.courseId || index}
+                    className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900"
+                  >
+                    <h4 className="mb-3 font-semibold text-gray-800 dark:text-gray-300">
+                      Course #{index + 1}: {selectedCourse?.name}
+                    </h4>
 
-                  {/* Payment Type */}
-                  <div ref={(el) => {
-                    inputRefs.current.paymentType = el; // ✅ different key
-                  }}>
-                    <Label>Select Payment Type</Label>
-                    <div className="relative">
-                      <Select
-                        options={paymentTypes.map((pt: any) => ({
-                          label: pt,
-                          value: pt,
-                        }))}
-                        onChange={(value) =>
-                          handleCourseRowChange(index, "paymentType", value)
-                        }
-                        value={row.paymentType}
-                        placeholder="Select Payment Type"
-                      />
-                      <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
-                        <ChevronDownIcon />
-                      </span>
-                    </div>
-                  </div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 
-                  {/* Installment Type — only if selected */}
-                  {row.paymentType === "INSTALLMENT" &&
-                    installmentTypes.length > 0 && (
-                      <div className="mt-3">
-                        <Label>Select Installment Type</Label>
+                      {/* Payment Type */}
+                      <div ref={(el) => {
+                        inputRefs.current.paymentType = el;
+                      }}>
+                        <Label>Payment Type</Label>
                         <div className="relative">
                           <Select
-                            options={installmentTypes.map((ins: any) => ({
-                              label: `${ins.number} Installments - ₹${ins.amount}`,
-                              value: ins.id,
+                            options={paymentTypes.map((pt: any) => ({
+                              label: pt,
+                              value: pt,
                             }))}
                             onChange={(value) =>
-                              handleCourseRowChange(
-                                index,
-                                "installmentTypeId",
-                                value,
-                              )
+                              handleCourseRowChange(index, "paymentType", value)
                             }
-                            value={row.installmentTypeId}
-                            placeholder="Select Installment"
+                            value={row.paymentType}
+                            placeholder="Select Payment Type"
                           />
                           <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
                             <ChevronDownIcon />
                           </span>
                         </div>
                       </div>
-                    )}
 
-                  {/* Fee Amount */}
-                  <div className="mt-3">
-                    <Label>Fee Amount</Label>
-                    <Input
-                      disabled
-                      value={
-                        row.paymentType === "ONE_TIME"
-                          ? selectedCourse?.courseFeeStructure?.totalAmount ||
-                          ""
-                          : row.paymentType === "INSTALLMENT"
-                            ? installmentTypes.find(
-                              (i: any) =>
-                                i.id.toString() === row.installmentTypeId,
-                            )?.amount || ""
-                            : ""
-                      }
-                    />
-                  </div>
-
-                  {/* Batch */}
-                  <div className="mt-3">
-                    <Label>Select Batch</Label>
-                    <div className="relative" data-master="lab">
-                      <Select
-                        options={batchOptions.filter(
-                          (bt: any) =>
-                            !courseRows
-                              .filter((_, i) => i !== index) // other rows
-                              .map((r) => r.batchId)
-                              .includes(bt.value), // remove already assigned batch
+                      {/* Installment Type — only if selected */}
+                      {row.paymentType === "INSTALLMENT" &&
+                        installmentTypes.length > 0 && (
+                          <div>
+                            <Label>Installment Type</Label>
+                            <div className="relative">
+                              <Select
+                                options={installmentTypes.map((ins: any) => ({
+                                  label: `${ins.number} Installments - ₹${ins.amount}`,
+                                  value: ins.id,
+                                }))}
+                                onChange={(value) =>
+                                  handleCourseRowChange(
+                                    index,
+                                    "installmentTypeId",
+                                    value,
+                                  )
+                                }
+                                value={row.installmentTypeId}
+                                placeholder="Select Installment"
+                              />
+                              <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
+                                <ChevronDownIcon />
+                              </span>
+                            </div>
+                          </div>
                         )}
-                        onChange={(value) =>
-                          handleCourseRowChange(index, "batchId", value)
-                        }
-                        value={row.batchId}
-                        placeholder="Select Batch"
-                      />
-                      <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
-                        <ChevronDownIcon />
-                      </span>
-                    </div>
-                    </div>
-                  {/* Advance Payment */}
-                  <div className="mt-3">
-                    <Label>Advance Amount</Label>
-                    <Input
-                      type="number"
-                      placeholder="Enter Advance Amount"
-                      value={row.advanceAmount}
-                      onChange={(e) =>
-                        handleCourseRowChange(index, "advanceAmount", e.target.value)
-                      }
-                    />
-                  </div>
-                </ComponentCard>
-              );
-            })}
 
-            {/* Advance Payment Section */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-4 border rounded-lg bg-gray-50">
+                      {/* Fee Amount */}
+                      <div>
+                        <Label>Fee Amount</Label>
+                        <Input
+                          disabled
+                          value={
+                            row.paymentType === "ONE_TIME"
+                              ? selectedCourse?.courseFeeStructure?.totalAmount ||
+                              ""
+                              : row.paymentType === "INSTALLMENT"
+                                ? installmentTypes.find(
+                                  (i: any) =>
+                                    i.id.toString() === row.installmentTypeId,
+                                )?.amount || ""
+                                : ""
+                          }
+                        />
+                      </div>
+
+                      {/* Batch */}
+                      <div>
+                        <Label>Select Batch</Label>
+                        <div className="relative" data-master="lab">
+                          <Select
+                            options={batchOptions.filter(
+                              (bt: any) =>
+                                !courseRows
+                                  .filter((_, i) => i !== index)
+                                  .map((r) => r.batchId)
+                                  .includes(bt.value),
+                            )}
+                            onChange={(value) =>
+                              handleCourseRowChange(index, "batchId", value)
+                            }
+                            value={row.batchId}
+                            placeholder="Select Batch"
+                          />
+                          <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Advance Payment */}
+                      <div>
+                        <Label>Advance Amount</Label>
+                        <Input
+                          type="number"
+                          placeholder="Enter Advance Amount"
+                          value={row.advanceAmount}
+                          onChange={(e) =>
+                            handleCourseRowChange(index, "advanceAmount", e.target.value)
+                          }
+                        />
+                      </div>
+
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Advance Payment Toggle Section */}
+            <div className="mt-5 space-y-4">
+              <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
                 <input
                   type="checkbox"
                   id="showAdvancePayment"
                   checked={showAdvancePayment}
                   onChange={(e) => setShowAdvancePayment(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500"
                 />
-                <label htmlFor="showAdvancePayment" className="text-sm font-medium text-gray-700 cursor-pointer">
+                <label htmlFor="showAdvancePayment" className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">
                   Enable Advance Payment Collection
                 </label>
               </div>
 
               {showAdvancePayment && (
-                <ComponentCard title="Advance Payment Summary">
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold mb-3">Collect Advance Payments</h3>
+                <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                  <h4 className="mb-3 text-sm font-semibold text-gray-800 dark:text-gray-300">Collect Advance Payments</h4>
+                  <div className="space-y-3">
                     {courseRows.map((row, index) => {
                       const selectedCourse = courses.find(
                         (c) => c.id.toString() === row.courseId,
                       );
                       return (
-                        <div key={index} className="border rounded p-3 bg-gray-50">
-                          <div className="flex justify-between items-center">
+                        <div key={index} className="rounded-md border border-gray-100 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-800/50">
+                          <div className="flex items-center justify-between gap-4">
                             <div>
-                              <p className="font-medium">{selectedCourse?.name}</p>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{selectedCourse?.name}</p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">
                                 Total Fee: ₹{row.feeAmount || "0"}
                               </p>
                             </div>
-                            <div className="text-right">
-                              <Input
-                                type="number"
-                                placeholder="Advance Amount"
-                                value={row.advanceAmount}
-                                onChange={(e) =>
-                                  handleCourseRowChange(index, "advanceAmount", e.target.value)
-                                }
-                                className="w-32"
-                              />
-                            </div>
+                            <Input
+                              type="number"
+                              placeholder="Advance Amount"
+                              value={row.advanceAmount}
+                              onChange={(e) =>
+                                handleCourseRowChange(index, "advanceAmount", e.target.value)
+                              }
+                              className="w-36"
+                            />
                           </div>
                         </div>
                       );
                     })}
-                    
-                    <div className="flex justify-end mt-4 space-x-3">
-                      <Button 
-                        variant="outline" 
+
+                    <div className="mt-2 flex justify-end gap-3">
+                      <Button
+                        variant="outline"
                         onClick={() => {
-                          // Clear advance amounts
-                          setCourseRows(prev => 
+                          setCourseRows(prev =>
                             prev.map(row => ({ ...row, advanceAmount: "" }))
                           );
                         }}
                       >
                         Clear Advances
                       </Button>
-                      {/* <Button 
+                      {/* <Button
                         variant="primary"
                         onClick={handleAdvancePayment}
                         disabled={courseRows.every(row => !row.advanceAmount || parseFloat(row.advanceAmount) <= 0)}
@@ -1509,265 +1340,272 @@ export default function AdmissionForm() {
                       </Button> */}
                     </div>
                   </div>
-                </ComponentCard>
-              )}
-            </div>
-
-            {/* Id Proof Type */}
-            <ComponentCard title="Id Proof">
-              <div ref={(el) => {
-                inputRefs.current.idProofType = el; // ✅ different key
-              }}>
-                <Label>Select Id Proof</Label>
-                <div className="relative">
-                  <Select
-                    tabIndex={12}
-                    options={options}
-                    placeholder="Select Id Proof"
-                    onChange={(value) => handleChange("idProofType", value)}
-                    className="dark:bg-dark-900"
-                  />
-                  <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                    <ChevronDownIcon />
-                  </span>
                 </div>
-                {errors.idProofType && (
-                  <p className="text-sm text-red-500">{errors.idProofType}</p>
-                )}
-              </div>
-              <div ref={(el) => {
-                inputRefs.current.idProofNumber = el; // ✅ different key
-              }}>
-                <Label>
-                  <span className="capitalize">
-                    {filledEnquiryData.idProofType
-                      ? filledEnquiryData.idProofType.charAt(0).toUpperCase() +
-                      filledEnquiryData.idProofType.slice(1).toLowerCase()
-                      : ""}
-                  </span>{" "}
-                  Number
-                </Label>
-                <Input
-                  tabIndex={13}
-                  type="text"
-                  placeholder="Enter Id No."
-                  onChange={(e) => handleChange("idProofNumber", e.target.value)}
-                  value={filledEnquiryData.idProofNumber}
-                />
-                {errors.idProofNumber && (
-                  <p className="text-sm text-red-500">{errors.idProofNumber}</p>
-                )}
-              </div>
-            </ComponentCard>
-
-            {/* Local Address Proof Type */}
-            <ComponentCard title="Local Address Proof">
-              <div ref={(el) => {
-                inputRefs.current.localAddressProofType = el; // ✅ different key
-              }}>
-                <Label>Select Local Add. Proof</Label>
-                <div className="relative">
-                  <Select
-                    tabIndex={12}
-                    options={options}
-                    placeholder="Select Id Proof"
-                    onChange={(value) => handleChange("localAddressProofType", value)}
-                    className="dark:bg-dark-900"
-                  />
-                  <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                    <ChevronDownIcon />
-                  </span>
-                </div>
-                {errors.localAddressProofType && (
-                  <p className="text-sm text-red-500">{errors.localAddressProofType}</p>
-                )}
-              </div>
-              <div ref={(el) => {
-                inputRefs.current.localAddressProofNumber = el; // ✅ different key
-              }}>
-                <Label>
-                  <span className="capitalize">
-                    {filledEnquiryData.localAddressProofType
-                      ? filledEnquiryData.localAddressProofType.charAt(0).toUpperCase() +
-                      filledEnquiryData.localAddressProofType.slice(1).toLowerCase()
-                      : ""}
-                  </span>{" "}
-                  Number
-                </Label>
-                <Input
-                  tabIndex={13}
-                  type="text"
-                  placeholder="Enter Id No."
-                  onChange={(e) => handleChange("localAddressProofNumber", e.target.value)}
-                  value={filledEnquiryData.localAddressProofNumber}
-                />
-                {errors.localAddressProofNumber && (
-                  <p className="text-sm text-red-500">{errors.localAddressProofNumber}</p>
-                )}
-              </div>
-            </ComponentCard>
-
-
-            {/* Residential Address */}
-            <div ref={(el) => {
-              inputRefs.current.residentialAddress = el; // ✅ different key
-            }}>
-              <Label>Residential Address</Label>
-              <TextArea
-                tabIndex={14}
-                placeholder="Enter Student Residential Address"
-                value={filledEnquiryData.residentialAddress}
-                onChange={(value) =>
-                  handleChange("residentialAddress", value)
-                }
-              />
-              {errors.residentialAddress && (
-                <p className="text-sm text-red-500">
-                  {errors.residentialAddress}
-                </p>
               )}
-            </div>
-
-
-
-            {/* Permenant Address */}
-            <div ref={(el) => {
-              inputRefs.current.permenantAddress = el; // ✅ different key
-            }}>
-              <Label>Permenant Address</Label>
-
-              <TextArea
-                tabIndex={15}
-                placeholder="Enter Student Permenant Address"
-                value={filledEnquiryData.permenantAddress}
-                onChange={(value) =>
-                  handleChange("permenantAddress", value)
-                }
-                disabled={sameAsResidential}
-              />
-              {errors.permenantAddress && (
-                <p className="text-sm text-red-500">
-                  {errors.permenantAddress}
-                </p>
-              )}
-
-
-              <div className="flex items-center gap-2 mt-2">
-                <input
-                  type="checkbox"
-                  checked={sameAsResidential}
-                  onChange={(e) => {
-                    const checked = e.target.checked;
-                    setSameAsResidential(checked);
-
-                    setFilledEnquiryData((prev) => ({
-                      ...prev,
-                      permenantAddress: checked ? prev.residentialAddress : "",
-                    }));
-                  }}
-                />
-                <span className="text-sm">Same as Residential Address</span>
-              </div>
-            </div>
-
-            {/* Stationary Kit Type */}
-            <ComponentCard title="Kit Details">
-              <div className="flex gap-6">
-
-                {/* ID Card */}
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={filledEnquiryData.idCard}
-                    onChange={(e) =>
-                      setFilledEnquiryData((prev) => ({
-                        ...prev,
-                        idCard: e.target.checked,
-                      }))
-                    }
-                  />
-                  ID Card Issued
-                </label>
-
-                {/* Bag */}
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={filledEnquiryData.bag}
-                    onChange={(e) =>
-                      setFilledEnquiryData((prev) => ({
-                        ...prev,
-                        bag: e.target.checked,
-                      }))
-                    }
-                  />
-                  Bag Issued
-                </label>
-
-              </div>
-            </ComponentCard>
-
-
-
-            <div
-              ref={(el) => {
-                inputRefs.current.referedBy = el; // ✅ different key
-              }}
-            >
-              <Label>Reference Name</Label>
-              <Input
-                type="text"
-                tabIndex={2}
-
-                placeholder="Enter Reference"
-                value={titleCase(newEnquiry.referedBy)}
-                onChange={(e) => handleChangeNew("referedBy", e.target.value)}
-              />
-              {errors.referedBy && (
-                <p className="text-sm text-red-500">{errors.referedBy}</p>
-              )}
-            </div>
-
-            <div ref={(el) => {
-              inputRefs.current.admissionDate = el; // ✅ different key
-            }}>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Admission Date
-              </label>
-              <Input
-                tabIndex={16}
-                type="datetime-local"
-                placeholder="Enter Admission Date"
-                value={filledEnquiryData.admissionDate}
-                onChange={(e) => handleChange("admissionDate", e.target.value)}
-              />
-              {errors.admissionDate && (
-                <p className="text-sm text-red-500">{errors.admissionDate}</p>
-              )}
-            </div>
-
-            <div>
-              <DropzonBoxComponent
-                tabIndex={17}
-                title="Student Photo"
-                selectedFile={selectedProfilePicture}
-                setSelectedFile={setSelectedProfilePicture}
-              />
-              {errors.selectedProfilePicture && (
-                <p className="text-sm text-red-500">
-                  {errors.selectedProfilePicture}
-                </p>
-              )}
-            </div>
-            <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-              <Button size="sm" variant="outline" tabIndex={19}>
-                Clear
-              </Button>
-              <Button size="sm" tabIndex={18} variant="primary" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
-                Save
-              </Button>
             </div>
           </div>
+
+          {/* Section 4: Identity & Address Proof */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Identity & Address Proof</h3>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+              {/* Id Proof */}
+              <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                <h4 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">ID Proof</h4>
+                <div className="flex flex-col gap-4">
+                  <div ref={(el) => {
+                    inputRefs.current.idProofType = el;
+                  }}>
+                    <Label>Select Id Proof</Label>
+                    <div className="relative">
+                      <Select
+                        tabIndex={12}
+                        options={options}
+                        placeholder="Select Id Proof"
+                        onChange={(value) => handleChange("idProofType", value)}
+                        className="dark:bg-dark-900"
+                      />
+                      <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                        <ChevronDownIcon />
+                      </span>
+                    </div>
+                    {errors.idProofType && (
+                      <p className="mt-1 text-sm text-red-500">{errors.idProofType}</p>
+                    )}
+                  </div>
+                  <div ref={(el) => {
+                    inputRefs.current.idProofNumber = el;
+                  }}>
+                    <Label>
+                      <span className="capitalize">
+                        {filledEnquiryData.idProofType
+                          ? filledEnquiryData.idProofType.charAt(0).toUpperCase() +
+                          filledEnquiryData.idProofType.slice(1).toLowerCase()
+                          : ""}
+                      </span>{" "}
+                      Number
+                    </Label>
+                    <Input
+                      tabIndex={13}
+                      type="text"
+                      placeholder="Enter Id No."
+                      onChange={(e) => handleChange("idProofNumber", e.target.value)}
+                      value={filledEnquiryData.idProofNumber}
+                    />
+                    {errors.idProofNumber && (
+                      <p className="mt-1 text-sm text-red-500">{errors.idProofNumber}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Local Address Proof */}
+              <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                <h4 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Local Address Proof</h4>
+                <div className="flex flex-col gap-4">
+                  <div ref={(el) => {
+                    inputRefs.current.localAddressProofType = el;
+                  }}>
+                    <Label>Select Local Add. Proof</Label>
+                    <div className="relative">
+                      <Select
+                        tabIndex={12}
+                        options={options}
+                        placeholder="Select Id Proof"
+                        onChange={(value) => handleChange("localAddressProofType", value)}
+                        className="dark:bg-dark-900"
+                      />
+                      <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                        <ChevronDownIcon />
+                      </span>
+                    </div>
+                    {errors.localAddressProofType && (
+                      <p className="mt-1 text-sm text-red-500">{errors.localAddressProofType}</p>
+                    )}
+                  </div>
+                  <div ref={(el) => {
+                    inputRefs.current.localAddressProofNumber = el;
+                  }}>
+                    <Label>
+                      <span className="capitalize">
+                        {filledEnquiryData.localAddressProofType
+                          ? filledEnquiryData.localAddressProofType.charAt(0).toUpperCase() +
+                          filledEnquiryData.localAddressProofType.slice(1).toLowerCase()
+                          : ""}
+                      </span>{" "}
+                      Number
+                    </Label>
+                    <Input
+                      tabIndex={13}
+                      type="text"
+                      placeholder="Enter Id No."
+                      onChange={(e) => handleChange("localAddressProofNumber", e.target.value)}
+                      value={filledEnquiryData.localAddressProofNumber}
+                    />
+                    {errors.localAddressProofNumber && (
+                      <p className="mt-1 text-sm text-red-500">{errors.localAddressProofNumber}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Section 5: Address Details */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Address Details</h3>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+              {/* Residential Address */}
+              <div ref={(el) => {
+                inputRefs.current.residentialAddress = el;
+              }}>
+                <Label>Residential Address</Label>
+                <TextArea
+                  tabIndex={14}
+                  placeholder="Enter Student Residential Address"
+                  value={filledEnquiryData.residentialAddress}
+                  onChange={(value) =>
+                    handleChange("residentialAddress", value)
+                  }
+                />
+                {errors.residentialAddress && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.residentialAddress}
+                  </p>
+                )}
+              </div>
+
+              {/* Permenant Address */}
+              <div ref={(el) => {
+                inputRefs.current.permenantAddress = el;
+              }}>
+                <Label>Permenant Address</Label>
+                <TextArea
+                  tabIndex={15}
+                  placeholder="Enter Student Permenant Address"
+                  value={filledEnquiryData.permenantAddress}
+                  onChange={(value) =>
+                    handleChange("permenantAddress", value)
+                  }
+                  disabled={sameAsResidential}
+                />
+                {errors.permenantAddress && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.permenantAddress}
+                  </p>
+                )}
+
+                <div className="mt-2 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={sameAsResidential}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setSameAsResidential(checked);
+
+                      setFilledEnquiryData((prev) => ({
+                        ...prev,
+                        permenantAddress: checked ? prev.residentialAddress : "",
+                      }));
+                    }}
+                  />
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Same as Residential Address</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Section 6: Admission & Kit Details */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Admission & Kit Details</h3>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+
+              <div ref={(el) => {
+                inputRefs.current.admissionDate = el;
+              }}>
+                <Label>Admission Date</Label>
+                <Input
+                  tabIndex={16}
+                  type="datetime-local"
+                  placeholder="Enter Admission Date"
+                  value={filledEnquiryData.admissionDate}
+                  onChange={(e) => handleChange("admissionDate", e.target.value)}
+                />
+                {errors.admissionDate && (
+                  <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>
+                )}
+              </div>
+
+              <div className="lg:col-span-2">
+                <Label>Kit Details</Label>
+                <div className="mt-1.5 flex h-11 items-center gap-6 rounded-lg border border-gray-300 px-4 dark:border-gray-700">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300">
+                    <input
+                      type="checkbox"
+                      checked={filledEnquiryData.idCard}
+                      onChange={(e) =>
+                        setFilledEnquiryData((prev) => ({
+                          ...prev,
+                          idCard: e.target.checked,
+                        }))
+                      }
+                    />
+                    ID Card Issued
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300">
+                    <input
+                      type="checkbox"
+                      checked={filledEnquiryData.bag}
+                      onChange={(e) =>
+                        setFilledEnquiryData((prev) => ({
+                          ...prev,
+                          bag: e.target.checked,
+                        }))
+                      }
+                    />
+                    Bag Issued
+                  </label>
+                </div>
+              </div>
+
+              <div className="lg:col-span-3">
+                <DropzonBoxComponent
+                  tabIndex={17}
+                  title="Student Photo"
+                  selectedFile={selectedProfilePicture}
+                  setSelectedFile={setSelectedProfilePicture}
+                />
+                {errors.selectedProfilePicture && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.selectedProfilePicture}
+                  </p>
+                )}
+              </div>
+
+            </div>
+          </div>
+
+          {/* Action Bar */}
+          <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
+            <Button size="sm" variant="outline" tabIndex={19}>
+              Clear
+            </Button>
+            <Button
+              size="sm"
+              tabIndex={18}
+              variant="primary"
+              className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+              onClick={handleSubmit}
+            >
+              Save
+            </Button>
+          </div>
+
         </div>
       </div>
     </div>

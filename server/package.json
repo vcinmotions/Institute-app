@@ -26,6 +26,8 @@
     "db:push:tenant": "prisma db push --schema=prisma/institute/schema.prisma",
     "generate:central": "npx prisma generate --schema=prisma/central/schema.prisma",
     "generate:tenant": "npx prisma generate --schema=prisma/institute/schema.prisma",
+    "validate:central": "npx prisma validate --schema=prisma/central/schema.prisma",
+    "validate:tenant": "npx prisma validate --schema=prisma/institute/schema.prisma",
     "generate:central-prod": "npx prisma generate --schema=prisma/central/schema.sqlite.prisma",
     "generate:tenant-prod": "npx prisma generate --schema=prisma/institute/schema.sqlite.prisma",
     "migrate:central": "npx prisma migrate dev --schema=prisma/central/schema.sqlite.prisma",

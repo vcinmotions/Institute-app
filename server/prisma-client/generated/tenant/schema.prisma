@@ -101,8 +101,8 @@ model ActivityLog {
 }
 
 model Enquiry {
-  id               String          @id @default(uuid())
-  srNo             Int             @unique
+  id               String    @id @default(uuid())
+  srNo             Int       @unique
   name             String
   contact          String
   alternateContact String?
@@ -113,24 +113,37 @@ model Enquiry {
   course           String?
   gender           String?
   dob              DateTime?
-  source           String?
-  referedBy        String?
-  takenBy          String?
-  leadStatus       LeadStatus      @default(WARM)
-  enquiryDate      DateTime?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  isConverted      Boolean         @default(false)
-  studentId        Int?            @unique
-  clientAdminId    String
-  clientAdmin      ClientAdmin     @relation("AdminToEnquiries", fields: [clientAdminId], references: [id])
-  student          Student?        @relation("EnquiryToStudent", fields: [studentId], references: [id])
-  enquiryCourse    EnquiryCourse[]
-  followUps        FollowUp[]
-  notification     Notification?
+
+  sourceId Int?
+  source   SourceType? @relation(fields: [sourceId], references: [id])
+
+  referedBy     String?
+  takenBy       String?
+  leadStatus    LeadStatus      @default(WARM)
+  enquiryDate   DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  isConverted   Boolean         @default(false)
+  studentId     Int?            @unique
+  clientAdminId String
+  clientAdmin   ClientAdmin     @relation("AdminToEnquiries", fields: [clientAdminId], references: [id])
+  student       Student?        @relation("EnquiryToStudent", fields: [studentId], references: [id])
+  enquiryCourse EnquiryCourse[]
+  followUps     FollowUp[]
+  notification  Notification?
 
   @@unique([email, clientAdminId])
   @@unique([contact, clientAdminId])
+}
+
+model SourceType {
+  id   Int    @id @default(autoincrement())
+  name String
+  slug String @unique
+
+  createdAt DateTime @default(now())
+
+  enquiries Enquiry[]
 }
 
 model EnquiryCourse {

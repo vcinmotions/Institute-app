@@ -45,14 +45,14 @@ interface EnquiryData {
   name: string;
   email: string;
   courseId: string[];
-  alternateContact: string,
-  location: string,
-  city: string,
-  gender: string,
-  dob: string,
-  enquiryDate: string,
-  referedBy: string,
-  takenBy: string,
+  alternateContact: string;
+  location: string;
+  city: string;
+  gender: string;
+  dob: string;
+  enquiryDate: string;
+  referedBy: string;
+  takenBy: string;
   source: string;
   contact: string;
 }
@@ -80,9 +80,7 @@ export default function EditEnquiryForm({
   });
 
   const dispatch = useDispatch();
-  console.log("GEt enquiry data to edit Enquiry:", enquiryData);
-
-  //const course = useSelector((state: RootState) => state.course.courses);
+  console.log("Get enquiry data to edit Enquiry:", enquiryData);
 
   // New state for alert
   const [alert, setAlert] = useState<{
@@ -96,6 +94,7 @@ export default function EditEnquiryForm({
     message: "",
     variant: "",
   });
+  
   const error = useSelector((state: RootState) => state.enquiry.error);
   const modalBodyRef = useRef<HTMLDivElement>(null);
   const { inputRefs, scrollToError } = useScrollToError();
@@ -116,7 +115,7 @@ export default function EditEnquiryForm({
     const countryIso = branchCountry;
     const cities = City.getCitiesOfState(countryIso, branchState);
     setCity(cities);
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (courseData?.course) {
@@ -140,6 +139,7 @@ export default function EditEnquiryForm({
 
   const [errors, setErrors] = useState<FormErrors>({});
   const { mutate: editEnquiry, isPending } = useEditEnquiry();
+  
   const countries = [
     { code: "IN", label: "+91" },
     { code: "US", label: "+1" },
@@ -155,41 +155,11 @@ export default function EditEnquiryForm({
     });
   };
 
-  console.log("Get Courses Name in Enquiry Form:", courses);
-
   const genders = [
     { value: "female", label: "Female" },
     { value: "male", label: "Male" },
     { value: "other", label: "Other" },
   ];
-
-  // useEffect(() => {
-  //   if (enquiryData && Object.keys(enquiryData).length > 0) {
-  //     console.log("🔥 Setting enquiry data to form:", enquiryData);
-
-  //     // Extract course IDs from enquiryCourse array
-  //     const courseIds: string[] = enquiryData.enquiryCourse
-  //       ? enquiryData.enquiryCourse.map((ec: any) => String(ec.courseId))
-  //       : [];
-
-  //     setNewEnquiry({
-  //       id: enquiryData.id,
-  //       name: enquiryData.name || "",
-  //       email: enquiryData.email || "",
-  //       courseId: courseIds, // ✅ set extracted course IDs
-  //       alternateContact: enquiryData.alternateContact || "",
-  //       location: enquiryData.location || "",
-  //       city: enquiryData.city || "",
-  //       gender: enquiryData.gender || "",
-  //       dob: enquiryData.dob
-  //       ? enquiryData.dob.split("T")[0] // ✅ FIX HERE
-  //       : "",
-  //       referedBy: enquiryData.referedBy || "",
-  //       source: enquiryData.source || "",
-  //       contact: enquiryData.contact || "",
-  //     });
-  //   }
-  // }, [enquiryData]);
 
   useEffect(() => {
     if (!enquiryData) return;
@@ -210,8 +180,8 @@ export default function EditEnquiryForm({
       id: enquiryData.id,
       name: enquiryData.name ?? "",
       email: enquiryData.email ?? "",
-      contact: splicedContact,                 // ✅ FIXED
-      alternateContact: splicedAlternateContact, // ✅ FIXED
+      contact: splicedContact,
+      alternateContact: splicedAlternateContact,
       location: enquiryData.location ?? "",
       city: enquiryData.city ?? "",
       gender: enquiryData.gender ?? "",
@@ -229,30 +199,6 @@ export default function EditEnquiryForm({
   useEffect(() => {
     firstInputRef.current?.focus();
   }, []);
-
-  console.log("Get Courses Name in Enquiry Form:", courseList);
-
-  // const handlePhoneNumberChange = (
-  //   phoneNumber: string,
-  //   countryCode: string,
-  // ) => {
-  //   // If phoneNumber doesn't start with +, prepend selected country code
-  //   let formattedNumber = phoneNumber;
-  //   if (!phoneNumber.startsWith("+")) {
-  //     formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
-  //   }
-
-  //   setNewEnquiry((prev) => ({
-  //     ...prev,
-  //     contact: formattedNumber,
-  //   }));
-
-  //   setErrors((prev) => ({
-  //     ...prev,
-  //     contact: "",
-  //   }));
-  // };
-
 
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
     const safePhone = phoneNumber || ""; // 🛡️
@@ -312,28 +258,6 @@ export default function EditEnquiryForm({
     }));
   };
 
-  //  const handleAlternatePhoneNumberChange = (
-  //   phoneNumber: string,
-  //   countryCode: string,
-  // ) => {
-  //   // If phoneNumber doesn't start with +, prepend selected country code
-  //   let formattedNumber = phoneNumber;
-  //   if (!phoneNumber.startsWith("+")) {
-  //     formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
-  //   }
-
-  //   setNewEnquiry((prev) => ({
-  //     ...prev,
-  //     alternateContact: formattedNumber,
-  //   }));
-
-  //   setErrors((prev) => ({
-  //     ...prev,
-  //     alternateContact: "",
-  //   }));
-  // };
-
-
   const validate = () => {
     const newErrors: FormErrors = {};
 
@@ -377,7 +301,7 @@ export default function EditEnquiryForm({
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter required fileds.",
+        message: "Please enter required fields.",
         variant: "error",
       });
 
@@ -452,21 +376,29 @@ export default function EditEnquiryForm({
 
       onError: () => {
         scrollModalToTop();
-        // You already handle error via redux + toast
       },
     });
   };
 
-  console.log("GET ENQUIRY FORM DATA", newEnquiry);
-
   return (
-    <ModalCard title="Edit Enquiry" oncloseModal={onCloseModal} onBodyRef={(el) => (modalBodyRef.current = el)}>
-      <div className="space-y-6">
+    <ModalCard
+      title="Edit Enquiry"
+      oncloseModal={onCloseModal}
+      onBodyRef={(el) => (modalBodyRef.current = el)}
+    >
+      <div className="flex flex-col gap-6">
+        
+        {/* Header & Alerts */}
+        <div className="border-b pb-4 dark:border-gray-700">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Update the details below to modify the system enquiry.
+          </p>
+        </div>
+
         {error && (
-          <div className="rounded-md border border-red-300 bg-red-100 p-3 text-sm text-red-700">
-            {error}
-          </div>
+          <Alert variant="error" title="" message={error} showLink={false} />
         )}
+        
         {alert.show && (
           <Alert
             variant={alert.title === "Enquiry Updated" ? "success" : "error"}
@@ -475,214 +407,234 @@ export default function EditEnquiryForm({
             showLink={false}
           />
         )}
-        <div ref={(el) => {
-          inputRefs.current.name = el;
-        }}>
-          <Label>Name</Label>
-          <Input
-            ref={firstInputRef}
-            type="text"
-            placeholder="Enter Name"
-            value={titleCase(newEnquiry.name)}
-            tabIndex={1}
-            onChange={(e) => handleChange("name", e.target.value)}
-          />
-          {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
-        </div>
-        <div ref={(el) => {
-          inputRefs.current.email = el;
-        }}>
-          <Label>Email</Label>
-          <div className="relative">
-            <Input
-              placeholder="Enter Email"
-              type="text"
-              className="pl-[62px]"
-              tabIndex={2}
-              value={newEnquiry.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-            />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
-            )}
-            <span className="absolute top-1/2 left-0 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
-              <EnvelopeIcon />
-            </span>
+
+        {/* Section 1: Personal Details */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Personal Details
+          </h3>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div ref={(el) => { inputRefs.current.name = el; }}>
+              <Label>Name *</Label>
+              <Input
+                ref={firstInputRef}
+                type="text"
+                placeholder="Enter Name"
+                value={titleCase(newEnquiry.name)}
+                tabIndex={1}
+                onChange={(e) => handleChange("name", e.target.value)}
+              />
+              {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+            </div>
+
+            <div>
+              <Label>Gender</Label>
+              <div className="relative">
+                <Select
+                  tabIndex={2}
+                  options={genders.map((item) => ({
+                    label: item.label,
+                    value: item.value,
+                  }))}
+                  placeholder="Select Gender"
+                  onChange={(value) => handleChange("gender", value)}
+                  value={newEnquiry.gender}
+                  className="dark:bg-dark-900"
+                />
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+              {errors.gender && <p className="mt-1 text-sm text-red-500">{errors.gender}</p>}
+            </div>
+
+            <div>
+              <Label>Date Of Birth</Label>
+              <Input
+                tabIndex={3}
+                type="date"
+                placeholder="Enter DoB"
+                value={newEnquiry.dob}
+                onChange={(e) => handleChange("dob", e.target.value)}
+              />
+              {errors.dob && <p className="mt-1 text-sm text-red-500">{errors.dob}</p>}
+            </div>
           </div>
         </div>
-        <div ref={(el) => {
-          inputRefs.current.contact = el;
-        }}>
-          <Label>Contact No.</Label>
-          <PhoneInput
-            selectPosition="start"
-            countries={countries}
-            tabIndex={3}
-            value={newEnquiry.contact}
-            placeholder="Enter Contact"
-            onChange={handlePhoneNumberChange}
-          />
-          {errors.contact && (
-            <p className="text-sm text-red-500">{errors.contact}</p>
-          )}
-        </div>{" "}
 
+        {/* Section 2: Contact & Location */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Contact & Location
+          </h3>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div ref={(el) => { inputRefs.current.contact = el; }}>
+              <Label>Contact No. *</Label>
+              <PhoneInput
+                selectPosition="start"
+                countries={countries}
+                tabIndex={4}
+                value={newEnquiry.contact}
+                placeholder="Enter Contact"
+                onChange={handlePhoneNumberChange}
+              />
+              {errors.contact && <p className="mt-1 text-sm text-red-500">{errors.contact}</p>}
+            </div>
 
-        <div>
-          <Label>Alternate Conatct No.</Label>
-          <PhoneInput
-            tabIndex={4}
-            countries={countries}
-            value={newEnquiry.alternateContact ?? ""} // ← fixed // <-- THIS FIXES IT
-            placeholder="Enter alternate Contact"
-            onChange={handleAlternatePhoneNumberChange}
-          />
-          {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
-        </div>{" "}
+            <div>
+              <Label>Alternate Contact No.</Label>
+              <PhoneInput
+                tabIndex={5}
+                countries={countries}
+                value={newEnquiry.alternateContact ?? ""}
+                placeholder="Enter alternate Contact"
+                onChange={handleAlternatePhoneNumberChange}
+              />
+              {errors.alternateContact && <p className="mt-1 text-sm text-red-500">{errors.alternateContact}</p>}
+            </div>
 
-        <div>
-          <div className="relative">
-            <MultiSelect
-              tabIndex={9}
-              label="Select Courses"
-              options={courseList.map((course) => ({
-                value: String(course.id),
-                text: capitalizeWords(course.name),
-                selected: newEnquiry.courseId.includes(String(course.id)), // optional if MultiSelect uses selected prop
-              }))}
-              value={newEnquiry.courseId} // 🔥 CONTROLLED VALUE
-              onChange={(value) => handleChange("courseId", value)}
-            />
+            <div ref={(el) => { inputRefs.current.email = el; }}>
+              <Label>Email</Label>
+              <div className="relative">
+                <Input
+                  placeholder="Enter Email"
+                  type="text"
+                  className="pl-[60px]"
+                  tabIndex={6}
+                  value={newEnquiry.email}
+                  onChange={(e) => handleChange("email", e.target.value)}
+                />
+                <span className="absolute top-1/2 left-0 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                  <EnvelopeIcon />
+                </span>
+              </div>
+              {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+            </div>
+
+            <div>
+              <Label>City</Label>
+              <Select
+                options={city.map((c) => ({
+                  label: c.name,
+                  value: c.name,
+                }))}
+                tabIndex={7}
+                placeholder="Select City"
+                onChange={(value) => handleChange("city", value)}
+                value={newEnquiry.city}
+              />
+              {errors.city && <p className="mt-1 text-sm text-red-500">{errors.city}</p>}
+            </div>
+
+            <div className="lg:col-span-2">
+              <Label>Location / Locality</Label>
+              <Input
+                type="text"
+                placeholder="Enter Location"
+                value={normalizeToLowercase(newEnquiry.location)}
+                tabIndex={8}
+                onChange={(e) => handleChange("location", e.target.value)}
+              />
+              {errors.location && <p className="mt-1 text-sm text-red-500">{errors.location}</p>}
+            </div>
           </div>
-          {errors.courseId && (
-            <p className="text-sm text-red-500">{errors.courseId}</p>
-          )}
         </div>
 
-        <div>
-          <Label>Enquiry Date</Label>
-          <Input
-            tabIndex={6}
-            type="date"
-            placeholder="Enter Enquiry Date"
-            //maxLength={10} // e.g. 12:30 PM
-            value={newEnquiry.enquiryDate}
-            onChange={(e) => handleChange("enquiryDate", e.target.value)}
-          />
-          {errors.dob && <p className="text-sm text-red-500">{errors.enquiryDate}</p>}
-        </div>
-        <div>
-          <Label>Date Of Birth</Label>
-          <Input
-            tabIndex={6}
-            type="date"
-            placeholder="Enter DoB"
-            //maxLength={10} // e.g. 12:30 PM
-            value={newEnquiry.dob}
-            onChange={(e) => handleChange("dob", e.target.value)}
-          />
-          {errors.dob && <p className="text-sm text-red-500">{errors.dob}</p>}
-        </div>
+        {/* Section 3: Enquiry Details */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Enquiry Details
+          </h3>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            
+            <div className="lg:col-span-2" ref={(el) => { inputRefs.current.courseId = el; }}>
+              {/* <Label>Select Courses *</Label> */}
+              <div className="relative">
+                <MultiSelect
+                  tabIndex={9}
+                  label="Select Courses *"
+                  options={courseList.map((course) => ({
+                    value: String(course.id),
+                    text: capitalizeWords(course.name),
+                    selected: newEnquiry.courseId.includes(String(course.id)),
+                  }))}
+                  value={newEnquiry.courseId}
+                  onChange={(value) => handleChange("courseId", value)}
+                />
+              </div>
+              {errors.courseId && <p className="mt-1 text-sm text-red-500">{errors.courseId}</p>}
+            </div>
 
-        <div>
-          <Label>Gender</Label>
+            <div>
+              <Label>Enquiry Date</Label>
+              <Input
+                tabIndex={10}
+                type="date"
+                placeholder="Enter Enquiry Date"
+                value={newEnquiry.enquiryDate}
+                onChange={(e) => handleChange("enquiryDate", e.target.value)}
+              />
+              {errors.enquiryDate && <p className="mt-1 text-sm text-red-500">{errors.enquiryDate}</p>}
+            </div>
 
-          <div className="relative">
-            <Select
-              tabIndex={7}
-              options={genders.map((item) => ({
-                label: item.label,
-                value: item.value,
-              }))}
-              placeholder="Select Gender"
-              onChange={(value) => handleChange("gender", value)}
-              value={newEnquiry.gender} // just the courseId string
-              className="dark:bg-dark-900"
-            />
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
+            <div>
+              <Label>Source</Label>
+              <Input
+                type="text"
+                placeholder="Enter Source"
+                value={newEnquiry.source}
+                tabIndex={11}
+                onChange={(e) => handleChange("source", e.target.value)}
+              />
+              {errors.source && <p className="mt-1 text-sm text-red-500">{errors.source}</p>}
+            </div>
+
+            <div>
+              <Label>Referred By</Label>
+              <Input
+                type="text"
+                placeholder="Enter Referred Name"
+                value={newEnquiry.referedBy}
+                tabIndex={12}
+                onChange={(e) => handleChange("referedBy", e.target.value)}
+              />
+              {errors.referedBy && <p className="mt-1 text-sm text-red-500">{errors.referedBy}</p>}
+            </div>
+
+            <div>
+              <Label>Taken By</Label>
+              <Input
+                type="text"
+                placeholder="Taken by"
+                value={newEnquiry.takenBy}
+                tabIndex={13}
+                onChange={(e) => handleChange("takenBy", e.target.value)}
+              />
+              {errors.takenBy && <p className="mt-1 text-sm text-red-500">{errors.takenBy}</p>}
+            </div>
           </div>
-          {errors.gender && (
-            <p className="text-sm text-red-500">{errors.gender}</p>
-          )}
         </div>
 
-
-
-        {/* CITY */}
-        <div>
-          <Label>City *</Label>
-          <Select
-            options={city.map((c) => ({
-              label: c.name,
-              value: c.name, // city name is fine
-            }))}
-            tabIndex={8}
-            placeholder="Select City"
-            onChange={(value) => handleChange("city", value)}
-            value={newEnquiry.city}
-          />
-          {errors.city && (
-            <p className="text-sm text-red-500">{errors.city}</p>
-          )}
-        </div>
-
-        <div>
-          <Label>Location</Label>
-          <Input
-            type="text"
-            placeholder="Enter Location"
-            value={normalizeToLowercase(newEnquiry.location)}
-            tabIndex={9}
-            onChange={(e) => handleChange("location", e.target.value)} />
-          {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
-        </div>
-
-
-
-        <div>
-          <Label>Source</Label>
-          <Input
-            type="text"
-            placeholder="Enter Source"
-            value={newEnquiry.source}
-            tabIndex={10}
-            onChange={(e) => handleChange("source", e.target.value)} />
-          {errors.source && <p className="text-red-500 text-sm">{errors.source}</p>}
-        </div>
-
-
-        <div>
-          <Label>Refered By</Label>
-          <Input
-            type="text"
-            placeholder="Enter Refered Name"
-            value={newEnquiry.referedBy}
-            tabIndex={11}
-            onChange={(e) => handleChange("referedBy", e.target.value)} />
-          {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
-        </div>
-
-        <div>
-          <Label>Taken By</Label>
-          <Input
-            type="text"
-            placeholder="Taken by"
-            value={newEnquiry.takenBy}
-            tabIndex={11}
-            onChange={(e) => handleChange("takenBy", e.target.value)} />
-          {errors.takenBy && <p className="text-red-500 text-sm">{errors.takenBy}</p>}
-        </div>
-
-        <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-          <Button size="sm" variant="outline" tabIndex={12} onClick={onCloseModal}>
+        {/* Action Bar */}
+        <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
+          <Button 
+            size="sm" 
+            variant="outline" 
+            tabIndex={14} 
+            onClick={onCloseModal}
+          >
             Close
           </Button>
-          <Button size="sm" tabIndex={13} className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
-            Save
+          <Button 
+            size="sm" 
+            tabIndex={15} 
+            className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500" 
+            onClick={handleSubmit}
+          >
+            Save Enquiry
           </Button>
         </div>
+
       </div>
     </ModalCard>
   );

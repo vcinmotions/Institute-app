@@ -16,7 +16,7 @@ export interface AuthParams {
 
 export async function SignIn({email, password}: AuthParams): Promise<SignInResponse> {
   try {
-    const response = await axios.post('/api/login', { email, password }, {
+    const response = await axios.post('/api/auth/login', { email, password }, {
       withCredentials: true,
     })
     return response.data

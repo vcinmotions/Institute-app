@@ -17,6 +17,7 @@ import admissionReducer from './slices/admissionSlice'
 import stationaryReducer from './slices/stationarySlice'
 import taskReducer from './slices/taskSlice'
 import testReducer from './slices/testSlice'
+import sourceReducer from './slices/sourceSlice'
 
 export const store = configureStore({
   reducer: {
@@ -38,6 +39,7 @@ export const store = configureStore({
     stationary: stationaryReducer,
     task: taskReducer,
     test: testReducer,
+    source: sourceReducer,
     // add more reducers here (notifications, enquiry etc)
   },
 });

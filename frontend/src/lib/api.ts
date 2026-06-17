@@ -958,6 +958,23 @@ export const editTestAPI = async (
   return response.data;
 };
 
+export const createSourceAPI = async (
+  token: string,
+  sourceData: { name: string }
+) => {
+  const response = await apiClient.post(
+    "/create-source",
+    sourceData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
 // 🔧 FIXED getUser API with token header
 export const createFacultyAPI = async (token: string, newFacultyData: any) => {
   const response = await apiClient.post(`/create-faculty`, newFacultyData, {

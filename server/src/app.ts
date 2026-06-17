@@ -28,6 +28,7 @@ import MasterRoute from "../src/routes/master.dashboard.routes";
 import LogRoute from "../src/routes/log.routes";
 import rolesRoute from "../src/routes/roles.routes";
 import stationaryRoute from "../src/routes/stationary.routes";
+import sourceRoute from "../src/routes/source.routes";
 import attendanceRoute from "./routes/attendance.routes";
 import taskRoute from "./routes/task.routes";
 import testRoute from "./routes/test.routes";
@@ -88,6 +89,8 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // // Attach CORS middleware with dynamic logic
 // app.use(cors(dynamicCors));
 
+app.use(cors({ origin: 'http://localhost:3000' })); // Or whatever port your React app runs on
+
 // // Core middleware
 // app.use(express.json());
 
@@ -127,5 +130,6 @@ app.use("/api", rolesRoute);
 app.use("/api", taskRoute);
 app.use("/api", testRoute);
 app.use("/api", stationaryRoute);
+app.use("/api", sourceRoute);
 
 export default app;

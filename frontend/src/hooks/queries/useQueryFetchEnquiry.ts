@@ -1,5 +1,6 @@
 // useQueryFetchEnquiry.ts
 import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData } from "@tanstack/react-query"; // If on RQ v5
 
 // Define the type of your API response
 interface EnquiryApiResponse {
@@ -46,14 +47,15 @@ export const useFetchEnquiry = ({
         sortField,
         sortOrder,
         ...filters,
+        signal // <-- Pass this to your axios/fetch call inside `getEnquiry`!
       });
-      console.log("ENQUIRY USE QUERY FETCHED:", data)
 
       if (!data) throw new Error("No data returned");
 
       return data;
     },
     enabled: !!token,
+    placeholderData: keepPreviousData,
     staleTime: 30 * 1000,   // ⭐ caching (30s)
 
   });
