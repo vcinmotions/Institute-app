@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
@@ -55,7 +56,6 @@ export default function CourseForm({
   const dispatch = useDispatch();
   const [facultyList, setFacultyList] = useState([]);
   const { inputRefs, scrollToError } = useScrollToError();
-  
 
   const [batchList, setBatchList] = useState([]);
 
@@ -87,10 +87,10 @@ export default function CourseForm({
   console.log("useEffect triggered — studentDetails:", studentDetails);
 
   const {
-      data: batchData,
-      isLoading: batchLoading,
-      isError: batchError,
-    } = useFetchAllBatches({ onlyAvailable: true });
+    data: batchData,
+    isLoading: batchLoading,
+    isError: batchError,
+  } = useFetchAllBatches({ onlyAvailable: true });
 
   const [paymentTypeOption, setpaymentTypeOption] = useState<any>([]);
   const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
@@ -118,13 +118,13 @@ export default function CourseForm({
   console.log("Get Courses Name in Add course to student Form:", courseList);
 
   useEffect(() => {
-      console.log("get all batches data;", batchData);
-      if (batchData?.batch) { 
-        dispatch(setBatches(batchData.batch));
-      }
-      setBatches;
-    }, [batchData, dispatch]);
-    console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
+    console.log("get all batches data;", batchData);
+    if (batchData?.batch) {
+      dispatch(setBatches(batchData.batch));
+    }
+    setBatches;
+  }, [batchData, dispatch]);
+  console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
 
   const enrolledCourseIds =
     studentDetails?.studentCourses?.map(
@@ -160,12 +160,6 @@ export default function CourseForm({
       })
       .filter(Boolean) || [];
 
-  // Filter batches to remove those with same time ranges
-  // const filteredBatches = batch.filter((b) => {
-  //   const timeRange = `${b.labTimeSlot.startTime}-${b.labTimeSlot.endTime}`;
-  //   return !enrolledTimeRanges.includes(timeRange);
-  // });
-
   const enrolledTimeSlot =
     studentDetails?.labAllocations.map(
       (sc: { labTimeSlotId: any }) => sc.labTimeSlotId,
@@ -192,8 +186,6 @@ export default function CourseForm({
     value: b.id.toString(),
     label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
   }));
-
-  // const filteredBatches = batch.filter((b) => !enrolledBatchIds.includes(b.id)); // for raw batch names.
 
   // Filter batches to remove those with same time ranges
   const filteredTimeSlots = batch.filter((b) => {
@@ -322,33 +314,6 @@ export default function CourseForm({
       [field]: value,
     }));
 
-    // if (field === "course") {
-    //   const selectedCourse = courses.find(c => c.id.toString() === value);
-    //   if (selectedCourse?.batches) {
-    //     setBatchList(selectedCourse.batches.map((b: any) => ({
-    //       value: b.id.toString(),
-    //       label: `${b.name} (${b.startTime} - ${b.endTime})`,
-    //     })));
-    //   } else {
-    //     setBatchList([]);
-    //   }
-    //   setFilledEnquiryData(prev => ({ ...prev, batch: "" }));
-    // }
-
-    // if (field === "courseId") {
-    //   const selectedCourse = courseList.find((c) => c.id.toString() === value);
-
-    //   // ✅ Auto Update Fee & Payment Type if courseFeeStructure is available
-    //   if (selectedCourse?.courseFeeStructure) {
-    //     setFilledCourseData((prev) => ({
-    //       ...prev,
-    //       feeAmount:
-    //         selectedCourse.courseFeeStructure.totalAmount?.toString() || "",
-    //       paymentType: selectedCourse.courseFeeStructure.paymentType || "",
-    //     }));
-    //   }
-    // }
-
     if (field === "courseId") {
       const selectedCourse = courseList.find((c) => c.id.toString() === value);
 
@@ -385,7 +350,7 @@ export default function CourseForm({
   console.log("GET SELECTED PAYMENTTUPE :", paymentTypeOption);
 
   const handleSubmit = async () => {
-     const { isValid, errors: validationErrors } = validate();
+    const { isValid, errors: validationErrors } = validate();
 
     if (!isValid) {
       setAlert({
@@ -398,8 +363,8 @@ export default function CourseForm({
       scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
       return; // ⛔ mutation never runs
     }
@@ -430,35 +395,6 @@ export default function CourseForm({
       paymentType: filledCoursedata.paymentType,
       installmentTypeId: filledCoursedata.installmentTypeId,
     };
-
-    // try {
-    //   await createCourseMutation(admissionPayload);
-
-    //   setAlert({
-    //     show: true,
-    //     title: "Course Assigned",
-    //     message: "Student course was successfully created.",
-    //     variant: "success",
-    //   });
-
-    //   // optional: close modal
-    //   setTimeout(() => onCloseModal(), 2000);
-    // } catch (error: any) {
-    //   console.error("Error creating course:", error);
-    //   setAlert({
-    //     show: true,
-    //     title: "Failed to Assign Course",
-    //     message:
-    //       error?.response?.data?.error ||
-    //       "Something went wrong. Please try again.",
-    //     variant: "error",
-    //   });
-
-    //   setTimeout(() => {
-    //     setAlert({ show: false, title: "", message: "", variant: "" });
-    //     onCloseModal();
-    //   }, 2000);
-    // }
 
     assignCourseToExistenceStudent(
       admissionPayload,
@@ -506,7 +442,9 @@ export default function CourseForm({
 
   return (
     <ModalCard title="Course Form" oncloseModal={onCloseModal}>
-      <div className="space-y-6">
+      <div className="flex flex-col gap-6">
+
+        {/* Alert Messages */}
         {alert.show && (
           <Alert
             variant={alert.title === "Course Assigned" ? "success" : "error"}
@@ -516,182 +454,172 @@ export default function CourseForm({
           />
         )}
 
-        <div>
-          <Label>Select Course</Label>
-          <div className="relative" data-master="course">
-            <Select
-              ref={firstInputRef}
-              tabIndex={1}
-              options={filteredCourses.map((course) => ({
-                label: course.name,
-                value: course.id,
-              }))}
-              placeholder="Select a course"
-              onChange={(value) => handleChangeNew("courseId", value)}
-              defaultValue={filledCoursedata.courseId} // Bind selected course
-              className="dark:bg-dark-900"
-            />
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
-          </div>
-          {errors.courseId && (
-            <p className="text-sm text-red-500">{errors.courseId}</p>
-          )}
-        </div>
+        {/* Form Groupings */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Enrollment Details
+          </h3>
 
-        <div>
-          <Label>Select Batch</Label>
-          <div className="relative" data-master="batch">
-            <Select
-              tabIndex={2}
-              options={filteredBatches.map((batch) => ({
-                label: batch.label,
-                value: batch.value,
-              }))}
-              placeholder="Select an option"
-              onChange={(value) => handleChange("batchId", value)}
-              defaultValue={filledCoursedata.batchId} // Bind selected course
-              className="dark:bg-dark-900"
-            />
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
-          </div>
-          {errors.batchId && (
-            <p className="text-sm text-red-500">{errors.batchId}</p>
-          )}
-        </div>
-
-        {/* <div>
-          <Label>Payment Type</Label>
-          <Input
-            tabIndex={4}
-            type="text"
-            placeholder="Ex. Mumbai, Maharashtra"
-            value={filledCoursedata.paymentType}
-            onChange={(e) => handleChange("paymentType", e.target.value)}
-          />
-          {errors.paymentType && (
-            <p className="text-sm text-red-500">{errors.paymentType}</p>
-          )}
-        </div> */}
-
-        <div>
-          <Label>Select Payment Type</Label>
-          <div className="relative" data-master="course">
-            <Select
-              tabIndex={10}
-              options={paymentTypeOption.map((course: any) => ({
-                label: course,
-                value: course,
-              }))}
-              placeholder="Select a course"
-              onChange={(value) => handleChange("paymentType", value)}
-              value={filledCoursedata.paymentType} // just the courseId string
-              className="dark:bg-dark-900"
-            />
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
-          </div>
-          {errors.paymentType && (
-            <p className="text-sm text-red-500">{errors.paymentType}</p>
-          )}
-        </div>
-        {filledCoursedata.paymentType === "INSTALLMENT" &&
-          installmentTypeOption.length > 0 && (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            {/* Course Selection */}
             <div>
-              <Label>Select Installment Type</Label>
+              <Label>Select Course *</Label>
               <div className="relative" data-master="course">
                 <Select
-                  tabIndex={10}
-                  options={installmentTypeOption.map(
-                    (ins: { id: number; number: any; amount: any }) => ({
-                      label: `${ins.number} Installments - ₹${ins.amount}`,
-                      value: ins.id, // <-- important
-                    }),
-                  )}
+                  ref={firstInputRef}
+                  tabIndex={1}
+                  options={filteredCourses.map((course) => ({
+                    label: course.name,
+                    value: course.id,
+                  }))}
                   placeholder="Select a course"
-                  onChange={(value) => handleChange("installmentTypeId", value)}
-                  value={filledCoursedata.installmentTypeId} // just the courseId string
-                  className="dark:bg-dark-900"
+                  onChange={(value) => handleChangeNew("courseId", value)}
+                  defaultValue={filledCoursedata.courseId}
+                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 />
                 <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                   <ChevronDownIcon />
                 </span>
               </div>
-              {errors.installmentTypeId && (
-                <p className="text-sm text-red-500">
-                  {errors.installmentTypeId}
-                </p>
+              {errors.courseId && (
+                <p className="mt-1 text-sm text-red-500">{errors.courseId}</p>
               )}
             </div>
-          )}
 
-        <div>
-          <Label>Fee Amount</Label>
-          <Input
-            tabIndex={3}
-            type="text"
-            placeholder="Ex. Mumbai, Maharashtra"
-            value={filledCoursedata.feeAmount}
-            readOnly
-          />
-          {errors.feeAmount && (
-            <p className="text-sm text-red-500">{errors.feeAmount}</p>
-          )}
+            {/* Batch Selection */}
+            <div>
+              <Label>Select Batch *</Label>
+              <div className="relative" data-master="batch">
+                <Select
+                  tabIndex={2}
+                  options={filteredBatches.map((batch) => ({
+                    label: batch.label,
+                    value: batch.value,
+                  }))}
+                  placeholder="Select a batch"
+                  onChange={(value) => handleChange("batchId", value)}
+                  defaultValue={filledCoursedata.batchId}
+                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                />
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+              {errors.batchId && (
+                <p className="mt-1 text-sm text-red-500">{errors.batchId}</p>
+              )}
+            </div>
+
+            {/* Admission Date */}
+            <div>
+              <Label>Admission Date *</Label>
+              <Input
+                tabIndex={5}
+                type="datetime-local"
+                value={filledCoursedata.admissionDate}
+                onChange={(e) => handleChange("admissionDate", e.target.value)}
+                className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+              />
+              {errors.admissionDate && (
+                <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>
+              )}
+            </div>
+
+            {/* Payment Type */}
+            <div>
+              <Label>Select Payment Type *</Label>
+              <div className="relative" data-master="payment">
+                <Select
+                  tabIndex={10}
+                  options={paymentTypeOption.map((course: any) => ({
+                    label: course,
+                    value: course,
+                  }))}
+                  placeholder="Select payment type"
+                  onChange={(value) => handleChange("paymentType", value)}
+                  value={filledCoursedata.paymentType}
+                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                />
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+              {errors.paymentType && (
+                <p className="mt-1 text-sm text-red-500">{errors.paymentType}</p>
+              )}
+            </div>
+
+            {/* Conditional Installment Type */}
+            {filledCoursedata.paymentType === "INSTALLMENT" &&
+              installmentTypeOption.length > 0 && (
+                <div>
+                  <Label>Select Installment Type *</Label>
+                  <div className="relative" data-master="installment">
+                    <Select
+                      tabIndex={11}
+                      options={installmentTypeOption.map(
+                        (ins: { id: number; number: any; amount: any }) => ({
+                          label: `${ins.number} Installments - ₹${ins.amount}`,
+                          value: ins.id,
+                        })
+                      )}
+                      placeholder="Select installment plan"
+                      onChange={(value) => handleChange("installmentTypeId", value)}
+                      value={filledCoursedata.installmentTypeId}
+                      className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                    />
+                    <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                      <ChevronDownIcon />
+                    </span>
+                  </div>
+                  {errors.installmentTypeId && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.installmentTypeId}
+                    </p>
+                  )}
+                </div>
+              )}
+
+            {/* Fee Amount (Readonly) */}
+            <div>
+              <Label>Fee Amount</Label>
+              <Input
+                tabIndex={3}
+                type="text"
+                placeholder="₹ 0.00"
+                value={filledCoursedata.feeAmount}
+                readOnly
+                className="w-full rounded border border-gray-300 bg-gray-100 px-3 py-2 text-sm text-gray-600 placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 cursor-not-allowed focus:ring-0"
+              />
+              {errors.feeAmount && (
+                <p className="mt-1 text-sm text-red-500">{errors.feeAmount}</p>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-            Admission Date
-          </label>
-          <Input
-            tabIndex={5}
-            type="text"
-            placeholder="10/10/2025"
-            className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-400"
-            value={filledCoursedata.admissionDate}
-            onChange={(e) => handleDateChange("admissionDate", e.target.value)}
-          />
-          {errors.admissionDate && (
-            <p className="text-sm text-red-500">{errors.admissionDate}</p>
-          )}
-        </div> */}
-
-        <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-            Admission Date
-          </label>
-          <Input
-            tabIndex={5}
-            type="datetime-local"
-            placeholder="Ex. Mumbai, Maharashtra"
-            value={filledCoursedata.admissionDate}
-            onChange={(e) => handleChange("admissionDate", e.target.value)}
-          />
-          {errors.admissionDate && (
-            <p className="text-sm text-red-500">{errors.admissionDate}</p>
-          )}
-        </div>
-        <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
+        {/* Action Bar */}
+        <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
           <Button
             size="sm"
             variant="outline"
             tabIndex={6}
             onClick={onCloseModal}
+            className="min-w-[100px] rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           >
             Close
           </Button>
-          <Button size="sm" 
-           tabIndex={7} 
-           variant="primary"  
-           className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" 
-           onClick={handleSubmit}>
-            Save
+          <Button
+            size="sm"
+            variant="primary"
+            tabIndex={7}
+            onClick={handleSubmit}
+            className="min-w-[120px] rounded bg-gray-900 px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+          >
+            Save Course
           </Button>
         </div>
+
       </div>
     </ModalCard>
   );

@@ -132,6 +132,8 @@ export default function ActivityTable() {
 
           <Pagination
             currentPage={currentPage}
+            limit={PAGE_SIZE}
+            totalCount={0}
             totalPages={totalPages}
             noTotal
             onPageChange={handlePagination}

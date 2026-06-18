@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -6,18 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
-
-import { useDispatch } from "react-redux";
-import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
-
-import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
-
 import AssignBatchFacultyForm from "../form/form-elements/AssignbatchToFacultyForm";
 import Button from "../ui/button/Button";
 import EditFacultyForm from "../form/form-elements/EditfacultyForm";
-
-type FollowUpModalType = "createNew" | "update" | "complete" | null;
+import { Tooltip } from "@heroui/react";
 
 type FacultyDataTableProps = {
   faculties: any[];
@@ -32,191 +24,115 @@ export default function FacultyDataTable({
   batch,
   loading,
 }: FacultyDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
-  const dispatch = useDispatch();
-  const [followUpData, setFollowUpData] = useState<any>(null);
-  const [showCreateFollowUp, setShowCreateFollowUp] = useState(false);
-  const [enquiryDetail, setEnquiryDetail] = useState(false);
-  const [selectedEnquiryData, setSelectedEnquiryData] = useState<any>(null); // You can strongly type this
-  const [newEnquiry, setNewEnquiry] = React.useState({
-    name: "",
-    email: "",
-    course: "",
-    source: "",
-    contact: "",
-  });
-  const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [facultyDetail, setFacultyDetail] = useState<boolean>(false);
   const [facultyData, setFacultyData] = useState<any>(null);
-  const [modalType, setModalType] = useState<FollowUpModalType>(null);
-  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
-    null,
-  );
 
-  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
-    null,
-  );
-  const { mutate: fetchEnquiries, data } = useFetchEnquiry();
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [selectedFaculty, setSelectedFaculty] = useState<any>(null);
-  //const { enquiries, loading } = useSelector((state: RootState) => state.enquiry);
 
-  // const [sortField, setSortField] = useState<string>("createdAt");
-  // const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-
-  console.log("get All Query To search in faculty Table:", faculties);
-
-  console.log("get All Query To search in faculty Table:", courses);
-
-  const openDeleteModal = (id: string) => {
-    setSelectedId(id);
-    setShowModal(true);
+  const handleAssignBatchClick = (item: any) => {
+    setSelectedFaculty(item);
+    setShowAssignModal(true);
   };
 
-  const closeDeleteModal = () => {
-    setSelectedId(null);
-    setShowModal(false);
-  };
-
-  const handleCreateClick = () => {
-    setShowForm(!showForm);
-  };
-
-  const handleCreateFollowUpForEnquiry = (enquiryId: string) => {
-    setSelectedEnquiryId(enquiryId);
-    setModalType("createNew");
-  };
-
-  const handleCreateFollowUpForFollowUp = (followUpId: string) => {
-    setSelectedFollowUpId(followUpId);
-    setModalType("update");
-  };
-
-  const hanldleEdit = (item: any) => {
+  const handleEditClick = (item: any) => {
     setSelectedId(item.id);
     setFacultyDetail(true);
     setFacultyData(item);
   };
 
   const handleCloseModal = () => {
-    setShowForm(false);
     setFacultyDetail(false);
+    setSelectedId(null);
   };
 
-  const handleCloseAdmissionModal = () => {
-    setShowAdmissionForm(false);
-    setSelectedEnquiryData(null);
-  };
-
-  console.log("get ModalType", modalType);
-  console.log("get selectedEnquiryId", selectedEnquiryId);
-  console.log("get selectedFollowUpId", selectedFollowUpId);
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1102px] overflow-y-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+            {/* ERP Style Table Header */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Faculty Name
                 </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Email
                 </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Contact No.
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Joining Date
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Assign New Batch
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Batch Assignment
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Update
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Actions
                 </TableCell>
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {faculties && faculties.length > 0 ? (
                 faculties.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-                        <div>
-                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
-                            {item.name}
-                          </span>
-                          <span className="block text-xs text-gray-500 dark:text-gray-400">
-                            Faculty
-                          </span>
-                        </div>
+                  <TableRow key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors">
+                    <TableCell className="px-3 py-1.5">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
+                          {item.name}
+                        </span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide">
+                          Faculty Member
+                        </span>
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
                       {item.email}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.contact}
+                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
+                      {item.contact ?? "—"}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {new Date(item.joiningDate).toISOString().split("T")[0]}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                      {item.joiningDate ? new Date(item.joiningDate).toISOString().split("T")[0] : "—"}
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-start">
+
+                    <TableCell className="px-3 py-1.5">
                       <Button
-                        onClick={() => {
-                          setSelectedFaculty(item);
-                          setShowAssignModal(true);
-                        }}
-                        size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                        onClick={() => handleAssignBatchClick(item)}
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Assign Batch
                       </Button>
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-start">
-                      <Button
-                        onClick={() => hanldleEdit(item)}
-                        size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
-                      >
-                        Edit
-                      </Button>
+
+                    <TableCell className="px-3 py-1.5">
+                      <Tooltip className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5" content="Edit Faculty">
+                        <button
+                          className="rounded p-0.5 text-slate-500 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                          onClick={() => handleEditClick(item)}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                          </svg>
+                        </button>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
-                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                    colSpan={6}
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
                     No Faculty found.
                   </TableCell>
@@ -227,6 +143,7 @@ export default function FacultyDataTable({
         </div>
       </div>
 
+      {/* Overlays / Forms */}
       {selectedFaculty !== null && showAssignModal && (
         <AssignBatchFacultyForm
           faculty={selectedFaculty}

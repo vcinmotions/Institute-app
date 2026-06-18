@@ -1,6 +1,3 @@
-
-
-
 import { Metadata } from "next";
 import CompanyDashboard from "../(client-dashboard)/CompanyDashboard";
 

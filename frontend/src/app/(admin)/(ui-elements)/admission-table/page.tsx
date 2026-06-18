@@ -25,11 +25,11 @@ export default function AdmissionTable() {
     null,
   );
   const {
-      currentPage,
-      searchQuery,
-      sortOrder,
-      sortField,
-    } = useSelector((state: RootState) => state.admission);
+    currentPage,
+    searchQuery,
+    sortOrder,
+    sortField,
+  } = useSelector((state: RootState) => state.admission);
 
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
@@ -47,12 +47,12 @@ export default function AdmissionTable() {
   const debouncedSearchTerm = useDebounce(searchInput, 300);
 
   // 2. sync debounced value to Redux
-    useEffect(() => {
-      if (debouncedSearchTerm !== searchQuery) {
-        dispatch(setSearchQuery(debouncedSearchTerm));
-        dispatch(setCurrentPage(1));
-      }
-    }, [debouncedSearchTerm, searchQuery, dispatch]);
+  useEffect(() => {
+    if (debouncedSearchTerm !== searchQuery) {
+      dispatch(setSearchQuery(debouncedSearchTerm));
+      dispatch(setCurrentPage(1));
+    }
+  }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -109,31 +109,31 @@ export default function AdmissionTable() {
         });
 
         dispatch(setBatches(responseBatch.batch));
-      } catch (error) {}
+      } catch (error) { }
     };
 
     fetchMeta();
   }, []);
 
   // --- Handlers (memoized)
-  
-    const handleSearchSubmit = useCallback((e: React.FormEvent) => {
-      e.preventDefault();
-      dispatch(setCurrentPage(1));
-    }, [dispatch]);
-  
-    const handlePagination = useCallback((page: number) => {
-      if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
-    }, [dispatch, totalPages]);
-  
-    const handleSort = useCallback((field: string) => {
-      const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-      dispatch(setSort({ field, order }));
-    }, [dispatch, sortField, sortOrder]);
-  
-    const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
-      dispatch(setFilters(selectedFilters));
-    }, [dispatch]);
+
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(setCurrentPage(1));
+  }, [dispatch]);
+
+  const handlePagination = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+  }, [dispatch, totalPages]);
+
+  const handleSort = useCallback((field: string) => {
+    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
+    dispatch(setSort({ field, order }));
+  }, [dispatch, sortField, sortOrder]);
+
+  const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
+    dispatch(setFilters(selectedFilters));
+  }, [dispatch]);
 
   return (
     <div>
@@ -155,6 +155,7 @@ export default function AdmissionTable() {
 
           <Pagination
             currentPage={currentPage}
+            limit={PAGE_SIZE}
             totalPages={totalPages}
             title="Pending Admissions"
             totalCount={total}

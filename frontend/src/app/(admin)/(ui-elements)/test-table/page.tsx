@@ -104,6 +104,7 @@ export default function TestTable() {
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
+                        limit={PAGE_SIZE}
                         totalCount={total}
                         title="Tasks"
                         onPageChange={handlePagination}

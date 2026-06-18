@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -6,89 +6,79 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
-
-import { useDispatch } from "react-redux";
-
-import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
-
 import Button from "../ui/button/Button";
-import EditFacultyForm from "../form/form-elements/EditfacultyForm";
 import EditSourceForm from "../form/form-elements/EditSourceForm";
-
 
 type SourceDataTableProps = {
   sources: any[];
   loading: boolean;
 };
 
-export default function FacultyDataTable({
+export default function SourceDataTable({
   sources,
   loading,
 }: SourceDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
-  const dispatch = useDispatch();
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [facultyDetail, setFacultyDetail] = useState<boolean>(false);
+  const [sourceDetail, setSourceDetail] = useState<boolean>(false);
   const [sourceData, setSourceData] = useState<any>(null);
 
- const handleCloseModal = () => {
-    setShowForm(false);
-    setFacultyDetail(false);
+  const handleCloseModal = () => {
+    setSelectedId(null);
+    setSourceDetail(false);
+    setSourceData(null);
   };
 
-  const hanldleEdit = (item: any) => {
+  const handleEdit = (item: any) => {
     setSelectedId(item.id);
-    setFacultyDetail(true);
+    setSourceDetail(true);
     setSourceData(item);
   };
 
-
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1102px] overflow-y-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+            {/* ERP Style Table Header */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Name
                 </TableCell>
 
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Update
                 </TableCell>
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {sources && sources.length > 0 ? (
                 sources.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-                        <div>
-                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
-                            {item.name}
-                          </span>
-                          {/* <span className="block text-xs text-gray-500 dark:text-gray-400">
-                            Faculty
-                          </span> */}
-                        </div>
+                  <TableRow
+                    key={item.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                  >
+                    <TableCell className="px-3 py-1.5">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
+                          {item.name}
+                        </span>
                       </div>
                     </TableCell>
 
-                    <TableCell className="px-4 py-3 text-start">
+                    <TableCell className="px-3 py-1.5">
                       <Button
-                        onClick={() => hanldleEdit(item)}
+                        onClick={() => handleEdit(item)}
                         size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Edit
                       </Button>
@@ -98,8 +88,8 @@ export default function FacultyDataTable({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
-                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                    colSpan={2}
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
                     No Source found.
                   </TableCell>
@@ -110,7 +100,7 @@ export default function FacultyDataTable({
         </div>
       </div>
 
-      {selectedId !== null && facultyDetail === true && (
+      {selectedId !== null && sourceDetail === true && (
         <EditSourceForm
           onCloseModal={handleCloseModal}
           sourceData={sourceData}

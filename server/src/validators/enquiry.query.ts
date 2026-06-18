@@ -66,13 +66,15 @@ export const enquiryEditSchema = z.object({
   id: z.string().min(1, "Enquiry ID is required"),
   name: z.string().min(1, "Name is required"),
   contact: z.string().min(1, "Contact is required"),
+
+  courseId: z
+    .array(z.union([z.number(), z.string()]))
+    .min(1, "At least one course is required"),
+
   email: z.preprocess(
     (val) => (val === "" || val === null ? undefined : val),
     z.string().email("Invalid email").optional()
   ),
-  courseId: z
-    .array(z.union([z.number(), z.string()]))
-    .min(1, "At least one course is required"),
   source: z.preprocess(
     (val) => (val === "" || val === null ? undefined : val),
     z.string().optional()

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -6,194 +6,47 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
-
 import { useDispatch } from "react-redux";
-
-import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
-
-import { useCreateAdmission } from "@/hooks/useCreateAdmission";
-
-import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
-
+import Button from "../ui/button/Button";
+import EditRolesForm from "../form/form-elements/EditRoleForm";
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
-
+import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
+import { useCreateAdmission } from "@/hooks/useCreateAdmission";
+import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
-import Button from "../ui/button/Button";
-import EditFacultyForm from "../form/form-elements/EditfacultyForm";
-import EditRolesForm from "../form/form-elements/EditRoleForm";
+import { Tooltip } from "@heroui/react";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
 type RolesDataTableProps = {
   roles: any[];
   loading: boolean;
-
 };
 
 export default function RolesDataTable({
   roles,
   loading,
-
 }: RolesDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
   const [roleDetail, setRoleDetail] = useState<boolean>(false);
   const [roleData, setRoleData] = useState<any>(null);
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
   const dispatch = useDispatch();
-  const [followUpData, setFollowUpData] = useState<any>(null);
-  const [showCreateFollowUp, setShowCreateFollowUp] = useState(false);
-  const [enquiryDetail, setEnquiryDetail] = useState(false);
-  const [selectedEnquiryData, setSelectedEnquiryData] = useState<any>(null); // You can strongly type this
-  const [newEnquiry, setNewEnquiry] = React.useState({
-    name: "",
-    email: "",
-    course: "",
-    source: "",
-    contact: "",
-  });
-  const [showModal, setShowModal] = useState(false);
+
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [modalType, setModalType] = useState<FollowUpModalType>(null);
-  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(
-    null,
-  );
-  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(
-    null,
-  );
+  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(null);
+  const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(null);
+
+  // API Mutators
   const { mutate: fetchEnquiries, data } = useFetchEnquiry();
-  //const { enquiries, loading } = useSelector((state: RootState) => state.enquiry);
-
-  // const [sortField, setSortField] = useState<string>("createdAt");
-  // const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-
-  console.log("get All Query To search in Course DATA Table:", roles);
+  const { mutate: followUp } = useFetchFollowUps();
+  const { mutate: admissionStudent } = useCreateAdmission();
+  const { mutate: deleteEnquiry } = useDeleteEnquiry();
 
   const handleCloseModal = () => {
     setSelectedId(null);
     setRoleDetail(false);
     setRoleData(null);
-  };
-
-  const { mutate: followUp, error, isSuccess, isPending } = useFetchFollowUps();
-  const { mutate: admissionStudent } = useCreateAdmission();
-  const { mutate: deleteEnquiry } = useDeleteEnquiry();
-
-  // if (!enquiries) {
-  //   return <div>Loading enquiries...</div>; // or a spinner
-  // }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEnquiry({ ...newEnquiry, [e.target.name]: e.target.value });
-  };
-
-  // const handleFollowUp = (id: any) => {
-  //   const token = sessionStorage.getItem("token");
-  //   if (!token) {
-  //       console.error("No token found in sessionStorage");
-  //       return;
-  //   }
-
-  //   console.log("Get EnquiryId to Fetch Follow Up", id);
-  //   setSelectedId(id);
-  //   setSelectedEnquiryId(id);
-  //   followUp(
-  //       { token, id },
-  //       {
-  //       onSuccess: (data) => {
-  //           //setFollowUpData(data);
-  //           console.log("Fetched follow-up data in hanldeFollowUp:", data);
-
-  //           // ✅ Save to Redux instead of useState
-  //           // ✅ Instead, save follow-ups keyed by enquiryId
-  //           dispatch(addFollowUpsForEnquiry({
-  //             enquiryId: id,
-  //             followUps: data.followup,
-  //           }));
-
-  //           setFollowUpData(data);   // ✅ Save follow-up data
-  //           setShowForm(true);       // ✅ Show the modal
-  //       },
-  //       }
-  //   );
-  // };
-
-  const handleAdmission = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
-
-    console.log("Get EnquiryId to Admission Handle:", id);
-
-    const enquiryData = roles.find((item) => item.id === id);
-
-    console.log("Get Enquity Data in Handle Admission:", enquiryData);
-
-    if (!enquiryData) {
-      console.error("No enquiry data found for this ID");
-      return;
-    }
-
-    const { name, email, contact, course } = enquiryData;
-
-    // ✅ Save ID and data to state
-    setSelectedEnquiryId(id);
-    setSelectedEnquiryData({ name, email, contact, course });
-
-    console.log("Get Enquiry Id in HandleAdmission:", selectedEnquiryId);
-    console.log("Get Enquiry DATA in HandleAdmission:", selectedEnquiryData);
-    setShowAdmissionForm(true);
-  };
-
-  // const handleDeleted = (id: any) => {
-  //   const token = sessionStorage.getItem("token");
-  //   if (!token) {
-  //       console.error("No token found in sessionStorage");
-  //       return;
-  //   }
-
-  //   console.log("Get EnquiryId to Deleted Enquiry", id);
-
-  //   deleteEnquiry(
-  //       { token, id },
-  //       {
-  //       onSuccess: (data) => {
-  //           console.log("Deleted Enquiry:", data);
-  //           setFollowUpData(data);   // ✅ Save follow-up data
-  //       },
-  //       }
-  //   );
-
-  //   setShowForm(false);
-  // }
-
-  const handleDeleted = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
-
-    console.log("Get EnquiryId to Deleted Enquiry", id);
-
-    deleteEnquiry(
-      { token, id },
-      {
-        onSuccess: (data) => {
-          console.log("Deleted Enquiry:", data);
-          setFollowUpData(null); // Optional: Clear data if needed
-          setShowModal(false); // ✅ Close the modal
-          setSelectedId(null); // ✅ Reset selectedId
-        },
-        onError: (err) => {
-          console.error("Delete failed:", err);
-          alert("Something went wrong while deleting");
-        },
-      },
-    );
   };
 
   const hanldleEdit = (item: any) => {
@@ -202,120 +55,104 @@ export default function RolesDataTable({
     setRoleData(item);
   };
 
-  const handleEnquiryDetail = (id: any) => {
-    console.log("Get EnquiryId to Deleted Enquiry", id);
-    setSelectedId(id);
-    setEnquiryDetail(true);
-  };
-
-  console.log("get ModalType", modalType);
-  console.log("get selectedEnquiryId", selectedEnquiryId);
-  console.log("get selectedFollowUpId", selectedFollowUpId);
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1102px] overflow-y-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+            {/* ERP Style Table Header */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Name
                 </TableCell>
-                {/* <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                  <button
-                    type="button"
-                    className="flex items-center gap-1"
-                    onClick={() => handleSort("name")}
-                  >
-                    User
-                    {sortField === "name" && (
-                      <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
-                    )}
-                  </button>
-                </TableCell> */}
-
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Email
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Role
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Created At
                 </TableCell>
-                {/* <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  Status
-                </TableCell> */}
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
-                  Update
+                  Actions
                 </TableCell>
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {roles && roles.length > 0 ? (
                 roles.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-                        {/* <div className="w-10 h-10 overflow-hidden rounded-full">
-                          <Image
-                            width={40}
-                            height={40}
-                            src="/images/user/user-21.jpg"
-                            alt="/images/user/user-21.jpg"
-                          />
-                        </div> */}
-                        <div>
-                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
-                            {item.name}
-                          </span>
-                        </div>
-                      </div>
+                  <TableRow
+                    key={item.id}
+                    className="transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-900/40"
+                  >
+                    <TableCell className="px-3 py-1.5">
+                      <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
+                        {item.name}
+                      </span>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 font-mono">
                       {item.email}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.role}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
+                      <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-800 dark:bg-slate-800 dark:text-slate-200">
+                        {item.role}
+                      </span>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {new Date(item.createdAt).toISOString().split("T")[0]}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                      {item.createdAt ? new Date(item.createdAt).toISOString().split("T")[0] : "—"}
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-start">
-                      <Button
-                        onClick={() => hanldleEdit(item)}
-                        size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                    <TableCell className="px-3 py-1.5">
+                      <Tooltip
+                        className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5"
+                        content="Edit Role"
                       >
-                        Edit
-                      </Button>
+                        <button
+                          className="rounded p-0.5 text-slate-500 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                          onClick={() => hanldleEdit(item)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="15"
+                            height="15"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                          </svg>
+                        </button>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={4}
-                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                    colSpan={5}
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
                     No Roles found.
                   </TableCell>
@@ -326,8 +163,7 @@ export default function RolesDataTable({
         </div>
       </div>
 
-      {/* === Follow-Up Timeline modal === */}
-
+      {/* === Logical Modals === */}
       {modalType === "createNew" && selectedEnquiryId !== null && (
         <CreateNewFollowUpOnEnquiryModal
           enquiryId={selectedEnquiryId}
@@ -335,7 +171,6 @@ export default function RolesDataTable({
           onClose={() => setModalType(null)}
         />
       )}
-
 
       {modalType === "complete" &&
         selectedFollowUpId !== null &&

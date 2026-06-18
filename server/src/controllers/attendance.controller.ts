@@ -143,6 +143,33 @@ export async function getAttendanceByBatch(req: Request, res: Response) {
       ? new Date(date as string)
       : new Date(new Date().setHours(0, 0, 0, 0));
 
+      const getBatch = await tenantPrisma.batch.findUnique({
+        where: {
+          id: Number(batchId),
+        },
+        include: {
+          studentCourses: {
+            include: {
+              student: {
+                select: {
+                  id: true,
+                  fullName: true,
+                  studentCode: true,
+                },
+              },
+              course: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      console.log("GET BATCH DETAIL IN ATTENDANCE SYDENT BY BATCH :", getBatch);
+
     // ✅ Step 1: Get all ACTIVE students in this batch
     const activeStudentCourses = await tenantPrisma.studentCourse.findMany({
       where: {

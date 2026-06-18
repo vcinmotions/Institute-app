@@ -10,13 +10,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../ui/button/Button";
-import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
-import { useCreateAdmission } from "@/hooks/useCreateAdmission";
-import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
-import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
-import EnquiryDetails from "../ui/enquiry/EnquiryDetails";
-import { addFollowUpsForEnquiry } from "@/store/slices/followUpSlice";
-import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
 import AdmissionForm from "../common/AdmissionForm";
 import { Student } from "@/types/student";
 import CourseForm from "../form/form-elements/AddCourseToStudentForm";
@@ -25,8 +18,6 @@ import { getUser } from "@/lib/api";
 import { setLoading, setUser } from "@/store/slices/authSlice";
 import EditStudentForm from "../form/form-elements/EditStudentForm";
 import Avatar from "../common/Avatar";
-
-type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
 type StudentDataTableProps = {
   students: any[];
@@ -47,38 +38,19 @@ export default function StudentDataTable({
   sortField,
   sortOrder,
 }: StudentDataTableProps) {
-  const [showForm, setShowForm] = useState(false);
   const [showAdmissionForm, setShowAdmissionForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showCourseForm, setShowCourseForm] = useState(false);
   const dispatch = useDispatch();
-
   const router = useRouter();
 
   const user = useSelector((state: RootState) => state.auth.user);
-  const { mutate: fetchEnquiries, data } = useFetchEnquiry();
   const [studentId, setStudentId] = useState<string | null>(null);
   const [studentDetails, setStudentDetails] = useState<Student | null>(null);
 
-  console.log("get All Query To search:", students);
-
-  // Dispatch server-side fetch
+  // Sorting Handler logic matching ERP behavior
   const handleSort = (field: string) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
-    const order: "asc" | "desc" =
-      sortField === field && sortOrder === "asc" ? "desc" : "asc";
-
-    fetchEnquiries({
-      token,
-      sortField: field,
-      sortOrder: order,
-    });
-  };
-
-  const handleCloseModal = () => {
-    setShowForm(false);
+    onSort(field);
   };
 
   const handleCloseAdmissionModal = () => {
@@ -93,70 +65,40 @@ export default function StudentDataTable({
     setShowCourseForm(false);
   };
 
-  console.log("Get All Enquiry Details in Enquiry table", students);
-
   const handleAdmissionForm = (id: any) => {
     const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
+    if (!token) return;
 
-    console.log("Get studentId to Admission Handle:", id);
+    const details = students.find((item) => item.id === id);
+    if (!details) return;
 
-    console.log("Student All Details:", students);
-
-    const studentDetails = students.find((item) => item.id === id);
-
-    console.log(
-      "Get student Data with Id in Handle Admission:",
-      studentDetails,
-    );
-
-    if (!studentDetails) {
-      console.error("No enquiry data found for this ID");
-      return;
-    }
-
-    // ✅ Save ID and data to state
-    setStudentDetails(studentDetails);
+    setStudentDetails(details);
     setStudentId(id);
-
-    console.log("Get student Id in HandleAdmission:", studentId);
-    console.log("Get studentDetails in HandleAdmission:", studentDetails);
     setShowAdmissionForm(true);
   };
 
   const handleEditForm = (id: any) => {
     const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
+    if (!token) return;
 
-    console.log("Get studentId to Admission Handle:", id);
+    const details = students.find((item) => item.id === id);
+    if (!details) return;
 
-    console.log("Student All Details:", students);
-
-    const studentDetails = students.find((item) => item.id === id);
-
-    console.log(
-      "Get student Data with Id in Handle Admission:",
-      studentDetails,
-    );
-
-    if (!studentDetails) {
-      console.error("No enquiry data found for this ID");
-      return;
-    }
-
-    // ✅ Save ID and data to state
-    setStudentDetails(studentDetails);
+    setStudentDetails(details);
     setStudentId(id);
-
-    console.log("Get student Id in HandleAdmission:", studentId);
-    console.log("Get studentDetails in HandleAdmission:", studentDetails);
     setShowEditForm(true);
+  };
+
+  const handleCourseForm = (id: any) => {
+    const token = sessionStorage.getItem("token");
+    if (!token) return;
+
+    const details = students.find((item) => item.id === id);
+    if (!details) return;
+
+    setStudentDetails(details);
+    setStudentId(id);
+    setShowCourseForm(true);
   };
 
   useEffect(() => {
@@ -164,147 +106,113 @@ export default function StudentDataTable({
       const token = sessionStorage.getItem("token");
 
       if (!token) {
-        console.warn("No token found.");
-        router.replace("/signin"); // or "/login"
-        return; // ✅ return early to prevent `getUser(null)`
+        router.replace("/signin");
+        return;
       }
 
       try {
         const data = await getUser(token);
         dispatch(setUser(data.userdata));
-        console.log("GET USER DATA IN ADMIN LAYOUT:", data);
 
-        // 🚫 Restrict MASTER_ADMIN from entering Admin layout
         const role = data?.userdata?.role;
         if (role === "MASTER_ADMIN") {
-          console.warn("Master admin cannot access Admin layout.");
-          router.replace("/master-dashboard"); // 👈 redirect to master layout
+          router.replace("/master-dashboard");
           return;
         }
 
-        setLoading(false); // ✅ All good, show dashboard
+        setLoading(false);
       } catch (err) {
         console.error("❌ Error fetching user:", err);
       }
     };
 
     fetchUser();
-  }, []);
-
-  const handleCourseForm = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
-
-    console.log("Get studentId to Admission Handle:", id);
-
-    console.log("Student All Details:", students);
-
-    const studentDetails = students.find((item) => item.id === id);
-
-    console.log(
-      "Get student Data with Id in Handle Admission:",
-      studentDetails,
-    );
-
-    if (!studentDetails) {
-      console.error("No enquiry data found for this ID");
-      return;
-    }
-
-    // ✅ Save ID and data to state
-    setStudentDetails(studentDetails);
-    setStudentId(id);
-
-    console.log("Get student Id in HandleAdmission:", studentId);
-    console.log("Get studentDetails in HandleAdmission:", studentDetails);
-    setShowCourseForm(true);
-  };
-
+  }, [dispatch, router]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1102px] overflow-y-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+            {/* ERP Style Table Header matching your exact theme requirements */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   User
                 </TableCell>
 
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Email
                 </TableCell>
-                {/* <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Studant Code
-                </TableCell> */}
+
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Contact
                 </TableCell>
 
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   <button
                     type="button"
-                    className="flex items-center gap-1"
-                    onClick={() => onSort("admissionDate")}
+                    className="flex items-center gap-1 font-semibold uppercase hover:text-slate-700 dark:hover:text-slate-200"
+                    onClick={() => handleSort("admissionDate")}
                   >
                     Admission Date
-                    <span>
-                      {sortField === "admissionDate" && sortOrder === "asc"
-                        ? "▲"
-                        : "▼"}
+                    <span className="text-[9px] opacity-70">
+                      {sortField !== "admissionDate"
+                        ? "↕"
+                        : sortOrder === "asc"
+                          ? "↑"
+                          : "↓"}
                     </span>
                   </button>
                 </TableCell>
 
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Add New Course
                 </TableCell>
+
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Admission Form
                 </TableCell>
+
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Edit Details
-
                 </TableCell>
               </TableRow>
             </TableHeader>
 
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {students && students.length > 0 ? (
                 students.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 overflow-hidden rounded-full">
+                  <TableRow
+                    key={item.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                  >
+                    {/* User profile detail block */}
+                    <TableCell className="px-3 py-1.5">
+                      <div className="flex items-center gap-2">
+                        <div className="h-7 w-7 flex-shrink-0 overflow-hidden rounded-full border border-slate-100 dark:border-slate-800">
                           {item?.photoUrl ? (
                             <img
                               src={
@@ -313,76 +221,81 @@ export default function StudentDataTable({
                                   : `http://localhost:5001${item.photoUrl}`
                               }
                               alt="student"
-                              className="h-10 w-10 rounded-full object-cover"
-                              onError={(e) =>
-                                ((e.target as HTMLImageElement).src = "/images/user/user-21.jpg")
-                              }
+                              className="h-full w-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src =
+                                  "/images/user/user-21.jpg";
+                              }}
                             />
                           ) : (
-                            <Avatar name={item?.fullName} size={38} />
+                            <Avatar name={item?.fullName} size={28} />
                           )}
                         </div>
-                        <div>
-                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
                             {item.fullName}
                           </span>
-                          <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
-                            {/* {new Date(item.admissionDate).toLocaleDateString()} */}
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                             {new Date(item.admissionDate).toLocaleDateString(
                               "en-US",
                               {
                                 year: "numeric",
                                 month: "short",
                                 day: "numeric",
-                              },
+                              }
                             )}
                           </span>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+
+                    {/* Email */}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 tracking-wide">
                       {item.email}
                     </TableCell>
-                    {/* <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.studentCode}
-                    </TableCell> */}
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.contact ? item.contact : "-"}
+
+                    {/* Contact details */}
+                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
+                      {item.contact ? item.contact : "—"}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {/* {new Date(item.admissionDate).toISOString().split("T")[0]} */}
+
+                    {/* Admission Date field */}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap font-mono">
                       {new Date(item.admissionDate).toLocaleDateString(
                         "en-US",
                         {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
-                        },
+                        }
                       )}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
+
+                    {/* Micro Action: Add Course */}
+                    <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handleCourseForm(item.id)}
-                        size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Add
                       </Button>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
+
+                    {/* Micro Action: View Admission Form */}
+                    <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handleAdmissionForm(item.id)}
-                        size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         View
                       </Button>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
+
+                    {/* Micro Action: Edit Details */}
+                    <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handleEditForm(item.id)}
-                        size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Edit
                       </Button>
@@ -393,9 +306,9 @@ export default function StudentDataTable({
                 <TableRow>
                   <TableCell
                     colSpan={7}
-                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
-                    No Sudent found.
+                    No Student found.
                   </TableCell>
                 </TableRow>
               )}
@@ -404,29 +317,28 @@ export default function StudentDataTable({
         </div>
       </div>
 
-
       {/* === Student Admission modal === */}
       {showAdmissionForm && studentDetails && studentId !== null && (
         <AdmissionForm
           companyDetails={user}
-          onCloseModal={handleCloseAdmissionModal} // Function to close timeline modal
-          student={studentDetails!} // Pass follow-up data fetched from API
+          onCloseModal={handleCloseAdmissionModal}
+          student={studentDetails!}
         />
       )}
 
-      {/* === Edit STudent Detail modal === */}
+      {/* === Edit Student Detail modal === */}
       {showEditForm && studentDetails && studentId !== null && (
         <EditStudentForm
-          onCloseModal={handleCloseEditStudentModal} // Function to close timeline modal
-          student={studentDetails!} // Pass follow-up data fetched from API
+          onCloseModal={handleCloseEditStudentModal}
+          student={studentDetails!}
         />
       )}
 
-      {/* === Follow-Up Timeline modal === */}
+      {/* === Add Course modal === */}
       {showCourseForm && studentDetails && studentId !== null && (
         <CourseForm
-          onCloseModal={handleCloseCourseModal} // Function to close timeline modal
-          studentId={studentId!} // Pass follow-up data fetched from API
+          onCloseModal={handleCloseCourseModal}
+          studentId={studentId!}
           batch={batch}
           course={course}
           studentDetails={studentDetails}

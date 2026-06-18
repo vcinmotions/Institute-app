@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -5,121 +6,101 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
-import EditCourseForm from "../form/form-elements/EditCourseForm";
 import Button from "../ui/button/Button";
 import Badge from "../ui/badge/Badge";
-import { STATUS_COLOR_MAP, TASK_STATUS } from "../common/BadgeStatus";
+import { TASK_STATUS } from "../common/BadgeStatus";
 import EditTaskForm from "../form/form-elements/EditTaskForm";
 
-
-type CourseDataTableProps = {
+type TaskDataTableProps = {
   tasks: any[];
   batch: any[];
   loading: boolean;
-
 };
 
 export default function TaskDataTable({
   tasks,
   batch,
   loading,
-}: CourseDataTableProps) {
+}: TaskDataTableProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [batchDetail, setBatchDetail] = useState(false);
-  const [batchData, setBatchData] = useState<any>(null);
-
-  console.log("get All Query To search in Course DATA Table:", tasks);
+  const [taskDetail, setTaskDetail] = useState(false);
+  const [taskData, setTaskData] = useState<any>(null);
 
   const handleCloseModal = () => {
     setSelectedId(null);
-    setBatchDetail(false);
-    setBatchData(null);
+    setTaskDetail(false);
+    setTaskData(null);
   };
 
   const handleEditLab = (item: any) => {
-    console.log("Get EnquiryId to Deleted Enquiry", item.id);
-    console.log("Get EDIT COURSE DATA Enquiry", item);
     setSelectedId(item.id);
-    setBatchDetail(true);
-    setBatchData(item);
+    setTaskDetail(true);
+    setTaskData(item);
   };
 
   const handlePublish = (item: any) => {
-    console.log("PUBLISH TAST DATA:", item);
-
+    // TODO: Wire to actual publish mutation/endpoint
+    console.log("Publish requested for task:", item.id);
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1102px] overflow-y-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+            {/* ERP Style Table Header */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Course Name
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Task Name
                 </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Batch
                 </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Course
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Status
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Publish
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Edit
                 </TableCell>
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {tasks && tasks.length > 0 ? (
                 tasks.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-
-                        <div>
-                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
-                            {item.name}
-                          </span>
-                        </div>
+                  <TableRow
+                    key={item.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                  >
+                    {/* Task Name */}
+                    <TableCell className="px-3 py-1.5">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
+                          {item.name}
+                        </span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.batch?.name || "-"}
+
+                    {/* Batch */}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
+                      {item.batch?.name || "—"}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.course?.name || "-"}
+                    {/* Course */}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
+                      {item.course?.name || "—"}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+
+                    {/* Status Badge */}
+                    <TableCell className="px-3 py-1.5">
                       <Badge
                         size="sm"
                         color={TASK_STATUS[item.status] ?? "error"}
@@ -127,40 +108,40 @@ export default function TaskDataTable({
                         {item.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
 
+                    {/* Publish Action Button */}
+                    <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handlePublish(item)}
                         size="sm"
-                        allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]} // hide for others
-                        className="rounded bg-gray-100 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
+                        allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]}
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Publish
                       </Button>
-
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
-                      <span
-                        className={`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${"cursor-pointer"}`}
+
+                    {/* Micro Edit Icon Action */}
+                    <TableCell className="px-3 py-1.5">
+                      <button
+                        type="button"
                         onClick={() => handleEditLab(item)}
+                        className="rounded p-0.5 text-slate-500 hover:bg-slate-100 transition dark:text-slate-400 dark:hover:bg-slate-800"
                       >
-                        {/* <PencilIcon /> */}
                         <svg
-                          width="22"
-                          height="22"
+                          width="16"
+                          height="16"
                           viewBox="0 0 24 24"
                           fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          <path
-                            d="M21 18L19.9999 19.094C19.4695 19.6741 18.7502 20 18.0002 20C17.2501 20 16.5308 19.6741 16.0004 19.094C15.4693 18.5151 14.75 18.1901 14.0002 18.1901C13.2504 18.1901 12.5312 18.5151 12 19.094M3.00003 20H4.67457C5.16376 20 5.40835 20 5.63852 19.9447C5.84259 19.8957 6.03768 19.8149 6.21663 19.7053C6.41846 19.5816 6.59141 19.4086 6.93732 19.0627L19.5001 6.49998C20.3285 5.67156 20.3285 4.32841 19.5001 3.49998C18.6716 2.67156 17.3285 2.67156 16.5001 3.49998L3.93729 16.0627C3.59139 16.4086 3.41843 16.5816 3.29475 16.7834C3.18509 16.9624 3.10428 17.1574 3.05529 17.3615C3.00003 17.5917 3.00003 17.8363 3.00003 18.3255V20Z"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                          <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                         </svg>
-                      </span>
+                      </button>
                     </TableCell>
                   </TableRow>
                 ))
@@ -168,7 +149,7 @@ export default function TaskDataTable({
                 <TableRow>
                   <TableCell
                     colSpan={6}
-                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
                     No Task found.
                   </TableCell>
@@ -179,8 +160,9 @@ export default function TaskDataTable({
         </div>
       </div>
 
-      {selectedId !== null && batchDetail === true && (
-        <EditTaskForm onCloseModal={handleCloseModal} taskData={batchData} />
+      {/* Edit Task Modal Layer */}
+      {selectedId !== null && taskDetail === true && (
+        <EditTaskForm onCloseModal={handleCloseModal} taskData={taskData} />
       )}
     </div>
   );

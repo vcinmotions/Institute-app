@@ -33,15 +33,15 @@ export default function CourseTable() {
 
   // Debounce effect: update searchQuery 1 second after user stops typing
   // --- Debounced search and Set delay time according to your needs
-    const debouncedSearchTerm = useDebounce(searchInput, 300);
+  const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    // 2. sync debounced value to Redux
-    useEffect(() => {
-      if (debouncedSearchTerm !== searchQuery) {
-        dispatch(setSearchQuery(debouncedSearchTerm));
-        dispatch(setCurrentPage(1));
-      }
-    }, [debouncedSearchTerm, searchQuery, dispatch]);
+  // 2. sync debounced value to Redux
+  useEffect(() => {
+    if (debouncedSearchTerm !== searchQuery) {
+      dispatch(setSearchQuery(debouncedSearchTerm));
+      dispatch(setCurrentPage(1));
+    }
+  }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function CourseTable() {
   // };
 
   // --- Handlers (memoized)
-    
+
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     dispatch(setCurrentPage(1));
@@ -128,6 +128,7 @@ export default function CourseTable() {
 
           <Pagination
             currentPage={currentPage}
+            limit={PAGE_SIZE}
             totalPages={totalPages}
             totalCount={total}
             title="Courses"

@@ -30,7 +30,7 @@ export default function FacultyTable() {
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
 
- // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
+  // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -38,15 +38,15 @@ export default function FacultyTable() {
 
   // Debounce effect: update searchQuery 1 second after user stops typing
   // --- Debounced search and Set delay time according to your needs
-    const debouncedSearchTerm = useDebounce(searchInput, 300);
+  const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    // 2. sync debounced value to Redux
-    useEffect(() => {
-      if (debouncedSearchTerm !== searchQuery) {
-        dispatch(setSearchQuery(debouncedSearchTerm));
-        dispatch(setCurrentPage(1));
-      }
-    }, [debouncedSearchTerm, searchQuery, dispatch]);
+  // 2. sync debounced value to Redux
+  useEffect(() => {
+    if (debouncedSearchTerm !== searchQuery) {
+      dispatch(setSearchQuery(debouncedSearchTerm));
+      dispatch(setCurrentPage(1));
+    }
+  }, [debouncedSearchTerm, searchQuery, dispatch]);
   // Fetch data on mount or when filters change
   useEffect(() => {
     const fetchData = async () => {
@@ -106,13 +106,13 @@ export default function FacultyTable() {
   // };
 
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
-      e.preventDefault();
-      dispatch(setCurrentPage(1));
-    }, [dispatch]);
-  
-    const handlePagination = useCallback((page: number) => {
-      if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
-    }, [dispatch, totalPages]);
+    e.preventDefault();
+    dispatch(setCurrentPage(1));
+  }, [dispatch]);
+
+  const handlePagination = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+  }, [dispatch, totalPages]);
 
 
   return (
@@ -134,6 +134,7 @@ export default function FacultyTable() {
 
           <Pagination
             currentPage={currentPage}
+            limit={PAGE_SIZE}
             totalPages={totalPages}
             title="Faculties"
             totalCount={total}

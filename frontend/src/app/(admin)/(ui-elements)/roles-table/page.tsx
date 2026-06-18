@@ -31,7 +31,7 @@ export default function RolesTable() {
   const dispatch = useDispatch();
   const leadStatusOptions = [null, "HOT", "WARM", "COLD"] as const;
 
- // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
+  // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -39,15 +39,15 @@ export default function RolesTable() {
 
   // Debounce effect: update searchQuery 1 second after user stops typing
   // --- Debounced search and Set delay time according to your needs
-    const debouncedSearchTerm = useDebounce(searchInput, 300);
+  const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    // 2. sync debounced value to Redux
-    useEffect(() => {
-      if (debouncedSearchTerm !== searchQuery) {
-        dispatch(setSearchQuery(debouncedSearchTerm));
-        dispatch(setCurrentPage(1));
-      }
-    }, [debouncedSearchTerm, searchQuery, dispatch]);
+  // 2. sync debounced value to Redux
+  useEffect(() => {
+    if (debouncedSearchTerm !== searchQuery) {
+      dispatch(setSearchQuery(debouncedSearchTerm));
+      dispatch(setCurrentPage(1));
+    }
+  }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // Fetch data on mount or when filters change
   useEffect(() => {
@@ -60,12 +60,12 @@ export default function RolesTable() {
 
       setLoading(true);
       try {
-         const response = await getRoles(
-            token,
-            currentPage,
-            PAGE_SIZE, // limit
-            searchQuery
-          );
+        const response = await getRoles(
+          token,
+          currentPage,
+          PAGE_SIZE, // limit
+          searchQuery
+        );
 
         dispatch(setRoles(response.roles || []));
         dispatch(setTotalPages(response.totalPages || 0));
@@ -83,13 +83,13 @@ export default function RolesTable() {
   console.log("Query data:", currentPage, searchQuery, totalPages);
 
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
-        e.preventDefault();
-        dispatch(setCurrentPage(1));
-      }, [dispatch]);
-    
-      const handlePagination = useCallback((page: number) => {
-        if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
-      }, [dispatch, totalPages]);
+    e.preventDefault();
+    dispatch(setCurrentPage(1));
+  }, [dispatch]);
+
+  const handlePagination = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+  }, [dispatch, totalPages]);
 
 
   console.log("GET ROLE SEARCH:", searchQuery, searchInput, totalPages);
@@ -111,6 +111,7 @@ export default function RolesTable() {
 
           <Pagination
             currentPage={currentPage}
+            limit={PAGE_SIZE}
             totalPages={totalPages}
             totalCount={total}
             onPageChange={handlePagination}

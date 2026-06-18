@@ -21,7 +21,7 @@ export default function CompanyTable() {
   const [totalCount, setTotalCount] = useState(1);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const company = useSelector((state: RootState) => state.auth.tenant ?? []);
-  
+
   const [loading, setLoading] = useState<boolean>(false);
   const [sortField, setSortField] = useState("createdAt");
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(
@@ -51,22 +51,22 @@ export default function CompanyTable() {
   //         setShowForm(false);
   //       }
   //         };
-        
+
   //         window.addEventListener("keydown", handleKeyDown);
   //         return () => window.removeEventListener("keydown", handleKeyDown);
   //       }, []);
 
-    // Debounce effect: update searchQuery 1 second after user stops typing
-    useEffect(() => {
-      const handler = setTimeout(() => {
-        setSearchQuery(searchInput);
-        setCurrentPage(1); // reset page when search changes
-      }, 300);
+  // Debounce effect: update searchQuery 1 second after user stops typing
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(searchInput);
+      setCurrentPage(1); // reset page when search changes
+    }, 300);
 
-      return () => {
-        clearTimeout(handler);
-      };
-    }, [searchInput]);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchInput]);
 
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(e.target.value);
@@ -82,7 +82,7 @@ export default function CompanyTable() {
       }
 
       try {
-        const data = await getTenant({token, page: currentPage, search: searchInput, limit: PAGE_SIZE});
+        const data = await getTenant({ token, page: currentPage, search: searchInput, limit: PAGE_SIZE });
         setLoading(false); // ✅ All good, show dashboard
         console.log("👤 Get Master User Data in CompanyTable:", data);
         dispatch(setTenant(data.tenant));
@@ -144,10 +144,14 @@ export default function CompanyTable() {
           <CompanyDataTable
             company={company}
             loading={loading}
+            onSort={handleSort}
+            sortField={sortField}
+            sortOrder={sortOrder}
           />
 
           <Pagination
             currentPage={currentPage}
+            limit={PAGE_SIZE}
             totalPages={totalPages}
             title="Companies"
             totalCount={totalCount}

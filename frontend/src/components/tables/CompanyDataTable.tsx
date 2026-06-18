@@ -8,21 +8,28 @@ import {
 } from "../ui/table";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import Button from "../ui/button/Button";
 import ShowEncryptedPassword from "../form/form-elements/ShowPasswordModal";
 
-type FacultyDataTableProps = {
+type CompanyDataTableProps = {
   company: any[];
   loading: boolean;
+  onSort: (field: string) => void;
+  sortField: string;
+  sortOrder: "asc" | "desc";
 };
 
 export default function CompanyDataTable({
   company,
-}: FacultyDataTableProps) {
-
+  loading,
+  onSort,
+  sortField,
+  sortOrder,
+}: CompanyDataTableProps) {
   const dispatch = useDispatch();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
- 
+
   const handleShowPassword = (item: string) => {
     setSelectedId(item);
     setPassword(item);
@@ -33,81 +40,102 @@ export default function CompanyDataTable({
     setPassword(null);
   };
 
-  console.log("get All Query To search in faculty Table:", company);
+  console.log("get All Query To search in company Table:", company);
+
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1102px] overflow-y-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+            {/* ERP Style Table Header */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
+                >
+                  Sr No.
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Institute Name
                 </TableCell>
 
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
-                  Username
+                  Username / Email
                 </TableCell>
 
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
-                  Published Date
+                  <button
+                    type="button"
+                    className="flex items-center gap-1 font-semibold uppercase hover:text-slate-700 dark:hover:text-slate-200"
+                  // onClick={() => onSort("createdAt")}
+                  >
+                    Published Date
+                    <span className="text-[9px] opacity-70">
+                      {sortField !== "createdAt" ? "↕" : sortOrder === "asc" ? "↑" : "↓"}
+                    </span>
+                  </button>
                 </TableCell>
 
                 {/* <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
-                  View Password
+                  Actions
                 </TableCell> */}
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {company && company.length > 0 ? (
-                company.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-                        <div>
-                          <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
-                            {item.name}
-                          </span>
-                          <span className="block text-xs text-gray-500 dark:text-gray-400">
-                            Company
-                          </span>
-                        </div>
+                company.map((item: any, index: number) => (
+                  <TableRow
+                    key={item.id || index}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                  >
+                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-400 dark:text-slate-500">
+                      {index + 1}
+                    </TableCell>
+
+                    <TableCell className="px-3 py-1.5">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
+                          {item.name}
+                        </span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide">
+                          Company
+                        </span>
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
                       {item.email}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {new Date(item.createdAt).toLocaleDateString("en-US", {
-                        //weekday: "long",
-                        year: "numeric",
-                        month: "short", //month: "long"
-                        day: "numeric",
-                      })}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                      {item.createdAt
+                        ? new Date(item.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })
+                        : "—"}
                     </TableCell>
 
-                    {/* <TableCell className="px-4 py-3 text-start">
+                    {/* <TableCell className="px-3 py-1.5">
                       <Button
-                        onClick={() =>
-                          handleShowPassword(item.originalPassword)
-                        }
-                        size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                        onClick={() => handleShowPassword(item.originalPassword)}
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Show Password
                       </Button>
@@ -117,8 +145,8 @@ export default function CompanyDataTable({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={3}
-                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                    colSpan={5}
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
                     No Company found.
                   </TableCell>
@@ -128,6 +156,7 @@ export default function CompanyDataTable({
           </Table>
         </div>
       </div>
+
       {selectedId !== null && password !== null && (
         <ShowEncryptedPassword
           onCloseModal={handleCloseShowPassword}

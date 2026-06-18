@@ -574,26 +574,43 @@ export async function profitAnalyticsController(req: Request, res: Response) {
     const incomePerPC = totalPCs > 0 ? totalPCIncome / totalPCs : 0;
 
     // =============================================
+    // 📊 REVENUE-BASED MONTHLY SALES CALCULATION
+    // =============================================
+    const monthlySalesData: Record<string, number> = {};
+    
+    allFees.forEach(fee => {
+      if (fee.paymentStatus === "SUCCESS" && fee.paymentDate) {
+        const month = new Date(fee.paymentDate).toLocaleString("en-US", { month: "short" });
+        monthlySalesData[month] = (monthlySalesData[month] || 0) + fee.amountPaid;
+      }
+    });
+
+    const formattedMonthlySales = Object.entries(monthlySalesData).map(([month, sales]) => ({
+      month,
+      sales
+    }));
+
+    // =============================================
     // 📊 FINAL RESULT
     // =============================================
     return res.json({
       summary: {
-        totalIncome: totalAmountPaid,
+        totalIncome: totalIncome, // ✅ Uses the exact per-student sum
         totalPCs,
         totalPCIncome,
-        totalStudentIncome: totalAmountPaid,
+        totalStudentIncome: totalIncome, 
         totalCourseIncome,
         totalBatchIncome,
         totalFacultyIncome,
-        totalOutstanding: totalAmountOutstanding,
+        totalOutstanding: totalOutstanding, // ✅ Uses the correct mapped outstanding balance
       },
-      monthlySales: result ,
+      monthlySales: formattedMonthlySales, // ✅ Now returns actual revenue per month formatted for charts
       breakdown: {
         perStudent,
         perCourse,
         perBatch,
         perFaculty,
-        perPC, // ✅ added real per-PC breakdown
+        perPC, 
       },
     });
   } catch (err) {

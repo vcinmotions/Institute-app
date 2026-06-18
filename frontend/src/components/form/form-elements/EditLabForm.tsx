@@ -82,13 +82,13 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
       totalPCs: labData.totalPCs || 0,
       timeSlots: labData.timeSlots?.length
         ? labData.timeSlots.map((slot: any) => ({
-            day: slot.day || "Daily",
-            startTime: slot.startTime || "",
-            endTime: slot.endTime || "",
-            id: slot.id,
-            allocatedPCs: slot.allocatedPCs,
-            availablePCs: slot.availablePCs,
-          }))
+          day: slot.day || "Daily",
+          startTime: slot.startTime || "",
+          endTime: slot.endTime || "",
+          id: slot.id,
+          allocatedPCs: slot.allocatedPCs,
+          availablePCs: slot.availablePCs,
+        }))
         : [{ day: "Daily", startTime: "", endTime: "" }],
     });
   }, [labData]);
@@ -194,8 +194,8 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
       scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
       return; // ⛔ mutation never runs
     }
@@ -219,11 +219,11 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
     const id = labData.id;
     console.log("GET LABDATA ID IN HABDLE SUBMIT:", id);
 
-     const normalizedLab = {
-          ...lab,
-          name: titleCase(lab.name),
-          location: normalizeToLowercase(lab.location),
-        }
+    const normalizedLab = {
+      ...lab,
+      name: titleCase(lab.name),
+      location: normalizeToLowercase(lab.location),
+    }
 
     editLab(
       { lab: normalizedLab, id },
@@ -251,7 +251,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
         onError: () => {
           // You already handle error via redux + toast
-          window.scrollTo({top: 0, behavior: "smooth"})
+          window.scrollTo({ top: 0, behavior: "smooth" })
         },
       },
     );
@@ -261,7 +261,15 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
   return (
     <ModalCard title="Edit Lab" oncloseModal={onCloseModal}>
-      <div className="space-y-6">
+      <div className="flex flex-col gap-6">
+
+        {/* Header & Alerts */}
+        <div className="border-b pb-4 dark:border-gray-700">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Update the details below to modify the lab configuration.
+          </p>
+        </div>
+
         {alert.show && (
           <Alert
             variant={alert.variant === "Success" ? "success" : "error"}
@@ -271,163 +279,153 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
           />
         )}
 
-        {/* 🔹 Lab Name */}
-        <div  ref={(el) => {
-                inputRefs.current.name = el;
-              }}>
-          <Label>Lab Name</Label>
-          <Input
-            ref={firstInputRef}
-            tabIndex={1}
-            type="text"
-            placeholder="Ex. LAB-06"
-            value={titleCase(lab.name)}
-            onChange={(e) => handleChange("name", e.target.value)}
-          />
-          {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
-        </div>
+        {/* Section 1: Lab Details */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Lab Details
+          </h3>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div ref={(el) => { inputRefs.current.name = el; }}>
+              <Label>Lab Name *</Label>
+              <Input
+                ref={firstInputRef}
+                tabIndex={1}
+                type="text"
+                placeholder="Ex. LAB-06"
+                value={titleCase(lab.name)}
+                onChange={(e) => handleChange("name", e.target.value)}
+              />
+              {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+            </div>
 
-        {/* 🔹 Location */}
-        <div>
-          <Label>Location</Label>
-          <Input
-            type="text"
-            tabIndex={2}
-            placeholder="Ex. Building D - Floor 1"
-            value={titleCase(lab.location)}
-            onChange={(e) => handleChange("location", e.target.value)}
-          />
-          {errors.location && (
-            <p className="text-sm text-red-500">{errors.location}</p>
-          )}
-        </div>
-
-        {/* 🔹 Total PCs */}
-        <div  ref={(el) => {
-                inputRefs.current.totalPCs = el;
-              }}>
-          <Label>Total PCs</Label>
-          <Input
-            tabIndex={3}
-            type="number"
-            placeholder="Ex. 15"
-            value={lab.totalPCs}
-            onChange={(e) => handleChange("totalPCs", Number(e.target.value))}
-          />
-          {errors.totalPCs && (
-            <p className="text-sm text-red-500">{errors.totalPCs}</p>
-          )}
-        </div>
-
-        {/* 🔹 Time Slots */}
-        {/* <div>
-          <Label>Time Slots</Label>
-          {lab.timeSlots.map((slot, index) => (
-            <div key={index} className="mb-3 flex gap-3">
+            <div>
+              <Label>Location *</Label>
               <Input
                 type="text"
-                tabIndex={4}
-                placeholder="Day (e.g., Daily)"
-                value={slot.day}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "day", e.target.value)
-                }
+                tabIndex={2}
+                placeholder="Ex. Building D - Floor 1"
+                value={titleCase(lab.location)}
+                onChange={(e) => handleChange("location", e.target.value)}
               />
-              <Input
-                type="time"
-                value={slot.startTime}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "startTime", e.target.value)
-                }
-              />
-              <Input
-                type="time"
-                value={slot.endTime}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "endTime", e.target.value)
-                }
-              />
-              {lab.timeSlots.length > 1 && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => removeTimeSlot(index)}
-                >
-                  ✕
-                </Button>
+              {errors.location && (
+                <p className="mt-1 text-sm text-red-500">{errors.location}</p>
               )}
             </div>
-          ))}
 
-          <Button size="sm" variant="outline" onClick={addTimeSlot}>
-            + Add Time Slot
-          </Button>
-        </div> */}
-
-        {lab.timeSlots.map((slot, index) => {
-          const isLocked = (slot.allocatedPCs ?? 0) > 0;
-
-          return (
-            <div key={index} className="mb-3 flex items-center gap-3"  ref={(el) => {
-                inputRefs.current.timeSlots = el;
-              }}>
+            <div ref={(el) => { inputRefs.current.totalPCs = el; }}>
+              <Label>Total PCs *</Label>
               <Input
-                type="text"
-                value={slot.day}
-                disabled={isLocked}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "day", e.target.value)
-                }
+                tabIndex={3}
+                type="number"
+                placeholder="Ex. 15"
+                value={lab.totalPCs}
+                onChange={(e) => handleChange("totalPCs", Number(e.target.value))}
               />
-
-              <Input
-                type="time"
-                value={slot.startTime}
-                disabled={isLocked}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "startTime", e.target.value)
-                }
-              />
-
-              <Input
-                type="time"
-                value={slot.endTime}
-                disabled={isLocked}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "endTime", e.target.value)
-                }
-              />
-
-              {lab.timeSlots.length > 1 && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={isLocked}
-                  onClick={() => removeTimeSlot(index)}
-                >
-                  ✕
-                </Button>
+              {errors.totalPCs && (
+                <p className="mt-1 text-sm text-red-500">{errors.totalPCs}</p>
               )}
-               {errors.timeSlots && (
-              <p className="text-sm text-red-500">{errors.timeSlots}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 2: Time Slots */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Time Slots
+          </h3>
+          <div className="flex flex-col gap-4">
+            {lab.timeSlots.map((slot, index) => {
+              const isLocked = (slot.allocatedPCs ?? 0) > 0;
+
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col sm:flex-row items-start sm:items-center gap-3"
+                  ref={(el) => { inputRefs.current.timeSlots = el; }}
+                >
+                  <div className="w-full sm:w-1/3">
+                    <Label className="sm:hidden">Day</Label>
+                    <Input
+                      type="text"
+                      value={slot.day}
+                      disabled={isLocked}
+                      placeholder="Ex. Daily"
+                      onChange={(e) =>
+                        handleTimeSlotChange(index, "day", e.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div className="w-full sm:w-1/3">
+                    <Label className="sm:hidden">Start Time</Label>
+                    <Input
+                      type="time"
+                      value={slot.startTime}
+                      disabled={isLocked}
+                      onChange={(e) =>
+                        handleTimeSlotChange(index, "startTime", e.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div className="w-full sm:w-1/3">
+                    <Label className="sm:hidden">End Time</Label>
+                    <Input
+                      type="time"
+                      value={slot.endTime}
+                      disabled={isLocked}
+                      onChange={(e) =>
+                        handleTimeSlotChange(index, "endTime", e.target.value)
+                      }
+                    />
+                  </div>
+
+                  {lab.timeSlots.length > 1 && (
+                    <div className="mt-6 sm:mt-0">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={isLocked}
+                        onClick={() => removeTimeSlot(index)}
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            {errors.timeSlots && (
+              <p className="mt-1 text-sm text-red-500">{errors.timeSlots}</p>
             )}
+
+            <div className="mt-2">
+              <Button size="sm" variant="outline" onClick={addTimeSlot}>
+                + Add Time Slot
+              </Button>
             </div>
-          );
-        })}
+          </div>
+        </div>
 
-        <Button size="sm" variant="outline" onClick={addTimeSlot}>
-          + Add Time Slot
-        </Button>
-
-        {/* 🔹 Actions */}
-        <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-          <Button size="sm" variant="outline" onClick={onCloseModal}>
+        {/* Action Bar */}
+        <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={onCloseModal}
+          >
             Close
           </Button>
-          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
-            Save
+          <Button
+            size="sm"
+            className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+            onClick={handleSubmit}
+          >
+            Save Lab
           </Button>
         </div>
+
       </div>
     </ModalCard>
   );

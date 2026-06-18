@@ -100,6 +100,8 @@ export default function NotificationTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            totalCount={0}
+            limit={PAGE_SIZE}
             noTotal
             onPageChange={handlePagination}
           />

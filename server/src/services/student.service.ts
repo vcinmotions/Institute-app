@@ -708,6 +708,7 @@ export async function getStudents({
 //   });
 // }
 
+
 export async function createStudentService({
   prisma,
   clientAdminId,
@@ -999,6 +1000,96 @@ export async function createStudentService({
       }
 
       allFees.push(studentFeeRecords);
+
+      // ======================================
+      // LAB PC ALLOCATION
+      // ======================================
+      if (batchExists.labTimeSlotId) {
+
+        const labTimeSlot = await tx.labTimeSlot.findUnique({
+          where: {
+            id: batchExists.labTimeSlotId,
+          },
+          include: {
+            allocations: {
+              select: {
+                pcNumber: true,
+              },
+            },
+            lab: {
+              select: {
+                totalPCs: true,
+              },
+            },
+          },
+        });
+
+        if (!labTimeSlot) {
+          throw new Error("Lab timeslot not found");
+        }
+
+        if (labTimeSlot.availablePCs <= 0) {
+          throw new Error("No PCs available");
+        }
+
+        const totalPCs = labTimeSlot.lab.totalPCs;
+
+        const usedPCs = new Set(
+          labTimeSlot.allocations.map(
+            (a: any) => a.pcNumber
+          )
+        );
+
+        let freePC: number | null = null;
+
+        for (let i = 1; i <= totalPCs; i++) {
+          if (!usedPCs.has(i)) {
+            freePC = i;
+            break;
+          }
+        }
+
+        if (!freePC) {
+          throw new Error(
+            `No free PCs available for batch ${batchId}`
+          );
+        }
+
+        const existingAllocation =
+          await tx.labAllocation.findFirst({
+            where: {
+              labTimeSlotId: labTimeSlot.id,
+              pcNumber: freePC,
+            },
+          });
+
+        if (existingAllocation) {
+          throw new Error(
+            "PC already allocated. Please retry."
+          );
+        }
+
+        await tx.labAllocation.create({
+          data: {
+            labTimeSlotId: labTimeSlot.id,
+            studentId: student.id,
+            pcNumber: freePC,
+            clientAdminId,
+          },
+        });
+
+        await tx.labTimeSlot.update({
+          where: {
+            id: labTimeSlot.id,
+          },
+          data: {
+            availablePCs: {
+              decrement: 1,
+            },
+          },
+        });
+      }
+
     }
 
     return {
@@ -1134,6 +1225,8 @@ export async function editStudentService({
       gender,
     },
   });
+
+  
 
   const getAllStudent = await prisma.student.findMany()
 

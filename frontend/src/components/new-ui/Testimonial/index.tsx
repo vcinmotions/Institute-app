@@ -2,9 +2,6 @@
 import SectionHeader from "../Common/SectionHeader";
 
 import { Autoplay, Pagination } from "swiper/modules"
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { motion } from "framer-motion";

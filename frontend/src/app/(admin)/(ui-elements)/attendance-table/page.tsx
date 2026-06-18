@@ -20,6 +20,7 @@ import StudentCard from "@/components/common/StudentCard";
 import Alert from "@/components/ui/alert/Alert";
 import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function AttendanceTable() {
   const [filters, setFilters] = useState<Record<string, string | null>>({});
@@ -37,47 +38,47 @@ export default function AttendanceTable() {
   const course = useSelector((state: RootState) => state.course.courses);
 
   const [alert, setAlert] = useState<{ show: boolean; title: string; message: string; variant: string }>({
-      show: false,
-      title: '',
-      message: '',
-      variant: '',
-    });
+    show: false,
+    title: '',
+    message: '',
+    variant: '',
+  });
 
   // const facultyBatch = batch.filter((item) => item.facultyId === user.id);
   const {
-        data: courseData,
-        isLoading: courseLoading,
-        isError: courseError,
-      } = useFetchAllCourses();
-    
-      const {
-        data: batchData,
-        isLoading: batchLoading,
-        isError: batchError,
-      } = useFetchAllBatches();
-  
-      useEffect(() => {
-        if (courseData?.course) {
-          dispatch(setCourses(courseData.course));
-        };
-      }, [courseData, dispatch]);
-    
-      useEffect(() => {
-        console.log("get all batches data;", batchData);
-        if (batchData?.batch) { 
-          dispatch(setBatches(batchData.batch));
-        };
-      }, [batchData, dispatch]);
-      console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
-  
-    const batchOptions = batch.map((b: any) => ({
-      value: b.id.toString(),
-      label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
-    }));
-  
-    console.log("get Course Info In Faculty Create Form Modal;", course);
-  
-    console.log("get batch Info In Faculty Create Form Modal;", batch);
+    data: courseData,
+    isLoading: courseLoading,
+    isError: courseError,
+  } = useFetchAllCourses();
+
+  const {
+    data: batchData,
+    isLoading: batchLoading,
+    isError: batchError,
+  } = useFetchAllBatches();
+
+  useEffect(() => {
+    if (courseData?.course) {
+      dispatch(setCourses(courseData.course));
+    };
+  }, [courseData, dispatch]);
+
+  useEffect(() => {
+    console.log("get all batches data;", batchData);
+    if (batchData?.batch) {
+      dispatch(setBatches(batchData.batch));
+    };
+  }, [batchData, dispatch]);
+  console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
+
+  const batchOptions = batch.map((b: any) => ({
+    value: b.id.toString(),
+    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+  }));
+
+  console.log("get Course Info In Faculty Create Form Modal;", course);
+
+  console.log("get batch Info In Faculty Create Form Modal;", batch);
 
   // ✅ Determine batch list based on role
   const facultyBatch =
@@ -118,74 +119,74 @@ export default function AttendanceTable() {
   };
 
   const handleDownloadAttendance = async () => {
-  const batchId = filters.batchId ? Number(filters.batchId) : null;
-  const date =
-    filters.date || new Date().toISOString().split("T")[0];
+    const batchId = filters.batchId ? Number(filters.batchId) : null;
+    const date =
+      filters.date || new Date().toISOString().split("T")[0];
 
-  // 🛑 Validate inputs
-  if (!batchId || !date) {
-    setAlert({
-      show: true,
-      title: "Missing Required Fields",
-      message: "Please select Batch and Date to download attendance.",
-      variant: "error",
-    });
-
-    setTimeout(() => {
+    // 🛑 Validate inputs
+    if (!batchId || !date) {
       setAlert({
-        show: false,
-        title: "",
-        message: "",
-        variant: "",
+        show: true,
+        title: "Missing Required Fields",
+        message: "Please select Batch and Date to download attendance.",
+        variant: "error",
       });
-    }, 2000);
 
-    return; // ⛔ STOP execution
-  }
+      setTimeout(() => {
+        setAlert({
+          show: false,
+          title: "",
+          message: "",
+          variant: "",
+        });
+      }, 2000);
 
-  if (!token) {
-    setAlert({
-      show: true,
-      title: "Authentication Error",
-      message: "Session expired. Please login again.",
-      variant: "error",
-    });
-    return;
-  }
+      return; // ⛔ STOP execution
+    }
 
-  try {
-    setLoading(true);
-
-    await downloadAttendanceExcel(token, batchId, date);
-
-    setAlert({
-      show: true,
-      title: "Download Started",
-      message: "Attendance file is downloading.",
-      variant: "success",
-    });
-  } catch (error) {
-    console.error("❌ Error downloading attendance:", error);
-
-    setAlert({
-      show: true,
-      title: "Download Failed",
-      message: "Please try again later.",
-      variant: "error",
-    });
-  } finally {
-    setLoading(false);
-
-    setTimeout(() => {
+    if (!token) {
       setAlert({
-        show: false,
-        title: "",
-        message: "",
-        variant: "",
+        show: true,
+        title: "Authentication Error",
+        message: "Session expired. Please login again.",
+        variant: "error",
       });
-    }, 2000);
-  }
-};
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await downloadAttendanceExcel(token, batchId, date);
+
+      setAlert({
+        show: true,
+        title: "Download Started",
+        message: "Attendance file is downloading.",
+        variant: "success",
+      });
+    } catch (error) {
+      console.error("❌ Error downloading attendance:", error);
+
+      setAlert({
+        show: true,
+        title: "Download Failed",
+        message: "Please try again later.",
+        variant: "error",
+      });
+    } finally {
+      setLoading(false);
+
+      setTimeout(() => {
+        setAlert({
+          show: false,
+          title: "",
+          message: "",
+          variant: "",
+        });
+      }, 2000);
+    }
+  };
 
 
   // 🔹 Fetch student + attendance data only when filters are applied
@@ -222,13 +223,13 @@ export default function AttendanceTable() {
             </button>
           </div>
 
-          {alert.show && 
-          (<Alert
-            variant={"error"}
-            title={alert.title}
-            message={alert.message}
-            showLink={false}
-          />)}
+          {alert.show &&
+            (<Alert
+              variant={"error"}
+              title={alert.title}
+              message={alert.message}
+              showLink={false}
+            />)}
 
           {/* 🧾 Attendance Table only after filter selection */}
           {filters.batchId ? (
@@ -253,6 +254,8 @@ export default function AttendanceTable() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
+              totalCount={0}
+              limit={PAGE_SIZE}
               onPageChange={handlePagination}
             />
           )}

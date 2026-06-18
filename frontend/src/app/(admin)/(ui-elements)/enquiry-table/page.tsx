@@ -29,6 +29,7 @@ import { setCourses } from "@/store/slices/courseSlice";
 import { LEAD_STATUS_FILTER_OPTIONS } from "@/components/common/LeadStatus";
 import { LEAD_STATUS_OPTIONS } from "@/domain/enquiry/leadStatus";
 import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function EnquiryTable() {
   const dispatch = useDispatch<AppDispatch>();
@@ -185,7 +186,7 @@ export default function EnquiryTable() {
           </div>
 
           <EnquiryDataTable
-            enquiries={enquiriesList} 
+            enquiries={enquiriesList}
             loading={isLoading || isFetching}
             onSort={handleSort}
             onLeadStatus={handleLeadStatus}
@@ -196,6 +197,7 @@ export default function EnquiryTable() {
           <Pagination
             currentPage={currentPage}
             totalCount={total}
+            limit={PAGE_SIZE}
             totalPages={totalPages}
             title="Enquiries"
             onPageChange={handlePagination}

@@ -1,4 +1,3 @@
-
 import {
   Table,
   TableBody,
@@ -14,7 +13,6 @@ import { useRouter } from "next/navigation";
 import Avatar from "../common/Avatar";
 import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
 import { formatDate } from "../common/Formatdate";
-
 
 type AdmissionDataTableProps = {
   admissions: any[];
@@ -32,7 +30,6 @@ export default function AdmissionDataTable({
   sortOrder,
 }: AdmissionDataTableProps) {
   const router = useRouter();
-  // const [selectedId, setSelectedId] = useState<string | null>(null);
   const admission = useSelector(
     (state: RootState) => state.admission.admissions,
   );
@@ -43,118 +40,92 @@ export default function AdmissionDataTable({
   );
 
   const handleEditAdmission = (id: string) => {
-    // router.push(`/dashboard/admission/edit/${id}`);
     router.push(`/dashboard/admission/edit?id=${id}`);
   };
 
-  // const handleAdmission = (id: any) => {
-  //   const token = sessionStorage.getItem("token");
-  //   if (!token) {
-  //     console.error("No token found in sessionStorage");
-  //     return;
-  //   }
-
-  //   console.log("Get EnquiryId to Admission Handle:", id);
-
-  //   const enquiryData = enquiries.find((item) => item.id === id);
-
-  //   console.log("Get Enquity Data in Handle Admission:", enquiryData);
-
-  //   if (!enquiryData) {
-  //     console.error("No enquiry data found for this ID");
-  //     return;
-  //   }
-
-  //   const { name, email, contact, courseId } = enquiryData;
-
-  //   // ✅ Save ID and data to state
-  //   setSelectedEnquiryId(id);
-  //   setSelectedEnquiryData({ name, email, contact, courseId });
-
-  //   console.log("Get Enquiry Id in HandleAdmission:", selectedEnquiryId);
-  //   console.log("Get Enquiry DATA in HandleAdmission:", selectedEnquiryData);
-  //   setShowAdmissionForm(true);
-  // };
-
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1102px] overflow-y-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+            {/* ERP Style Table Header */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Enquiry
                 </TableCell>
 
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Email
                 </TableCell>
 
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Contact
                 </TableCell>
+
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Course
                 </TableCell>
+
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Status
                 </TableCell>
+
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   <button
                     type="button"
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 font-semibold uppercase hover:text-slate-700 dark:hover:text-slate-200"
                     onClick={() => onSort("createdAt")}
                   >
                     Enquiry At
-                    <span>
-                      {sortField === "createdAt" && sortOrder === "asc"
-                        ? "▲"
-                        : "▼"}
+                    <span className="text-[9px] opacity-70">
+                      {sortField !== "createdAt" ? "↕" : sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   </button>
                 </TableCell>
+
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Admission
                 </TableCell>
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {admission && admission.length > 0 ? (
                 admission.map((item: any) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 overflow-hidden rounded-full">
-                          <Avatar name={item.name} size={38} />
+                  <TableRow key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors">
+                    <TableCell className="px-3 py-1.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-7 w-7 overflow-hidden rounded-full flex-shrink-0">
+                          <Avatar name={item.name} size={28} />
                         </div>
-                        <div>
-                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
                             {item.name}
                           </span>
-                          <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide">
                             {new Date(item.createdAt).toLocaleDateString(
                               "en-US",
                               {
@@ -167,18 +138,26 @@ export default function AdmissionDataTable({
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
                       {item.email ? item.email : "-"}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+
+                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
                       {item.contact}
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {item.enquiryCourse.map((cr: any, index: number) => (
-                        <span key={index}>{cr.course.name}</span>
-                      ))}
+
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
+                      <div className="space-y-0.5">
+                        {item.enquiryCourse.map((cr: any, index: number) => (
+                          <div key={index} className="truncate max-w-[150px]">
+                            {cr.course.name}
+                          </div>
+                        ))}
+                      </div>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+
+                    <TableCell className="px-3 py-1.5">
                       <Badge
                         size="sm"
                         color={STATUS_COLOR_MAP[item.leadStatus] ?? "error"}
@@ -186,15 +165,15 @@ export default function AdmissionDataTable({
                         {item.leadStatus}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-theme-sm px-5 py-3 text-start text-gray-500 dark:text-gray-400">
+
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
                       {formatDate(item.enquiryDate)}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handleEditAdmission(item.id)}
-                        size="sm"
-                        className="rounded bg-gray-800 px-5 py-2 text-sm text-white transition hover:bg-gray-900"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Admission
                       </Button>
@@ -204,8 +183,8 @@ export default function AdmissionDataTable({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={6}
-                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                    colSpan={7}
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
                     No Admission found.
                   </TableCell>

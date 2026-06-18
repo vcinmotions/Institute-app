@@ -9,15 +9,10 @@ import {
 import { useState } from "react";
 
 import Badge from "../ui/badge/Badge";
-import Image from "next/image";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
-import Button from "../ui/button/Button";
 import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
-import { Student } from "@/types/student";
 import CourseCompletionForm from "../form/form-elements/CourseCompletionForm";
 import Avatar from "../common/Avatar";
+import Button from "../ui/button/Button";
 
 type FollowUpModalType = "completeCourse" | "update" | "complete" | null;
 
@@ -39,12 +34,9 @@ export default function StudentCourseDataTable({
   const [modalType, setModalType] = useState<FollowUpModalType>(null);
   const [selectedStudentCourseId, setSelectedStudentCourseId] =
     useState<string>("");
-  const { mutate: fetchEnquiries, data } = useFetchEnquiry();
+  const { mutate: fetchEnquiries } = useFetchEnquiry();
   const [studentId, setStudentId] = useState<string | null>(null);
 
-  console.log("get All Query To search:", studentCourse);
-
-  // Dispatch server-side fetch
   const handleSort = (field: string) => {
     const token = sessionStorage.getItem("token");
     if (!token) return;
@@ -58,8 +50,6 @@ export default function StudentCourseDataTable({
       sortOrder: order,
     });
   };
-
-  console.log("Get All Enquiry Details in Enquiry table", studentCourse);
 
   const handleCompletion = (item: any) => {
     setModalType("completeCourse");
@@ -95,98 +85,93 @@ export default function StudentCourseDataTable({
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1102px] overflow-y-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+            {/* ERP Style Table Header */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Student Name
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Course
                 </TableCell>
-
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Batch
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Status
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   <button
                     type="button"
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 font-semibold uppercase hover:text-slate-700 dark:hover:text-slate-200"
                     onClick={() => onSort("startDate")}
                   >
                     Start Date
-                    <span>
-                      {sortField === "startDate" && sortOrder === "asc"
-                        ? "▲"
-                        : "▼"}
+                    <span className="text-[9px] opacity-70">
+                      {sortField !== "startDate" ? "↕" : sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   </button>
                 </TableCell>
-
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   <button
                     type="button"
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 font-semibold uppercase hover:text-slate-700 dark:hover:text-slate-200"
                     onClick={() => onSort("endDate")}
                   >
                     End Date
-                    <span>
-                      {sortField === "endDate" && sortOrder === "asc"
-                        ? "▲"
-                        : "▼"}
+                    <span className="text-[9px] opacity-70">
+                      {sortField !== "endDate" ? "↕" : sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   </button>
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
-                  <button type="button" className="flex items-center gap-1">
-                    Course Completion
-                  </button>
+                  Course Completion
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
                 >
                   Download
                 </TableCell>
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {studentCourse && studentCourse.length > 0 ? (
                 studentCourse.map((item: any) => (
-                  <TableRow key={item.studentCourse?.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 overflow-hidden rounded-full">
-
-
+                  <TableRow
+                    key={item.studentCourse?.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                  >
+                    <TableCell className="px-3 py-1.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full flex items-center justify-center">
                           {item?.studentCourse?.student?.photoUrl ? (
                             <img
                               src={
@@ -195,38 +180,35 @@ export default function StudentCourseDataTable({
                                   : `http://localhost:5001${item?.studentCourse?.student?.photoUrl}`
                               }
                               alt="student"
-                              className="h-10 w-10 rounded-full object-cover"
-                              onError={(e) =>
-                                ((e.target as HTMLImageElement).src = "/images/user/user-21.jpg")
-                              }
+                              className="h-7 w-7 rounded-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "/images/user/user-21.jpg";
+                              }}
                             />
                           ) : (
-                            <Avatar name={item?.studentCourse?.student?.fullName} size={38} />
+                            <Avatar name={item?.studentCourse?.student?.fullName} size={28} />
                           )}
-
                         </div>
-                        <div>
-                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize truncate">
                             {item.studentCourse?.student?.fullName || "N/A"}
                           </span>
-                          <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
-                            {item.studentCourse.student.email
-                              ? item.studentCourse?.student?.email
-                              : "N/A"}
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide truncate">
+                            {item.studentCourse?.student?.email || "N/A"}
                           </span>
                         </div>
                       </div>
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 max-w-[150px] truncate">
                       {item.studentCourse?.course?.name || "N/A"}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
                       {item.studentCourse?.batchId || "N/A"}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5">
                       <Badge
                         size="sm"
                         color={
@@ -235,7 +217,7 @@ export default function StudentCourseDataTable({
                             : item.studentCourse?.status === "ACTIVE"
                               ? "warning"
                               : item.studentCourse?.status === "WARM"
-                                ? "info" // or any color name you support
+                                ? "info"
                                 : "error"
                         }
                       >
@@ -243,11 +225,9 @@ export default function StudentCourseDataTable({
                       </Badge>
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
                       {item.studentCourse?.startDate
-                        ? new Date(
-                          item.studentCourse.startDate,
-                        ).toLocaleDateString("en-US", {
+                        ? new Date(item.studentCourse.startDate).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
@@ -255,11 +235,9 @@ export default function StudentCourseDataTable({
                         : "N/A"}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
                       {item.studentCourse?.endDate
-                        ? new Date(
-                          item.studentCourse.endDate,
-                        ).toLocaleDateString("en-US", {
+                        ? new Date(item.studentCourse.endDate).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
@@ -267,32 +245,28 @@ export default function StudentCourseDataTable({
                         : "N/A"}
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5">
                       <Button
-                        size="sm"
                         onClick={() => handleCompletion(item)}
                         disabled={item.studentCourse.status === "COMPLETED"}
-                        className="rounded bg-gray-800 px-4 py-2 text-sm text-white transition hover:bg-gray-900"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         Completion
                       </Button>
                     </TableCell>
 
-                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-3 py-1.5">
                       {item.studentCourse?.certificate?.certificateUrl ? (
                         <Button
-                          size="sm"
                           onClick={() =>
-                            handleDownload(
-                              item.studentCourse.certificate.certificateUrl,
-                            )
+                            handleDownload(item.studentCourse.certificate.certificateUrl)
                           }
-                          className="mt-2 bg-yellow-500 text-white hover:bg-yellow-600"
+                          className="h-6 rounded-[4px] bg-amber-500 px-2.5 text-[11px] font-medium text-white shadow-sm transition hover:bg-amber-600 disabled:opacity-50"
                         >
                           Download
                         </Button>
                       ) : (
-                        <span className="text-gray-400 italic">
+                        <span className="text-[11px] text-slate-400 italic dark:text-slate-500">
                           No Certificate
                         </span>
                       )}
@@ -302,8 +276,8 @@ export default function StudentCourseDataTable({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={9}
-                    className="py-6 text-center text-gray-500 dark:text-gray-400"
+                    colSpan={8}
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
                     No Student Course found.
                   </TableCell>

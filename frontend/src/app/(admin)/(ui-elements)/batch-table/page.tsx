@@ -19,7 +19,7 @@ import useDebounce from "@/hooks/useDebounce";
 
 export default function BatchTable() {
   const [showForm, setShowForm] = useState(false);
-  const { currentPage, total, totalPages, searchQuery, sortField, sortOrder,  } = useSelector((state: RootState) => state.batch)
+  const { currentPage, total, totalPages, searchQuery, sortField, sortOrder, } = useSelector((state: RootState) => state.batch)
   //const [enquiries, setEnquiries] = useState<any[]>([]);
   const batch = useSelector((state: RootState) => state.batch.batches ?? []);
   const labs = useSelector((state: RootState) => state.lab.labs ?? []);
@@ -38,15 +38,15 @@ export default function BatchTable() {
 
   // Debounce effect: update searchQuery 1 second after user stops typing
   // --- Debounced search and Set delay time according to your needs
-    const debouncedSearchTerm = useDebounce(searchInput, 300);
+  const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    // 2. sync debounced value to Redux
-    useEffect(() => {
-      if (debouncedSearchTerm !== searchQuery) {
-        dispatch(setSearchQuery(debouncedSearchTerm));
-        dispatch(setCurrentPage(1));
-      }
-    }, [debouncedSearchTerm, searchQuery, dispatch]);
+  // 2. sync debounced value to Redux
+  useEffect(() => {
+    if (debouncedSearchTerm !== searchQuery) {
+      dispatch(setSearchQuery(debouncedSearchTerm));
+      dispatch(setCurrentPage(1));
+    }
+  }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // 2. sync debounced value to Redux
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function BatchTable() {
   console.log("Query data:", currentPage, searchQuery, totalPages);
 
   // --- Handlers (memoized)
-  
+
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     dispatch(setCurrentPage(1));
@@ -158,6 +158,7 @@ export default function BatchTable() {
 
           <Pagination
             currentPage={currentPage}
+            limit={PAGE_SIZE}
             totalPages={totalPages}
             title="Bathes"
             totalCount={total}

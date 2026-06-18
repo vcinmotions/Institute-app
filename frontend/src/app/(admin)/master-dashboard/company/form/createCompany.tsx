@@ -34,19 +34,6 @@ import PhoneInput from "@/components/form/group-input/PhoneInput";
 import { countries } from "@/components/common/CountriesCode";
 import { normalizeEmail, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
-import { fieldNormalizers } from "@/app/utils/formNormalizer";
-
-// interface CompanyData {
-//   name: string;
-//   instituteName: string;
-//   email: string;
-//   password: string;
-//   contact: string;
-//   country: string;
-//   state: string;
-//   city: string;
-//   zipCode: string;
-// }
 
 const CompanySchema = z.object({
     name: z.string().min(1, "Display Name is required"),
@@ -65,12 +52,11 @@ const CompanySchema = z.object({
         .string()
         .min(5, "Zipcode must be at least 5 digits")
         .regex(/^[0-9]+$/, "Zipcode must be numeric"),
-    financialStartDate: z.string().min(1, "Financial Year is required"), // ✅ ADD THIS
-    financialEndDate: z.string().min(1, "Financial Year is required"), // ✅ ADD THIS
+    financialStartDate: z.string().min(1, "Financial Year is required"),
+    financialEndDate: z.string().min(1, "Financial Year is required"),
 });
 
 type CompanyData = z.infer<typeof CompanySchema>;
-
 type FormErrors = Partial<Record<keyof CompanyData, string>>;
 
 export default function CompanyForm() {
@@ -92,9 +78,8 @@ export default function CompanyForm() {
     const [selectedLogo, setSelectedLogo] = useState<File | null>(null);
     const [selectedStamp, setSelectedStamp] = useState<File | null>(null);
     const [selectedSign, setSelectedSign] = useState<File | null>(null);
-    const [selectedCertificate, setSelectedCertificate] = useState<string | null>(
-        null,
-    );
+    const [selectedCertificate, setSelectedCertificate] = useState<string | null>(null);
+
     const router = useRouter();
     const { inputRefs, scrollToError } = useScrollToError();
 
@@ -123,7 +108,7 @@ export default function CompanyForm() {
         toast.error(error);
 
         const timer = setTimeout(() => {
-            dispatch(setError(null)); // ✅ Clear error after 3 sec
+            dispatch(setError(null));
         }, 3000);
 
         return () => clearTimeout(timer);
@@ -133,19 +118,6 @@ export default function CompanyForm() {
         src: `/certificates/certificate-template-${i + 1}.png`,
         alt: `certificate-template-${i + 1}.png`,
     }));
-    console.log("GET AUTH LOADING STATUS:", loading);
-
-    // useEffect(() => {
-    //         const handleKeyDown = (e: KeyboardEvent) => {
-    //           if (e.key === "Escape") {
-    //           e.preventDefault();
-    //           redirect('/master-dashboard');
-    //         }
-    //         };
-
-    //         window.addEventListener("keydown", handleKeyDown);
-    //         return () => window.removeEventListener("keydown", handleKeyDown);
-    //       }, []);
 
     useEffect(() => {
         if (form) {
@@ -230,7 +202,6 @@ export default function CompanyForm() {
     };
 
     const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
-        // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
         const formattedNumber = code + phoneNumber;
 
         setNewCompany((prev) => ({
@@ -250,15 +221,12 @@ export default function CompanyForm() {
         }
     };
 
-    // Function to generate a password based on selected options
     const generatePassword = (length = 12): void => {
         const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
         const numberChars = "0123456789";
         const symbolChars = "@#$%&";
-        //const symbolChars = "!@#$%^&*()_+[]{}|;:,.<>?";
 
-        // Ensure at least one character from each type
         const getRandomChar = (chars: string) =>
             chars[Math.floor(Math.random() * chars.length)];
 
@@ -269,32 +237,24 @@ export default function CompanyForm() {
             getRandomChar(symbolChars),
         ];
 
-        // Combine all characters
         const allChars =
             uppercaseChars + lowercaseChars + numberChars + symbolChars;
 
-        // Fill the rest of the password
         for (let i = password.length; i < length; i++) {
             password.push(getRandomChar(allChars));
         }
 
-        // Shuffle password so first 4 chars aren't predictable
         password = password.sort(() => Math.random() - 0.5);
 
-        // Set password in state
         setNewCompany((prev) => ({ ...prev, password: password.join("") }));
     };
 
     const capitalizeWords = (text: string) =>
-        text
-            .toLowerCase()
-            .replace(/\b\w/g, (char) => char.toUpperCase());
+        text.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 
     const handleChange = (field: keyof CompanyData, value: string) => {
         if (field === "instituteName") {
-            const cleaned = value
-                .toLowerCase()
-
+            const cleaned = value.toLowerCase();
             const displayName = capitalizeWords(value);
 
             setNewCompany((prev) => ({
@@ -320,8 +280,7 @@ export default function CompanyForm() {
         }
 
         if (field === "email") {
-            const cleaned = value
-                .toLowerCase()
+            const cleaned = value.toLowerCase();
 
             setNewCompany((prev) => ({
                 ...prev,
@@ -384,72 +343,24 @@ export default function CompanyForm() {
         setErrors((prev) => ({ ...prev, [field]: "" }));
     };
 
-    // const handleChange = (field: keyof CompanyData, value: string) => {
-    //     const normalizer = fieldNormalizers[field];
-
-    //     const finalValue =
-    //         typeof value === "string" && normalizer
-    //             ? normalizer(value)
-    //             : value;
-
-    //     // ✅ special rule
-    //     if (field === "instituteName") {
-    //         const displayName = titleCase(value);
-
-    //         setNewCompany((prev) => ({
-    //             ...prev,
-    //             instituteName: finalValue,
-    //             name: displayName,
-    //         }));
-
-    //         setField("instituteName", finalValue);
-    //         setField("name", displayName);
-    //         return;
-    //     }
-
-    //     setNewCompany((prev) => ({
-    //         ...prev,
-    //         [field]: finalValue,
-    //     }));
-
-    //     setField(field, finalValue);
-
-    //     setErrors((prev) => ({ ...prev, [field]: "" }));
-    // };
-
     const handleSubmit = async () => {
-        // if (!validate()) {
-        //   setAlert({
-        //     show: true,
-        //     title: "Validation Error",
-        //     message: "Please fill all fields.",
-        //     variant: "error",
-        //   });
-
-        //   setTimeout(
-        //     () => setAlert({ show: false, title: "", message: "", variant: "" }),
-        //     3000,
-        //   );
-        //   return;
-        // }
-
         const { isValid, errors: validationErrors } = validate();
 
         if (!isValid) {
             setAlert({
                 show: true,
                 title: "Validation Error",
-                message: "Please enter required fileds.",
+                message: "Please enter required fields.",
                 variant: "error",
             });
 
-            scrollToError(validationErrors); // ✅ ALWAYS WORKS
+            scrollToError(validationErrors);
 
             setTimeout(() => {
                 setAlert({ show: false, title: "", message: "", variant: "" });
             }, 2000);
 
-            return; // ⛔ mutation never runs
+            return;
         }
 
         const token = sessionStorage.getItem("token");
@@ -461,9 +372,7 @@ export default function CompanyForm() {
                 variant: "error",
             });
 
-            window.scrollTo({
-                top: 0, behavior: "smooth"
-            })
+            window.scrollTo({ top: 0, behavior: "smooth" });
 
             setTimeout(() => {
                 setAlert({ show: false, title: "", message: "", variant: "" });
@@ -474,7 +383,6 @@ export default function CompanyForm() {
 
         const financialYear = `${new Date(newCompany.financialStartDate).getFullYear()}-${new Date(newCompany.financialEndDate).getFullYear()}`;
 
-        // Combine all data
         const admissionPayload = {
             name: titleCase(newCompany.name).trim(),
             email: normalizeEmail(newCompany.email).trim(),
@@ -483,7 +391,7 @@ export default function CompanyForm() {
             password: newCompany.password.trim(),
             country: newCompany.country,
 
-            financialYear, // ✅ generated
+            financialYear,
             financialStartDate: newCompany.financialStartDate,
             financialEndDate: newCompany.financialEndDate,
 
@@ -492,10 +400,10 @@ export default function CompanyForm() {
             zipCode: newCompany.zipCode,
             fullAddress: newCompany.fullAddress,
 
-            logo: selectedLogo, // you'll need to track this in state
-            stamp: selectedStamp, // you'll need to track this in state
-            sign: selectedSign, // you'll need to track this in state
-            certificateName: selectedCertificate, // you'll need to track this in state
+            logo: selectedLogo,
+            stamp: selectedStamp,
+            sign: selectedSign,
+            certificateName: selectedCertificate,
         };
 
         createCompany(admissionPayload, {
@@ -515,9 +423,11 @@ export default function CompanyForm() {
                     financialEndDate: "",
                 });
 
+                window.scrollTo({ top: 0, behavior: "smooth" });
+
                 setAlert({
                     show: true,
-                    title: "Company Created Successfully",
+                    title: "Company Created",
                     message: "New Company has been Successfully Created.",
                     variant: "success",
                 });
@@ -529,365 +439,226 @@ export default function CompanyForm() {
             },
 
             onError: () => {
-                // You already handle error via redux + toast
-                window.scrollTo({
-                    top: 0,
-                    left: 0, // Optional: scrolls to the leftmost position as well
-                    behavior: "smooth", // For smooth scrolling animation
-                });
+                window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
             },
         });
     };
 
-    console.log("get all county data:", allCountries);
-    console.log("get all state data:", state);
-    console.log("get all city data:", city);
-    console.log(
-        "get all data:",
-        newCompany,
-        selectedCertificate,
-        selectedLogo,
-        selectedSign,
-        selectedStamp,
-    );
-    console.log("get all data Company Store adat:", form);
-    console.log("get all data Company:", newCompany);
-
     return (
         <div>
             <PageBreadcrumb pageTitle="Create Company" />
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
 
-                {error && (
-                    <div className="mb-2 rounded-md border border-red-300 bg-red-100 p-3 text-sm text-red-700">
-                        {error}
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3 shadow-sm">
+                <div className="flex flex-col gap-6">
+
+                    {/* Header & Alerts */}
+                    <div className="border-b pb-4 dark:border-gray-700">
+                        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">Company Information</h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to register a new company.</p>
                     </div>
-                )}
 
-                <div className="space-y-8">
+                    {error && <Alert variant={"error"} title={""} message={error} showLink={false} />}
                     {alert.show && (
                         <Alert
-                            variant={alert.variant as any}
+                            variant={alert.title === "Company Created" ? "success" : "error"}
                             title={alert.title}
                             message={alert.message}
                             showLink={false}
                         />
                     )}
 
-                    <h2 className="border-b pb-6">Company Infomation</h2>
+                    {/* Section 1: Institute & Account Details */}
+                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+                        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Institute &amp; Account Details</h3>
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 
-                    <div className="grid grid-cols-2 gap-8 border-b pb-8">
-                        {/* AUTO-INSTITUTE NAME */}
-                        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-                            <div className="flex items-center gap-1" ref={(el) => {
-                                inputRefs.current.name = el;
-                            }}>
-                                <Label>Institute Name </Label>
-                                <Tooltip
-                                    content="Unique than other created company"
-                                    className="rounded bg-gray-200 text-[12px]"
-                                >
-                                    <span className="mb-1 cursor-pointer text-xl text-gray-600">
-                                        🛈
-                                    </span>
-                                </Tooltip>
+                            <div ref={(el) => { inputRefs.current.name = el; }}>
+                                <div className="flex items-center gap-1">
+                                    <Label>Institute Name *</Label>
+                                    <Tooltip
+                                        content="Unique than other created company"
+                                        className="rounded bg-gray-200 text-[12px]"
+                                    >
+                                        <span className="mb-1 cursor-pointer text-xl text-gray-600">🛈</span>
+                                    </Tooltip>
+                                </div>
+                                <Input
+                                    ref={firstInputRef}
+                                    type="text"
+                                    tabIndex={1}
+                                    placeholder="Enter Institute Name"
+                                    value={titleCase(newCompany.instituteName)}
+                                    onChange={(e) => handleChange("instituteName", e.target.value)}
+                                />
+                                {errors.instituteName && <p className="mt-1 text-sm text-red-500">{errors.instituteName}</p>}
                             </div>
-                            <Input
-                                ref={firstInputRef}
-                                type="text"
-                                placeholder="Enter Institute Name"
-                                value={titleCase(newCompany.instituteName)}
-                                onChange={(e) => handleChange("instituteName", e.target.value)}
-                            />
-                            {errors.instituteName && (
-                                <p className="text-sm text-red-500">{errors.instituteName}</p>
-                            )}
-                        </div>
 
-                        {/* NAME */}
-                        <div className="col-span-4 md:col-span-2 lg:col-span-1" ref={(el) => {
-                            inputRefs.current.displayName = el;
-                        }}>
-                            <Label>Display Name </Label>
-                            <Input
-                                type="text"
-                                placeholder="Enter Display Name"
-                                value={titleCase(newCompany.name)}
-                                onChange={(e) => handleChange("name", e.target.value)}
-                            />
-                            {errors.name && (
-                                <p className="text-sm text-red-500">{errors.name}</p>
-                            )}
-                        </div>
-
-                        {/* EMAIL */}
-                        <div className="col-span-4 md:col-span-2 lg:col-span-1" ref={(el) => {
-                            inputRefs.current.email = el;
-                        }}>
-                            <Label>Username *</Label>
-                            <Input
-                                type="text"
-                                placeholder="Enter Username"
-                                value={normalizeEmail(newCompany.email)}
-                                onChange={(e) => handleChange("email", e.target.value)}
-                            />
-                            {errors.email && (
-                                <p className="text-sm text-red-500">{errors.email}</p>
-                            )}
-                        </div>
-
-                        {/* PASSWORD */}
-                        <div className="relative col-span-4 md:col-span-2 lg:col-span-1" ref={(el) => {
-                            inputRefs.current.password = el;
-                        }}>
-                            <Label>Password *</Label>
-                            <div className="relative">
+                            <div ref={(el) => { inputRefs.current.displayName = el; }}>
+                                <Label>Display Name *</Label>
                                 <Input
                                     type="text"
-                                    placeholder="Enter password"
-                                    value={newCompany.password}
-                                    onChange={(e) => handleChange("password", e.target.value)}
-                                    className="pr-10" // add padding to the right so button doesn't overlap text
+                                    tabIndex={2}
+                                    placeholder="Enter Display Name"
+                                    value={titleCase(newCompany.name)}
+                                    onChange={(e) => handleChange("name", e.target.value)}
                                 />
-                                {/* <button
-                  type="button"
-                  onClick={() => generatePassword(12)}
-                  className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full"
-                >
-                  <ArrowRightIcon className="h-5 w-5 text-gray-600 dark:text-gray-200" />
-                </button> */}
+                                {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                             </div>
-                            {errors.password && (
-                                <p className="text-sm text-red-500">{errors.password}</p>
-                            )}
-                        </div>
 
-                        {/* CONTACT */}
-                        <div className="col-span-4 md:col-span-2 lg:col-span-1" ref={(el) => {
-                            inputRefs.current.contact = el;
-                        }}>
-                            <Label>Contact </Label>
-                            {/* <Input
-                                type="text"
-                                placeholder="Enter Contact"
-                                value={newCompany.contact}
-                                onChange={(e) => handleChange("contact", e.target.value)}
-                            /> */}
-                            <PhoneInput
-                                selectPosition="start"
-                                countries={countries}
-                                onKeyDown={handleKeyDown}
-                                placeholder="Enter Contact"
-                                onChange={handlePhoneNumberChange}
-                            />
-                            {errors.contact && (
-                                <p className="text-sm text-red-500">{errors.contact}</p>
-                            )}
-                        </div>
+                            <div ref={(el) => { inputRefs.current.email = el; }}>
+                                <Label>Username *</Label>
+                                <Input
+                                    type="text"
+                                    tabIndex={3}
+                                    placeholder="Enter Username"
+                                    value={normalizeEmail(newCompany.email)}
+                                    onChange={(e) => handleChange("email", e.target.value)}
+                                />
+                                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                            </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            {/* START DATE */}
-                            <div>
+                            <div ref={(el) => { inputRefs.current.password = el; }}>
+                                <Label>Password *</Label>
+                                <div className="relative">
+                                    <Input
+                                        type="text"
+                                        tabIndex={4}
+                                        placeholder="Enter password"
+                                        value={newCompany.password}
+                                        onChange={(e) => handleChange("password", e.target.value)}
+                                        className="pr-10"
+                                    />
+                                </div>
+                                {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+                            </div>
+
+                            <div ref={(el) => { inputRefs.current.contact = el; }}>
+                                <Label>Contact *</Label>
+                                <PhoneInput
+                                    selectPosition="start"
+                                    countries={countries}
+                                    tabIndex={5}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Enter Contact"
+                                    onChange={handlePhoneNumberChange}
+                                />
+                                {errors.contact && <p className="mt-1 text-sm text-red-500">{errors.contact}</p>}
+                            </div>
+
+                            <div ref={(el) => { inputRefs.current.financialStartDate = el; }}>
                                 <Label>Financial Start Date *</Label>
                                 <Input
                                     type="date"
+                                    tabIndex={6}
                                     value={newCompany.financialStartDate}
-                                    onChange={(e) =>
-                                        handleChange("financialStartDate", e.target.value)
-                                    }
+                                    onChange={(e) => handleChange("financialStartDate", e.target.value)}
                                 />
-                                {errors.financialStartDate && (
-                                    <p className="text-sm text-red-500">
-                                        {errors.financialStartDate}
-                                    </p>
-                                )}
+                                {errors.financialStartDate && <p className="mt-1 text-sm text-red-500">{errors.financialStartDate}</p>}
                             </div>
 
-                            {/* END DATE */}
-                            <div>
+                            <div ref={(el) => { inputRefs.current.financialEndDate = el; }}>
                                 <Label>Financial End Date *</Label>
                                 <Input
                                     type="date"
+                                    tabIndex={7}
                                     value={newCompany.financialEndDate}
-                                    onChange={(e) =>
-                                        handleChange("financialEndDate", e.target.value)
-                                    }
+                                    onChange={(e) => handleChange("financialEndDate", e.target.value)}
                                 />
-                                {errors.financialEndDate && (
-                                    <p className="text-sm text-red-500">
-                                        {errors.financialEndDate}
-                                    </p>
-                                )}
+                                {errors.financialEndDate && <p className="mt-1 text-sm text-red-500">{errors.financialEndDate}</p>}
                             </div>
+
                         </div>
                     </div>
 
-                    <h2 className="border-b pb-6" ref={(el) => {
-                        inputRefs.current.fullAddress = el;
-                    }}>Address Infomation</h2>
+                    {/* Section 2: Address Information */}
+                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+                        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Address Information</h3>
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 
-                    <div >
-                        <Label>Institute Full Address *</Label>
-                        <div className="relative">
-                            <TextArea
-                                rows={4}
-                                onChange={(value) => handleChange("fullAddress", value)}
-                                placeholder="Enter Full Address"
-                                value={newCompany.fullAddress}
-                                className="w-full rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                            />
-                            {errors.fullAddress && (
-                                <p className="text-sm text-red-500">{errors.fullAddress}</p>
-                            )}
-                        </div>
-                    </div>
-                    {/* COUNTRY */}
-                    <div ref={(el) => {
-                        inputRefs.current.country = el;
-                    }}>
-                        <Label>Select Country *</Label>
-                        <div className="relative">
-                            <Select
-                                options={allCountries.map((c) => ({
-                                    label: c.name,
-                                    value: c.isoCode,
-                                }))}
-                                placeholder="Select Country"
-                                onChange={(value) => handleChange("country", value)}
-                                defaultValue={newCompany.country}
-                            />
-                            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                <ChevronDownIcon />
-                            </span>
-                        </div>
-                        {errors.country && (
-                            <p className="text-sm text-red-500">{errors.country}</p>
-                        )}
-                    </div>
-
-                    {/* STATE */}
-                    <div ref={(el) => {
-                        inputRefs.current.statelocation = el;
-                    }}>
-                        <Label>Select State *</Label>
-                        <div className="relative">
-                            <Select
-                                options={state.map((s) => ({
-                                    label: s.name,
-                                    value: s.isoCode,
-                                }))}
-                                placeholder="Select State"
-                                onChange={(value) => handleChange("state", value)}
-                                defaultValue={newCompany.state}
-                            />
-                            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                <ChevronDownIcon />
-                            </span>
-                        </div>
-                        {errors.state && (
-                            <p className="text-sm text-red-500">{errors.state}</p>
-                        )}
-                    </div>
-
-                    {/* CITY */}
-                    <div ref={(el) => {
-                        inputRefs.current.city = el;
-                    }}>
-                        <Label>City *</Label>
-                        <Select
-                            options={city.map((c) => ({
-                                label: c.name,
-                                value: c.name, // city name is fine
-                            }))}
-                            placeholder="Select City"
-                            onChange={(value) => handleChange("city", value)}
-                            defaultValue={newCompany.city}
-                        />
-                        {errors.city && (
-                            <p className="text-sm text-red-500">{errors.city}</p>
-                        )}
-                    </div>
-
-                    {/* ZIPCODE */}
-                    <div ref={(el) => {
-                        inputRefs.current.zipCode = el;
-                    }}>
-                        <Label>Zip Code </Label>
-                        <Input
-                            type="number"
-                            min={0}
-                            placeholder="Enter Zip Code"
-                            value={newCompany.zipCode}
-                            onChange={(e) => handleChange("zipCode", e.target.value)}
-                        />
-                        {errors.zipCode && (
-                            <p className="text-sm text-red-500">{errors.zipCode}</p>
-                        )}
-                    </div>
-
-                    {/* <h2 className="border-y py-6">Institute Infomation</h2>
-
-                        <div className="space-y-2">
-                    
-                            <div className="flex w-full gap-2">
-                            <div className="w-full">
-                                <DropzonBoxComponent
-                                title="Institute Logo"
-                                selectedFile={selectedLogo}
-                                setSelectedFile={setSelectedLogo}
+                            <div className="lg:col-span-3" ref={(el) => { inputRefs.current.fullAddress = el; }}>
+                                <Label>Institute Full Address *</Label>
+                                <TextArea
+                                    rows={4}
+                                    onChange={(value) => handleChange("fullAddress", value)}
+                                    placeholder="Enter Full Address"
+                                    value={newCompany.fullAddress}
+                                    className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 />
+                                {errors.fullAddress && <p className="mt-1 text-sm text-red-500">{errors.fullAddress}</p>}
                             </div>
 
-                            <div className="w-full">
-                                <DropzonBoxComponent
-                                title="Institute Stamp"
-                                selectedFile={selectedStamp}
-                                setSelectedFile={setSelectedStamp}
-                                />
-                            </div>
-                            </div>
-
-                            <div className="w-full pb-3">
-                            <DropzonBoxComponent
-                                title="Institute Sign"
-                                selectedFile={selectedSign}
-                                setSelectedFile={setSelectedSign}
-                            />
-                            </div>
-
-                            <h2 className="border-y py-6">Institute Certificate</h2>
-
-                            <div className="grid grid-cols-4 gap-4">
-                            {certificateTemplates.map((item, i) => (
-                                <div
-                                key={i}
-                                className={`cursor-pointer rounded-lg border p-1 transition ${selectedCertificate === item.alt ? "border-blue-600 shadow-md" : "border-gray-300"}`}
-                                onClick={() => setSelectedCertificate(item.alt)}
-                                >
-                                <img
-                                    src={item.src}
-                                    alt={item.alt}
-                                    className="h-auto w-full rounded"
-                                />
+                            <div ref={(el) => { inputRefs.current.country = el; }}>
+                                <Label>Select Country *</Label>
+                                <div className="relative">
+                                    <Select
+                                        options={allCountries.map((c) => ({ label: c.name, value: c.isoCode }))}
+                                        placeholder="Select Country"
+                                        onChange={(value) => handleChange("country", value)}
+                                        defaultValue={newCompany.country}
+                                    />
+                                    <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                                        <ChevronDownIcon />
+                                    </span>
                                 </div>
-                            ))}
+                                {errors.country && <p className="mt-1 text-sm text-red-500">{errors.country}</p>}
                             </div>
-                        </div> 
-                    */}
 
-                    {/* BUTTONS */}
-                    <div className="mt-6 flex justify-end gap-3">
-                        {/* <Button
-                        variant="outline"
-                        disabled={loading === true}
-                        onClick={handleResetForm}
+                            <div ref={(el) => { inputRefs.current.statelocation = el; }}>
+                                <Label>Select State *</Label>
+                                <div className="relative">
+                                    <Select
+                                        options={state.map((s) => ({ label: s.name, value: s.isoCode }))}
+                                        placeholder="Select State"
+                                        onChange={(value) => handleChange("state", value)}
+                                        defaultValue={newCompany.state}
+                                    />
+                                    <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                                        <ChevronDownIcon />
+                                    </span>
+                                </div>
+                                {errors.state && <p className="mt-1 text-sm text-red-500">{errors.state}</p>}
+                            </div>
+
+                            <div ref={(el) => { inputRefs.current.city = el; }}>
+                                <Label>City *</Label>
+                                <Select
+                                    options={city.map((c) => ({ label: c.name, value: c.name }))}
+                                    placeholder="Select City"
+                                    onChange={(value) => handleChange("city", value)}
+                                    defaultValue={newCompany.city}
+                                />
+                                {errors.city && <p className="mt-1 text-sm text-red-500">{errors.city}</p>}
+                            </div>
+
+                            <div ref={(el) => { inputRefs.current.zipCode = el; }}>
+                                <Label>Zip Code *</Label>
+                                <Input
+                                    type="number"
+                                    min={0}
+                                    placeholder="Enter Zip Code"
+                                    value={newCompany.zipCode}
+                                    onChange={(e) => handleChange("zipCode", e.target.value)}
+                                />
+                                {errors.zipCode && <p className="mt-1 text-sm text-red-500">{errors.zipCode}</p>}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Action Bar */}
+                    <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
+                        <Button
+                            disabled={loading === true}
+                            size="sm"
+                            tabIndex={8}
+                            variant="primary"
+                            className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+                            onClick={handleSubmit}
                         >
-                        Clear
-                        </Button> */}
-                        <Button disabled={loading === true} size="sm" className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
-                            {loading === true ? "Creating..." : "Save"}
+                            {loading === true ? "Creating..." : "Save Company"}
                         </Button>
                     </div>
+
                 </div>
             </div>
         </div>

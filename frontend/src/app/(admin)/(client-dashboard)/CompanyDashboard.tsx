@@ -22,15 +22,11 @@ import { exportAnalyticsToExcel } from "@/app/utils/exportToExcel";
 
 // ⭐ Dynamic Imports
 import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
-import Button from "@/components/ui/button/Button";
 import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
 import FinancialReport from "@/components/common/FinancialReport";
 import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
 import StatisticsChart from "@/components/ecommerce/StatisticsChart";
-import DemographicCard from "@/components/ecommerce/DemographicCard";
 import EnquiryTarget from "@/components/ecommerce/EnquiryPieChart";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
-import { PAGE_SIZE } from "@/constants/pagination";
 import MonthlyBirthdayCard from "@/components/ecommerce/MonthlyBirthdayCard";
 import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
 import { useFetchStudent } from "@/hooks/queries/useQueryFetchStudent";
@@ -80,7 +76,7 @@ export default function CompanyDashboard() {
   }, [data, dispatch]);
 
   useEffect(() => {
-    console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
+    console.log("useFetchStudent TRIGGERED IN DASHBOARD", student);
     if (student) {
       dispatch(setBirthday(student.birthday || []));
     }
@@ -127,12 +123,12 @@ export default function CompanyDashboard() {
       <div className="col-span-12 space-y-6 xl:col-span-7">
         <EcommerceMetrics user={user} summary={summary} breakdown={breakdown} />
 
-        {userRole === "ADMIN" && <FinancialReport />}
+        {/* {userRole === "ADMIN" && <FinancialReport />} */}
         <MonthlySalesChart monthlySales={monthlySales} />
       </div>
 
       <div className="col-span-12 space-y-6 xl:col-span-5">
-        <MonthlyTarget />
+        {/* <MonthlyTarget /> */}
         {userRole === "ADMIN" && (
           <EnquiryTarget
             enquiries={enquiries}
@@ -140,9 +136,7 @@ export default function CompanyDashboard() {
             notConvertedCount={totalNotConverted}
           />
         )}
-        <MonthlyBirthdayCard birthdays={birthday}
-          convertedCount={totalConverted}
-          notConvertedCount={totalNotConverted} />
+        <MonthlyBirthdayCard birthdays={birthday} />
       </div>
 
       <div className="col-span-12">

@@ -54,24 +54,24 @@ export default function AssignBatchFacultyForm({
   const { mutate: assignBatchToFaculty } = useAssignBatch();
 
   const firstInputRef = useRef<HTMLInputElement>(null);
+  const modalBodyRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     firstInputRef.current?.focus();
   }, []);
 
   const {
-        data: batchData,
-        isLoading: batchLoading,
-        isError: batchError,
-      } = useFetchAllBatches();
+    data: batchData,
+    isLoading: batchLoading,
+    isError: batchError,
+  } = useFetchAllBatches();
 
-      useEffect(() => {
-            console.log("get all batches data;", batchData);
-            if (batchData?.batch) { 
-              dispatch(setBatches(batchData.batch));
-            }
-            setBatches;
-          }, [batchData, dispatch]);
+  useEffect(() => {
+    console.log("get all batches data;", batchData);
+    if (batchData?.batch) {
+      dispatch(setBatches(batchData.batch));
+    }
+  }, [batchData, dispatch]);
 
   // ✅ Auto–fill faculty details
   useEffect(() => {
@@ -146,7 +146,7 @@ export default function AssignBatchFacultyForm({
     }
 
     console.log(
-      "GET ASSIGN BATCH TO FACUlTY DATA BEFORE CREATION:",
+      "GET ASSIGN BATCH TO FACULTY DATA BEFORE CREATION:",
       newFaculty,
     );
 
@@ -181,8 +181,20 @@ export default function AssignBatchFacultyForm({
   console.log("filtered batches:", filteredBatchOptions);
 
   return (
-    <ModalCard title={title} oncloseModal={onCloseModal}>
-      <div className="space-y-6">
+    <ModalCard
+      title={title}
+      oncloseModal={onCloseModal}
+      onBodyRef={(el) => (modalBodyRef.current = el)}
+    >
+      <div className="flex flex-col gap-6">
+
+        {/* Header & Alerts */}
+        <div className="border-b pb-4 dark:border-gray-700">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Assign a new batch to the selected faculty member below.
+          </p>
+        </div>
+
         {alert.show && (
           <Alert
             variant={alert.variant as any}
@@ -192,56 +204,76 @@ export default function AssignBatchFacultyForm({
           />
         )}
 
-        <div>
-          <Label>Faculty Name</Label>
-          <Input
-            ref={firstInputRef}
-            tabIndex={1}
-            type="text"
-            placeholder="Faculty Name"
-            value={newFaculty.name}
-            onChange={(e) => handleChange("name", e.target.value)}
-            disabled // optional: disable if you don’t want it edited
-          />
-          {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
-        </div>
+        {/* Section 1: Faculty Details */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Faculty Details
+          </h3>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <div>
+              <Label>Faculty Name</Label>
+              <Input
+                ref={firstInputRef}
+                tabIndex={1}
+                type="text"
+                placeholder="Faculty Name"
+                value={newFaculty.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+                disabled // optional: disable if you don’t want it edited
+              />
+              {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+            </div>
 
-        <div>
-          <Label>Username</Label>
-          <Input
-            tabIndex={2}
-            type="email"
-            placeholder="Faculty Email"
-            value={newFaculty.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-            disabled // optional: disable if you don’t want it edited
-          />
-          {errors.email && (
-            <p className="text-sm text-red-500">{errors.email}</p>
-          )}
-        </div>
-
-        <div>
-          <Label>Select Batch *</Label>
-          <div className="relative">
-            <Select
-              tabIndex={3}
-              options={filteredBatchOptions}
-              placeholder={
-                filteredBatchOptions.length > 0
-                  ? "Select an available batch"
-                  : "No available batches"
-              }
-              onChange={(value) => handleChange("batchId", value)}
-              className="dark:bg-dark-900"
-            />
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
+            <div>
+              <Label>Username (Email)</Label>
+              <Input
+                tabIndex={2}
+                type="email"
+                placeholder="Faculty Email"
+                value={newFaculty.email}
+                onChange={(e) => handleChange("email", e.target.value)}
+                disabled // optional: disable if you don’t want it edited
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
+        {/* Section 2: Batch Assignment */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Batch Assignment
+          </h3>
+          <div className="grid grid-cols-1 gap-5">
+            <div>
+              <Label>Select Batch *</Label>
+              <div className="relative">
+                <Select
+                  tabIndex={3}
+                  options={filteredBatchOptions}
+                  placeholder={
+                    filteredBatchOptions.length > 0
+                      ? "Select an available batch"
+                      : "No available batches"
+                  }
+                  onChange={(value) => handleChange("batchId", value)}
+                  className="dark:bg-dark-900"
+                />
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+              {errors.batchId && (
+                <p className="mt-1 text-sm text-red-500">{errors.batchId}</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Action Bar */}
+        <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
           <Button
             size="sm"
             variant="outline"
@@ -250,10 +282,16 @@ export default function AssignBatchFacultyForm({
           >
             Close
           </Button>
-          <Button size="sm" tabIndex={5} onClick={handleSubmit}>
-            Save
+          <Button
+            size="sm"
+            tabIndex={5}
+            className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+            onClick={handleSubmit}
+          >
+            Assign Batch
           </Button>
         </div>
+
       </div>
     </ModalCard>
   );

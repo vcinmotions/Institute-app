@@ -253,6 +253,19 @@ export async function editEnquiryService({
   // 2️⃣ Calculate age via domain
   const age = Enquiry.calculateAge(dob ? new Date(dob) : null);
 
+  // ✅ Conditionally fetch Source ID if a source was provided
+  let sourceId = null;
+  if (normalizedData.source) {
+    const sourceRecord = await prisma.sourceType.findUnique({
+      where: { slug: normalizedData.source },
+    });
+
+    if (!sourceRecord) {
+      throw new Error("Provided Source Type not found!");
+    }
+    sourceId = sourceRecord.id;
+  }
+
   // 4️⃣ Create enquiry
   const enquiry = await prisma.enquiry.update({
     where: { id },
@@ -263,7 +276,7 @@ export async function editEnquiryService({
       age: age,
       dob: parseDateISO(dob),
       enquiryDate: parseDateISO(enquiryDate),
-      source: normalizedData.source || null,
+      sourceId: sourceId,
       alternateContact: normalizedData.alternateContact || null,
       location: normalizedData.location || null,
       city: normalizedData.city || null,

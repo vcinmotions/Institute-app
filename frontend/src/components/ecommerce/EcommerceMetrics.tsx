@@ -36,10 +36,9 @@ export const EcommerceMetrics = ({ user, summary, breakdown }: EcommerceMetricsP
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 Income By Students
               </span>
+              {/* Income By Students */}
               <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-                {summary.totalStudentIncome
-                  ? new Intl.NumberFormat('en-IN').format(summary.totalStudentIncome)
-                  : 0} INR
+                {new Intl.NumberFormat('en-IN').format(summary?.totalStudentIncome || 0)} INR
               </h4>
             </div>
             <Badge color="success">
@@ -61,10 +60,9 @@ export const EcommerceMetrics = ({ user, summary, breakdown }: EcommerceMetricsP
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 Income By Course
               </span>
+              {/* Income By Course */}
               <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-                {summary.totalCourseIncome
-                  ? new Intl.NumberFormat('en-IN').format(summary.totalCourseIncome)
-                  : 0} INR
+                {new Intl.NumberFormat('en-IN').format(summary?.totalCourseIncome || 0)} INR
               </h4>
             </div>
             <Badge color="success">
@@ -135,10 +133,9 @@ export const EcommerceMetrics = ({ user, summary, breakdown }: EcommerceMetricsP
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 Total Outstanding
               </span>
+              {/* Total Outstanding */}
               <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-                {summary.totalOutstanding
-                  ? new Intl.NumberFormat('en-IN').format(summary.totalOutstanding)
-                  : 0} INR
+                {new Intl.NumberFormat('en-IN').format(summary?.totalOutstanding || 0)} INR
               </h4>
             </div>
 
@@ -160,10 +157,9 @@ export const EcommerceMetrics = ({ user, summary, breakdown }: EcommerceMetricsP
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 Total Income
               </span>
+              {/* Total Income */}
               <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-                {summary.totalIncome
-                  ? new Intl.NumberFormat('en-IN').format(summary.totalIncome)
-                  : 0} INR
+                {new Intl.NumberFormat('en-IN').format(summary?.totalIncome || 0)} INR
               </h4>
             </div>
 
@@ -174,14 +170,14 @@ export const EcommerceMetrics = ({ user, summary, breakdown }: EcommerceMetricsP
           </div>
         </div>
         {/* <!-- Metric Item End --> */}
-        {user.role === "ADMIN" && (
+        {/* {user.role === "ADMIN" && (
           <Button
             onClick={() => exportAnalyticsToExcel(summary, breakdown)}
             className="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition"
           >
             Export to Excel
           </Button>
-        )}
+        )} */}
       </div>
     </div>
   );

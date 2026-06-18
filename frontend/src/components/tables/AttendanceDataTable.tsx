@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Button from "../ui/button/Button";
+import Badge from "../ui/badge/Badge";
 import { useMutation } from "@tanstack/react-query";
 import { markAttendance, getAttendanceByBatch } from "@/lib/api";
 import Checkbox from "../form/input/Checkbox";
@@ -28,12 +29,9 @@ export default function AttendanceDataTable({
   selectedDate,
 }: AttendanceDataTableProps) {
   const [attendance, setAttendance] = useState<Record<number, boolean>>({});
-  // const [selectedDate, setSelectedDate] = useState<string>(
-  //   new Date().toISOString().split("T")[0]
-  // );
   const [attendanceData, setAttendanceData] = useState<any[]>([]);
 
-  console.log("get Selected dtae in Attendance data table:", selectedDate);
+  console.log("get Selected date in Attendance data table:", selectedDate);
   console.log("get Batch Id in Attendance data table:", batchId);
   console.log("get Faculty Id in Attendance data table:", facultyId);
   console.log("get Role in Attendance data table:", role);
@@ -108,20 +106,20 @@ export default function AttendanceDataTable({
 
   if (loading)
     return (
-      <div className="p-6 text-center text-gray-500">Loading students...</div>
+      <div className="p-6 text-center text-xs text-slate-400 dark:text-slate-500">Loading students...</div>
     );
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-      {/* 🧾 Table */}
-      {/* ✅ Display selected date for faculty */}
-      <div className="flex items-center justify-end border-b border-gray-100 bg-gray-50 p-4 dark:border-white/[0.05] dark:bg-gray-800">
-        <div className="text-sm text-gray-600 dark:text-gray-300">
-          <span className="font-medium">Batch:</span> {batchId}
+    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+
+      {/* ERP Style Meta Header */}
+      <div className="flex items-center justify-end gap-3 border-b border-slate-200 bg-slate-50/50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="text-xs text-slate-600 dark:text-slate-400">
+          <span className="font-semibold text-slate-500 uppercase tracking-wide text-[10px]">Batch:</span> {batchId}
         </div>{" "}
-        {"  | "}
-        <div className="text-sm text-gray-600 dark:text-gray-300">
-          <span className="font-medium">Date:</span>{" "}
+        <span className="text-slate-300 dark:text-slate-700">|</span>
+        <div className="text-xs text-slate-600 dark:text-slate-400">
+          <span className="font-semibold text-slate-500 uppercase tracking-wide text-[10px]">Date:</span>{" "}
           {new Date(selectedDate).toLocaleDateString("en-IN", {
             year: "numeric",
             month: "long",
@@ -132,106 +130,116 @@ export default function AttendanceDataTable({
       </div>
 
       <div className="max-w-full overflow-x-auto">
-        <div className="max-h-[500px] min-w-[1100px] overflow-y-auto">
-          <Table>
-            <TableHeader className="dark:bg-gray-dark sticky top-0 z-30 border-b border-gray-100 bg-white dark:border-white/[0.05]">
+        <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
+          <Table className="w-full border-collapse text-left">
+
+            {/* ERP Style Table Header */}
+            <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Sr No.
+                </TableCell>
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Student
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Course
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Batch
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Faculty
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Attendance
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Attendance Status
                 </TableCell>
               </TableRow>
             </TableHeader>
 
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            {/* High Density Data Cells */}
+            <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {attendanceData.length > 0 ? (
-                attendanceData.map((record: any) => (
-                  <TableRow key={record.id}>
-                    <TableCell className="px-5 py-4 text-start sm:px-6">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={
-                            record.student?.photoUrl?.startsWith("http")
-                              ? record.student.photoUrl
-                              : `http://localhost:5001${record.student?.photoUrl || ""}`
-                          }
-                          alt="student"
-                          className="h-10 w-10 rounded-full object-cover"
-                          onError={(e) =>
+                attendanceData.map((record: any, index: number) => {
+                  const isPresent = attendance[record.student?.id] || false;
+
+                  return (
+                    <TableRow key={record.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors">
+
+                      {/* Sr No */}
+                      <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-400 dark:text-slate-500">
+                        {index + 1}
+                      </TableCell>
+
+                      {/* Student Info */}
+                      <TableCell className="px-3 py-1.5">
+                        <div className="flex items-center gap-2.5">
+                          <img
+                            src={
+                              record.student?.photoUrl?.startsWith("http")
+                                ? record.student.photoUrl
+                                : `http://localhost:5001${record.student?.photoUrl || ""}`
+                            }
+                            alt="student"
+                            className="h-7 w-7 rounded-full object-cover border border-slate-100 dark:border-slate-800"
+                            onError={(e) =>
                             ((e.target as HTMLImageElement).src =
                               "/images/user/user-21.jpg")
-                          }
-                        />
-                        <div>
-                          <span className="text-theme-sm capitalize block font-medium text-gray-800 dark:text-white/90">
-                            {record.student?.fullName || "N/A"}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {record.student?.studentCode || "N/A"}
-                          </span>
+                            }
+                          />
+                          <div className="flex flex-col">
+                            <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
+                              {record.student?.fullName || "N/A"}
+                            </span>
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide font-mono">
+                              {record.student?.studentCode || "N/A"}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    </TableCell>
+                      </TableCell>
 
-                    <TableCell className="text-theme-sm capitalize font-medium text-gray-800 dark:text-white/90">
-                      {record.course?.name || "N/A"}
-                    </TableCell>
-                    <TableCell className="text-theme-sm capitalize font-medium text-gray-800 dark:text-white/90">
-                      {record.batch?.name || "N/A"}
-                    </TableCell>
-                    <TableCell className="text-theme-sm font-medium text-gray-800 dark:text-white/90">
-                      {record.batch?.faculty?.name || "N/A"}
-                    </TableCell>
+                      {/* Course */}
+                      <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 capitalize">
+                        {record.course?.name || "N/A"}
+                      </TableCell>
 
-                    <TableCell className="text-center">
-                      <label className="inline-flex items-center gap-2">
-                        <Checkbox
-                        disabled={role === "ADMIN"}
-                          checked={attendance[record.student?.id] || false}
-                          onChange={(checked) =>
-                            handleToggle(record.student?.id, checked)
-                          }
-                        />
-                        <span className="text-sm text-gray-600 dark:text-gray-100">
-                          {attendance[record.student?.id]
-                            ? "Present"
-                            : "Absent"}
-                        </span>
-                      </label>
-                    </TableCell>
-                  </TableRow>
-                ))
+                      {/* Batch */}
+                      <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 capitalize">
+                        {record.batch?.name || "N/A"}
+                      </TableCell>
+
+                      {/* Faculty */}
+                      <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
+                        {record.batch?.faculty?.name || "N/A"}
+                      </TableCell>
+
+                      {/* Attendance Action Column */}
+                      <TableCell className="px-3 py-1.5">
+                        <div className="flex items-center gap-3">
+                          <Checkbox
+                            disabled={role === "ADMIN"}
+                            checked={isPresent}
+                            onChange={(checked) =>
+                              handleToggle(record.student?.id, checked)
+                            }
+                          />
+                          <Badge
+                            size="sm"
+                            color={isPresent ? "success" : "error"}
+                          >
+                            {isPresent ? "Present" : "Absent"}
+                          </Badge>
+                        </div>
+                      </TableCell>
+
+                    </TableRow>
+                  );
+                })
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
-                    className="py-6 text-center text-gray-500"
+                    colSpan={6}
+                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
                     No attendance records found.
                   </TableCell>
@@ -242,13 +250,13 @@ export default function AttendanceDataTable({
         </div>
       </div>
 
-      {/* ✅ Submit Button */}
+      {/* ✅ Action Footer */}
       {role === "FACULTY" && attendanceData.length > 0 && (
-        <div className="flex justify-end divide-y divide-gray-100 border-t border-gray-100 p-4 dark:divide-white/[0.05] dark:border-white/[0.05]">
+        <div className="flex justify-end border-t border-slate-200 bg-slate-50/30 p-3 dark:border-slate-800 dark:bg-slate-900/30">
           <Button
             onClick={handleSubmit}
             disabled={isPending}
-            className="rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700"
+            className="h-7 rounded-[4px] bg-blue-600 px-4 text-xs font-medium text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
           >
             {isPending ? "Saving..." : "Submit Attendance"}
           </Button>

@@ -2,14 +2,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useCourseStore } from "@/store/courseStore";
 import { useRouter } from "next/navigation";
-
 import { useCreateCourse } from "@/hooks/useCreateCourseData";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Alert from "@/components/ui/alert/Alert";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
-import Select from "@/components/form/Select";
-import { ChevronDownIcon } from "@/icons";
 import Button from "@/components/ui/button/Button";
 import Checkbox from "@/components/form/input/Checkbox";
 import { titleCase } from "@/app/utils/Normalize";
@@ -41,7 +38,7 @@ export default function CourseForm() {
     totalAmount: "",
   });
 
-  // New state for alert
+  // Alert State
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -59,13 +56,6 @@ export default function CourseForm() {
   const [oneTime, setOneTime] = useState<boolean>(false);
   const [installment, setInstallment] = useState<boolean>(false);
   const { mutate: createCourse } = useCreateCourse();
-  const countries = [
-    { code: "IN", label: "+91" },
-    { code: "US", label: "+1" },
-    { code: "GB", label: "+44" },
-    { code: "CA", label: "+1" },
-    { code: "AU", label: "+61" },
-  ];
 
   // Installments State (Array)
   const [installments, setInstallments] = useState<InstallmentDetail[]>([
@@ -78,31 +68,12 @@ export default function CourseForm() {
   }, []);
 
   useEffect(() => {
-    const newTypes: string[] = [];
-    newTypes.push("ONE_TIME");
-
+    const newTypes: string[] = ["ONE_TIME"];
     setNewCourse((prev) => ({ ...prev, paymentType: newTypes }));
-    console.log("Push By Default ONE_TIME FROM USEEFFECT()", newTypes);
     setOneTime(true);
   }, []);
 
-  // 🟢 Restore data from Zustand when page opens
-  // 🟢 Restore saved form when opening Course Create
-
-  // useEffect(() => {
-  //   if (!form || Object.keys(form).length === 0) return;
-
-  //   setNewCourse((prev) => ({
-  //     name: form.name || prev.name,
-  //     description: form.description || prev.description,
-  //     durationMonths: form.durationMonths || prev.durationMonths,
-  //     paymentType: form.paymentType?.length
-  //       ? form.paymentType
-  //       : prev.paymentType,
-  //     totalAmount: form.totalAmount || prev.totalAmount,
-  //   }));
-  // }, [form]);
-
+  // Restore form state when opened
   useEffect(() => {
     if (!form || Object.keys(form).length === 0) return;
 
@@ -112,44 +83,13 @@ export default function CourseForm() {
       description: form.description ?? prev.description,
       durationMonths: form.durationMonths ?? prev.durationMonths,
       totalAmount: form.totalAmount ?? prev.totalAmount,
-      paymentType: form && form.paymentType
+      paymentType: form.paymentType
         ? Array.isArray(form.paymentType) && form.paymentType.length > 0
           ? form.paymentType
-          : [form.paymentType]  // convert single string to array
-        : prev.paymentType
-
+          : [form.paymentType] // convert single string to array
+        : prev.paymentType,
     }));
   }, [form]);
-
-  // useEffect(() => {
-  //   if (!form || Object.keys(form).length === 0) return;
-
-  //   setNewCourse({
-  //     name: form.name || "",
-  //     description: form.description || "",
-  //     durationMonths: form.durationMonths || "",
-  //     paymentType: form.paymentType || "",
-  //     totalAmount: form.totalAmount || "",
-  //   });
-  // }, [form]);
-
-  const paymentType = [
-    { value: "ONE_TIME", label: "One Time" },
-    { value: "INSTALLMENT", label: "Installment" },
-  ];
-
-  // const handleTypesCheck = (value: "ONE_TIME" | "INSTALLMENT") => {
-  //   if (value === "ONE_TIME") {
-  //     setOneTime(!oneTime);
-  //   } else if (value === "INSTALLMENT") {
-  //     const newInstallmentState = !installment;
-  //     setInstallment(newInstallmentState);
-  //     setNewCourse((prev) => ({
-  //       ...prev,
-  //       paymentType: newInstallmentState ? "INSTALLMENT" : "", // clear if unchecked
-  //     }));
-  //   }
-  // };
 
   const handleTypesCheck = (value: "ONE_TIME" | "INSTALLMENT") => {
     // toggle the UI checkboxes
@@ -161,7 +101,6 @@ export default function CourseForm() {
 
     setNewCourse((prev) => {
       const updated = [];
-
       const ot = value === "ONE_TIME" ? !oneTime : oneTime;
       const inst = value === "INSTALLMENT" ? !installment : installment;
 
@@ -172,35 +111,12 @@ export default function CourseForm() {
     });
   };
 
-  // const handleTypesCheck = (value: "ONE_TIME" | "INSTALLMENT") => {
-  //   if (value === "ONE_TIME") {
-  //     setOneTime(!oneTime);
-  //   } else if (value === "INSTALLMENT") {
-  //     setInstallment(!installment);
-  //   }
-
-  //   const newTypes: string[] = [];
-  //   if (oneTime || value === "ONE_TIME") newTypes.push("ONE_TIME");
-  //   if (installment || value === "INSTALLMENT") newTypes.push("INSTALLMENT");
-
-  //   setNewCourse((prev) => ({ ...prev, paymentType: newTypes }));
-  // };
-
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newCourse.durationMonths.trim()) {
-      newErrors.durationMonths = "Name is required.";
-    }
-
-    if (!newCourse.name.trim()) {
-      newErrors.name = "Course is required.";
-    }
-
-    if (!newCourse.totalAmount.trim()) {
-      newErrors.totalAmount = "Course Amount is required.";
-    }
-
+    if (!newCourse.name.trim()) newErrors.name = "Course name is required.";
+    if (!newCourse.durationMonths.trim()) newErrors.durationMonths = "Duration is required.";
+    if (!newCourse.totalAmount.trim()) newErrors.totalAmount = "Course amount is required.";
     if (!newCourse.paymentType || newCourse.paymentType.length === 0) {
       newErrors.paymentType = "Please select at least one payment type.";
     }
@@ -214,14 +130,13 @@ export default function CourseForm() {
     };
   };
 
-  // Handle input change
   const updateInstallment = (
     index: number,
     field: keyof InstallmentDetail,
-    value: string,
+    value: string
   ) => {
     setInstallments((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
     );
 
     const updatedInstallments = [...installments];
@@ -235,7 +150,6 @@ export default function CourseForm() {
     }));
   };
 
-  // Add new installment
   const addInstallment = () => {
     setInstallments((prev) => [
       ...prev,
@@ -243,26 +157,16 @@ export default function CourseForm() {
     ]);
   };
 
-  // Remove installment
   const removeInstallment = (index: number) => {
     setInstallments((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleChange = (field: keyof CourseData, value: string) => {
-
-    // ✅ Ensure non-negative
+    // Ensure non-negative
     if (["durationMonths", "totalAmount"].includes(field)) {
       const numericValue = Number(value);
       if (numericValue < 0) return; // ignore negative
     }
-
-    // setNewCourse((prev) => ({
-    //   ...prev,
-    //   [field]: value.toLocaleLowerCase(),
-    //   ...(field === "paymentType" && value === "ONE_TIME"
-    //     ? { installmentCount: "" }
-    //     : {}),
-    // }));
 
     setNewCourse((prev) => ({
       ...prev,
@@ -272,7 +176,7 @@ export default function CourseForm() {
         : {}),
     }));
 
-    setField(field, value); // <-- IMPORTANT
+    setField(field, value);
 
     // Clear error on change
     setErrors((prev) => ({
@@ -291,14 +195,11 @@ export default function CourseForm() {
         message: "Please enter required inputs.",
         variant: "error",
       });
-
-      scrollToError(validationErrors); // ✅ ALWAYS WORKS
-
+      scrollToError(validationErrors);
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 2000);
-
-      return; // ⛔ mutation never runs
+      return;
     }
 
     const token = sessionStorage.getItem("token");
@@ -309,22 +210,11 @@ export default function CourseForm() {
         message: "Token not found. Please log in again.",
         variant: "error",
       });
-
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 3000);
-
       return;
     }
-
-    // const formData = new FormData();
-
-    // // ✅ Append all fields to FormData
-    // Object.entries(installments).forEach(([key, value]) => {
-    //   if (value !== undefined && value !== null) {
-    //     formData.append(key, value.toString());
-    //   }
-    // });
 
     const normalizedCourse = {
       ...newCourse,
@@ -351,29 +241,33 @@ export default function CourseForm() {
         reset();
 
         setTimeout(() => {
-          // redirect("/dashboard/course");
           router.back();
         }, 1000);
       },
-
       onError: () => {
-        // You already handle error via redux + toast
         window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });
   };
 
-  console.log("GET COURSE DATA IN STORE:", form);
-  console.log("GET NEW COURSE DATA:", newCourse);
+  const handleCancel = () => {
+    router.back();
+  };
 
   return (
     <div>
       <PageBreadcrumb pageTitle="Create Course" />
+
       <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3">
+        <div className="flex flex-col gap-6">
 
-        <div className="space-y-8">
-          <h2 className="border-b pb-6 dark:text-gray-50 dark:border-gray-700">Course Infomation</h2>
+          {/* Header & Alerts */}
+          <div className="border-b pb-4 dark:border-gray-700">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">Course Information</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new system Course.</p>
+          </div>
 
+          {/* Alert Messages */}
           {alert.show && (
             <Alert
               variant={alert.title === "Course Created" ? "success" : "error"}
@@ -383,180 +277,204 @@ export default function CourseForm() {
             />
           )}
 
-          <div ref={(el) => {
-            inputRefs.current.name = el;
-          }}>
-            <Label>Course *</Label>
-            <Input
-              ref={firstInputRef}
-              type="text"
-              placeholder="Ex. Full Stack Developer"
-              value={titleCase(newCourse.name)}
-              onChange={(e) => handleChange("name", e.target.value)}
-            />
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name}</p>
-            )}
-          </div>
+          {/* Form Grouping: Course Details */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+              Course Information
+            </h3>
 
-          <div ref={(el) => {
-            inputRefs.current.durationMonths = el;
-          }}>
-            <Label>Duration Months *</Label>
-            <Input
-              type="number"
-              min={0}              // ✅ Prevents negatives
-
-              placeholder="Enter Duration"
-              value={newCourse.durationMonths}
-              onChange={(e) => handleChange("durationMonths", e.target.value)}
-            />
-            {errors.durationMonths && (
-              <p className="text-sm text-red-500">{errors.durationMonths}</p>
-            )}
-          </div>
-
-          <div ref={(el) => {
-            inputRefs.current.totalAmount = el;
-          }}>
-            <Label>Course Amount *</Label>
-            <Input
-              type="number"
-              min={0}
-
-              placeholder="Enter Amount"
-              value={newCourse.totalAmount}
-              onChange={(e) => handleChange("totalAmount", e.target.value)}
-            />
-            {errors.totalAmount && (
-              <p className="text-sm text-red-500">{errors.totalAmount}</p>
-            )}
-          </div>
-
-          <div ref={(el) => {
-            inputRefs.current.paymentType = el;
-          }}>
-            <Label> Payment Type *</Label>
-
-            <div className="flex gap-4">
-              <Checkbox
-                className="h-5 w-5"
-                checked={oneTime}
-                onChange={(value) => handleTypesCheck("ONE_TIME")}
-              />
-              <Label> ONE_TIME</Label>
-
-              <Checkbox
-                className="h-5 w-5"
-                checked={installment}
-                onChange={(value) => handleTypesCheck("INSTALLMENT")}
-              />
-              <Label> INSTALLMENTS</Label>
-            </div>
-            {errors.paymentType && (
-              <p className="text-sm text-red-500">{errors.paymentType}</p>
-            )}
-          </div>
-          {/* <div>
-            <Label>Select Payment Type *</Label>
-            <div className="relative">
-              <Select
-                options={paymentType}
-                placeholder="Select an option"
-                onChange={(value) => handleChange("paymentType", value)}
-                className="dark:bg-dark-900"
-                tabIndex={5}
-              />
-              <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                <ChevronDownIcon />
-              </span>
-            </div>
-            {errors.paymentType && (
-              <p className="text-sm text-red-500">{errors.paymentType}</p>
-            )}
-          </div> */}
-
-          {oneTime === true && (
-            <div className="mt-4">
-              <Label>One Time Payment</Label>
-
-              <div className="mb-3 flex items-center gap-3">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div
+                ref={(el) => {
+                  if (inputRefs.current) inputRefs.current.name = el;
+                }}
+              >
+                <Label>Course Name *</Label>
                 <Input
+                  ref={firstInputRef}
                   type="text"
-                  className="w-32"
-                  value="ONE_TIME"
-                  placeholder="Installment No."
-                  disabled
+                  placeholder="Ex. Full Stack Developer"
+                  value={titleCase(newCourse.name)}
+                  onChange={(e) => handleChange("name", e.target.value)}
+                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                )}
+              </div>
 
+              <div
+                ref={(el) => {
+                  if (inputRefs.current) inputRefs.current.durationMonths = el;
+                }}
+              >
+                <Label>Duration (Months) *</Label>
                 <Input
                   type="number"
                   min={0}
-                  className="w-48"
-                  value={newCourse.totalAmount}
-                  placeholder="Amount"
-                  readOnly
+                  placeholder="Enter Duration"
+                  value={newCourse.durationMonths}
+                  onChange={(e) => handleChange("durationMonths", e.target.value)}
+                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 />
+                {errors.durationMonths && (
+                  <p className="mt-1 text-sm text-red-500">{errors.durationMonths}</p>
+                )}
+              </div>
+
+              <div
+                ref={(el) => {
+                  if (inputRefs.current) inputRefs.current.totalAmount = el;
+                }}
+              >
+                <Label>Total Course Amount *</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  placeholder="Enter Amount"
+                  value={newCourse.totalAmount}
+                  onChange={(e) => handleChange("totalAmount", e.target.value)}
+                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                />
+                {errors.totalAmount && (
+                  <p className="mt-1 text-sm text-red-500">{errors.totalAmount}</p>
+                )}
               </div>
             </div>
-          )}
+          </div>
 
-          {installment === true && (
-            <div className="mt-4">
-              <Label>Installments Payments</Label>
+          {/* Form Grouping: Payment Configuration */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+              Payment Configuration
+            </h3>
 
-              {installments.map((item, index) => (
-                <div key={index} className="mb-3 flex items-center gap-3">
-                  <Input
-                    type="text"
-                    className="w-32"
-                    value={item.installment}
-                    placeholder="Installment No."
-                    disabled
-                  />
+            <div className="grid grid-cols-1 gap-5">
+              <div
+                ref={(el) => {
+                  if (inputRefs.current) inputRefs.current.paymentType = el;
+                }}
+              >
+                <Label>Accepted Payment Types *</Label>
+                <div className="mt-2 flex gap-6">
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      className="h-5 w-5"
+                      checked={oneTime}
+                      onChange={() => handleTypesCheck("ONE_TIME")}
+                    />
+                    <Label className="mb-0">ONE TIME</Label>
+                  </div>
 
-                  <Input
-                    type="number"
-                    min={0}
-                    className="w-48"
-                    value={item.addAmount}
-                    placeholder="Amount"
-                    onChange={(e) =>
-                      updateInstallment(index, "addAmount", e.target.value)
-                    }
-                  />
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      className="h-5 w-5"
+                      checked={installment}
+                      onChange={() => handleTypesCheck("INSTALLMENT")}
+                    />
+                    <Label className="mb-0">INSTALLMENTS</Label>
+                  </div>
+                </div>
+                {errors.paymentType && (
+                  <p className="mt-2 text-sm text-red-500">{errors.paymentType}</p>
+                )}
+              </div>
 
-                  {index !== 0 && (
+              {/* Conditional Breakdowns */}
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {oneTime && (
+                  <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+                    <Label className="text-gray-700 dark:text-gray-300">One Time Payment Detail</Label>
+                    <div className="mt-2 flex items-center gap-3">
+                      <Input
+                        type="text"
+                        className="w-1/3 rounded border border-gray-300 bg-gray-100 px-3 py-2 text-sm text-gray-500 cursor-not-allowed dark:border-gray-700 dark:bg-gray-900"
+                        value="ONE_TIME"
+                        disabled
+                      />
+                      <Input
+                        type="number"
+                        min={0}
+                        className="w-2/3 rounded border border-gray-300 bg-gray-100 px-3 py-2 text-sm text-gray-500 cursor-not-allowed dark:border-gray-700 dark:bg-gray-900"
+                        value={newCourse.totalAmount}
+                        placeholder="Amount"
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {installment && (
+                  <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+                    <Label className="text-gray-700 dark:text-gray-300">Installments Configuration</Label>
+
+                    <div className="mt-2 space-y-3">
+                      {installments.map((item, index) => (
+                        <div key={index} className="flex items-center gap-3">
+                          <Input
+                            type="text"
+                            className="w-24 rounded border border-gray-300 bg-gray-100 px-3 py-2 text-sm text-gray-500 text-center cursor-not-allowed dark:border-gray-700 dark:bg-gray-900"
+                            value={item.installment}
+                            disabled
+                          />
+                          <Input
+                            type="number"
+                            min={0}
+                            className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                            value={item.addAmount}
+                            placeholder="Amount"
+                            onChange={(e) =>
+                              updateInstallment(index, "addAmount", e.target.value)
+                            }
+                          />
+                          {index !== 0 && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => removeInstallment(index)}
+                              className="px-3 py-2"
+                            >
+                              ✕
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => removeInstallment(index)}
+                      onClick={addInstallment}
+                      className="mt-4 w-full border-dashed"
                     >
-                      ✕
+                      + Add Installment
                     </Button>
-                  )}
-                </div>
-              ))}
-
-              <Button size="sm" variant="outline" onClick={addInstallment}>
-                + Add Installment
-              </Button>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
+          </div>
 
-          <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-            {/* <Button
+          {/* Action Bar */}
+          <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
+            <Button
               size="sm"
               variant="outline"
-              tabIndex={8}
-              onClick={handleResetForm}
+              onClick={handleCancel}
+              className="min-w-[100px] rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             >
-              Clear
-            </Button> */}
-            <Button size="sm" variant="primary" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
-              Save
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={handleSubmit}
+              className="min-w-[120px] rounded bg-gray-900 px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+            >
+              Save Course
             </Button>
           </div>
+
         </div>
       </div>
     </div>

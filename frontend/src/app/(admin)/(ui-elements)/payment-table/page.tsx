@@ -45,7 +45,7 @@ export default function PaymentTable() {
     setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
-   // --- Debounced search and Set delay time according to your needs
+  // --- Debounced search and Set delay time according to your needs
   const debouncedSearchTerm = useDebounce(searchInput, 300);
 
   // 2. sync debounced value to Redux
@@ -92,26 +92,26 @@ export default function PaymentTable() {
   }, [currentPage, searchQuery, sortField, sortOrder, filters]);
 
 
-   // --- Handlers (memoized)
-  
-    const handleSearchSubmit = useCallback((e: React.FormEvent) => {
-      e.preventDefault();
-      dispatch(setCurrentPage(1));
-    }, [dispatch]);
-  
-    const handlePagination = useCallback((page: number) => {
-      if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
-    }, [dispatch, totalPages]);
-  
-    const handleSort = useCallback((field: string) => {
-      const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-      dispatch(setSort({ field, order }));
-    }, [dispatch, sortField, sortOrder]);
-  
-    const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
-      dispatch(setFilters(selectedFilters));
-      dispatch(setCurrentPage(1));
-    }, [dispatch]);
+  // --- Handlers (memoized)
+
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(setCurrentPage(1));
+  }, [dispatch]);
+
+  const handlePagination = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+  }, [dispatch, totalPages]);
+
+  const handleSort = useCallback((field: string) => {
+    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
+    dispatch(setSort({ field, order }));
+  }, [dispatch, sortField, sortOrder]);
+
+  const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
+    dispatch(setFilters(selectedFilters));
+    dispatch(setCurrentPage(1));
+  }, [dispatch]);
 
   const handlePaymentType = (field: string) => {
     const currentIndex = paymentTypeOptions.indexOf(paymentType);
@@ -181,6 +181,7 @@ export default function PaymentTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            limit={PAGE_SIZE}
             totalCount={total}
             title="Student Payments"
             onPageChange={handlePagination}

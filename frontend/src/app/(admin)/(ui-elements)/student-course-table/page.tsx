@@ -77,7 +77,7 @@ export default function StudentCourseTable() {
   }, [courseData, dispatch]);
 
   useEffect(() => {
-    if (batchData?.batch) { 
+    if (batchData?.batch) {
       dispatch(setBatches(batchData.batch));
     };
   }, [batchData, dispatch]);
@@ -193,28 +193,28 @@ export default function StudentCourseTable() {
 
 
 
-   // --- Handlers (memoized)
-    const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchInput(e.target.value);
-    }, []);
-  
-    const handleSearchSubmit = useCallback((e: React.FormEvent) => {
-      e.preventDefault();
-      dispatch(setCurrentPage(1));
-    }, [dispatch]);
-  
-    const handlePagination = useCallback((page: number) => {
-      if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
-    }, [dispatch, totalPages]);
-  
-    const handleSort = useCallback((field: string) => {
-      const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-      dispatch(setSort({ field, order }));
-    }, [dispatch, sortField, sortOrder]);
-  
-    const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
-      dispatch(setFilters(selectedFilters));
-    }, [dispatch]);
+  // --- Handlers (memoized)
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  }, []);
+
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(setCurrentPage(1));
+  }, [dispatch]);
+
+  const handlePagination = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
+  }, [dispatch, totalPages]);
+
+  const handleSort = useCallback((field: string) => {
+    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
+    dispatch(setSort({ field, order }));
+  }, [dispatch, sortField, sortOrder]);
+
+  const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
+    dispatch(setFilters(selectedFilters));
+  }, [dispatch]);
 
   return (
     <div>
@@ -272,6 +272,7 @@ export default function StudentCourseTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
+            limit={PAGE_SIZE}
             totalCount={total}
             title="Student Courses"
             onPageChange={handlePagination}

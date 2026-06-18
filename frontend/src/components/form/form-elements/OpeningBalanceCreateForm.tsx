@@ -48,7 +48,9 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
     message: "",
     variant: "",
   });
+
   const firstInputRef = useRef<HTMLInputElement>(null);
+  const modalBodyRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     firstInputRef.current?.focus();
@@ -69,12 +71,8 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
   };
 
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
-    // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
-    //const formattedNumber = code + phoneNumber;
-
     // Extract digits only
     const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
-
     const formattedNumber = code + digitsOnly;
 
     setStudent((prev) => ({
@@ -91,46 +89,46 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
       }));
     }
   };
-  
+
   const handleDateChange = (field: keyof OpeningBalanceData, value: string) => {
-      // Allow only digits
-      let digits = value.replace(/\D/g, "");
-  
-      // Restrict to max 8 digits (DDMMYYYY)
-      if (digits.length > 8) digits = digits.slice(0, 8);
-  
-      // Auto-format as DD/MM/YYYY
-      let formattedValue = digits;
-      if (digits.length > 4) {
-        formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4, 8)}`;
-      } else if (digits.length > 2) {
-        formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}`;
+    // Allow only digits
+    let digits = value.replace(/\D/g, "");
+
+    // Restrict to max 8 digits (DDMMYYYY)
+    if (digits.length > 8) digits = digits.slice(0, 8);
+
+    // Auto-format as DD/MM/YYYY
+    let formattedValue = digits;
+    if (digits.length > 4) {
+      formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4, 8)}`;
+    } else if (digits.length > 2) {
+      formattedValue = `${digits.slice(0, 2)}-${digits.slice(2, 4)}`;
+    }
+
+    // Update form data
+    setStudent((prev) => ({
+      ...prev,
+      [field]: formattedValue,
+    }));
+
+    // Simple validation (optional)
+    let error = "";
+    if (digits.length === 8) {
+      const day = parseInt(digits.slice(0, 2), 10);
+      const month = parseInt(digits.slice(2, 4), 10);
+      const year = parseInt(digits.slice(4, 8), 10);
+      const isValidDate = !isNaN(new Date(`${year}-${month}-${day}`).getTime());
+      if (!isValidDate || day > 31 || month > 12) {
+        error = "Invalid date";
       }
-  
-      // Update form data
-      setStudent((prev) => ({
-        ...prev,
-        [field]: formattedValue,
-      }));
-  
-      // Simple validation (optional)
-      let error = "";
-      if (digits.length === 8) {
-        const day = parseInt(digits.slice(0, 2), 10);
-        const month = parseInt(digits.slice(2, 4), 10);
-        const year = parseInt(digits.slice(4, 8), 10);
-        const isValidDate = !isNaN(new Date(`${year}-${month}-${day}`).getTime());
-        if (!isValidDate || day > 31 || month > 12) {
-          error = "Invalid date";
-        }
-      }
-  
-      setErrors((prev) => ({
-        ...prev,
-        [field]: error,
-      }));
-    };
-  
+    }
+
+    setErrors((prev) => ({
+      ...prev,
+      [field]: error,
+    }));
+  };
+
 
   // 🔹 Handle input change
   const handleChange = (field: keyof OpeningBalanceData, value: string | number) => {
@@ -141,10 +139,10 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
   // 🔹 Basic validation
   const validate = () => {
     const newErrors: Partial<OpeningBalanceData> = {};
-    if (!student.name.trim()) newErrors.name = "Lab name is required.";
+    if (!student.name.trim()) newErrors.name = "Student name is required.";
     if (!student.contact.trim()) newErrors.contact = "Contact is required.";
     if (!student.dueAmount || student.dueAmount <= 0)
-      newErrors.dueAmount = "Total PCs must be greater than 0." as any;
+      newErrors.dueAmount = "Amount must be greater than 0." as any;
     setErrors(newErrors);
 
     setTimeout(() => setErrors({}), 3000);
@@ -183,11 +181,11 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
       return;
     }
 
-     const normalizedStudent = {
-          ...student,
-          name: titleCase(student.name),
-          contact: normalizePhone(student.contact),
-        };
+    const normalizedStudent = {
+      ...student,
+      name: titleCase(student.name),
+      contact: normalizePhone(student.contact),
+    };
 
     createOpeningBalance(normalizedStudent, {
       onSuccess: () => {
@@ -202,7 +200,7 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
         setAlert({
           show: true,
           title: "Success",
-          message: "Lab created successfully!",
+          message: "Opening balance created successfully!",
           variant: "Success",
         });
 
@@ -218,8 +216,20 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
   };
 
   return (
-    <ModalCard title="New Student Opening Balance" oncloseModal={onCloseModal}>
-      <div className="space-y-6">
+    <ModalCard
+      title="New Student Opening Balance"
+      oncloseModal={onCloseModal}
+      onBodyRef={(el) => (modalBodyRef.current = el)}
+    >
+      <div className="flex flex-col gap-6">
+
+        {/* Header & Alerts */}
+        <div className="border-b pb-4 dark:border-gray-700">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Enter the student's details and opening balance information below.
+          </p>
+        </div>
+
         {alert.show && (
           <Alert
             variant={alert.variant === "Success" ? "success" : "error"}
@@ -229,82 +239,96 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
           />
         )}
 
-        {/* 🔹 Lab Name */}
-        <div ref={(el) => {
-              inputRefs.current.name = el;
-            }}>
-          <Label>Student Name</Label>
-          <Input
-            ref={firstInputRef}
-            tabIndex={1}
-            type="text"
-            placeholder="Enter Student Name"
-            value={student.name}
-            onChange={(e) => handleChange("name", e.target.value)}
-          />
-          {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
-        </div>
+        {/* Section 1: Opening Balance Details */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+            Student Information
+          </h3>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 
-        <div
-            ref={(el) => {
-              inputRefs.current.contact = el;
-            }}
-          >
-          <Label>Contact No. *</Label>
-          <div className="relative">
-            <PhoneInput
-              selectPosition="start"
-              countries={countries}
-              tabIndex={3}
-              onKeyDown={handleKeyDown}
-              placeholder="Enter Contact"
-              onChange={handlePhoneNumberChange}
-            />
-            {errors.contact && (
-              <p className="text-sm text-red-500">{errors.contact}</p>
-            )}
+            <div ref={(el) => { inputRefs.current.name = el; }}>
+              <Label>Student Name *</Label>
+              <Input
+                ref={firstInputRef}
+                tabIndex={1}
+                type="text"
+                placeholder="Enter Student Name"
+                value={student.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+              />
+              {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+            </div>
+
+            <div ref={(el) => { inputRefs.current.contact = el; }}>
+              <Label>Contact No. *</Label>
+              <div className="relative">
+                <PhoneInput
+                  selectPosition="start"
+                  countries={countries}
+                  tabIndex={2}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Enter Contact"
+                  onChange={handlePhoneNumberChange}
+                />
+              </div>
+              {errors.contact && (
+                <p className="mt-1 text-sm text-red-500">{errors.contact}</p>
+              )}
+            </div>
+
+            <div>
+              <Label>Due Amount *</Label>
+              <Input
+                tabIndex={3}
+                type="number"
+                min={0}
+                placeholder="Ex. 1500"
+                value={student.dueAmount}
+                onChange={(e) => handleChange("dueAmount", Number(e.target.value))}
+              />
+              {errors.dueAmount && (
+                <p className="mt-1 text-sm text-red-500">{errors.dueAmount}</p>
+              )}
+            </div>
+
+            <div>
+              <Label>Admission Date</Label>
+              <Input
+                type="text"
+                tabIndex={4}
+                placeholder="DD-MM-YYYY"
+                className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                value={student.admissionDate}
+                onChange={(e) => handleDateChange("admissionDate", e.target.value)}
+              />
+              {errors.admissionDate && (
+                <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>
+              )}
+            </div>
+
           </div>
-        </div>{" "}     
-
-        {/* 🔹 Total PCs */}
-        <div>
-          <Label>Due Amount</Label>
-          <Input
-            tabIndex={3}
-            type="number"
-            min={0}
-            placeholder="Ex. 15"
-            value={student.dueAmount}
-            onChange={(e) => handleChange("dueAmount", Number(e.target.value))}
-          />
-          {errors.dueAmount && (
-            <p className="text-sm text-red-500">{errors.dueAmount}</p>
-          )}
         </div>
 
-         <div>
-          <Label>Admission Date</Label>
-
-          <Input
-            type="text"
-            tabIndex={6}
-            placeholder="Enter DoB"
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-            value={student.admissionDate}
-            onChange={(e) => handleDateChange("admissionDate", e.target.value)}
-          />
-          {errors.admissionDate && <p className="text-sm text-red-500">{errors.admissionDate}</p>}
-        </div>
-
-        {/* 🔹 Actions */}
-        <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-          <Button size="sm" variant="outline" onClick={onCloseModal}>
+        {/* Action Bar */}
+        <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
+          <Button
+            size="sm"
+            variant="outline"
+            tabIndex={5}
+            onClick={onCloseModal}
+          >
             Close
           </Button>
-          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
-            Save
+          <Button
+            size="sm"
+            tabIndex={6}
+            className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+            onClick={handleSubmit}
+          >
+            Save Balance
           </Button>
         </div>
+
       </div>
     </ModalCard>
   );
