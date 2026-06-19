@@ -24,69 +24,52 @@ export default function EnquiryTarget({
 }: EnquiryTargetProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // const converted = 45;
-  // const notConverted = 55;
-
-  //  const convertedCount = enquiries.filter(e => e.isConverted && e.studentId !== null).length;
-  // const notConvertedCount = enquiries.length - convertedCount;
-
-  console.log(
-    "Get convertedCount and notConvertedCount length:",
-    convertedCount,
-    notConvertedCount,
-  );
-
   const series = [notConvertedCount, convertedCount];
+  const totalCount = convertedCount + notConvertedCount;
+  const conversionRate = totalCount > 0 ? Math.round((convertedCount / totalCount) * 100) : 0;
 
-  //const series = [notConverted, converted]; // false, true
   const options: ApexOptions = {
     chart: {
       type: "pie",
-      fontFamily: "Outfit, sans-serif",
+      fontFamily: "inherit",
     },
     labels: ["Not Converted", "Converted"],
-    colors: ["#465fff", "#46c8ff"],
-
+    // ERP Clean operational branding colors (Slate/Blue matrix)
+    colors: ["#64748b", "#0284c7"],
+    stroke: {
+      width: 1,
+      colors: ["#ffffff"]
+    },
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: "11px",
+        fontWeight: "600",
+      }
+    },
     tooltip: {
-      x: {
-        show: false,
-      },
+      x: { show: false },
       y: {
-        formatter: (value: number) => `${value}%`,
+        // Displays exact numbers instead of arbitrary percentages for business accuracy
+        formatter: (value: number) => `${value} Enquiries`,
       },
       style: {
-        fontSize: "14px",
-        fontFamily: "Outfit, sans-serif",
+        fontSize: "11px",
       },
     },
-
     legend: {
       position: "bottom",
-      fontSize: "14px",
-      fontWeight: 500,
+      fontSize: "11px",
+      fontWeight: 600,
       labels: {
-        colors: "#6B7280", // Tailwind gray-500
+        colors: "#475569", // Tailwind slate-600
         useSeriesColors: false,
       },
       itemMargin: {
-        horizontal: 12,
-        vertical: 8,
+        horizontal: 10,
+        vertical: 4,
       },
     },
-
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 280,
-          },
-          legend: {
-            position: "bottom",
-          },
-        },
-      },
-    ],
   };
 
   function toggleDropdown() {
@@ -98,49 +81,55 @@ export default function EnquiryTarget({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Total Sales
+    <div className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+
+      {/* ERP Compact Card Header Toolbar */}
+      <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5 dark:border-slate-800/60">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+          Enquiry Conversion Matrix
         </h3>
 
-        <div className="relative inline-block">
-          <button onClick={toggleDropdown} className="dropdown-toggle">
-            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
+        <div className="relative inline-block h-4">
+          <button onClick={toggleDropdown} type="button" className="p-0.5 rounded transition hover:bg-slate-50 dark:hover:bg-slate-900">
+            <MoreDotIcon className="text-slate-400 hover:text-slate-600 dark:text-slate-500" />
           </button>
           <Dropdown
             isOpen={isOpen}
             onClose={closeDropdown}
-            className="w-40 p-2"
+            className="w-36 rounded border border-slate-200 bg-white p-1 shadow-md dark:border-slate-800 dark:bg-slate-950 z-50"
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded px-2.5 py-1.5 text-left text-[11px] font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-900/60"
             >
-              View More
+              Export Dataset
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded px-2.5 py-1.5 text-left text-[11px] font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30"
             >
-              Delete
+              Reset Filters
             </DropdownItem>
           </Dropdown>
         </div>
       </div>
 
-      <div className="custom-scrollbar max-w-full overflow-x-auto">
-        <div className="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
+      {/* Analytics Plot Wrapper */}
+      <div className="p-4 flex flex-col items-center justify-center">
+        <div className="w-full max-w-[280px]">
           <ReactApexChart
             options={options}
             series={series}
             type="pie"
-            height={300}
+            height={220}
           />
         </div>
-        {/* Footer note */}
-        <p className="py-3 text-center text-sm text-gray-500 dark:text-gray-400">
-          {convertedCount}% of inquiries were converted to Admission this month.
+      </div>
+
+      {/* ERP Statistical Status Meta Footer */}
+      <div className="border-t border-slate-100 px-4 py-2 bg-slate-50/50 dark:border-slate-800/60 dark:bg-slate-900/10 text-center">
+        <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 tracking-wide">
+          <span className="font-bold text-slate-800 dark:text-slate-200">{conversionRate}%</span> of total pipeline inquiries converted to complete admissions this session cycle.
         </p>
       </div>
     </div>

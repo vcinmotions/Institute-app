@@ -118,29 +118,29 @@ export default function FacultyTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Faculty Lists">
+        <div className="flex justify-between">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+        </div>
 
-          <FacultyDataTable
-            faculties={faculties}
-            courses={courses}
-            batch={batch}
-            loading={loading}
-          />
+        <FacultyDataTable
+          faculties={faculties}
+          courses={courses}
+          batch={batch}
+          loading={loading}
+        />
 
-          <Pagination
-            currentPage={currentPage}
-            limit={PAGE_SIZE}
-            totalPages={totalPages}
-            title="Faculties"
-            totalCount={total}
-            onPageChange={handlePagination}
-          />
-        </StudentCard>
+        <Pagination
+          currentPage={currentPage}
+          limit={PAGE_SIZE}
+          totalPages={totalPages}
+          title="Faculties"
+          totalCount={total}
+          onPageChange={handlePagination}
+        />
       </div>
 
     </div>

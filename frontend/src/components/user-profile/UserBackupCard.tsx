@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Button from "../ui/button/Button";
-
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
@@ -32,9 +31,8 @@ export default function UserBackUpCard() {
 
             setBackupMsg("📦 Backup ready. Saving file...");
 
-            // ✅ Electron download (IMPORTANT)
+            // Electron desktop channel download
             await window.electronAPI.saveBackupFile(data.filePath);
-
             setBackupMsg("✅ Backup saved successfully");
 
         } catch (err: any) {
@@ -45,44 +43,43 @@ export default function UserBackUpCard() {
         }
     }
 
-    console.log("User in Profile", user);
     return (
-        <>
-            <div className="rounded-2xl border border-gray-200 p-5 lg:p-6 dark:border-gray-800">
-                <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
-                        <h4 className="text-lg font-semibold text-gray-800 lg:mb-6 dark:text-white/90">
-                            Backup Settings
-                        </h4>
+        <div className="rounded border border-slate-100 bg-slate-50/40 p-4 dark:border-slate-800/80 dark:bg-slate-900/10">
+            <div className="max-w-xl">
 
-                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
-                            <div className="mt-6 border-t pt-6 space-y-4">
+                {/* Module Header */}
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                    Database Backup Settings
+                </h4>
+                <p className="mt-0.5 text-[11px] font-medium text-slate-400 dark:text-slate-500 tracking-wide">
+                    Generate an absolute dump file of application configurations, courses, leads, and transaction ledger tables.
+                </p>
 
-                                {/* BACKUP STATUS */}
-                                {backupMsg && (
-                                    <div className={`text-sm px-3 py-2 rounded 
-                                        ${backupMsg.startsWith("✅") ? "bg-green-100 text-green-700" :
-                                            backupMsg.startsWith("❌") ? "bg-red-100 text-red-700" :
-                                                "bg-gray-100 text-gray-700"}`}>
-                                        {backupMsg}
-                                    </div>
-                                )}
+                <div className="mt-4 pt-4 border-t border-slate-200/60 dark:border-slate-800 max-w-sm space-y-3">
 
-                                {/* BACKUP BUTTON */}
-                                <Button
-                                    onClick={handleBackup}
-                                    disabled={backupLoading}
-                                    className="w-full rounded bg-blue-600 text-white py-2.5 text-sm hover:bg-blue-700"
-                                >
-                                    {backupLoading ? "Creating Backup..." : "Create Full Backup"}
-                                </Button>
-
-                            </div>
+                    {/* ERP Styled Dynamic Alert Notifications Banner */}
+                    {backupMsg && (
+                        <div className={`text-[11px] font-mono font-semibold px-3 py-1.5 rounded border tracking-wide shadow-none
+              ${backupMsg.startsWith("✅") ? "bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/20 dark:border-emerald-900/60 dark:text-emerald-400" :
+                                backupMsg.startsWith("❌") ? "bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-950/20 dark:border-rose-900/60 dark:text-rose-400" :
+                                    "bg-slate-100 border-slate-200 text-slate-700 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400"}`}
+                        >
+                            {backupMsg}
                         </div>
-                    </div>
+                    )}
+
+                    {/* Core ERP Action Trigger */}
+                    <button
+                        type="button"
+                        onClick={handleBackup}
+                        disabled={backupLoading}
+                        className="inline-flex h-8 w-full items-center justify-center rounded bg-slate-900 px-4 text-[11px] font-semibold tracking-wide text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-slate-200"
+                    >
+                        {backupLoading ? "Executing Maintenance Process..." : "Run Global System Backup"}
+                    </button>
 
                 </div>
             </div>
-        </>
+        </div>
     );
 }

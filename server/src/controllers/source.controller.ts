@@ -21,13 +21,16 @@ export async function addSourceController(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const tables = await tenantPrisma.$queryRawUnsafe(`
-  SELECT table_name
-  FROM information_schema.tables
-  WHERE table_schema='public';
-`);
+//     const tables = await tenantPrisma.$queryRawUnsafe(`
+//   SELECT table_name
+//   FROM information_schema.tables
+//   WHERE table_schema='public';
+// `);
 
-console.log(tables);
+// console.log(tables);
+
+console.log("Incoming Source:", name);
+    console.log("Generated Slug:", slugifyName(name));
 
     const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
       where: { id: user.clientAdminId },
@@ -42,10 +45,15 @@ console.log(tables);
         slug: slugifyName(name),
       },
     });
+    console.log("Existing Source:", existingSourceType);
+
 
     if (existingSourceType) {
       return res.status(409).json({ error: "Source already exists" });
     }
+
+    
+
 
     // ✅ Create Faculty
     const source = await tenantPrisma.sourceType.create({
@@ -54,6 +62,8 @@ console.log(tables);
         slug: slugifyName(name),
       },
     });
+
+    
 
     return res.status(201).json({
       message: "Source created ✅",

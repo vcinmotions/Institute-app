@@ -216,7 +216,7 @@ export default function AttendanceTable() {
             />
 
             <button
-              className="rounded-md bg-green-600 px-4 py-2 text-white"
+              className="rounded-md text-[12px] bg-green-600 px-4 py-1 text-white"
               onClick={handleDownloadAttendance}
             >
               Download Attendance

@@ -145,26 +145,29 @@ export default function BatchTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Batch Lists" onCreateClick={handleCreateClick}>
+
+        <div className="flex justify-between">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+        </div>
 
-          <BatchDataTable
-            batch={batch}
-          />
+        <BatchDataTable
+          batch={batch}
+        />
 
-          <Pagination
-            currentPage={currentPage}
-            limit={PAGE_SIZE}
-            totalPages={totalPages}
-            title="Bathes"
-            totalCount={total}
-            onPageChange={handlePagination}
-          />
-        </StudentCard>
+
+        <Pagination
+          currentPage={currentPage}
+          limit={PAGE_SIZE}
+          totalPages={totalPages}
+          title="Bathes"
+          totalCount={total}
+          onPageChange={handlePagination}
+        />
+
       </div>
 
       {showForm && <BatchForm onCloseModal={handleCloseModal} labs={labs} />}

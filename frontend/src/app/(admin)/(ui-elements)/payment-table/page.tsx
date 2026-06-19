@@ -132,61 +132,68 @@ export default function PaymentTable() {
   return (
     <div>
       <div className="space-y-6">
-        <EnquiryCard title="Student Payment Lists" onCreateClick={handleCreateClick}>
-          <div className="flex justify-between">
-            <Search
-              value={searchInput}
-              onChange={handleSearchChange}
-              onSubmit={handleSearchSubmit}
-            />
-
-            <FilterBox
-              onFilterChange={handleFilters}
-              filterFields={[
-                {
-                  label: "Payment Status",
-                  key: "paymentStatus",
-                  type: "select",
-                  options: [
-                    { label: "SUCCESS", value: "SUCCESS" },
-                    { label: "PENDING", value: "PENDING" },
-                    { label: "FAILED", value: "FAILED" },
-                  ],
-                },
-                {
-                  label: "Payment Mode",
-                  key: "paymentMode",
-                  type: "select",
-                  options: [
-                    { label: "Cash", value: "CASH" },
-                    { label: "UPI", value: "UPI" },
-                    { label: "Card", value: "CARD" },
-                  ],
-                },
-                { label: "From Date", key: "fromDate", type: "date" },
-                { label: "To Date", key: "toDate", type: "date" },
-              ]}
-            />
-          </div>
-
-          <PaymentDataTable
-            payment={payment}
-            loading={loading}
-            onPaymentType={handlePaymentType}
-            onSort={handleSort}
-            sortField={sortField}
-            sortOrder={sortOrder}
+        <div className="flex justify-between">
+          <Search
+            value={searchInput}
+            onChange={handleSearchChange}
+            onSubmit={handleSearchSubmit}
           />
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            limit={PAGE_SIZE}
-            totalCount={total}
-            title="Student Payments"
-            onPageChange={handlePagination}
+          <FilterBox
+            onFilterChange={handleFilters}
+            filterFields={[
+              {
+                label: "Payment Status",
+                key: "paymentStatus",
+                type: "select",
+                options: [
+                  { label: "SUCCESS", value: "SUCCESS" },
+                  { label: "PENDING", value: "PENDING" },
+                  { label: "FAILED", value: "FAILED" },
+                ],
+              },
+              {
+                label: "Payment Mode",
+                key: "paymentMode",
+                type: "select",
+                options: [
+                  { label: "Cash", value: "CASH" },
+                  { label: "UPI", value: "UPI" },
+                  { label: "Card", value: "CARD" },
+                ],
+              },
+              { label: "From Date", key: "fromDate", type: "date" },
+              { label: "To Date", key: "toDate", type: "date" },
+            ]}
           />
-        </EnquiryCard>
+
+          {/* Right Zone: ERP Contextual Actions Button */}
+          <button
+            type="button"
+            onClick={handleCreateClick}
+            className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            + Create Record
+          </button>
+        </div>
+
+        <PaymentDataTable
+          payment={payment}
+          loading={loading}
+          onPaymentType={handlePaymentType}
+          onSort={handleSort}
+          sortField={sortField}
+          sortOrder={sortOrder}
+        />
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          limit={PAGE_SIZE}
+          totalCount={total}
+          title="Student Payments"
+          onPageChange={handlePagination}
+        />
       </div>
       {showForm && <OpeningBalanceForm onCloseModal={handleCloseModal} />}
     </div>

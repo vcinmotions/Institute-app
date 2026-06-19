@@ -43,6 +43,7 @@ interface GetStudentCourseParams {
   page?: number;
   limit?: number;
   search?: string;
+  paymentStatus?: string,
   sortField?: string;
   sortOrder?: "asc" | "desc";
   courseId?: string;

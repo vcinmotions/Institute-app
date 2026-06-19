@@ -96,27 +96,29 @@ export default function RolesTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Role User Lists">
+
+        <div className="flex justify-between">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+        </div>
 
-          <RolesDataTable
-            roles={roles}
-            loading={loading}
+        <RolesDataTable
+          roles={roles}
+          loading={loading}
 
-          />
+        />
 
-          <Pagination
-            currentPage={currentPage}
-            limit={PAGE_SIZE}
-            totalPages={totalPages}
-            totalCount={total}
-            onPageChange={handlePagination}
-          />
-        </StudentCard>
+        <Pagination
+          currentPage={currentPage}
+          limit={PAGE_SIZE}
+          totalPages={totalPages}
+          totalCount={total}
+          onPageChange={handlePagination}
+        />
+
       </div>
 
     </div>

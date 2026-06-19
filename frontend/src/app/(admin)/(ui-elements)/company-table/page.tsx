@@ -134,30 +134,32 @@ export default function CompanyTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Companies Lists" onCreateClick={handleCreateClick}>
+
+        <div className="flex justify-between">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+        </div>
 
-          <CompanyDataTable
-            company={company}
-            loading={loading}
-            onSort={handleSort}
-            sortField={sortField}
-            sortOrder={sortOrder}
-          />
+        <CompanyDataTable
+          company={company}
+          loading={loading}
+          onSort={handleSort}
+          sortField={sortField}
+          sortOrder={sortOrder}
+        />
 
-          <Pagination
-            currentPage={currentPage}
-            limit={PAGE_SIZE}
-            totalPages={totalPages}
-            title="Companies"
-            totalCount={totalCount}
-            onPageChange={handlePagination}
-          />
-        </StudentCard>
+        <Pagination
+          currentPage={currentPage}
+          limit={PAGE_SIZE}
+          totalPages={totalPages}
+          title="Companies"
+          totalCount={totalCount}
+          onPageChange={handlePagination}
+        />
+
       </div>
 
       {showForm && <CompanyForm onCloseModal={handleCloseModal} />}

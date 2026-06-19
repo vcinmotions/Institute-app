@@ -31,6 +31,7 @@ import MonthlyBirthdayCard from "@/components/ecommerce/MonthlyBirthdayCard";
 import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
 import { useFetchStudent } from "@/hooks/queries/useQueryFetchStudent";
 import { setBirthday } from "@/store/slices/studentSlice";
+import { DashboardOpsMetrics } from "@/components/ecommerce/DashboardOpsMetrics";
 
 export default function CompanyDashboard() {
   const router = useRouter();
@@ -63,6 +64,7 @@ export default function CompanyDashboard() {
   });
 
   console.log("ENQUIRIES IN DASHBOARD:", data);
+  console.log("student IN DASHBOARD:", student);
 
 
   useEffect(() => {
@@ -121,7 +123,8 @@ export default function CompanyDashboard() {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className="col-span-12 space-y-6 xl:col-span-7">
-        <EcommerceMetrics user={user} summary={summary} breakdown={breakdown} />
+        {/* <EcommerceMetrics user={user} summary={summary} breakdown={breakdown} /> */}
+        <DashboardOpsMetrics />
 
         {/* {userRole === "ADMIN" && <FinancialReport />} */}
         <MonthlySalesChart monthlySales={monthlySales} />

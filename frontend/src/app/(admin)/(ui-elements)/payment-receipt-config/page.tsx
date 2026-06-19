@@ -89,15 +89,15 @@ export default function PaymentReceiptConfigPage() {
         <div>
             <PageBreadcrumb pageTitle="Payment Receipt Number Settings" />
 
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3 shadow-sm">
+            <div className="form-container">
                 <div className="flex flex-col gap-6">
 
                     {/* Header & Alerts */}
                     <div className="border-b pb-4 dark:border-gray-700">
-                        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">
+                        <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">
                             Payment Receipt Config
                         </h2>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">
                             Define the automated sequence and format for payment receipt numbers.
                         </p>
                     </div>
@@ -112,7 +112,7 @@ export default function PaymentReceiptConfigPage() {
                     )}
 
                     {/* Section 1: Format Details */}
-                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
                         <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
                             Format Details
                         </h3>
@@ -193,11 +193,11 @@ export default function PaymentReceiptConfigPage() {
                     </div>
 
                     {/* Section 2: Live Preview */}
-                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
                         <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
                             Live Preview
                         </h3>
-                        <div className="flex flex-col items-center justify-center rounded-lg bg-white p-8 border border-gray-200 shadow-sm dark:bg-gray-900 dark:border-gray-700">
+                        <div className="flex flex-col items-center justify-center rounded-lg bg-white p-8 border border-gray-200 shadow-sm dark:bg-slate-900 dark:border-gray-700">
                             <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Generated Format</p>
                             <p className="font-mono text-3xl font-bold tracking-widest text-gray-800 dark:text-gray-100">
                                 {preview}
@@ -212,7 +212,7 @@ export default function PaymentReceiptConfigPage() {
                             tabIndex={7}
                             variant="primary"
                             disabled={isPending}
-                            className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-brand-600 dark:hover:bg-brand-500"
+                            className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-brand-600 dark:hover:bg-brand-500"
                             onClick={handleSubmit}
                         >
                             {isPending ? "Saving..." : "Save Configuration"}

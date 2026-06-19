@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function Payment() {
   return (
     <RoleProtected allowedRoles={["ADMIN", "ACCOUNTANT"]}>
-        <PageBreadcrumb pageTitle="Student Payment" />
+      {/* <PageBreadcrumb pageTitle="Student Payment" /> */}
 
-        <PaymentTable />
+      <PaymentTable />
     </RoleProtected>
   );
 }

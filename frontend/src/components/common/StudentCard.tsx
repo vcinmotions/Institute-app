@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import Button from "../ui/button/Button";
-import DefaultInputs from "../form/form-elements/DefaultInputs";
-import Badge from "../ui/badge/Badge";
+import React from "react";
 
 interface StudentCardProps {
   title: string;
   children: React.ReactNode;
   className?: string; // Additional custom classes for styling
   desc?: string; // Description text
-  onCreateClick?: () => void; // <-- Add this
+  onCreateClick?: () => void;
 }
 
 const StudentCard: React.FC<StudentCardProps> = ({
@@ -20,24 +17,38 @@ const StudentCard: React.FC<StudentCardProps> = ({
 }) => {
   return (
     <div
-      className={`rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] ${className}`}
+      className={`rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950 ${className}`}
     >
-      {/* Card Header */}
-      <div className="flex justify-between items-center px-6 py-5">
-        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-          {title}
-        </h3>
-         {/* <Button size="sm" className="rounded bg-gray-900 px-4 py-2 text-white text-sm hover:bg-gray-700 transition" onClick={onCreateClick}>Create</Button>  */}
-        {desc && (
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {desc}
-          </p>
+      {/* ERP Style Clean Header Toolbar */}
+      <div className="flex items-center justify-between gap-4 border-b border-slate-100 px-4 py-3 dark:border-slate-800/60">
+
+        {/* Left Zone: Title and metadata description */}
+        <div className="flex flex-col">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+            {title}
+          </h3>
+          {desc && (
+            <p className="mt-0.5 text-[11px] font-medium text-slate-400 dark:text-slate-500">
+              {desc}
+            </p>
+          )}
+        </div>
+
+        {/* Right Zone: ERP Contextual Actions Button */}
+        {onCreateClick && (
+          <button
+            type="button"
+            onClick={onCreateClick}
+            className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            + Create Record
+          </button>
         )}
       </div>
 
-      {/* Card Body */}
-      <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
-        <div className="space-y-6">{children}</div>
+      {/* ERP Compact Card Body */}
+      <div className="p-3">
+        <div className="space-y-4">{children}</div>
       </div>
     </div>
   );

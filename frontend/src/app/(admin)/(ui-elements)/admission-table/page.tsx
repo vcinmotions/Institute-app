@@ -138,30 +138,32 @@ export default function AdmissionTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Admission Lists">
+        {/* <StudentCard title="Admission Lists"> */}
+        <div className="flex justify-between">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+        </div>
 
-          <AdmissionDataTable
-            admissions={admission}
-            loading={loading}
-            onSort={handleSort}
-            sortField={sortField}
-            sortOrder={sortOrder}
-          />
+        <AdmissionDataTable
+          admissions={admission}
+          loading={loading}
+          onSort={handleSort}
+          sortField={sortField}
+          sortOrder={sortOrder}
+        />
 
-          <Pagination
-            currentPage={currentPage}
-            limit={PAGE_SIZE}
-            totalPages={totalPages}
-            title="Pending Admissions"
-            totalCount={total}
-            onPageChange={handlePagination}
-          />
-        </StudentCard>
+        <Pagination
+          currentPage={currentPage}
+          limit={PAGE_SIZE}
+          totalPages={totalPages}
+          title="Pending Admissions"
+          totalCount={total}
+          onPageChange={handlePagination}
+        />
+        {/* </StudentCard> */}
       </div>
     </div>
   );

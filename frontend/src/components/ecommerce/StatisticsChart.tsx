@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-// import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import ChartTab from "../common/ChartTab";
 import dynamic from "next/dynamic";
@@ -13,138 +12,162 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 export default function StatisticsChart() {
   const options: ApexOptions = {
     legend: {
-      show: false, // Hide legend
+      show: true,
       position: "top",
-      horizontalAlign: "left",
+      horizontalAlign: "right",
+      fontSize: "11px",
+      fontWeight: 600,
+      fontFamily: "inherit",
+      labels: {
+        colors: "#475569",
+      },
+      markers: {
+        // width: 7,
+        // height: 7,
+        // radius: 2,
+      },
+      itemMargin: {
+        horizontal: 10,
+        vertical: 0,
+      },
     },
-    colors: ["#465FFF", "#9CB9FF"], // Define line colors
+    colors: ["#0284c7", "#64748b"], // ERP Business Indigo Azure & Neutral Slate
     chart: {
-      fontFamily: "Outfit, sans-serif",
+      fontFamily: "inherit",
       height: 310,
-      type: "line", // Set the chart type to 'line'
+      type: "area",
       toolbar: {
-        show: false, // Hide chart toolbar
+        show: false,
+      },
+      zoom: {
+        enabled: false,
       },
     },
     stroke: {
-      curve: "straight", // Define the line style (straight, smooth, or step)
-      width: [2, 2], // Line width for each dataset
+      curve: "straight", // ERP default straight layout style for precision reporting
+      width: [1.5, 1.5],
     },
-
     fill: {
       type: "gradient",
       gradient: {
-        opacityFrom: 0.55,
-        opacityTo: 0,
+        shadeIntensity: 1,
+        opacityFrom: 0.2,
+        opacityTo: 0.02,
+        stops: [0, 95, 100],
       },
     },
     markers: {
-      size: 0, // Size of the marker points
-      strokeColors: "#fff", // Marker border color
-      strokeWidth: 2,
+      size: 0,
+      strokeColors: "#fff",
+      strokeWidth: 1.5,
       hover: {
-        size: 6, // Marker size on hover
+        size: 4,
       },
     },
     grid: {
+      borderColor: "#f1f5f9", // Subtle slate-100 grid borders
       xaxis: {
         lines: {
-          show: false, // Hide grid lines on x-axis
+          show: false,
         },
       },
       yaxis: {
         lines: {
-          show: true, // Show grid lines on y-axis
+          show: true,
         },
       },
     },
     dataLabels: {
-      enabled: false, // Disable data labels
+      enabled: false,
     },
     tooltip: {
-      enabled: true, // Enable tooltip
+      enabled: true,
+      shared: true,
+      intersect: false,
+      theme: "light",
+      style: {
+        fontSize: "11px",
+      },
       x: {
-        format: "dd MMM yyyy", // Format for x-axis tooltip
+        show: true,
+      },
+      y: {
+        formatter: (val: number) => new Intl.NumberFormat("en-IN").format(val),
       },
     },
     xaxis: {
-      type: "category", // Category-based x-axis
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      type: "category",
+      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       axisBorder: {
-        show: false, // Hide x-axis border
+        show: true,
+        color: "#e2e8f0", // Clear slate-200 boundary line
       },
       axisTicks: {
-        show: false, // Hide x-axis ticks
+        show: true,
+        color: "#e2e8f0",
       },
-      tooltip: {
-        enabled: false, // Disable tooltip for x-axis points
+      labels: {
+        style: {
+          fontSize: "10px",
+          fontWeight: 500,
+          colors: "#64748b",
+        },
       },
     },
     yaxis: {
       labels: {
         style: {
-          fontSize: "12px", // Adjust font size for y-axis labels
-          colors: ["#6B7280"], // Color of the labels
+          fontSize: "10px",
+          colors: "#64748b",
         },
-      },
-      title: {
-        text: "", // Remove y-axis title
-        style: {
-          fontSize: "0px",
-        },
+        formatter: (val: number) => new Intl.NumberFormat("en-IN").format(val),
       },
     },
   };
 
   const series = [
     {
-      name: "Sales",
+      name: "Sales Volume",
       data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235],
     },
     {
-      name: "Revenue",
+      name: "Gross Revenue",
       data: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
     },
   ];
+
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
-      <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
-        <div className="w-full">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Statistics
+    <div className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950 flex flex-col">
+
+      {/* ERP Style Title & Toolbar Zone Header */}
+      <div className="flex flex-col gap-4 border-b border-slate-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800/60 shrink-0">
+        <div className="min-w-0">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+            Performance Statistics Analytics
           </h3>
-          <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Target you’ve set for each month
+          <p className="mt-0.5 text-[11px] font-medium text-slate-400 dark:text-slate-500 tracking-wide">
+            Target tracking matrices configured against current cycle months.
           </p>
         </div>
-        <div className="flex items-start w-full gap-3 sm:justify-end">
+
+        {/* Dynamic Period Toggles */}
+        <div className="flex items-center shrink-0 sm:justify-end">
           <ChartTab />
         </div>
       </div>
 
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
-        <div className="min-w-[1000px] xl:min-w-full">
+      {/* Render Plot Area */}
+      <div className="p-4 flex-1 max-w-full overflow-x-auto no-scrollbar">
+        <div className="-ml-3 min-w-[850px] xl:min-w-full">
           <ReactApexChart
             options={options}
             series={series}
             type="area"
-            height={310}
+            height={290}
           />
         </div>
       </div>
+
     </div>
   );
 }

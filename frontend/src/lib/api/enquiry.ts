@@ -19,8 +19,10 @@ export interface GetEnquiryParams {
   token: string;
   page?: number;
   limit?: number;
+  currentPage?: number,
   search?: string | null;
   sortField?: string;
+  filters?: Record<string, string | number | boolean | null | undefined>;
   sortOrder?: "asc" | "desc";
   leadStatus?: "HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null;
   signal?: AbortSignal; // ✅ senior-level: support cancel

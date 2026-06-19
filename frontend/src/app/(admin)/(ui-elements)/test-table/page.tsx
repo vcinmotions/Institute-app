@@ -88,30 +88,30 @@ export default function TestTable() {
     return (
         <div>
             <div className="space-y-6">
-                <StudentCard title="Tests List">
+                <div className="flex justify-between">
                     <Search
                         value={searchInput}
                         onChange={handleSearchChange}
                         onSubmit={handleSearchSubmit}
                     />
+                </div>
 
-                    <TestDataTable
-                        tests={tests}
-                        batch={batch}
-                        loading={loading}
-                    />
+                <TestDataTable
+                    tests={tests}
+                    batch={batch}
+                    loading={loading}
+                />
 
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        limit={PAGE_SIZE}
-                        totalCount={total}
-                        title="Tasks"
-                        onPageChange={handlePagination}
-                    />
-                </StudentCard>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    limit={PAGE_SIZE}
+                    totalCount={total}
+                    title="Tasks"
+                    onPageChange={handlePagination}
+                />
+
             </div>
-
         </div>
     );
 }

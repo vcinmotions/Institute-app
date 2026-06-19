@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { useFetchReports } from "@/hooks/queries/useQueryFetchReports";
+import StudentCard from "@/components/common/StudentCard";
 
 type ReportType = "ENQUIRIES" | "FINANCE" | "STUDENTS";
 type FinanceStatus = "ALL" | "PAID" | "OUTSTANDING";
@@ -96,7 +97,7 @@ export default function ReportsDashboard() {
 
     return (
         <div className="space-y-6 text-slate-900 dark:text-slate-100">
-            <ComponentCard title="Generate Reports">
+            <StudentCard title="Generate Reports">
 
                 {/* FILTERS SECTION */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-6 p-5 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800 transition-colors duration-200">
@@ -309,7 +310,7 @@ export default function ReportsDashboard() {
                         </>
                     )}
                 </div>
-            </ComponentCard>
+            </StudentCard>
         </div>
     );
 }

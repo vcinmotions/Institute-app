@@ -83,15 +83,15 @@ export default function AdmissionConfigForm() {
       {/* Assuming PageBreadcrumb is available globally in your layout */}
       <PageBreadcrumb pageTitle="Admission Configuration" />
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3 shadow-sm">
+      <div className="form-container">
         <div className="flex flex-col gap-6">
 
           {/* Header & Alerts */}
           <div className="border-b pb-4 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">
               Admission Form Settings
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">
               Configure the sequence and formatting rules for student admission numbers.
             </p>
           </div>

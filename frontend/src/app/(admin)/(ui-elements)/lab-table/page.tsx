@@ -131,31 +131,39 @@ export default function LabTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Lab Lists" onCreateClick={handleCreateClick}>
+        <div className="flex justify-between">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
 
-          <LabDataTable
-            lab={lab}
-            loading={loading}
-            courses={courses}
-            onSort={handleSort}
-            sortField={sortField}
-            sortOrder={sortOrder}
-          />
+          <button
+            type="button"
+            onClick={handleCreateClick}
+            className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            + Create Record
+          </button>
+        </div>
 
-          <Pagination
-            currentPage={currentPage}
-            limit={PAGE_SIZE}
-            totalPages={totalPages}
-            totalCount={total}
-            title="Labs"
-            onPageChange={handlePagination}
-          />
-        </StudentCard>
+        <LabDataTable
+          lab={lab}
+          loading={loading}
+          courses={courses}
+          onSort={handleSort}
+          sortField={sortField}
+          sortOrder={sortOrder}
+        />
+
+        <Pagination
+          currentPage={currentPage}
+          limit={PAGE_SIZE}
+          totalPages={totalPages}
+          totalCount={total}
+          title="Labs"
+          onPageChange={handlePagination}
+        />
       </div>
       {showForm && <LabForm onCloseModal={handleCloseModal} />}
     </div>

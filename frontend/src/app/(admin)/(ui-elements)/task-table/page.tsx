@@ -93,28 +93,28 @@ export default function TaskTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Task Lists">
+        <div className="flex justify-between">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+        </div>
 
-          <TaskDataTable
-            tasks={tasks}
-            batch={batch}
-            loading={loading}
-          />
+        <TaskDataTable
+          tasks={tasks}
+          batch={batch}
+          loading={loading}
+        />
 
-          <Pagination
-            currentPage={currentPage}
-            limit={PAGE_SIZE}
-            totalPages={totalPages}
-            totalCount={total}
-            title="Tasks"
-            onPageChange={handlePagination}
-          />
-        </StudentCard>
+        <Pagination
+          currentPage={currentPage}
+          limit={PAGE_SIZE}
+          totalPages={totalPages}
+          totalCount={total}
+          title="Tasks"
+          onPageChange={handlePagination}
+        />
       </div>
 
     </div>

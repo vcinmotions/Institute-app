@@ -219,65 +219,63 @@ export default function StudentCourseTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Student Course Lists">
-          <div className="flex justify-between">
-            <Search
-              value={searchInput}
-              onChange={handleSearchChange}
-              onSubmit={handleSearchSubmit}
-            />
-
-            <FilterBox
-              onFilterChange={handleFilters}
-              filterFields={[
-                {
-                  label: "Course",
-                  key: "courseId",
-                  type: "select",
-                  options: course.map((c) => ({
-                    label: c.name,
-                    value: c.id.toString(),
-                  })), // ✅ dynamic
-                },
-                {
-                  label: "Batch",
-                  key: "batchId",
-                  type: "select",
-                  options: batch.map((b) => ({
-                    label: b.name,
-                    value: b.id.toString(),
-                  })),
-                },
-                {
-                  label: "Faculty",
-                  key: "facultyId",
-                  type: "select",
-                  options: faculty.map((f) => ({
-                    label: f.name,
-                    value: f.id.toString(),
-                  })),
-                },
-              ]}
-            />
-          </div>
-
-          <StudentCourseDataTable
-            studentCourse={studentDetails}
-            loading={loading}
-            onSort={handleSort}
-            sortField={sortField}
-            sortOrder={sortOrder}
+        <div className="flex justify-between">
+          <Search
+            value={searchInput}
+            onChange={handleSearchChange}
+            onSubmit={handleSearchSubmit}
           />
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            limit={PAGE_SIZE}
-            totalCount={total}
-            title="Student Courses"
-            onPageChange={handlePagination}
+          <FilterBox
+            onFilterChange={handleFilters}
+            filterFields={[
+              {
+                label: "Course",
+                key: "courseId",
+                type: "select",
+                options: course.map((c) => ({
+                  label: c.name,
+                  value: c.id.toString(),
+                })), // ✅ dynamic
+              },
+              {
+                label: "Batch",
+                key: "batchId",
+                type: "select",
+                options: batch.map((b) => ({
+                  label: b.name,
+                  value: b.id.toString(),
+                })),
+              },
+              {
+                label: "Faculty",
+                key: "facultyId",
+                type: "select",
+                options: faculty.map((f) => ({
+                  label: f.name,
+                  value: f.id.toString(),
+                })),
+              },
+            ]}
           />
-        </StudentCard>
+        </div>
+
+        <StudentCourseDataTable
+          studentCourse={studentDetails}
+          loading={loading}
+          onSort={handleSort}
+          sortField={sortField}
+          sortOrder={sortOrder}
+        />
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          limit={PAGE_SIZE}
+          totalCount={total}
+          title="Student Courses"
+          onPageChange={handlePagination}
+        />
       </div>
     </div>
   );

@@ -34,8 +34,8 @@ export default function MasterAdminLayout({
   const mainContentMargin = isMobileOpen
     ? "ml-0"
     : isExpanded || isHovered
-      ? "lg:ml-[290px]"
-      : "lg:ml-[90px]";
+      ? "lg:ml-[240px]"
+      : "lg:ml-[70px]";
 
   return (
     <ProtectedRoute allowedRoles={["MASTER_ADMIN"]}>

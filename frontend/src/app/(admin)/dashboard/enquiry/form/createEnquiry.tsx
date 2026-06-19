@@ -221,7 +221,7 @@ export default function EnquiryForm() {
       alternateContact: formattedNumber,
     }));
 
-    setField("alternateContact", formattedNumber); 
+    setField("alternateContact", formattedNumber);
 
     if (phoneNumber.length === 10) {
       setErrors((prev) => ({ ...prev, alternateContact: "" }));
@@ -313,7 +313,7 @@ export default function EnquiryForm() {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 2000);
 
-      return; 
+      return;
     }
 
     const token = sessionStorage.getItem("token");
@@ -378,21 +378,21 @@ export default function EnquiryForm() {
   return (
     <div>
       <PageBreadcrumb pageTitle="Create Enquiry" />
-      
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3 shadow-sm">
+
+      <div className="form-container">
         <div className="flex flex-col gap-6">
-          
+
           {/* Header & Alerts */}
           <div className="border-b pb-4 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">Enquiry Information</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new system enquiry.</p>
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">Enquiry Information</h2>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new system enquiry.</p>
           </div>
 
           {error && <Alert variant={"error"} title={""} message={error} showLink={false} />}
           {alert.show && <Alert variant={alert.title === "Enquiry Created" ? "success" : "error"} title={alert.title} message={alert.message} showLink={false} />}
 
           {/* Section 1: Personal Details */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Personal Details</h3>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
               <div ref={(el) => { inputRefs.current.name = el; }}>
@@ -442,29 +442,29 @@ export default function EnquiryForm() {
           </div>
 
           {/* Section 2: Contact & Location */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Contact & Location</h3>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
               <div ref={(el) => { inputRefs.current.contact = el; }}>
                 <Label>Contact No. *</Label>
-                <PhoneNumberInput 
-                  tabIndex={4} 
-                  onKeyDown={handleKeyDown} 
+                <PhoneNumberInput
+                  tabIndex={4}
+                  onKeyDown={handleKeyDown}
                   placeholder="Enter Contact"
-                  value={newEnquiry.contact}                
-                  onChange={handlePhoneNumberChange}         
+                  value={newEnquiry.contact}
+                  onChange={handlePhoneNumberChange}
                 />
                 {errors.contact && <p className="mt-1 text-sm text-red-500">{errors.contact}</p>}
               </div>
 
               <div>
                 <Label>Alternate Contact No.</Label>
-                <PhoneNumberInput 
-                  tabIndex={5} 
-                  onKeyDown={handleKeyDown} 
+                <PhoneNumberInput
+                  tabIndex={5}
+                  onKeyDown={handleKeyDown}
                   placeholder="Enter Alternate"
-                  value={newEnquiry.alternateContact}      
-                  onChange={handleAlternatePhoneNumberChange} 
+                  value={newEnquiry.alternateContact}
+                  onChange={handleAlternatePhoneNumberChange}
                 />
                 {errors.alternateContact && <p className="mt-1 text-sm text-red-500">{errors.alternateContact}</p>}
               </div>
@@ -514,10 +514,10 @@ export default function EnquiryForm() {
           </div>
 
           {/* Section 3: Enquiry Details */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Enquiry Details</h3>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              
+
               <div className="lg:col-span-2" ref={(el) => { inputRefs.current.courseId = el; }}>
                 <div className="relative" data-master="course">
                   <MultiSelect
@@ -598,17 +598,17 @@ export default function EnquiryForm() {
 
           {/* Action Bar */}
           <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
-            <Button 
-              size="sm" 
-              tabIndex={14} 
-              variant="primary" 
-              className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500" 
+            <Button
+              size="sm"
+              tabIndex={14}
+              variant="primary"
+              className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
               onClick={handleSubmit}
             >
               Save Enquiry
             </Button>
           </div>
-          
+
         </div>
       </div>
     </div>

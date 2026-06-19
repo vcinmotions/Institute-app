@@ -233,13 +233,13 @@ export default function LabForm() {
     <div>
       <PageBreadcrumb pageTitle="Create Lab" />
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="form-container">
         <div className="flex flex-col gap-6">
 
           {/* Header & Alerts */}
           <div className="border-b pb-4 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">Lab Information</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new system Lab.</p>
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">Lab Information</h2>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new system Lab.</p>
           </div>
 
           {/* Alert Messages */}
@@ -253,7 +253,7 @@ export default function LabForm() {
           )}
 
           {/* Form Grouping: Lab Details */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
               Lab Details
             </h3>
@@ -318,7 +318,7 @@ export default function LabForm() {
           </div>
 
           {/* Form Grouping: Time Slots Configuration */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
               Time Slots Configuration
             </h3>
@@ -390,7 +390,7 @@ export default function LabForm() {
               size="sm"
               variant="outline"
               onClick={handleCancel}
-              className="min-w-[100px] rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="min-w-[100px] rounded border border-gray-300 bg-white py-1 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             >
               Cancel
             </Button>
@@ -398,7 +398,7 @@ export default function LabForm() {
               size="sm"
               variant="primary"
               onClick={handleSubmit}
-              className="min-w-[120px] rounded bg-gray-900 px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+              className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             >
               Save Lab
             </Button>

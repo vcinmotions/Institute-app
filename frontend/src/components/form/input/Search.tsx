@@ -1,59 +1,3 @@
-// import React, { useRef } from "react";
-
-// type SearchProps = {
-//   value: string;
-//   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-//   onSubmit: (e: React.FormEvent) => void;
-// };
-
-// const Search: React.FC<SearchProps> = ({ value, onChange, onSubmit }) => {
-//   const inputRef = useRef<HTMLInputElement>(null);
-
-//   return (
-//     <div className="hidden lg:block">
-//       <form onSubmit={onSubmit}>
-//         <div className="relative w-max">
-//           <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
-//             <svg
-//               className="fill-gray-500 dark:fill-gray-400"
-//               width="20"
-//               height="20"
-//               viewBox="0 0 20 20"
-//               fill="none"
-//               xmlns="http://www.w3.org/2000/svg"
-//             >
-//               <path
-//                 fillRule="evenodd"
-//                 clipRule="evenodd"
-//                 d="M3.04175 9.37363C3.04175 5.87693 5.87711 3.04199 9.37508 3.04199C12.8731 3.04199 15.7084 5.87693 15.7084 9.37363C15.7084 12.8703 12.8731 15.7053 9.37508 15.7053C5.87711 15.7053 3.04175 12.8703 3.04175 9.37363ZM9.37508 1.54199C5.04902 1.54199 1.54175 5.04817 1.54175 9.37363C1.54175 13.6991 5.04902 17.2053 9.37508 17.2053C11.2674 17.2053 13.003 16.5344 14.357 15.4176L17.177 18.238C17.4699 18.5309 17.9448 18.5309 18.2377 18.238C18.5306 17.9451 18.5306 17.4703 18.2377 17.1774L15.418 14.3573C16.5365 13.0033 17.2084 11.2669 17.2084 9.37363C17.2084 5.04817 13.7011 1.54199 9.37508 1.54199Z"
-//               />
-//             </svg>
-//           </span>
-//           <input
-//             ref={inputRef} // 👈 attach the forwarded ref
-//             type="text"
-//             value={value}
-//             onChange={onChange}
-//             placeholder="Search or type command..."
-//             className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
-//           />
-
-//           <button
-//             type="button"
-//             className="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400"
-//           >
-//             <span> ⌘ </span>
-//             <span> K </span>
-//           </button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Search;
-
-
 import React, { forwardRef } from "react";
 
 type SearchProps = {
@@ -67,39 +11,39 @@ const Search = forwardRef<HTMLInputElement, SearchProps>(
     return (
       <div className="hidden lg:block">
         <form onSubmit={onSubmit}>
-          <div className="relative w-max">
-            <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
+          <div className="relative w-full max-w-xs xl:max-w-sm">
+            {/* Search Icon */}
+            <span className="absolute -translate-y-1/2 left-3 top-1/2 pointer-events-none text-slate-400 dark:text-slate-500">
               <svg
-              className="fill-gray-500 dark:fill-gray-400"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M3.04175 9.37363C3.04175 5.87693 5.87711 3.04199 9.37508 3.04199C12.8731 3.04199 15.7084 5.87693 15.7084 9.37363C15.7084 12.8703 12.8731 15.7053 9.37508 15.7053C5.87711 15.7053 3.04175 12.8703 3.04175 9.37363ZM9.37508 1.54199C5.04902 1.54199 1.54175 5.04817 1.54175 9.37363C1.54175 13.6991 5.04902 17.2053 9.37508 17.2053C11.2674 17.2053 13.003 16.5344 14.357 15.4176L17.177 18.238C17.4699 18.5309 17.9448 18.5309 18.2377 18.238C18.5306 17.9451 18.5306 17.4703 18.2377 17.1774L15.418 14.3573C16.5365 13.0033 17.2084 11.2669 17.2084 9.37363C17.2084 5.04817 13.7011 1.54199 9.37508 1.54199Z"
-              />
-            </svg>
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
             </span>
+
+            {/* High Density ERP Input Field */}
             <input
-              ref={ref} // now this is the forwarded ref
+              ref={ref}
               type="text"
               value={value}
               onChange={onChange}
-              placeholder="Search or type command..."
-              className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
+              placeholder="Search record..."
+              className="h-7 w-full max-w-[240px] xl:max-w-[320px] rounded border border-slate-200 bg-slate-50/50 py-1 pl-8 pr-12 text-[11px] font-medium text-slate-700 placeholder:text-slate-400 shadow-none transition-colors focus:border-slate-300 focus:bg-white focus:outline-none dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-300 dark:placeholder:text-slate-500 dark:focus:border-slate-700"
             />
 
-            <button
-              type="button"
-              className="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400"
-            >
-              <span> ⌘ </span>
-              <span> K </span>
-            </button>
+            {/* ERP Style Minimal Shortcut Badge */}
+            <div className="absolute right-1.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded border border-slate-200/60 bg-white px-1 py-0.5 text-[9px] font-semibold text-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-500 select-none pointer-events-none">
+              <span>⌘</span>
+              <span>K</span>
+            </div>
           </div>
         </form>
       </div>

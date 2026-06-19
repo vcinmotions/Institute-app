@@ -905,13 +905,13 @@ export default function AdmissionForm() {
     <div>
       <PageBreadcrumb pageTitle="Create Student Admission" />
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3 shadow-sm">
+      <div className="form-container">
         <div className="flex flex-col gap-6">
 
           {/* Header & Alerts */}
           <div className="border-b pb-4 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">Student Information</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to create a new student admission.</p>
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">Student Information</h2>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to create a new student admission.</p>
           </div>
 
           {alert.show && (
@@ -926,7 +926,7 @@ export default function AdmissionForm() {
           )}
 
           {/* Section 1: Personal Details */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Personal Details</h3>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 
@@ -1031,7 +1031,7 @@ export default function AdmissionForm() {
           </div>
 
           {/* Section 2: Contact Details */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Contact Details</h3>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 
@@ -1115,7 +1115,7 @@ export default function AdmissionForm() {
           </div>
 
           {/* Section 3: Course & Fee Details */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Course & Fee Details</h3>
 
             <div className="mb-5" ref={(el) => {
@@ -1346,7 +1346,7 @@ export default function AdmissionForm() {
           </div>
 
           {/* Section 4: Identity & Address Proof */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Identity & Address Proof</h3>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 
@@ -1454,7 +1454,7 @@ export default function AdmissionForm() {
           </div>
 
           {/* Section 5: Address Details */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Address Details</h3>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 
@@ -1520,7 +1520,7 @@ export default function AdmissionForm() {
           </div>
 
           {/* Section 6: Admission & Kit Details */}
-          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Admission & Kit Details</h3>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 
@@ -1599,7 +1599,7 @@ export default function AdmissionForm() {
               size="sm"
               tabIndex={18}
               variant="primary"
-              className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+              className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
               onClick={handleSubmit}
             >
               Save

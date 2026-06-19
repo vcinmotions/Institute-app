@@ -1,6 +1,5 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
+
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
@@ -9,52 +8,53 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Avatar from "../common/Avatar";
 
+// Apply extension globally once
+dayjs.extend(relativeTime);
+
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [notifying, setNotifying] = useState(false);
   const context = useNotifications();
 
-  if(!context) {
-    return <div>loading...</div>
+  if (!context) {
+    return <div className="animate-pulse w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800" />
   }
 
   const { notifications, unreadCount, markAllRead } = context;
 
   useEffect(() => {
-    if(notifications.length >= 1) {
+    if (unreadCount >= 1) {
       setNotifying(true);
+    } else {
+      setNotifying(false);
     }
-  }, [notifications])
-
-  function toggleDropdown() {
-    setIsOpen(!isOpen);
-  }
-
-  function closeDropdown() {
-    setIsOpen(false);
-  }
+  }, [unreadCount])
 
   const handleClick = () => {
-    toggleDropdown();
-    setNotifying(false);
+    setIsOpen(!isOpen);
+    // Optional: Mark as notifying false on click, 
+    // but better to rely strictly on unreadCount
   };
+
   return (
-    <div className="relative">
+    <div className="relative flex items-center">
       <button
-        className="relative dropdown-toggle flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-gray-700 h-11 w-11 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        className="group relative flex items-center justify-center rounded-full transition-all duration-200 border border-gray-200/80 bg-white/50 text-gray-500 shadow-sm backdrop-blur-sm h-9 w-9 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 active:scale-95 dark:border-gray-800 dark:bg-gray-950/40 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:bg-gray-900 dark:hover:text-white"
         onClick={handleClick}
+        aria-label={`Notifications (${unreadCount} unread)`}
       >
-        <span
-          className={`absolute right-0 top-0.5 z-10 h-2 w-2 rounded-full bg-orange-400 ${
-            !notifying ? "hidden" : "flex"
-          }`}
-        >
-          <span className="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 animate-ping"></span>
-        </span>
+        {/* Modern Dot Indicator */}
+        {notifying && unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-orange-500 px-1 font-mono text-[9px] font-bold text-white shadow-sm ring-1 ring-white/80 dark:ring-gray-900/80">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+            <span className="relative tabular-nums">{unreadCount > 9 ? '9+' : unreadCount}</span>
+          </span>
+        )}
+
         <svg
-          className="fill-current"
-          width="20"
-          height="20"
+          className="opacity-80 group-hover:opacity-100"
+          width="17"
+          height="17"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -66,80 +66,87 @@ export default function NotificationDropdown() {
           />
         </svg>
       </button>
+
       <Dropdown
         isOpen={isOpen}
-        onClose={closeDropdown}
-        className="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0"
+        onClose={() => setIsOpen(false)}
+        className="absolute -right-16 md:-right-1 top-8 mt-3 flex w-[320px] flex-col rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-950/95backdrop-blur-lg sm:w-[361px]"
       >
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 dark:border-gray-700">
-          <h5 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-            Notification
-          </h5>
-          <button
-            onClick={toggleDropdown}
-            className="text-gray-500 transition dropdown-toggle dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-          >
-            <svg
-              className="fill-current"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+        <div className="flex h-[400px] flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 pb-3 border-b border-gray-100 dark:border-gray-800">
+            <div className="flex items-center gap-2">
+              <h5 className="text-base font-semibold tracking-tight text-gray-950 dark:text-gray-100">
+                System notifications
+              </h5>
+              {unreadCount > 0 && (
+                <span className="font-mono text-[10px] font-bold text-gray-400 dark:text-gray-600">
+                  /{unreadCount}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="rounded-md p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-400"
             >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M6.21967 7.28131C5.92678 6.98841 5.92678 6.51354 6.21967 6.22065C6.51256 5.92775 6.98744 5.92775 7.28033 6.22065L11.999 10.9393L16.7176 6.22078C17.0105 5.92789 17.4854 5.92788 17.7782 6.22078C18.0711 6.51367 18.0711 6.98855 17.7782 7.28144L13.0597 12L17.7782 16.7186C18.0711 17.0115 18.0711 17.4863 17.7782 17.7792C17.4854 18.0721 17.0105 18.0721 16.7176 17.7792L11.999 13.0607L7.28033 17.7794C6.98744 18.0722 6.51256 18.0722 6.21967 17.7794C5.92678 17.4865 5.92678 17.0116 6.21967 16.7187L10.9384 12L6.21967 7.28131Z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-        </div>
-        <ul className="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-          {notifications.length === 0 ? (
-            <li className="text-center text-sm text-gray-500 dark:text-gray-400 py-4">
-              No notifications yet.
-            </li>
-          ) : (
-            notifications.map((notification, index) => (
-              <li key={index}>
-                <DropdownItem
-                  onItemClick={closeDropdown}
-                  className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                >
-                  <span className="relative block w-full h-10 rounded-full z-1 max-w-10">
-                    {/* <Image
-                      width={40}
-                      height={40}
-                      src="/images/user/user-05.jpg"
-                      alt="Notification"
-                      className="w-full overflow-hidden rounded-full"
-                    /> */}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M1 1l12 12M13 1L1 13" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
 
-                    <Avatar name={notification.notificationMessage} size={42} />
-                  </span>
-                  <span className="block">
-                    <span className="mb-1.5 block text-theme-sm text-gray-800 dark:text-white/90">
-                      {notification.notificationMessage}
-                    </span>
-                    <span className="text-theme-xs text-gray-500 dark:text-gray-400">
-                      {dayjs(notification.createdAt).fromNow()}
-                    </span>
-                  </span>
-                </DropdownItem>
-              </li>
-            ))
+          {/* Body */}
+          <div className="grow overflow-y-auto custom-scrollbar p-1.5">
+            {notifications.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full gap-2 p-6 text-center">
+                <div className="rounded-full bg-gray-100 p-2 dark:bg-gray-800">
+                  <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.287a6 6 0 010 7.427M13.812 10.938a3 3 0 010 2.124M10 12a2 2 0 110-4 2 2 0 010 4zM2 12v.01M6.5 21v.01" />
+                  </svg>
+                </div>
+                <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">All clear!</p>
+                <p className="text-[11px] text-gray-500 dark:text-gray-400">You don't have any new system alerts or user updates.</p>
+              </div>
+            ) : (
+              <ul className="flex flex-col gap-1">
+                {notifications.map((notification, index) => (
+                  <li key={index}>
+                    <DropdownItem
+                      onItemClick={() => setIsOpen(false)}
+                      className="flex items-start gap-3 rounded-lg p-2.5 hover:bg-gray-100 dark:hover:bg-gray-800/60"
+                    >
+                      <Avatar name={notification.notificationMessage} size={32} />
+                      <div className="grow">
+                        <p className="text-xs font-medium leading-relaxed text-gray-800 dark:text-gray-200">
+                          {notification.notificationMessage}
+                        </p>
+                        <time className="mt-1 font-mono text-[10px] text-gray-500 dark:text-gray-400">
+                          {dayjs(notification.createdAt).fromNow()}
+                        </time>
+                      </div>
+                      {/* {!notification.isRead && (
+                        <div className="mt-1 w-1.5 h-1.5 rounded-full bg-brand-500" />
+                      )} */}
+                    </DropdownItem>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Footer */}
+          {notifications.length >= 1 && (
+            <div className="p-3 mt-auto border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/20 rounded-b-xl">
+              <button
+                onClick={markAllRead}
+                className="w-full h-8 flex items-center justify-center gap-1.5 rounded-lg border border-gray-200/80 bg-white text-xs font-semibold text-gray-700 shadow-sm transition-colors hover:border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                Mark all notifications as read
+              </button>
+            </div>
           )}
-        </ul>
-        { notifications.length >= 1 && <div onClick={markAllRead}
-          className="block px-4 py-2 mt-3 text-sm font-medium text-center text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 cursor-pointer"
-        >
-          marked As Read!
-        </div>}
+        </div>
       </Dropdown>
     </div>
   );
 }
-
-
-dayjs.extend(relativeTime); // ✅ This line is required

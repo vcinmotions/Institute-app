@@ -13,8 +13,10 @@ import { setCurrentPage, setSearchQuery, setSources, setTotal, setTotalPages } f
 import SourceDataTable from "@/components/tables/SourceDataTable";
 import ComponentCard from "@/components/common/ComponentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
+import { useRouter } from "next/navigation";
 
 export default function SourceTable() {
+  const router = useRouter()
   const dispatch = useDispatch<AppDispatch>();
   const {
     sources,
@@ -69,16 +71,29 @@ export default function SourceTable() {
     if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
   }, [dispatch, totalPages]);
 
+  const handleCreateClick = () => {
+    router.push("/dashboard/source/create")
+  };
 
   return (
     <div>
       <div className="space-y-6">
-        <ComponentCard title="Source Lists" createUrl="/dashboard/source/create" createLabel="Create Source">
-          <Search
-            value={searchInput}
-            onChange={handleSearchChange}
-            onSubmit={handleSearchSubmit}
-          />
+        <div className="flex flex-col justify-between gap-4">
+          <div className="flex justify-between">
+            <Search
+              value={searchInput}
+              onChange={handleSearchChange}
+              onSubmit={handleSearchSubmit}
+            />
+
+            <button
+              type="button"
+              onClick={handleCreateClick}
+              className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+            >
+              + Create Record
+            </button>
+          </div>
 
           <SourceDataTable
             sources={sources}
@@ -93,7 +108,7 @@ export default function SourceTable() {
             totalCount={total}
             onPageChange={handlePagination}
           />
-        </ComponentCard>
+        </div>
       </div>
 
     </div>

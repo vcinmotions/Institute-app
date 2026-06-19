@@ -2,8 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useCourseStore } from "@/store/courseStore";
 import { useRouter } from "next/navigation";
-
-import { useCreateCourse } from "@/hooks/useCreateCourseData";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Alert from "@/components/ui/alert/Alert";
 import Label from "@/components/form/Label";
@@ -11,10 +9,9 @@ import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
 import { ChevronDownIcon } from "@/icons";
 import Button from "@/components/ui/button/Button";
-import Checkbox from "@/components/form/input/Checkbox";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
-import { useFetchAllCourses, useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourses } from "@/store/slices/courseSlice";
@@ -27,9 +24,8 @@ type FormErrors = Partial<Record<keyof TaskData, string>>;
 interface TaskData {
   batchId: string;
   courseId: string;
-  name: string; // ✅ this matches backend
+  name: string;
 }
-
 
 export default function TaskForm() {
   const router = useRouter();
@@ -40,7 +36,6 @@ export default function TaskForm() {
     courseId: "",
   });
 
-  // New state for alert
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -67,31 +62,20 @@ export default function TaskForm() {
     firstInputRef.current?.focus();
   }, []);
 
-  const {
-    data: courseData,
-    isLoading: courseLoading,
-    isError: courseError,
-  } = useFetchAllCourses();
-
-  const {
-    data: batchData,
-    isLoading: batchLoading,
-    isError: batchError,
-  } = useFetchAllBatches();
+  const { data: courseData } = useFetchAllCourses();
+  const { data: batchData } = useFetchAllBatches();
 
   useEffect(() => {
     if (courseData?.course) {
       dispatch(setCourses(courseData.course));
-    };
+    }
   }, [courseData, dispatch]);
 
   useEffect(() => {
-    console.log("get all batches data;", batchData);
     if (batchData?.batch) {
       dispatch(setBatches(batchData.batch));
-    };
+    }
   }, [batchData, dispatch]);
-  console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
@@ -117,16 +101,14 @@ export default function TaskForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newTask.batchId.trim()) {
-      newErrors.batchId = "Batch Id is required.";
-    }
-
     if (!newTask.name.trim()) {
-      newErrors.name = "Name is required.";
+      newErrors.name = "Task name is required.";
     }
-
     if (!newTask.courseId.trim()) {
-      newErrors.courseId = "Course Id is required.";
+      newErrors.courseId = "Course selection is required.";
+    }
+    if (!newTask.batchId.trim()) {
+      newErrors.batchId = "Batch selection is required.";
     }
 
     setErrors(newErrors);
@@ -139,22 +121,15 @@ export default function TaskForm() {
   };
 
   const handleChange = (field: keyof TaskData, value: string) => {
-
     setNewTask((prev) => ({
       ...prev,
       [field]: value,
     }));
-
-    setField(field, value); // <-- IMPORTANT
-
-    // Clear error on change
-    setErrors((prev) => ({
-      ...prev,
-      [field]: "",
-    }));
+    setField(field, value);
+    setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const { isValid, errors: validationErrors } = validate();
 
     if (!isValid) {
@@ -165,13 +140,11 @@ export default function TaskForm() {
         variant: "error",
       });
 
-      scrollToError(validationErrors); // ✅ ALWAYS WORKS
-
+      scrollToError(validationErrors);
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 2000);
-
-      return; // ⛔ mutation never runs
+      return;
     }
 
     const token = sessionStorage.getItem("token");
@@ -182,21 +155,15 @@ export default function TaskForm() {
         message: "Token not found. Please log in again.",
         variant: "error",
       });
-
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
-
       return;
     }
 
-
-    const normalizedCourse = {
+    const normalizedTask = {
       ...newTask,
       name: titleCase(newTask.name),
     };
 
-    createTask(normalizedCourse, {
+    createTask(normalizedTask, {
       onSuccess: () => {
         setNewTask({
           batchId: "",
@@ -206,117 +173,140 @@ export default function TaskForm() {
 
         setAlert({
           show: true,
-          title: "Course Created",
-          message: "Course has been successfully created.",
-          variant: "success",
+          title: "Success",
+          message: "Task has been successfully created.",
+          variant: "Success",
         });
 
         reset();
-
         setTimeout(() => {
-          // redirect("/dashboard/course");
           router.back();
         }, 1000);
       },
-
       onError: () => {
-        // You already handle error via redux + toast
         window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });
   };
 
-  console.log("GET COURSE DATA IN STORE:", form);
-  console.log("GET NEW COURSE DATA:", newTask);
+  const handleCancel = () => {
+    router.back();
+  };
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Create Course" />
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3">
+      <PageBreadcrumb pageTitle="Create Task" />
 
-        <div className="space-y-8">
-          <h2 className="border-b pb-6 dark:text-gray-50 dark:border-gray-700">Course Infomation</h2>
+      <div className="form-container">
+        <div className="flex flex-col gap-6">
 
+          {/* Header & Alerts */}
+          <div className="border-b pb-4 dark:border-gray-700">
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">
+              Task Information
+            </h2>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">
+              Fill in the details below to log a new academic assignments milestone.
+            </p>
+          </div>
+
+          {/* Alert Messages */}
           {alert.show && (
             <Alert
-              variant={alert.title === "Course Created" ? "success" : "error"}
+              variant={alert.variant === "Success" ? "success" : "error"}
               title={alert.title}
               message={alert.message}
               showLink={false}
             />
           )}
 
-          <div ref={(el) => {
-            inputRefs.current.name = el;
-          }}>
-            <Label>Task Name *</Label>
-            <Input
-              ref={firstInputRef}
-              type="text"
-              placeholder="Ex. Full Stack Developer"
-              value={titleCase(newTask.name)}
-              onChange={(e) => handleChange("name", e.target.value)}
-            />
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name}</p>
-            )}
-          </div>
+          {/* Form Grouping: Task Configurations */}
+          <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+              Assignment Parameters
+            </h3>
 
-          <div>
-            <Label>
-              Select Course *{" "}
-            </Label>
-            <div className="relative" data-master="course">
-              <Select
-                tabIndex={5}
-                options={courseOptions}
-                placeholder="Select an option"
-                onChange={(value) => handleChange("courseId", value)}
-                className="dark:bg-dark-900"
-              />
-              <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                <ChevronDownIcon />
-              </span>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+
+              {/* Task Name Input */}
+              <div ref={(el) => { if (inputRefs.current) inputRefs.current.name = el; }}>
+                <Label>Task Name *</Label>
+                <Input
+                  ref={firstInputRef}
+                  type="text"
+                  placeholder="Ex. Final Capstone Presentation"
+                  value={titleCase(newTask.name)}
+                  onChange={(e) => handleChange("name", e.target.value)}
+                  className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                )}
+              </div>
+
+              {/* Course Selection dropdown */}
+              <div ref={(el) => { if (inputRefs.current) inputRefs.current.courseId = el; }}>
+                <Label>Select Course *</Label>
+                <div className="relative">
+                  <Select
+                    tabIndex={2}
+                    options={courseOptions}
+                    placeholder="Choose course option"
+                    onChange={(value) => handleChange("courseId", value)}
+                    className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                  />
+                  <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
+                {errors.courseId && (
+                  <p className="mt-1 text-sm text-red-500">{errors.courseId}</p>
+                )}
+              </div>
+
+              {/* Batch Selection dropdown */}
+              <div className="md:col-span-2 lg:col-span-1" ref={(el) => { if (inputRefs.current) inputRefs.current.batchId = el; }}>
+                <Label>Select Batch *</Label>
+                <div className="relative">
+                  <Select
+                    tabIndex={3}
+                    options={batchOptions}
+                    placeholder="Choose batch timetable"
+                    onChange={(value) => handleChange("batchId", value)}
+                    className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                  />
+                  <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
+                {errors.batchId && (
+                  <p className="mt-1 text-sm text-red-500">{errors.batchId}</p>
+                )}
+              </div>
+
             </div>
-            {errors.courseId && (
-              <p className="text-sm text-red-500">{errors.courseId}</p>
-            )}
           </div>
 
-          <div ref={(el) => {
-            inputRefs.current.batchId = el;
-          }}>
-            <Label>Select Batch *</Label>
-            <div className="relative" data-master="batch">
-              <Select
-                tabIndex={6}
-                options={batchOptions}
-                placeholder="Select an option"
-                onChange={(value) => handleChange("batchId", value)}
-                className="dark:bg-dark-900"
-              />
-              <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                <ChevronDownIcon />
-              </span>
-            </div>
-            {errors.batchId && (
-              <p className="text-sm text-red-500">{errors.batchId}</p>
-            )}
-          </div>
-
-          <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
-            {/* <Button
+          {/* Action Footer Wrapper Bar */}
+          <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
+            <Button
               size="sm"
               variant="outline"
-              tabIndex={8}
-              onClick={handleResetForm}
+              onClick={handleCancel}
+              className="min-w-[100px] rounded border border-gray-300 bg-white py-1 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             >
-              Clear
-            </Button> */}
-            <Button size="sm" variant="primary" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
-              Save
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={handleSubmit}
+              className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
+            >
+              Save Task
             </Button>
           </div>
+
         </div>
       </div>
     </div>

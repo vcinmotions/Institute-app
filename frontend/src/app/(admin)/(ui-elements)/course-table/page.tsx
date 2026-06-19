@@ -110,31 +110,32 @@ export default function CourseTable() {
   return (
     <div>
       <div className="space-y-6">
-        <StudentCard title="Course Lists" onCreateClick={handleCreateClick}>
+        <div className="flex justify-between">
           <Search
             value={searchInput}
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+        </div>
 
-          <CourseDataTable
-            courses={courses}
-            batch={batch}
-            loading={loading}
-            onSort={handleSort}
-            sortField={sortField}
-            sortOrder={sortOrder}
-          />
+        <CourseDataTable
+          courses={courses}
+          batch={batch}
+          loading={loading}
+          onSort={handleSort}
+          sortField={sortField}
+          sortOrder={sortOrder}
+        />
 
-          <Pagination
-            currentPage={currentPage}
-            limit={PAGE_SIZE}
-            totalPages={totalPages}
-            totalCount={total}
-            title="Courses"
-            onPageChange={handlePagination}
-          />
-        </StudentCard>
+        <Pagination
+          currentPage={currentPage}
+          limit={PAGE_SIZE}
+          totalPages={totalPages}
+          totalCount={total}
+          title="Courses"
+          onPageChange={handlePagination}
+        />
+
       </div>
 
       {showForm && <CourseForm onCloseModal={handleCloseModal} batch={batch} />}
