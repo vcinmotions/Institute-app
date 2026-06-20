@@ -4,28 +4,21 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { AppDispatch } from "@/store";
-import StudentCard from "@/components/common/StudentCard";
 import Search from "@/components/form/input/Search";
 import FilterBox from "@/components/form/input/FilterBox";
 import EnquiryDataTable from "@/components/tables/EnquiryDataTable";
 import Pagination from "@/components/tables/Pagination";
 import useDebounce from "@/hooks/useDebounce";
-import { Tooltip } from "@heroui/react";
 
 import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 
 import {
   setCurrentPage,
-  setEnquiries,
   setFilters,
   setLeadStatus,
-  setLoading,
   setSearchQuery,
   setSort,
-  setTotal,
-  setTotalPages,
 } from "@/store/slices/enquirySlice";
-import { setCourses } from "@/store/slices/courseSlice";
 import { LEAD_STATUS_FILTER_OPTIONS } from "@/components/common/LeadStatus";
 import { LEAD_STATUS_OPTIONS } from "@/domain/enquiry/leadStatus";
 import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
@@ -35,16 +28,12 @@ export default function EnquiryTable() {
   const dispatch = useDispatch<AppDispatch>();
 
   const {
-    enquiries,
     sortField,
     sortOrder,
     leadStatus,
     filters,
-    loading,
     searchQuery,
     currentPage,
-    totalPages,
-    total
   } = useSelector((state: RootState) => state.enquiry);
 
   const [searchInput, setSearchInput] = useState("");
@@ -70,27 +59,6 @@ export default function EnquiryTable() {
   const totalCount = data?.total || 0;
   const totalPagesCount = data?.totalPages || 1;
 
-  // ✅ Reset page to 1 on navigation (mount)
-  useEffect(() => {
-    dispatch(setCurrentPage(1));
-  }, [dispatch]);
-
-  useEffect(() => {
-    console.log("useFetchEnquiry TRIGGERED IN ENQUIRY-TABLE", data)
-    if (data) {
-      dispatch(setEnquiries(data.data || []));
-      dispatch(setTotal(data.total || 0));
-      dispatch(setTotalPages(data.totalPages || 1));
-    }
-  }, [data, dispatch]);
-
-  // --- Load courses into Redux
-  useEffect(() => {
-    if (courseData?.course?.length) {
-      dispatch(setCourses(courseData.course));
-    }
-  }, [courseData, dispatch]);
-
   // --- Debounced search and Set delay time according to your needs
   const debouncedSearchTerm = useDebounce(searchInput, 300);
 
@@ -107,11 +75,6 @@ export default function EnquiryTable() {
     setSearchInput(e.target.value);
   }, []);
 
-  const handleReload = useCallback(() => {
-    dispatch(setCurrentPage(1));
-    dispatch(setSearchQuery(searchQuery));
-  }, [dispatch, searchQuery]);
-
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     dispatch(setCurrentPage(1));
@@ -121,9 +84,9 @@ export default function EnquiryTable() {
     Math.min(Math.max(value, min), max);
 
   const handlePagination = useCallback((page: number) => {
-    const safePage = clamp(page, 1, totalPages);
+    const safePage = clamp(page, 1, totalPagesCount);
     dispatch(setCurrentPage(safePage));
-  }, [dispatch, totalPages]);
+  }, [dispatch, totalPagesCount]);
 
   const handleSort = useCallback((field: string) => {
     console.log("SORTORDER IN ENQUIRY TABLE:", sortField, sortOrder, field);
@@ -146,15 +109,12 @@ export default function EnquiryTable() {
 
   // --- Course options for filter (memoized)
   const courseOptions = useMemo(() => {
-    return courses.map(c => ({ label: c.name, value: c.id }));
-  }, [courses]);
-
-  console.log("get ENQUURY SEARCH DATA:", searchQuery);
+    return courseData?.course.map(c => ({ label: c.name, value: c.id }));
+  }, [courseData]);
 
   return (
     <div>
       <div className="space-y-6">
-        {/* <StudentCard title="Enquiry Lists"> */}
         <div className="flex justify-between items-end w-full">
           <Search
             value={searchInput}
@@ -184,13 +144,12 @@ export default function EnquiryTable() {
 
         <Pagination
           currentPage={currentPage}
-          totalCount={total}
+          totalCount={totalCount}
           limit={PAGE_SIZE}
-          totalPages={totalPages}
+          totalPages={totalPagesCount}
           title="Enquiries"
           onPageChange={handlePagination}
         />
-        {/* </StudentCard> */}
       </div>
     </div>
   );

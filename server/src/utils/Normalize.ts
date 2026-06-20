@@ -36,8 +36,12 @@ export function titleCase(str: string = ""): string {
  * Normalize email
  * "  TEST@MAIL.COM " → "test@mail.com"
  */
-export function normalizeEmail(email: string = ""): string {
-  return email.trim().toLowerCase();
+export function normalizeEmail(
+  email?: string | null
+): string | null {
+  const normalized = email?.trim().toLowerCase();
+
+  return normalized ? normalized : null;
 }
 
 /**

@@ -1,86 +1,90 @@
 "use client";
-import Search from "@/components/form/input/Search";
 
-import Pagination from "@/components/tables/Pagination";
-import { getStudent } from "@/lib/api";
-import { useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store"; // Adjust path if needed
-import { useDispatch } from "react-redux";
 import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
-import StudentCard from "@/components/common/StudentCard";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+
+// Components & UI Elements
+import Search from "@/components/form/input/Search";
+import Pagination from "@/components/tables/Pagination";
 import StudentDataTable from "@/components/tables/StudentDataTable";
-import { setCurrentPage, setFilters, setSearchQuery, setSort, setStudents, setTotal, setTotalPages } from "@/store/slices/studentSlice";
-import { setBatches } from "@/store/slices/batchSlice";
-import { setCourses } from "@/store/slices/courseSlice";
-import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import FilterBox from "@/components/form/input/FilterBox";
-import { Tooltip } from "@heroui/react";
+
+// Hooks & Store Reducers
 import useDebounce from "@/hooks/useDebounce";
+import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { PAGE_SIZE } from "@/constants/pagination";
+import {
+  setCurrentPage,
+  setFilters,
+  setSearchQuery,
+  setSort
+} from "@/store/slices/studentSlice";
+import { setBatches } from "@/store/slices/batchSlice";
+import { setCourses } from "@/store/slices/courseSlice";
+import { useFetchStudent } from "@/hooks/queries/useQueryFetchStudent";
 
 export default function StudentTable() {
-  const { students, error } = useSelector((state: RootState) => state.student);
-  const totalCount = useSelector((state: RootState) => state.student.total);
+  const dispatch = useDispatch<AppDispatch>();
+  const [searchInput, setSearchInput] = useState("");
+
+  // 1. Grab metadata arrays directly out of state slices
   const batch = useSelector((state: RootState) => state.batch.batches);
   const course = useSelector((state: RootState) => state.course.courses);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [searchInput, setSearchInput] = useState("");
-  const dispatch = useDispatch<AppDispatch>();
 
+  // 2. Pull operational search and pagination query dependencies from slice
   const {
     currentPage,
     searchQuery,
-    totalPages,
     filters,
     sortField,
     sortOrder,
   } = useSelector((state: RootState) => state.student);
 
-  console.log("Get Student All:", students);
+  // Safe Token retrieval block
+  const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
 
-  // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
-  // Update searchInput immediately on typing
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  };
-
+  // 3. Bind master student query data mapping seamlessly to your hook
   const {
-    data: courseData,
-    isLoading: courseLoading,
-    isError: courseError,
-  } = useFetchCourse();
+    data: studentApiResponse,
+    isLoading: isStudentLoading,
+    isFetching: isStudentFetching,
+  } = useFetchStudent({
+    token,
+    currentPage,
+    searchQuery,
+    limit: PAGE_SIZE,
+    sortField,
+    sortOrder,
+    filters,
+  });
 
-  const {
-    data: batchData,
-    isLoading: batchLoading,
-    isError: batchError,
-  } = useFetchAllBatches({ onlyAvailable: true });
+  // 4. Fetch metadata using React Query parallel executions
+  const { data: courseData } = useFetchCourse();
+  const { data: batchData } = useFetchAllBatches({ onlyAvailable: true });
 
+  // Sync Course metadata into slice when fetched
   useEffect(() => {
     if (courseData?.course) {
       dispatch(setCourses(courseData.course));
     }
   }, [courseData, dispatch]);
 
+  // Sync Batch metadata into slice when fetched
   useEffect(() => {
     if (batchData?.batch) {
       dispatch(setBatches(batchData.batch));
-    };
+    }
   }, [batchData, dispatch]);
 
-  console.log("GET COURSE DATA in STUDENT TABLE:", course);
-  console.log("GET BATCH DATA in STUDENT TABLE:", batch);
+  // Handle immediate keyboard input feedback loop
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
 
-  const courseOptions = course.map(course => ({
-    label: course.name,   // what user sees
-    value: course.id,     // what backend uses
-  }));
-
-  // --- Debounced search and Set delay time according to your needs
+  // Sync debounced string value down to search controller parameters
   const debouncedSearchTerm = useDebounce(searchInput, 300);
-
-  // 2. sync debounced value to Redux
   useEffect(() => {
     if (debouncedSearchTerm !== searchQuery) {
       dispatch(setSearchQuery(debouncedSearchTerm));
@@ -88,52 +92,23 @@ export default function StudentTable() {
     }
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
+  // Generate clean select field configurations for the filter box
+  const courseOptions = course.map((c) => ({
+    label: c.name,
+    value: c.id,
+  }));
 
-  // Fetch data on mount or when filters change
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        console.error("Token missing from sessionStorage");
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const response = await getStudent({
-          token,
-          page: currentPage,
-          limit: PAGE_SIZE,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-          ...filters
-        });
-
-        dispatch(setStudents(response.data || []));
-        dispatch(setTotalPages(response.totalPages || 1));
-        dispatch(setCurrentPage(currentPage || 1)); // reset page when search changes
-        dispatch(setTotal(response.total || 0));
-      } catch (error) {
-        console.error("Error fetching students:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, filters]);
-
-  // --- Handlers (memoized)
-
+  // --- Memoized Handler Actions ---
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     dispatch(setCurrentPage(1));
   }, [dispatch]);
 
   const handlePagination = useCallback((page: number) => {
-    if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
-  }, [dispatch, totalPages]);
+    if (studentApiResponse?.totalPages && page >= 1 && page <= studentApiResponse.totalPages) {
+      dispatch(setCurrentPage(page));
+    }
+  }, [dispatch, studentApiResponse?.totalPages]);
 
   const handleSort = useCallback((field: string) => {
     const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
@@ -142,64 +117,49 @@ export default function StudentTable() {
 
   const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
     dispatch(setFilters(selectedFilters));
+    dispatch(setCurrentPage(1)); // Reset back to baseline pagination page on filter shifts
   }, [dispatch]);
 
+  // Pull out safely initialized values from React Query mapping boundaries
+  // Note: Depending on your backend response shape, adjust `studentApiResponse?.student` 
+  // to `studentApiResponse?.data` if your endpoint wraps paginated listings inside an inner block.
+  const recordsList = (studentApiResponse as any)?.data || studentApiResponse?.student || [];
+  const totalCount = studentApiResponse?.total || 0;
+  const computedTotalPages = studentApiResponse?.totalPages || 1;
 
   return (
     <div>
       <div className="space-y-6">
         <div className="flex justify-between w-full items-end">
-          <Search
-            value={searchInput}
-            onChange={handleSearchChange}
-            onSubmit={handleSearchSubmit}
-          />
+          <div className="flex items-center gap-3 w-full">
+            <Search
+              value={searchInput}
+              onChange={handleSearchChange}
+              onSubmit={handleSearchSubmit}
+            />
+          </div>
 
-          <div className="flex justify-centre items-center gap-3">
+          <div className="flex justify-center items-center gap-3">
             <FilterBox
               onFilterChange={handleFilters}
               filterFields={[
                 {
                   label: "Course",
-                  key: "courseId", // 🔑 important
+                  key: "courseId",
                   type: "select",
                   options: courseOptions,
                 },
                 { label: "Admission Date", key: "admissionDate", type: "date" },
               ]}
             />
-            <span
-              className="cursor-pointer"
-              onClick={() => {
-                dispatch(setCurrentPage(1));       // 👈 reset to page 1
-                dispatch(setSearchQuery(searchQuery));
-              }}
-            >
-              <Tooltip
-                className="rounded bg-gray-200 text-[10px]"
-                content="Reload"
-              >
-                <div className="items-center rounded-lg border border-gray-200 bg-gray-50 px-[10px] py-[10px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
-                  <svg
-                    className="dark:text-gray-300"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path d="M2 10C2 10 4.00498 7.26822 5.63384 5.63824C7.26269 4.00827 9.5136 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.89691 21 4.43511 18.2543 3.35177 14.5M2 10V4M2 10H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              </Tooltip>
-            </span>
           </div>
         </div>
 
         <StudentDataTable
-          students={students}
+          students={recordsList}
           batch={batch}
           course={course}
-          loading={loading}
+          loading={isStudentLoading}
           onSort={handleSort}
           sortField={sortField}
           sortOrder={sortOrder}
@@ -208,7 +168,7 @@ export default function StudentTable() {
         <Pagination
           currentPage={currentPage}
           limit={PAGE_SIZE}
-          totalPages={totalPages}
+          totalPages={computedTotalPages}
           totalCount={totalCount}
           title="Students"
           onPageChange={handlePagination}

@@ -6,9 +6,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Badge from "../ui/badge/Badge";
-import { useSelector } from "react-redux";
 import Button from "../ui/button/Button";
-import { RootState } from "@/store";
 import { useRouter } from "next/navigation";
 import Avatar from "../common/Avatar";
 import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
@@ -30,14 +28,6 @@ export default function AdmissionDataTable({
   sortOrder,
 }: AdmissionDataTableProps) {
   const router = useRouter();
-  const admission = useSelector(
-    (state: RootState) => state.admission.admissions,
-  );
-
-  console.log(
-    "Get Enquiries to Proceed With Admission:",
-    admission,
-  );
 
   const handleEditAdmission = (id: string) => {
     router.push(`/dashboard/admission/edit?id=${id}`);
@@ -113,8 +103,12 @@ export default function AdmissionDataTable({
 
             {/* High Density Data Cells */}
             <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {admission && admission.length > 0 ? (
-                admission.map((item: any) => (
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="py-3 text-center text-xs text-slate-400">Loading master records...</TableCell>
+                </TableRow>
+              ) : admissions && admissions.length > 0 ? (
+                admissions.map((item: any) => (
                   <TableRow key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors">
                     <TableCell className="px-3 py-1.5">
                       <div className="flex items-center gap-2.5">

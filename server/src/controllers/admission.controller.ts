@@ -563,6 +563,10 @@ export async function getStudentCourseController(req: Request, res: Response) {
 
     console.log("get allClientAdmin in getEnquiryController:", allClientAdmin);
 
+    const student = await tenantPrisma.student.findUnique({
+      where: { id: parseInt(id) },
+    });
+
     const studentCourses = await tenantPrisma.studentCourse.findMany({
       where: { studentId: parseInt(id) },
       include: {
@@ -597,7 +601,8 @@ export async function getStudentCourseController(req: Request, res: Response) {
     );
 
     return res.status(200).json({
-      message: "Students Course fetched successfully",
+      message: "Students And Course fetched successfully",
+      student,
       detailedCourses,
     });
 

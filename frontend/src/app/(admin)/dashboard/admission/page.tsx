@@ -11,12 +11,10 @@ export const metadata: Metadata = {
 export default function Admission() {
   return (
     <RoleProtected allowedRoles={["ADMIN"]}>
-      <div>
-        <PageBreadcrumb pageTitle="Admission" />
-        
-            <AdmissionTable />
-          </div>
-        
+      <PageBreadcrumb pageTitle="Admission" />
+
+      <AdmissionTable />
+
     </RoleProtected>
   );
 }

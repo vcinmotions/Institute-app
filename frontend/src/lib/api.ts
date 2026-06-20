@@ -11,6 +11,12 @@ interface GetEnquiryParams {
   sortOrder?: "asc" | "desc";
   leadStatus?: "HOT" | "WARM" | "COLD" | "LOST" | "HOLD" | null;
 }
+
+interface GetStudentByIdParams {
+  token: string;
+  studentId: string;
+}
+
 interface GetNotificationParams {
   token: string;
   page?: number;
@@ -603,6 +609,19 @@ export const getStudent = async ({
   return response.data;
 };
 
+export const getStudentById = async ({
+  token,
+  studentId
+}: GetStudentByIdParams) => {
+  const response = await apiClient.get(`/students/${studentId}/courses`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
 // 🔧 FIXED getUser API with token header
 export const getStudentCourse = async ({
   token,
@@ -815,8 +834,10 @@ export const getFaculty = async ({
   return response.data;
 };
 
-// 🔧 FIXED getUser API with token header
-export const getFollowUp = async (token: string, id: any) => {
+// 🔧 FIXED API call with proper types
+export const getFollowUp = async (token: string | null, id: string | null) => {
+  if (!token || !id) throw new Error("Missing authentication token or Enquiry ID");
+
   const response = await apiClient.get(`/followup/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,

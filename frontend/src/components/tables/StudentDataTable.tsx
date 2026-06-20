@@ -1,23 +1,22 @@
-import React, { useEffect } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
-import { useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+
+// Components & UI Elements
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
 import Button from "../ui/button/Button";
 import AdmissionForm from "../common/AdmissionForm";
-import { Student } from "@/types/student";
 import CourseForm from "../form/form-elements/AddCourseToStudentForm";
+import EditStudentForm from "../form/form-elements/EditStudentForm";
+import Avatar from "../common/Avatar";
+
+// Store & API Utilities
 import { RootState } from "@/store";
 import { getUser } from "@/lib/api";
 import { setLoading, setUser } from "@/store/slices/authSlice";
-import EditStudentForm from "../form/form-elements/EditStudentForm";
-import Avatar from "../common/Avatar";
+import { Student } from "@/types/student";
 
 type StudentDataTableProps = {
   students: any[];
@@ -38,37 +37,44 @@ export default function StudentDataTable({
   sortField,
   sortOrder,
 }: StudentDataTableProps) {
-  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
-  const [showCourseForm, setShowCourseForm] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const user = useSelector((state: RootState) => state.auth.user);
+  // Local Component States
+  const [showAdmissionForm, setShowAdmissionForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [showCourseForm, setShowCourseForm] = useState(false);
+
   const [studentId, setStudentId] = useState<string | null>(null);
   const [studentDetails, setStudentDetails] = useState<Student | null>(null);
 
-  // Sorting Handler logic matching ERP behavior
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  // Sorting Handler behavior
   const handleSort = (field: string) => {
     onSort(field);
   };
 
+  // ✅ FIXED: Clean cleanup handlers to prevent row re-click freezing bugs
   const handleCloseAdmissionModal = () => {
     setShowAdmissionForm(false);
+    setStudentId(null);
+    setStudentDetails(null);
   };
 
   const handleCloseEditStudentModal = () => {
     setShowEditForm(false);
+    setStudentId(null);
+    setStudentDetails(null);
   };
 
   const handleCloseCourseModal = () => {
     setShowCourseForm(false);
+    setStudentId(null);
+    setStudentDetails(null);
   };
 
   const handleAdmissionForm = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
     const details = students.find((item) => item.id === id);
     if (!details) return;
 
@@ -78,9 +84,6 @@ export default function StudentDataTable({
   };
 
   const handleEditForm = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
     const details = students.find((item) => item.id === id);
     if (!details) return;
 
@@ -90,9 +93,6 @@ export default function StudentDataTable({
   };
 
   const handleCourseForm = (id: any) => {
-    const token = sessionStorage.getItem("token");
-    if (!token) return;
-
     const details = students.find((item) => item.id === id);
     if (!details) return;
 
@@ -120,7 +120,7 @@ export default function StudentDataTable({
           return;
         }
 
-        setLoading(false);
+        dispatch(setLoading(false));
       } catch (err) {
         console.error("❌ Error fetching user:", err);
       }
@@ -134,97 +134,44 @@ export default function StudentDataTable({
       <div className="max-w-full overflow-x-auto">
         <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
           <Table className="w-full border-collapse text-left">
-            {/* ERP Style Table Header matching your exact theme requirements */}
             <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
-                <TableCell
-                  isHeader
-                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
-                >
-                  User
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
-                >
-                  Email
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
-                >
-                  Contact
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
-                >
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 font-semibold uppercase hover:text-slate-700 dark:hover:text-slate-200"
-                    onClick={() => handleSort("admissionDate")}
-                  >
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">User</TableCell>
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email</TableCell>
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Contact</TableCell>
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <button type="button" className="flex items-center gap-1 font-semibold uppercase hover:text-slate-700 dark:hover:text-slate-200" onClick={() => handleSort("admissionDate")}>
                     Admission Date
                     <span className="text-[9px] opacity-70">
-                      {sortField !== "admissionDate"
-                        ? "↕"
-                        : sortOrder === "asc"
-                          ? "↑"
-                          : "↓"}
+                      {sortField !== "admissionDate" ? "↕" : sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   </button>
                 </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
-                >
-                  Add New Course
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
-                >
-                  Admission Form
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
-                >
-                  Edit Details
-                </TableCell>
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Add New Course</TableCell>
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Admission Form</TableCell>
+                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Edit Details</TableCell>
               </TableRow>
             </TableHeader>
 
-            {/* High Density Data Cells */}
+            {/* ✅ FIXED: Eradicated parsing syntax crash right inside the TableBody evaluation node */}
             <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {students && students.length > 0 ? (
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="py-3 text-center text-xs text-slate-400">Loading master records...</TableCell>
+                </TableRow>
+              ) : students && students.length > 0 ? (
                 students.map((item: any) => (
-                  <TableRow
-                    key={item.id}
-                    className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
-                  >
-                    {/* User profile detail block */}
+                  <TableRow key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors">
                     <TableCell className="px-3 py-1.5">
                       <div className="flex items-center gap-2">
                         <div className="h-7 w-7 flex-shrink-0 overflow-hidden rounded-full border border-slate-100 dark:border-slate-800">
                           {item?.photoUrl ? (
                             <img
-                              src={
-                                item.photoUrl.startsWith("http")
-                                  ? item.photoUrl
-                                  : `http://localhost:5001${item.photoUrl}`
-                              }
+                              src={item.photoUrl.startsWith("http") ? item.photoUrl : `http://localhost:5001${item.photoUrl}`}
                               alt="student"
                               className="h-full w-full object-cover"
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src =
-                                  "/images/user/user-21.jpg";
+                                (e.target as HTMLImageElement).src = "/images/user/user-21.jpg";
                               }}
                             />
                           ) : (
@@ -232,70 +179,42 @@ export default function StudentDataTable({
                           )}
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
-                            {item.fullName}
-                          </span>
+                          <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">{item.fullName}</span>
                           <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
-                            {new Date(item.admissionDate).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              }
-                            )}
+                            {item.admissionDate ? new Date(item.admissionDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "—"}
                           </span>
                         </div>
                       </div>
                     </TableCell>
 
-                    {/* Email */}
-                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 tracking-wide">
-                      {item.email}
-                    </TableCell>
-
-                    {/* Contact details */}
-                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
-                      {item.contact ? item.contact : "—"}
-                    </TableCell>
-
-                    {/* Admission Date field */}
+                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 tracking-wide">{item.email || "—"}</TableCell>
+                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">{item.contact || "—"}</TableCell>
                     <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap font-mono">
-                      {new Date(item.admissionDate).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      )}
+                      {item.admissionDate ? new Date(item.admissionDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "—"}
                     </TableCell>
 
-                    {/* Micro Action: Add Course */}
                     <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handleCourseForm(item.id)}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
                       >
                         Add
                       </Button>
                     </TableCell>
 
-                    {/* Micro Action: View Admission Form */}
                     <TableCell className="px-3 py-1.5">
                       <Button
-                        onClick={() => handleAdmissionForm(item.id)}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                        onClick={() => router.push(`/dashboard/student/admission-form/${item.id}`)}
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
                       >
                         View
                       </Button>
                     </TableCell>
 
-                    {/* Micro Action: Edit Details */}
                     <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handleEditForm(item.id)}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
                       >
                         Edit
                       </Button>
@@ -304,12 +223,7 @@ export default function StudentDataTable({
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={7}
-                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
-                  >
-                    No Student found.
-                  </TableCell>
+                  <TableCell colSpan={7} className="py-8 text-center text-xs text-slate-400 dark:text-slate-500">No Students found.</TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -317,28 +231,28 @@ export default function StudentDataTable({
         </div>
       </div>
 
-      {/* === Student Admission modal === */}
+      {/* === Student Admission Modal === */}
       {showAdmissionForm && studentDetails && studentId !== null && (
         <AdmissionForm
           companyDetails={user}
           onCloseModal={handleCloseAdmissionModal}
-          student={studentDetails!}
+          student={studentDetails}
         />
       )}
 
-      {/* === Edit Student Detail modal === */}
+      {/* === Edit Student Detail Modal === */}
       {showEditForm && studentDetails && studentId !== null && (
         <EditStudentForm
           onCloseModal={handleCloseEditStudentModal}
-          student={studentDetails!}
+          student={studentDetails}
         />
       )}
 
-      {/* === Add Course modal === */}
-      {showCourseForm && studentDetails && studentId !== null && (
+      {/* === Add Course Modal === */}
+      {showCourseForm && studentId !== null && (
         <CourseForm
           onCloseModal={handleCloseCourseModal}
-          studentId={studentId!}
+          studentId={studentId}
           batch={batch}
           course={course}
           studentDetails={studentDetails}

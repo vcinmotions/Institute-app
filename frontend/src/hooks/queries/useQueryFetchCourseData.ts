@@ -10,6 +10,7 @@ export interface Course {
 }
 
 interface GetCourseResponse {
+  message: string;
   course: Course[];
 }
 
@@ -34,16 +35,19 @@ export const useFetchCourse = () => {
 };
 
 export const useFetchAllCourses = () => {
-  const token = sessionStorage.getItem("token");
+  // Safe validation check for Server-Side Rendering (SSR) environments
+  const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
 
-  return useQuery({
+  return useQuery<GetCourseResponse, Error, Course[]>({
     queryKey: ["all-courses"],
     queryFn: async () => {
       const res = await apiClient.get("/course/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      return res.data; // returns full array
+      return res.data;
     },
+    // ✅ Extract the flat course array out of the response envelope automatically
+    select: (data) => data.course || [],
     enabled: !!token,
   });
 };
