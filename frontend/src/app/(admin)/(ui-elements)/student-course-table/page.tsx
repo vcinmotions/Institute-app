@@ -1,23 +1,17 @@
 "use client";
 import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
-import {
-  getBatch,
-  getCourse,
-  getFaculty,
-  getStudentCourse,
-} from "@/lib/api";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store"; // Adjust path if needed
-import { useDispatch } from "react-redux";
-import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
-import StudentCard from "@/components/common/StudentCard";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store";
+import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 import StudentCourseDataTable from "@/components/tables/StudentCourseDataTable";
 import {
   setStudentCourse,
   setStudentDetail,
   setTotal,
-  setTotalPages, setCurrentPage, setFilters,
+  setTotalPages,
+  setCurrentPage,
+  setFilters,
   setSearchQuery,
   setSort
 } from "@/store/slices/studentCourseSlice";
@@ -30,72 +24,63 @@ import useDebounce from "@/hooks/useDebounce";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchFaculty } from "@/hooks/queries/useQueryFetchFaculty";
+import { useFetchStudentCourses } from "@/hooks/queries/useQueryFetchStudentCourse"; // 👈 Import our hook
 
 export default function StudentCourseTable() {
+  const dispatch = useDispatch();
 
-  const { studentCourse, searchQuery, totalPages, currentPage, filters, total, sortField, sortOrder } = useSelector(
+  const { searchQuery, totalPages, currentPage, filters, total, sortField, sortOrder } = useSelector(
     (state: RootState) => state.studentCourse,
   );
   const studentDetails = useSelector(
-    (state: RootState) => state.studentCourse.studentDetails,
+    (state: RootState) => state.studentCourse.studentDetails ?? [],
   );
-  useSelector((state: RootState) => state.studentCourse);
-  const [loading, setLoading] = useState<boolean>(false);
-  // 1. Separate state to track immediate input changes
+  const batch = useSelector((state: RootState) => state.batch.batches ?? []);
+  const course = useSelector((state: RootState) => state.course.courses ?? []);
+  const faculty = useSelector((state: RootState) => state.faculty.faculties ?? []);
+
   const [searchInput, setSearchInput] = useState("");
-  const dispatch = useDispatch();
-  const batch = useSelector((state: RootState) => state.batch.batches);
-  const course = useSelector((state: RootState) => state.course.courses);
-  const faculty = useSelector((state: RootState) => state.faculty.faculties);
 
-  console.log("Get all studentCourse:", studentCourse);
+  // Supporting layout structural selections queries
+  const { data: courseData } = useFetchCourse();
+  const { data: batchData } = useFetchAllBatches();
+  const { data: facultyData } = useFetchFaculty();
 
-  console.log("get All Students Deails;", studentDetails);
+  // 1. Core Server State Query Integration Hook
+  const { data: studentCourseData, isLoading: isMainTableLoading } = useFetchStudentCourses({
+    page: currentPage,
+    limit: PAGE_SIZE,
+    search: searchQuery,
+    sortField,
+    sortOrder,
+    filters,
+  });
 
-  const {
-    data: courseData,
-    isLoading: courseLoading,
-    isError: courseError,
-  } = useFetchCourse();
-
-  const {
-    data: batchData,
-    isLoading: batchLoading,
-    isError: batchError,
-  } = useFetchAllBatches();
-
-  const {
-    data: facultyData,
-    isLoading: facultyLoading,
-    isError: facultyError,
-  } = useFetchFaculty();
-
+  // Hydrate context references selections 
   useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
-    }
+    if (courseData?.course) dispatch(setCourses(courseData.course));
   }, [courseData, dispatch]);
 
   useEffect(() => {
-    if (batchData?.batch) {
-      dispatch(setBatches(batchData.batch));
-    };
+    if (batchData?.batch) dispatch(setBatches(batchData.batch));
   }, [batchData, dispatch]);
 
   useEffect(() => {
-    if (facultyData?.faculty) {
-      dispatch(setFaculties(facultyData.faculty));
-    }
+    if (facultyData?.faculty) dispatch(setFaculties(facultyData.faculty));
   }, [facultyData, dispatch]);
 
-  console.log("GET COURSE DATA in STUDENT TABLE:", course);
-  console.log("GET BATCH DATA in STUDENT TABLE:", batch);
-  console.log("GET FACULTY DATA in STUDENT TABLE:", faculty);
+  // ✅ 2. CRITICAL SYNC EFFECT: Updates Redux when React Query fetches fresh results
+  useEffect(() => {
+    if (studentCourseData) {
+      dispatch(setStudentCourse(studentCourseData.data || []));
+      dispatch(setStudentDetail(studentCourseData.detailedCourses || []));
+      dispatch(setTotalPages(studentCourseData.totalPages || 1));
+      dispatch(setTotal(studentCourseData.total || 0));
+    }
+  }, [studentCourseData, dispatch]);
 
-  // --- Debounced search and Set delay time according to your needs
+  // Sync debounced search values string down to data store layers
   const debouncedSearchTerm = useDebounce(searchInput, 300);
-
-  // 2. sync debounced value to Redux
   useEffect(() => {
     if (debouncedSearchTerm !== searchQuery) {
       dispatch(setSearchQuery(debouncedSearchTerm));
@@ -103,97 +88,6 @@ export default function StudentCourseTable() {
     }
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
-  // useEffect(() => {
-  //   fetchBatchCourse();
-  // }, []);
-
-  // Fetch data on mount or when filters change
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        console.error("Token missing from sessionStorage");
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const response = await getStudentCourse({
-          token,
-          page: currentPage,
-          limit: PAGE_SIZE,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-          ...filters, // 👈 send filters to API
-        });
-
-        dispatch(setStudentCourse(response.data || []));
-        dispatch(setStudentDetail(response.detailedCourses || []));
-        dispatch(setTotalPages(response.totalPages || 1));
-        dispatch(setTotal(response.total || 0));
-      } catch (error) {
-        console.error("Error fetching student course:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, filters]);
-
-  // const fetchBatchCourse = async () => {
-  //   const token = sessionStorage.getItem("token");
-  //   if (!token) {
-  //     console.error("Token missing from sessionStorage");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   try {
-  //     const responseBatch = await getBatch({
-  //       token,
-  //       page: currentPage,
-  //       limit: 5,
-  //       search: searchQuery,
-  //       sortField,
-  //       sortOrder,
-  //       ...filters, // 👈 send filters to API
-  //     });
-
-  //     const responseCourse = await getCourse({
-  //       token,
-  //       page: currentPage,
-  //       limit: 5,
-  //       search: searchQuery,
-  //       sortField,
-  //       sortOrder,
-  //       ...filters, // 👈 send filters to API
-  //     });
-
-  //     const responsefaculty = await getFaculty({
-  //       token,
-  //       page: currentPage,
-  //       limit: 5,
-  //       search: searchQuery,
-  //       sortField,
-  //       sortOrder,
-  //       ...filters, // 👈 send filters to API
-  //     });
-
-  //     dispatch(setBatches(responseBatch.batch || []));
-  //     dispatch(setCourses(responseCourse.course || []));
-  //     dispatch(setFaculties(responsefaculty.faculty || []));
-  //   } catch (error) {
-  //     console.error("Error fetching enquiries:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
-
-  // --- Handlers (memoized)
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   }, []);
@@ -236,7 +130,7 @@ export default function StudentCourseTable() {
                 options: course.map((c) => ({
                   label: c.name,
                   value: c.id.toString(),
-                })), // ✅ dynamic
+                })),
               },
               {
                 label: "Batch",
@@ -260,9 +154,10 @@ export default function StudentCourseTable() {
           />
         </div>
 
+        {/* Mapped loading flag directly back to React Query status state */}
         <StudentCourseDataTable
           studentCourse={studentDetails}
-          loading={loading}
+          loading={isMainTableLoading}
           onSort={handleSort}
           sortField={sortField}
           sortOrder={sortOrder}

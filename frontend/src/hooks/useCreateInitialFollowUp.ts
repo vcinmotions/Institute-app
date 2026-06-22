@@ -1,62 +1,52 @@
-// src/hooks/useCreateInitialFollowUp.ts
-import { useMutation } from "@tanstack/react-query";
-import { createInitialFolowUpAPI, getEnquiry, getFollowUp } from "@/lib/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createInitialFolowUpAPI, getFollowUp } from "@/lib/api"; // Added getFollowUp API
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { setFollowUps, setLoading, setError } from "@/store/slices/followUpSlice";
-import { setEnquiries } from "@/store/slices/enquirySlice";
+import { setLoading, setError, setFollowUps } from "@/store/slices/followUpSlice";
 
 export const useCreateInitialFollowUp = () => {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const token = useSelector((state: RootState) => state.auth.token);
-  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
-  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
-  const {
-    filters,
-    sortField,
-    sortOrder,
-    leadStatus,
-  } = useSelector((state: RootState) => state.enquiry);
 
   return useMutation({
     mutationFn: async (newFollowUpData: {
       enquiryId: string;
       remark: string;
       scheduledAt: string;
-      searchQuery: string;
-      currentPage: number
     }) => {
-      if (!token) throw new Error("No token in useCreateInitialFollowUp");
+      if (!token) throw new Error("Authentication token missing from store context");
 
+      // 1️⃣ Match loading states exactly like the others
       dispatch(setLoading(true));
+
       await createInitialFolowUpAPI(token, newFollowUpData);
 
-      // Return payload for use in onSuccess
-      return { token, enquiryId: newFollowUpData.enquiryId};
+      // Return the ID for use in the next step
+      return newFollowUpData.enquiryId;
     },
 
-    onSuccess: async ({ token, enquiryId  }) => {
-      try {
-        // Fetch updated enquiry list
-        const updatedEnquiry = await getEnquiry({token, page: currentPage, search: searchQuery, sortField: sortField, sortOrder: sortOrder, ...filters});
+    onSuccess: async (enquiryId: string) => {
+      if (!token) throw new Error("Missing Token");
 
-        // Fetch follow-ups for this enquiry
-        const updatedFollowUps = await getFollowUp(token, enquiryId);
+      // 2️⃣ Fetch and sync the updated follow-up details straight to the timeline state
+      const followData = await getFollowUp(token, enquiryId);
+      dispatch(setFollowUps(followData.followup));
 
-        // Update Redux state
-        dispatch(setEnquiries(updatedEnquiry.data));
-        dispatch(setFollowUps(updatedFollowUps));
-        dispatch(setError(null));
-      } catch (err: any) {
-        dispatch(setError(err.message || "Failed to fetch updated follow-ups"));
-      } finally {
-        dispatch(setLoading(false));
-      }
+      // 3️⃣ FIXED: Match the exact singular string "enquiry" used by your table view query
+      await queryClient.invalidateQueries({
+        queryKey: ["enquiry"],
+      });
+
+      console.log("INVALIDATEQUERIES TRIGGERED IN INITIAL FOLLOW-UP!");
+
+      dispatch(setError(null));
+      dispatch(setLoading(false));
     },
 
     onError: (error: any) => {
-      const backend = error?.response?.data?.error || "Failed to create FollowUp";
-      dispatch(setError(backend));
+      const backendError = error?.response?.data?.error || "Failed to create Follow-Up";
+      dispatch(setError(backendError));
       dispatch(setLoading(false));
     },
   });

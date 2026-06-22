@@ -442,30 +442,40 @@ model StudentFeeLog {
   amountPaid   Float
   paymentDate  DateTime
   paymentMode  PaymentMode
-  receiptNo    String      @unique
-  studentFee   StudentFee  @relation(fields: [studentFeeId], references: [id])
+
+  // 👇 ADD THEM HERE TOO TO TRACK FUTURE INDIVIDUAL INSTALLMENTS
+  transactionNo String?
+  bankName      String?
+
+  receiptNo  String     @unique
+  studentFee StudentFee @relation(fields: [studentFeeId], references: [id])
 }
 
 model StudentFee {
-  id               Int             @id @default(autoincrement())
+  id               Int           @id @default(autoincrement())
   studentId        Int
   courseId         Int?
   dueDate          DateTime
   amountDue        Float
-  amountPaid       Float           @default(0)
+  amountPaid       Float         @default(0)
   paymentDate      DateTime?
-  createdAt        DateTime        @default(now())
+  createdAt        DateTime      @default(now())
   paymentMode      PaymentMode?
   receiptNo        String?
-  paymentStatus    PaymentStatus   @default(PENDING)
-  isOpeningBalance Boolean         @default(false)
+  paymentStatus    PaymentStatus @default(PENDING)
+  isOpeningBalance Boolean       @default(false)
   sourceType       String?
   clientAdminId    String
-  notification     Notification?
-  clientAdmin      ClientAdmin     @relation(fields: [clientAdminId], references: [id])
-  course           Course?         @relation(fields: [courseId], references: [id])
-  student          Student         @relation(fields: [studentId], references: [id])
-  feeLogs          StudentFeeLog[]
+
+  // 👇 ADD THESE TWO FIELDS HERE FOR UPFRONT/ONE-TIME PAYMENTS
+  transactionNo String? // Stores Cheque No. or UPI Transaction ID
+  bankName      String? // Stores Issuing Bank Name (e.g., "HDFC", "SBI")
+
+  notification Notification?
+  clientAdmin  ClientAdmin     @relation(fields: [clientAdminId], references: [id])
+  course       Course?         @relation(fields: [courseId], references: [id])
+  student      Student         @relation(fields: [studentId], references: [id])
+  feeLogs      StudentFeeLog[]
 }
 
 model StationeryItem {

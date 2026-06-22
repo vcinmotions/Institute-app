@@ -51,6 +51,12 @@ export const studentCreateSchema = z.object({
         feeAmount: z.number().optional(),
         paymentType: z.enum(["INSTALLMENT", "ONE_TIME"]).optional(),
         installmentTypeId: z.number().optional(),
+
+        // 🌟 ADDED: Allow course-level payment tracking fields
+        paymentMode: z.string().optional(),
+        transactionNo: z.string().nullable().optional(),
+        bankName: z.string().nullable().optional(),
+
         installments: z
           .array(
             z.object({
@@ -71,6 +77,10 @@ export const studentCreateSchema = z.object({
         advanceAmount: z.number().optional(),
         paymentMode: z.string().optional(),
         paymentDate: z.string().optional(),
+
+        // 🌟 ADDED: Allow advance-level transaction tracking fields
+        transactionNo: z.string().nullable().optional(),
+        bankName: z.string().nullable().optional(),
       })
     )
     .optional(),

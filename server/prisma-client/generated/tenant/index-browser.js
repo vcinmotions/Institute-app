@@ -415,6 +415,8 @@ exports.Prisma.StudentFeeLogScalarFieldEnum = {
   amountPaid: 'amountPaid',
   paymentDate: 'paymentDate',
   paymentMode: 'paymentMode',
+  transactionNo: 'transactionNo',
+  bankName: 'bankName',
   receiptNo: 'receiptNo'
 };
 
@@ -432,7 +434,9 @@ exports.Prisma.StudentFeeScalarFieldEnum = {
   paymentStatus: 'paymentStatus',
   isOpeningBalance: 'isOpeningBalance',
   sourceType: 'sourceType',
-  clientAdminId: 'clientAdminId'
+  clientAdminId: 'clientAdminId',
+  transactionNo: 'transactionNo',
+  bankName: 'bankName'
 };
 
 exports.Prisma.StationeryItemScalarFieldEnum = {

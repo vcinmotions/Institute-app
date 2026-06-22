@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -6,10 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
 import Badge from "../ui/badge/Badge";
-import { useDispatch } from "react-redux";
-import Button from "../ui/button/Button";
 import CreateStudentPaymentModal from "../form/form-elements/CreateStudentPaymentModal";
 import { downloadReceipt } from "@/app/utils/ReceiptDownload";
 import { singleDownloadReceipt } from "@/app/utils/SingleReceiptDownload";
@@ -34,7 +31,6 @@ export default function PaymentDataTable({
   sortOrder,
 }: StudentCourseDataTableProps) {
   const [showPaymentDetailsForm, setShowPaymentDetailsForm] = useState(false);
-  const dispatch = useDispatch();
   const [selectedPaymentData, setSelectedPaymentData] = useState<any>(null);
   const [expandedRowId, setExpandedRowId] = useState<number | null>(null);
 
@@ -47,15 +43,9 @@ export default function PaymentDataTable({
     setSelectedPaymentData(null);
   };
 
-  const handleEditClick = async (paymentItem: any) => {
+  const handleEditClick = (paymentItem: any) => {
     setShowPaymentDetailsForm(true);
     setSelectedPaymentData(paymentItem);
-
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in sessionStorage");
-      return;
-    }
   };
 
   return (
@@ -63,7 +53,8 @@ export default function PaymentDataTable({
       <div className="max-w-full overflow-x-auto">
         <div className="max-h-[550px] min-w-[1102px] overflow-y-auto">
           <Table className="w-full border-collapse text-left">
-            {/* ERP Style Table Header */}
+
+            {/* Sticky Table Header */}
             <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
                 <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -102,12 +93,18 @@ export default function PaymentDataTable({
               </TableRow>
             </TableHeader>
 
-            {/* High Density Data Cells */}
             <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {payment && payment.length > 0 ? (
+              {/* Async Loading Skeleton UI State */}
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={9} className="py-3 text-center text-xs text-slate-400">Loading master records...</TableCell>
+                </TableRow>
+              ) : payment && payment.length > 0 ? (
                 payment.map((item: any) => (
                   <React.Fragment key={item?.id}>
                     <TableRow className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors">
+
+                      {/* Student Profile Block */}
                       <TableCell className="px-3 py-1.5">
                         <div className="flex items-center gap-2.5">
                           <div className="h-7 w-7 overflow-hidden rounded-full shrink-0">
@@ -133,12 +130,13 @@ export default function PaymentDataTable({
                               {item?.student?.fullName || "N/A"}
                             </span>
                             <span className="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide font-mono">
-                              {item.receiptNo ? item?.receiptNo : "—"}
+                              {item?.receiptNo || "—"}
                             </span>
                           </div>
                         </div>
                       </TableCell>
 
+                      {/* Status Badging */}
                       <TableCell className="px-3 py-1.5">
                         <Badge
                           size="sm"
@@ -148,23 +146,24 @@ export default function PaymentDataTable({
                         </Badge>
                       </TableCell>
 
+                      {/* Enriched Fee Parameters from Unified Payload Structure */}
                       <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
-                        {item?.feeStructure?.paymentType ?? "—"}
+                        {item?.feeStructure?.paymentType || "—"}
                       </TableCell>
 
                       <TableCell className="px-3 py-1.5 text-xs font-mono font-medium text-slate-800 dark:text-slate-200">
-                        {item?.feeStructure?.totalAmount ?? (item.amountDue + item.amountPaid)}
+                        {item?.feeStructure?.totalAmount ?? (Number(item?.amountDue || 0) + Number(item?.amountPaid || 0))}
                       </TableCell>
 
                       <TableCell className="px-3 py-1.5 text-xs font-mono text-rose-600 dark:text-rose-400">
-                        {item.amountDue}
+                        {item?.amountDue ?? 0}
                       </TableCell>
 
                       <TableCell className="px-3 py-1.5 text-xs font-mono text-emerald-600 dark:text-emerald-400">
-                        {item?.amountPaid}
+                        {item?.amountPaid ?? 0}
                       </TableCell>
 
-                      {/* Micro Actions Aligned to Grid */}
+                      {/* Detailed Fee History Logs Toggles */}
                       <TableCell className="px-3 py-1.5 text-center">
                         <button
                           type="button"
@@ -175,28 +174,30 @@ export default function PaymentDataTable({
                         </button>
                       </TableCell>
 
+                      {/* Operational Call-To-Action Switches */}
                       <TableCell className="px-3 py-1.5 text-center">
                         <button
                           type="button"
                           onClick={() => handleEditClick(item)}
                           disabled={item.paymentStatus === "SUCCESS"}
                           className={`h-6 rounded-[4px] border px-2 text-[11px] font-medium shadow-sm transition ${item.paymentStatus === "SUCCESS"
-                              ? "border-slate-100 bg-slate-50 text-slate-400 cursor-not-allowed dark:border-slate-900 dark:bg-slate-900/50"
-                              : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                            ? "border-slate-100 bg-slate-50 text-slate-400 cursor-not-allowed dark:border-slate-900 dark:bg-slate-900/50"
+                            : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                             }`}
                         >
                           Update
                         </button>
                       </TableCell>
 
+                      {/* Master Aggregate Receipts Generator Button */}
                       <TableCell className="px-3 py-1.5 text-center">
                         <button
                           type="button"
                           disabled={!item?.feeLogs || item.feeLogs.length === 0}
                           onClick={() => downloadReceipt(item)}
                           className={`p-1 transition rounded inline-flex items-center justify-center ${!item?.feeLogs || item.feeLogs.length === 0
-                              ? "opacity-30 cursor-not-allowed text-slate-400"
-                              : "text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                            ? "opacity-30 cursor-not-allowed text-slate-400"
+                            : "text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
                             }`}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -208,15 +209,12 @@ export default function PaymentDataTable({
                       </TableCell>
                     </TableRow>
 
-                    {/* Sub-item Log Expanded View matching ERP style */}
+                    {/* Sub-item Logs Drawer Expanded Block */}
                     {expandedRowId === item.id && (
                       <TableRow>
-                        <TableCell
-                          colSpan={9}
-                          className="bg-slate-50/50 p-3 text-xs text-slate-700 dark:bg-slate-900/30 dark:text-slate-300"
-                        >
+                        <TableCell colSpan={9} className="bg-slate-50/50 p-3 text-xs text-slate-700 dark:bg-slate-900/30 dark:text-slate-300">
                           <div className="rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden shadow-inner">
-                            {item?.feeLogs?.length > 0 ? (
+                            {item?.feeLogs && item.feeLogs.length > 0 ? (
                               <table className="w-full border-collapse text-left text-xs">
                                 <thead className="bg-slate-50 border-b border-slate-200 dark:bg-slate-900 dark:border-slate-800 text-slate-500 font-medium">
                                   <tr>
@@ -255,7 +253,7 @@ export default function PaymentDataTable({
                               </table>
                             ) : (
                               <p className="p-3 text-center text-slate-400 dark:text-slate-500 italic">
-                                No fee logs found for this student.
+                                No individual transaction logs found for this student payment file.
                               </p>
                             )}
                           </div>
@@ -266,11 +264,8 @@ export default function PaymentDataTable({
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={9}
-                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
-                  >
-                    No Payment found.
+                  <TableCell colSpan={9} className="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
+                    No records matched your search parameters.
                   </TableCell>
                 </TableRow>
               )}
@@ -279,11 +274,11 @@ export default function PaymentDataTable({
         </div>
       </div>
 
-      {/* Modal Element */}
+      {/* Modal Integration Element */}
       {showPaymentDetailsForm && selectedPaymentData && (
         <CreateStudentPaymentModal
           onCloseModal={handleCloseAdmissionModal}
-          payment={selectedPaymentData!}
+          payment={selectedPaymentData}
           title={"Receive Payment"}
           currentPage={0}
           searchQuery={""}

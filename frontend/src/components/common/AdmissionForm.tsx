@@ -64,6 +64,9 @@ const AdmissionForm: React.FC<Props> = ({
     enabled: !!studentId && !!token,
   });
 
+  console.log("studEnT DETAIL IN ADMISSION FORM:", student);
+  console.log("Course DETAIL IN ADMISSION FORM:", courseDetails);
+
   // Print Handler
   const handlePrint = useReactToPrint({
     contentRef: formRef,

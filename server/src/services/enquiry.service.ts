@@ -36,6 +36,7 @@ export async function getEnquiries({
       take: query.limit,
       include: {
         enquiryCourse: { include: { course: true } },
+        source: true
       },
     }),
     prisma.enquiry.count({ where }),
@@ -56,7 +57,6 @@ export async function getEnquiries({
       },
     });
 
-  console.log("DATA IN ENQUIRY SERVICE;", data);
 
   return {
     data,
@@ -66,6 +66,118 @@ export async function getEnquiries({
     totalPages: Math.ceil(total / query.limit),
   };
 }
+
+// export async function createEnquiryService({
+//   prisma,
+//   clientAdminId,
+//   data,
+// }: {
+//   prisma: any;
+//   clientAdminId: string;
+//   data: any;
+// }) {
+
+//   // ✅ Normalize FIRST (backend is source of truth)
+//   // const normalizedData = {
+//   //   ...data,
+//   //   name: data.name ? titleCase(data.name) : null,
+//   //   email: data.email ? normalizeEmail(data.email) : null,
+//   //   contact: data.contact ? normalizePhone(data.contact) : null,
+//   //   alternateContact: data.alternateContact
+//   //     ? normalizePhone(data.alternateContact)
+//   //     : null,
+//   //   location: data.location
+//   //     ? normalizeToLowercase(data.location)
+//   //     : null,
+//   // };
+
+//   const normalizedData = normalizeEnquiryInput(data);
+
+//   const { name, contact, email, dob, courseId, enquiryDate } = normalizedData;
+  
+//   // const { name, contact, email, dob, courseId } = data;
+
+//   // 1️⃣ Check for duplicates only if values exist
+//   if (email) {
+//     const existingEmail = await prisma.enquiry.findFirst({
+//       where: { email, clientAdminId },
+//     });
+//     ensureUniqueEnquiry(!!existingEmail, false);
+//   }
+
+//   if (contact) {
+//     const existingContact = await prisma.enquiry.findFirst({
+//       where: { contact, clientAdminId },
+//     });
+//     ensureUniqueEnquiry(false, !!existingContact);
+//   }
+
+//   const parsedDob = parseDate(dob);
+//   const parsedEnquirydate = parseDate(enquiryDate);
+
+// const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
+
+//   // 2️⃣ Calculate age safely
+//   // const age =
+//   //   dob && !isNaN(new Date(dob).getTime())
+//   //     ? Enquiry.calculateAge(new Date(dob))
+//   //     : null;
+
+//   // 3️⃣ Get next SR No
+//   const last = await prisma.enquiry.findFirst({
+//     where: { clientAdminId },
+//     orderBy: { srNo: "desc" },
+//     select: { srNo: true },
+//   });
+//   const nextSrNo = (last?.srNo ?? 0) + 1;
+
+//   // ✅ Conditionally fetch Source ID if a source was provided
+//   let sourceId = null;
+//   if (normalizedData.source) {
+//     const sourceRecord = await prisma.sourceType.findUnique({
+//       where: { slug: normalizedData.source },
+//     });
+
+//     if (!sourceRecord) {
+//       throw new Error("Provided Source Type not found!");
+//     }
+//     sourceId = sourceRecord.id;
+//   }
+
+//   // 4️⃣ Create enquiry
+//   const enquiry = await prisma.enquiry.create({
+//     data: {
+//       srNo: nextSrNo,
+//       name,
+//       contact,
+//       email,
+//       age: age ?? null,
+//       dob: parsedDob ? new Date(parsedDob) : null,
+//       enquiryDate: parsedEnquirydate ? new Date(parsedEnquirydate) : null,
+//       sourceId: sourceId,
+//       alternateContact: normalizedData.alternateContact || null,
+//       location: normalizedData.location || null,
+//       city: normalizedData.city || null,
+//       gender: normalizedData.gender || null,
+//       referedBy: normalizedData.referedBy || null,
+//       takenBy: normalizedData.takenBy || null,
+//       clientAdminId,
+//     },
+//   });
+
+//   // 5️⃣ Link courses
+//   if (Array.isArray(courseId) && courseId.length > 0) {
+//     await prisma.enquiryCourse.createMany({
+//       data: courseId.map((id: number | string) => ({
+//         enquiryId: enquiry.id,
+//         courseId: Number(id),
+//         clientAdminId,
+//       })),
+//     });
+//   }
+
+//   return enquiry;
+// }
 
 export async function createEnquiryService({
   prisma,
@@ -77,28 +189,21 @@ export async function createEnquiryService({
   data: any;
 }) {
 
-  // ✅ Normalize FIRST (backend is source of truth)
-  // const normalizedData = {
-  //   ...data,
-  //   name: data.name ? titleCase(data.name) : null,
-  //   email: data.email ? normalizeEmail(data.email) : null,
-  //   contact: data.contact ? normalizePhone(data.contact) : null,
-  //   alternateContact: data.alternateContact
-  //     ? normalizePhone(data.alternateContact)
-  //     : null,
-  //   location: data.location
-  //     ? normalizeToLowercase(data.location)
-  //     : null,
-  // };
-
   const normalizedData = normalizeEnquiryInput(data);
 
-  const { name, contact, email, dob, courseId, enquiryDate } = normalizedData;
+  // 1️⃣ Convert empty strings to null for database safety
+  const name = normalizedData.name ? normalizedData.name.trim() : null;
+  const contact = normalizedData.contact ? normalizedData.contact.trim() : null;
   
-  // const { name, contact, email, dob, courseId } = data;
+  // Clean up email explicitly
+  const email = normalizedData.email && normalizedData.email.trim() !== "" 
+    ? normalizedData.email.trim() 
+    : null; // 🌟 Force empty string to null
 
-  // 1️⃣ Check for duplicates only if values exist
-  if (email) {
+  const { dob, courseId, enquiryDate } = normalizedData;
+
+  // 2️⃣ Check for duplicates now that values are clean
+  if (email !== null) { // Check only if it's a real string value
     const existingEmail = await prisma.enquiry.findFirst({
       where: { email, clientAdminId },
     });
@@ -114,14 +219,7 @@ export async function createEnquiryService({
 
   const parsedDob = parseDate(dob);
   const parsedEnquirydate = parseDate(enquiryDate);
-
-const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
-
-  // 2️⃣ Calculate age safely
-  // const age =
-  //   dob && !isNaN(new Date(dob).getTime())
-  //     ? Enquiry.calculateAge(new Date(dob))
-  //     : null;
+  const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
 
   // 3️⃣ Get next SR No
   const last = await prisma.enquiry.findFirst({
@@ -131,7 +229,6 @@ const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
   });
   const nextSrNo = (last?.srNo ?? 0) + 1;
 
-  // ✅ Conditionally fetch Source ID if a source was provided
   let sourceId = null;
   if (normalizedData.source) {
     const sourceRecord = await prisma.sourceType.findUnique({
@@ -150,14 +247,14 @@ const age = parsedDob ? Enquiry.calculateAge(parsedDob) : null;
       srNo: nextSrNo,
       name,
       contact,
-      email,
+      email, // ✅ This will now safely be null if empty, satisfying the database constraint
       age: age ?? null,
       dob: parsedDob ? new Date(parsedDob) : null,
       enquiryDate: parsedEnquirydate ? new Date(parsedEnquirydate) : null,
       sourceId: sourceId,
-      alternateContact: normalizedData.alternateContact || null,
-      location: normalizedData.location || null,
-      city: normalizedData.city || null,
+      alternateContact: normalizedData.alternateContact?.trim() || null,
+      location: normalizedData.location?.trim() || null,
+      city: normalizedData.city?.trim() || null,
       gender: normalizedData.gender || null,
       referedBy: normalizedData.referedBy || null,
       takenBy: normalizedData.takenBy || null,
@@ -189,131 +286,96 @@ export async function editEnquiryService({
   data: any;
 }) {
 
-   // ✅ Normalize FIRST (backend is source of truth)
-  const normalizedData = {
-    ...data,
-    name: data.name ? titleCase(data.name) : null,
-    email: data.email ? normalizeEmail(data.email) : null,
-    contact: data.contact ? normalizePhone(data.contact) : null,
-    alternateContact: data.alternateContact
-      ? normalizePhone(data.alternateContact)
-      : null,
-    location: data.location
-      ? normalizeToLowercase(data.location)
-      : null,
-  };
+  // 1️⃣ Normalize fields only if they are provided (not undefined or empty strings)
+  const normalizedData: any = { ...data };
+  
+  if (data.name) normalizedData.name = titleCase(data.name);
+  if (data.email) normalizedData.email = normalizeEmail(data.email);
+  if (data.contact) normalizedData.contact = normalizePhone(data.contact);
+  if (data.alternateContact) normalizedData.alternateContact = normalizePhone(data.alternateContact);
+  if (data.location) normalizedData.location = normalizeToLowercase(data.location);
 
-  const { id, name, contact, email, dob, courseId, enquiryDate } = normalizedData;
-  //const { id, name, contact, email, dob, courseId } = data;
+  const { id, dob, courseId, enquiryDate } = normalizedData;
 
-  console.log("GET ENIT DATA:", normalizedData);
-  console.log("GET ENIT DATA:", data);
-
-  // 1️⃣ Check for duplicates only if values exist
-  if (email) {
-    const existingEmail = await prisma.enquiry.findFirst({
-      where: {
-        email,
-        clientAdminId,
-        NOT: { id }, // 👈 exclude current enquiry
-      },
-    });
-
-    ensureUniqueEnquiry(!!existingEmail, false);
-  }
-
-  if (contact) {
-    const existingContact = await prisma.enquiry.findFirst({
-      where: {
-        contact,
-        clientAdminId,
-        NOT: { id }, // 👈 exclude current enquiry
-      },
-    });
-
-    ensureUniqueEnquiry(false, !!existingContact);
-  }
-
-  // 1️⃣ Check for duplicates in domain rule
+  // 2️⃣ Verify the enquiry exists and isn't locked
   const existingEnquiry = await prisma.enquiry.findUnique({
-    where: {
-      id: id
-    }
-  })
+    where: { id }
+  });
 
-  if(!existingEnquiry) {
-    throw new Error("Enquiry do not found!");
+  if (!existingEnquiry) {
+    throw new Error("Enquiry not found!");
   }
 
-   // 2️⃣ Domain rule: cannot edit WON enquiry
   if (existingEnquiry.leadStatus === "WON") {
     throw new Error("Enquiry already converted to admission");
   }
 
-  // 2️⃣ Calculate age via domain
-  const age = Enquiry.calculateAge(dob ? new Date(dob) : null);
+  // 3️⃣ Unique validations (Only run if updated value is provided)
+  if (normalizedData.email) {
+    const existingEmail = await prisma.enquiry.findFirst({
+      where: { email: normalizedData.email, clientAdminId, NOT: { id } },
+    });
+    ensureUniqueEnquiry(!!existingEmail, false);
+  }
 
-  // ✅ Conditionally fetch Source ID if a source was provided
-  let sourceId = null;
+  if (normalizedData.contact) {
+    const existingContact = await prisma.enquiry.findFirst({
+      where: { contact: normalizedData.contact, clientAdminId, NOT: { id } },
+    });
+    ensureUniqueEnquiry(false, !!existingContact);
+  }
+
+  // 4️⃣ Handle conditional properties (Age & Source)
+  let age = undefined;
+  if (dob) {
+    age = Enquiry.calculateAge(new Date(dob));
+  }
+
+  let sourceId = undefined;
   if (normalizedData.source) {
     const sourceRecord = await prisma.sourceType.findUnique({
       where: { slug: normalizedData.source },
     });
-
-    if (!sourceRecord) {
-      throw new Error("Provided Source Type not found!");
-    }
+    if (!sourceRecord) throw new Error("Provided Source Type not found!");
     sourceId = sourceRecord.id;
   }
 
-  // 4️⃣ Create enquiry
-  const enquiry = await prisma.enquiry.update({
-    where: { id },
-    data: {
-      name,
-      contact,
-      email,
-      age: age,
-      dob: parseDateISO(dob),
-      enquiryDate: parseDateISO(enquiryDate),
-      sourceId: sourceId,
-      alternateContact: normalizedData.alternateContact || null,
-      location: normalizedData.location || null,
-      city: normalizedData.city || null,
-      gender: normalizedData.gender || null,
-      referedBy: normalizedData.referedBy || null,
-      takenBy: normalizedData.takenBy || null,
-      clientAdminId,
-    },
+  // 5️⃣ Dynamically build the update payload (Ignore empty strings/undefined)
+  const updatePayload: any = {};
+  
+  const fieldsToUpdate = [
+    'name', 'contact', 'email', 'alternateContact', 
+    'location', 'city', 'gender', 'referedBy', 'takenBy'
+  ];
+
+  fieldsToUpdate.forEach(field => {
+    // Only update if the field is present and not an empty string
+    if (normalizedData[field] !== undefined && normalizedData[field] !== '') {
+      updatePayload[field] = normalizedData[field];
+    }
   });
 
-  // 5️⃣ Link courses
+  if (age !== undefined) updatePayload.age = age;
+  if (dob && dob !== '') updatePayload.dob = parseDateISO(dob);
+  if (enquiryDate && enquiryDate !== '') updatePayload.enquiryDate = parseDateISO(enquiryDate);
+  if (sourceId !== undefined) updatePayload.sourceId = sourceId;
+
+  // 6️⃣ Execute Prisma Update
+  const enquiry = await prisma.enquiry.update({
+    where: { id },
+    data: updatePayload,
+  });
+
+  // 7️⃣ Link courses
   if (Array.isArray(courseId) && courseId.length > 0) {
-    // 1️⃣ Delete old existing mappings
-      await prisma.enquiryCourse.deleteMany({
-        where: { enquiryId: id },
-      });
-
-       // 2️⃣ Create new mappings
-      // const linkData = courseId.map((course) => ({
-      //   enquiryId: id, // FIX: enquiryId should be ENQUIRY ID (not course!)
-      //   courseId: Number(course),
-      //   clientAdminId,
-      // }));
-
-      // await prisma.enquiryCourse.createMany({
-      //   data: linkData,
-      // });
-
-      if (courseId.length > 0) {
-      await prisma.enquiryCourse.createMany({
-        data: courseId.map((course) => ({
-          enquiryId: id,
-          courseId: Number(course),
-          clientAdminId,
-        })),
-      });
-    }
+    await prisma.enquiryCourse.deleteMany({ where: { enquiryId: id } });
+    await prisma.enquiryCourse.createMany({
+      data: courseId.map((course) => ({
+        enquiryId: id,
+        courseId: Number(course),
+        clientAdminId,
+      })),
+    });
   }
 
   return enquiry;

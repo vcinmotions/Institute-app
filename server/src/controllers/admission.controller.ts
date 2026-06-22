@@ -32,6 +32,10 @@ export async function addStudentControllerNew(req: any, res: any) {
         batchId: Number(c.batchId),
         feeAmount: Number(c.feeAmount),
         installmentTypeId: c.installmentTypeId ? Number(c.installmentTypeId) : undefined,
+        // 👇 Capture new fields passed per course block
+        paymentMode: c.paymentMode || "CASH",
+        transactionNo: c.transactionNo || null,
+        bankName: c.bankName || null,
       })),
       advancePayments: req.body.advancePayments ? 
         (typeof req.body.advancePayments === "string" 

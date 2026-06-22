@@ -924,6 +924,15 @@ export const createTestAPI = async (token: string, newTestData: any) => {
   return response.data;
 };
 
+export const createPublishTestAPI = async (token: string, payload: any) => {
+  const response = await apiClient.post(`/create-test/publish`, payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
 // 🔧 FIXED getUser API with token header
 export const editCourseAPI = async (
   token: string,
@@ -967,12 +976,21 @@ export const editTaskAPI = async (
 };
 
 // 🔧 FIXED getUser API with token header
-export const editTestAPI = async (
-  token: string,
-  newTest: any,
-  id: any,
-) => {
+// D:\SHOBHA\vcinmotions-application-ai\frontend\src\lib\api.ts
+
+export const editTestAPI = async (token: string, newTest: any, id: any) => {
+  // Appends route parameters directly onto the base client configuration endpoint wrapper
   const response = await apiClient.put(`/edit-test/${id}`, newTest, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+// 🚀 Added Publish Test API using the exact same structural layout
+export const publishTestAPI = async (token: string, publishData: any) => {
+  const response = await apiClient.post("/create-test/publish", publishData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

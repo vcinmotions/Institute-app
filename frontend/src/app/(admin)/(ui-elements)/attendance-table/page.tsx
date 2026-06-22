@@ -58,12 +58,6 @@ export default function AttendanceTable() {
   } = useFetchAllBatches();
 
   useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
-    };
-  }, [courseData, dispatch]);
-
-  useEffect(() => {
     console.log("get all batches data;", batchData);
     if (batchData?.batch) {
       dispatch(setBatches(batchData.batch));

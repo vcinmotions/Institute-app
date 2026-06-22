@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { useFetchReports } from "@/hooks/queries/useQueryFetchReports";
 import StudentCard from "@/components/common/StudentCard";
+import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
+import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchSource } from "@/hooks/queries/useQueryFetchSource";
 
 type ReportType = "ENQUIRIES" | "FINANCE" | "STUDENTS";
 type FinanceStatus = "ALL" | "PAID" | "OUTSTANDING";
@@ -23,10 +26,26 @@ export default function ReportsDashboard() {
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    // Mock constants - wire these up with your application's actual drop-down data lists
-    const coursesList = [{ id: 1, name: "Full Stack Web Dev" }, { id: 2, name: "Data Science" }];
-    const batchesList = [{ id: 4, name: "Morning Batch A" }, { id: 5, name: "Evening Batch B" }];
-    const sourcesList = [{ id: 1, name: "Google" }, { id: 2, name: "Instagram" }];
+    // 1️⃣ Fetch raw query datasets from your application API endpoints
+    const {
+        data: courseData,
+        isLoading: courseLoading,
+    } = useFetchAllCourses();
+
+    const {
+        data: batchData,
+        isLoading: batchLoading,
+    } = useFetchAllBatches();
+
+    const {
+        data: sourceData,
+        isLoading: sourceLoading,
+    } = useFetchSource();
+
+    // 2️⃣ Safely extract array collections matching incoming backend JSON data geometries
+    const functionalCourses = Array.isArray(courseData) ? courseData : [];
+    const functionalBatches = batchData?.batch || [];
+    const functionalSources = sourceData?.source || [];
 
     const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
 
@@ -132,16 +151,38 @@ export default function ReportsDashboard() {
                         <>
                             <div className="flex flex-col">
                                 <label className={labelStyles}>Lead Source</label>
-                                <select className={inputStyles} value={sourceId} onChange={(e) => setSourceId(e.target.value)}>
-                                    <option value="" className="bg-white dark:bg-slate-800">All Sources</option>
-                                    {sourcesList.map(s => <option key={s.id} value={s.id} className="bg-white dark:bg-slate-800">{s.name}</option>)}
+                                <select
+                                    className={inputStyles}
+                                    value={sourceId}
+                                    onChange={(e) => setSourceId(e.target.value)}
+                                    disabled={sourceLoading}
+                                >
+                                    <option value="" className="bg-white dark:bg-slate-800">
+                                        {sourceLoading ? "Loading Sources..." : "All Sources"}
+                                    </option>
+                                    {functionalSources.map((s: any) => (
+                                        <option key={s.id} value={s.id} className="bg-white dark:bg-slate-800">
+                                            {s.name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="flex flex-col">
                                 <label className={labelStyles}>Course</label>
-                                <select className={inputStyles} value={courseId} onChange={(e) => setCourseId(e.target.value)}>
-                                    <option value="" className="bg-white dark:bg-slate-800">All Courses</option>
-                                    {coursesList.map(c => <option key={c.id} value={c.id} className="bg-white dark:bg-slate-800">{c.name}</option>)}
+                                <select
+                                    className={inputStyles}
+                                    value={courseId}
+                                    onChange={(e) => setCourseId(e.target.value)}
+                                    disabled={courseLoading}
+                                >
+                                    <option value="" className="bg-white dark:bg-slate-800">
+                                        {courseLoading ? "Loading Courses..." : "All Courses"}
+                                    </option>
+                                    {functionalCourses.map((c: any) => (
+                                        <option key={c.id} value={c.id} className="bg-white dark:bg-slate-800">
+                                            {c.name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         </>
@@ -151,16 +192,38 @@ export default function ReportsDashboard() {
                         <>
                             <div className="flex flex-col">
                                 <label className={labelStyles}>Course</label>
-                                <select className={inputStyles} value={courseId} onChange={(e) => setCourseId(e.target.value)}>
-                                    <option value="" className="bg-white dark:bg-slate-800">All Courses</option>
-                                    {coursesList.map(c => <option key={c.id} value={c.id} className="bg-white dark:bg-slate-800">{c.name}</option>)}
+                                <select
+                                    className={inputStyles}
+                                    value={courseId}
+                                    onChange={(e) => setCourseId(e.target.value)}
+                                    disabled={courseLoading}
+                                >
+                                    <option value="" className="bg-white dark:bg-slate-800">
+                                        {courseLoading ? "Loading Courses..." : "All Courses"}
+                                    </option>
+                                    {functionalCourses.map((c: any) => (
+                                        <option key={c.id} value={c.id} className="bg-white dark:bg-slate-800">
+                                            {c.name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="flex flex-col">
                                 <label className={labelStyles}>Batch</label>
-                                <select className={inputStyles} value={batchId} onChange={(e) => setBatchId(e.target.value)}>
-                                    <option value="" className="bg-white dark:bg-slate-800">All Batches</option>
-                                    {batchesList.map(b => <option key={b.id} value={b.id} className="bg-white dark:bg-slate-800">{b.name}</option>)}
+                                <select
+                                    className={inputStyles}
+                                    value={batchId}
+                                    onChange={(e) => setBatchId(e.target.value)}
+                                    disabled={batchLoading}
+                                >
+                                    <option value="" className="bg-white dark:bg-slate-800">
+                                        {batchLoading ? "Loading Batches..." : "All Batches"}
+                                    </option>
+                                    {functionalBatches.map((b: any) => (
+                                        <option key={b.id} value={b.id} className="bg-white dark:bg-slate-800">
+                                            {b.name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         </>

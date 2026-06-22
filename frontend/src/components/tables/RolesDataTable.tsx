@@ -7,14 +7,9 @@ import {
   TableRow,
 } from "../ui/table";
 import { useDispatch } from "react-redux";
-import Button from "../ui/button/Button";
 import EditRolesForm from "../form/form-elements/EditRoleForm";
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
-import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
-import { useCreateAdmission } from "@/hooks/useCreateAdmission";
-import { useDeleteEnquiry } from "@/hooks/useDeleteEnquiry";
-import { useFetchEnquiry } from "@/hooks/useGetEnquiries";
 import { Tooltip } from "@heroui/react";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
@@ -30,18 +25,11 @@ export default function RolesDataTable({
 }: RolesDataTableProps) {
   const [roleDetail, setRoleDetail] = useState<boolean>(false);
   const [roleData, setRoleData] = useState<any>(null);
-  const dispatch = useDispatch();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [modalType, setModalType] = useState<FollowUpModalType>(null);
   const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(null);
   const [selectedFollowUpId, setSelectedFollowUpId] = useState<string | null>(null);
-
-  // API Mutators
-  const { mutate: fetchEnquiries, data } = useFetchEnquiry();
-  const { mutate: followUp } = useFetchFollowUps();
-  const { mutate: admissionStudent } = useCreateAdmission();
-  const { mutate: deleteEnquiry } = useDeleteEnquiry();
 
   const handleCloseModal = () => {
     setSelectedId(null);

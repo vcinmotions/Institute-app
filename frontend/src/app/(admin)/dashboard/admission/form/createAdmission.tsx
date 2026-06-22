@@ -8,7 +8,6 @@ import { useCreateAdmission } from "@/hooks/useCreateAdmission";
 import { useCreateAdvancePayment } from "@/hooks/mutations/useMutationAdvancePayment";
 import { useDispatch, useSelector } from "react-redux";
 import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
-import { setCourses } from "@/store/slices/courseSlice";
 import { RootState } from "@/store";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
@@ -18,16 +17,13 @@ import DropzonBoxComponent from "@/components/form/form-elements/DropBox";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useFetchEnquiryById } from "@/hooks/queries/useQueryFetchEnquiry";
-import { setBatches } from "@/store/slices/batchSlice";
 import MultiSelect from "@/components/form/MultiSelect";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
-import { capitalizeWords } from "@/components/common/ToCapitalize";
 import TextArea from "@/components/form/input/TextArea";
 import { countries } from "@/components/common/CountriesCode";
-import { genders, options } from "@/components/common/Options";
+import { genders, options, paymentModeOptions } from "@/components/common/Options";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { titleCase } from "@/app/utils/Normalize";
-import ComponentCard from "@/components/common/ComponentCard";
 
 type FormErrors = Partial<Record<keyof NewEnquiryDataAll, string>>;
 
@@ -133,6 +129,11 @@ export default function AdmissionForm() {
       feeAmount: "",
       batchId: "",
       advanceAmount: "",
+
+      // 👇 ADD NEW TRACKING PROPERTIES HERE
+      paymentMode: "CASH",
+      transactionNo: "",
+      bankName: "",
     },
   ]);
 
@@ -230,20 +231,31 @@ export default function AdmissionForm() {
   useEffect(() => {
     if (data?.enquiry) {
       setEnquiryData(data.enquiry);
+      setLoading(false); // ✅ Turn off the loading shield once data arrives
+    } else if (!isLoading && !data) {
+      setLoading(false); // ✅ Turn off if loading completes but no data was returned
     }
-  }, [data]);
+  }, [data, isLoading]);
 
   useEffect(() => {
     if (!newEnquiry.courseId.length) return;
 
-    const rows = newEnquiry.courseId.map((id) => ({
-      courseId: id,
-      paymentType: "",
-      installmentTypeId: "",
-      feeAmount: "",
-      batchId: "",
-      advanceAmount: "",
-    }));
+    const rows = newEnquiry.courseId.map((id) => {
+      // Retain previously configured matching values if user modifies selections
+      const existingRow = courseRows.find(r => r.courseId === id);
+      return {
+        courseId: id,
+        paymentType: existingRow?.paymentType || "",
+        installmentTypeId: existingRow?.installmentTypeId || "",
+        feeAmount: existingRow?.feeAmount || "",
+        batchId: existingRow?.batchId || "",
+        advanceAmount: existingRow?.advanceAmount || "",
+        // 👇 Initialize structural default criteria safely
+        paymentMode: existingRow?.paymentMode || "CASH",
+        transactionNo: existingRow?.transactionNo || "",
+        bankName: existingRow?.bankName || "",
+      };
+    });
 
     setCourseRows(rows);
   }, [newEnquiry.courseId]);
@@ -421,21 +433,8 @@ export default function AdmissionForm() {
     isError: batchError,
   } = useFetchAllBatches({ onlyAvailable: true });
 
-  useEffect(() => {
-    if (courseData?.course) {
-      console.log("get all courses data;", courseData);
-      dispatch(setCourses(courseData.course || []));
-      setLoading(false);
-    };
-  }, [courseData, dispatch]);
-
-  useEffect(() => {
-    console.log("get all batches data;", batchData);
-    if (batchData?.batch) {
-      dispatch(setBatches(batchData.batch || []));
-      setLoading(false);
-    };
-  }, [batchData, dispatch]);
+  console.log("COURSE DATA IN ADMISON FORM:", courseData);
+  console.log("BATCH DATA IN ADMISON FORM:", batchData);
 
   // const batchOptions = batch.map((b: any) => ({
   //   value: b.id.toString(),
@@ -451,13 +450,17 @@ export default function AdmissionForm() {
     [batch]
   );
 
-  useEffect(() => {
-    if (courseData?.course && batchData?.batch) {
-      dispatch(setCourses(courseData.course));
-      dispatch(setBatches(batchData.batch));
-      setLoading(false);
-    }
-  }, [courseData, batchData, dispatch]);
+  // useEffect(() => {
+  //   if (courseData?.course) {
+  //     dispatch(setCourses(courseData.course));
+  //   }
+  // }, [courseData, dispatch]);
+
+  // useEffect(() => {
+  //   if (batchData?.batch) {
+  //     dispatch(setBatches(batchData.batch));
+  //   }
+  // }, [batchData, dispatch]);
 
   const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
     // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
@@ -577,44 +580,6 @@ export default function AdmissionForm() {
     };
   };
 
-  const handleDateChange = (field: keyof NewEnquiryData, value: string) => {
-    // Allow only digits
-    let digits = value.replace(/\D/g, "");
-
-    // Restrict to max 8 digits (DDMMYYYY)
-    if (digits.length > 8) digits = digits.slice(0, 8);
-
-    // Auto-format as DD/MM/YYYY
-    let formattedValue = digits;
-    if (digits.length > 4) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4, 8)}`;
-    } else if (digits.length > 2) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
-    }
-
-    // Update form data
-    setFilledEnquiryData((prev) => ({
-      ...prev,
-      [field]: formattedValue,
-    }));
-
-    // Simple validation (optional)
-    let error = "";
-    if (digits.length === 8) {
-      const day = parseInt(digits.slice(0, 2), 10);
-      const month = parseInt(digits.slice(2, 4), 10);
-      const year = parseInt(digits.slice(4, 8), 10);
-      const isValidDate = !isNaN(new Date(`${year}-${month}-${day}`).getTime());
-      if (!isValidDate || day > 31 || month > 12) {
-        error = "Invalid date";
-      }
-    }
-
-    setErrors((prev) => ({
-      ...prev,
-      [field]: error,
-    }));
-  };
 
   const handleChange = (field: keyof NewEnquiryData, value: string) => {
     let formattedValue = value;
@@ -834,7 +799,9 @@ export default function AdmissionForm() {
           courseId: row.courseId,
           courseName: selectedCourse?.name || "",
           advanceAmount: parseFloat(row.advanceAmount),
-          paymentMode: "CASH",
+          paymentMode: row.paymentMode, // 👈 Dynamically pulled from current index row state
+          transactionNo: row.paymentMode !== "CASH" ? row.transactionNo : null,
+          bankName: row.paymentMode !== "CASH" ? row.bankName : null,
           paymentDate: new Date().toISOString()
         };
       });
@@ -1268,6 +1235,52 @@ export default function AdmissionForm() {
                         />
                       </div>
 
+                      {/* 👇 NEW FIELD 1: Payment Mode Field Selection Option Dropdown */}
+                      <div>`
+                        <Label>Payment Mode</Label>
+                        <div className="relative">
+                          <Select
+                            options={paymentModeOptions}
+                            value={row.paymentMode}
+                            onChange={(value) => {
+                              handleCourseRowChange(index, "paymentMode", value);
+                              if (value === "CASH") {
+                                handleCourseRowChange(index, "transactionNo", "");
+                                handleCourseRowChange(index, "bankName", "");
+                              }
+                            }}
+                            placeholder="Select Payment Mode"
+                          />
+                          <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
+                            <ChevronDownIcon />
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* 👇 NEW FIELD 2: Conditional Input Elements for Transaction details */}
+                      {row.paymentMode !== "CASH" && (
+                        <div className="lg:col-span-4 grid grid-cols-1 gap-4 md:grid-cols-2 bg-slate-100/50 dark:bg-slate-900/60 p-4 rounded-xl border border-dashed border-gray-200 dark:border-gray-700 mt-2">
+                          <div>
+                            <Label>{row.paymentMode === "CHEQUE" ? "Cheque Number *" : "Transaction Reference ID *"}</Label>
+                            <Input
+                              type="text"
+                              placeholder={row.paymentMode === "CHEQUE" ? "Enter Cheque No." : "UPI Ref or Txn ID"}
+                              value={row.transactionNo}
+                              onChange={(e) => handleCourseRowChange(index, "transactionNo", e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label>Bank Name *</Label>
+                            <Input
+                              type="text"
+                              placeholder="e.g. HDFC Bank, SBI"
+                              value={row.bankName}
+                              onChange={(e) => handleCourseRowChange(index, "bankName", e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      )}`
+
                     </div>
                   </div>
                 );
@@ -1331,13 +1344,6 @@ export default function AdmissionForm() {
                       >
                         Clear Advances
                       </Button>
-                      {/* <Button
-                        variant="primary"
-                        onClick={handleAdvancePayment}
-                        disabled={courseRows.every(row => !row.advanceAmount || parseFloat(row.advanceAmount) <= 0)}
-                      >
-                        Take Advance Payment
-                      </Button> */}
                     </div>
                   </div>
                 </div>

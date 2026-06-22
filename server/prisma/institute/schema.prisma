@@ -442,6 +442,11 @@ model StudentFeeLog {
   amountPaid   Float
   paymentDate  DateTime
   paymentMode  PaymentMode
+  
+  // 👇 ADD THEM HERE TOO TO TRACK FUTURE INDIVIDUAL INSTALLMENTS
+  transactionNo String?    
+  bankName      String?
+
   receiptNo    String      @unique
   studentFee   StudentFee  @relation(fields: [studentFeeId], references: [id])
 }
@@ -461,6 +466,11 @@ model StudentFee {
   isOpeningBalance Boolean         @default(false)
   sourceType       String?
   clientAdminId    String
+
+  // 👇 ADD THESE TWO FIELDS HERE FOR UPFRONT/ONE-TIME PAYMENTS
+  transactionNo    String?         // Stores Cheque No. or UPI Transaction ID
+  bankName         String?         // Stores Issuing Bank Name (e.g., "HDFC", "SBI")
+
   notification     Notification?
   clientAdmin      ClientAdmin     @relation(fields: [clientAdminId], references: [id])
   course           Course?         @relation(fields: [courseId], references: [id])

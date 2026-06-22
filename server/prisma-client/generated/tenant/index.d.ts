@@ -34794,6 +34794,8 @@ export namespace Prisma {
     amountPaid: number | null
     paymentDate: Date | null
     paymentMode: $Enums.PaymentMode | null
+    transactionNo: string | null
+    bankName: string | null
     receiptNo: string | null
   }
 
@@ -34803,6 +34805,8 @@ export namespace Prisma {
     amountPaid: number | null
     paymentDate: Date | null
     paymentMode: $Enums.PaymentMode | null
+    transactionNo: string | null
+    bankName: string | null
     receiptNo: string | null
   }
 
@@ -34812,6 +34816,8 @@ export namespace Prisma {
     amountPaid: number
     paymentDate: number
     paymentMode: number
+    transactionNo: number
+    bankName: number
     receiptNo: number
     _all: number
   }
@@ -34835,6 +34841,8 @@ export namespace Prisma {
     amountPaid?: true
     paymentDate?: true
     paymentMode?: true
+    transactionNo?: true
+    bankName?: true
     receiptNo?: true
   }
 
@@ -34844,6 +34852,8 @@ export namespace Prisma {
     amountPaid?: true
     paymentDate?: true
     paymentMode?: true
+    transactionNo?: true
+    bankName?: true
     receiptNo?: true
   }
 
@@ -34853,6 +34863,8 @@ export namespace Prisma {
     amountPaid?: true
     paymentDate?: true
     paymentMode?: true
+    transactionNo?: true
+    bankName?: true
     receiptNo?: true
     _all?: true
   }
@@ -34949,6 +34961,8 @@ export namespace Prisma {
     amountPaid: number
     paymentDate: Date
     paymentMode: $Enums.PaymentMode
+    transactionNo: string | null
+    bankName: string | null
     receiptNo: string
     _count: StudentFeeLogCountAggregateOutputType | null
     _avg: StudentFeeLogAvgAggregateOutputType | null
@@ -34977,6 +34991,8 @@ export namespace Prisma {
     amountPaid?: boolean
     paymentDate?: boolean
     paymentMode?: boolean
+    transactionNo?: boolean
+    bankName?: boolean
     receiptNo?: boolean
     studentFee?: boolean | StudentFeeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentFeeLog"]>
@@ -34987,6 +35003,8 @@ export namespace Prisma {
     amountPaid?: boolean
     paymentDate?: boolean
     paymentMode?: boolean
+    transactionNo?: boolean
+    bankName?: boolean
     receiptNo?: boolean
     studentFee?: boolean | StudentFeeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentFeeLog"]>
@@ -34997,6 +35015,8 @@ export namespace Prisma {
     amountPaid?: boolean
     paymentDate?: boolean
     paymentMode?: boolean
+    transactionNo?: boolean
+    bankName?: boolean
     receiptNo?: boolean
     studentFee?: boolean | StudentFeeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentFeeLog"]>
@@ -35007,10 +35027,12 @@ export namespace Prisma {
     amountPaid?: boolean
     paymentDate?: boolean
     paymentMode?: boolean
+    transactionNo?: boolean
+    bankName?: boolean
     receiptNo?: boolean
   }
 
-  export type StudentFeeLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentFeeId" | "amountPaid" | "paymentDate" | "paymentMode" | "receiptNo", ExtArgs["result"]["studentFeeLog"]>
+  export type StudentFeeLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentFeeId" | "amountPaid" | "paymentDate" | "paymentMode" | "transactionNo" | "bankName" | "receiptNo", ExtArgs["result"]["studentFeeLog"]>
   export type StudentFeeLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     studentFee?: boolean | StudentFeeDefaultArgs<ExtArgs>
   }
@@ -35032,6 +35054,8 @@ export namespace Prisma {
       amountPaid: number
       paymentDate: Date
       paymentMode: $Enums.PaymentMode
+      transactionNo: string | null
+      bankName: string | null
       receiptNo: string
     }, ExtArgs["result"]["studentFeeLog"]>
     composites: {}
@@ -35462,6 +35486,8 @@ export namespace Prisma {
     readonly amountPaid: FieldRef<"StudentFeeLog", 'Float'>
     readonly paymentDate: FieldRef<"StudentFeeLog", 'DateTime'>
     readonly paymentMode: FieldRef<"StudentFeeLog", 'PaymentMode'>
+    readonly transactionNo: FieldRef<"StudentFeeLog", 'String'>
+    readonly bankName: FieldRef<"StudentFeeLog", 'String'>
     readonly receiptNo: FieldRef<"StudentFeeLog", 'String'>
   }
     
@@ -35920,6 +35946,8 @@ export namespace Prisma {
     isOpeningBalance: boolean | null
     sourceType: string | null
     clientAdminId: string | null
+    transactionNo: string | null
+    bankName: string | null
   }
 
   export type StudentFeeMaxAggregateOutputType = {
@@ -35937,6 +35965,8 @@ export namespace Prisma {
     isOpeningBalance: boolean | null
     sourceType: string | null
     clientAdminId: string | null
+    transactionNo: string | null
+    bankName: string | null
   }
 
   export type StudentFeeCountAggregateOutputType = {
@@ -35954,6 +35984,8 @@ export namespace Prisma {
     isOpeningBalance: number
     sourceType: number
     clientAdminId: number
+    transactionNo: number
+    bankName: number
     _all: number
   }
 
@@ -35989,6 +36021,8 @@ export namespace Prisma {
     isOpeningBalance?: true
     sourceType?: true
     clientAdminId?: true
+    transactionNo?: true
+    bankName?: true
   }
 
   export type StudentFeeMaxAggregateInputType = {
@@ -36006,6 +36040,8 @@ export namespace Prisma {
     isOpeningBalance?: true
     sourceType?: true
     clientAdminId?: true
+    transactionNo?: true
+    bankName?: true
   }
 
   export type StudentFeeCountAggregateInputType = {
@@ -36023,6 +36059,8 @@ export namespace Prisma {
     isOpeningBalance?: true
     sourceType?: true
     clientAdminId?: true
+    transactionNo?: true
+    bankName?: true
     _all?: true
   }
 
@@ -36127,6 +36165,8 @@ export namespace Prisma {
     isOpeningBalance: boolean
     sourceType: string | null
     clientAdminId: string
+    transactionNo: string | null
+    bankName: string | null
     _count: StudentFeeCountAggregateOutputType | null
     _avg: StudentFeeAvgAggregateOutputType | null
     _sum: StudentFeeSumAggregateOutputType | null
@@ -36163,6 +36203,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: boolean
     clientAdminId?: boolean
+    transactionNo?: boolean
+    bankName?: boolean
     notification?: boolean | StudentFee$notificationArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     course?: boolean | StudentFee$courseArgs<ExtArgs>
@@ -36186,6 +36228,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: boolean
     clientAdminId?: boolean
+    transactionNo?: boolean
+    bankName?: boolean
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     course?: boolean | StudentFee$courseArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -36206,6 +36250,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: boolean
     clientAdminId?: boolean
+    transactionNo?: boolean
+    bankName?: boolean
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     course?: boolean | StudentFee$courseArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -36226,9 +36272,11 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: boolean
     clientAdminId?: boolean
+    transactionNo?: boolean
+    bankName?: boolean
   }
 
-  export type StudentFeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "dueDate" | "amountDue" | "amountPaid" | "paymentDate" | "createdAt" | "paymentMode" | "receiptNo" | "paymentStatus" | "isOpeningBalance" | "sourceType" | "clientAdminId", ExtArgs["result"]["studentFee"]>
+  export type StudentFeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "courseId" | "dueDate" | "amountDue" | "amountPaid" | "paymentDate" | "createdAt" | "paymentMode" | "receiptNo" | "paymentStatus" | "isOpeningBalance" | "sourceType" | "clientAdminId" | "transactionNo" | "bankName", ExtArgs["result"]["studentFee"]>
   export type StudentFeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     notification?: boolean | StudentFee$notificationArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
@@ -36272,6 +36320,8 @@ export namespace Prisma {
       isOpeningBalance: boolean
       sourceType: string | null
       clientAdminId: string
+      transactionNo: string | null
+      bankName: string | null
     }, ExtArgs["result"]["studentFee"]>
     composites: {}
   }
@@ -36714,6 +36764,8 @@ export namespace Prisma {
     readonly isOpeningBalance: FieldRef<"StudentFee", 'Boolean'>
     readonly sourceType: FieldRef<"StudentFee", 'String'>
     readonly clientAdminId: FieldRef<"StudentFee", 'String'>
+    readonly transactionNo: FieldRef<"StudentFee", 'String'>
+    readonly bankName: FieldRef<"StudentFee", 'String'>
   }
     
 
@@ -49441,6 +49493,8 @@ export namespace Prisma {
     amountPaid: 'amountPaid',
     paymentDate: 'paymentDate',
     paymentMode: 'paymentMode',
+    transactionNo: 'transactionNo',
+    bankName: 'bankName',
     receiptNo: 'receiptNo'
   };
 
@@ -49461,7 +49515,9 @@ export namespace Prisma {
     paymentStatus: 'paymentStatus',
     isOpeningBalance: 'isOpeningBalance',
     sourceType: 'sourceType',
-    clientAdminId: 'clientAdminId'
+    clientAdminId: 'clientAdminId',
+    transactionNo: 'transactionNo',
+    bankName: 'bankName'
   };
 
   export type StudentFeeScalarFieldEnum = (typeof StudentFeeScalarFieldEnum)[keyof typeof StudentFeeScalarFieldEnum]
@@ -51959,6 +52015,8 @@ export namespace Prisma {
     amountPaid?: FloatFilter<"StudentFeeLog"> | number
     paymentDate?: DateTimeFilter<"StudentFeeLog"> | Date | string
     paymentMode?: EnumPaymentModeFilter<"StudentFeeLog"> | $Enums.PaymentMode
+    transactionNo?: StringNullableFilter<"StudentFeeLog"> | string | null
+    bankName?: StringNullableFilter<"StudentFeeLog"> | string | null
     receiptNo?: StringFilter<"StudentFeeLog"> | string
     studentFee?: XOR<StudentFeeScalarRelationFilter, StudentFeeWhereInput>
   }
@@ -51969,6 +52027,8 @@ export namespace Prisma {
     amountPaid?: SortOrder
     paymentDate?: SortOrder
     paymentMode?: SortOrder
+    transactionNo?: SortOrderInput | SortOrder
+    bankName?: SortOrderInput | SortOrder
     receiptNo?: SortOrder
     studentFee?: StudentFeeOrderByWithRelationInput
   }
@@ -51983,6 +52043,8 @@ export namespace Prisma {
     amountPaid?: FloatFilter<"StudentFeeLog"> | number
     paymentDate?: DateTimeFilter<"StudentFeeLog"> | Date | string
     paymentMode?: EnumPaymentModeFilter<"StudentFeeLog"> | $Enums.PaymentMode
+    transactionNo?: StringNullableFilter<"StudentFeeLog"> | string | null
+    bankName?: StringNullableFilter<"StudentFeeLog"> | string | null
     studentFee?: XOR<StudentFeeScalarRelationFilter, StudentFeeWhereInput>
   }, "id" | "receiptNo">
 
@@ -51992,6 +52054,8 @@ export namespace Prisma {
     amountPaid?: SortOrder
     paymentDate?: SortOrder
     paymentMode?: SortOrder
+    transactionNo?: SortOrderInput | SortOrder
+    bankName?: SortOrderInput | SortOrder
     receiptNo?: SortOrder
     _count?: StudentFeeLogCountOrderByAggregateInput
     _avg?: StudentFeeLogAvgOrderByAggregateInput
@@ -52009,6 +52073,8 @@ export namespace Prisma {
     amountPaid?: FloatWithAggregatesFilter<"StudentFeeLog"> | number
     paymentDate?: DateTimeWithAggregatesFilter<"StudentFeeLog"> | Date | string
     paymentMode?: EnumPaymentModeWithAggregatesFilter<"StudentFeeLog"> | $Enums.PaymentMode
+    transactionNo?: StringNullableWithAggregatesFilter<"StudentFeeLog"> | string | null
+    bankName?: StringNullableWithAggregatesFilter<"StudentFeeLog"> | string | null
     receiptNo?: StringWithAggregatesFilter<"StudentFeeLog"> | string
   }
 
@@ -52030,6 +52096,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFilter<"StudentFee"> | boolean
     sourceType?: StringNullableFilter<"StudentFee"> | string | null
     clientAdminId?: StringFilter<"StudentFee"> | string
+    transactionNo?: StringNullableFilter<"StudentFee"> | string | null
+    bankName?: StringNullableFilter<"StudentFee"> | string | null
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     course?: XOR<CourseNullableScalarRelationFilter, CourseWhereInput> | null
@@ -52052,6 +52120,8 @@ export namespace Prisma {
     isOpeningBalance?: SortOrder
     sourceType?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
+    transactionNo?: SortOrderInput | SortOrder
+    bankName?: SortOrderInput | SortOrder
     notification?: NotificationOrderByWithRelationInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
@@ -52077,6 +52147,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFilter<"StudentFee"> | boolean
     sourceType?: StringNullableFilter<"StudentFee"> | string | null
     clientAdminId?: StringFilter<"StudentFee"> | string
+    transactionNo?: StringNullableFilter<"StudentFee"> | string | null
+    bankName?: StringNullableFilter<"StudentFee"> | string | null
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     course?: XOR<CourseNullableScalarRelationFilter, CourseWhereInput> | null
@@ -52099,6 +52171,8 @@ export namespace Prisma {
     isOpeningBalance?: SortOrder
     sourceType?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
+    transactionNo?: SortOrderInput | SortOrder
+    bankName?: SortOrderInput | SortOrder
     _count?: StudentFeeCountOrderByAggregateInput
     _avg?: StudentFeeAvgOrderByAggregateInput
     _max?: StudentFeeMaxOrderByAggregateInput
@@ -52124,6 +52198,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolWithAggregatesFilter<"StudentFee"> | boolean
     sourceType?: StringNullableWithAggregatesFilter<"StudentFee"> | string | null
     clientAdminId?: StringWithAggregatesFilter<"StudentFee"> | string
+    transactionNo?: StringNullableWithAggregatesFilter<"StudentFee"> | string | null
+    bankName?: StringNullableWithAggregatesFilter<"StudentFee"> | string | null
   }
 
   export type StationeryItemWhereInput = {
@@ -55188,6 +55264,8 @@ export namespace Prisma {
     amountPaid: number
     paymentDate: Date | string
     paymentMode: $Enums.PaymentMode
+    transactionNo?: string | null
+    bankName?: string | null
     receiptNo: string
     studentFee: StudentFeeCreateNestedOneWithoutFeeLogsInput
   }
@@ -55198,6 +55276,8 @@ export namespace Prisma {
     amountPaid: number
     paymentDate: Date | string
     paymentMode: $Enums.PaymentMode
+    transactionNo?: string | null
+    bankName?: string | null
     receiptNo: string
   }
 
@@ -55205,6 +55285,8 @@ export namespace Prisma {
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     studentFee?: StudentFeeUpdateOneRequiredWithoutFeeLogsNestedInput
   }
@@ -55215,6 +55297,8 @@ export namespace Prisma {
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
   }
 
@@ -55224,6 +55308,8 @@ export namespace Prisma {
     amountPaid: number
     paymentDate: Date | string
     paymentMode: $Enums.PaymentMode
+    transactionNo?: string | null
+    bankName?: string | null
     receiptNo: string
   }
 
@@ -55231,6 +55317,8 @@ export namespace Prisma {
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
   }
 
@@ -55240,6 +55328,8 @@ export namespace Prisma {
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
   }
 
@@ -55254,6 +55344,8 @@ export namespace Prisma {
     paymentStatus?: $Enums.PaymentStatus
     isOpeningBalance?: boolean
     sourceType?: string | null
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
     course?: CourseCreateNestedOneWithoutStudentFeesInput
@@ -55276,6 +55368,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: string | null
     clientAdminId: string
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
   }
@@ -55291,6 +55385,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
     course?: CourseUpdateOneWithoutStudentFeesNestedInput
@@ -55313,6 +55409,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
   }
@@ -55332,6 +55430,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: string | null
     clientAdminId: string
+    transactionNo?: string | null
+    bankName?: string | null
   }
 
   export type StudentFeeUpdateManyMutationInput = {
@@ -55345,6 +55445,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentFeeUncheckedUpdateManyInput = {
@@ -55362,6 +55464,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StationeryItemCreateInput = {
@@ -57936,6 +58040,8 @@ export namespace Prisma {
     amountPaid?: SortOrder
     paymentDate?: SortOrder
     paymentMode?: SortOrder
+    transactionNo?: SortOrder
+    bankName?: SortOrder
     receiptNo?: SortOrder
   }
 
@@ -57951,6 +58057,8 @@ export namespace Prisma {
     amountPaid?: SortOrder
     paymentDate?: SortOrder
     paymentMode?: SortOrder
+    transactionNo?: SortOrder
+    bankName?: SortOrder
     receiptNo?: SortOrder
   }
 
@@ -57960,6 +58068,8 @@ export namespace Prisma {
     amountPaid?: SortOrder
     paymentDate?: SortOrder
     paymentMode?: SortOrder
+    transactionNo?: SortOrder
+    bankName?: SortOrder
     receiptNo?: SortOrder
   }
 
@@ -58023,6 +58133,8 @@ export namespace Prisma {
     isOpeningBalance?: SortOrder
     sourceType?: SortOrder
     clientAdminId?: SortOrder
+    transactionNo?: SortOrder
+    bankName?: SortOrder
   }
 
   export type StudentFeeAvgOrderByAggregateInput = {
@@ -58048,6 +58160,8 @@ export namespace Prisma {
     isOpeningBalance?: SortOrder
     sourceType?: SortOrder
     clientAdminId?: SortOrder
+    transactionNo?: SortOrder
+    bankName?: SortOrder
   }
 
   export type StudentFeeMinOrderByAggregateInput = {
@@ -58065,6 +58179,8 @@ export namespace Prisma {
     isOpeningBalance?: SortOrder
     sourceType?: SortOrder
     clientAdminId?: SortOrder
+    transactionNo?: SortOrder
+    bankName?: SortOrder
   }
 
   export type StudentFeeSumOrderByAggregateInput = {
@@ -64326,6 +64442,8 @@ export namespace Prisma {
     paymentStatus?: $Enums.PaymentStatus
     isOpeningBalance?: boolean
     sourceType?: string | null
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     course?: CourseCreateNestedOneWithoutStudentFeesInput
     student: StudentCreateNestedOneWithoutFeeRecordsInput
@@ -64346,6 +64464,8 @@ export namespace Prisma {
     paymentStatus?: $Enums.PaymentStatus
     isOpeningBalance?: boolean
     sourceType?: string | null
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
   }
@@ -65209,6 +65329,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFilter<"StudentFee"> | boolean
     sourceType?: StringNullableFilter<"StudentFee"> | string | null
     clientAdminId?: StringFilter<"StudentFee"> | string
+    transactionNo?: StringNullableFilter<"StudentFee"> | string | null
+    bankName?: StringNullableFilter<"StudentFee"> | string | null
   }
 
   export type StudentTaskUpsertWithWhereUniqueWithoutClientAdminInput = {
@@ -67475,6 +67597,8 @@ export namespace Prisma {
     paymentStatus?: $Enums.PaymentStatus
     isOpeningBalance?: boolean
     sourceType?: string | null
+    transactionNo?: string | null
+    bankName?: string | null
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
     course?: CourseCreateNestedOneWithoutStudentFeesInput
     student: StudentCreateNestedOneWithoutFeeRecordsInput
@@ -67496,6 +67620,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: string | null
     clientAdminId: string
+    transactionNo?: string | null
+    bankName?: string | null
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
   }
 
@@ -67735,6 +67861,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
     course?: CourseUpdateOneWithoutStudentFeesNestedInput
     student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
@@ -67756,6 +67884,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
   }
 
@@ -68173,6 +68303,8 @@ export namespace Prisma {
     paymentStatus?: $Enums.PaymentStatus
     isOpeningBalance?: boolean
     sourceType?: string | null
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
     course?: CourseCreateNestedOneWithoutStudentFeesInput
@@ -68193,6 +68325,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: string | null
     clientAdminId: string
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
   }
@@ -69000,6 +69134,8 @@ export namespace Prisma {
     paymentStatus?: $Enums.PaymentStatus
     isOpeningBalance?: boolean
     sourceType?: string | null
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
     student: StudentCreateNestedOneWithoutFeeRecordsInput
@@ -69020,6 +69156,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: string | null
     clientAdminId: string
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
     feeLogs?: StudentFeeLogUncheckedCreateNestedManyWithoutStudentFeeInput
   }
@@ -73403,6 +73541,8 @@ export namespace Prisma {
     paymentStatus?: $Enums.PaymentStatus
     isOpeningBalance?: boolean
     sourceType?: string | null
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationCreateNestedOneWithoutPaymentInput
     clientAdmin: ClientAdminCreateNestedOneWithoutStudentFeesInput
     course?: CourseCreateNestedOneWithoutStudentFeesInput
@@ -73424,6 +73564,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: string | null
     clientAdminId: string
+    transactionNo?: string | null
+    bankName?: string | null
     notification?: NotificationUncheckedCreateNestedOneWithoutPaymentInput
   }
 
@@ -73454,6 +73596,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
     course?: CourseUpdateOneWithoutStudentFeesNestedInput
@@ -73475,6 +73619,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
   }
 
@@ -73744,6 +73890,8 @@ export namespace Prisma {
     amountPaid: number
     paymentDate: Date | string
     paymentMode: $Enums.PaymentMode
+    transactionNo?: string | null
+    bankName?: string | null
     receiptNo: string
   }
 
@@ -73752,6 +73900,8 @@ export namespace Prisma {
     amountPaid: number
     paymentDate: Date | string
     paymentMode: $Enums.PaymentMode
+    transactionNo?: string | null
+    bankName?: string | null
     receiptNo: string
   }
 
@@ -74076,6 +74226,8 @@ export namespace Prisma {
     amountPaid?: FloatFilter<"StudentFeeLog"> | number
     paymentDate?: DateTimeFilter<"StudentFeeLog"> | Date | string
     paymentMode?: EnumPaymentModeFilter<"StudentFeeLog"> | $Enums.PaymentMode
+    transactionNo?: StringNullableFilter<"StudentFeeLog"> | string | null
+    bankName?: StringNullableFilter<"StudentFeeLog"> | string | null
     receiptNo?: StringFilter<"StudentFeeLog"> | string
   }
 
@@ -79431,6 +79583,8 @@ export namespace Prisma {
     paymentStatus?: $Enums.PaymentStatus
     isOpeningBalance?: boolean
     sourceType?: string | null
+    transactionNo?: string | null
+    bankName?: string | null
   }
 
   export type StudentTaskCreateManyClientAdminInput = {
@@ -80298,6 +80452,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     course?: CourseUpdateOneWithoutStudentFeesNestedInput
     student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
@@ -80318,6 +80474,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
   }
@@ -80336,6 +80494,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentTaskUpdateWithoutClientAdminInput = {
@@ -80735,6 +80895,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: string | null
     clientAdminId: string
+    transactionNo?: string | null
+    bankName?: string | null
   }
 
   export type StudentTaskCreateManyStudentInput = {
@@ -81017,6 +81179,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
     course?: CourseUpdateOneWithoutStudentFeesNestedInput
@@ -81037,6 +81201,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
   }
@@ -81055,6 +81221,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentTaskUpdateWithoutStudentInput = {
@@ -81232,6 +81400,8 @@ export namespace Prisma {
     isOpeningBalance?: boolean
     sourceType?: string | null
     clientAdminId: string
+    transactionNo?: string | null
+    bankName?: string | null
   }
 
   export type StudentTaskCreateManyCourseInput = {
@@ -81515,6 +81685,8 @@ export namespace Prisma {
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUpdateOneWithoutPaymentNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentFeesNestedInput
     student?: StudentUpdateOneRequiredWithoutFeeRecordsNestedInput
@@ -81535,6 +81707,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUncheckedUpdateOneWithoutPaymentNestedInput
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
   }
@@ -81553,6 +81727,8 @@ export namespace Prisma {
     isOpeningBalance?: BoolFieldUpdateOperationsInput | boolean
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentTaskUpdateWithoutCourseInput = {
@@ -82272,6 +82448,8 @@ export namespace Prisma {
     amountPaid: number
     paymentDate: Date | string
     paymentMode: $Enums.PaymentMode
+    transactionNo?: string | null
+    bankName?: string | null
     receiptNo: string
   }
 
@@ -82279,6 +82457,8 @@ export namespace Prisma {
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
   }
 
@@ -82287,6 +82467,8 @@ export namespace Prisma {
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
   }
 
@@ -82295,6 +82477,8 @@ export namespace Prisma {
     amountPaid?: FloatFieldUpdateOperationsInput | number
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    transactionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
   }
 

@@ -1,41 +1,44 @@
-// useQueryFetchPayment.ts
-import { useQuery } from '@tanstack/react-query';
-import { getPayment } from '@/lib/api';
+import { useQuery } from "@tanstack/react-query";
+import { getPayment } from "@/lib/api";
+import { PAGE_SIZE } from "@/constants/pagination";
 
-export interface UseFetchPaymentParams {
-  token: string;
-  page?: number;
-  limit?: number;
-  search?: string;
-  sortField?: string;
-  sortOrder?: 'asc' | 'desc';
+interface UsePaymentsProps {
+  currentPage: number;
+  searchQuery: string;
+  sortField: string;
+  sortOrder: "asc" | "desc";
+  filters: Record<string, string | null>;
 }
 
-export const useFetchPayment = ({
-  token,
-  page = 1,
-  limit = 5,
-  search = '',
+export function useFetchPayment({
+  currentPage,
+  searchQuery,
   sortField,
   sortOrder,
-}: UseFetchPaymentParams) => {
+  filters,
+}: UsePaymentsProps) {
+  const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
+
   return useQuery({
-    queryKey: ['payment', page, limit, search, sortField, sortOrder],
+    // The query key acts as a dependency array for your network requests
+    queryKey: ["payments", { currentPage, searchQuery, sortField, sortOrder, filters }],
     queryFn: async () => {
-      if (!token) throw new Error('Missing token');
-      const data = await getPayment({
+      if (!token) {
+        throw new Error("Token missing from sessionStorage");
+      }
+      return getPayment({
         token,
-        page,
-        limit,
-        search,
+        page: currentPage,
+        limit: PAGE_SIZE,
+        search: searchQuery,
         sortField,
         sortOrder,
+        ...filters,
       });
-
-      if (!data) throw new Error('No data returned');
-
-      return data;
     },
+    // Prevent query running if there's no auth token available
     enabled: !!token,
+    // Optional: Keeps previous data on screen while fetching new pages (prevents flickering)
+    placeholderData: (previousData) => previousData,
   });
-};
+}

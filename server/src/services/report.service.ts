@@ -98,20 +98,43 @@ export async function getReportDataService({
 
       const fees = await prisma.studentFee.findMany({
         where: feeConditions,
-        include: { student: true, course: true },
+        include: { 
+          student: {
+            include: {
+              // 🌟 Include feeStructures to pull the total course invoice limit natively
+              feeStructures: true 
+            }
+          }, 
+          course: true 
+        },
         orderBy: { createdAt: "desc" },
       });
 
-      return fees.map(f => ({
-        "Receipt No.": f.receiptNo || "-",
-        "Student Name": f.student?.fullName || "N/A",
-        "Course Program": f.course?.name || "Generic Fee",
-        "Amount Due": f.amountDue ?? 0,
-        "Amount Paid": f.amountPaid ?? 0,
-        "Remaining Balance": (f.amountDue ?? 0) - (f.amountPaid ?? 0),
-        "Payment Status": f.paymentStatus || "-",
-        "Due Date String": f.dueDate ? f.dueDate.toLocaleDateString("en-GB") : "-",
-      }));
+      return fees.map(f => {
+        // Find the specific course structure link matching this fee entry record
+        const matchingStructure = f.student?.feeStructures?.find(
+          (fs: any) => fs.courseId === f.courseId
+        );
+
+        // 🌟 Total Course Amount is retrieved from the FeeStructure, fallback safely to dynamic parts sum if unlinked
+        const totalCourseFee = matchingStructure?.totalAmount ?? ((f.amountDue ?? 0) + (f.amountPaid ?? 0));
+        const amountPaid = f.amountPaid ?? 0;
+        
+        // 🌟 FIXED MATHEMATICAL LOGIC: Remaining balance is Total Limit minus what has been cleared down
+        const remainingBalance = totalCourseFee - amountPaid;
+
+        return {
+          "Receipt No.": f.receiptNo || "-",
+          "Student Name": f.student?.fullName || "N/A",
+          "Course Program": f.course?.name || "Generic Fee",
+          "Total Course Fee": totalCourseFee,
+          "Amount Paid": amountPaid,
+          "Remaining Balance": remainingBalance,
+          "Invoice Due Component": f.amountDue ?? 0,
+          "Payment Status": f.paymentStatus || "-",
+          "Due Date String": f.dueDate ? f.dueDate.toLocaleDateString("en-GB") : "-",
+        };
+      });
     }
 
     case "STUDENTS": {

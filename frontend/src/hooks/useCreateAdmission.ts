@@ -1,13 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
-import { createAdmission, getEnquiry, getWonEnquiry } from "@/lib/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createAdmission } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import { setStudents } from "@/store/slices/studentSlice";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setEnquiries,
-} from "@/store/slices/enquirySlice";
-import { setAdmissions, setCurrentPage, setError, setSearchQuery } from "@/store/slices/admissionSlice";
-import { RootState } from "@/store";
+import { setError, setSearchQuery } from "@/store/slices/admissionSlice";
 
 type AdmissionPayload = {
   token: string;
@@ -37,84 +33,58 @@ type AdmissionPayload = {
 };
 
 export const useCreateAdmission = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
-  const admissionCurrentPage = useSelector((state: RootState) => state.admission.currentPage);
-  const enquiryCurrentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: AdmissionPayload) => {
       const { token, profilePicture, advancePayments, courseData, ...rest } = payload;
 
-      console.log("🔥 Received Payload:", payload);
-      console.log("Raw Jwt Token:", payload.token);
+      console.log("🔥 Received Payload inside Mutation:", payload);
 
       const formData = new FormData();
 
-      // ✅ Append all fields to FormData
+      // ✅ Append flat fields to FormData
       Object.entries(rest).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
           formData.append(key, value.toString());
         }
       });
 
-      // ✅ Append profile picture if available
-      // if (profilePicture) {
-      //   formData.append("profilePicture", profilePicture);
-      // }
-
-      // Append file only if it exists
+      // ✅ Append files safely
       if (payload.profilePicture) {
-        formData.append("profilePicture", payload.profilePicture); // <--- actual File object
+        formData.append("profilePicture", payload.profilePicture);
       }
+
+      // ✅ Stringify nested structural collections cleanly
       if (payload.courseData) {
-        // 🔑 Stringify courseData array
         formData.append("courseData", JSON.stringify(payload.courseData));
       }
       if (payload.advancePayments) {
-        // 🔑 Stringify advancePayment array
         formData.append("advancePayments", JSON.stringify(payload.advancePayments));
       }
 
-      // Debug
-      console.log("📦 Constructed FormData:");
-      for (const [key, val] of formData.entries()) {
-        if (val instanceof File) {
-          console.log(
-            `${key}: File { name: ${val.name}, size: ${val.size}, type: ${val.type} }`,
-          );
-        } else {
-          console.log(`${key}: ${val}`);
-        }
-      }
-
-      // Call your backend API
+      // Call your backend multipart API handler
       return await createAdmission(token, formData);
     },
 
-    // ✅ Make onSuccess async so you can await inside it
-    onSuccess: async (data, variables) => {
-      console.log("✅ Admission Created Successfully:", data);
+    onSuccess: async () => {
+      console.log("INVALIDATEQUERIES TRIGGERED IN ADMISSIONS!");
 
-      // Update students
-      dispatch(setStudents(data.getAllStudent));
+      // ✅ 1. Invalidate using the target namespace matching "useFetchWonAdmissions"
+      // This tells TanStack Query to immediately trigger a background refetch for the table grid.
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["won-admissions"] }),
+        queryClient.invalidateQueries({ queryKey: ["enquiry"] }) // Invalidates the master enquiries view too since a lead was converted
+      ]);
 
-      // Refetch updated enquiries
-      const updatedWonEnquiry = await getWonEnquiry({
-        token: variables.token,
-        page: admissionCurrentPage,
-        limit: 5,
-        sortField: "createdAt",
-      });
-
-      console.log("📋 Updated Enquiries After New Admission:", updatedWonEnquiry);
-
-      dispatch(setAdmissions(updatedWonEnquiry.data));
+      // ✅ 2. Reset local filter fields cleanly 
       dispatch(setSearchQuery(""));
+      dispatch(setError(null));
     },
 
     onError: (error: any) => {
-      const backend = error?.response?.data?.error || "Failed to create enquiry";
+      const backend = error?.response?.data?.error || "Failed to finalize admission file";
       dispatch(setError(backend));
     },
   });

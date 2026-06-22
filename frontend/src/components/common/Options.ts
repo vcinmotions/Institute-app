@@ -10,3 +10,10 @@ export const genders = [
   { value: "male", label: "Male" },
   { value: "other", label: "Other" },
 ];
+
+export const paymentModeOptions = [
+  { value: "CASH", label: "Cash" },
+  { value: "UPI", label: "UPI" },
+  { value: "BANK_TRANSFER", label: "Bank Transfer" },
+  { value: "CHEQUE", label: "Cheque" },
+];

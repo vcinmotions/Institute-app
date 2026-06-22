@@ -28,6 +28,7 @@ export async function getPayment({
 
   const orderBy = buildPaymentOrderBy(query.sortField, query.sortOrder);
 
+  // 1. Fetch the core paginated records
   const [payments, total] = await prisma.$transaction([
     prisma.studentFee.findMany({
       where,
@@ -38,86 +39,53 @@ export async function getPayment({
         student: true,
         course: true,
         feeLogs: true,
-        
       },
     }),
     prisma.studentFee.count({ where }),
   ]);
 
-  // Optional: enrich with detailed fee structure
-  // const detailedPayments = await Promise.all(
-  //   payments.map(async (p) => {
-  //     // const feeStructure = await prisma.feeStructure.findUnique({
-  //     //   where: {
-  //     //     studentId_courseId: {
-  //     //       studentId: p.studentId,
-  //     //       courseId: p.courseId,
-  //     //     },
-  //     //   },
-  //     // });
-
-  //     let feeStructure = null;
-
-  //     if (p.courseId !== null) {
-  //       feeStructure = await prisma.feeStructure.findUnique({
-  //         where: {
-  //           studentId_courseId: {
-  //             studentId: p.studentId,
-  //             courseId: p.courseId,
-  //           },
-  //         },
-  //       });
-  //     }
-
-  //     const feeRecords = await prisma.studentFee.findMany({
-  //       where: { studentId: p.studentId, courseId: p.courseId },
-  //     });
-
-  //     return {
-  //       studentPayment: p,
-  //       feeStructure,
-  //       feeRecords,
-  //     };
-  //   })
-  // );
-
-  const detailedPayments = await Promise.all(
-    payments.map(async (p) => {
-      if (!p.courseId) {
+  // 2. Map and structurally merge side-queries directly into each object
+  const unifiedPayments = await Promise.all(
+    payments.map(async (paymentItem) => {
+      // Default structural fallbacks if there's no course context
+      if (!paymentItem.courseId) {
         return {
-          studentPayment: p,
+          ...paymentItem, // Spreads id, amountDue, amountPaid, student, course, feeLogs, etc.
           feeStructure: null,
           feeRecords: [],
         };
       }
 
-      const feeStructure = await prisma.feeStructure.findUnique({
-        where: {
-          studentId_courseId: {
-            studentId: p.studentId,
-            courseId: p.courseId,
+      // Fetch accompanying relational information concurrently for this record
+      const [feeStructure, feeRecords] = await Promise.all([
+        prisma.feeStructure.findUnique({
+          where: {
+            studentId_courseId: {
+              studentId: paymentItem.studentId,
+              courseId: paymentItem.courseId,
+            },
           },
-        },
-      });
+        }),
+        prisma.studentFee.findMany({
+          where: {
+            studentId: paymentItem.studentId,
+            courseId: paymentItem.courseId,
+          },
+        }),
+      ]);
 
-      const feeRecords = await prisma.studentFee.findMany({
-        where: {
-          studentId: p.studentId,
-          courseId: p.courseId,
-        },
-      });
-
+      // Return one single enriched object
       return {
-        studentPayment: p,
+        ...paymentItem, 
         feeStructure,
         feeRecords,
       };
     })
   );
 
+  // 3. Return the unified array directly to the 'data' key
   return {
-    data: payments,
-    detailedPayments,
+    data: unifiedPayments, 
     total,
     totalPages: Math.ceil(total / query.limit),
   };

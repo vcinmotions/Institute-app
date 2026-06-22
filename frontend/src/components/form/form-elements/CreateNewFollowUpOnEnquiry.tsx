@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { RootState } from "@/store";
 import TextArea from "../input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
-import DatePicker from "../date-picker";
 
 interface CreateFollowUpModalProps {
   onClose: () => void;
@@ -26,36 +25,28 @@ export default function CreateNewFollowUpOnEnquiryModal({
   enquiryId,
   title,
 }: CreateFollowUpModalProps) {
+  const dispatch = useDispatch();
   const [remark, setRemark] = useState("");
   const [scheduledAt, setScheduledAt] = useState<string>("");
   const [errors, setErrors] = useState<Partial<FollowUpData>>({});
-  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
-  const searchQuery = useSelector((state: RootState) => state.enquiry.searchQuery);
-
-  const dispatch = useDispatch();
-  
-  // New state for alert
-      const [alert, setAlert] = useState<{
-        show: boolean;
-        title: string;
-        message: string;
-        variant: string;
-      }>({
-        show: false,
-        title: "",
-        message: "",
-        variant: "",
-      });
-
-  // Option 2: callback style
-  const { mutate: createInitialFollowUp } = useCreateInitialFollowUp();
-  console.log("Creating follow-up for Enquiry ID:", enquiryId);
-  console.log("CURRENTTTT PAGE IN CREATE NEW FOLLOW_UP:", currentPage);
-  console.log("searchQuery PAGE IN CREATE NEW FOLLOW_UP:", searchQuery);
 
   const error = useSelector((state: RootState) => state.enquiry.error);
-
   const firstInputRef = useRef<HTMLInputElement>(null);
+
+  const [alert, setAlert] = useState<{
+    show: boolean;
+    title: string;
+    message: string;
+    variant: string;
+  }>({
+    show: false,
+    title: "",
+    message: "",
+    variant: "",
+  });
+
+  // ✅ Expose native isPending state out of mutation hook directly
+  const { mutate: createInitialFollowUp, isPending } = useCreateInitialFollowUp();
 
   useEffect(() => {
     firstInputRef.current?.focus();
@@ -63,73 +54,69 @@ export default function CreateNewFollowUpOnEnquiryModal({
 
   useEffect(() => {
     if (!error) return;
-
     toast.error(error);
 
     const timer = setTimeout(() => {
-      dispatch(setError(null)); // ✅ Clear error after 3 sec
+      dispatch(setError(null));
     }, 3000);
 
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const validationErrors: Partial<FollowUpData> = {};
 
     if (!remark.trim()) validationErrors.remark = "Remark is required.";
-    if (!scheduledAt)
-      validationErrors.scheduledAt = "Schedule time is required.";
+    if (!scheduledAt) validationErrors.scheduledAt = "Schedule time is required.";
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter all inputs.",
+        message: "Please populate all inputs before submitting.",
         variant: "error",
       });
-      // Optional: clear validation errors after 3 seconds
-       // ✅ FIXED setTimeout
-    setTimeout(() => {
-      setErrors({});
-      setAlert({ show: false, title: "", message: "", variant: "" });
-    }, 2000);
+
+      setTimeout(() => {
+        setErrors({});
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
       return;
     }
 
     try {
       const isoScheduledAt = new Date(scheduledAt).toISOString();
 
-      console.log("Creating follow-up for Enquiry ID:", enquiryId);
-      console.log("Remark:", remark);
-      console.log("Scheduled At (ISO):", isoScheduledAt);
-
-      await createInitialFollowUp({
-        enquiryId,
-        remark,
-        currentPage,
-        scheduledAt: isoScheduledAt,
-        searchQuery
-      });
-
-      // Reset form and close modal
-      setRemark("");
-      setScheduledAt("");
-      setErrors({});
-      onClose();
-    } catch (error) {
-      console.error("Failed to create follow-up:", error);
-      setErrors({ remark: "Failed to create follow-up. Please try again." });
+      createInitialFollowUp(
+        {
+          enquiryId,
+          remark,
+          scheduledAt: isoScheduledAt,
+        },
+        {
+          // ✅ Safe modal exit execution path on true successful pipeline responses
+          onSuccess: () => {
+            toast.success("Follow-up logs initiated successfully");
+            setRemark("");
+            setScheduledAt("");
+            setErrors({});
+            onClose();
+          },
+          onError: (err: any) => {
+            console.error("Mutation save tracking error failure:", err);
+          }
+        }
+      );
+    } catch (e) {
+      console.error("Failed to parse datetime parameters:", e);
     }
   };
-
-  console.log("Creating follow-up for Enquiry ID:", enquiryId);
 
   return (
     <ModalCard title={title} oncloseModal={onClose}>
       <div className="space-y-6">
-      {alert.show && (
+        {alert.show && (
           <Alert
             variant={"error"}
             title={alert.title}
@@ -137,6 +124,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
             showLink={false}
           />
         )}
+
         <div>
           <label className="block pb-2 text-sm text-gray-700 dark:text-gray-300">
             Remark
@@ -145,13 +133,14 @@ export default function CreateNewFollowUpOnEnquiryModal({
             ref={firstInputRef}
             tabIndex={1}
             value={remark}
+            disabled={isPending}
             className="w-full rounded capitalize border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
             onChange={(value) => setRemark(value)}
             rows={6}
-            placeholder="Interview Follow-Up Schedule"
+            placeholder="Interview Follow-Up Schedule Notes..."
           />
           {errors.remark && (
-            <p className="text-sm text-red-500">{errors.remark}</p>
+            <p className="text-sm text-red-500 mt-1">{errors.remark}</p>
           )}
         </div>
 
@@ -164,19 +153,10 @@ export default function CreateNewFollowUpOnEnquiryModal({
               tabIndex={2}
               type="datetime-local"
               value={scheduledAt}
+              disabled={isPending}
               onChange={(e) => setScheduledAt(e.target.value)}
-              className="w-full appearance-none rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-400"
+              className="w-full appearance-none rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
             />
-            {/* <DatePicker 
-             mode="single"
-             id={"date"} 
-             tabIndex={2}
-            
-              defaultDate={scheduledAt}
-              onChange={(_, dateStr) => {
-                setScheduledAt(dateStr);
-              }}
-            /> */}
             {errors.scheduledAt && (
               <p className="pt-2 text-sm text-red-500">{errors.scheduledAt}</p>
             )}
@@ -184,21 +164,21 @@ export default function CreateNewFollowUpOnEnquiryModal({
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <Button size="sm" variant="outline" tabIndex={3} onClick={onClose}>
+          <Button size="sm" variant="outline" tabIndex={3} disabled={isPending} onClick={onClose}>
             Cancel
           </Button>
           <Button
             size="sm"
-            variant="primary"  
-            className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
+            variant="primary"
+            className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900 disabled:opacity-50"
             tabIndex={4}
+            disabled={isPending}
             onClick={handleSubmit}
           >
-            Save Follow-Up
+            {isPending ? "Saving Record..." : "Save Follow-Up"}
           </Button>
         </div>
       </div>
     </ModalCard>
   );
 }
-

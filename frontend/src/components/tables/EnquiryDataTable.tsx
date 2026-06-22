@@ -7,7 +7,6 @@ import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table"
 import Badge from "../ui/badge/Badge";
 import Button from "../ui/button/Button";
 import TimelineDatatable from "@/app/(admin)/(ui-elements)/timeline/TimelineComponent";
-import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 import CompleteFollowUpModal from "../form/form-elements/CompleteFollowUp";
 import HoldEnquiryModal from "../form/form-elements/HoldEnquiryForm";
 import LostEnquiryModal from "../form/form-elements/LostEnquiryForm";
@@ -20,6 +19,7 @@ import ShowForRoles from "@/app/utils/ShowForRoles";
 import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
 import { canEditEnquiry, canHoldEnquiry, canMarkLost, canMarkWon } from "@/domain/enquiry/rules";
 import { formatDate } from "../common/Formatdate";
+import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
 
 type FollowUpModalType =
   | "createNew"

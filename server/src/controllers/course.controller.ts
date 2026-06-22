@@ -5,6 +5,7 @@ import { courseQuerySchema } from "../validators/course.query";
 import { getCourses } from "../services/course.service";
 import { titleCase } from "../utils/Normalize";
 import { parseDate } from "../helpers/date";
+import { generatePaymentReceiptNumber } from "../utils/paymentReceiptConfig";
 
 function calculateTimePerDay(schedule: { startTime: string; endTime: string }) {
   const [startH, startM] = schedule.startTime.split(":").map(Number);
@@ -268,6 +269,9 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
             : null,
       },
     });
+    
+    // 🧠 Generate an official sequential receipt number
+    const receiptNo = await generatePaymentReceiptNumber(tenantPrisma, clientAdminId);
 
     // 💳 7. Create StudentFee
     const studentFee = await tenantPrisma.studentFee.create({
@@ -278,7 +282,7 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
         amountDue: feeStructure.totalAmount,
         amountPaid: 0,
         paymentMode: "CASH",
-        receiptNo: `RCP${Date.now()}`,
+        receiptNo: receiptNo, // 👈 Clean sequence number instead of timestamp string
         paymentStatus: "PENDING",
         clientAdminId,
       },

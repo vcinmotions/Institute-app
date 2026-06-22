@@ -1,54 +1,64 @@
 "use client";
+import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store";
+
+
 import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
-import { getPayment } from "@/lib/api";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store"; // Adjust path if needed
-import { useDispatch } from "react-redux";
-import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
-import StudentCard from "@/components/common/StudentCard";
-import { setCurrentPage, setFilters, setPayment, setSearchQuery, setSort, setTotal, setTotalPages } from "@/store/slices/paymentSlice";
-import PaymentDataTable from "@/components/tables/PaymentDataTable";
 import FilterBox from "@/components/form/input/FilterBox";
-import { PAGE_SIZE } from "@/constants/pagination";
-import useDebounce from "@/hooks/useDebounce";
-import EnquiryCard from "@/components/common/EnquiryCard";
-import LabForm from "@/components/form/form-elements/LabCreateForm";
+import PaymentDataTable from "@/components/tables/PaymentDataTable";
 import OpeningBalanceForm from "@/components/form/form-elements/OpeningBalanceCreateForm";
 
+import { PAGE_SIZE } from "@/constants/pagination";
+import useDebounce from "@/hooks/useDebounce";
+import {
+  setCurrentPage,
+  setFilters,
+  setSearchQuery,
+  setSort
+} from "@/store/slices/paymentSlice";
+import { useFetchPayment } from "@/hooks/queries/useQueryFetchPayment";
+
 export default function PaymentTable() {
-  const studentDetails = useSelector(
-    (state: RootState) => state.studentCourse.studentDetails,
-  );
-  const [showForm, setShowForm] = useState(false);
-  const { payment, searchQuery, sortField, sortOrder, currentPage, filters, total, totalPages } = useSelector((state: RootState) => state.payment);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const [paymentType, setPaymentType] = useState<
-    "ONE_TIME" | "INSTALLMENT" | null
-  >(null);
-
-  // 1. Separate state to track immediate input changes
-  const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
+  const [showForm, setShowForm] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [paymentType, setPaymentType] = useState<"ONE_TIME" | "INSTALLMENT" | null>(null);
   const paymentTypeOptions = [null, "ONE_TIME", "INSTALLMENT"] as const;
 
-  // called when filters applied
+  // 1. Get query parameters from Redux UI Slice
+  const { searchQuery, sortField, sortOrder, currentPage, filters } = useSelector(
+    (state: RootState) => state.payment
+  );
 
-  console.log("Get all payment:", payment);
+  // 2. React Query Hook replaces local loading states and manual dispatch useEffects
+  const {
+    data,
+    isLoading,
+    isError,
+    error
+  } = useFetchPayment({
+    currentPage,
+    searchQuery,
+    sortField,
+    sortOrder,
+    filters,
+  });
 
-  console.log("get All Students Deails;", studentDetails);
+  // Extract variables safely from React Query's cached response data object
+  const paymentsList = data?.data || [];
+  console.log("PAYMENTS DATA IN PAYENT TABLE:", paymentsList)
+  const totalCount = data?.total || 0;
+  const totalPages = data?.totalPages || 1;
 
-  // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
-  // Update searchInput immediately on typing
+  // 3. Debounce search handling
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value.toLocaleLowerCase());
   };
 
-  // --- Debounced search and Set delay time according to your needs
   const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-  // 2. sync debounced value to Redux
   useEffect(() => {
     if (debouncedSearchTerm !== searchQuery) {
       dispatch(setSearchQuery(debouncedSearchTerm));
@@ -56,44 +66,7 @@ export default function PaymentTable() {
     }
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
-
-  // Fetch data on mount or when filters change
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        console.error("Token missing from sessionStorage");
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const response = await getPayment({
-          token,
-          page: currentPage,
-          limit: PAGE_SIZE,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-          ...filters, // 👈 send filters to API
-        });
-
-        dispatch(setPayment(response.data || []));
-        dispatch(setTotalPages(response.totalPages || 1));
-        dispatch(setTotal(response.total || 0));
-      } catch (error) {
-        console.error("Error fetching enquiries:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder, filters]);
-
-
-  // --- Handlers (memoized)
-
+  // 4. Handlers (memoized)
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     dispatch(setCurrentPage(1));
@@ -115,19 +88,13 @@ export default function PaymentTable() {
 
   const handlePaymentType = (field: string) => {
     const currentIndex = paymentTypeOptions.indexOf(paymentType);
-    const nextType =
-      paymentTypeOptions[(currentIndex + 1) % paymentTypeOptions.length];
+    const nextType = paymentTypeOptions[(currentIndex + 1) % paymentTypeOptions.length];
     setPaymentType(nextType);
-    setCurrentPage(1); // Reset pagination on status change
+    dispatch(setCurrentPage(1));
   };
 
-  const handleCreateClick = () => {
-    setShowForm(!showForm);
-  };
-
-  const handleCloseModal = () => {
-    setShowForm(false);
-  };
+  const handleCreateClick = () => setShowForm(!showForm);
+  const handleCloseModal = () => setShowForm(false);
 
   return (
     <div>
@@ -139,47 +106,54 @@ export default function PaymentTable() {
             onSubmit={handleSearchSubmit}
           />
 
-          <FilterBox
-            onFilterChange={handleFilters}
-            filterFields={[
-              {
-                label: "Payment Status",
-                key: "paymentStatus",
-                type: "select",
-                options: [
-                  { label: "SUCCESS", value: "SUCCESS" },
-                  { label: "PENDING", value: "PENDING" },
-                  { label: "FAILED", value: "FAILED" },
-                ],
-              },
-              {
-                label: "Payment Mode",
-                key: "paymentMode",
-                type: "select",
-                options: [
-                  { label: "Cash", value: "CASH" },
-                  { label: "UPI", value: "UPI" },
-                  { label: "Card", value: "CARD" },
-                ],
-              },
-              { label: "From Date", key: "fromDate", type: "date" },
-              { label: "To Date", key: "toDate", type: "date" },
-            ]}
-          />
+          <div className="flex gap-2">
+            <FilterBox
+              onFilterChange={handleFilters}
+              filterFields={[
+                {
+                  label: "Payment Status",
+                  key: "paymentStatus",
+                  type: "select",
+                  options: [
+                    { label: "SUCCESS", value: "SUCCESS" },
+                    { label: "PENDING", value: "PENDING" },
+                    { label: "FAILED", value: "FAILED" },
+                  ],
+                },
+                {
+                  label: "Payment Mode",
+                  key: "paymentMode",
+                  type: "select",
+                  options: [
+                    { label: "Cash", value: "CASH" },
+                    { label: "UPI", value: "UPI" },
+                    { label: "Card", value: "CARD" },
+                  ],
+                },
+                { label: "From Date", key: "fromDate", type: "date" },
+                { label: "To Date", key: "toDate", type: "date" },
+              ]}
+            />
 
-          {/* Right Zone: ERP Contextual Actions Button */}
-          <button
-            type="button"
-            onClick={handleCreateClick}
-            className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
-          >
-            + Create Record
-          </button>
+            <button
+              type="button"
+              onClick={handleCreateClick}
+              className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+            >
+              + Create Record
+            </button>
+          </div>
         </div>
 
+        {isError && (
+          <div className="text-red-500 text-xs p-2 bg-red-50 dark:bg-red-950/30 rounded">
+            Error fetching payments: {(error as Error).message}
+          </div>
+        )}
+
         <PaymentDataTable
-          payment={payment}
-          loading={loading}
+          payment={paymentsList}
+          loading={isLoading} // React Query handles this natively now
           onPaymentType={handlePaymentType}
           onSort={handleSort}
           sortField={sortField}
@@ -190,7 +164,7 @@ export default function PaymentTable() {
           currentPage={currentPage}
           totalPages={totalPages}
           limit={PAGE_SIZE}
-          totalCount={total}
+          totalCount={totalCount}
           title="Student Payments"
           onPageChange={handlePagination}
         />

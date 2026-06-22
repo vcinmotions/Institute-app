@@ -1,3 +1,4 @@
+"use client";
 import {
     Table,
     TableBody,
@@ -6,11 +7,11 @@ import {
     TableRow,
 } from "../ui/table";
 import { useState } from "react";
-import Button from "../ui/button/Button";
 import Badge from "../ui/badge/Badge";
 import { Tooltip } from "@heroui/react";
-import { TASK_STATUS } from "../common/BadgeStatus";
 import EditTestForm from "../form/form-elements/EditTestForm";
+import { usePublishTest } from "@/hooks/usePublishTest"; // Import our fresh hook
+import { useRouter } from "next/navigation";
 
 type TestDataTableProps = {
     tests: any[];
@@ -26,6 +27,11 @@ export default function TestDataTable({
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [testDetail, setTestDetail] = useState(false);
     const [testData, setTestData] = useState<any>(null);
+    // Inside your Table component:
+    const router = useRouter();
+
+    // Call our newly added publish mutation hook
+    const { mutate: publishTest } = usePublishTest();
 
     const handleCloseModal = () => {
         setSelectedId(null);
@@ -34,14 +40,8 @@ export default function TestDataTable({
     };
 
     const handleEditLab = (item: any) => {
-        setSelectedId(item.id);
-        setTestDetail(true);
-        setTestData(item);
-    };
-
-    const handlePublish = (item: any) => {
-        // TODO: wire to actual publish mutation/endpoint
-        console.log("Publish requested for test:", item.id);
+        // Redirects directly to the dedicated edit page using the query string format
+        router.push(`/dashboard/test/edit?id=${item.id}`);
     };
 
     return (
@@ -49,7 +49,6 @@ export default function TestDataTable({
             <div className="max-w-full overflow-x-auto">
                 <div className="max-h-[550px] min-w-[640px] overflow-y-auto">
                     <Table className="w-full table-fixed border-collapse text-left">
-                        {/* ERP Style Table Header */}
                         <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
                             <TableRow>
                                 <TableCell isHeader className="h-9 w-[26%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -64,85 +63,92 @@ export default function TestDataTable({
                                 <TableCell isHeader className="h-9 w-[14%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Status
                                 </TableCell>
-                                <TableCell isHeader className="h-9 w-[16%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                    Publish
-                                </TableCell>
+                                {/* <TableCell isHeader className="h-9 w-[16%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Action
+                                </TableCell> */}
                                 <TableCell isHeader className="h-9 w-[10%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Edit
                                 </TableCell>
                             </TableRow>
                         </TableHeader>
 
-                        {/* High Density Data Cells */}
                         <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                             {tests && tests.length > 0 ? (
-                                tests.map((item: any) => (
-                                    <TableRow
-                                        key={item.id}
-                                        className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
-                                    >
-                                        <TableCell className="px-3 py-1.5">
-                                            <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize truncate block">
-                                                {item.name}
-                                            </span>
-                                        </TableCell>
+                                tests.map((item: any) => {
+                                    const isDraft = item.status === "DRAFT";
 
-                                        <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 truncate">
-                                            {item.batch?.name || "-"}
-                                        </TableCell>
+                                    return (
+                                        <TableRow
+                                            key={item.id}
+                                            className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                                        >
+                                            <TableCell className="px-3 py-1.5">
+                                                <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize truncate block">
+                                                    {item.name}
+                                                </span>
+                                            </TableCell>
 
-                                        <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 truncate">
-                                            {item.course?.name || "-"}
-                                        </TableCell>
+                                            <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 truncate">
+                                                {item.batch?.name || "-"}
+                                            </TableCell>
 
-                                        <TableCell className="px-3 py-1.5">
-                                            <Badge
-                                                size="sm"
-                                                color={TASK_STATUS[item.status] ?? "error"}
-                                            >
-                                                {item.status}
-                                            </Badge>
-                                        </TableCell>
+                                            <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 truncate">
+                                                {item.course?.name || "-"}
+                                            </TableCell>
 
-                                        <TableCell className="px-3 py-1.5">
-                                            <Button
-                                                onClick={() => handlePublish(item)}
-                                                disabled
-                                                size="sm"
-                                                allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]}
-                                                className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
-                                            >
-                                                Publish
-                                            </Button>
-                                        </TableCell>
-
-                                        <TableCell className="px-3 py-1.5">
-                                            <Tooltip
-                                                className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5"
-                                                content="Edit Test"
-                                            >
-                                                <button
-                                                    className="rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
-                                                    onClick={() => handleEditLab(item)}
+                                            <TableCell className="px-3 py-1.5">
+                                                <Badge
+                                                    size="sm"
+                                                    color={item.status === "PUBLISHED" ? "success" : "warning"}
                                                 >
-                                                    <svg
-                                                        width="15"
-                                                        height="15"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        strokeWidth="2"
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
+                                                    {item.status}
+                                                </Badge>
+                                            </TableCell>
+
+                                            {/* <TableCell className="px-3 py-1.5">
+                                                <Button
+                                                    onClick={() => handlePublish(item)}
+                                                    // Dynamic disabling state rule: lock out if already published
+                                                    disabled={!isDraft}
+                                                    size="sm"
+                                                    allowedRoles={["ADMIN", "FACULTY", "ACCOUNTANT"]}
+                                                    className={`h-6 rounded-[4px] px-2.5 text-[11px] font-medium shadow-sm transition ${isDraft
+                                                        ? "border border-brand-500 bg-brand-600 text-white hover:bg-brand-700 dark:bg-brand-600"
+                                                        : "border border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-600"
+                                                        }`}
+                                                >
+                                                    {isDraft ? "Publish" : "Assigned"}
+                                                </Button>
+                                            </TableCell> */}
+
+                                            <TableCell className="px-3 py-1.5">
+                                                <Tooltip
+                                                    className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5"
+                                                    content="Edit Test"
+                                                >
+                                                    <button
+                                                        className="rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                                                        onClick={() => handleEditLab(item)}
                                                     >
-                                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                        <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                                    </svg>
-                                                </button>
-                                            </Tooltip>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
+                                                        <svg
+                                                            width="15"
+                                                            height="15"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            strokeWidth="2"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                        >
+                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                            <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                                        </svg>
+                                                    </button>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })
                             ) : (
                                 <TableRow>
                                     <TableCell

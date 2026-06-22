@@ -33,7 +33,7 @@ export function buildStudentWhere({
     const numeric = Number(search);
     where.OR = [
       { fullName: { contains: normalizedNameSearch } },
-      { email: { startsWith: normalizedEmailSearch } },
+      // { email: { startsWith: normalizedEmailSearch } },
       { studentCode: { startsWith: normalizeStudentCode } },
       { contact: { contains: search } },
     //   ...(isNaN(numeric) ? [] : [{ srNo: numeric }]),

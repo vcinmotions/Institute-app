@@ -1,4 +1,4 @@
-import { editTaskAPI, editTestAPI, getTest } from "@/lib/api";
+import { editTestAPI, publishTestAPI, getTest } from "@/lib/api"; // 🔧 Imported here
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setLoading, setError } from "@/store/slices/courseSlice";
@@ -8,38 +8,34 @@ import { setTests } from "@/store/slices/testSlice";
 
 export const useEditTest = () => {
     const dispatch = useDispatch();
-    const { currentPage, searchQuery, } = useSelector((state: RootState) => state.test);
-    const token = useSelector((state: RootState) => state.auth.token); // ✅ From Redux
-    console.log("get Token in useEditCourse:", token);
+    const { currentPage, searchQuery } = useSelector((state: RootState) => state.test);
+    const token = useSelector((state: RootState) => state.auth.token);
 
     return useMutation({
-        mutationFn: async ({ newTest, id }: { newTest: any; id: any }) => {
-            console.log("GET FACULT BATCH ASSIGNED DATA IN MUTATION:", newTest, id);
-            if (!token) throw new Error("Missing Token for assign batch");
+        mutationFn: async ({ newTest, id, action }: { newTest: any; id: any; action: "DRAFT" | "PUBLISH" }) => {
+            if (!token) throw new Error("Missing Token Context");
 
             dispatch(setLoading(true));
+            let responseData;
 
-            await editTestAPI(token, newTest, id);
+            if (action === "PUBLISH") {
+                // ✅ Calls your clean, isolated publish function mirroring edit API style
+                responseData = await publishTestAPI(token, newTest);
+            } else {
+                // ✅ Calls your standard edit draft function
+                responseData = await editTestAPI(token, newTest, id);
+            }
 
-            return { token };
+            return { token, responseData };
         },
 
         onSuccess: async ({ token }) => {
-            // ✅ Refetch updated list
-            //const updated = await getEnquiry({ token, page: 1, limit: 5 });
             const updated = await getTest({ token, page: currentPage, limit: PAGE_SIZE, search: searchQuery });
-            console.log(
-                "get task List after create new task:",
-                updated,
-                updated.test,
-            );
-
-            // ✅ Only dispatch the array part
             dispatch(setTests(updated.test));
         },
 
         onError: (error: any) => {
-            const backendError = error?.response?.data?.error || "Failed to assign batch";
+            const backendError = error?.response?.data?.error || "Failed to alter test configuration schema context.";
             dispatch(setError(backendError));
         },
     });

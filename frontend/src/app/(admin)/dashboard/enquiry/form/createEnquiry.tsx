@@ -136,9 +136,12 @@ export default function EnquiryForm() {
 
   const { data: sourceData, isLoading, isError } = useFetchSource();
 
+  // Inside your EnquiryForm component, find this useEffect block:
+
   useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
+    // 🔧 FIXED: courseData is already the flat Course[] array because of the hook's select option
+    if (courseData && Array.isArray(courseData)) {
+      dispatch(setCourses(courseData));
     }
   }, [courseData, dispatch]);
 

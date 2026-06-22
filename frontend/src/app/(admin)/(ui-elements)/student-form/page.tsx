@@ -49,14 +49,12 @@ const StudentForm: React.FC<Props> = ({
         try {
             setPdfLoading(true);
 
-            // Temporarily clear surface shadows and borders for accurate PDF replication
             const element = formRef.current;
             const originalBorder = element.style.border;
             const originalShadow = element.style.boxShadow;
             element.style.border = "none";
             element.style.boxShadow = "none";
 
-            // Reset scroll positioning to clear window canvas artifacts during render grab
             window.scrollTo(0, 0);
 
             const canvas = await html2canvas(element, {
@@ -81,24 +79,21 @@ const StudentForm: React.FC<Props> = ({
                 },
             });
 
-            // Instantly restore background preview styling parameters
             element.style.border = originalBorder;
             element.style.boxShadow = originalShadow;
 
             const imgData = canvas.toDataURL("image/png");
             const pdf = new jsPDF("p", "mm", "a4");
 
-            const imgWidth = 210; // Standard layout A4 width configuration in mm
-            const pageHeight = 297; // Standard layout A4 height configuration in mm
+            const imgWidth = 210;
+            const pageHeight = 297;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
             let heightLeft = imgHeight;
             let position = 0;
 
-            // Map dynamic document image to the initial target page boundary
             pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
             heightLeft -= pageHeight;
 
-            // Execute sequential split appending loops if document content height causes overflow
             while (heightLeft >= 0) {
                 position = heightLeft - imgHeight;
                 pdf.addPage();
@@ -109,7 +104,7 @@ const StudentForm: React.FC<Props> = ({
             pdf.save(`AdmissionForm_${(student?.fullName || "Student").replace(/\s+/g, "_")}.pdf`);
         } catch (error) {
             console.error("Error generating PDF:", error);
-            alert("Failed to generate PDF file structural output due to styling compilation issues. Please try again.");
+            alert("Failed to generate PDF file structural output. Please try again.");
         } finally {
             setPdfLoading(false);
         }
@@ -132,7 +127,7 @@ const StudentForm: React.FC<Props> = ({
                 {/* A4 Page Preview Container */}
                 <div className="Admission-form">
 
-                    {/* THE PRINTABLE AREA (Strict White/Black styling for accurate printing) */}
+                    {/* THE PRINTABLE AREA */}
                     <div
                         ref={formRef}
                         className={`mx-auto bg-white p-8 text-[13px] text-black shadow-lg border border-gray-300 max-w-[210mm] min-h-[297mm] print:m-0 print:border-none print:shadow-none print:w-full print:h-auto ${printConfig.letterHead ? "pt-[120px]" : ""
@@ -156,7 +151,7 @@ const StudentForm: React.FC<Props> = ({
 
                             <div className="text-sm space-y-1 text-right">
                                 <p><b>Reg. Form No :</b> {student?.admissionNumber || "-"}</p>
-                                <p><b>Admission Date :</b> {student?.createdAt ? new Date(student.createdAt).toLocaleDateString("en-GB") : "-"}</p>
+                                <p><b>Admission Date :</b> {student?.admissionDate ? new Date(student.admissionDate).toLocaleDateString("en-GB") : "-"}</p>
                                 <p><b>Reg. Branch :</b> {companyDetails?.city || "Head Office"}</p>
                             </div>
 
@@ -208,7 +203,7 @@ const StudentForm: React.FC<Props> = ({
                             <p><b>Reference Details :</b> {student?.referedBy || "-"}</p>
                         </div>
 
-                        {/* IDENTITY RECORD DATA PRESENTATION */}
+                        {/* DOCUMENTS SECTION (Meticulously redacting Aadhaar number digits) */}
                         <h2 className="mt-4 bg-red-700 text-white px-2 py-1 text-sm font-bold uppercase"
                             style={{ backgroundColor: "#b91c1c", color: "#ffffff" }}
                         >
@@ -246,42 +241,45 @@ const StudentForm: React.FC<Props> = ({
                                     <tr className="bg-gray-200 print:bg-gray-200">
                                         <th className="border border-black p-1.5">Sr</th>
                                         <th className="border border-black p-1.5 text-left">Course Name</th>
-                                        <th className="border border-black p-1.5">Date</th>
-                                        <th className="border border-black p-1.5">Course Fees</th>
-                                        <th className="border border-black p-1.5">Discount</th>
-                                        <th className="border border-black p-1.5">Advance</th>
+                                        <th className="border border-black p-1.5">Start Date</th>
+                                        <th className="border border-black p-1.5">End Date</th>
+                                        <th className="border border-black p-1.5">Total Fees</th>
+                                        <th className="border border-black p-1.5">Amount Paid</th>
+                                        <th className="border border-black p-1.5">Amount Due</th>
                                         <th className="border border-black p-1.5">Rec No</th>
-                                        <th className="border border-black p-1.5">Installment</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {detailedCourses.length > 0 ? (
                                         detailedCourses.map((item: any, index: number) => {
-                                            // Handling standard dynamic deep parsing based on structure
-                                            const courseName = item.studentCourse?.course?.name || `Course #${item.studentCourse?.courseId || index + 1}`;
+                                            const courseName = item.studentCourse?.course?.name || "—";
                                             const fee = item.feeStructure || {};
-                                            const feeRecords = item.feeRecords || [];
+                                            const primaryRecord = item.feeRecords?.[0] || {};
 
                                             return (
                                                 <tr key={index}>
                                                     <td className="border border-black p-1.5">{index + 1}</td>
-                                                    <td className="border border-black p-1.5 text-left">{courseName}</td>
+                                                    <td className="border border-black p-1.5 text-left font-medium">{courseName}</td>
                                                     <td className="border border-black p-1.5">
                                                         {item.studentCourse?.startDate
                                                             ? new Date(item.studentCourse.startDate).toLocaleDateString("en-GB")
-                                                            : "-"}
+                                                            : "—"}
                                                     </td>
-                                                    <td className="border border-black p-1.5">{fee?.totalAmount ?? "-"}</td>
-                                                    <td className="border border-black p-1.5">{fee?.discount ?? "-"}</td>
-                                                    <td className="border border-black p-1.5">{fee?.advance ?? "-"}</td>
-                                                    <td className="border border-black p-1.5">{feeRecords?.[0]?.receiptNo || "-"}</td>
-                                                    <td className="border border-black p-1.5">{fee?.installment ?? "-"}</td>
+                                                    <td className="border border-black p-1.5">
+                                                        {item.studentCourse?.endDate
+                                                            ? new Date(item.studentCourse.endDate).toLocaleDateString("en-GB")
+                                                            : "—"}
+                                                    </td>
+                                                    <td className="border border-black p-1.5 font-semibold">INR {fee?.totalAmount ?? "0.00"}</td>
+                                                    <td className="border border-black p-1.5 text-emerald-700 font-medium">INR {primaryRecord?.amountPaid ?? "0.00"}</td>
+                                                    <td className="border border-black p-1.5 text-rose-600 font-medium">INR {primaryRecord?.amountDue ?? "0.00"}</td>
+                                                    <td className="border border-black p-1.5 font-mono text-[11px]">{primaryRecord?.receiptNo || "—"}</td>
                                                 </tr>
                                             );
                                         })
                                     ) : (
                                         <tr>
-                                            <td colSpan={8} className="p-4 text-center">No courses assigned.</td>
+                                            <td colSpan={8} className="p-4 text-center">No structural courses assigned to this file.</td>
                                         </tr>
                                     )}
                                 </tbody>
@@ -301,13 +299,13 @@ const StudentForm: React.FC<Props> = ({
                                     return (
                                         <div key={index} className="space-y-1">
                                             <p className="font-semibold">({index + 1}) Course : {courseName}</p>
-                                            <p>Time : ________________________</p>
-                                            <p>Duration : ____________________</p>
+                                            <p>Batch ID Reference : Slot {item.studentCourse?.batchId || "—"}</p>
+                                            <p>Status : <span className="text-emerald-700 font-medium">{item.studentCourse?.status || "—"}</span></p>
                                         </div>
                                     );
                                 })
                             ) : (
-                                <p className="text-gray-500 col-span-2 text-xs italic">No dynamic batch information available.</p>
+                                <p className="text-gray-500 col-span-2 text-xs italic">No batch allocation maps found.</p>
                             )}
                         </div>
 
@@ -315,25 +313,26 @@ const StudentForm: React.FC<Props> = ({
                         <h2 className="mt-4 bg-red-700 text-white px-2 py-1 text-sm font-bold uppercase"
                             style={{ backgroundColor: "#b91c1c", color: "#ffffff" }}
                         >
-                            Remarks
+                            Remarks / Inventory Tracking
                         </h2>
                         <div className="border border-black h-16 mt-1">
                             <div className="grid grid-cols-3 divide-x divide-black h-full">
                                 <div className="p-2">
-                                    <b className="block mb-1.5">I-Card Tracking</b>
+                                    <b className="block mb-1.5">I-Card Status</b>
                                     <div className="flex gap-3">
-                                        <label className="flex items-center gap-1"><input type="checkbox" checked={student?.idCard === true} readOnly className="accent-black" /> Yes</label>
-                                        <label className="flex items-center gap-1"><input type="checkbox" checked={student?.idCard === false} readOnly className="accent-black" /> No</label>
+                                        <label className="flex items-center gap-1"><input type="checkbox" checked={student?.idCard === true} readOnly className="accent-black" /> Issued</label>
+                                        <label className="flex items-center gap-1"><input type="checkbox" checked={student?.idCard === false} readOnly className="accent-black" /> Pending</label>
                                     </div>
                                 </div>
                                 <div className="p-2">
-                                    <b className="block mb-1.5">Exam Tracking</b>
+                                    <b className="block mb-1.5">Course Term</b>
+                                    <span className="text-xs uppercase font-medium text-slate-700">{detailedCourses?.[0]?.feeStructure?.paymentType || "—"}</span>
                                 </div>
                                 <div className="p-2">
-                                    <b className="block mb-1.5">Bag Required</b>
+                                    <b className="block mb-1.5">Welcome Kit Bag</b>
                                     <div className="flex gap-3">
-                                        <label className="flex items-center gap-1"><input type="checkbox" checked={student?.bag === true} readOnly className="accent-black" /> Yes</label>
-                                        <label className="flex items-center gap-1"><input type="checkbox" checked={student?.bag === false} readOnly className="accent-black" /> No</label>
+                                        <label className="flex items-center gap-1"><input type="checkbox" checked={student?.bag === true} readOnly className="accent-black" /> Collected</label>
+                                        <label className="flex items-center gap-1"><input type="checkbox" checked={student?.bag === false} readOnly className="accent-black" /> N/A</label>
                                     </div>
                                 </div>
                             </div>

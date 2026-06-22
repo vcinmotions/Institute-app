@@ -21,6 +21,7 @@ import { City, State, IState, ICity } from "country-state-city";
 import { capitalizeWords } from "@/components/common/ToCapitalize";
 import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { useFetchSource } from "@/hooks/queries/useQueryFetchSource";
 
 type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
@@ -97,6 +98,13 @@ export default function EditEnquiryForm({
 
   const { data: courseData = [], isLoading: courseLoading } = useFetchAllCourses();
 
+  const { data: sourceData, isLoading, isError } = useFetchSource();
+
+  console.log("GET SOURCE IN EDIT ENQUIRY:", sourceData);
+  console.log("GET enquiryData IN EDIT ENQUIRY:", enquiryData);
+
+  const sourceList = sourceData?.source || [];
+
   useEffect(() => {
     if (branchCountry && branchState) {
       setState(State.getStatesOfCountry(branchCountry));
@@ -123,6 +131,11 @@ export default function EditEnquiryForm({
     const splicedContact = enquiryData.contact ? enquiryData.contact.slice(-10) : "";
     const splicedAlternateContact = enquiryData.alternateContact ? enquiryData.alternateContact.slice(-10) : "";
 
+    // Extract slug cleanly whether "source" is an object or a fallback string
+    const sourceSlug = enquiryData.source && typeof enquiryData.source === "object"
+      ? enquiryData.source.slug
+      : (enquiryData.source ?? "");
+
     setNewEnquiry({
       id: enquiryData.id,
       name: enquiryData.name ?? "",
@@ -136,7 +149,7 @@ export default function EditEnquiryForm({
       enquiryDate: enquiryData.enquiryDate ? enquiryData.enquiryDate.split("T")[0] : "",
       referedBy: enquiryData.referedBy ?? "",
       takenBy: enquiryData.takenBy ?? "",
-      source: enquiryData.source ?? "",
+      source: sourceSlug, // 👈 Fixed: Form state now gets the string slug ("indeed")
       courseId: courseIds,
     });
   }, [enquiryData]);
@@ -440,12 +453,20 @@ export default function EditEnquiryForm({
 
             <div>
               <Label>Source</Label>
-              <Input
-                type="text"
-                value={newEnquiry.source}
-                tabIndex={11}
-                onChange={(e) => handleChange("source", e.target.value)}
-              />
+              <div className="relative">
+                <Select
+                  tabIndex={11}
+                  options={sourceList.map((item) => ({ label: item.name, value: item.slug }))}
+                  placeholder="Select Source"
+                  onChange={(value) => handleChange("source", value)}
+                  value={newEnquiry.source}
+                  className="dark:bg-dark-900"
+                />
+                <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  <ChevronDownIcon />
+                </span>
+              </div>
+              {errors.source && <p className="mt-1 text-sm text-red-500">{errors.source}</p>}
             </div>
 
             <div>

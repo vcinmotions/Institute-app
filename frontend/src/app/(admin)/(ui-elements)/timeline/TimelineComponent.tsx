@@ -118,9 +118,16 @@ export default function TimelineDatatable({
               <span className="text-xs text-gray-500">Email</span>
               <span className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">{fineEnquiryById?.email || "—"}</span>
             </div>
+            {/* Change this section inside your file: */}
+
             <div className="flex flex-col">
               <span className="text-xs text-gray-500">Source</span>
-              <span className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">{fineEnquiryById?.source || "—"}</span>
+              <span className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">
+                {/* ✅ FIXED: Extract the name property instead of rendering the whole object */}
+                {typeof fineEnquiryById?.source === "object" && fineEnquiryById?.source !== null
+                  ? fineEnquiryById.source.name || fineEnquiryById.source.slug || "—"
+                  : fineEnquiryById?.source || "—"}
+              </span>
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-gray-500">Location</span>

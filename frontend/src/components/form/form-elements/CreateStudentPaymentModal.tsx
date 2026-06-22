@@ -10,6 +10,7 @@ import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useCreateStudentPayment } from "@/hooks/useCreateStudentPayment";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { paymentModeOptions } from "@/components/common/Options";
 
 interface CreateStudentPaymentModalProps {
   onCloseModal: () => void;
@@ -25,6 +26,8 @@ interface PaymentData {
   amountPaid: string;
   paymentDate: string;
   paymentMode: string;
+  transactionNo?: string;
+  bankName?: string;
 }
 
 export default function CreateStudentPaymentModal({
@@ -35,6 +38,10 @@ export default function CreateStudentPaymentModal({
   const [amountPaid, setAmountPaid] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
+  // 👇 NEW TRACKING STATES FOR NON-CASH TRANSACTIONS
+  const [transactionNo, setTransactionNo] = useState("");
+  const [bankName, setBankName] = useState("");
+
   const [errors, setErrors] = useState<Partial<PaymentData>>({});
 
   const [alert, setAlert] = useState({
@@ -89,6 +96,14 @@ export default function CreateStudentPaymentModal({
     if (!paymentDate.trim()) newErrors.paymentDate = "Date is required.";
     if (!paymentMode.trim()) newErrors.paymentMode = "Mode is required.";
 
+    // 👇 Ensure extra information is captured when using non-cash options
+    if (paymentMode !== "CASH") {
+      if (!transactionNo.trim()) {
+        newErrors.transactionNo = paymentMode === "CHEQUE" ? "Cheque number is required." : "Transaction reference ID is required.";
+      }
+      if (!bankName.trim()) newErrors.bankName = "Bank name is required.";
+    }
+
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 3000);
 
@@ -133,12 +148,17 @@ export default function CreateStudentPaymentModal({
         paymentDate: paymentDate,
         paymentMode,
         id,
+        // 👇 MATCHES EXPECTED CONTROLLER PARAMETERS
+        transactionNo: paymentMode !== "CASH" ? transactionNo : null,
+        bankName: paymentMode !== "CASH" ? bankName : null,
       },
       {
         onSuccess: () => {
           setAmountPaid("");
           setPaymentDate("");
           setPaymentMode("");
+          setTransactionNo("");
+          setBankName("");
           setErrors({});
 
           setAlert({
@@ -152,20 +172,18 @@ export default function CreateStudentPaymentModal({
             onCloseModal();
           }, 2000);
         },
-        onError: (error) => {
+        onError: (error: any) => {
           console.error("Payment creation failed:", error);
-          setErrors({ amountPaid: "Failed to create payment. Please try again." });
+          setAlert({
+            show: true,
+            title: "Transaction Failed",
+            message: error?.response?.data?.error || "Failed to process transaction.",
+            variant: "error",
+          });
         },
       }
     );
   };
-
-  const paymentModeOptions = [
-    { value: "CASH", label: "Cash" },
-    { value: "UPI", label: "UPI" },
-    { value: "BANK_TRANSFER", label: "Bank Transfer" },
-    { value: "CHEQUE", label: "Cheque" },
-  ];
 
   return (
     <ModalCard
@@ -250,9 +268,12 @@ export default function CreateStudentPaymentModal({
                   tabIndex={3}
                   options={paymentModeOptions}
                   placeholder="Select payment mechanism"
+                  value={paymentMode}
                   onChange={(value) => {
                     setPaymentMode(value);
-                    setErrors((prev) => ({ ...prev, paymentMode: "" }));
+                    setTransactionNo("");
+                    setBankName("");
+                    setErrors((prev) => ({ ...prev, paymentMode: "", transactionNo: "", bankName: "" }));
                   }}
                   className="dark:bg-dark-900"
                 />
@@ -264,6 +285,45 @@ export default function CreateStudentPaymentModal({
                 <p className="mt-1 text-sm text-red-500">{errors.paymentMode}</p>
               )}
             </div>
+
+            {/* 👇 DYNAMIC TRANSACT DETAILS BLOCK CONTAINER */}
+            {paymentMode && paymentMode !== "CASH" && (
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 p-4 rounded-xl border border-dashed border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                <div>
+                  <Label>
+                    {paymentMode === "CHEQUE" ? "Cheque Number *" : "Transaction Reference ID *"}
+                  </Label>
+                  <Input
+                    type="text"
+                    placeholder={paymentMode === "CHEQUE" ? "e.g., 123456" : "e.g., UPI Ref / Txn ID"}
+                    value={transactionNo}
+                    onChange={(e) => {
+                      setTransactionNo(e.target.value);
+                      setErrors((prev) => ({ ...prev, transactionNo: "" }));
+                    }}
+                  />
+                  {errors.transactionNo && (
+                    <p className="mt-1 text-sm text-red-500">{errors.transactionNo}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label>Bank Name *</Label>
+                  <Input
+                    type="text"
+                    placeholder="e.g., HDFC Bank, SBI"
+                    value={bankName}
+                    onChange={(e) => {
+                      setBankName(e.target.value);
+                      setErrors((prev) => ({ ...prev, bankName: "" }));
+                    }}
+                  />
+                  {errors.bankName && (
+                    <p className="mt-1 text-sm text-red-500">{errors.bankName}</p>
+                  )}
+                </div>
+              </div>
+            )}
 
           </div>
         </div>

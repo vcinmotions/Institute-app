@@ -181,17 +181,17 @@ const navItems: NavItem[] = [
     path: "/dashboard/attendance",
     roles: ["ADMIN", "FACULTY"],
   },
-  {
-    group: "Academics",
-    icon: <LockIcon />,
-    name: "Task",
-    path: "/dashboard/task",
-    roles: ["ADMIN", "FRONT_DESK"],
-    subItems: [
-      { name: "Task List", path: "/dashboard/task" },
-      { name: "Create Task", path: "/dashboard/task/create" },
-    ],
-  },
+  // {
+  //   group: "Academics",
+  //   icon: <LockIcon />,
+  //   name: "Task",
+  //   path: "/dashboard/task",
+  //   roles: ["ADMIN", "FRONT_DESK"],
+  //   subItems: [
+  //     { name: "Task List", path: "/dashboard/task" },
+  //     { name: "Create Task", path: "/dashboard/task/create" },
+  //   ],
+  // },
 
   // --- FINANCE & INVENTORY ---
   {

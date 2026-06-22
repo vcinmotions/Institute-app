@@ -1,39 +1,35 @@
 "use client";
 import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
-import { getTest } from "@/lib/api";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store"; // Adjust path if needed
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
-import { setCurrentPage, setSearchQuery, setTotal, setTotalPages } from "@/store/slices/testSlice";
-import StudentCard from "@/components/common/StudentCard";
+import { setCurrentPage, setSearchQuery, setTotal, setTotalPages, setTests } from "@/store/slices/testSlice";
+import { RootState } from "@/store";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import TestDataTable from "@/components/tables/TestDataTable";
-import { setTests } from "@/store/slices/testSlice";
+import { useFetchAllTests } from "@/hooks/queries/useQueryFetchTestData";
 
 export default function TestTable() {
-    //const [enquiries, setEnquiries] = useState<any[]>([]);
     const batch = useSelector((state: RootState) => state.batch.batches ?? []);
-    const tests = useSelector((state: RootState) => state.test.tests ?? []);
-    const [loading, setLoading] = useState<boolean>(false);
-    const { currentPage, total, totalPages, searchQuery, } = useSelector((state: RootState) => state.test);
-    // 1. Separate state to track immediate input changes
+    // const tests = useSelector((state: RootState) => state.test.tests ?? []);
+
+    const { currentPage, total, totalPages, searchQuery } = useSelector(
+        (state: RootState) => state.test
+    );
+
     const [searchInput, setSearchInput] = useState("");
     const dispatch = useDispatch();
 
-    // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
     // Update searchInput immediately on typing
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchInput(e.target.value);
     };
 
-    // Debounce effect: update searchQuery 1 second after user stops typing
-    // --- Debounced search and Set delay time according to your needs
+    // Debounce effect to delay execution tracking
     const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-    // 2. sync debounced value to Redux
+    // Sync debounced search string to Redux and reset back to page 1
     useEffect(() => {
         if (debouncedSearchTerm !== searchQuery) {
             dispatch(setSearchQuery(debouncedSearchTerm));
@@ -41,39 +37,24 @@ export default function TestTable() {
         }
     }, [debouncedSearchTerm, searchQuery, dispatch]);
 
-    // Fetch data on mount or when filters change
+    // 1. Fetch data directly using our fixed React Query Hook
+    const { data, isLoading } = useFetchAllTests({
+        page: currentPage,
+        limit: PAGE_SIZE,
+        search: searchQuery,
+    });
+
+    console.log("TEST DATA IN TEST TABLE:", data);
+    const tests = data?.test || [];
+
+    // 2. CRITICAL SYNC: Watch React Query response and update the Redux Store
     useEffect(() => {
-        const fetchData = async () => {
-            const token = sessionStorage.getItem("token");
-            if (!token) {
-                console.error("Token missing from sessionStorage");
-                return;
-            }
-
-            setLoading(true);
-            try {
-                const response = await getTest({
-                    token,
-                    page: currentPage,
-                    limit: PAGE_SIZE,
-                    search: searchQuery,
-                });
-
-                console.log("TEST IN TEST TABLE:", response);
-
-                dispatch(setTests(response.test || []));
-                dispatch(setTotalPages(response.totalPages || 1));
-                dispatch(setTotal(response.total || 0));
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [currentPage, searchQuery]);
-
+        if (data) {
+            dispatch(setTests(data.test || []));
+            dispatch(setTotalPages(data.totalPages || 1));
+            dispatch(setTotal(data.total || 0));
+        }
+    }, [data, dispatch]);
 
     const handleSearchSubmit = useCallback((e: React.FormEvent) => {
         e.preventDefault();
@@ -83,7 +64,6 @@ export default function TestTable() {
     const handlePagination = useCallback((page: number) => {
         if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
     }, [dispatch, totalPages]);
-
 
     return (
         <div>
@@ -96,10 +76,11 @@ export default function TestTable() {
                     />
                 </div>
 
+                {/* 3. Pass React Query's isLoading flag directly into the table spinner */}
                 <TestDataTable
                     tests={tests}
                     batch={batch}
-                    loading={loading}
+                    loading={isLoading}
                 />
 
                 <Pagination
@@ -107,10 +88,9 @@ export default function TestTable() {
                     totalPages={totalPages}
                     limit={PAGE_SIZE}
                     totalCount={total}
-                    title="Tasks"
+                    title="Tests"
                     onPageChange={handlePagination}
                 />
-
             </div>
         </div>
     );

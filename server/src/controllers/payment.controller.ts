@@ -783,9 +783,10 @@ export async function updateStudentPaymentController(
   res: Response
 ) {
   const { id } = req.params;
-  const { amountPaid, paymentDate, paymentMode } = req.body;
+  // 👇 EXTRACT THE NEW FIELDS SENT BY YOUR PAYMENT MODAL FRONTEND
+  const { amountPaid, paymentDate, paymentMode, transactionNo, bankName } = req.body;
 
-  console.log("UPDTAE PAYMENT REQ>BOSY:", req.body);
+  console.log("UPDATE PAYMENT REQ.BODY:", req.body);
 
   try {
     const tenantPrisma = req.tenantPrisma;
@@ -802,7 +803,10 @@ export async function updateStudentPaymentController(
       return res.status(400).json({ error: "Invalid payment amount" });
     }
 
-    const parsedPaymentDate = parseDate(paymentDate)
+    const parsedPaymentDate = parseDate(paymentDate);
+    const targetMode = paymentMode || "CASH";
+    const targetTxNo = targetMode !== "CASH" ? transactionNo : null;
+    const targetBank = targetMode !== "CASH" ? bankName : null;
 
     const result = await tenantPrisma.$transaction(async (tx: any) => {
       const studentFee = await tx.studentFee.findUnique({
@@ -820,9 +824,6 @@ export async function updateStudentPaymentController(
 
       const { studentId, courseId, isOpeningBalance } = studentFee;
 
-      // -----------------------------
-      // Determine total payable amount
-      // -----------------------------
       let totalAmount: number;
       let courseName = "Opening Balance";
 
@@ -849,9 +850,6 @@ export async function updateStudentPaymentController(
         }
       }
 
-      // -----------------------------
-      // Get advance payments for this student and course
-      // -----------------------------
       const advancePayments = await tx.studentFee.findMany({
         where: {
           studentId,
@@ -865,44 +863,44 @@ export async function updateStudentPaymentController(
         0
       );
 
-      // -----------------------------
-      // Prevent overpayment (including advance payments)
-      // -----------------------------
       const currentTotalPaid = studentFee.feeLogs.reduce(
         (sum: number, log: any) => sum + log.amountPaid,
         0
       );
 
       const totalPaidIncludingAdvance = currentTotalPaid + totalAdvancePaid;
+      const remainingToPay = totalAmount - totalPaidIncludingAdvance;
 
       if (totalPaidIncludingAdvance + paidAmount > totalAmount) {
-        throw new Error(`Payment exceeds remaining due amount. Total paid (including advance): ₹${totalPaidIncludingAdvance}, Total fee: ₹${totalAmount}`);
+        throw new Error(`Payment exceeds remaining due amount. Total paid (including advance): ₹${totalPaidIncludingAdvance}, Total fee: ₹${totalAmount}. Remaining balance to be paid: ₹${remainingToPay}`);
       }
 
       // -----------------------------
-      // Create payment log
+      // Create payment log WITH NEW TRACKING METRICS
       // -----------------------------
       const receiptNo = await generatePaymentReceiptNumber(tx, clientAdminId);
       const log = await tx.studentFeeLog.create({
         data: {
-           studentFee: {
+          studentFee: {
             connect: { id: studentFee.id },
           },
           amountPaid: paidAmount,
           paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : null,
-          paymentMode,
+          paymentMode: targetMode,
           receiptNo,
+          // 👇 NEW FIELDS REGISTERED FOR LOGS
+          transactionNo: targetTxNo,
+          bankName: targetBank,
         },
       });
 
       const newTotalPaid = currentTotalPaid + paidAmount;
       const totalPaidIncludingAdvanceAfterPayment = newTotalPaid + totalAdvancePaid;
       const remainingDue = Math.max(totalAmount - totalPaidIncludingAdvanceAfterPayment, 0);
-      const paymentStatus =
-        remainingDue === 0 ? "SUCCESS" : "PENDING";
+      const paymentStatus = remainingDue === 0 ? "SUCCESS" : "PENDING";
 
       // -----------------------------
-      // Update StudentFee summary
+      // Update StudentFee summary WITH NEW TRACKING METRICS
       // -----------------------------
       const updatedFee = await tx.studentFee.update({
         where: { id: studentFee.id },
@@ -911,6 +909,10 @@ export async function updateStudentPaymentController(
           amountDue: remainingDue,
           paymentStatus,
           paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : new Date(),
+          paymentMode: targetMode, // Update primary status type
+          // 👇 NEW FIELDS REPLICATED ON MASTER INVOICE ENTRY IF RELEVANT
+          transactionNo: targetTxNo,
+          bankName: targetBank,
         },
       });
 
@@ -922,9 +924,9 @@ export async function updateStudentPaymentController(
           clientAdminId,
           recordType: "INCOME",
           amount: paidAmount,
-          paymentMode,
+          paymentMode: targetMode,
           date: parsedPaymentDate ? new Date(parsedPaymentDate) : new Date(),
-          description: `Fee payment of ₹${paidAmount} from ${studentFee.student.fullName} for ${courseName}${totalAdvancePaid > 0 ? ` (Advance: ₹${totalAdvancePaid})` : ''}`,
+          description: `Fee payment of ₹${paidAmount} via ${targetMode} (Ref: ${targetTxNo || 'N/A'}) from ${studentFee.student.fullName} for ${courseName}${totalAdvancePaid > 0 ? ` (Advance: ₹${totalAdvancePaid})` : ''}`,
           studentId: studentFee.student.id,
           courseId: courseId ?? undefined,
         },
@@ -940,9 +942,177 @@ export async function updateStudentPaymentController(
     });
   } catch (error: any) {
     console.error("Payment update error:", error.message);
-
     return res.status(400).json({
       error: error.message || "Internal server error",
     });
   }
 }
+
+// export async function updateStudentPaymentController(
+//   req: Request,
+//   res: Response
+// ) {
+//   const { id } = req.params;
+//   const { amountPaid, paymentDate, paymentMode } = req.body;
+
+//   console.log("UPDTAE PAYMENT REQ>BOSY:", req.body);
+
+//   try {
+//     const tenantPrisma = req.tenantPrisma;
+//     const user = req.user;
+
+//     if (!tenantPrisma || !user || typeof user === "string") {
+//       return res.status(401).json({ error: "Unauthorized request" });
+//     }
+
+//     const clientAdminId = user.clientAdminId;
+//     const paidAmount = parseFloat(amountPaid);
+
+//     if (!paidAmount || paidAmount <= 0) {
+//       return res.status(400).json({ error: "Invalid payment amount" });
+//     }
+
+//     const parsedPaymentDate = parseDate(paymentDate)
+
+//     const result = await tenantPrisma.$transaction(async (tx: any) => {
+//       const studentFee = await tx.studentFee.findUnique({
+//         where: { id: parseInt(id) },
+//         include: {
+//           feeLogs: true,
+//           student: true,
+//           course: true,
+//         },
+//       });
+
+//       if (!studentFee) {
+//         throw new Error("StudentFee not found");
+//       }
+
+//       const { studentId, courseId, isOpeningBalance } = studentFee;
+
+//       // -----------------------------
+//       // Determine total payable amount
+//       // -----------------------------
+//       let totalAmount: number;
+//       let courseName = "Opening Balance";
+
+//       if (isOpeningBalance) {
+//         totalAmount = studentFee.amountDue + studentFee.amountPaid;
+//       } else {
+//         const feeStructure = await tx.feeStructure.findUnique({
+//           where: {
+//             studentId_courseId: {
+//               studentId,
+//               courseId: courseId!,
+//             },
+//           },
+//         });
+
+//         if (!feeStructure) {
+//           throw new Error("FeeStructure not found");
+//         }
+
+//         totalAmount = feeStructure.totalAmount;
+
+//         if (studentFee.course) {
+//           courseName = studentFee.course.name;
+//         }
+//       }
+
+//       // -----------------------------
+//       // Get advance payments for this student and course
+//       // -----------------------------
+//       const advancePayments = await tx.studentFee.findMany({
+//         where: {
+//           studentId,
+//           courseId: courseId!,
+//           sourceType: "ADVANCE_PAYMENT",
+//         },
+//       });
+
+//       const totalAdvancePaid = advancePayments.reduce(
+//         (sum: number, advance: any) => sum + advance.amountPaid,
+//         0
+//       );
+
+//       // -----------------------------
+//       // Prevent overpayment (including advance payments)
+//       // -----------------------------
+//       const currentTotalPaid = studentFee.feeLogs.reduce(
+//         (sum: number, log: any) => sum + log.amountPaid,
+//         0
+//       );
+
+//       const totalPaidIncludingAdvance = currentTotalPaid + totalAdvancePaid;
+
+//       if (totalPaidIncludingAdvance + paidAmount > totalAmount) {
+//         throw new Error(`Payment exceeds remaining due amount. Total paid (including advance): ₹${totalPaidIncludingAdvance}, Total fee: ₹${totalAmount}`);
+//       }
+
+//       // -----------------------------
+//       // Create payment log
+//       // -----------------------------
+//       const receiptNo = await generatePaymentReceiptNumber(tx, clientAdminId);
+//       const log = await tx.studentFeeLog.create({
+//         data: {
+//            studentFee: {
+//             connect: { id: studentFee.id },
+//           },
+//           amountPaid: paidAmount,
+//           paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : null,
+//           paymentMode,
+//           receiptNo,
+//         },
+//       });
+
+//       const newTotalPaid = currentTotalPaid + paidAmount;
+//       const totalPaidIncludingAdvanceAfterPayment = newTotalPaid + totalAdvancePaid;
+//       const remainingDue = Math.max(totalAmount - totalPaidIncludingAdvanceAfterPayment, 0);
+//       const paymentStatus =
+//         remainingDue === 0 ? "SUCCESS" : "PENDING";
+
+//       // -----------------------------
+//       // Update StudentFee summary
+//       // -----------------------------
+//       const updatedFee = await tx.studentFee.update({
+//         where: { id: studentFee.id },
+//         data: {
+//           amountPaid: newTotalPaid,
+//           amountDue: remainingDue,
+//           paymentStatus,
+//           paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : new Date(),
+//         },
+//       });
+
+//       // -----------------------------
+//       // Create Financial Record
+//       // -----------------------------
+//       await tx.financialRecord.create({
+//         data: {
+//           clientAdminId,
+//           recordType: "INCOME",
+//           amount: paidAmount,
+//           paymentMode,
+//           date: parsedPaymentDate ? new Date(parsedPaymentDate) : new Date(),
+//           description: `Fee payment of ₹${paidAmount} from ${studentFee.student.fullName} for ${courseName}${totalAdvancePaid > 0 ? ` (Advance: ₹${totalAdvancePaid})` : ''}`,
+//           studentId: studentFee.student.id,
+//           courseId: courseId ?? undefined,
+//         },
+//       });
+
+//       return { log, updatedFee };
+//     });
+
+//     return res.status(200).json({
+//       message: "Payment recorded successfully",
+//       paymentLog: result.log,
+//       payment: result.updatedFee,
+//     });
+//   } catch (error: any) {
+//     console.error("Payment update error:", error.message);
+
+//     return res.status(400).json({
+//       error: error.message || "Internal server error",
+//     });
+//   }
+// }
