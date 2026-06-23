@@ -14,6 +14,7 @@ import SourceDataTable from "@/components/tables/SourceDataTable";
 import ComponentCard from "@/components/common/ComponentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SourceTable() {
   const router = useRouter()
@@ -86,13 +87,12 @@ export default function SourceTable() {
               onSubmit={handleSearchSubmit}
             />
 
-            <button
-              type="button"
-              onClick={handleCreateClick}
+            <Link
+              href="/dashboard/source/create"
               className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
             >
               + Create Record
-            </button>
+            </Link>
           </div>
 
           <SourceDataTable

@@ -23,6 +23,7 @@ import { LEAD_STATUS_FILTER_OPTIONS } from "@/components/common/LeadStatus";
 import { LEAD_STATUS_OPTIONS } from "@/domain/enquiry/leadStatus";
 import { useFetchEnquiry } from "@/hooks/queries/useQueryFetchEnquiry";
 import { PAGE_SIZE } from "@/constants/pagination";
+import Link from "next/link";
 
 export default function EnquiryTable() {
   const dispatch = useDispatch<AppDispatch>();
@@ -130,6 +131,13 @@ export default function EnquiryTable() {
                 { label: "Create Date", key: "createDate", type: "date" },
               ]}
             />
+
+            <Link
+              href="/dashboard/enquiry/create"
+              className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+            >
+              + Create Record
+            </Link>
           </div>
         </div>
 

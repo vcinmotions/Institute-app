@@ -14,6 +14,7 @@ import dynamic from "next/dynamic";
 import StudentCard from "@/components/common/StudentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
+import Link from "next/link";
 
 const LabDataTable = dynamic(
   () => import("@/components/tables/LabDataTable"),
@@ -94,9 +95,6 @@ export default function LabTable() {
   //   setSearchQuery(e.target.value);
   // };
 
-  const handleCreateClick = () => {
-    setShowForm(!showForm);
-  };
 
   const handleCloseModal = () => {
     setShowForm(false);
@@ -138,13 +136,12 @@ export default function LabTable() {
             onSubmit={handleSearchSubmit}
           />
 
-          <button
-            type="button"
-            onClick={handleCreateClick}
+          <Link
+            href="/dashboard/lab/create"
             className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             + Create Record
-          </button>
+          </Link>
         </div>
 
         <LabDataTable

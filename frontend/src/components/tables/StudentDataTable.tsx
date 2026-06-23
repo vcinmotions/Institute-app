@@ -17,6 +17,7 @@ import { RootState } from "@/store";
 import { getUser } from "@/lib/api";
 import { setLoading, setUser } from "@/store/slices/authSlice";
 import { Student } from "@/types/student";
+import Link from "next/link";
 
 type StudentDataTableProps = {
   students: any[];
@@ -203,12 +204,12 @@ export default function StudentDataTable({
                     </TableCell>
 
                     <TableCell className="px-3 py-1.5">
-                      <Button
-                        onClick={() => router.push(`/dashboard/student/admission-form/${item.id}`)}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
+                      <Link
+                        href={(`/dashboard/student/admission-form/${item.id}`)}
+                        className="h-6 rounded-[8px] border border-slate-200 bg-white py-1.5 px-4 text-[11px] font-medium text-white shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
                       >
                         View
-                      </Button>
+                      </Link>
                     </TableCell>
 
                     <TableCell className="px-3 py-1.5">

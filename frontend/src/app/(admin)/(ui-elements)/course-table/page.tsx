@@ -13,6 +13,7 @@ import { setCourses, setCurrentPage, setSearchQuery, setSort, setTotal, setTotal
 import StudentCard from "@/components/common/StudentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
+import Link from "next/link";
 
 export default function CourseTable() {
   const [showForm, setShowForm] = useState(false);
@@ -116,6 +117,13 @@ export default function CourseTable() {
             onChange={handleSearchChange}
             onSubmit={handleSearchSubmit}
           />
+
+          <Link
+            href="/dashboard/course/create"
+            className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            + Create Record
+          </Link>
         </div>
 
         <CourseDataTable

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Avatar from "../common/Avatar";
 import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
 import { formatDate } from "../common/Formatdate";
+import Link from "next/link";
 
 type AdmissionDataTableProps = {
   admissions: any[];
@@ -165,12 +166,12 @@ export default function AdmissionDataTable({
                     </TableCell>
 
                     <TableCell className="px-3 py-1.5">
-                      <Button
-                        onClick={() => handleEditAdmission(item.id)}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                      <Link
+                        href={`/dashboard/admission/edit?id=${(item.id)}`}
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white py-1 px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Admission
-                      </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))
