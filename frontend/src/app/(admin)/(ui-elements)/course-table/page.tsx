@@ -1,42 +1,31 @@
 "use client";
-import EnquiryCard from "@/components/common/EnquiryCard";
+
 import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
-import { getBatch, getCourse, getEnquiry } from "@/lib/api";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store"; // Adjust path if needed
-import { useDispatch } from "react-redux";
-import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store";
+import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 import CourseDataTable from "@/components/tables/CourseDataTable";
 import CourseForm from "@/components/form/form-elements/CreateNewCourseForm";
-import { setCourses, setCurrentPage, setSearchQuery, setSort, setTotal, setTotalPages } from "@/store/slices/courseSlice";
-import StudentCard from "@/components/common/StudentCard";
+import { setCurrentPage, setSearchQuery, setSort } from "@/store/slices/courseSlice";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import Link from "next/link";
+import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 
 export default function CourseTable() {
-  const [showForm, setShowForm] = useState(false);
-  //const [enquiries, setEnquiries] = useState<any[]>([]);
-  const batch = useSelector((state: RootState) => state.batch.batches ?? []);
-  const courses = useSelector((state: RootState) => state.course.courses ?? []);
-  const [loading, setLoading] = useState<boolean>(false);
-  const { currentPage, total, totalPages, searchQuery, sortField, sortOrder } = useSelector((state: RootState) => state.course);
-  // 1. Separate state to track immediate input changes
-  const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
+  const [showForm, setShowForm] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
-  // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
-  // Update searchInput immediately on typing
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  };
+  // 1. Gather global UI parameters from Redux
+  const { currentPage, searchQuery, sortField, sortOrder } = useSelector(
+    (state: RootState) => state.course
+  );
 
-  // Debounce effect: update searchQuery 1 second after user stops typing
-  // --- Debounced search and Set delay time according to your needs
+  // 2. Handle Search Debounce Input
   const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-  // 2. sync debounced value to Redux
   useEffect(() => {
     if (debouncedSearchTerm !== searchQuery) {
       dispatch(setSearchQuery(debouncedSearchTerm));
@@ -44,47 +33,22 @@ export default function CourseTable() {
     }
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
-  // Fetch data on mount or when filters change
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        console.error("Token missing from sessionStorage");
-        return;
-      }
+  // 3. Connect TanStack Query Hook
+  const { data, isLoading, isError } = useFetchCourse({
+    page: currentPage,
+    limit: PAGE_SIZE,
+    search: searchQuery,
+  });
 
-      setLoading(true);
-      try {
-        const response = await getCourse({
-          token,
-          page: currentPage,
-          limit: PAGE_SIZE,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-        });
+  // Extract variables with safe structural fallbacks 
+  const coursesList = data?.course ?? [];
+  const totalPages = data?.totalPages ?? 1;
+  const totalCount = data?.total ?? 0;
 
-        console.log("COURSE IN COURSE TABLE:", response);
-
-        dispatch(setCourses(response.course || []));
-        dispatch(setTotalPages(response.totalPages || 1));
-        dispatch(setTotal(response.total || 0));
-      } catch (error) {
-        console.error("Error fetching Courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder]);
-
-
-  // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(e.target.value);
-  // };
-
-  // --- Handlers (memoized)
+  // --- Handlers ---
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
 
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -95,18 +59,12 @@ export default function CourseTable() {
     if (page >= 1 && page <= totalPages) dispatch(setCurrentPage(page));
   }, [dispatch, totalPages]);
 
-  const handleSort = useCallback((field: string) => {
-    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
-    dispatch(setSort({ field, order }));
-  }, [dispatch, sortField, sortOrder]);
-
-  const handleCreateClick = () => {
-    setShowForm(!showForm);
-  };
 
   const handleCloseModal = () => {
     setShowForm(false);
   };
+
+  if (isError) return <p className="text-red-500 p-4">Error loading courses.</p>;
 
   return (
     <div>
@@ -127,26 +85,21 @@ export default function CourseTable() {
         </div>
 
         <CourseDataTable
-          courses={courses}
-          batch={batch}
-          loading={loading}
-          onSort={handleSort}
-          sortField={sortField}
-          sortOrder={sortOrder}
+          courses={coursesList}
+          loading={isLoading}
         />
 
         <Pagination
           currentPage={currentPage}
           limit={PAGE_SIZE}
           totalPages={totalPages}
-          totalCount={total}
+          totalCount={totalCount}
           title="Courses"
           onPageChange={handlePagination}
         />
-
       </div>
 
-      {showForm && <CourseForm onCloseModal={handleCloseModal} batch={batch} />}
+      {showForm && <CourseForm onCloseModal={handleCloseModal} />}
     </div>
   );
 }

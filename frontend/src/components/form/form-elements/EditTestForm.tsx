@@ -82,7 +82,7 @@ export default function EditTestForm({
     const { data: courseData } = useFetchAllCourses() as { data: any };
     const { data: batchData } = useFetchAllBatches() as { data: any };
 
-    const coursesArray = Array.isArray(courseData) ? courseData : courseData?.courses || [];
+    const coursesArray = courseData?.course || [];
     const batchesArray = batchData?.batch || [];
 
     // ✅ DYNAMIC FILTERING: Narrow target scope contextual assignments cleanly

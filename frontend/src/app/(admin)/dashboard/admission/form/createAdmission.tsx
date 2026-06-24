@@ -24,6 +24,7 @@ import { countries } from "@/components/common/CountriesCode";
 import { genders, options, paymentModeOptions } from "@/components/common/Options";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { titleCase } from "@/app/utils/Normalize";
+import PhoneNumberInput from "@/components/form/PhoneNumberInput";
 
 type FormErrors = Partial<Record<keyof NewEnquiryDataAll, string>>;
 
@@ -199,9 +200,7 @@ export default function AdmissionForm() {
   });
 
   const [showAdvancePayment, setShowAdvancePayment] = useState(false);
-  const batch = useSelector((state: RootState) => state.batch.batches ?? []);
-
-  const courses = useSelector((state: RootState) => state.course.courses ?? []);
+  const [sameAsIdProof, setSameAsIdProof] = useState(false); // 👈 1. ADDED STATE FOR LOCAL PROOF SYNC
 
   //const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const { inputRefs, scrollToError } = useScrollToError();
@@ -214,6 +213,21 @@ export default function AdmissionForm() {
   const { mutate: createAdvancePayment } = useCreateAdvancePayment();
 
   const firstInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    data: courseData,
+    isLoading: courseLoading,
+    isError: courseError,
+  } = useFetchAllCourses();
+
+  const {
+    data: batchData,
+    isLoading: batchLoading,
+    isError: batchError,
+  } = useFetchAllBatches({ onlyAvailable: true });
+
+  const courses = courseData?.course || [];
+  const batch = batchData?.batch || [];
 
   useEffect(() => {
     if (!isLoading && firstInputRef.current) {
@@ -329,6 +343,16 @@ export default function AdmissionForm() {
   }, [enquiryData]);
 
   useEffect(() => {
+    if (sameAsIdProof) {
+      setFilledEnquiryData((prev) => ({
+        ...prev,
+        localAddressProofType: prev.idProofType,
+        localAddressProofNumber: prev.idProofNumber,
+      }));
+    }
+  }, [filledEnquiryData.idProofType, filledEnquiryData.idProofNumber, sameAsIdProof]);
+
+  useEffect(() => {
     if (!enquiryData) return;
 
     let dobValue = "";
@@ -398,43 +422,31 @@ export default function AdmissionForm() {
     }
   }, [filledEnquiryData.residentialAddress, sameAsResidential]);
 
+  // ✅ Synchronize selected course array into dynamic grid rows safely
   useEffect(() => {
-    console.log("🎯 enquiryData changed:", enquiryData);
-  }, [enquiryData, data]);
+    if (!Array.isArray(newEnquiry.courseId) || !newEnquiry.courseId.length) {
+      setCourseRows([]);
+      return;
+    }
 
-  useEffect(() => {
-    if (!newEnquiry.courseId) return;
-    if (!courses || courses.length === 0) return;
+    const rows = newEnquiry.courseId.map((id) => {
+      // Retain previously configured values if user modifies multi-select checkboxes
+      const existingRow = courseRows.find((r) => r.courseId === id);
+      return {
+        courseId: id,
+        paymentType: existingRow?.paymentType || "",
+        installmentTypeId: existingRow?.installmentTypeId || "",
+        feeAmount: existingRow?.feeAmount || "",
+        batchId: existingRow?.batchId || "",
+        advanceAmount: existingRow?.advanceAmount || "",
+        paymentMode: existingRow?.paymentMode || "CASH",
+        transactionNo: existingRow?.transactionNo || "",
+        bankName: existingRow?.bankName || "",
+      };
+    });
 
-    const selectedCourse = courses.find(
-      (c) => c.id.toString() === newEnquiry.courseId,
-    );
-
-    if (!selectedCourse?.courseFeeStructure) return;
-
-    // PAYMENT TYPE OPTIONS
-    setpaymentTypeOption(selectedCourse.courseFeeStructure.paymentType);
-
-    // INSTALLMENT OPTIONS
-    const inst = selectedCourse.courseFeeStructure.installments || [];
-    setInstallmentTypeOption(inst);
-
-  }, [courses, newEnquiry.courseId]);
-
-  const {
-    data: courseData,
-    isLoading: courseLoading,
-    isError: courseError,
-  } = useFetchAllCourses();
-
-  const {
-    data: batchData,
-    isLoading: batchLoading,
-    isError: batchError,
-  } = useFetchAllBatches({ onlyAvailable: true });
-
-  console.log("COURSE DATA IN ADMISON FORM:", courseData);
-  console.log("BATCH DATA IN ADMISON FORM:", batchData);
+    setCourseRows(rows);
+  }, [newEnquiry.courseId]);
 
   // const batchOptions = batch.map((b: any) => ({
   //   value: b.id.toString(),
@@ -450,26 +462,10 @@ export default function AdmissionForm() {
     [batch]
   );
 
-  // useEffect(() => {
-  //   if (courseData?.course) {
-  //     dispatch(setCourses(courseData.course));
-  //   }
-  // }, [courseData, dispatch]);
-
-  // useEffect(() => {
-  //   if (batchData?.batch) {
-  //     dispatch(setBatches(batchData.batch));
-  //   }
-  // }, [batchData, dispatch]);
-
-  const handlePhoneNumberChange = (phoneNumber: string, code: string) => {
-    // const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
-    //const formattedNumber = code + phoneNumber;
-
-    // Extract digits only
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const phoneNumber = e.target.value; // Extract the string from the event
     const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
-
-    const formattedNumber = code + digitsOnly;
+    const formattedNumber = digitsOnly;
 
     setNewEnquiry((prev) => ({
       ...prev,
@@ -579,7 +575,6 @@ export default function AdmissionForm() {
       errors: newErrors,
     };
   };
-
 
   const handleChange = (field: keyof NewEnquiryData, value: string) => {
     let formattedValue = value;
@@ -1006,7 +1001,7 @@ export default function AdmissionForm() {
                 inputRefs.current.contact = el;
               }}>
                 <Label>Student Contact</Label>
-                <PhoneInput
+                {/* <PhoneInput
                   tabIndex={5}
                   selectPosition="start"
                   countries={countries}
@@ -1016,14 +1011,28 @@ export default function AdmissionForm() {
                 />
                 {errors.contact && (
                   <p className="mt-1 text-sm text-red-500">{errors.contact}</p>
-                )}
+                )} */}
+
+                <div className="relative">
+                  <PhoneNumberInput
+                    tabIndex={4}
+                    placeholder="Enter Contact"
+                    value={newEnquiry.contact}
+                    onChange={handlePhoneNumberChange}
+                  />
+                  {errors.contact && <p className="mt-1 text-sm text-red-500">{errors.contact}</p>}
+                  <span className="absolute top-5.5 left-0 -translate-y-1/2 border-r border-gray-200 px-3 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                    IN
+                  </span>
+                </div>
               </div>
 
               <div ref={(el) => {
                 inputRefs.current.parentsContact = el;
               }}>
                 <Label>Alternate Contact</Label>
-                <PhoneInput
+
+                {/* <PhoneInput
                   tabIndex={6}
                   selectPosition="start"
                   countries={countries}
@@ -1033,7 +1042,20 @@ export default function AdmissionForm() {
                 />
                 {errors.parentsContact && (
                   <p className="mt-1 text-sm text-red-500">{errors.parentsContact}</p>
-                )}
+                )} */}
+
+                <div className="relative">
+                  <PhoneNumberInput
+                    tabIndex={4}
+                    placeholder="Enter Alternate Contact"
+                    value={filledEnquiryData.parentsContact}
+                    onChange={handlePhoneNumberChange}
+                  />
+                  {errors.parentsContact && <p className="mt-1 text-sm text-red-500">{errors.parentsContact}</p>}
+                  <span className="absolute top-5.5 left-0 -translate-y-1/2 border-r border-gray-200 px-3 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                    IN
+                  </span>
+                </div>
               </div>
 
               <div
@@ -1236,7 +1258,7 @@ export default function AdmissionForm() {
                       </div>
 
                       {/* 👇 NEW FIELD 1: Payment Mode Field Selection Option Dropdown */}
-                      <div>`
+                      <div>
                         <Label>Payment Mode</Label>
                         <div className="relative">
                           <Select
@@ -1279,7 +1301,7 @@ export default function AdmissionForm() {
                             />
                           </div>
                         </div>
-                      )}`
+                      )}
 
                     </div>
                   </div>
@@ -1421,6 +1443,7 @@ export default function AdmissionForm() {
                         placeholder="Select Id Proof"
                         onChange={(value) => handleChange("localAddressProofType", value)}
                         className="dark:bg-dark-900"
+                        value={filledEnquiryData.localAddressProofType}
                       />
                       <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                         <ChevronDownIcon />
@@ -1452,6 +1475,26 @@ export default function AdmissionForm() {
                     {errors.localAddressProofNumber && (
                       <p className="mt-1 text-sm text-red-500">{errors.localAddressProofNumber}</p>
                     )}
+                  </div>
+
+                  {/* 👇 3. ADDED THE UI SYNC CHECKBOX ELEMENT HERE TO PERFECTLY MATCH YOUR STRUCTURE */}
+                  <div className="mt-2 flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={sameAsIdProof}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setSameAsIdProof(checked);
+                        if (checked) {
+                          setFilledEnquiryData((prev) => ({
+                            ...prev,
+                            localAddressProofType: prev.idProofType,
+                            localAddressProofNumber: prev.idProofNumber,
+                          }));
+                        }
+                      }}
+                    />
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Same as ID Proof Details</span>
                   </div>
                 </div>
               </div>

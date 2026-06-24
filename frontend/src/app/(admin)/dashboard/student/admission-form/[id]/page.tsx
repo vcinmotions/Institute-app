@@ -1,7 +1,7 @@
 "use client";
 
 
-import StudentForm from "@/app/(admin)/(ui-elements)/student-form/page";
+import StudentForm from "@/components/form/form-elements/StudentForm";
 import { useFetchStudentById } from "@/hooks/queries/useQueryFetchStudent";
 import { RootState } from "@/store";
 import { useParams } from "next/navigation";

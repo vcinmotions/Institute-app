@@ -36,6 +36,8 @@ const StudentForm: React.FC<Props> = ({
     const student = studentData?.student || {};
     const detailedCourses = studentData?.detailedCourses || [];
 
+    console.log("GET STUDENT DATA IN ADMISSION FORM:", student);
+
     // Print Handler
     const handlePrint = useReactToPrint({
         contentRef: formRef,

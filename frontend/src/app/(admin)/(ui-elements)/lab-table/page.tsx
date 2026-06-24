@@ -1,20 +1,18 @@
 "use client";
-import EnquiryCard from "@/components/common/EnquiryCard";
 import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
-import { getLab } from "@/lib/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
-import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
+import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 //import LabDataTable from "@/components/tables/LabDataTable";
-import { setCurrentPage, setLab, setSearchQuery, setSort, setTotal, setTotalPages } from "@/store/slices/labSlice";
+import { setCurrentPage, setSearchQuery, setSort, setTotal, setTotalPages } from "@/store/slices/labSlice";
 import LabForm from "@/components/form/form-elements/LabCreateForm";
 import dynamic from "next/dynamic";
-import StudentCard from "@/components/common/StudentCard";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import Link from "next/link";
+import { useFetchLab } from "@/hooks/queries/useFetchLab";
 
 const LabDataTable = dynamic(
   () => import("@/components/tables/LabDataTable"),
@@ -24,13 +22,13 @@ const LabDataTable = dynamic(
 export default function LabTable() {
   const [showForm, setShowForm] = useState(false);
   //const [enquiries, setEnquiries] = useState<any[]>([]);
-  const lab = useSelector((state: RootState) => state.lab.labs);
+  // const lab = useSelector((state: RootState) => state.lab.labs);
   const courses = useSelector((state: RootState) => state.course.courses);
   const [loading, setLoading] = useState<boolean>(false);
   const [leadStatus, setLeadStatus] = useState<"HOT" | "WARM" | "COLD" | null>(
     null,
   );
-  const { currentPage, searchQuery, totalPages, sortField, sortOrder, total } = useSelector((state: RootState) => state.lab)
+  const { currentPage, searchQuery, sortField, sortOrder } = useSelector((state: RootState) => state.lab)
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
@@ -40,8 +38,6 @@ export default function LabTable() {
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };
-
-  console.log("TOTAL", total);
 
   // Debounce effect: update searchQuery 1 second after user stops typing
   // --- Debounced search and Set delay time according to your needs
@@ -56,60 +52,26 @@ export default function LabTable() {
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
   // Fetch data on mount or when filters change
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        console.error("Token missing from sessionStorage");
-        return;
-      }
+  // 3. Fire TanStack Query hook instead of a manual useEffect
+  const { data: labData, isLoading: isLabLoading, isError: isLabError } = useFetchLab({
+    page: currentPage,
+    limit: PAGE_SIZE,
+    search: searchQuery,
+  });
 
-      setLoading(true);
-      try {
-        const response = await getLab({
-          token,
-          page: currentPage,
-          limit: PAGE_SIZE,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-        });
+  console.log("LAB DATA IN LAB TABLE:", labData);
 
-        dispatch(setLab(response.labs || []));
-        dispatch(setTotalPages(response.totalPages || 1));
-        dispatch(setTotal(response.total || 0));
-        console.log("LOG LAB DATA:", response);
-      } catch (error) {
-        console.error("Error fetching enquiries:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder]);
-
-  console.log("Lab Query data:", currentPage, searchQuery, totalPages, sortField, sortOrder);
+  const lab = labData?.labs || [];
+  const totalPages = labData?.totalPages || [];
+  const total = labData?.total || [];
 
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(e.target.value);
   // };
 
-
   const handleCloseModal = () => {
     setShowForm(false);
   };
-
-  // const handleSort = (field: "isActive") => {
-  //   const order =
-  //     sortField === field && sortOrder === "desc" ? "asc" : "desc";
-
-  //   setSortField(field);
-  //   setSortOrder(order);
-  //   dispatch(setCurrentPage(1));
-  // };
-
-  // --- Handlers (memoized)
 
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -146,7 +108,7 @@ export default function LabTable() {
 
         <LabDataTable
           lab={lab}
-          loading={loading}
+          loading={isLabLoading}
           courses={courses}
           onSort={handleSort}
           sortField={sortField}

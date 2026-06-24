@@ -30,7 +30,7 @@ import {
 import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
-import { useFetchSource } from "@/hooks/queries/useQueryFetchSource";
+import { useFetchAllSource, useFetchSource } from "@/hooks/queries/useQueryFetchSource";
 import { setSources } from "@/store/slices/sourceSlice";
 import PhoneNumberInput from "@/components/form/PhoneNumberInput";
 
@@ -130,29 +130,12 @@ export default function EnquiryForm() {
 
   const {
     data: courseData,
-    isLoading: courseLoading,
-    isError: courseError,
   } = useFetchAllCourses();
 
-  const { data: sourceData, isLoading, isError } = useFetchSource();
+  const { data: sourceData, isLoading, isError } = useFetchAllSource();
 
-  // Inside your EnquiryForm component, find this useEffect block:
-
-  useEffect(() => {
-    // 🔧 FIXED: courseData is already the flat Course[] array because of the hook's select option
-    if (courseData && Array.isArray(courseData)) {
-      dispatch(setCourses(courseData));
-    }
-  }, [courseData, dispatch]);
-
-  useEffect(() => {
-    if (sourceData?.source) {
-      dispatch(setSources(sourceData.source));
-    }
-  }, [sourceData, dispatch]);
-
-  const courseList = useSelector((state: RootState) => state.course.courses);
-  const sourceList = useSelector((state: RootState) => state.source.sources);
+  const courseList = courseData?.course || [];
+  const sourceList = sourceData?.source || [];
 
   const error = useSelector((state: RootState) => state.enquiry.error);
 
@@ -450,26 +433,34 @@ export default function EnquiryForm() {
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
               <div ref={(el) => { inputRefs.current.contact = el; }}>
                 <Label>Contact No. *</Label>
-                <PhoneNumberInput
-                  tabIndex={4}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Enter Contact"
-                  value={newEnquiry.contact}
-                  onChange={handlePhoneNumberChange}
-                />
-                {errors.contact && <p className="mt-1 text-sm text-red-500">{errors.contact}</p>}
+                <div className="relative">
+                  <PhoneNumberInput
+                    tabIndex={4}
+                    placeholder="Enter Contact"
+                    value={newEnquiry.contact}
+                    onChange={handlePhoneNumberChange}
+                  />
+                  {errors.contact && <p className="mt-1 text-sm text-red-500">{errors.contact}</p>}
+                  <span className="absolute top-5.5 left-0 -translate-y-1/2 border-r border-gray-200 px-3 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                    IN
+                  </span>
+                </div>
               </div>
 
               <div>
                 <Label>Alternate Contact No.</Label>
-                <PhoneNumberInput
-                  tabIndex={5}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Enter Alternate"
-                  value={newEnquiry.alternateContact}
-                  onChange={handleAlternatePhoneNumberChange}
-                />
-                {errors.alternateContact && <p className="mt-1 text-sm text-red-500">{errors.alternateContact}</p>}
+                <div className="relative">
+                  <PhoneNumberInput
+                    tabIndex={5}
+                    placeholder="Enter Alternate"
+                    value={newEnquiry.alternateContact}
+                    onChange={handleAlternatePhoneNumberChange}
+                  />
+                  {errors.alternateContact && <p className="mt-1 text-sm text-red-500">{errors.alternateContact}</p>}
+                  <span className="absolute top-5.5 left-0 -translate-y-1/2 border-r border-gray-200 px-3 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                    IN
+                  </span>
+                </div>
               </div>
 
               <div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
+import React, { ChangeEvent, useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 
@@ -12,7 +12,7 @@ import FilterBox from "@/components/form/input/FilterBox";
 
 // Hooks & Store Reducers
 import useDebounce from "@/hooks/useDebounce";
-import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { PAGE_SIZE } from "@/constants/pagination";
 import {
@@ -21,19 +21,13 @@ import {
   setSearchQuery,
   setSort
 } from "@/store/slices/studentSlice";
-import { setBatches } from "@/store/slices/batchSlice";
-import { setCourses } from "@/store/slices/courseSlice";
 import { useFetchStudent } from "@/hooks/queries/useQueryFetchStudent";
 
 export default function StudentTable() {
   const dispatch = useDispatch<AppDispatch>();
   const [searchInput, setSearchInput] = useState("");
 
-  // 1. Grab metadata arrays directly out of state slices
-  const batch = useSelector((state: RootState) => state.batch.batches);
-  const course = useSelector((state: RootState) => state.course.courses);
-
-  // 2. Pull operational search and pagination query dependencies from slice
+  // 1. Pull query dependencies from slice
   const {
     currentPage,
     searchQuery,
@@ -45,9 +39,9 @@ export default function StudentTable() {
   // Safe Token retrieval block
   const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
 
-  // 3. Bind master student query data mapping seamlessly to your hook
+  // 2. Main Student API Query
   const {
-    data: studentApiResponse,
+    data: studentData,
     isLoading: isStudentLoading,
     isFetching: isStudentFetching,
   } = useFetchStudent({
@@ -60,30 +54,15 @@ export default function StudentTable() {
     filters,
   });
 
-  // 4. Fetch metadata using React Query parallel executions
-  const { data: courseData } = useFetchCourse();
+  // 3. Metadata Fetch via Parallel React Query Cache Instances
+  const { data: courseData } = useFetchAllCourses();
   const { data: batchData } = useFetchAllBatches({ onlyAvailable: true });
 
-  // Sync Course metadata into slice when fetched
-  useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
-    }
-  }, [courseData, dispatch]);
+  // ✅ FIX: courseData is already a flat array due to your select filter
+  const courseList = courseData?.course || [];
+  const batchList = batchData?.batch || [];
 
-  // Sync Batch metadata into slice when fetched
-  useEffect(() => {
-    if (batchData?.batch) {
-      dispatch(setBatches(batchData.batch));
-    }
-  }, [batchData, dispatch]);
-
-  // Handle immediate keyboard input feedback loop
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  };
-
-  // Sync debounced string value down to search controller parameters
+  // Sync debounced search string parameters down to slice properties
   const debouncedSearchTerm = useDebounce(searchInput, 300);
   useEffect(() => {
     if (debouncedSearchTerm !== searchQuery) {
@@ -92,23 +71,29 @@ export default function StudentTable() {
     }
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
-  // Generate clean select field configurations for the filter box
-  const courseOptions = course.map((c) => ({
-    label: c.name,
-    value: c.id,
-  }));
+  // ✅ FIX: Use useMemo to safely render filter fields and avoid runtime crash if data is loading
+  const courseOptions = useMemo(() => {
+    return courseList.map((c) => ({
+      label: c.name,
+      value: String(c.id),
+    }));
+  }, [courseList]);
 
-  // --- Memoized Handler Actions ---
+  // --- Handlers ---
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     dispatch(setCurrentPage(1));
   }, [dispatch]);
 
   const handlePagination = useCallback((page: number) => {
-    if (studentApiResponse?.totalPages && page >= 1 && page <= studentApiResponse.totalPages) {
+    if (studentData?.totalPages && page >= 1 && page <= studentData.totalPages) {
       dispatch(setCurrentPage(page));
     }
-  }, [dispatch, studentApiResponse?.totalPages]);
+  }, [dispatch, studentData?.totalPages]);
 
   const handleSort = useCallback((field: string) => {
     const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
@@ -117,15 +102,14 @@ export default function StudentTable() {
 
   const handleFilters = useCallback((selectedFilters: Record<string, string | null>) => {
     dispatch(setFilters(selectedFilters));
-    dispatch(setCurrentPage(1)); // Reset back to baseline pagination page on filter shifts
+    dispatch(setCurrentPage(1));
   }, [dispatch]);
 
-  // Pull out safely initialized values from React Query mapping boundaries
-  // Note: Depending on your backend response shape, adjust `studentApiResponse?.student` 
-  // to `studentApiResponse?.data` if your endpoint wraps paginated listings inside an inner block.
-  const recordsList = (studentApiResponse as any)?.data || studentApiResponse?.student || [];
-  const totalCount = studentApiResponse?.total || 0;
-  const computedTotalPages = studentApiResponse?.totalPages || 1;
+  // Handle baseline structural records safely out of Api wrappers
+  // Safe and explicit mapping to your interface definition
+  const recordsList = studentData?.student || [];
+  const totalCount = studentData?.total || 0;
+  const computedTotalPages = studentData?.totalPages || 1;
 
   return (
     <div>
@@ -157,9 +141,9 @@ export default function StudentTable() {
 
         <StudentDataTable
           students={recordsList}
-          batch={batch}
-          course={course}
-          loading={isStudentLoading}
+          batch={batchList}
+          course={courseList}
+          loading={isStudentLoading || isStudentFetching}
           onSort={handleSort}
           sortField={sortField}
           sortOrder={sortOrder}

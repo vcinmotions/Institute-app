@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import ComponentCard from "@/components/common/ComponentCard";
 import { useFetchReports } from "@/hooks/queries/useQueryFetchReports";
 import StudentCard from "@/components/common/StudentCard";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
-import { useFetchSource } from "@/hooks/queries/useQueryFetchSource";
+import { useFetchAllSource } from "@/hooks/queries/useQueryFetchSource";
 
 type ReportType = "ENQUIRIES" | "FINANCE" | "STUDENTS";
 type FinanceStatus = "ALL" | "PAID" | "OUTSTANDING";
@@ -40,10 +39,10 @@ export default function ReportsDashboard() {
     const {
         data: sourceData,
         isLoading: sourceLoading,
-    } = useFetchSource();
+    } = useFetchAllSource();
 
     // 2️⃣ Safely extract array collections matching incoming backend JSON data geometries
-    const functionalCourses = Array.isArray(courseData) ? courseData : [];
+    const functionalCourses = courseData?.course || [];
     const functionalBatches = batchData?.batch || [];
     const functionalSources = sourceData?.source || [];
 

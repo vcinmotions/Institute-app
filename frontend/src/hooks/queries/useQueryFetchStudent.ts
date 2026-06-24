@@ -34,7 +34,7 @@ export const useFetchStudent = ({
   filters = {},
 }: UseFetchStudentParams) => {
   return useQuery<StudentApiResponse, Error>({
-    queryKey: ["student", limit, currentPage, searchQuery, sortField, sortOrder, filters,],
+    queryKey: ["student", limit, currentPage, searchQuery, sortField, sortOrder, { ...filters }],
 
     queryFn: async ({ signal }) => {
       if (!token) throw new Error("Missing token");

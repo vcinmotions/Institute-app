@@ -16,7 +16,7 @@ import { setCourses } from "@/store/slices/courseSlice"; // Update path if neede
 import { setBatches } from "@/store/slices/batchSlice"; // Update path if needed
 import { titleCase, normalizeEmail, normalizePhone } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
-import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllCourses, useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useCreateFaculty } from "@/hooks/useCreateFaculty";
 import PhoneInput from "@/components/form/group-input/PhoneInput";
@@ -40,8 +40,6 @@ export default function FacultyForm() {
 
   const { form, reset, setField } = useFacultyStore();
   const user = useSelector((state: RootState) => state.auth.user);
-  const batch = useSelector((state: RootState) => state.batch.batches);
-  const courses = useSelector((state: RootState) => state.course.courses);
 
   const [newFaculty, setNewFaculty] = useState<FacultyData>({
     name: "",
@@ -83,7 +81,7 @@ export default function FacultyForm() {
     data: courseData,
     isLoading: courseLoading,
     isError: courseError,
-  } = useFetchCourse();
+  } = useFetchAllCourses();
 
   const {
     data: batchData,
@@ -91,24 +89,15 @@ export default function FacultyForm() {
     isError: batchError,
   } = useFetchAllBatches();
 
-  useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
-    }
-  }, [courseData, dispatch]);
-
-  useEffect(() => {
-    if (batchData?.batch) {
-      dispatch(setBatches(batchData.batch));
-    }
-  }, [batchData, dispatch]);
+  const course = courseData?.course || [];
+  const batch = batchData?.batch || [];
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
     label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
   }));
 
-  const courseOptions = courses.map((course: any) => ({
+  const courseOptions = course.map((course: any) => ({
     value: course.id.toString(),
     label: course.name,
   }));

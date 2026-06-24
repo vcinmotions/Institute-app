@@ -8,27 +8,22 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store"; // Adjust path if needed
 import { useDispatch } from "react-redux";
 
-import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react";
+import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 import BatchDataTable from "@/components/tables/BatchDataTable";
 import BatchForm from "@/components/form/form-elements/BatchCreateForm";
-import { setBatches, setCurrentPage, setSearchQuery, setTotal, setTotalPages, setSort, setFilters } from "@/store/slices/batchSlice";
-import { setLab } from "@/store/slices/labSlice";
-import StudentCard from "@/components/common/StudentCard";
+import { setCurrentPage, setSearchQuery, setSort, } from "@/store/slices/batchSlice";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
+import { useFetchBatch } from "@/hooks/queries/useFetchBatch";
+import { useFetchLab } from "@/hooks/queries/useFetchLab";
 
 export default function BatchTable() {
   const [showForm, setShowForm] = useState(false);
-  const { currentPage, total, totalPages, searchQuery, sortField, sortOrder, } = useSelector((state: RootState) => state.batch)
-  //const [enquiries, setEnquiries] = useState<any[]>([]);
-  const batch = useSelector((state: RootState) => state.batch.batches ?? []);
-  const labs = useSelector((state: RootState) => state.lab.labs ?? []);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { currentPage, searchQuery, sortField, sortOrder, } = useSelector((state: RootState) => state.batch)
+
   // 1. Separate state to track immediate input changes
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
-
-  console.log("Redux state in edit:", useSelector(state => state));
 
   // 3. Debounce effect to update searchQuery only after user stops typing for 500ms
   // Update searchInput immediately on typing
@@ -56,67 +51,29 @@ export default function BatchTable() {
     }
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
-  // Fetch data on mount or when filters change
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        console.error("Token missing from sessionStorage");
-        return;
-      }
+  // 3. Fire TanStack Query hook instead of a manual useEffect
+  const { data, isLoading, isError } = useFetchBatch({
+    page: currentPage,
+    limit: PAGE_SIZE,
+    search: searchQuery,
+  });
 
-      setLoading(true);
-      try {
-        const response = await getBatch({
-          token,
-          page: currentPage,
-          limit: PAGE_SIZE,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-        });
+  console.log("BATCH DATA IN BATCH TABLE:", data?.batch);
 
-        dispatch(setBatches(response.batch || []));
-        dispatch(setTotalPages(response.totalPages || 1));
-        dispatch(setTotal(response.total || 0));
-      } catch (error) {
-        console.error("Error fetching batch:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const batch = data?.batch || [];
+  const totalPages = data?.totalPages || [];
+  const total = data?.total || [];
 
-    fetchData();
-  }, [currentPage, searchQuery, sortField, sortOrder]);
+  // 3. Fire TanStack Query hook instead of a manual useEffect
+  const { data: labData, isLoading: isLabLoading, isError: isLabError } = useFetchLab({
+    page: currentPage,
+    limit: PAGE_SIZE,
+    search: searchQuery,
+  });
 
-  useEffect(() => {
-    const fetchLab = async () => {
-      const token = sessionStorage.getItem("token");
-      if (!token) {
-        console.error("Token missing from sessionStorage");
-        return;
-      }
+  console.log("LAB DATA IN BATCH TABLE:", labData);
 
-      setLoading(true);
-      try {
-        const responseLab = await getLab({
-          token,
-          page: currentPage,
-          limit: PAGE_SIZE,
-          search: searchQuery,
-          sortField,
-          sortOrder,
-        });
-
-        dispatch(setLab(responseLab.labs));
-      } catch (error) {
-        console.error("ERROR IN FETCHING LAB DATA IN BATCHTABLE");
-      }
-    };
-    fetchLab();
-  }, [totalPages]);
-
-  console.log("Query data:", currentPage, searchQuery, totalPages);
+  const labs = labData?.labs || []
 
   // --- Handlers (memoized)
 
@@ -156,8 +113,8 @@ export default function BatchTable() {
 
         <BatchDataTable
           batch={batch}
+          loading={isLoading}
         />
-
 
         <Pagination
           currentPage={currentPage}

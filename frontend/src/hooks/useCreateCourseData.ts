@@ -1,49 +1,37 @@
-import { createCourseAPI, createEnquiryAPI, getCourse } from "@/lib/api";
-import { useDispatch, useSelector } from "react-redux";
+// hooks/useCreateCourse.ts
+import { createCourseAPI } from "@/lib/api";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { setCourses, setLoading, setError } from "@/store/slices/courseSlice";
-import { useMutation } from "@tanstack/react-query";
-import { PAGE_SIZE } from "@/constants/pagination";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useCreateCourse = () => {
-  const dispatch = useDispatch();
-  const { currentPage, sortField, searchQuery, sortOrder } = useSelector((state: RootState) => state.course); 
-  const token = useSelector((state: RootState) => state.auth.token); // ✅ From Redux
-  console.log("get Token in useCreateCourse:", token);
+  const queryClient = useQueryClient();
+
+  // Safe token recovery fallback for SSR or edge scenarios
+  const token = useSelector((state: RootState) => state.auth.token) ||
+    (typeof window !== "undefined" ? sessionStorage.getItem("token") : null);
 
   return useMutation({
     mutationFn: async (newCourseData: any) => {
-      console.log(
-        "GET COURSE DATA IN MUTATION on USECREATECOURSE:",
-        newCourseData,
-      );
-      if (!token) throw new Error("Missing Token for assign batch");
+      console.log("GET COURSE DATA IN MUTATION on USECREATECOURSE:", newCourseData);
 
-      dispatch(setLoading(true));
+      if (!token) throw new Error("Missing Token for creating course");
 
-      await createCourseAPI(token, newCourseData);
-
-      return { token };
+      // Fire the API call
+      return await createCourseAPI(token, newCourseData);
     },
 
-    onSuccess: async ({ token }) => {
-      // ✅ Refetch updated list
-      //const updated = await getEnquiry({ token, page: 1, limit: 5 });
-      const updated = await getCourse({ token, page: currentPage, limit: PAGE_SIZE, sortField, sortOrder, search: searchQuery });
-      console.log(
-        "get course List after create new course:",
-        updated,
-        updated.course,
-      );
+    onSuccess: () => {
+      console.log("Course created successfully, invalidating cache...");
 
-      // ✅ Only dispatch the array part
-      dispatch(setCourses(updated.course));
+      // ✅ Tell TanStack Query that the existing paginated and flat lists are obsolete.
+      // This automatically forces any mounted tables or dropdowns to silently refetch.
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
 
     onError: (error: any) => {
-      const backendError = error?.response?.data?.error || "Failed to assign batch";
-      dispatch(setError(backendError));
-      console.error("ERROR IN CREATEING TASK:", backendError)
+      const backendError = error?.response?.data?.error || "Failed to create course";
+      console.error("ERROR IN CREATING COURSE:", backendError);
     },
   });
 };

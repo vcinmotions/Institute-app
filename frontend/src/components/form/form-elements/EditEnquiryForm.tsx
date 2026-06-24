@@ -96,13 +96,11 @@ export default function EditEnquiryForm({
   const { inputRefs, scrollToError } = useScrollToError();
   const { mutate: editEnquiry, isPending } = useEditEnquiry();
 
-  const { data: courseData = [], isLoading: courseLoading } = useFetchAllCourses();
+  const { data: courseData, isLoading: courseLoading } = useFetchAllCourses();
 
   const { data: sourceData, isLoading, isError } = useFetchSource();
 
-  console.log("GET SOURCE IN EDIT ENQUIRY:", sourceData);
-  console.log("GET enquiryData IN EDIT ENQUIRY:", enquiryData);
-
+  const courseList = courseData?.course || [];
   const sourceList = sourceData?.source || [];
 
   useEffect(() => {
@@ -429,7 +427,7 @@ export default function EditEnquiryForm({
                 <MultiSelect
                   tabIndex={9}
                   label="Select Courses *"
-                  options={courseLoading ? [] : courseData.map((course: Course) => ({
+                  options={courseLoading ? [] : courseList?.map((course: Course) => ({
                     value: String(course.id),
                     text: capitalizeWords(course.name),
                     selected: newEnquiry.courseId.includes(String(course.id)),

@@ -1,45 +1,29 @@
-import { editCourseAPI, getCourse } from "@/lib/api";
-import { useDispatch, useSelector } from "react-redux";
+import { editCourseAPI } from "@/lib/api";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { setCourses, setLoading, setError } from "@/store/slices/courseSlice";
-import { useMutation } from "@tanstack/react-query";
-import { PAGE_SIZE } from "@/constants/pagination";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useEditCourse = () => {
-  const dispatch = useDispatch();
-  const { currentPage, sortField, searchQuery, sortOrder } = useSelector((state: RootState) => state.course); 
-  const token = useSelector((state: RootState) => state.auth.token); // ✅ From Redux
-  console.log("get Token in useEditCourse:", token);
+  const queryClient = useQueryClient();
+  // Safe token check for SSR/session scenarios
+  const token = useSelector((state: RootState) => state.auth.token) ||
+    (typeof window !== "undefined" ? sessionStorage.getItem("token") : null);
 
   return useMutation({
     mutationFn: async ({ newCourse, id }: { newCourse: any; id: any }) => {
-      console.log("GET FACULT BATCH ASSIGNED DATA IN MUTATION:", newCourse, id);
-      if (!token) throw new Error("Missing Token for assign batch");
-
-      dispatch(setLoading(true));
-
-      await editCourseAPI(token, newCourse, id);
-
-      return { token };
+      if (!token) throw new Error("Missing Token for edit course");
+      return await editCourseAPI(token, newCourse, id);
     },
 
-    onSuccess: async ({ token }) => {
-      // ✅ Refetch updated list
-      //const updated = await getEnquiry({ token, page: 1, limit: 5 });
-      const updated = await getCourse({ token, page: currentPage, limit: PAGE_SIZE, sortField, sortOrder, search: searchQuery });
-      console.log(
-        "get course List after create new course:",
-        updated,
-        updated.course,
-      );
-
-      // ✅ Only dispatch the array part
-      dispatch(setCourses(updated.course));
+    onSuccess: () => {
+      // ✅ Invalidate everything under the "courses" query key prefix.
+      // This tells TanStack Query that the cached paginated lists are now stale.
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
 
     onError: (error: any) => {
-      const backendError = error?.response?.data?.error || "Failed to assign batch";
-      dispatch(setError(backendError));
+      const backendError = error?.response?.data?.error || "Failed to create course";
+      console.error("Mutation error:", backendError);
     },
   });
 };

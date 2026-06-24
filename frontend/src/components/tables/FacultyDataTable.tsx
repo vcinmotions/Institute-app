@@ -107,7 +107,8 @@ export default function FacultyDataTable({
                     <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handleAssignBatchClick(item)}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                        variant="nobg"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 dark:text-slate-50 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 hover:text-slate-900"
                       >
                         Assign Batch
                       </Button>

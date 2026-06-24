@@ -231,6 +231,10 @@ export default function CourseForm() {
           totalAmount: "",
         });
 
+        window.scrollTo({
+          top: 0, behavior: "smooth"
+        });
+
         setAlert({
           show: true,
           title: "Course Created",
@@ -241,8 +245,8 @@ export default function CourseForm() {
         reset();
 
         setTimeout(() => {
-          router.back();
-        }, 1000);
+          router.replace("/dashboard/course");
+        }, 300);
       },
       onError: () => {
         window.scrollTo({ top: 0, behavior: "smooth" });

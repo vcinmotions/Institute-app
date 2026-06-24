@@ -14,7 +14,6 @@ import { useCreateCourse } from '@/hooks/useCreateCourseData';
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
-  batch: any[];
 }
 
 interface CourseData {

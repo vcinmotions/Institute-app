@@ -197,7 +197,8 @@ export default function StudentDataTable({
                     <TableCell className="px-3 py-1.5">
                       <Button
                         onClick={() => handleCourseForm(item.id)}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
+                        variant="nobg"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 dark:text-slate-50 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 hover:text-slate-900"
                       >
                         Add
                       </Button>
@@ -206,7 +207,7 @@ export default function StudentDataTable({
                     <TableCell className="px-3 py-1.5">
                       <Link
                         href={(`/dashboard/student/admission-form/${item.id}`)}
-                        className="h-6 rounded-[8px] border border-slate-200 bg-white py-1.5 px-4 text-[11px] font-medium text-white shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
+                        className="h-6 rounded-[8px] border border-slate-200  bg-white py-1.5 px-4 text-[11px] font-medium text-slate-700 dark:text-white hover:text-slate-900 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
                       >
                         View
                       </Link>
@@ -214,8 +215,9 @@ export default function StudentDataTable({
 
                     <TableCell className="px-3 py-1.5">
                       <Button
+                        variant="nobg"
                         onClick={() => handleEditForm(item.id)}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 dark:text-slate-50 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 hover:text-slate-900"
                       >
                         Edit
                       </Button>

@@ -277,27 +277,6 @@ export async function getAllBatchController(req: Request, res: Response) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
-  
-    // ✅ Fetch paginated, sorted, and filtered enquiries
-    // const batch = await tenantPrisma.batch.findMany({
-    //   include: {
-    //     faculty: true,
-    //     studentCourses: {
-    //       include: {
-    //         student: true,
-    //         course: true,
-    //       },
-    //     },
-    //     batchCourses: {
-    //       include: {
-    //         course: true,
-    //         batch: true,
-    //       },
-    //     },
-    //     labTimeSlot: true,
-    //   },
-    // });
-
     // Fetch all batches
     const batches = await tenantPrisma.batch.findMany({
       include: {

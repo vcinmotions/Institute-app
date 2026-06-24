@@ -66,12 +66,6 @@ export default function TaskForm() {
   const { data: batchData } = useFetchAllBatches();
 
   useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
-    }
-  }, [courseData, dispatch]);
-
-  useEffect(() => {
     if (batchData?.batch) {
       dispatch(setBatches(batchData.batch));
     }

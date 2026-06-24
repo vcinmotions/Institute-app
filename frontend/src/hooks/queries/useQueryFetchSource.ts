@@ -1,4 +1,4 @@
-// hooks/useFetchCourse.ts
+// hooks/useFetchSource.ts
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/apiClient';
 
@@ -17,24 +17,41 @@ export interface GetSourceResponse {
   limit: number;
 }
 
-export const useFetchSource = () => {
-  const token = sessionStorage.getItem("token");
+export interface GetAllSourceResponse {
+  message: string;
+  source: Source[];
+}
 
+export const useFetchSource = (params: any = {}) => {
   return useQuery<GetSourceResponse>({
-    queryKey: ['source'],
+    queryKey: ['source', params],
     queryFn: async () => {
+      const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
       if (!token) throw new Error("Missing token");
 
       const response = await apiClient.get('/source', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
+        params,
       });
-
-      console.log("GET SOURCE DATA IN QUERY:", response);
-
       return response.data;
     },
-    enabled: !!token,
+    enabled: typeof window !== "undefined" ? !!sessionStorage.getItem("token") : false,
+  });
+};
+
+export const useFetchAllSource = () => {
+  return useQuery<GetAllSourceResponse>({
+    queryKey: ['all-source'],
+    queryFn: async () => {
+      const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
+      if (!token) throw new Error("Missing token");
+
+      const response = await apiClient.get('/source/all', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    },
+    enabled: typeof window !== "undefined" ? !!sessionStorage.getItem("token") : false,
+    staleTime: 5 * 60 * 1000, // Cache metadata for 5 mins
   });
 };

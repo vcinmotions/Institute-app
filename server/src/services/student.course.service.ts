@@ -91,8 +91,7 @@ export async function getStudentsCourses({
   );
 
   return {
-    data: studentCourses,
-    detailedCourses,
+    studentCourses: detailedCourses,
     total,
     totalPages: Math.ceil(total / query.limit),
   };

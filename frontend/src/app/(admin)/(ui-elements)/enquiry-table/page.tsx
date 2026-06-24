@@ -10,7 +10,7 @@ import EnquiryDataTable from "@/components/tables/EnquiryDataTable";
 import Pagination from "@/components/tables/Pagination";
 import useDebounce from "@/hooks/useDebounce";
 
-import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 
 import {
   setCurrentPage,
@@ -39,8 +39,8 @@ export default function EnquiryTable() {
 
   const [searchInput, setSearchInput] = useState("");
 
-  const courses = useSelector((state: RootState) => state.course.courses ?? []);
-  const { data: courseData, isLoading: courseLoading } = useFetchCourse();
+  // ✅ Hits the updated, cached universal course hook
+  const { data: courseData } = useFetchAllCourses();
 
   const token = useSelector((state: RootState) => state.auth.token);
 
@@ -55,15 +55,12 @@ export default function EnquiryTable() {
     filters,
   });
 
-  // Use data directly instead of pulling 'enquiries' from Redux!
   const enquiriesList = data?.data || [];
   const totalCount = data?.total || 0;
   const totalPagesCount = data?.totalPages || 1;
 
-  // --- Debounced search and Set delay time according to your needs
   const debouncedSearchTerm = useDebounce(searchInput, 300);
 
-  // 2. sync debounced value to Redux
   useEffect(() => {
     if (debouncedSearchTerm !== searchQuery) {
       dispatch(setSearchQuery(debouncedSearchTerm));
@@ -71,7 +68,6 @@ export default function EnquiryTable() {
     }
   }, [debouncedSearchTerm, searchQuery, dispatch]);
 
-  // --- Handlers (memoized)
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   }, []);
@@ -90,7 +86,6 @@ export default function EnquiryTable() {
   }, [dispatch, totalPagesCount]);
 
   const handleSort = useCallback((field: string) => {
-    console.log("SORTORDER IN ENQUIRY TABLE:", sortField, sortOrder, field);
     const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
     dispatch(setSort({ field, order }));
   }, [dispatch, sortField, sortOrder]);
@@ -108,9 +103,12 @@ export default function EnquiryTable() {
     dispatch(setLeadStatus(nextStatus));
   }, [leadStatus, dispatch, getNextLeadStatus]);
 
-  // --- Course options for filter (memoized)
+  // ✅ Maps perfectly across the response structure with a safe array fallback []
   const courseOptions = useMemo(() => {
-    return courseData?.course.map(c => ({ label: c.name, value: c.id }));
+    return courseData?.course?.map(c => ({
+      label: c.name,
+      value: String(c.id)
+    })) || [];
   }, [courseData]);
 
   return (
@@ -162,4 +160,3 @@ export default function EnquiryTable() {
     </div>
   );
 }
-

@@ -60,7 +60,11 @@ export default function SourceDataTable({
 
             {/* High Density Data Cells */}
             <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {sources && sources.length > 0 ? (
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={9} className="py-3 text-center text-xs text-slate-400">Loading master records...</TableCell>
+                </TableRow>
+              ) : sources && sources.length > 0 ? (
                 sources.map((item: any) => (
                   <TableRow
                     key={item.id}
@@ -78,7 +82,8 @@ export default function SourceDataTable({
                       <Button
                         onClick={() => handleEdit(item)}
                         size="sm"
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                        variant="nobg"
+                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 dark:text-slate-50 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 hover:text-slate-900"
                       >
                         Edit
                       </Button>

@@ -768,8 +768,6 @@ export async function getCourseController(req: Request, res: Response) {
       query,
     });
 
-    console.log("Courses Fetched Successfully in getCourseConTroller", result.data);
-
     return res.status(200).json({
       message: "Courses fetched successfully",
       course: result.data,
@@ -826,15 +824,15 @@ export async function getAllCourseController(req: Request, res: Response) {
 
     return res.status(200).json({
       message: "Courses fetched successfully",
-      course,
+      course: course,
     });
 
-    //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
   } catch (err) {
     console.error("Error Fetched Courses:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
+
 // export async function markCourseAsCompleted(req: Request, res: Response) {
 //   try {
 //     const { studentId, studentCourseId, feedback, remarks } = req.body;

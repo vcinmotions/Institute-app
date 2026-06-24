@@ -168,10 +168,6 @@ export async function getSourceController(req: Request, res: Response) {
     }
 
     console.log("Tenant Prisma URL:");
-const result = await tenantPrisma.$queryRawUnsafe(`
-  SELECT current_database();
-`);
-console.log(result);
 
     // ✅ Fetch paginated, sorted, and filtered enquiries
     const source = await tenantPrisma.sourceType.findMany({
@@ -209,8 +205,34 @@ console.log(result);
   }
 }
 
+export async function getAllSourceController(req: Request, res: Response) {
+  try {
+    // 1. Use values injected by middleware
+    const tenantPrisma = req.tenantPrisma;
+    const user = req.user;
+
+    if (!tenantPrisma || !user || typeof user === "string") {
+      return res.status(401).json({ error: "Unauthorized request" });
+    }
+
+    // ✅ Fetch paginated, sorted, and filtered enquiries
+    const source = await tenantPrisma.sourceType.findMany({});
+
+    return res.status(200).json({
+      message: "Source fetched successfully",
+      source: source,
+    });
+
+    //return res.status(201).json({ message: 'Enquiry Fetched successfully', enquiry });
+  } catch (err) {
+    console.error("Error Fetched Source:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   addSourceController,
   updateSourceController,
   getSourceController,
+  getAllSourceController
 };

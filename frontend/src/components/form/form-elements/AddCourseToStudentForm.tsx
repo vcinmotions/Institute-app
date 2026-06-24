@@ -9,13 +9,8 @@ import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { useCourseToExistenceStudent } from "@/hooks/useAssignCurseToExistemceStudent";
-import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
-import { useDispatch, useSelector } from "react-redux";
-import { setCourses } from "@/store/slices/courseSlice";
-import { RootState } from "@/store";
-import { setBatches } from "@/store/slices/batchSlice";
+import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
-import { capitalizeWords } from "@/components/common/ToCapitalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 
 interface DefaultInputsProps {
@@ -39,12 +34,7 @@ export default function CourseForm({
   onCloseModal,
   studentId,
   studentDetails,
-  course,
 }: DefaultInputsProps) {
-  console.log("get Student Id is Add course Form:", studentId);
-  console.log("get course is Add course Form:", course);
-
-  const batch = useSelector((state: RootState) => state.batch.batches);
   const [filledCoursedata, setFilledCourseData] = useState<NewCourseData>({
     courseId: "",
     batchId: "",
@@ -53,16 +43,9 @@ export default function CourseForm({
     paymentType: "",
     installmentTypeId: "",
   });
-  const dispatch = useDispatch();
-  const [facultyList, setFacultyList] = useState([]);
-  const { inputRefs, scrollToError } = useScrollToError();
 
-  const [batchList, setBatchList] = useState([]);
+  const { scrollToError } = useScrollToError();
 
-  const [selectedProfilePicture, setSelectedProfilePicture] =
-    useState<File | null>(null);
-
-  // New state for alert
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -77,29 +60,17 @@ export default function CourseForm({
 
   const [errors, setErrors] = useState<Partial<NewCourseData>>({});
   const { mutateAsync: assignCourseToExistenceStudent } = useCourseToExistenceStudent();
-  const countries = [
-    { code: "IN", label: "+91" },
-    { code: "US", label: "+1" },
-    { code: "GB", label: "+44" },
-    { code: "CA", label: "+1" },
-    { code: "AU", label: "+61" },
-  ];
-  console.log("useEffect triggered — studentDetails:", studentDetails);
 
   const {
     data: batchData,
-    isLoading: batchLoading,
-    isError: batchError,
   } = useFetchAllBatches({ onlyAvailable: true });
 
-  const [paymentTypeOption, setpaymentTypeOption] = useState<any>([]);
-  const [installmentTypeOption, setInstallmentTypeOption] = useState<any>([]);
+  const [paymentTypeOption, setpaymentTypeOption] = useState<any[]>([]);
+  const [installmentTypeOption, setInstallmentTypeOption] = useState<any[]>([]);
 
   const {
     data: courseData,
-    isLoading: courseLoading,
-    isError: courseError,
-  } = useFetchCourse();
+  } = useFetchAllCourses();
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -107,106 +78,47 @@ export default function CourseForm({
     firstInputRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    if (courseData?.course) {
-      dispatch(setCourses(courseData.course));
-    }
-  }, [courseData, dispatch]);
-
-  const courseList = useSelector((state: RootState) => state.course.courses);
-
-  console.log("Get Courses Name in Add course to student Form:", courseList);
-
-  useEffect(() => {
-    console.log("get all batches data;", batchData);
-    if (batchData?.batch) {
-      dispatch(setBatches(batchData.batch));
-    }
-    setBatches;
-  }, [batchData, dispatch]);
-  console.log("get all batches data::::::::::::::::::::::::::::::::::::::::::::::::;", batchData);
-
   const enrolledCourseIds =
     studentDetails?.studentCourses?.map(
-      (sc: { courseId: any }) => sc.courseId,
+      (sc: { courseId: any }) => sc.courseId
     ) || [];
   const enrolledBatchIds =
     studentDetails?.studentCourses?.map((sc: { batchId: any }) => sc.batchId) ||
     [];
 
-  const batchOptions = batch.map((b: any) => ({
-    value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
-  }));
-
-  console.log(
-    "Get ENROLLED COURseID in Add course to student Form:",
-    enrolledCourseIds,
-  );
-  console.log(
-    "Get ENROLLED BATCHID in Add course to student Form:",
-    enrolledBatchIds,
-  );
+  const courseList = courseData?.course || [];
+  const batchList = batchData?.batch || [];
 
   // Get already assigned time slots (start + end) for this student
   const enrolledTimeRanges =
     studentDetails?.labAllocations
-      .map((la: any) => {
-        // find the labTimeSlot object for this allocation
-        const slot = batch.find(
-          (b) => b.labTimeSlotId === la.labTimeSlotId,
+      ?.map((la: any) => {
+        const slot = batchList.find(
+          (b: any) => b.labTimeSlotId === la.labTimeSlotId
         )?.labTimeSlot;
         return slot ? `${slot.startTime}-${slot.endTime}` : null;
       })
       .filter(Boolean) || [];
 
-  const enrolledTimeSlot =
-    studentDetails?.labAllocations.map(
-      (sc: { labTimeSlotId: any }) => sc.labTimeSlotId,
-    ) || [];
-
-  console.log(
-    "Get ENROLLED TIMESLOTID in Add course to student Form:",
-    enrolledTimeSlot,
-  );
-
-  console.log(
-    "Get ENROLLED TIMESLOTID RANGE in Add course to student Form:",
-    enrolledTimeRanges,
-  );
-
   const filteredCourses = courseList.filter(
-    (course) => !enrolledCourseIds.includes(course.id),
+    (course) => !enrolledCourseIds.includes(course.id)
   );
 
-  console.log("enrolledCourseIds:", enrolledCourseIds);
-  console.log("FILTERED COURSE:", filteredCourses);
-
-  const filteredBatches = batch.filter((b) => !enrolledBatchIds.includes(b.id)).map((b: any) => ({
-    value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
-  }));
-
-  // Filter batches to remove those with same time ranges
-  const filteredTimeSlots = batch.filter((b) => {
-    const timeRange = `${b.labTimeSlot.startTime}-${b.labTimeSlot.endTime}`;
-    return !enrolledTimeRanges.includes(timeRange);
-  });
-
-  console.log("GET filteredBatches in Add course form;", filteredBatches);
-  console.log("GET FilteredTimeSots in Add course form;", filteredTimeSlots);
+  const filteredBatches = batchList
+    .filter((b: any) => !enrolledBatchIds.includes(b.id))
+    .map((b: any) => ({
+      value: b.id.toString(),
+      label: `${b.name} | ${b.labTimeSlot?.startTime || ""} - ${b.labTimeSlot?.endTime || ""} | PCs: ${b.labTimeSlot?.availablePCs || 0}`,
+    }));
 
   const validate = () => {
     const newErrors: Partial<NewCourseData> = {};
 
     if (!filledCoursedata.courseId) newErrors.courseId = "Course is required.";
     if (!filledCoursedata.batchId) newErrors.batchId = "Batch is required.";
-    if (!filledCoursedata.feeAmount)
-      newErrors.feeAmount = "Fee amount is required.";
-    if (!filledCoursedata.paymentType)
-      newErrors.paymentType = "Payment type is required.";
-    if (!filledCoursedata.admissionDate)
-      newErrors.admissionDate = "Admission date is required.";
+    if (!filledCoursedata.feeAmount) newErrors.feeAmount = "Fee amount is required.";
+    if (!filledCoursedata.paymentType) newErrors.paymentType = "Payment type is required.";
+    if (!filledCoursedata.admissionDate) newErrors.admissionDate = "Admission date is required.";
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 2000);
@@ -231,123 +143,36 @@ export default function CourseForm({
         const paymentTypes = selectedCourse.courseFeeStructure.paymentType;
         const installments = selectedCourse.courseFeeStructure.installments;
 
-        // ✅ Set payment type dropdown options
         setpaymentTypeOption(paymentTypes || []);
-
-        console.log("GET SELECTED PAYMENTTUPE :", paymentTypeOption);
-
-        // ✅ Set installment dropdown options
         setInstallmentTypeOption(installments || []);
 
-        // ✅ Auto-set default fee
         setFilledCourseData((prev) => ({
           ...prev,
           feeAmount: fee?.toString() || "",
-          paymentType: "", // payment type unselected until user chooses
-          installmentTypeId: "", // clear installment
+          paymentType: "",
+          installmentTypeId: "",
         }));
       }
     }
 
     if (field === "installmentTypeId") {
       const selectedIns = installmentTypeOption.find(
-        (ins: any) => ins.id.toString() === value,
+        (ins: any) => ins.id.toString() === value
       );
 
       if (selectedIns) {
         setFilledCourseData((prev) => ({
           ...prev,
-          feeAmount: selectedIns.amount.toString(), // AUTO SET FEE
+          feeAmount: selectedIns.amount.toString(),
         }));
       }
     }
 
-    // Clear error on change
     setErrors((prev) => ({
       ...prev,
       [field]: "",
     }));
   };
-
-  const handleDateChange = (field: keyof NewCourseData, value: string) => {
-    // Allow only digits
-    let digits = value.replace(/\D/g, "");
-
-    // Restrict to max 8 digits (DDMMYYYY)
-    if (digits.length > 8) digits = digits.slice(0, 8);
-
-    // Auto-format as DD/MM/YYYY
-    let formattedValue = digits;
-    if (digits.length > 4) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4, 8)}`;
-    } else if (digits.length > 2) {
-      formattedValue = `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
-    }
-
-    // Update form data
-    setFilledCourseData((prev) => ({
-      ...prev,
-      [field]: formattedValue,
-    }));
-
-    // Simple validation (optional)
-    let error = "";
-    if (digits.length === 8) {
-      const day = parseInt(digits.slice(0, 2), 10);
-      const month = parseInt(digits.slice(2, 4), 10);
-      const year = parseInt(digits.slice(4, 8), 10);
-      const isValidDate = !isNaN(new Date(`${year}-${month}-${day}`).getTime());
-      if (!isValidDate || day > 31 || month > 12) {
-        error = "Invalid date";
-      }
-    }
-
-    setErrors((prev) => ({
-      ...prev,
-      [field]: error,
-    }));
-  };
-
-  const handleChangeNew = (field: keyof NewCourseData, value: string) => {
-    setFilledCourseData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-
-    if (field === "courseId") {
-      const selectedCourse = courseList.find((c) => c.id.toString() === value);
-
-      if (selectedCourse?.courseFeeStructure) {
-        const fee = selectedCourse.courseFeeStructure.totalAmount;
-        const paymentTypes = selectedCourse.courseFeeStructure.paymentType;
-        const installments = selectedCourse.courseFeeStructure.installments;
-
-        // ✅ Set payment type dropdown options
-        setpaymentTypeOption(paymentTypes || []);
-
-        console.log("GET SELECTED PAYMENTTUPE :", paymentTypeOption);
-
-        // ✅ Set installment dropdown options
-        setInstallmentTypeOption(installments || []);
-
-        // ✅ Auto-set default fee
-        setFilledCourseData((prev) => ({
-          ...prev,
-          feeAmount: fee?.toString() || "",
-          paymentType: "", // payment type unselected until user chooses
-          installmentTypeId: "", // clear installment
-        }));
-      }
-    }
-
-    // Clear error on change
-    setErrors((prev) => ({
-      ...prev,
-      [field]: "",
-    }));
-  };
-
-  console.log("GET SELECTED PAYMENTTUPE :", paymentTypeOption);
 
   const handleSubmit = async () => {
     const { isValid, errors: validationErrors } = validate();
@@ -360,13 +185,13 @@ export default function CourseForm({
         variant: "error",
       });
 
-      scrollToError(validationErrors); // ✅ ALWAYS WORKS
+      scrollToError(validationErrors);
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
       }, 2000);
 
-      return; // ⛔ mutation never runs
+      return;
     }
 
     const token = sessionStorage.getItem("token");
@@ -377,11 +202,6 @@ export default function CourseForm({
         message: "Token not found. Please log in again.",
         variant: "error",
       });
-
-      setTimeout(() => {
-        setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
-
       return;
     }
 
@@ -416,35 +236,22 @@ export default function CourseForm({
             variant: "success",
           });
 
-          window.scrollTo({
-            top: 0, behavior: "smooth"
-          })
+          window.scrollTo({ top: 0, behavior: "smooth" });
 
           setTimeout(() => {
             onCloseModal();
           }, 1000);
         },
-
         onError: () => {
-          // You already handle error via redux + toast
-          window.scrollTo({
-            top: 0, behavior: "smooth"
-          })
+          window.scrollTo({ top: 0, behavior: "smooth" });
         },
-      },
+      }
     );
   };
-
-  console.log(
-    "get All Add New Course To Existing Student form editable data:",
-    filledCoursedata,
-  );
 
   return (
     <ModalCard title="Course Form" oncloseModal={onCloseModal}>
       <div className="flex flex-col gap-6">
-
-        {/* Alert Messages */}
         {alert.show && (
           <Alert
             variant={alert.title === "Course Assigned" ? "success" : "error"}
@@ -454,10 +261,9 @@ export default function CourseForm({
           />
         )}
 
-        {/* Form Groupings */}
         <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
-            Enrollment Details
+            // Enrollment Details
           </h3>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -470,10 +276,10 @@ export default function CourseForm({
                   tabIndex={1}
                   options={filteredCourses.map((course) => ({
                     label: course.name,
-                    value: course.id,
+                    value: course.id.toString(), // 📑 FIXED: Added .toString() here
                   }))}
                   placeholder="Select a course"
-                  onChange={(value) => handleChangeNew("courseId", value)}
+                  onChange={(value) => handleChange("courseId", value)} // 🧹 FIXED: Consolidated duplicate handler
                   defaultValue={filledCoursedata.courseId}
                   className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 />
@@ -492,10 +298,7 @@ export default function CourseForm({
               <div className="relative" data-master="batch">
                 <Select
                   tabIndex={2}
-                  options={filteredBatches.map((batch) => ({
-                    label: batch.label,
-                    value: batch.value,
-                  }))}
+                  options={filteredBatches}
                   placeholder="Select a batch"
                   onChange={(value) => handleChange("batchId", value)}
                   defaultValue={filledCoursedata.batchId}
@@ -531,9 +334,9 @@ export default function CourseForm({
               <div className="relative" data-master="payment">
                 <Select
                   tabIndex={10}
-                  options={paymentTypeOption.map((course: any) => ({
-                    label: course,
-                    value: course,
+                  options={paymentTypeOption.map((type: any) => ({
+                    label: type,
+                    value: type.toString(), // 📑 FIXED: Added .toString() here safely
                   }))}
                   placeholder="Select payment type"
                   onChange={(value) => handleChange("paymentType", value)}
@@ -560,7 +363,7 @@ export default function CourseForm({
                       options={installmentTypeOption.map(
                         (ins: { id: number; number: any; amount: any }) => ({
                           label: `${ins.number} Installments - ₹${ins.amount}`,
-                          value: ins.id,
+                          value: ins.id.toString(), // 📑 FIXED: Added .toString() here
                         })
                       )}
                       placeholder="Select installment plan"
@@ -619,7 +422,6 @@ export default function CourseForm({
             Save Course
           </Button>
         </div>
-
       </div>
     </ModalCard>
   );

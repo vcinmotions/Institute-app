@@ -163,126 +163,133 @@ export default function StudentCourseDataTable({
 
             {/* High Density Data Cells */}
             <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {studentCourse && studentCourse.length > 0 ? (
-                studentCourse.map((item: any) => (
-                  <TableRow
-                    key={item.studentCourse?.id}
-                    className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
-                  >
-                    <TableCell className="px-3 py-1.5">
-                      <div className="flex items-center gap-2.5">
-                        <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full flex items-center justify-center">
-                          {item?.studentCourse?.student?.photoUrl ? (
-                            <img
-                              src={
-                                item?.studentCourse?.student?.photoUrl?.startsWith("http")
-                                  ? item.photoUrl
-                                  : `http://localhost:5001${item?.studentCourse?.student?.photoUrl}`
-                              }
-                              alt="student"
-                              className="h-7 w-7 rounded-full object-cover"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = "/images/user/user-21.jpg";
-                              }}
-                            />
-                          ) : (
-                            <Avatar name={item?.studentCourse?.student?.fullName} size={28} />
-                          )}
+              {/* Async Loading Skeleton UI State */}
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={9} className="py-3 text-center text-xs text-slate-400">Loading master records...</TableCell>
+                </TableRow>
+              ) :
+                studentCourse && studentCourse.length > 0 ? (
+                  studentCourse.map((item: any) => (
+                    <TableRow
+                      key={item.studentCourse?.id}
+                      className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                    >
+                      <TableCell className="px-3 py-1.5">
+                        <div className="flex items-center gap-2.5">
+                          <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full flex items-center justify-center">
+                            {item?.studentCourse?.student?.photoUrl ? (
+                              <img
+                                src={
+                                  item?.studentCourse?.student?.photoUrl?.startsWith("http")
+                                    ? item.photoUrl
+                                    : `http://localhost:5001${item?.studentCourse?.student?.photoUrl}`
+                                }
+                                alt="student"
+                                className="h-7 w-7 rounded-full object-cover"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = "/images/user/user-21.jpg";
+                                }}
+                              />
+                            ) : (
+                              <Avatar name={item?.studentCourse?.student?.fullName} size={28} />
+                            )}
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize truncate">
+                              {item.studentCourse?.student?.fullName || "N/A"}
+                            </span>
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide truncate">
+                              {item.studentCourse?.student?.email || "N/A"}
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex flex-col min-w-0">
-                          <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize truncate">
-                            {item.studentCourse?.student?.fullName || "N/A"}
-                          </span>
-                          <span className="text-[10px] text-slate-400 dark:text-slate-500 tracking-wide truncate">
-                            {item.studentCourse?.student?.email || "N/A"}
-                          </span>
-                        </div>
-                      </div>
-                    </TableCell>
+                      </TableCell>
 
-                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 max-w-[150px] truncate">
-                      {item.studentCourse?.course?.name || "N/A"}
-                    </TableCell>
+                      <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 max-w-[150px] truncate">
+                        {item.studentCourse?.course?.name || "N/A"}
+                      </TableCell>
 
-                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
-                      {item.studentCourse?.batchId || "N/A"}
-                    </TableCell>
+                      <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
+                        {item.studentCourse?.batchId || "N/A"}
+                      </TableCell>
 
-                    <TableCell className="px-3 py-1.5">
-                      <Badge
-                        size="sm"
-                        color={
-                          item.studentCourse?.status === "COMPLETED"
-                            ? "success"
-                            : item.studentCourse?.status === "ACTIVE"
-                              ? "warning"
-                              : item.studentCourse?.status === "WARM"
-                                ? "info"
-                                : "error"
-                        }
-                      >
-                        {item.studentCourse?.status}
-                      </Badge>
-                    </TableCell>
-
-                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
-                      {item.studentCourse?.startDate
-                        ? new Date(item.studentCourse.startDate).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })
-                        : "N/A"}
-                    </TableCell>
-
-                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
-                      {item.studentCourse?.endDate
-                        ? new Date(item.studentCourse.endDate).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })
-                        : "N/A"}
-                    </TableCell>
-
-                    <TableCell className="px-3 py-1.5">
-                      <Button
-                        onClick={() => handleCompletion(item)}
-                        disabled={item.studentCourse.status === "COMPLETED"}
-                        className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed"
-                      >
-                        Completion
-                      </Button>
-                    </TableCell>
-
-                    <TableCell className="px-3 py-1.5">
-                      {item.studentCourse?.certificate?.certificateUrl ? (
-                        <Button
-                          onClick={() =>
-                            handleDownload(item.studentCourse.certificate.certificateUrl)
+                      <TableCell className="px-3 py-1.5">
+                        <Badge
+                          size="sm"
+                          color={
+                            item.studentCourse?.status === "COMPLETED"
+                              ? "success"
+                              : item.studentCourse?.status === "ACTIVE"
+                                ? "warning"
+                                : item.studentCourse?.status === "WARM"
+                                  ? "info"
+                                  : "error"
                           }
-                          className="h-6 rounded-[4px] bg-amber-500 px-2.5 text-[11px] font-medium text-white shadow-sm transition hover:bg-amber-600 disabled:opacity-50"
                         >
-                          Download
+                          {item.studentCourse?.status}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                        {item.studentCourse?.startDate
+                          ? new Date(item.studentCourse.startDate).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })
+                          : "N/A"}
+                      </TableCell>
+
+                      <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                        {item.studentCourse?.endDate
+                          ? new Date(item.studentCourse.endDate).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })
+                          : "N/A"}
+                      </TableCell>
+
+                      <TableCell className="px-3 py-1.5">
+                        <Button
+                          onClick={() => handleCompletion(item)}
+                          disabled={item.studentCourse.status === "COMPLETED"}
+                          variant="nobg"
+                          className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 dark:text-slate-50 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 hover:text-slate-900"
+                        >
+                          Completion
                         </Button>
-                      ) : (
-                        <span className="text-[11px] text-slate-400 italic dark:text-slate-500">
-                          No Certificate
-                        </span>
-                      )}
+                      </TableCell>
+
+                      <TableCell className="px-3 py-1.5">
+                        {item.studentCourse?.certificate?.certificateUrl ? (
+                          <Button
+                            onClick={() =>
+                              handleDownload(item.studentCourse.certificate.certificateUrl)
+                            }
+                            className="h-6 rounded-[4px] bg-amber-500 px-2.5 text-[11px] font-medium text-white shadow-sm transition hover:bg-amber-600 disabled:opacity-50"
+                          >
+                            Download
+                          </Button>
+                        ) : (
+                          <span className="text-[11px] text-slate-400 italic dark:text-slate-500">
+                            No Certificate
+                          </span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={8}
+                      className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
+                    >
+                      No Student Course found.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
-                  >
-                    No Student Course found.
-                  </TableCell>
-                </TableRow>
-              )}
+                )}
             </TableBody>
           </Table>
         </div>

@@ -3,7 +3,7 @@ import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
-import { setCurrentPage, setSearchQuery, setTotal, setTotalPages, setTests } from "@/store/slices/testSlice";
+import { setCurrentPage, setSearchQuery } from "@/store/slices/testSlice";
 import { RootState } from "@/store";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
@@ -12,10 +12,7 @@ import { useFetchAllTests } from "@/hooks/queries/useQueryFetchTestData";
 import Link from "next/link";
 
 export default function TestTable() {
-    const batch = useSelector((state: RootState) => state.batch.batches ?? []);
-    // const tests = useSelector((state: RootState) => state.test.tests ?? []);
-
-    const { currentPage, total, totalPages, searchQuery } = useSelector(
+    const { currentPage, searchQuery } = useSelector(
         (state: RootState) => state.test
     );
 
@@ -45,17 +42,9 @@ export default function TestTable() {
         search: searchQuery,
     });
 
-    console.log("TEST DATA IN TEST TABLE:", data);
     const tests = data?.test || [];
-
-    // 2. CRITICAL SYNC: Watch React Query response and update the Redux Store
-    useEffect(() => {
-        if (data) {
-            dispatch(setTests(data.test || []));
-            dispatch(setTotalPages(data.totalPages || 1));
-            dispatch(setTotal(data.total || 0));
-        }
-    }, [data, dispatch]);
+    const totalPages = data?.totalPages || [];
+    const total = data?.total || [];
 
     const handleSearchSubmit = useCallback((e: React.FormEvent) => {
         e.preventDefault();
@@ -87,7 +76,6 @@ export default function TestTable() {
                 {/* 3. Pass React Query's isLoading flag directly into the table spinner */}
                 <TestDataTable
                     tests={tests}
-                    batch={batch}
                     loading={isLoading}
                 />
 

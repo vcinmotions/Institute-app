@@ -8,5 +8,4 @@ router.post('/student-course', addStudentCourseController);
 
 router.get('/student-course', getStudentCourseController)
 
-
 export default router;

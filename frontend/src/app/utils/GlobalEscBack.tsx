@@ -8,8 +8,6 @@ export default function GlobalEscBack() {
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log("GET PATHNAME GLOBALLY:", pathname);
-
   useEffect(() => {
     // const handleKey = (e: KeyboardEvent) => {
     //   // ESC key (Escape)

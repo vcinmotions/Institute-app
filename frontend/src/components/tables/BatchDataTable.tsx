@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Table,
   TableBody,
@@ -9,10 +8,10 @@ import {
 
 type CourseDataTableProps = {
   batch: any[];
+  loading: boolean
 };
 
-export default function BatchDataTable({ batch }: CourseDataTableProps) {
-  console.log("get All Query To search:", batch);
+export default function BatchDataTable({ batch, loading }: CourseDataTableProps) {
 
   return (
     <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -63,44 +62,49 @@ export default function BatchDataTable({ batch }: CourseDataTableProps) {
 
             {/* High Density Data Cells */}
             <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {batch && batch.length > 0 ? (
-                batch.map((item: any) => (
-                  <TableRow
-                    key={item.id}
-                    className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
-                  >
-                    <TableCell className="px-3 py-1.5">
-                      <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
-                        {item.name}
-                      </span>
-                    </TableCell>
-                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
-                      {item.labTimeSlot?.startTime ?? "—"}
-                    </TableCell>
-                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
-                      {item.labTimeSlot?.endTime ?? "—"}
-                    </TableCell>
-                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
-                      {item.labTimeSlot?.day ?? "—"}
-                    </TableCell>
-                    <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
-                      {item.faculty ? item.faculty.name : "Not Assigned"}
-                    </TableCell>
-                    <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
-                      {item.labTimeSlot?.availablePCs ?? "0"}
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="py-3 text-center text-xs text-slate-400">Loading master records...</TableCell>
+                </TableRow>
+              ) :
+                batch && batch.length > 0 ? (
+                  batch.map((item: any) => (
+                    <TableRow
+                      key={item.id}
+                      className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                    >
+                      <TableCell className="px-3 py-1.5">
+                        <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize">
+                          {item.name}
+                        </span>
+                      </TableCell>
+                      <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
+                        {item.labTimeSlot?.startTime ?? "—"}
+                      </TableCell>
+                      <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
+                        {item.labTimeSlot?.endTime ?? "—"}
+                      </TableCell>
+                      <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
+                        {item.labTimeSlot?.day ?? "—"}
+                      </TableCell>
+                      <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
+                        {item.faculty ? item.faculty.name : "Not Assigned"}
+                      </TableCell>
+                      <TableCell className="px-3 py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400">
+                        {item.labTimeSlot?.availablePCs ?? "0"}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={6}
+                      className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
+                    >
+                      No Batches found.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
-                  >
-                    No Batches found.
-                  </TableCell>
-                </TableRow>
-              )}
+                )}
             </TableBody>
           </Table>
         </div>

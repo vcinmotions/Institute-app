@@ -15,13 +15,11 @@ import { useRouter } from "next/navigation";
 
 type TestDataTableProps = {
     tests: any[];
-    batch: any[];
     loading: boolean;
 };
 
 export default function TestDataTable({
     tests,
-    batch,
     loading,
 }: TestDataTableProps) {
     const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -73,39 +71,44 @@ export default function TestDataTable({
                         </TableHeader>
 
                         <TableBody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-                            {tests && tests.length > 0 ? (
-                                tests.map((item: any) => {
-                                    const isDraft = item.status === "DRAFT";
+                            {loading ? (
+                                <TableRow>
+                                    <TableCell colSpan={9} className="py-3 text-center text-xs text-slate-400">Loading master records...</TableCell>
+                                </TableRow>
+                            ) :
+                                tests && tests.length > 0 ? (
+                                    tests.map((item: any) => {
+                                        const isDraft = item.status === "DRAFT";
 
-                                    return (
-                                        <TableRow
-                                            key={item.id}
-                                            className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
-                                        >
-                                            <TableCell className="px-3 py-1.5">
-                                                <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize truncate block">
-                                                    {item.name}
-                                                </span>
-                                            </TableCell>
+                                        return (
+                                            <TableRow
+                                                key={item.id}
+                                                className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+                                            >
+                                                <TableCell className="px-3 py-1.5">
+                                                    <span className="text-xs font-medium text-slate-800 dark:text-slate-200 capitalize truncate block">
+                                                        {item.name}
+                                                    </span>
+                                                </TableCell>
 
-                                            <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 truncate">
-                                                {item.batch?.name || "-"}
-                                            </TableCell>
+                                                <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 truncate">
+                                                    {item.batch?.name || "-"}
+                                                </TableCell>
 
-                                            <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 truncate">
-                                                {item.course?.name || "-"}
-                                            </TableCell>
+                                                <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 truncate">
+                                                    {item.course?.name || "-"}
+                                                </TableCell>
 
-                                            <TableCell className="px-3 py-1.5">
-                                                <Badge
-                                                    size="sm"
-                                                    color={item.status === "PUBLISHED" ? "success" : "warning"}
-                                                >
-                                                    {item.status}
-                                                </Badge>
-                                            </TableCell>
+                                                <TableCell className="px-3 py-1.5">
+                                                    <Badge
+                                                        size="sm"
+                                                        color={item.status === "PUBLISHED" ? "success" : "warning"}
+                                                    >
+                                                        {item.status}
+                                                    </Badge>
+                                                </TableCell>
 
-                                            {/* <TableCell className="px-3 py-1.5">
+                                                {/* <TableCell className="px-3 py-1.5">
                                                 <Button
                                                     onClick={() => handlePublish(item)}
                                                     // Dynamic disabling state rule: lock out if already published
@@ -121,44 +124,45 @@ export default function TestDataTable({
                                                 </Button>
                                             </TableCell> */}
 
-                                            <TableCell className="px-3 py-1.5">
-                                                <Tooltip
-                                                    className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5"
-                                                    content="Edit Test"
-                                                >
-                                                    <button
-                                                        className="rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
-                                                        onClick={() => handleEditLab(item)}
+                                                <TableCell className="px-3 py-1.5">
+                                                    <Tooltip
+                                                        className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5"
+                                                        content="Edit Test"
                                                     >
-                                                        <svg
-                                                            width="15"
-                                                            height="15"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="2"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
+                                                        <button
+                                                            className={item.status === "PUBLISHED" ? "opacity-30 cursor-not-allowed text-slate-600 dark:text-slate-400" : "rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"}
+                                                            onClick={() => handleEditLab(item)}
+                                                            disabled={item.status === "PUBLISHED"}
                                                         >
-                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                            <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                                        </svg>
-                                                    </button>
-                                                </Tooltip>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })
-                            ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={6}
-                                        className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
-                                    >
-                                        No Test found.
-                                    </TableCell>
-                                </TableRow>
-                            )}
+                                                            <svg
+                                                                width="15"
+                                                                height="15"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                            >
+                                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                                <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                                            </svg>
+                                                        </button>
+                                                    </Tooltip>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })
+                                ) : (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={6}
+                                            className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
+                                        >
+                                            No Test found.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                         </TableBody>
                     </Table>
                 </div>

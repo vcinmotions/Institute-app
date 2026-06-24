@@ -357,7 +357,7 @@ export default function EditCourseForm({
             </div>
 
             <div ref={(el) => { inputRefs.current.durationMonths = el; }}>
-              <Label>Duration (Weeks) *</Label>
+              <Label>Duration (Months) *</Label>
               <Input
                 type="number"
                 tabIndex={2}

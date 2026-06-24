@@ -10,7 +10,6 @@ export default function GlobalDisableSignin() {
   const pathname = usePathname();
   const user = useSelector((state: RootState) => state.auth.user);
 
-  console.log("GET USER IN GLOAB DISABLE COMPONENT:", user);
   useEffect(() => {
     const token = sessionStorage.getItem("token");
 

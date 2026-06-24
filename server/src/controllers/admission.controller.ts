@@ -464,7 +464,9 @@ export async function getStudentController(req: Request, res: Response) {
 
     return res.status(200).json({
       message: "Students fetched successfully",
-      ...result,
+      student: result.data,
+      totalPages: result.totalPages,
+      total: result.total,
       page: query.page,
       limit: query.limit,
     });

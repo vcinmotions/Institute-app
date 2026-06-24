@@ -22,32 +22,26 @@ import { setFaculties } from "@/store/slices/facultySlice";
 import { PAGE_SIZE } from "@/constants/pagination";
 import useDebounce from "@/hooks/useDebounce";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
-import { useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
+import { useFetchAllCourses, useFetchCourse } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchFaculty } from "@/hooks/queries/useQueryFetchFaculty";
 import { useFetchStudentCourses } from "@/hooks/queries/useQueryFetchStudentCourse"; // 👈 Import our hook
 
 export default function StudentCourseTable() {
   const dispatch = useDispatch();
 
-  const { searchQuery, totalPages, currentPage, filters, total, sortField, sortOrder } = useSelector(
+  const { searchQuery, currentPage, filters, sortField, sortOrder } = useSelector(
     (state: RootState) => state.studentCourse,
   );
-  const studentDetails = useSelector(
-    (state: RootState) => state.studentCourse.studentDetails ?? [],
-  );
-  const batch = useSelector((state: RootState) => state.batch.batches ?? []);
-  const course = useSelector((state: RootState) => state.course.courses ?? []);
-  const faculty = useSelector((state: RootState) => state.faculty.faculties ?? []);
 
   const [searchInput, setSearchInput] = useState("");
 
   // Supporting layout structural selections queries
-  const { data: courseData } = useFetchCourse();
+  const { data: courseData } = useFetchAllCourses();
   const { data: batchData } = useFetchAllBatches();
   const { data: facultyData } = useFetchFaculty();
 
   // 1. Core Server State Query Integration Hook
-  const { data: studentCourseData, isLoading: isMainTableLoading } = useFetchStudentCourses({
+  const { data: studentCourseData, isLoading } = useFetchStudentCourses({
     page: currentPage,
     limit: PAGE_SIZE,
     search: searchQuery,
@@ -56,28 +50,14 @@ export default function StudentCourseTable() {
     filters,
   });
 
-  // Hydrate context references selections 
-  useEffect(() => {
-    if (courseData?.course) dispatch(setCourses(courseData.course));
-  }, [courseData, dispatch]);
+  console.log("GET STUDENT COURSE DATA IN STUDENT COURSE TABLE:", studentCourseData)
 
-  useEffect(() => {
-    if (batchData?.batch) dispatch(setBatches(batchData.batch));
-  }, [batchData, dispatch]);
-
-  useEffect(() => {
-    if (facultyData?.faculty) dispatch(setFaculties(facultyData.faculty));
-  }, [facultyData, dispatch]);
-
-  // ✅ 2. CRITICAL SYNC EFFECT: Updates Redux when React Query fetches fresh results
-  useEffect(() => {
-    if (studentCourseData) {
-      dispatch(setStudentCourse(studentCourseData.data || []));
-      dispatch(setStudentDetail(studentCourseData.detailedCourses || []));
-      dispatch(setTotalPages(studentCourseData.totalPages || 1));
-      dispatch(setTotal(studentCourseData.total || 0));
-    }
-  }, [studentCourseData, dispatch]);
+  const courseList = courseData?.course || [];
+  const batchList = batchData?.batch || [];
+  const facultyList = facultyData?.faculty || [];
+  const studentDetails = studentCourseData?.studentCourses || [];
+  const totalPages = studentCourseData?.totalPages || [];
+  const total = studentCourseData?.total || [];
 
   // Sync debounced search values string down to data store layers
   const debouncedSearchTerm = useDebounce(searchInput, 300);
@@ -127,7 +107,7 @@ export default function StudentCourseTable() {
                 label: "Course",
                 key: "courseId",
                 type: "select",
-                options: course.map((c) => ({
+                options: courseList.map((c) => ({
                   label: c.name,
                   value: c.id.toString(),
                 })),
@@ -136,7 +116,7 @@ export default function StudentCourseTable() {
                 label: "Batch",
                 key: "batchId",
                 type: "select",
-                options: batch.map((b) => ({
+                options: batchList.map((b: any) => ({
                   label: b.name,
                   value: b.id.toString(),
                 })),
@@ -145,7 +125,7 @@ export default function StudentCourseTable() {
                 label: "Faculty",
                 key: "facultyId",
                 type: "select",
-                options: faculty.map((f) => ({
+                options: facultyList.map((f) => ({
                   label: f.name,
                   value: f.id.toString(),
                 })),
@@ -157,7 +137,7 @@ export default function StudentCourseTable() {
         {/* Mapped loading flag directly back to React Query status state */}
         <StudentCourseDataTable
           studentCourse={studentDetails}
-          loading={isMainTableLoading}
+          loading={isLoading}
           onSort={handleSort}
           sortField={sortField}
           sortOrder={sortOrder}

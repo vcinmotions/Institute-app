@@ -14,11 +14,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useDispatch } from 'react-redux';
 import { setCourses } from '@/store/slices/courseSlice';
-import { useFetchCourse } from '@/hooks/queries/useQueryFetchCourseData';
+import { useFetchAllCourses, useFetchCourse } from '@/hooks/queries/useQueryFetchCourseData';
 import { toast } from 'sonner';
 import { setError } from '@/store/slices/enquirySlice';
-import {Calendar} from "@heroui/react";
-import {today, getLocalTimeZone} from "@internationalized/date";
+import { Calendar } from "@heroui/react";
+import { today, getLocalTimeZone } from "@internationalized/date";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -58,7 +58,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
 
   //const course = useSelector((state: RootState) => state.course.courses);
 
-    // New state for alert
+  // New state for alert
   const [alert, setAlert] = useState<{ show: boolean; title: string; message: string; variant: string }>({
     show: false,
     title: '',
@@ -68,7 +68,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
 
   const [errors, setErrors] = useState<Partial<EnquiryData>>({});
   const { mutate: createEnquiry } = useCreateEnquiry();
-   const countries = [
+  const countries = [
     { code: "IN", label: "+91" },
     { code: "US", label: "+1" },
     { code: "GB", label: "+44" },
@@ -76,14 +76,14 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
     { code: "AU", label: "+61" },
   ];
   const firstInputRef = useRef<HTMLInputElement>(null);
-    
-      useEffect(() => {
-        firstInputRef.current?.focus();
-      }, []);
+
+  useEffect(() => {
+    firstInputRef.current?.focus();
+  }, []);
 
   console.log("Get Courses Name in Enquiry Form:", courses);
 
-   const genders = [
+  const genders = [
     { value: "female", label: "Female" },
     { value: "male", label: "Male" },
     { value: "other", label: "Other" },
@@ -93,7 +93,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
     data: courseData,
     isLoading: courseLoading,
     isError: courseError,
-  } = useFetchCourse();
+  } = useFetchAllCourses();
 
   useEffect(() => {
     if (courseData?.course) {
@@ -119,41 +119,41 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
- const handlePhoneNumberChange = (phoneNumber: string, countryCode = "+91") => {
-  // If phoneNumber doesn't start with +, prepend selected country code
-  let formattedNumber = phoneNumber;
-  if (!phoneNumber.startsWith("+")) {
-    formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
-  }
+  const handlePhoneNumberChange = (phoneNumber: string, countryCode = "+91") => {
+    // If phoneNumber doesn't start with +, prepend selected country code
+    let formattedNumber = phoneNumber;
+    if (!phoneNumber.startsWith("+")) {
+      formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
+    }
 
-  setNewEnquiry((prev) => ({
-    ...prev,
-    contact: formattedNumber,
-  }));
+    setNewEnquiry((prev) => ({
+      ...prev,
+      contact: formattedNumber,
+    }));
 
-  setErrors((prev) => ({
-    ...prev,
-    contact: "",
-  }));
-};
+    setErrors((prev) => ({
+      ...prev,
+      contact: "",
+    }));
+  };
 
- const handleAlternatePhoneNumberChange = (phoneNumber: string, countryCode = "+91") => {
-  // If phoneNumber doesn't start with +, prepend selected country code
-  let formattedNumber = phoneNumber;
-  if (!phoneNumber.startsWith("+")) {
-    formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
-  }
+  const handleAlternatePhoneNumberChange = (phoneNumber: string, countryCode = "+91") => {
+    // If phoneNumber doesn't start with +, prepend selected country code
+    let formattedNumber = phoneNumber;
+    if (!phoneNumber.startsWith("+")) {
+      formattedNumber = countryCode + phoneNumber.replace(/^0+/, ""); // remove leading zeros
+    }
 
-  setNewEnquiry((prev) => ({
-    ...prev,
-    alternateContact: formattedNumber,
-  }));
+    setNewEnquiry((prev) => ({
+      ...prev,
+      alternateContact: formattedNumber,
+    }));
 
-  setErrors((prev) => ({
-    ...prev,
-    contact: "",
-  }));
-};
+    setErrors((prev) => ({
+      ...prev,
+      contact: "",
+    }));
+  };
 
 
   const options = [
@@ -221,7 +221,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
   //     // alert("Enquiry created successfully!");
   //     setNewEnquiry({ name: "", email: "", course: "", source: "", contact: "" });
   //     setErrors({});
-      
+
   //     // Wait 3 seconds before showing alert
   //       setAlert({
   //         show: true,
@@ -229,7 +229,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
   //         message: "Your enquiry has been successfully submitted.",
   //         variant: "success",
   //       });
-      
+
   //     // Close modal after showing alert for 2 seconds (for example)
   //       setTimeout(() => {
   //         onCloseModal();
@@ -241,7 +241,7 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
   // };
 
   const handleSubmit = () => {
-  if (!validate()) {
+    if (!validate()) {
       setAlert({
         show: true,
         title: "Validation Error",
@@ -272,27 +272,27 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
       return;
     }
 
-  createEnquiry(newEnquiry, {
-    onSuccess: () => {
-      setNewEnquiry({ name: "", email: "", course: "", source: "", alternateContact: "", age: null, location: "", gender: "", dob: "", referedBy: "", contact: "" });
+    createEnquiry(newEnquiry, {
+      onSuccess: () => {
+        setNewEnquiry({ name: "", email: "", course: "", source: "", alternateContact: "", age: null, location: "", gender: "", dob: "", referedBy: "", contact: "" });
 
-      setAlert({
-        show: true,
-        title: "Enquiry Created",
-        message: "Enquiry has been Successfully Created.",
-        variant: "success",
-      });
+        setAlert({
+          show: true,
+          title: "Enquiry Created",
+          message: "Enquiry has been Successfully Created.",
+          variant: "success",
+        });
 
-      setTimeout(() => {
-        onCloseModal();
-      }, 3000);
-    },
+        setTimeout(() => {
+          onCloseModal();
+        }, 3000);
+      },
 
-    onError: () => {
-      // You already handle error via redux + toast
-    },
-  });
-};
+      onError: () => {
+        // You already handle error via redux + toast
+      },
+    });
+  };
 
   console.log("GET ENQUIRY FORM DATA", newEnquiry);
 
@@ -304,8 +304,8 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             {error}
           </div>
         )}
-        {alert.show && 
-        (<Alert
+        {alert.show &&
+          (<Alert
             variant={alert.title === "Enquiry Created" ? "success" : "error"}
             title={alert.title}
             message={alert.message}
@@ -314,12 +314,12 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
         <div>
           <Label>Name *</Label>
           <Input
-          ref={firstInputRef}
+            ref={firstInputRef}
             type="text"
             placeholder="Info Demo"
             value={newEnquiry.name}
             tabIndex={1}
-            onChange={(e) => handleChange("name", e.target.value)}         />
+            onChange={(e) => handleChange("name", e.target.value)} />
           {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
         </div>
 
@@ -332,8 +332,8 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
               className="pl-[62px]"
               tabIndex={2}
               value={newEnquiry.email}
-              onChange={(e) => handleChange("email", e.target.value)}          />
-             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              onChange={(e) => handleChange("email", e.target.value)} />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             <span className="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
               <EnvelopeIcon />
             </span>
@@ -342,27 +342,27 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
         <div>
           <Label>Conatct No. *</Label>
           <PhoneInput
-           tabIndex={3}
+            tabIndex={3}
             selectPosition="start"
             countries={countries}
             placeholder="+91 55555 00000"
-            
+
             onChange={handlePhoneNumberChange}
           />
-           {errors.contact && <p className="text-red-500 text-sm">{errors.contact}</p>}
+          {errors.contact && <p className="text-red-500 text-sm">{errors.contact}</p>}
         </div>{" "}
 
-       <div>
+        <div>
           <Label>Alternate Conatct No.</Label>
           <PhoneInput
-           tabIndex={3}
+            tabIndex={3}
             selectPosition="start"
             countries={countries}
             placeholder="+91 55555 00000"
-            
+
             onChange={handleAlternatePhoneNumberChange}
           />
-           {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
+          {errors.alternateContact && <p className="text-red-500 text-sm">{errors.alternateContact}</p>}
         </div>{" "}
 
         <div>
@@ -372,26 +372,26 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             placeholder="Enter Age"
             value={newEnquiry.age as number}
             tabIndex={1}
-            onChange={(e) => handleChange("age", e.target.value)}         />
-            {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
+            onChange={(e) => handleChange("age", e.target.value)} />
+          {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
         </div>
 
         <div className="relative">
-            <Select
-              tabIndex={8}
-              options={genders.map((item) => ({
-                label: item.label,
-                value: item.value,
-              }))}
-              placeholder="Select Gender"
-              onChange={(value) => handleChange("gender", value)}
-              defaultValue={newEnquiry.gender} // just the courseId string
-              className="dark:bg-dark-900"
-            />
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
-          </div>
+          <Select
+            tabIndex={8}
+            options={genders.map((item) => ({
+              label: item.label,
+              value: item.value,
+            }))}
+            placeholder="Select Gender"
+            onChange={(value) => handleChange("gender", value)}
+            defaultValue={newEnquiry.gender} // just the courseId string
+            className="dark:bg-dark-900"
+          />
+          <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+            <ChevronDownIcon />
+          </span>
+        </div>
 
         <div>
           <Label>Location</Label>
@@ -400,8 +400,8 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             placeholder="Enter Age"
             value={newEnquiry.location}
             tabIndex={1}
-            onChange={(e) => handleChange("location", e.target.value)}         />
-            {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
+            onChange={(e) => handleChange("location", e.target.value)} />
+          {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
 
         <div>
@@ -411,8 +411,8 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             placeholder="Enter Age"
             value={newEnquiry.dob}
             tabIndex={1}
-            onChange={(e) => handleChange("dob", e.target.value)}         />
-            {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
+            onChange={(e) => handleChange("dob", e.target.value)} />
+          {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
         </div>
 
         {/* <div>
@@ -475,8 +475,8 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             placeholder="Enter Age"
             value={newEnquiry.referedBy}
             tabIndex={1}
-            onChange={(e) => handleChange("referedBy", e.target.value)}         />
-            {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
+            onChange={(e) => handleChange("referedBy", e.target.value)} />
+          {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
         </div>
 
         <div>
