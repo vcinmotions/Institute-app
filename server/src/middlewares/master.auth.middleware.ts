@@ -33,9 +33,6 @@ export const masterAuthMiddleware = async (
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     req.user = decoded;
 
-    console.log("req.user", req.user);
-    console.log("decoded", decoded);
-
     const id = decoded.id;
     const email = decoded.email;
     const role = decoded.role;
@@ -58,8 +55,6 @@ export const masterAuthMiddleware = async (
     if (!superAdmin) {
       return res.status(404).json({ error: "superAdmin not found" });
     }
-
-    console.log("Get Super Admin Data in Auth Middleware", superAdmin);
 
     // 🔌 Inject tenant-specific Prisma client into request
     req.superAdmin = superAdmin;

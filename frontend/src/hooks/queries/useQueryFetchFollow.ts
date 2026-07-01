@@ -22,7 +22,7 @@ export const useFollowUp = (enquiryId: string | null) => {
   const token = useSelector((state: RootState) => state.auth.token);
 
   const {
-     data: followupDetails = { message: '', followup: [] } as FollowUpData,
+    data: followupDetails = { message: '', followup: [] } as FollowUpData,
     isLoading,
     isError,
     refetch,

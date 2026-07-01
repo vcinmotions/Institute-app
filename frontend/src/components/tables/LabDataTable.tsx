@@ -266,48 +266,6 @@ export default function LabDataTable({
         </div>
       </div>
 
-      {/* === Modals Unchanged for Logical Flow Integrity === */}
-      {showForm && followUpData && selectedId !== null && (
-        <TimelineDatatable
-          onClose={handleCloseModal}
-          followUpData={followupDetails}
-          enquiryId={selectedId}
-          onCreateFollowUpForFollowUp={handleCreateFollowUpForFollowUp}
-        />
-      )}
-
-      {modalType === "createNew" && selectedEnquiryId !== null && (
-        <CreateNewFollowUpOnEnquiryModal
-          enquiryId={selectedEnquiryId}
-          title="Create Follow-Up"
-          onClose={() => setModalType(null)}
-        />
-      )}
-
-      {modalType === "complete" && selectedEnquiryId !== null && (
-        <CompleteFollowUpModal
-          enquiryId={selectedEnquiryId}
-          title="Complete Follow-Up"
-          onClose={() => setModalType(null)}
-        />
-      )}
-
-      {modalType === "hold" && selectedEnquiryId !== null && (
-        <HoldEnquiryModal
-          enquiryId={selectedEnquiryId}
-          title="hold Follow-Up"
-          onClose={() => setModalType(null)}
-        />
-      )}
-
-      {modalType === "lost" && selectedEnquiryId !== null && (
-        <LostEnquiryModal
-          enquiryId={selectedEnquiryId}
-          title="lost Follow-Up"
-          onClose={() => setModalType(null)}
-        />
-      )}
-
       {selectedId !== null && enquiryDetail === true && (
         <EnquiryDetails onClose={handleCloseModal} enquiryId={selectedId} />
       )}

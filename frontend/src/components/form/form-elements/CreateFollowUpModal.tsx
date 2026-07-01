@@ -33,21 +33,21 @@ export default function CreateFollowUpModal({
   const { refetch } = useFollowUp(enquiryId);
   const [scheduledAt, setScheduledAt] = useState<string>("");
   const { inputRefs, scrollToError } = useScrollToError();
-  
+
   const [errors, setErrors] = useState<Partial<FollowUpData>>({});
   // New state for alert
-    const [alert, setAlert] = useState<{
-      show: boolean;
-      title: string;
-      message: string;
-      variant: string;
-    }>({
-      show: false,
-      title: "",
-      message: "",
-      variant: "",
-    });
-    const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
+  const [alert, setAlert] = useState<{
+    show: boolean;
+    title: string;
+    message: string;
+    variant: string;
+  }>({
+    show: false,
+    title: "",
+    message: "",
+    variant: "",
+  });
+  const currentPage = useSelector((state: RootState) => state.enquiry.currentPage);
 
   const { mutate: createnextFollowUp } = useCreateNextFollowUp();
 
@@ -58,75 +58,75 @@ export default function CreateFollowUpModal({
   }, []);
 
   const validate = () => {
-  const newErrors: Partial<FollowUpData> = {};
-  if (!remark.trim()) newErrors.remark = "Remark is required.";
-  if (!scheduledAt) newErrors.scheduledAt = "Schedule time is required.";
+    const newErrors: Partial<FollowUpData> = {};
+    if (!remark.trim()) newErrors.remark = "Remark is required.";
+    if (!scheduledAt) newErrors.scheduledAt = "Schedule time is required.";
 
-     setErrors(newErrors);
+    setErrors(newErrors);
     setTimeout(() => setErrors({}), 2000);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
       errors: newErrors,
     };;
-};
+  };
 
-//   const handleSubmit = async () => {
-//     const validationErrors: Partial<FollowUpData> = {};
+  //   const handleSubmit = async () => {
+  //     const validationErrors: Partial<FollowUpData> = {};
 
-//     if (!remark.trim()) validationErrors.remark = "Remark is required.";
-//     if (!scheduledAt)
-//       validationErrors.scheduledAt = "Schedule time is required.";
+  //     if (!remark.trim()) validationErrors.remark = "Remark is required.";
+  //     if (!scheduledAt)
+  //       validationErrors.scheduledAt = "Schedule time is required.";
 
-//     if (Object.keys(validationErrors).length > 0) {
-//       setErrors(validationErrors);
-//  setAlert({
-//         show: true,
-//         title: "Validation Error",
-//         message: "Please enter all inputs.",
-//         variant: "error",
-//       });
-//       // Optional: clear validation errors after 3 seconds
-//        // ✅ FIXED setTimeout
-//     setTimeout(() => {
-//       setErrors({});
-//       setAlert({ show: false, title: "", message: "", variant: "" });
-//     }, 2000); 
-//       return;
-//     }
+  //     if (Object.keys(validationErrors).length > 0) {
+  //       setErrors(validationErrors);
+  //  setAlert({
+  //         show: true,
+  //         title: "Validation Error",
+  //         message: "Please enter all inputs.",
+  //         variant: "error",
+  //       });
+  //       // Optional: clear validation errors after 3 seconds
+  //        // ✅ FIXED setTimeout
+  //     setTimeout(() => {
+  //       setErrors({});
+  //       setAlert({ show: false, title: "", message: "", variant: "" });
+  //     }, 2000); 
+  //       return;
+  //     }
 
-//     try {
-//       const isoScheduledAt = new Date(scheduledAt).toISOString();
+  //     try {
+  //       const isoScheduledAt = new Date(scheduledAt).toISOString();
 
-//       console.log("Creating follow-up for Follow Up ID:", followUpId);
-//       console.log("get Enquiry Id:", enquiryId);
-//       console.log("Remark:", remark);
-//       console.log("Scheduled At (ISO):", isoScheduledAt);
+  //       console.log("Creating follow-up for Follow Up ID:", followUpId);
+  //       console.log("get Enquiry Id:", enquiryId);
+  //       console.log("Remark:", remark);
+  //       console.log("Scheduled At (ISO):", isoScheduledAt);
 
-//       await createnextFollowUp({
-//         enquiryId,
-//         followUpId,
-//         remark,
-//         scheduledAt: isoScheduledAt,
-//         currentPage,
-//       });
+  //       await createnextFollowUp({
+  //         enquiryId,
+  //         followUpId,
+  //         remark,
+  //         scheduledAt: isoScheduledAt,
+  //         currentPage,
+  //       });
 
-//          // ✅ Trigger parent refetch
-//          onSuccess(); 
+  //          // ✅ Trigger parent refetch
+  //          onSuccess(); 
 
-//       // Reset form and close modal
-//       setRemark("");
-//       setScheduledAt("");
-//       setErrors({});
-//       onClose();
-//     } catch (error) {
-//       console.error("Failed to create follow-up:", error);
-//       setErrors({ remark: "Failed to create follow-up. Please try again." });
-//     }
-//   };
+  //       // Reset form and close modal
+  //       setRemark("");
+  //       setScheduledAt("");
+  //       setErrors({});
+  //       onClose();
+  //     } catch (error) {
+  //       console.error("Failed to create follow-up:", error);
+  //       setErrors({ remark: "Failed to create follow-up. Please try again." });
+  //     }
+  //   };
 
-const handleSubmit = async () => {
-  const { isValid, errors: validationErrors } = validate();
+  const handleSubmit = async () => {
+    const { isValid, errors: validationErrors } = validate();
 
     if (!isValid) {
       setAlert({
@@ -139,69 +139,69 @@ const handleSubmit = async () => {
       scrollToError(validationErrors); // ✅ ALWAYS WORKS
 
       setTimeout(() => {
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 2000);
 
       return; // ⛔ mutation never runs
     }
 
-  const isoScheduledAt = new Date(scheduledAt).toISOString();
+    const isoScheduledAt = new Date(scheduledAt).toISOString();
 
-  createnextFollowUp(
-    {
-      enquiryId,
-      followUpId,
-      remark,
-      scheduledAt: isoScheduledAt,
-      currentPage,
-    },
-    {
-      onSuccess: () => {
-        // Reset form
-        setRemark("");
-        setScheduledAt("");
-        setErrors({});
-
-        // Show success alert
-        setAlert({
-          show: true,
-          title: "Follow-Up Created",
-          message: "New follow-up has been successfully created.",
-          variant: "success",
-        });
-
-        // Call parent refetch / close modal after a short delay
-        setTimeout(() => {
-          onSuccess(); // triggers Timeline refetch
-          onClose();   // closes modal
-          setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 1000);
+    createnextFollowUp(
+      {
+        enquiryId,
+        followUpId,
+        remark,
+        scheduledAt: isoScheduledAt,
+        currentPage,
       },
+      {
+        onSuccess: () => {
+          // Reset form
+          setRemark("");
+          setScheduledAt("");
+          setErrors({});
 
-      onError: (error: any) => {
-        console.error("Failed to create follow-up:", error);
-        setErrors({ remark: "Failed to create follow-up. Please try again." });
-        // Optional: show error alert
-        setAlert({
-          show: true,
-          title: "Error",
-          message: "Failed to create follow-up. Please try again.",
-          variant: "error",
-        });
+          // Show success alert
+          setAlert({
+            show: true,
+            title: "Follow-Up Created",
+            message: "New follow-up has been successfully created.",
+            variant: "success",
+          });
 
-        setTimeout(
-          () => setAlert({ show: false, title: "", message: "", variant: "" }),
-          2000,
-        );
+          // Call parent refetch / close modal after a short delay
+          setTimeout(() => {
+            onSuccess(); // triggers Timeline refetch
+            onClose();   // closes modal
+            setAlert({ show: false, title: "", message: "", variant: "" });
+          }, 1000);
+        },
+
+        onError: (error: any) => {
+          console.error("Failed to create follow-up:", error);
+          setErrors({ remark: "Failed to create follow-up. Please try again." });
+          // Optional: show error alert
+          setAlert({
+            show: true,
+            title: "Error",
+            message: "Failed to create follow-up. Please try again.",
+            variant: "error",
+          });
+
+          setTimeout(
+            () => setAlert({ show: false, title: "", message: "", variant: "" }),
+            2000,
+          );
+        },
       },
-    },
-  );
-};
+    );
+  };
 
   return (
     <ModalCard title={title} oncloseModal={onClose}>
       <div className="space-y-4">
-      {alert.show && (
+        {alert.show && (
           <Alert
             variant={alert.variant as any}
             title={alert.title}
@@ -214,11 +214,11 @@ const handleSubmit = async () => {
             Remark
           </label>
           {/* <textarea
-          className="w-full border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm dark:bg-gray-900 text-black dark:text-white placeholder:text-gray-500"
-          value={remark}
-          placeholder="Interview Follow-Up Schedule"
-          onChange={(e) => setRemark(e.target.value)}
-        /> */}
+            className="w-full border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm dark:bg-gray-900 text-black dark:text-white placeholder:text-gray-500"
+            value={remark}
+            placeholder="Interview Follow-Up Schedule"
+            onChange={(e) => setRemark(e.target.value)}
+          /> */}
 
           <TextArea
             ref={firstInputRef}
@@ -257,7 +257,7 @@ const handleSubmit = async () => {
           </Button>
           <Button
             size="sm"
-            variant="primary"  
+            variant="primary"
             className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
             tabIndex={4}
             onClick={handleSubmit}

@@ -20,6 +20,7 @@ import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
 import { canEditEnquiry, canHoldEnquiry, canMarkLost, canMarkWon } from "@/domain/enquiry/rules";
 import { formatDate } from "../common/Formatdate";
 import CreateNewFollowUpOnEnquiryModal from "../form/form-elements/CreateNewFollowUpOnEnquiry";
+import { useRouter } from "next/navigation";
 
 type FollowUpModalType =
   | "createNew"
@@ -48,6 +49,7 @@ export default function EnquiryDataTable({
   sortOrder,
 }: EnquiryDataTableProps) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   // Local Component States
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -85,20 +87,21 @@ export default function EnquiryDataTable({
     }
   }, [followupDetails, selectedId, modalType, dispatch]);
 
-  const handleFollowUp = useCallback(async (enquiryId: string) => {
-    const currentEnquiry = enquiries.find((e) => e.id === enquiryId);
-    setSelectedEnquiryData(currentEnquiry || null);
+  // const handleFollowUp = useCallback(async (enquiryId: string) => {
+  //   const currentEnquiry = enquiries.find((e) => e.id === enquiryId);
+  //   setSelectedEnquiryData(currentEnquiry || null);
 
-    setSelectedId(enquiryId);
-    setSelectedEnquiryId(enquiryId);
-    setModalType("timeline"); // Set intent explicitly to handle the follow-up flow
+  //   setSelectedId(enquiryId);
+  //   setSelectedEnquiryId(enquiryId);
+  //   setModalType("timeline"); // Set intent explicitly to handle the follow-up flow
 
-    setTimeout(() => {
-      refetchFollowUps();
-    }, 10);
-  }, [refetchFollowUps, enquiries]);
+  //   setTimeout(() => {
+  //     refetchFollowUps();
+  //   }, 10);
+  // }, [refetchFollowUps, enquiries]);
 
   // Unified cleanup sequence resetting tracking coordinates back to baseline values
+
   const handleCloseModal = () => {
     setModalType(null);
     setShowTimelineModal(false);
@@ -134,6 +137,11 @@ export default function EnquiryDataTable({
     setSelectedId(null);         // Clear selectedId to prevent useFetchFollowUps hook from firing automatically
     setSelectedEnquiryId(item.id);
   };
+
+  const handleFollowUp = useCallback((enquiryId: string) => {
+    // Directly navigate to the timeline route page layout
+    router.push(`/dashboard/enquiry/${enquiryId}/timeline`);
+  }, [router]);
 
   return (
     <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -259,7 +267,7 @@ export default function EnquiryDataTable({
       </div>
 
       {/* Render Timeline View Overlay */}
-      {showTimelineModal && (
+      {/* {showTimelineModal && (
         <TimelineDatatable
           onClose={handleCloseModal}
           followUpData={followupDetails}
@@ -267,7 +275,7 @@ export default function EnquiryDataTable({
           enquiryData={selectedEnquiryData}
           onCreateFollowUpForFollowUp={handleCreateFollowUpForFollowUp}
         />
-      )}
+      )} */}
 
       {/* Form Action Routing Layer */}
       {modalType === "createNew" && selectedEnquiryId !== null && (

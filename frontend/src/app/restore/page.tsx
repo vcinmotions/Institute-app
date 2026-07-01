@@ -50,26 +50,26 @@ export default function RestoreBackUp() {
 
     /* ---------------- RESTORE ---------------- */
     async function handleRestore() {
-    if (!filePath) {
-        setMsg("❌ Please select a backup file first");
-        return;
+        if (!filePath) {
+            setMsg("❌ Please select a backup file first");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            setMsg("🔄 Restoring backup...");
+
+            // ✅ Call Electron instead of backend
+            await window.electronAPI.performRestore(filePath);
+
+            // ❗ App will restart automatically
+            setMsg("✅ Backup restored. Restarting...");
+
+        } catch (err: any) {
+            setMsg("❌ " + err.message);
+            setLoading(false);
+        }
     }
-
-    try {
-        setLoading(true);
-        setMsg("🔄 Restoring backup...");
-
-        // ✅ Call Electron instead of backend
-        await window.electronAPI.performRestore(filePath);
-
-        // ❗ App will restart automatically
-        setMsg("✅ Backup restored. Restarting...");
-
-    } catch (err: any) {
-        setMsg("❌ " + err.message);
-        setLoading(false);
-    }
-}
 
     return (
         <SetupModalCard title="Restore Backup">

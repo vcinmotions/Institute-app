@@ -180,14 +180,7 @@ function startBackend() {
 function startFrontend() {
   if (isDev) return waitForPort(FRONTEND_PORT, STARTUP_TIMEOUT);
 
-  // const frontendDir = path.join(RESOURCES_PATH, "frontend", "standalone", "frontend");
-  const frontendDir = path.join(
-    RESOURCES_PATH,
-    "frontend",
-    "standalone",
-    "vcinmotions-application-ai",
-    "frontend"
-  );
+  const frontendDir = path.join(RESOURCES_PATH, "frontend", "standalone", "frontend");
   const frontendServerPath = path.join(frontendDir, "server.js");
 
   log.info("Frontend dir:", frontendDir);

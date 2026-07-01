@@ -13,6 +13,7 @@ interface CreateFollowUpModalProps {
   onClose: () => void;
   enquiryId: string;
   title: string;
+  onSuccess?: () => void; // ✅ Added callback signature
 }
 
 interface FollowUpData {
@@ -24,6 +25,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
   onClose,
   enquiryId,
   title,
+  onSuccess, // 🧠 FIXED: Added here to pull it from incoming props successfully
 }: CreateFollowUpModalProps) {
   const dispatch = useDispatch();
   const [remark, setRemark] = useState("");
@@ -95,12 +97,12 @@ export default function CreateNewFollowUpOnEnquiryModal({
           scheduledAt: isoScheduledAt,
         },
         {
-          // ✅ Safe modal exit execution path on true successful pipeline responses
           onSuccess: () => {
             toast.success("Follow-up logs initiated successfully");
             setRemark("");
             setScheduledAt("");
             setErrors({});
+            if (onSuccess) onSuccess(); // ✅ Trigger the parent cache synchronization callback
             onClose();
           },
           onError: (err: any) => {

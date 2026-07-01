@@ -34,20 +34,11 @@ import attendanceRoute from "./routes/attendance.routes";
 import taskRoute from "./routes/task.routes";
 import testRoute from "./routes/test.routes";
 import systemRoute from "./routes/system.backup.routes";
-import { backupFullSystem } from "./utils/backUp";
-import { restoreBackup } from "./utils/restoreBackUp";
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-console.log("APP_ENV in APP:", process.env.APP_ENV);
-console.log("DB_PROVIDER in APP:", process.env.DB_PROVIDER);
-console.log("DATABASE_URL in APP:", process.env.DATABASE_URL);
-console.log("CENTRAL_DATABASE_URL in APP:", process.env.CENTRAL_DATABASE_URL);
-console.log("TENANT_DATABASE_URL in APP:", process.env.TENANT_DATABASE_URL);
-console.log("IS_PACKED in APP:", isPackaged);
-
 
 // Serve static files from the 'uploads' directory
 //app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
