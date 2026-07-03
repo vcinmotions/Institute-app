@@ -338,6 +338,36 @@ export default function CompanyForm() {
             return;
         }
 
+        // --- NEW LOGIC FOR AUTOMATIC FINANCIAL END DATE ---
+        if (field === "financialStartDate") {
+            let calculatedEndDate = "";
+            
+            if (value) {
+                const startDate = new Date(value);
+                if (!isNaN(startDate.getTime())) {
+                    // Advance 1 full year, and subtract 1 day (e.g., 2026-04-01 to 2027-03-31)
+                    const endDate = new Date(startDate);
+                    endDate.setFullYear(startDate.getFullYear() + 1);
+                    endDate.setDate(startDate.getDate() - 1);
+                    
+                    // Format to 'YYYY-MM-DD'
+                    calculatedEndDate = endDate.toISOString().split("T")[0];
+                }
+            }
+
+            setNewCompany((prev) => ({
+                ...prev,
+                financialStartDate: value,
+                financialEndDate: calculatedEndDate,
+            }));
+            
+            setField("financialStartDate", value);
+            setField("financialEndDate", calculatedEndDate);
+            
+            setErrors((prev) => ({ ...prev, financialStartDate: "", financialEndDate: "" }));
+            return;
+        }
+
         setNewCompany((prev) => ({ ...prev, [field]: value }));
         setField(field, value);
         setErrors((prev) => ({ ...prev, [field]: "" }));
@@ -562,7 +592,9 @@ export default function CompanyForm() {
                                     type="date"
                                     tabIndex={7}
                                     value={newCompany.financialEndDate}
-                                    onChange={(e) => handleChange("financialEndDate", e.target.value)}
+                                    readOnly // Prevents direct mutation since it's pre-calculated now
+                                    className="bg-gray-100 cursor-not-allowed dark:bg-gray-800"
+                                    placeholder="Auto-calculated"
                                 />
                                 {errors.financialEndDate && <p className="mt-1 text-sm text-red-500">{errors.financialEndDate}</p>}
                             </div>
