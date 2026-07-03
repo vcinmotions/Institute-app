@@ -498,47 +498,45 @@ model FeeStructure {
 }
 
 model StudentFeeLog {
-  id            Int           @id @default(autoincrement())
-  studentFee    StudentFee    @relation(fields: [studentFeeId], references: [id])
-  studentFeeId  Int
+  id           Int         @id @default(autoincrement())
+  studentFeeId Int
+  amountPaid   Float
+  paymentDate  DateTime
+  paymentMode  PaymentMode
+  
+  // 👇 ADD THEM HERE TOO TO TRACK FUTURE INDIVIDUAL INSTALLMENTS
+  transactionNo String?    
+  bankName      String?
 
-  amountPaid    Float
-  paymentDate   DateTime
-  paymentMode   PaymentMode
-  receiptNo     String        @unique
+  receiptNo    String      @unique
+  studentFee   StudentFee  @relation(fields: [studentFeeId], references: [id])
 }
 
-
 model StudentFee {
-  id              Int       @id @default(autoincrement())
-
-  student         Student   @relation(fields: [studentId], references: [id])
-  studentId       Int
-
-  course          Course?   @relation(fields: [courseId], references: [id])
-  courseId        Int?      // ✅ make nullable
-
-  dueDate         DateTime
-  amountDue       Float
-  amountPaid      Float     @default(0)
-
-  paymentDate     DateTime?
-  createdAt       DateTime    @default(now())
-  
-  paymentMode     PaymentMode?  // ✅ nullable
-  receiptNo       String?       // ✅ nullable
-
-  paymentStatus   PaymentStatus @default(PENDING)
-
-  isOpeningBalance Boolean @default(false)
+  id               Int             @id @default(autoincrement())
+  studentId        Int
+  courseId         Int?
+  dueDate          DateTime
+  amountDue        Float
+  amountPaid       Float           @default(0)
+  paymentDate      DateTime?
+  createdAt        DateTime        @default(now())
+  paymentMode      PaymentMode?
+  receiptNo        String?
+  paymentStatus    PaymentStatus   @default(PENDING)
+  isOpeningBalance Boolean         @default(false)
   sourceType       String?
+  clientAdminId    String
 
-  feeLogs         StudentFeeLog[]
+  // 👇 ADD THESE TWO FIELDS HERE FOR UPFRONT/ONE-TIME PAYMENTS
+  transactionNo    String?         // Stores Cheque No. or UPI Transaction ID
+  bankName         String?         // Stores Issuing Bank Name (e.g., "HDFC", "SBI")
 
-  notification    Notification?
-
-  clientAdminId   String
-  clientAdmin     ClientAdmin @relation(fields: [clientAdminId], references: [id])
+  notification     Notification?
+  clientAdmin      ClientAdmin     @relation(fields: [clientAdminId], references: [id])
+  course           Course?         @relation(fields: [courseId], references: [id])
+  student          Student         @relation(fields: [studentId], references: [id])
+  feeLogs          StudentFeeLog[]
 }
 
 model StationeryItem {
