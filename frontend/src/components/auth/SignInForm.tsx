@@ -173,8 +173,7 @@ export default function SignInForm() {
                 </div>
 
                 <div className="pt-2">
-                  <Button 
-                    type="submit" 
+                  <Button
                     className="w-full disabled:opacity-60 disabled:cursor-not-allowed" 
                     size="sm"
                     disabled={isPending}
