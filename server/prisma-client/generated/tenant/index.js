@@ -646,7 +646,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\SHOBHA\\vcinmotions-application-ai\\server\\prisma-client\\generated\\tenant",
+      "value": "C:\\SHOBHA\\institute desktop app\\vcinmotions-application-ai\\server\\prisma-client\\generated\\tenant",
       "fromEnvVar": null
     },
     "config": {
@@ -660,7 +660,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\SHOBHA\\vcinmotions-application-ai\\server\\prisma\\institute\\schema.prisma",
+    "sourceFilePath": "C:\\SHOBHA\\institute desktop app\\vcinmotions-application-ai\\server\\prisma\\institute\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

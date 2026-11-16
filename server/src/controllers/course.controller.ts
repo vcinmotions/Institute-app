@@ -25,6 +25,7 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
     courseId, // 📚 Course name (e.g., "Python")
     batchId,
     admissionDate, // 📅 Start date of course
+    durationMonths,
     feeAmount, // 💵 New
     paymentType, // e.g., 'ONE_TIME' or 'INSTALLMENT'
 
@@ -225,8 +226,9 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
      // Create StudentCourse
     const startDate = new Date(admissionDate);
     const endDate = new Date(startDate);
-    if (courseExists.durationMonths) {
-      const targetMonth = startDate.getMonth() + courseExists.durationMonths;
+    const enrollmentDurationMonths = Number(durationMonths) || courseExists.durationMonths;
+    if (enrollmentDurationMonths) {
+      const targetMonth = startDate.getMonth() + enrollmentDurationMonths;
       endDate.setMonth(targetMonth);
 
       // Fix overflow (e.g., Feb issue)

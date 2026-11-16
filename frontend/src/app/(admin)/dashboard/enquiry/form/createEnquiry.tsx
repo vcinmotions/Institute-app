@@ -498,7 +498,7 @@ export default function EnquiryForm() {
                 <Input
                   type="text"
                   placeholder="Enter Locality"
-                  value={normalizeToLowercase(newEnquiry.location)}
+                  value={newEnquiry.location}
                   tabIndex={8}
                   onChange={(e) => handleChange("location", e.target.value)}
                 />
