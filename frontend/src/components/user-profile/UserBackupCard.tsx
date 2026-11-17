@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/config";
 import React, { useState } from "react";
 import Button from "../ui/button/Button";
 import { useSelector } from "react-redux";
@@ -16,7 +17,7 @@ export default function UserBackUpCard() {
             setBackupLoading(true);
             setBackupMsg("📦 Creating backup...");
 
-            const res = await fetch("http://localhost:5001/api/backup", {
+            const res = await fetch(`${API_BASE_URL}/backup`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,

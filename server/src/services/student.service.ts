@@ -543,6 +543,9 @@ export async function createStudentService({
       advancePayments,
     } = data;
 
+    // Missing admission date means "today"; an invalid one is rejected by the controller.
+    const admissionDateValue: Date = admissionDate ? new Date(admissionDate) : new Date();
+
     console.log("STUDENT DATA RECEIVED IN SERVICE:", data);
 
     // 1️⃣ STEP 0: MAP ADVANCE PAYMENTS (Extract metadata completely)
@@ -594,7 +597,7 @@ export async function createStudentService({
         referedBy,
         idCard,
         bag,
-        admissionDate: new Date(admissionDate),
+        admissionDate: admissionDateValue,
         religion,
         fatherName,
         qualification,
@@ -651,7 +654,7 @@ export async function createStudentService({
         });
       }
 
-      const startDate = new Date(admissionDate);
+      const startDate = new Date(admissionDateValue);
       const endDate = new Date(startDate);
       if (courseExists.durationMonths) {
         endDate.setMonth(startDate.getMonth() + courseExists.durationMonths);
@@ -746,7 +749,7 @@ export async function createStudentService({
       // 💥 FLOW B: ONE TIME PROCESSOR
       // ==========================================
       else {
-        const dueDate = new Date(admissionDate);
+        const dueDate = new Date(admissionDateValue);
         dueDate.setDate(dueDate.getDate() + 21);
 
         const paid = Math.min(totalFee, remainingAdvance);

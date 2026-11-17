@@ -13,6 +13,8 @@ import enquiryRoutes from "../src/routes/enquiry.routes";
 import enquiryFollowUpRoutes from "../src/routes/enquiry.followup.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import { authMiddleware } from "./middlewares/auth.middleware";
+import { roleGuard } from "./middlewares/roleGuard.middleware";
+import { stripSecrets } from "./middlewares/stripSecrets.middleware";
 import { tenantResolverMiddleware } from "./middlewares/tenantResolverMiddleware";
 import { runAllTenantFollowUps } from "./cronJobs/cron-job-runner";
 import notification from "../src/routes/notification.routes";
@@ -103,6 +105,8 @@ app.use("/api/auth", tenantResolverMiddleware);
 app.use("/api/auth", authRoute);
 
 app.use(authMiddleware);
+app.use(roleGuard);
+app.use(stripSecrets);
 app.use("/api", dashboardRoutes);
 app.use("/api", AdmissionRoute);
 app.use("/api", attendanceRoute);

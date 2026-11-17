@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { titleCase } from "../utils/Normalize";
+import { checkLoginEmailDomain } from "../utils/tenantDbUrl";
+
+const ALLOWED_ROLES = ["ADMIN", "FRONT_DESK", "ACCOUNTANT", "VIEW_ONLY", "FACULTY"];
 
 // =============================
 // ✅ Create a new Role-based User (sub-admin)
@@ -14,6 +17,10 @@ export async function createRoleUserController(req: Request, res: Response) {
     });
   }
 
+  if (!ALLOWED_ROLES.includes(role)) {
+    return res.status(400).json({ error: `role must be one of ${ALLOWED_ROLES.join(", ")}` });
+  }
+
   try {
     const tenantPrisma = req.tenantPrisma;
     const user = req.user;
@@ -21,6 +28,9 @@ export async function createRoleUserController(req: Request, res: Response) {
     if (!tenantPrisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized request" });
     }
+
+    const domainError = await checkLoginEmailDomain(user, email);
+    if (domainError) return res.status(400).json({ error: domainError });
 
     //✅ Get current admin (creator)
     const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
@@ -84,7 +94,7 @@ export async function createRoleUserController(req: Request, res: Response) {
 // =============================
 export async function updateRoleUserController(req: Request, res: Response) {
   const { name, email, role } = req.body;
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   if (!name || !email || !role) {
     return res.status(400).json({

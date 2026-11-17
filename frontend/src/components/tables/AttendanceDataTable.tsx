@@ -1,4 +1,5 @@
 "use client";
+import { SERVER_ORIGIN } from "@/lib/config";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -178,7 +179,7 @@ export default function AttendanceDataTable({
                             src={
                               record.student?.photoUrl?.startsWith("http")
                                 ? record.student.photoUrl
-                                : `http://localhost:5001${record.student?.photoUrl || ""}`
+                                : `${SERVER_ORIGIN}${record.student?.photoUrl || ""}`
                             }
                             alt="student"
                             className="h-7 w-7 rounded-full object-cover border border-slate-100 dark:border-slate-800"

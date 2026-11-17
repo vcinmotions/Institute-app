@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 // controllers/studentController.ts
 import { Request, Response } from "express";
 import { getPayment } from "../services/payment.service";
@@ -424,7 +425,7 @@ export async function getStudentPaymentController(
     });
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error("Error fetching payments:", err);
@@ -436,7 +437,7 @@ export async function getStudentPaymenbyIdController(
   req: Request,
   res: Response
 ) {
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   console.log("Get Stiudent Id in GetStudentCourseControlle:", id);
 
@@ -516,7 +517,7 @@ export async function getStudentPaymenbyIdController(
 
 // PUT /api/student/payment/:id
 // export async function updateStudentPaymentController(req: Request, res: Response) {
-//   const { id } = req.params;
+//   const id = String(req.params.id);
 //   const {
 //     amountPaid,
 //     paymentDate,
@@ -564,7 +565,7 @@ export async function getStudentPaymenbyIdController(
 
 // PUT /api/student/payment/:id
 // export async function updateStudentPaymentController(req: Request, res: Response) {
-//   const { id } = req.params;
+//   const id = String(req.params.id);
 //   const {
 //     amountPaid,
 //     paymentDate,
@@ -647,7 +648,7 @@ export async function getStudentPaymenbyIdController(
 //   req: Request,
 //   res: Response
 // ) {
-//   const { id } = req.params;
+//   const id = String(req.params.id);
 //   const { amountPaid, paymentDate, paymentMode } = req.body;
 
 //   console.log(
@@ -782,7 +783,7 @@ export async function updateStudentPaymentController(
   req: Request,
   res: Response
 ) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   // 👇 EXTRACT THE NEW FIELDS SENT BY YOUR PAYMENT MODAL FRONTEND
   const { amountPaid, paymentDate, paymentMode, transactionNo, bankName } = req.body;
 
@@ -804,6 +805,9 @@ export async function updateStudentPaymentController(
     }
 
     const parsedPaymentDate = parseDate(paymentDate);
+    if (paymentDate && !parsedPaymentDate) {
+      return res.status(400).json({ error: "paymentDate must be DD-MM-YYYY or YYYY-MM-DD" });
+    }
     const targetMode = paymentMode || "CASH";
     const targetTxNo = targetMode !== "CASH" ? transactionNo : null;
     const targetBank = targetMode !== "CASH" ? bankName : null;
@@ -885,7 +889,7 @@ export async function updateStudentPaymentController(
             connect: { id: studentFee.id },
           },
           amountPaid: paidAmount,
-          paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : null,
+          paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : new Date(),
           paymentMode: targetMode,
           receiptNo,
           // 👇 NEW FIELDS REGISTERED FOR LOGS
@@ -942,6 +946,10 @@ export async function updateStudentPaymentController(
     });
   } catch (error: any) {
     console.error("Payment update error:", error.message);
+    // Database/driver errors must not be shown to the client.
+    if (String(error?.name || "").startsWith("PrismaClient")) {
+      return res.status(500).json({ error: "Could not record the payment" });
+    }
     return res.status(400).json({
       error: error.message || "Internal server error",
     });
@@ -952,7 +960,7 @@ export async function updateStudentPaymentController(
 //   req: Request,
 //   res: Response
 // ) {
-//   const { id } = req.params;
+//   const id = String(req.params.id);
 //   const { amountPaid, paymentDate, paymentMode } = req.body;
 
 //   console.log("UPDTAE PAYMENT REQ>BOSY:", req.body);

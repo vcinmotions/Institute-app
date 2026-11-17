@@ -25,12 +25,9 @@ if (isProd) {
 
 console.log("APP_ENV IN SERVER:", process.env.APP_ENV);
 console.log("DB_PROVIDER IN SERVER:", process.env.DB_PROVIDER);
-console.log("CENTRAL_DATABASE_URL  IN SERVER:", process.env.CENTRAL_DATABASE_URL);
-console.log("TENANT_DATABASE_URL  IN SERVER:", process.env.TENANT_DATABASE_URL);
 
 // 🔥 GET CENTRAL SQLITE DB URL
     const centralDbUrl = getCentralDbUrl();
-    console.log("📀 CENTRAL SQLITE DB URL IN SERVER:", centralDbUrl);
 
 const PORT = process.env.PORT || 5001;
 const server = app.listen(PORT, () => {

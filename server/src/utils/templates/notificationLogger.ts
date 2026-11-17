@@ -28,7 +28,6 @@ export async function logNotification({
   try {
     const tenantPrisma = getTenantPrisma(dbUrl);
 
-    console.log(`🚀 Notification Log for: ${dbUrl}`);
 
     await tenantPrisma.notification.create({
       data: {

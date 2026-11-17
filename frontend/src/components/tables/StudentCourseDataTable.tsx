@@ -1,3 +1,4 @@
+import { SERVER_ORIGIN } from "@/lib/config";
 import React from "react";
 import {
   Table,
@@ -183,7 +184,7 @@ export default function StudentCourseDataTable({
                                 src={
                                   item?.studentCourse?.student?.photoUrl?.startsWith("http")
                                     ? item.photoUrl
-                                    : `http://localhost:5001${item?.studentCourse?.student?.photoUrl}`
+                                    : `${SERVER_ORIGIN}${item?.studentCourse?.student?.photoUrl}`
                                 }
                                 alt="student"
                                 className="h-7 w-7 rounded-full object-cover"

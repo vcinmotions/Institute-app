@@ -21,7 +21,6 @@ async function setupInstitute() {
     process.exit(1);
   }
 
-  console.log("📌 DATABASE_URL:", dbUrl);
 
   // Extract database name
   const dbName = dbUrl.split("/").pop()?.split("?")[0];

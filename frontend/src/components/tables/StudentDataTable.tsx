@@ -1,5 +1,6 @@
 "use client";
 
+import { SERVER_ORIGIN } from "@/lib/config";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -168,7 +169,7 @@ export default function StudentDataTable({
                         <div className="h-7 w-7 flex-shrink-0 overflow-hidden rounded-full border border-slate-100 dark:border-slate-800">
                           {item?.photoUrl ? (
                             <img
-                              src={item.photoUrl.startsWith("http") ? item.photoUrl : `http://localhost:5001${item.photoUrl}`}
+                              src={item.photoUrl.startsWith("http") ? item.photoUrl : `${SERVER_ORIGIN}${item.photoUrl}`}
                               alt="student"
                               className="h-full w-full object-cover"
                               onError={(e) => {

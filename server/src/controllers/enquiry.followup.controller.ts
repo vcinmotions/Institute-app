@@ -52,7 +52,7 @@ export async function addFollowUpController(req: Request, res: Response) {
 }
 
 export async function updateFollowUpController(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   const { enquiryId, scheduledAt, remark } = req.body;
 
   console.log("Pending FollowUp Id:", id);
@@ -140,7 +140,7 @@ export async function updateFollowUpController(req: Request, res: Response) {
 
 export async function getFollowUpController(req: Request, res: Response) {
 
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   console.log("get Enquiry Id:", id)
 
@@ -193,7 +193,7 @@ export async function getFollowUpController(req: Request, res: Response) {
 
 
 export async function editFollowUpController(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   const { scheduledAt, remark, followUpStatus } = req.body;
 
   console.log("Editing FollowUp Id:", id);

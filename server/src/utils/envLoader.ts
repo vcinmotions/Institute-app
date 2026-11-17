@@ -60,7 +60,6 @@ export function getCentralDbUrl(): string | undefined {
     return `file:${dbPath.replace(/\\/g, "/")}`;
   }
 
-  console.log("URL IN ENVLOADER:", process.env.CENTRAL_DATABASE_URL);
 
   return process.env.CENTRAL_DATABASE_URL; // fallback for Postgres/dev
 }

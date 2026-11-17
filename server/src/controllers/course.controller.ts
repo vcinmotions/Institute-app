@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 import { Request, Response } from "express";
 import { generateCertificate } from "../utils/templates/certificatesGenerate";
 import path from "path";
@@ -425,30 +426,51 @@ export async function addCourseController(req: Request, res: Response) {
 
     const normalizeCourseName = titleCase(name);
 
-    // ✅ Step 1: Create Course
-    const course = await tenantPrisma.course.create({
-      data: {
-        name: normalizeCourseName,
-        durationMonths: parseInt(durationMonths),
-        description,
-        clientAdminId: user.clientAdminId,
-      },
+    // paymentType is stored as a list; accept a single string too.
+    const paymentTypes: string[] = Array.isArray(paymentType)
+      ? paymentType
+      : paymentType
+      ? [String(paymentType)]
+      : [];
+
+    // Reject duplicate course names (case-insensitive) within this institute.
+    // (done in JS because "mode: insensitive" is not available on SQLite)
+    const existing = await tenantPrisma.course.findMany({
+      where: { clientAdminId: user.clientAdminId },
+      select: { name: true },
     });
+    const duplicate = existing.some(
+      (c) => c.name.toLowerCase() === normalizeCourseName.toLowerCase()
+    );
+    if (duplicate) {
+      return res.status(409).json({ error: "Course already exists ❌" });
+    }
 
-    console.log("COURSE IS CREATED:", course);
+    if (paymentTypes.includes("INSTALLMENT") && !Array.isArray(installments)) {
+      return res.status(400).json({ error: "installments are required for INSTALLMENT payment type" });
+    }
 
-    // ✅ Step 2: Create Fee Structure
-    const feeStructure = await tenantPrisma.courseFeeStructure.create({
-      data: {
-        courseId: course.id,
-        clientAdminId: user.clientAdminId,
-        totalAmount: parseFloat(totalAmount),
-        paymentType: paymentType || null,
-      },
-    });
+    // Course, fee structure and installments are saved together or not at all.
+    const { course, feeStructure } = await tenantPrisma.$transaction(async (tx) => {
+      const course = await tx.course.create({
+        data: {
+          name: normalizeCourseName,
+          durationMonths: parseInt(durationMonths),
+          description,
+          clientAdminId: user.clientAdminId,
+        },
+      });
 
-    await tenantPrisma.$transaction(async (tx) => {
-      if (paymentType.includes("INSTALLMENT")) {
+      const feeStructure = await tx.courseFeeStructure.create({
+        data: {
+          courseId: course.id,
+          clientAdminId: user.clientAdminId,
+          totalAmount: parseFloat(totalAmount),
+          paymentType: paymentTypes as any,
+        },
+      });
+
+      if (paymentTypes.includes("INSTALLMENT")) {
         await tx.installmentDetail.createMany({
           data: installments.map(
             (i: { installment: Number; addAmount: Number }) => ({
@@ -459,6 +481,8 @@ export async function addCourseController(req: Request, res: Response) {
           ),
         });
       }
+
+      return { course, feeStructure };
     });
 
     return res.status(201).json({
@@ -779,7 +803,7 @@ export async function getCourseController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);

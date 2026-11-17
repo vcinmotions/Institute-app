@@ -785,6 +785,24 @@ export default function AdmissionForm() {
       return;
     }
 
+    // Every selected course needs a payment type, a batch and a fee amount.
+    const incompleteCourse = courseRows.some(
+      (row: any) => row.courseId && (!row.paymentType || !row.batchId || !row.feeAmount)
+    );
+    if (incompleteCourse) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setAlert({
+        show: true,
+        title: "Course details missing",
+        message: "For every course, please select the payment type, batch and fee amount.",
+        variant: "error",
+      });
+      setTimeout(() => {
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, 3000);
+      return;
+    }
+
     // Prepare advance payment data
     const advancePaymentData = courseRows
       .filter(row => row.advanceAmount && parseFloat(row.advanceAmount) > 0)
@@ -854,11 +872,20 @@ export default function AdmissionForm() {
       },
 
       onError: (error: any) => {
-        console.error("Error creating admission:", error);
-        // You already handle error via redux + toast
+        // Shown to the user below (not console.error: that opens the Next.js error overlay).
+        const reason = error?.response?.data?.error;
         window.scrollTo({
           top: 0, behavior: "smooth"
         })
+        setAlert({
+          show: true,
+          title: "Admission Failed",
+          message: typeof reason === "string" ? reason : "Could not save the admission. Please check the form.",
+          variant: "error",
+        });
+        setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 4000);
       },
     });
   };

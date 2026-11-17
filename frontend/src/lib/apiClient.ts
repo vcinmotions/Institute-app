@@ -1,14 +1,15 @@
+import { API_BASE_URL } from "./config";
 import axios from "axios";
 import { forceLogout } from "@/app/utils/forceLogout";
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5001/api",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 export const apiClientNew = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5001/api",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "multipart/form-data",
   },

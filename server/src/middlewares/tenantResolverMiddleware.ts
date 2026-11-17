@@ -112,7 +112,6 @@ export async function tenantResolverMiddleware(
   try {
     const { email } = req.body;
 
-    console.log("login data:", email,);
     
       const normalizeEmail = normalizeEmailInput({ email });
 
@@ -193,7 +192,6 @@ export async function tenantResolverMiddleware(
 
     const getALlTenant = await centralPrisma.tenant.findMany({});
 
-    console.log("GET ALL TENANT IN CENTRL DB;", getALlTenant);
 
     // 4️⃣ Try to find tenant by domain or name
     // const domainTenant = await centralPrisma.tenant.findFirst({

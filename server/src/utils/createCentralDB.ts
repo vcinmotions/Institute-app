@@ -303,10 +303,6 @@ const envFile =
 
   console.log("envFile in CREATE CENTRAL CONTROLLER:", envFile);
   console.log("DB_PROVIDER in CREATE CENTRAL CONTROLLER:", process.env.DB_PROVIDER);
-  console.log("DB_HOST:", process.env.DB_HOST);
-  console.log("DB_USER:", process.env.DB_USER);
-  console.log("DB_PASS:", process.env.DB_PASS);
-  console.log("DB_PORT:", process.env.DB_PORT);
 // Load active env
 
 // const isProd = process.env.APP_ENV === "prod";
@@ -429,28 +425,16 @@ export async function createCentralDB(clientId: string, options?: any) {
   // }
 
   dbUrl = `file:${userDbPath.replace(/\\/g, "/")}`;
-  console.log("DB URL being used:", dbUrl); // <- debug
-
-
 
   }
   /* ---------- DEV (Postgres) ---------- */
-  /* ===============================
-     DEV (Postgres) → MIGRATIONS
-  =============================== */
   else {
-
 
     console.log("DEV DB CREATION CALLED", envFile);
     dbUrl =
       `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}` +
       `@${process.env.DB_HOST}:${process.env.DB_PORT}/${dbName}`;
 
-      console.log("dbURL in DB CREATION:", dbUrl);
-        console.log("DB_HOST in DB CREATION::", process.env.DB_HOST);
-  console.log("DB_USER in DB CREATION::", process.env.DB_USER);
-  console.log("DB_PASS in DB CREATION::", process.env.DB_PASS);
-  console.log("DB_PORT in DB CREATION::", process.env.DB_PORT);
 
     const admin = new Client({
       user: process.env.DB_USER,
@@ -501,7 +485,8 @@ export async function createCentralDB(clientId: string, options?: any) {
 
   }
 
-  /* ---------- MIGRATIONS ---------- */
+  /* ---------- MIGRATIONS (SQLite only; Postgres schema was pushed above) ---------- */
+  if (isSqlite) {
   await new Promise<void>((resolve, reject) => {
     exec(
       `"${nodePath}" "${prismaCLI}" db push --accept-data-loss --schema="${centralSchema}"`,
@@ -522,6 +507,7 @@ export async function createCentralDB(clientId: string, options?: any) {
       }
     );
   });
+  }
 
   console.log(
     isProd

@@ -1,5 +1,6 @@
 "use client";
 
+import { API_BASE_URL } from "@/lib/config";
 import React, { useState } from "react";
 import { useFetchReports } from "@/hooks/queries/useQueryFetchReports";
 import StudentCard from "@/components/common/StudentCard";
@@ -83,7 +84,7 @@ export default function ReportsDashboard() {
             if (batchId) params.append("batchId", batchId);
             if (reportType === "FINANCE") params.append("financeStatus", financeStatus);
 
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+            const baseUrl = API_BASE_URL;
 
             const response = await fetch(`${baseUrl}/reports/${format}?${params.toString()}`, {
                 method: "GET",

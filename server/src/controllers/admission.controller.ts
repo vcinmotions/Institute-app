@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 // controllers/studentController.ts
 import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
@@ -25,7 +26,7 @@ export async function addStudentControllerNew(req: any, res: any) {
       photoUrl: req.file ? `/uploads/students/${req.file.filename}` : null,
       courseData: (typeof req.body.courseData === "string" 
         ? JSON.parse(req.body.courseData) 
-        : req.body.courseData
+        : req.body.courseData ?? []
       ).map((c: any) => ({
         ...c,
         courseId: Number(c.courseId),
@@ -48,7 +49,13 @@ export async function addStudentControllerNew(req: any, res: any) {
         })) : undefined,
     });
 
-    console.log("PARSED DATA:", data);
+    if (data.admissionDate && isNaN(new Date(data.admissionDate).getTime())) {
+      return res.status(400).json({ error: "admissionDate is not a valid date" });
+    }
+    if (!Array.isArray(data.courseData) || data.courseData.length === 0) {
+      return res.status(400).json({ error: "At least one course is required for admission" });
+    }
+
 
     // ✅ Call Service Layer
     const result = await createStudentService({
@@ -83,10 +90,10 @@ export async function addStudentControllerNew(req: any, res: any) {
     console.error("FULL ERROR:", err);
 
   if (err.name === "ZodError") {
-    console.log(JSON.stringify(err.errors, null, 2));
+    console.log(JSON.stringify((err.issues ?? err.errors), null, 2));
 
     return res.status(400).json({
-      error: err.errors,
+      error: formatZodError(err), details: (err.issues ?? err.errors),
     });
   }
     console.error("❌ Admission Error:", err);
@@ -134,7 +141,7 @@ export async function createstudentOpeningBalanceController(req: any, res: any) 
     });
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
     console.error("❌ Admission Error:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -240,7 +247,7 @@ export async function editStudentController(req: any, res: any) {
     });
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
     console.error("❌ Admission Error:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -473,7 +480,7 @@ export async function getStudentController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);
@@ -541,7 +548,7 @@ export async function getStudentController(req: Request, res: Response) {
 // }
 
 export async function getStudentCourseController(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   console.log("Get Stiudent Id in GetStudentCourseControlle:", id);
 

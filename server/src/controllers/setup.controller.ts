@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
 import { createCentralDB } from "../utils/createCentralDB";
+import { readSetupState } from "./setup-status.controller";
 
 export async function setupCentralController(req: Request, res: Response) {
   try {
+    // Setup may only run once; afterwards this public endpoint must be closed.
+    if ((await readSetupState()) !== "NOT_STARTED") {
+      return res.status(403).json({ error: "Setup has already been completed" });
+    }
+
     const { clientId, password, name, email } = req.body;
 
-    console.log("REQ BODY FOR CREATE MASTER:", req.body);
 
     if (!clientId) {
       return res.status(400).json({ error: "clientId is required" });
@@ -15,10 +20,6 @@ export async function setupCentralController(req: Request, res: Response) {
       return res.status(400).json({ error: "Licsenced Info is required" });
     }
 
-    console.log("DB_HOST in DB CREATION CONTROLLER::", process.env.DB_HOST); 
-    console.log("DB_USER in DB CREATION CONTROLLER::", process.env.DB_USER); 
-    console.log("DB_PASS in DB CREATION CONTROLLER::", process.env.DB_PASS); 
-    console.log("DB_PORT in DB CREATION CONTROLLER::", process.env.DB_PORT);
 
     // ✅ STEP 1: Verify license (REMOTE SERVER)
     // const licenseRes = await fetch(

@@ -1,6 +1,7 @@
+import { SERVER_ORIGIN } from "@/lib/config";
 // import { io, Socket } from 'socket.io-client';
 
-// const SOCKET_URL = 'http://localhost:5001'; // 🔁 Replace with your backend URL in production
+// const SOCKET_URL = SERVER_ORIGIN; // 🔁 Replace with your backend URL in production
 
 // // Export a single socket instance
 // export const socket: Socket = io(SOCKET_URL, {
@@ -9,7 +10,7 @@
 
 import { io, Socket } from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5001'; // Use env variable in production
+const SOCKET_URL = SERVER_ORIGIN; // Use env variable in production
 
 // ✅ Updated config
 export const socket: Socket = io(SOCKET_URL, {

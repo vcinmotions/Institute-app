@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 import { getTenantPrisma } from "../prisma-client/tenant-client";
+import { getTenantDbUrlById } from "../utils/tenantDbUrl";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 
@@ -21,10 +22,8 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("Raw Jwt Token:", req.headers.authorization);
   const token = req.headers.authorization?.split(" ")[1];
   //const token = req.headers.authorization
-  console.log("Jwt Token:", token);
 
   if (!token) return res.status(401).json({ error: "No token provided" });
 
@@ -32,12 +31,20 @@ export const authMiddleware = async (
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     req.user = decoded;
 
-    console.log("req.user", req.user);
-    console.log("decoded", decoded);
+    // Master (super-admin) tokens are not valid on institute routes.
+    if (decoded.role === "MASTER_ADMIN") {
+      return res.status(403).json({ error: "Master admin cannot use institute routes" });
+    }
 
     const id = decoded.id;
     const email = decoded.email;
-    const dbUrl = decoded.dbUrl;
+    // dbUrl is resolved server-side from the tenant id (older tokens may still carry it).
+    let dbUrl: string | null | undefined = decoded.dbUrl;
+    if (!dbUrl && decoded.tenantId) {
+      dbUrl = await getTenantDbUrlById(decoded.tenantId);
+    }
+    // Server-side only. Non-enumerable so it never shows up in logs or JSON output.
+    Object.defineProperty(decoded, "dbUrl", { value: dbUrl, enumerable: false, writable: true });
     const userType = decoded.userType;
 
     if (!email) {
@@ -48,7 +55,6 @@ export const authMiddleware = async (
 
     console.log("🔐 Decoded JWT -> Id:", id);
     console.log("🔐 Decoded JWT -> Email:", email);
-    console.log("🔐 Decoded JWT -> dbUrl:", dbUrl);
     console.log("🔐 Decoded JWT -> userType:", userType);
 
     //const dbUrl = decoded.dburl;

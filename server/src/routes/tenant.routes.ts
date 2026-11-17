@@ -20,6 +20,6 @@ router.post(
   createTenantController
 );
 
-router.get("/tenants", getTenantController);
+router.get("/tenants", masterAuthMiddleware, getTenantController);
 
 export default router;

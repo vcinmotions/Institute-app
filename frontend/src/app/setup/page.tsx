@@ -1,5 +1,6 @@
 "use client";
 
+import { API_BASE_URL } from "@/lib/config";
 import { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/button/Button";
 import ModalCard from "@/components/common/ModalCard";
@@ -37,7 +38,7 @@ export default function SetupPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:5001/api/setup", {
+      const res = await fetch(`${API_BASE_URL}/setup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

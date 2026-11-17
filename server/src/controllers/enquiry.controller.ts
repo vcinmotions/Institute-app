@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
 import redis from "../redis/redis";
 import { convertEnquiryService, createEnquiryService, editEnquiryService, getEnquiries, getEnquiryByIdService, markEnquiryHoldService, markEnquiryLostService } from "../services/enquiry.service";
+import { mapBusinessError, formatZodError } from "../utils/httpErrors";
 import { enquiryCreateSchema, enquiryEditSchema, enquiryQuerySchema } from "../validators/enquiry.query";
 import { getWonEnquiries } from "../services/won.enquiry.service";
 import { logNotification } from "../utils/templates/notificationLogger";
@@ -179,7 +180,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
     });
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     if (err.message?.includes("exists")) {
@@ -187,8 +188,8 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
     }
 
     if (err.name === "ZodError") {
-      console.error("Zod validation failed:", err.errors);
-      return res.status(400).json({ error: err.errors });
+      console.error("Zod validation failed:", (err.issues ?? err.errors));
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     } 
     
     console.error("Error creating enquiry:", err);
@@ -229,7 +230,7 @@ export async function editEnquiryController(req: any, res: any) {
     });
   } catch (error: any) {
     if (error.name === "ZodError") {
-      return res.status(400).json({ error: error.errors });
+      return res.status(400).json({ error: formatZodError(error), details: (error.issues ?? error.errors) });
     }
 
     return res.status(400).json({ error: error.message });
@@ -262,7 +263,7 @@ export async function getEnquiryController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);
@@ -296,7 +297,7 @@ export async function getWonEnquiryController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);
@@ -306,7 +307,7 @@ export async function getWonEnquiryController(req: Request, res: Response) {
 
 export async function getEnquiryByIdController(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
 
     if (!id) {
       return res.status(400).json({ error: "Enquiry ID is required" });
@@ -331,13 +332,15 @@ export async function getEnquiryByIdController(req: Request, res: Response) {
     });
   } catch (error: any) {
     console.error("Error fetching enquiry:", error);
-    return res.status(500).json({ error: error.message });
+    const mapped = mapBusinessError(error);
+    if (mapped) return res.status(mapped.status).json({ error: mapped.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 }
 
 
 export async function deleteEnquiryController(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   if (!id) {
     return res
@@ -368,33 +371,26 @@ export async function deleteEnquiryController(req: Request, res: Response) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
-    /// 1. Find all followUp IDs for the enquiry
-    const followUps = await tenantPrisma.followUp.findMany({
-      where: { enquiryId: id },
-      select: { id: true },
-    });
-    const followUpIds = followUps.map((f) => f.id);
+    const existing = await tenantPrisma.enquiry.findUnique({ where: { id } });
+    if (!existing) {
+      return res.status(404).json({ error: "Enquiry not found" });
+    }
 
-    // 2. Delete notifications first
-    await tenantPrisma.notification.deleteMany({
-      where: {
-        followUpId: { in: followUpIds },
-      },
-    });
+    // Remove everything that points at the enquiry, then the enquiry, atomically.
+    const enquiry = await tenantPrisma.$transaction(async (tx) => {
+      const followUps = await tx.followUp.findMany({
+        where: { enquiryId: id },
+        select: { id: true },
+      });
+      const followUpIds = followUps.map((f) => f.id);
 
-    // 3. Delete followUps
-    await tenantPrisma.followUp.deleteMany({
-      where: { enquiryId: id },
-    });
+      await tx.notification.deleteMany({
+        where: { OR: [{ followUpId: { in: followUpIds } }, { enquiryId: id }] },
+      });
+      await tx.followUp.deleteMany({ where: { enquiryId: id } });
+      await tx.enquiryCourse.deleteMany({ where: { enquiryId: id } });
 
-    // 3. Create student under that admin
-    const enquiry = await tenantPrisma.enquiry.delete({
-      where: {
-        id: id,
-      },
-      include: {
-        followUps: true,
-      },
+      return tx.enquiry.delete({ where: { id } });
     });
 
     console.log("Enquiry deleted Successfully", enquiry);
@@ -418,7 +414,7 @@ export async function convertEnquiryController(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const { id } = req.params;
+    const id = String(req.params.id);
 
     if (!id) {
       return res
@@ -469,7 +465,9 @@ export async function lostEnquiryController(req: Request, res: Response) {
     });
   } catch (err: any) {
     console.error("Error marking enquiry as LOST:", err);
-    return res.status(500).json({ error: err.message });
+    const mapped = mapBusinessError(err);
+    if (mapped) return res.status(mapped.status).json({ error: mapped.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 }
 
@@ -503,7 +501,9 @@ export async function holdEnquiryController(req: Request, res: Response) {
       finalFollowUp: result,
     });
   } catch (err) {
-    console.error("Error Enquiry marked as LOST and final follow-up created:", err);
+    console.error("Error marking enquiry as HOLD/LOST:", err);
+    const mapped = mapBusinessError(err);
+    if (mapped) return res.status(mapped.status).json({ error: mapped.message });
     return res.status(500).json({ error: "Internal server error" });
   }
 }

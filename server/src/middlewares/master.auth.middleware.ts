@@ -22,16 +22,18 @@ export const masterAuthMiddleware = async (
   next: NextFunction
 ) => {
   // 1. Use values injected by tenantResolverMiddleware
-  console.log("Raw Jwt Token:", req.headers.authorization);
   const token = req.headers.authorization?.split(" ")[1];
   //const token = req.headers.authorization
-  console.log("Jwt Token:", token);
 
   if (!token) return res.status(401).json({ error: "No token provided" });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     req.user = decoded;
+
+    if (decoded.role !== "MASTER_ADMIN") {
+      return res.status(403).json({ error: "Master admin access required" });
+    }
 
     const id = decoded.id;
     const email = decoded.email;

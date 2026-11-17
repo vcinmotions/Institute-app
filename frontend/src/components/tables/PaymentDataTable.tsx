@@ -1,3 +1,4 @@
+import { SERVER_ORIGIN } from "@/lib/config";
 import React, { useState } from "react";
 import {
   Table,
@@ -113,7 +114,7 @@ export default function PaymentDataTable({
                                 src={
                                   item.student.photoUrl.startsWith("http")
                                     ? item.student.photoUrl
-                                    : `http://localhost:5001${item.student.photoUrl}`
+                                    : `${SERVER_ORIGIN}${item.student.photoUrl}`
                                 }
                                 alt="student"
                                 className="h-7 w-7 rounded-full object-cover"

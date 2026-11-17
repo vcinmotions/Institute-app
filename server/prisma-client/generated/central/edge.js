@@ -36,11 +36,11 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.2
+ * Prisma Client JS version: 6.19.3
  * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
  */
 Prisma.prismaVersion = {
-  client: "6.19.2",
+  client: "6.19.3",
   engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
 }
 
@@ -170,7 +170,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\SHOBHA\\vcinmotions-application-ai\\server\\prisma-client\\generated\\central",
+      "value": "D:\\Projects\\Jagrut Project\\Institute app\\Institute-app\\server\\prisma-client\\generated\\central",
       "fromEnvVar": null
     },
     "config": {
@@ -184,20 +184,21 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\SHOBHA\\vcinmotions-application-ai\\server\\prisma\\central\\schema.prisma",
+    "sourceFilePath": "D:\\Projects\\Jagrut Project\\Institute app\\Institute-app\\server\\prisma\\central\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
     "rootEnvPath": null,
-    "schemaEnvPath": "../../../prisma/central/.env"
+    "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma/central",
-  "clientVersion": "6.19.2",
+  "clientVersion": "6.19.3",
   "engineVersion": "c2990dca591cba766e3b7ef5d9e8a84796e47ab7",
   "datasourceNames": [
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

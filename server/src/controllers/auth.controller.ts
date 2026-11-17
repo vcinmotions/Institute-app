@@ -12,10 +12,8 @@ export async function loginController(req: Request, res: Response) {
 
   const { email, password } = req.body;
 
-  console.log("login data:", email, password);
 
   const normalizeEmail = normalizeLoginInput({ email });
-  console.log("normalizeEmail:", normalizeEmail);
 
   if (!normalizeEmail.email || !password)
     return res.status(400).json({ error: "Email and password required" });
@@ -66,10 +64,6 @@ export async function loginController(req: Request, res: Response) {
     const tenantPrisma = req.tenantPrisma;
     const tenantInfo = req.tenantInfo;
 
-    console.log(
-      "GET tenantInfo IN AUTH LOGIN for CLientAdmin or Role based or faculty Login:",
-      tenantInfo
-    );
 
     let userType = null;
     let user = null;
@@ -96,7 +90,6 @@ export async function loginController(req: Request, res: Response) {
       if (user) userType = "FACULTY";
     }
 
-    console.log("GET USER DATA:", user);
 
     if (!user) return res.status(404).json({ error: "User not found" });
 
@@ -124,17 +117,13 @@ export async function loginController(req: Request, res: Response) {
       clientAdminId
     );
 
-    console.log(
-      "⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐ Get user in Login Controller:",
-      user
-    );
 
     const payload = {
       id: user.id,
       email: normalizeEmail.email,
       userType,
       role: user.role,
-      dbUrl: tenantInfo.dbUrl,
+      tenantId: tenantInfo.id, // dbUrl is resolved server-side, never sent to clients
       clientAdminId: clientAdminId ?? null,
     };
 
@@ -195,7 +184,6 @@ export async function loginController(req: Request, res: Response) {
       email: user.email,
       name: user.name,
       role: user.role,
-      dbUrl: tenantInfo.dbUrl,
     });
   } catch (error) {
     console.error("Login Error:", error);

@@ -25,7 +25,9 @@ export default function SignInForm() {
 
   // Safely check for token on client mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    // The app stores its session token in sessionStorage (see authSlice);
+    // checking localStorage here caused a "/" <-> "/signin" redirect loop.
+    const token = sessionStorage.getItem("token");
     if (token) {
       router.push("/");
     }

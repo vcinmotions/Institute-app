@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 import { Request, Response } from "express";
 import { batchQuerySchema } from "../validators/batch.query";
 import { getBatches } from "../services/batch.service";
@@ -249,7 +250,7 @@ export async function getBatchController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);

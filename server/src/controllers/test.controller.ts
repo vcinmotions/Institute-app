@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 import { Request, Response } from "express";
 import { titleCase } from "../utils/Normalize";
 import { testQuerySchema } from "../validators/test.query";
@@ -536,7 +537,7 @@ export async function getTestController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);
@@ -548,7 +549,7 @@ export async function getTestByIdController(req: Request, res: Response) {
   try {
     const prisma = req.tenantPrisma;
     const user = req.user;
-    const { id } = req.params;
+    const id = String(req.params.id);
 
     if (!prisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized" });

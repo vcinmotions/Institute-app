@@ -1,5 +1,6 @@
 "use client";
 
+import { API_BASE_URL } from "@/lib/config";
 import { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/button/Button";
 import ModalCard from "@/components/common/ModalCard";
@@ -152,7 +153,7 @@ export default function AddressSetupPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:5001/api/setup/address", {
+      const res = await fetch(`${API_BASE_URL}/setup/address`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -166,6 +167,9 @@ export default function AddressSetupPage() {
         if (typeof window !== "undefined" && "electronAPI" in window) {
           // @ts-ignore
           window.electronAPI.restartApp();
+        } else if (typeof window !== "undefined") {
+          // Plain browser (no Electron shell to restart): go to the sign-in page.
+          (globalThis as any).location.replace("/signin");
         }
       }, 1000);
     } catch (err: any) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { API_BASE_URL } from "@/lib/config";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
@@ -45,7 +46,7 @@ const AdmissionForm: React.FC<Props> = ({
   const studentId = student?.id;
 
   const apiClient = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5001/api",
+    baseURL: API_BASE_URL,
     headers: {
       "Content-Type": "application/json",
     },

@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 import { titleCase } from "../utils/Normalize";
 import { Request, Response } from "express";
 import { taskQuerySchema } from "../validators/Task.query";
@@ -354,7 +355,7 @@ export async function getTaskController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);

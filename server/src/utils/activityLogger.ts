@@ -35,7 +35,6 @@ export async function logActivity({
 
     const tenantPrisma = getTenantPrisma(dbUrl);
 
-    console.log(`🚀 Activity Log for: ${dbUrl}`);
 
     await tenantPrisma.activityLog.create({
       data: {

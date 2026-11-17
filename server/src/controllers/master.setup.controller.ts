@@ -1,6 +1,7 @@
 // controllers/tMaster.setup.controller.ts
 import { Request, Response } from "express";
 import { getCentralPrisma } from "../prisma-client/central-client";
+import { readSetupState } from "./setup-status.controller";
 
 export async function createMasterAddressController(req: Request, res: Response) {
   const {
@@ -11,6 +12,10 @@ export async function createMasterAddressController(req: Request, res: Response)
     zipCode,
     fullAddress,
   } = req.body;
+
+  if ((await readSetupState()) !== "BASIC_DONE") {
+    return res.status(403).json({ error: "Address step is not available" });
+  }
 
   if (!country || !state || !city || !zipCode || !fullAddress) {
     return res.status(400).json({ error: "Missing required fields." });
