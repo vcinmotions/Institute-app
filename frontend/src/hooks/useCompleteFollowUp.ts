@@ -45,6 +45,9 @@ export const useCreateCompleteFollowUp = () => {
       queryClient.invalidateQueries({
         queryKey: ["enquiry"],
       });
+      // Admission list and dashboard cards depend on enquiry status (e.g. WON)
+      queryClient.invalidateQueries({ queryKey: ["won-admissions"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
 
       console.log("INVALIDATEQUERIES TRIGGERED IN WON!")
 
@@ -84,6 +87,9 @@ export const useCreateHoldEnquiry = () => {
       queryClient.invalidateQueries({
         queryKey: ["enquiry"],
       });
+      // Admission list and dashboard cards depend on enquiry status (e.g. WON)
+      queryClient.invalidateQueries({ queryKey: ["won-admissions"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
 
       console.log("INVALIDATEQUERIES TRIGGERED IN HOLD!")
 
@@ -124,6 +130,9 @@ export const useCreateLostEnquiry = () => {
       queryClient.invalidateQueries({
         queryKey: ["enquiry"],
       });
+      // Admission list and dashboard cards depend on enquiry status (e.g. WON)
+      queryClient.invalidateQueries({ queryKey: ["won-admissions"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
 
       console.log("INVALIDATEQUERIES TRIGGERED IN LOST!")
 

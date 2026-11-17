@@ -75,7 +75,9 @@ export const useCreateAdmission = () => {
       // This tells TanStack Query to immediately trigger a background refetch for the table grid.
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["won-admissions"] }),
-        queryClient.invalidateQueries({ queryKey: ["enquiry"] }) // Invalidates the master enquiries view too since a lead was converted
+        queryClient.invalidateQueries({ queryKey: ["enquiry"] }), // Invalidates the master enquiries view too since a lead was converted
+        queryClient.invalidateQueries({ queryKey: ["student"] }), // New admission creates a student
+        queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] }),
       ]);
 
       // ✅ 2. Reset local filter fields cleanly 
