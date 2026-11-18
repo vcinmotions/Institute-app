@@ -37,6 +37,7 @@ import taskRoute from "./routes/task.routes";
 import testRoute from "./routes/test.routes";
 import systemRoute from "./routes/system.backup.routes";
 import subscriptionRoute from "./routes/subscription.routes";
+import expenseRoute from "./routes/expense.routes";
 import { subscriptionGuard } from "./middlewares/subscriptionGuard.middleware";
 import { syncFromCloud, isEnforced } from "./services/subscription.service";
 
@@ -148,5 +149,6 @@ app.use("/api", testRoute);
 app.use("/api", stationaryRoute);
 app.use("/api", sourceRoute);
 app.use("/api", reportRoute);
+app.use("/api", expenseRoute);
 
 export default app;

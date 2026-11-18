@@ -292,7 +292,13 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
     // 🖥️ 8. Allocate PC in Lab Time Slot
     // 🖥️ Allocate PC if batch has lab time slot
     // 🧩 Inside addStudentController, replace allocation section with:
-    if (batchExists.labTimeSlotId) {
+    const alreadySeated = batchExists.labTimeSlotId
+      ? await tenantPrisma.labAllocation.findFirst({
+          where: { labTimeSlotId: batchExists.labTimeSlotId, studentId: student.id },
+        })
+      : null;
+
+    if (batchExists.labTimeSlotId && !alreadySeated) {
       await tenantPrisma.$transaction(async (tx) => {
         // 🧠 Step 1: Get the timeslot + its lab + current allocations
         const labTimeSlot = await tx.labTimeSlot.findUnique({

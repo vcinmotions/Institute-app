@@ -1,6 +1,7 @@
 // services/enquiry.service.ts
 
 import { Enquiry } from "../domain/enquiry/enquiry";
+import { io } from "../utils/socket";
 import { ensureUniqueEnquiry } from "../domain/enquiry/enquiryRules";
 import { buildEnquiryWhere } from "../filters/enquiry.filter";
 import { buildEnquiryOrderBy } from "../filters/enquiry.sort";
@@ -271,6 +272,21 @@ export async function createEnquiryService({
         clientAdminId,
       })),
     });
+  }
+
+  // Alert front desk / admin about the new enquiry (best-effort; never blocks saving).
+  try {
+    const message = `New enquiry: ${name ?? "Unknown"}${contact ? ` (${contact})` : ""}`;
+    await prisma.notification.create({
+      data: { message, enquiryId: enquiry.id, clientAdminId },
+    });
+    io?.to(clientAdminId).emit("enquiry-notification", {
+      notificationMessage: message,
+      message,
+      createdAt: new Date().toISOString(),
+    });
+  } catch (e) {
+    console.error("Could not create new-enquiry notification:", e);
   }
 
   return enquiry;

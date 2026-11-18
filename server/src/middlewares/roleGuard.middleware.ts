@@ -30,13 +30,14 @@ const RULES: Rule[] = [
   // --- money: ADMIN + ACCOUNTANT ---
   { test: /^\/(create-student-payment|advance-payment|create-op)/, roles: ["ADMIN", "ACCOUNTANT"] },
   { test: /^\/(profit|financial-summary|outstanding)/, roles: ["ADMIN", "ACCOUNTANT"] },
+  { test: /^\/expense/, roles: ["ADMIN", "ACCOUNTANT"] },
 
   // --- front office: ADMIN + FRONT_DESK ---
   { test: /^\/(admission-new|edit-student|add-course|student-course)/, methods: ["POST", "PUT"], roles: ["ADMIN", "FRONT_DESK"] },
   { test: /^\/(enquiry|enquiry-new|edit-enquiry|followup|followup-edit|followup\/complete)/, methods: ["POST", "PUT", "DELETE"], roles: ["ADMIN", "FRONT_DESK"] },
 
   // --- teaching: ADMIN + FACULTY ---
-  { test: /^\/(attendance\/mark|create-task|edit-task|task-publish|create-test|edit-test)/, roles: ["ADMIN", "FACULTY"] },
+  { test: /^\/(attendance\/mark|create-task|edit-task|task-publish|create-test|edit-test|test-marks)/, roles: ["ADMIN", "FACULTY"] },
   { test: /^\/course-completion/, roles: ["ADMIN", "FACULTY"] },
 ];
 

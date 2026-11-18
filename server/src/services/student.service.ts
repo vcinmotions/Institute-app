@@ -807,7 +807,15 @@ export async function createStudentService({
       // ======================================
       // LAB TIME SLOT PC ALLOCATOR 
       // ======================================
-      if (batchExists.labTimeSlotId) {
+      // A student already seated in this time slot (another course in the same
+      // batch/slot) keeps that seat; the database allows one seat per student per slot.
+      const alreadySeated = batchExists.labTimeSlotId
+        ? await tx.labAllocation.findFirst({
+            where: { labTimeSlotId: batchExists.labTimeSlotId, studentId: student.id },
+          })
+        : null;
+
+      if (batchExists.labTimeSlotId && !alreadySeated) {
         const labTimeSlot = await tx.labTimeSlot.findUnique({
           where: { id: batchExists.labTimeSlotId },
           include: {

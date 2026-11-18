@@ -203,6 +203,13 @@ const navItems: NavItem[] = [
   },
   {
     group: "Finance & Inventory",
+    icon: <BoltIcon />,
+    name: "Expenses",
+    path: "/dashboard/expense",
+    roles: ["ADMIN", "ACCOUNTANT"],
+  },
+  {
+    group: "Finance & Inventory",
     icon: <FileIcon />,
     name: "Receipt Config",
     path: "/dashboard/payment-receipt-config",

@@ -55,6 +55,7 @@ export default function RolesForm() {
   const roles = [
     { value: "FRONT_DESK", label: "Front Desk" },
     { value: "ACCOUNTANT", label: "Accountant" },
+    { value: "VIEW_ONLY", label: "View Only" },
   ];
 
   const firstInputRef = useRef<HTMLInputElement>(null);

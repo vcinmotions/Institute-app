@@ -64,6 +64,9 @@ export default function TestDataTable({
                                 {/* <TableCell isHeader className="h-9 w-[16%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Action
                                 </TableCell> */}
+                                <TableCell isHeader className="h-9 w-[12%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Marks
+                                </TableCell>
                                 <TableCell isHeader className="h-9 w-[10%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Edit
                                 </TableCell>
@@ -125,6 +128,16 @@ export default function TestDataTable({
                                             </TableCell> */}
 
                                                 <TableCell className="px-3 py-1.5">
+                                                    <button
+                                                        className={item.status === "PUBLISHED" ? "rounded border border-brand-500 px-2 py-0.5 text-[11px] font-medium text-brand-600 hover:bg-brand-50 dark:text-brand-400" : "cursor-not-allowed rounded border border-slate-200 px-2 py-0.5 text-[11px] text-slate-400 opacity-50"}
+                                                        disabled={item.status !== "PUBLISHED"}
+                                                        onClick={() => router.push(`/dashboard/test/marks?id=${item.id}`)}
+                                                    >
+                                                        Enter marks
+                                                    </button>
+                                                </TableCell>
+
+                                                <TableCell className="px-3 py-1.5">
                                                     <Tooltip
                                                         className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5"
                                                         content="Edit Test"
@@ -156,7 +169,7 @@ export default function TestDataTable({
                                 ) : (
                                     <TableRow>
                                         <TableCell
-                                            colSpan={6}
+                                            colSpan={7}
                                             className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                                         >
                                             No Test found.
