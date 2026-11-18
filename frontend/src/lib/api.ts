@@ -85,7 +85,9 @@ export const loginUser = async (userData: {
     return response.data;
   } catch (err: any) {
     // Optional: You can handle or rethrow the API error here
-    console.error("❌ Login API failed:", err.response?.data || err.message);
+    // A wrong username/password is an expected result, not a crash: warn instead of
+    // console.error so the Next.js dev overlay does not pop up. The form shows the message.
+    console.warn("Login failed:", err.response?.data?.error || err.message);
     throw new Error(
       err.response?.data?.error ||
       err.response?.data ||

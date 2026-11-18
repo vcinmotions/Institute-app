@@ -50,10 +50,10 @@ export default function SignInForm() {
 
     // If it looks like an email address (contains '@'), validate the structure
     if (trimmed.includes("@")) {
-      const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(trimmed);
+      const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/.test(trimmed);
       if (!isValidEmail) {
         setInputError(true);
-        setErrorMessage("Please enter a valid email address.");
+        setErrorMessage("Enter your username (for staff: name@institute-id) or a valid email.");
         return false;
       }
     }
@@ -71,7 +71,7 @@ export default function SignInForm() {
       // Clear or adjust validation state dynamically as they type
       if (value.trim()) {
         if (value.includes("@")) {
-          const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value.trim());
+          const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/.test(value.trim());
           if (isValidEmail) setInputError(false);
         } else {
           setInputError(false);

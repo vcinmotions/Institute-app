@@ -171,8 +171,26 @@ export default function AssignBatchFacultyForm({
         }, 3000);
       },
 
-      onError: () => {
-        // You already handle error via redux + toast
+      onError: (error: any) => {
+        // Show the server's reason (e.g. "This batch is already assigned to another faculty")
+        const reason =
+          error?.response?.data?.error ||
+          error?.response?.data?.message ||
+          error?.message ||
+          "Could not assign the batch. Please try again.";
+
+        setAlert({
+          show: true,
+          title: "Could not assign batch",
+          message: reason,
+          variant: "error",
+        });
+
+        modalBodyRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+
+        setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, 5000);
       },
     });
   };

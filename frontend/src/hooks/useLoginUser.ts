@@ -53,7 +53,7 @@ export const useLoginUser = () => {
       }
     },
     onError: (error: any) => {
-      console.error("Error logging in user:", error);
+      console.warn("Login error:", error?.message);
       console.log("error in login", error.message);
     },
   });
