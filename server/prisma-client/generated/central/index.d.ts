@@ -23,6 +23,31 @@ export type SuperAdmin = $Result.DefaultSelection<Prisma.$SuperAdminPayload>
  * 
  */
 export type Tenant = $Result.DefaultSelection<Prisma.$TenantPayload>
+/**
+ * Model SubscriptionPlan
+ * 
+ */
+export type SubscriptionPlan = $Result.DefaultSelection<Prisma.$SubscriptionPlanPayload>
+/**
+ * Model PortalSubscription
+ * 
+ */
+export type PortalSubscription = $Result.DefaultSelection<Prisma.$PortalSubscriptionPayload>
+/**
+ * Model PortalPayment
+ * 
+ */
+export type PortalPayment = $Result.DefaultSelection<Prisma.$PortalPaymentPayload>
+/**
+ * Model SaasAdmin
+ * 
+ */
+export type SaasAdmin = $Result.DefaultSelection<Prisma.$SaasAdminPayload>
+/**
+ * Model AppSetting
+ * 
+ */
+export type AppSetting = $Result.DefaultSelection<Prisma.$AppSettingPayload>
 
 /**
  * Enums
@@ -177,6 +202,56 @@ export class PrismaClient<
     * ```
     */
   get tenant(): Prisma.TenantDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.subscriptionPlan`: Exposes CRUD operations for the **SubscriptionPlan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SubscriptionPlans
+    * const subscriptionPlans = await prisma.subscriptionPlan.findMany()
+    * ```
+    */
+  get subscriptionPlan(): Prisma.SubscriptionPlanDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.portalSubscription`: Exposes CRUD operations for the **PortalSubscription** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PortalSubscriptions
+    * const portalSubscriptions = await prisma.portalSubscription.findMany()
+    * ```
+    */
+  get portalSubscription(): Prisma.PortalSubscriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.portalPayment`: Exposes CRUD operations for the **PortalPayment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PortalPayments
+    * const portalPayments = await prisma.portalPayment.findMany()
+    * ```
+    */
+  get portalPayment(): Prisma.PortalPaymentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.saasAdmin`: Exposes CRUD operations for the **SaasAdmin** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SaasAdmins
+    * const saasAdmins = await prisma.saasAdmin.findMany()
+    * ```
+    */
+  get saasAdmin(): Prisma.SaasAdminDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.appSetting`: Exposes CRUD operations for the **AppSetting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppSettings
+    * const appSettings = await prisma.appSetting.findMany()
+    * ```
+    */
+  get appSetting(): Prisma.AppSettingDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -619,7 +694,12 @@ export namespace Prisma {
 
   export const ModelName: {
     SuperAdmin: 'SuperAdmin',
-    Tenant: 'Tenant'
+    Tenant: 'Tenant',
+    SubscriptionPlan: 'SubscriptionPlan',
+    PortalSubscription: 'PortalSubscription',
+    PortalPayment: 'PortalPayment',
+    SaasAdmin: 'SaasAdmin',
+    AppSetting: 'AppSetting'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -638,7 +718,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "superAdmin" | "tenant"
+      modelProps: "superAdmin" | "tenant" | "subscriptionPlan" | "portalSubscription" | "portalPayment" | "saasAdmin" | "appSetting"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -790,6 +870,376 @@ export namespace Prisma {
           }
         }
       }
+      SubscriptionPlan: {
+        payload: Prisma.$SubscriptionPlanPayload<ExtArgs>
+        fields: Prisma.SubscriptionPlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SubscriptionPlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SubscriptionPlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>
+          }
+          findFirst: {
+            args: Prisma.SubscriptionPlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SubscriptionPlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>
+          }
+          findMany: {
+            args: Prisma.SubscriptionPlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>[]
+          }
+          create: {
+            args: Prisma.SubscriptionPlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>
+          }
+          createMany: {
+            args: Prisma.SubscriptionPlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SubscriptionPlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>[]
+          }
+          delete: {
+            args: Prisma.SubscriptionPlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>
+          }
+          update: {
+            args: Prisma.SubscriptionPlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.SubscriptionPlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SubscriptionPlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SubscriptionPlanUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>[]
+          }
+          upsert: {
+            args: Prisma.SubscriptionPlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanPayload>
+          }
+          aggregate: {
+            args: Prisma.SubscriptionPlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSubscriptionPlan>
+          }
+          groupBy: {
+            args: Prisma.SubscriptionPlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SubscriptionPlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SubscriptionPlanCountArgs<ExtArgs>
+            result: $Utils.Optional<SubscriptionPlanCountAggregateOutputType> | number
+          }
+        }
+      }
+      PortalSubscription: {
+        payload: Prisma.$PortalSubscriptionPayload<ExtArgs>
+        fields: Prisma.PortalSubscriptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PortalSubscriptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PortalSubscriptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>
+          }
+          findFirst: {
+            args: Prisma.PortalSubscriptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PortalSubscriptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>
+          }
+          findMany: {
+            args: Prisma.PortalSubscriptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>[]
+          }
+          create: {
+            args: Prisma.PortalSubscriptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>
+          }
+          createMany: {
+            args: Prisma.PortalSubscriptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PortalSubscriptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>[]
+          }
+          delete: {
+            args: Prisma.PortalSubscriptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>
+          }
+          update: {
+            args: Prisma.PortalSubscriptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.PortalSubscriptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PortalSubscriptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PortalSubscriptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.PortalSubscriptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalSubscriptionPayload>
+          }
+          aggregate: {
+            args: Prisma.PortalSubscriptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePortalSubscription>
+          }
+          groupBy: {
+            args: Prisma.PortalSubscriptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PortalSubscriptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PortalSubscriptionCountArgs<ExtArgs>
+            result: $Utils.Optional<PortalSubscriptionCountAggregateOutputType> | number
+          }
+        }
+      }
+      PortalPayment: {
+        payload: Prisma.$PortalPaymentPayload<ExtArgs>
+        fields: Prisma.PortalPaymentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PortalPaymentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PortalPaymentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>
+          }
+          findFirst: {
+            args: Prisma.PortalPaymentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PortalPaymentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>
+          }
+          findMany: {
+            args: Prisma.PortalPaymentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>[]
+          }
+          create: {
+            args: Prisma.PortalPaymentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>
+          }
+          createMany: {
+            args: Prisma.PortalPaymentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PortalPaymentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>[]
+          }
+          delete: {
+            args: Prisma.PortalPaymentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>
+          }
+          update: {
+            args: Prisma.PortalPaymentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>
+          }
+          deleteMany: {
+            args: Prisma.PortalPaymentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PortalPaymentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PortalPaymentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>[]
+          }
+          upsert: {
+            args: Prisma.PortalPaymentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortalPaymentPayload>
+          }
+          aggregate: {
+            args: Prisma.PortalPaymentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePortalPayment>
+          }
+          groupBy: {
+            args: Prisma.PortalPaymentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PortalPaymentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PortalPaymentCountArgs<ExtArgs>
+            result: $Utils.Optional<PortalPaymentCountAggregateOutputType> | number
+          }
+        }
+      }
+      SaasAdmin: {
+        payload: Prisma.$SaasAdminPayload<ExtArgs>
+        fields: Prisma.SaasAdminFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SaasAdminFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SaasAdminFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>
+          }
+          findFirst: {
+            args: Prisma.SaasAdminFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SaasAdminFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>
+          }
+          findMany: {
+            args: Prisma.SaasAdminFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>[]
+          }
+          create: {
+            args: Prisma.SaasAdminCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>
+          }
+          createMany: {
+            args: Prisma.SaasAdminCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SaasAdminCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>[]
+          }
+          delete: {
+            args: Prisma.SaasAdminDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>
+          }
+          update: {
+            args: Prisma.SaasAdminUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>
+          }
+          deleteMany: {
+            args: Prisma.SaasAdminDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SaasAdminUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SaasAdminUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>[]
+          }
+          upsert: {
+            args: Prisma.SaasAdminUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SaasAdminPayload>
+          }
+          aggregate: {
+            args: Prisma.SaasAdminAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSaasAdmin>
+          }
+          groupBy: {
+            args: Prisma.SaasAdminGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SaasAdminGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SaasAdminCountArgs<ExtArgs>
+            result: $Utils.Optional<SaasAdminCountAggregateOutputType> | number
+          }
+        }
+      }
+      AppSetting: {
+        payload: Prisma.$AppSettingPayload<ExtArgs>
+        fields: Prisma.AppSettingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppSettingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppSettingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>
+          }
+          findFirst: {
+            args: Prisma.AppSettingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppSettingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>
+          }
+          findMany: {
+            args: Prisma.AppSettingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>[]
+          }
+          create: {
+            args: Prisma.AppSettingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>
+          }
+          createMany: {
+            args: Prisma.AppSettingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppSettingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>[]
+          }
+          delete: {
+            args: Prisma.AppSettingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>
+          }
+          update: {
+            args: Prisma.AppSettingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>
+          }
+          deleteMany: {
+            args: Prisma.AppSettingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppSettingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AppSettingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>[]
+          }
+          upsert: {
+            args: Prisma.AppSettingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppSettingPayload>
+          }
+          aggregate: {
+            args: Prisma.AppSettingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppSetting>
+          }
+          groupBy: {
+            args: Prisma.AppSettingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppSettingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppSettingCountArgs<ExtArgs>
+            result: $Utils.Optional<AppSettingCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -888,6 +1338,11 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     superAdmin?: SuperAdminOmit
     tenant?: TenantOmit
+    subscriptionPlan?: SubscriptionPlanOmit
+    portalSubscription?: PortalSubscriptionOmit
+    portalPayment?: PortalPaymentOmit
+    saasAdmin?: SaasAdminOmit
+    appSetting?: AppSettingOmit
   }
 
   /* Types for Logging */
@@ -3323,6 +3778,5170 @@ export namespace Prisma {
 
 
   /**
+   * Model SubscriptionPlan
+   */
+
+  export type AggregateSubscriptionPlan = {
+    _count: SubscriptionPlanCountAggregateOutputType | null
+    _avg: SubscriptionPlanAvgAggregateOutputType | null
+    _sum: SubscriptionPlanSumAggregateOutputType | null
+    _min: SubscriptionPlanMinAggregateOutputType | null
+    _max: SubscriptionPlanMaxAggregateOutputType | null
+  }
+
+  export type SubscriptionPlanAvgAggregateOutputType = {
+    months: number | null
+    price: number | null
+  }
+
+  export type SubscriptionPlanSumAggregateOutputType = {
+    months: number | null
+    price: number | null
+  }
+
+  export type SubscriptionPlanMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    months: number | null
+    price: number | null
+    currency: string | null
+    active: boolean | null
+    updatedAt: Date | null
+  }
+
+  export type SubscriptionPlanMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    months: number | null
+    price: number | null
+    currency: string | null
+    active: boolean | null
+    updatedAt: Date | null
+  }
+
+  export type SubscriptionPlanCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    months: number
+    price: number
+    currency: number
+    active: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SubscriptionPlanAvgAggregateInputType = {
+    months?: true
+    price?: true
+  }
+
+  export type SubscriptionPlanSumAggregateInputType = {
+    months?: true
+    price?: true
+  }
+
+  export type SubscriptionPlanMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    months?: true
+    price?: true
+    currency?: true
+    active?: true
+    updatedAt?: true
+  }
+
+  export type SubscriptionPlanMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    months?: true
+    price?: true
+    currency?: true
+    active?: true
+    updatedAt?: true
+  }
+
+  export type SubscriptionPlanCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    months?: true
+    price?: true
+    currency?: true
+    active?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SubscriptionPlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubscriptionPlan to aggregate.
+     */
+    where?: SubscriptionPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionPlans to fetch.
+     */
+    orderBy?: SubscriptionPlanOrderByWithRelationInput | SubscriptionPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SubscriptionPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SubscriptionPlans
+    **/
+    _count?: true | SubscriptionPlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SubscriptionPlanAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SubscriptionPlanSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SubscriptionPlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SubscriptionPlanMaxAggregateInputType
+  }
+
+  export type GetSubscriptionPlanAggregateType<T extends SubscriptionPlanAggregateArgs> = {
+        [P in keyof T & keyof AggregateSubscriptionPlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSubscriptionPlan[P]>
+      : GetScalarType<T[P], AggregateSubscriptionPlan[P]>
+  }
+
+
+
+
+  export type SubscriptionPlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubscriptionPlanWhereInput
+    orderBy?: SubscriptionPlanOrderByWithAggregationInput | SubscriptionPlanOrderByWithAggregationInput[]
+    by: SubscriptionPlanScalarFieldEnum[] | SubscriptionPlanScalarFieldEnum
+    having?: SubscriptionPlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SubscriptionPlanCountAggregateInputType | true
+    _avg?: SubscriptionPlanAvgAggregateInputType
+    _sum?: SubscriptionPlanSumAggregateInputType
+    _min?: SubscriptionPlanMinAggregateInputType
+    _max?: SubscriptionPlanMaxAggregateInputType
+  }
+
+  export type SubscriptionPlanGroupByOutputType = {
+    id: string
+    code: string
+    name: string
+    months: number
+    price: number
+    currency: string
+    active: boolean
+    updatedAt: Date
+    _count: SubscriptionPlanCountAggregateOutputType | null
+    _avg: SubscriptionPlanAvgAggregateOutputType | null
+    _sum: SubscriptionPlanSumAggregateOutputType | null
+    _min: SubscriptionPlanMinAggregateOutputType | null
+    _max: SubscriptionPlanMaxAggregateOutputType | null
+  }
+
+  type GetSubscriptionPlanGroupByPayload<T extends SubscriptionPlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SubscriptionPlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SubscriptionPlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SubscriptionPlanGroupByOutputType[P]>
+            : GetScalarType<T[P], SubscriptionPlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SubscriptionPlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    months?: boolean
+    price?: boolean
+    currency?: boolean
+    active?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["subscriptionPlan"]>
+
+  export type SubscriptionPlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    months?: boolean
+    price?: boolean
+    currency?: boolean
+    active?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["subscriptionPlan"]>
+
+  export type SubscriptionPlanSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    months?: boolean
+    price?: boolean
+    currency?: boolean
+    active?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["subscriptionPlan"]>
+
+  export type SubscriptionPlanSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    months?: boolean
+    price?: boolean
+    currency?: boolean
+    active?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SubscriptionPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "months" | "price" | "currency" | "active" | "updatedAt", ExtArgs["result"]["subscriptionPlan"]>
+
+  export type $SubscriptionPlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SubscriptionPlan"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      name: string
+      months: number
+      price: number
+      currency: string
+      active: boolean
+      updatedAt: Date
+    }, ExtArgs["result"]["subscriptionPlan"]>
+    composites: {}
+  }
+
+  type SubscriptionPlanGetPayload<S extends boolean | null | undefined | SubscriptionPlanDefaultArgs> = $Result.GetResult<Prisma.$SubscriptionPlanPayload, S>
+
+  type SubscriptionPlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SubscriptionPlanFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SubscriptionPlanCountAggregateInputType | true
+    }
+
+  export interface SubscriptionPlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SubscriptionPlan'], meta: { name: 'SubscriptionPlan' } }
+    /**
+     * Find zero or one SubscriptionPlan that matches the filter.
+     * @param {SubscriptionPlanFindUniqueArgs} args - Arguments to find a SubscriptionPlan
+     * @example
+     * // Get one SubscriptionPlan
+     * const subscriptionPlan = await prisma.subscriptionPlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SubscriptionPlanFindUniqueArgs>(args: SelectSubset<T, SubscriptionPlanFindUniqueArgs<ExtArgs>>): Prisma__SubscriptionPlanClient<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SubscriptionPlan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SubscriptionPlanFindUniqueOrThrowArgs} args - Arguments to find a SubscriptionPlan
+     * @example
+     * // Get one SubscriptionPlan
+     * const subscriptionPlan = await prisma.subscriptionPlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SubscriptionPlanFindUniqueOrThrowArgs>(args: SelectSubset<T, SubscriptionPlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SubscriptionPlanClient<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SubscriptionPlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanFindFirstArgs} args - Arguments to find a SubscriptionPlan
+     * @example
+     * // Get one SubscriptionPlan
+     * const subscriptionPlan = await prisma.subscriptionPlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SubscriptionPlanFindFirstArgs>(args?: SelectSubset<T, SubscriptionPlanFindFirstArgs<ExtArgs>>): Prisma__SubscriptionPlanClient<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SubscriptionPlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanFindFirstOrThrowArgs} args - Arguments to find a SubscriptionPlan
+     * @example
+     * // Get one SubscriptionPlan
+     * const subscriptionPlan = await prisma.subscriptionPlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SubscriptionPlanFindFirstOrThrowArgs>(args?: SelectSubset<T, SubscriptionPlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__SubscriptionPlanClient<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SubscriptionPlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SubscriptionPlans
+     * const subscriptionPlans = await prisma.subscriptionPlan.findMany()
+     * 
+     * // Get first 10 SubscriptionPlans
+     * const subscriptionPlans = await prisma.subscriptionPlan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const subscriptionPlanWithIdOnly = await prisma.subscriptionPlan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SubscriptionPlanFindManyArgs>(args?: SelectSubset<T, SubscriptionPlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SubscriptionPlan.
+     * @param {SubscriptionPlanCreateArgs} args - Arguments to create a SubscriptionPlan.
+     * @example
+     * // Create one SubscriptionPlan
+     * const SubscriptionPlan = await prisma.subscriptionPlan.create({
+     *   data: {
+     *     // ... data to create a SubscriptionPlan
+     *   }
+     * })
+     * 
+     */
+    create<T extends SubscriptionPlanCreateArgs>(args: SelectSubset<T, SubscriptionPlanCreateArgs<ExtArgs>>): Prisma__SubscriptionPlanClient<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SubscriptionPlans.
+     * @param {SubscriptionPlanCreateManyArgs} args - Arguments to create many SubscriptionPlans.
+     * @example
+     * // Create many SubscriptionPlans
+     * const subscriptionPlan = await prisma.subscriptionPlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SubscriptionPlanCreateManyArgs>(args?: SelectSubset<T, SubscriptionPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SubscriptionPlans and returns the data saved in the database.
+     * @param {SubscriptionPlanCreateManyAndReturnArgs} args - Arguments to create many SubscriptionPlans.
+     * @example
+     * // Create many SubscriptionPlans
+     * const subscriptionPlan = await prisma.subscriptionPlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SubscriptionPlans and only return the `id`
+     * const subscriptionPlanWithIdOnly = await prisma.subscriptionPlan.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SubscriptionPlanCreateManyAndReturnArgs>(args?: SelectSubset<T, SubscriptionPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SubscriptionPlan.
+     * @param {SubscriptionPlanDeleteArgs} args - Arguments to delete one SubscriptionPlan.
+     * @example
+     * // Delete one SubscriptionPlan
+     * const SubscriptionPlan = await prisma.subscriptionPlan.delete({
+     *   where: {
+     *     // ... filter to delete one SubscriptionPlan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SubscriptionPlanDeleteArgs>(args: SelectSubset<T, SubscriptionPlanDeleteArgs<ExtArgs>>): Prisma__SubscriptionPlanClient<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SubscriptionPlan.
+     * @param {SubscriptionPlanUpdateArgs} args - Arguments to update one SubscriptionPlan.
+     * @example
+     * // Update one SubscriptionPlan
+     * const subscriptionPlan = await prisma.subscriptionPlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SubscriptionPlanUpdateArgs>(args: SelectSubset<T, SubscriptionPlanUpdateArgs<ExtArgs>>): Prisma__SubscriptionPlanClient<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SubscriptionPlans.
+     * @param {SubscriptionPlanDeleteManyArgs} args - Arguments to filter SubscriptionPlans to delete.
+     * @example
+     * // Delete a few SubscriptionPlans
+     * const { count } = await prisma.subscriptionPlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SubscriptionPlanDeleteManyArgs>(args?: SelectSubset<T, SubscriptionPlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubscriptionPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SubscriptionPlans
+     * const subscriptionPlan = await prisma.subscriptionPlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SubscriptionPlanUpdateManyArgs>(args: SelectSubset<T, SubscriptionPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubscriptionPlans and returns the data updated in the database.
+     * @param {SubscriptionPlanUpdateManyAndReturnArgs} args - Arguments to update many SubscriptionPlans.
+     * @example
+     * // Update many SubscriptionPlans
+     * const subscriptionPlan = await prisma.subscriptionPlan.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SubscriptionPlans and only return the `id`
+     * const subscriptionPlanWithIdOnly = await prisma.subscriptionPlan.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SubscriptionPlanUpdateManyAndReturnArgs>(args: SelectSubset<T, SubscriptionPlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SubscriptionPlan.
+     * @param {SubscriptionPlanUpsertArgs} args - Arguments to update or create a SubscriptionPlan.
+     * @example
+     * // Update or create a SubscriptionPlan
+     * const subscriptionPlan = await prisma.subscriptionPlan.upsert({
+     *   create: {
+     *     // ... data to create a SubscriptionPlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SubscriptionPlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SubscriptionPlanUpsertArgs>(args: SelectSubset<T, SubscriptionPlanUpsertArgs<ExtArgs>>): Prisma__SubscriptionPlanClient<$Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SubscriptionPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanCountArgs} args - Arguments to filter SubscriptionPlans to count.
+     * @example
+     * // Count the number of SubscriptionPlans
+     * const count = await prisma.subscriptionPlan.count({
+     *   where: {
+     *     // ... the filter for the SubscriptionPlans we want to count
+     *   }
+     * })
+    **/
+    count<T extends SubscriptionPlanCountArgs>(
+      args?: Subset<T, SubscriptionPlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SubscriptionPlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SubscriptionPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SubscriptionPlanAggregateArgs>(args: Subset<T, SubscriptionPlanAggregateArgs>): Prisma.PrismaPromise<GetSubscriptionPlanAggregateType<T>>
+
+    /**
+     * Group by SubscriptionPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SubscriptionPlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SubscriptionPlanGroupByArgs['orderBy'] }
+        : { orderBy?: SubscriptionPlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SubscriptionPlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubscriptionPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SubscriptionPlan model
+   */
+  readonly fields: SubscriptionPlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SubscriptionPlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SubscriptionPlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SubscriptionPlan model
+   */
+  interface SubscriptionPlanFieldRefs {
+    readonly id: FieldRef<"SubscriptionPlan", 'String'>
+    readonly code: FieldRef<"SubscriptionPlan", 'String'>
+    readonly name: FieldRef<"SubscriptionPlan", 'String'>
+    readonly months: FieldRef<"SubscriptionPlan", 'Int'>
+    readonly price: FieldRef<"SubscriptionPlan", 'Float'>
+    readonly currency: FieldRef<"SubscriptionPlan", 'String'>
+    readonly active: FieldRef<"SubscriptionPlan", 'Boolean'>
+    readonly updatedAt: FieldRef<"SubscriptionPlan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SubscriptionPlan findUnique
+   */
+  export type SubscriptionPlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlan to fetch.
+     */
+    where: SubscriptionPlanWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionPlan findUniqueOrThrow
+   */
+  export type SubscriptionPlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlan to fetch.
+     */
+    where: SubscriptionPlanWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionPlan findFirst
+   */
+  export type SubscriptionPlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlan to fetch.
+     */
+    where?: SubscriptionPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionPlans to fetch.
+     */
+    orderBy?: SubscriptionPlanOrderByWithRelationInput | SubscriptionPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubscriptionPlans.
+     */
+    cursor?: SubscriptionPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubscriptionPlans.
+     */
+    distinct?: SubscriptionPlanScalarFieldEnum | SubscriptionPlanScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionPlan findFirstOrThrow
+   */
+  export type SubscriptionPlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlan to fetch.
+     */
+    where?: SubscriptionPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionPlans to fetch.
+     */
+    orderBy?: SubscriptionPlanOrderByWithRelationInput | SubscriptionPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubscriptionPlans.
+     */
+    cursor?: SubscriptionPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubscriptionPlans.
+     */
+    distinct?: SubscriptionPlanScalarFieldEnum | SubscriptionPlanScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionPlan findMany
+   */
+  export type SubscriptionPlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlans to fetch.
+     */
+    where?: SubscriptionPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionPlans to fetch.
+     */
+    orderBy?: SubscriptionPlanOrderByWithRelationInput | SubscriptionPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SubscriptionPlans.
+     */
+    cursor?: SubscriptionPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionPlans.
+     */
+    skip?: number
+    distinct?: SubscriptionPlanScalarFieldEnum | SubscriptionPlanScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionPlan create
+   */
+  export type SubscriptionPlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SubscriptionPlan.
+     */
+    data: XOR<SubscriptionPlanCreateInput, SubscriptionPlanUncheckedCreateInput>
+  }
+
+  /**
+   * SubscriptionPlan createMany
+   */
+  export type SubscriptionPlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SubscriptionPlans.
+     */
+    data: SubscriptionPlanCreateManyInput | SubscriptionPlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SubscriptionPlan createManyAndReturn
+   */
+  export type SubscriptionPlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * The data used to create many SubscriptionPlans.
+     */
+    data: SubscriptionPlanCreateManyInput | SubscriptionPlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SubscriptionPlan update
+   */
+  export type SubscriptionPlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SubscriptionPlan.
+     */
+    data: XOR<SubscriptionPlanUpdateInput, SubscriptionPlanUncheckedUpdateInput>
+    /**
+     * Choose, which SubscriptionPlan to update.
+     */
+    where: SubscriptionPlanWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionPlan updateMany
+   */
+  export type SubscriptionPlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SubscriptionPlans.
+     */
+    data: XOR<SubscriptionPlanUpdateManyMutationInput, SubscriptionPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which SubscriptionPlans to update
+     */
+    where?: SubscriptionPlanWhereInput
+    /**
+     * Limit how many SubscriptionPlans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubscriptionPlan updateManyAndReturn
+   */
+  export type SubscriptionPlanUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * The data used to update SubscriptionPlans.
+     */
+    data: XOR<SubscriptionPlanUpdateManyMutationInput, SubscriptionPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which SubscriptionPlans to update
+     */
+    where?: SubscriptionPlanWhereInput
+    /**
+     * Limit how many SubscriptionPlans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubscriptionPlan upsert
+   */
+  export type SubscriptionPlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SubscriptionPlan to update in case it exists.
+     */
+    where: SubscriptionPlanWhereUniqueInput
+    /**
+     * In case the SubscriptionPlan found by the `where` argument doesn't exist, create a new SubscriptionPlan with this data.
+     */
+    create: XOR<SubscriptionPlanCreateInput, SubscriptionPlanUncheckedCreateInput>
+    /**
+     * In case the SubscriptionPlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SubscriptionPlanUpdateInput, SubscriptionPlanUncheckedUpdateInput>
+  }
+
+  /**
+   * SubscriptionPlan delete
+   */
+  export type SubscriptionPlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+    /**
+     * Filter which SubscriptionPlan to delete.
+     */
+    where: SubscriptionPlanWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionPlan deleteMany
+   */
+  export type SubscriptionPlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubscriptionPlans to delete
+     */
+    where?: SubscriptionPlanWhereInput
+    /**
+     * Limit how many SubscriptionPlans to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubscriptionPlan without action
+   */
+  export type SubscriptionPlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlan
+     */
+    select?: SubscriptionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlan
+     */
+    omit?: SubscriptionPlanOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PortalSubscription
+   */
+
+  export type AggregatePortalSubscription = {
+    _count: PortalSubscriptionCountAggregateOutputType | null
+    _min: PortalSubscriptionMinAggregateOutputType | null
+    _max: PortalSubscriptionMaxAggregateOutputType | null
+  }
+
+  export type PortalSubscriptionMinAggregateOutputType = {
+    id: string | null
+    email: string | null
+    clientId: string | null
+    plan: string | null
+    startDate: Date | null
+    expiryDate: Date | null
+    status: string | null
+    syncTokenHash: string | null
+    updatedAt: Date | null
+  }
+
+  export type PortalSubscriptionMaxAggregateOutputType = {
+    id: string | null
+    email: string | null
+    clientId: string | null
+    plan: string | null
+    startDate: Date | null
+    expiryDate: Date | null
+    status: string | null
+    syncTokenHash: string | null
+    updatedAt: Date | null
+  }
+
+  export type PortalSubscriptionCountAggregateOutputType = {
+    id: number
+    email: number
+    clientId: number
+    plan: number
+    startDate: number
+    expiryDate: number
+    status: number
+    syncTokenHash: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PortalSubscriptionMinAggregateInputType = {
+    id?: true
+    email?: true
+    clientId?: true
+    plan?: true
+    startDate?: true
+    expiryDate?: true
+    status?: true
+    syncTokenHash?: true
+    updatedAt?: true
+  }
+
+  export type PortalSubscriptionMaxAggregateInputType = {
+    id?: true
+    email?: true
+    clientId?: true
+    plan?: true
+    startDate?: true
+    expiryDate?: true
+    status?: true
+    syncTokenHash?: true
+    updatedAt?: true
+  }
+
+  export type PortalSubscriptionCountAggregateInputType = {
+    id?: true
+    email?: true
+    clientId?: true
+    plan?: true
+    startDate?: true
+    expiryDate?: true
+    status?: true
+    syncTokenHash?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PortalSubscriptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PortalSubscription to aggregate.
+     */
+    where?: PortalSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortalSubscriptions to fetch.
+     */
+    orderBy?: PortalSubscriptionOrderByWithRelationInput | PortalSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PortalSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortalSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortalSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PortalSubscriptions
+    **/
+    _count?: true | PortalSubscriptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PortalSubscriptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PortalSubscriptionMaxAggregateInputType
+  }
+
+  export type GetPortalSubscriptionAggregateType<T extends PortalSubscriptionAggregateArgs> = {
+        [P in keyof T & keyof AggregatePortalSubscription]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePortalSubscription[P]>
+      : GetScalarType<T[P], AggregatePortalSubscription[P]>
+  }
+
+
+
+
+  export type PortalSubscriptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PortalSubscriptionWhereInput
+    orderBy?: PortalSubscriptionOrderByWithAggregationInput | PortalSubscriptionOrderByWithAggregationInput[]
+    by: PortalSubscriptionScalarFieldEnum[] | PortalSubscriptionScalarFieldEnum
+    having?: PortalSubscriptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PortalSubscriptionCountAggregateInputType | true
+    _min?: PortalSubscriptionMinAggregateInputType
+    _max?: PortalSubscriptionMaxAggregateInputType
+  }
+
+  export type PortalSubscriptionGroupByOutputType = {
+    id: string
+    email: string
+    clientId: string
+    plan: string
+    startDate: Date
+    expiryDate: Date
+    status: string
+    syncTokenHash: string | null
+    updatedAt: Date
+    _count: PortalSubscriptionCountAggregateOutputType | null
+    _min: PortalSubscriptionMinAggregateOutputType | null
+    _max: PortalSubscriptionMaxAggregateOutputType | null
+  }
+
+  type GetPortalSubscriptionGroupByPayload<T extends PortalSubscriptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PortalSubscriptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PortalSubscriptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PortalSubscriptionGroupByOutputType[P]>
+            : GetScalarType<T[P], PortalSubscriptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PortalSubscriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    clientId?: boolean
+    plan?: boolean
+    startDate?: boolean
+    expiryDate?: boolean
+    status?: boolean
+    syncTokenHash?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["portalSubscription"]>
+
+  export type PortalSubscriptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    clientId?: boolean
+    plan?: boolean
+    startDate?: boolean
+    expiryDate?: boolean
+    status?: boolean
+    syncTokenHash?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["portalSubscription"]>
+
+  export type PortalSubscriptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    clientId?: boolean
+    plan?: boolean
+    startDate?: boolean
+    expiryDate?: boolean
+    status?: boolean
+    syncTokenHash?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["portalSubscription"]>
+
+  export type PortalSubscriptionSelectScalar = {
+    id?: boolean
+    email?: boolean
+    clientId?: boolean
+    plan?: boolean
+    startDate?: boolean
+    expiryDate?: boolean
+    status?: boolean
+    syncTokenHash?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PortalSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "clientId" | "plan" | "startDate" | "expiryDate" | "status" | "syncTokenHash" | "updatedAt", ExtArgs["result"]["portalSubscription"]>
+
+  export type $PortalSubscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PortalSubscription"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      email: string
+      clientId: string
+      plan: string
+      startDate: Date
+      expiryDate: Date
+      status: string
+      syncTokenHash: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["portalSubscription"]>
+    composites: {}
+  }
+
+  type PortalSubscriptionGetPayload<S extends boolean | null | undefined | PortalSubscriptionDefaultArgs> = $Result.GetResult<Prisma.$PortalSubscriptionPayload, S>
+
+  type PortalSubscriptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PortalSubscriptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PortalSubscriptionCountAggregateInputType | true
+    }
+
+  export interface PortalSubscriptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PortalSubscription'], meta: { name: 'PortalSubscription' } }
+    /**
+     * Find zero or one PortalSubscription that matches the filter.
+     * @param {PortalSubscriptionFindUniqueArgs} args - Arguments to find a PortalSubscription
+     * @example
+     * // Get one PortalSubscription
+     * const portalSubscription = await prisma.portalSubscription.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PortalSubscriptionFindUniqueArgs>(args: SelectSubset<T, PortalSubscriptionFindUniqueArgs<ExtArgs>>): Prisma__PortalSubscriptionClient<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PortalSubscription that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PortalSubscriptionFindUniqueOrThrowArgs} args - Arguments to find a PortalSubscription
+     * @example
+     * // Get one PortalSubscription
+     * const portalSubscription = await prisma.portalSubscription.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PortalSubscriptionFindUniqueOrThrowArgs>(args: SelectSubset<T, PortalSubscriptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PortalSubscriptionClient<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PortalSubscription that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalSubscriptionFindFirstArgs} args - Arguments to find a PortalSubscription
+     * @example
+     * // Get one PortalSubscription
+     * const portalSubscription = await prisma.portalSubscription.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PortalSubscriptionFindFirstArgs>(args?: SelectSubset<T, PortalSubscriptionFindFirstArgs<ExtArgs>>): Prisma__PortalSubscriptionClient<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PortalSubscription that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalSubscriptionFindFirstOrThrowArgs} args - Arguments to find a PortalSubscription
+     * @example
+     * // Get one PortalSubscription
+     * const portalSubscription = await prisma.portalSubscription.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PortalSubscriptionFindFirstOrThrowArgs>(args?: SelectSubset<T, PortalSubscriptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PortalSubscriptionClient<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PortalSubscriptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalSubscriptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PortalSubscriptions
+     * const portalSubscriptions = await prisma.portalSubscription.findMany()
+     * 
+     * // Get first 10 PortalSubscriptions
+     * const portalSubscriptions = await prisma.portalSubscription.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const portalSubscriptionWithIdOnly = await prisma.portalSubscription.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PortalSubscriptionFindManyArgs>(args?: SelectSubset<T, PortalSubscriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PortalSubscription.
+     * @param {PortalSubscriptionCreateArgs} args - Arguments to create a PortalSubscription.
+     * @example
+     * // Create one PortalSubscription
+     * const PortalSubscription = await prisma.portalSubscription.create({
+     *   data: {
+     *     // ... data to create a PortalSubscription
+     *   }
+     * })
+     * 
+     */
+    create<T extends PortalSubscriptionCreateArgs>(args: SelectSubset<T, PortalSubscriptionCreateArgs<ExtArgs>>): Prisma__PortalSubscriptionClient<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PortalSubscriptions.
+     * @param {PortalSubscriptionCreateManyArgs} args - Arguments to create many PortalSubscriptions.
+     * @example
+     * // Create many PortalSubscriptions
+     * const portalSubscription = await prisma.portalSubscription.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PortalSubscriptionCreateManyArgs>(args?: SelectSubset<T, PortalSubscriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PortalSubscriptions and returns the data saved in the database.
+     * @param {PortalSubscriptionCreateManyAndReturnArgs} args - Arguments to create many PortalSubscriptions.
+     * @example
+     * // Create many PortalSubscriptions
+     * const portalSubscription = await prisma.portalSubscription.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PortalSubscriptions and only return the `id`
+     * const portalSubscriptionWithIdOnly = await prisma.portalSubscription.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PortalSubscriptionCreateManyAndReturnArgs>(args?: SelectSubset<T, PortalSubscriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PortalSubscription.
+     * @param {PortalSubscriptionDeleteArgs} args - Arguments to delete one PortalSubscription.
+     * @example
+     * // Delete one PortalSubscription
+     * const PortalSubscription = await prisma.portalSubscription.delete({
+     *   where: {
+     *     // ... filter to delete one PortalSubscription
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PortalSubscriptionDeleteArgs>(args: SelectSubset<T, PortalSubscriptionDeleteArgs<ExtArgs>>): Prisma__PortalSubscriptionClient<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PortalSubscription.
+     * @param {PortalSubscriptionUpdateArgs} args - Arguments to update one PortalSubscription.
+     * @example
+     * // Update one PortalSubscription
+     * const portalSubscription = await prisma.portalSubscription.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PortalSubscriptionUpdateArgs>(args: SelectSubset<T, PortalSubscriptionUpdateArgs<ExtArgs>>): Prisma__PortalSubscriptionClient<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PortalSubscriptions.
+     * @param {PortalSubscriptionDeleteManyArgs} args - Arguments to filter PortalSubscriptions to delete.
+     * @example
+     * // Delete a few PortalSubscriptions
+     * const { count } = await prisma.portalSubscription.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PortalSubscriptionDeleteManyArgs>(args?: SelectSubset<T, PortalSubscriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PortalSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalSubscriptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PortalSubscriptions
+     * const portalSubscription = await prisma.portalSubscription.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PortalSubscriptionUpdateManyArgs>(args: SelectSubset<T, PortalSubscriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PortalSubscriptions and returns the data updated in the database.
+     * @param {PortalSubscriptionUpdateManyAndReturnArgs} args - Arguments to update many PortalSubscriptions.
+     * @example
+     * // Update many PortalSubscriptions
+     * const portalSubscription = await prisma.portalSubscription.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PortalSubscriptions and only return the `id`
+     * const portalSubscriptionWithIdOnly = await prisma.portalSubscription.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PortalSubscriptionUpdateManyAndReturnArgs>(args: SelectSubset<T, PortalSubscriptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PortalSubscription.
+     * @param {PortalSubscriptionUpsertArgs} args - Arguments to update or create a PortalSubscription.
+     * @example
+     * // Update or create a PortalSubscription
+     * const portalSubscription = await prisma.portalSubscription.upsert({
+     *   create: {
+     *     // ... data to create a PortalSubscription
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PortalSubscription we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PortalSubscriptionUpsertArgs>(args: SelectSubset<T, PortalSubscriptionUpsertArgs<ExtArgs>>): Prisma__PortalSubscriptionClient<$Result.GetResult<Prisma.$PortalSubscriptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PortalSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalSubscriptionCountArgs} args - Arguments to filter PortalSubscriptions to count.
+     * @example
+     * // Count the number of PortalSubscriptions
+     * const count = await prisma.portalSubscription.count({
+     *   where: {
+     *     // ... the filter for the PortalSubscriptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends PortalSubscriptionCountArgs>(
+      args?: Subset<T, PortalSubscriptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PortalSubscriptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PortalSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalSubscriptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PortalSubscriptionAggregateArgs>(args: Subset<T, PortalSubscriptionAggregateArgs>): Prisma.PrismaPromise<GetPortalSubscriptionAggregateType<T>>
+
+    /**
+     * Group by PortalSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalSubscriptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PortalSubscriptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PortalSubscriptionGroupByArgs['orderBy'] }
+        : { orderBy?: PortalSubscriptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PortalSubscriptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPortalSubscriptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PortalSubscription model
+   */
+  readonly fields: PortalSubscriptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PortalSubscription.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PortalSubscriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PortalSubscription model
+   */
+  interface PortalSubscriptionFieldRefs {
+    readonly id: FieldRef<"PortalSubscription", 'String'>
+    readonly email: FieldRef<"PortalSubscription", 'String'>
+    readonly clientId: FieldRef<"PortalSubscription", 'String'>
+    readonly plan: FieldRef<"PortalSubscription", 'String'>
+    readonly startDate: FieldRef<"PortalSubscription", 'DateTime'>
+    readonly expiryDate: FieldRef<"PortalSubscription", 'DateTime'>
+    readonly status: FieldRef<"PortalSubscription", 'String'>
+    readonly syncTokenHash: FieldRef<"PortalSubscription", 'String'>
+    readonly updatedAt: FieldRef<"PortalSubscription", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PortalSubscription findUnique
+   */
+  export type PortalSubscriptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalSubscription to fetch.
+     */
+    where: PortalSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PortalSubscription findUniqueOrThrow
+   */
+  export type PortalSubscriptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalSubscription to fetch.
+     */
+    where: PortalSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PortalSubscription findFirst
+   */
+  export type PortalSubscriptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalSubscription to fetch.
+     */
+    where?: PortalSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortalSubscriptions to fetch.
+     */
+    orderBy?: PortalSubscriptionOrderByWithRelationInput | PortalSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PortalSubscriptions.
+     */
+    cursor?: PortalSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortalSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortalSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PortalSubscriptions.
+     */
+    distinct?: PortalSubscriptionScalarFieldEnum | PortalSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PortalSubscription findFirstOrThrow
+   */
+  export type PortalSubscriptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalSubscription to fetch.
+     */
+    where?: PortalSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortalSubscriptions to fetch.
+     */
+    orderBy?: PortalSubscriptionOrderByWithRelationInput | PortalSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PortalSubscriptions.
+     */
+    cursor?: PortalSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortalSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortalSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PortalSubscriptions.
+     */
+    distinct?: PortalSubscriptionScalarFieldEnum | PortalSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PortalSubscription findMany
+   */
+  export type PortalSubscriptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalSubscriptions to fetch.
+     */
+    where?: PortalSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortalSubscriptions to fetch.
+     */
+    orderBy?: PortalSubscriptionOrderByWithRelationInput | PortalSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PortalSubscriptions.
+     */
+    cursor?: PortalSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortalSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortalSubscriptions.
+     */
+    skip?: number
+    distinct?: PortalSubscriptionScalarFieldEnum | PortalSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PortalSubscription create
+   */
+  export type PortalSubscriptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PortalSubscription.
+     */
+    data: XOR<PortalSubscriptionCreateInput, PortalSubscriptionUncheckedCreateInput>
+  }
+
+  /**
+   * PortalSubscription createMany
+   */
+  export type PortalSubscriptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PortalSubscriptions.
+     */
+    data: PortalSubscriptionCreateManyInput | PortalSubscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PortalSubscription createManyAndReturn
+   */
+  export type PortalSubscriptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many PortalSubscriptions.
+     */
+    data: PortalSubscriptionCreateManyInput | PortalSubscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PortalSubscription update
+   */
+  export type PortalSubscriptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PortalSubscription.
+     */
+    data: XOR<PortalSubscriptionUpdateInput, PortalSubscriptionUncheckedUpdateInput>
+    /**
+     * Choose, which PortalSubscription to update.
+     */
+    where: PortalSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PortalSubscription updateMany
+   */
+  export type PortalSubscriptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PortalSubscriptions.
+     */
+    data: XOR<PortalSubscriptionUpdateManyMutationInput, PortalSubscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which PortalSubscriptions to update
+     */
+    where?: PortalSubscriptionWhereInput
+    /**
+     * Limit how many PortalSubscriptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PortalSubscription updateManyAndReturn
+   */
+  export type PortalSubscriptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * The data used to update PortalSubscriptions.
+     */
+    data: XOR<PortalSubscriptionUpdateManyMutationInput, PortalSubscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which PortalSubscriptions to update
+     */
+    where?: PortalSubscriptionWhereInput
+    /**
+     * Limit how many PortalSubscriptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PortalSubscription upsert
+   */
+  export type PortalSubscriptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PortalSubscription to update in case it exists.
+     */
+    where: PortalSubscriptionWhereUniqueInput
+    /**
+     * In case the PortalSubscription found by the `where` argument doesn't exist, create a new PortalSubscription with this data.
+     */
+    create: XOR<PortalSubscriptionCreateInput, PortalSubscriptionUncheckedCreateInput>
+    /**
+     * In case the PortalSubscription was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PortalSubscriptionUpdateInput, PortalSubscriptionUncheckedUpdateInput>
+  }
+
+  /**
+   * PortalSubscription delete
+   */
+  export type PortalSubscriptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+    /**
+     * Filter which PortalSubscription to delete.
+     */
+    where: PortalSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PortalSubscription deleteMany
+   */
+  export type PortalSubscriptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PortalSubscriptions to delete
+     */
+    where?: PortalSubscriptionWhereInput
+    /**
+     * Limit how many PortalSubscriptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PortalSubscription without action
+   */
+  export type PortalSubscriptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalSubscription
+     */
+    select?: PortalSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalSubscription
+     */
+    omit?: PortalSubscriptionOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PortalPayment
+   */
+
+  export type AggregatePortalPayment = {
+    _count: PortalPaymentCountAggregateOutputType | null
+    _avg: PortalPaymentAvgAggregateOutputType | null
+    _sum: PortalPaymentSumAggregateOutputType | null
+    _min: PortalPaymentMinAggregateOutputType | null
+    _max: PortalPaymentMaxAggregateOutputType | null
+  }
+
+  export type PortalPaymentAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type PortalPaymentSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type PortalPaymentMinAggregateOutputType = {
+    id: string | null
+    email: string | null
+    planCode: string | null
+    amount: number | null
+    currency: string | null
+    orderId: string | null
+    paymentId: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type PortalPaymentMaxAggregateOutputType = {
+    id: string | null
+    email: string | null
+    planCode: string | null
+    amount: number | null
+    currency: string | null
+    orderId: string | null
+    paymentId: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type PortalPaymentCountAggregateOutputType = {
+    id: number
+    email: number
+    planCode: number
+    amount: number
+    currency: number
+    orderId: number
+    paymentId: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PortalPaymentAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type PortalPaymentSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type PortalPaymentMinAggregateInputType = {
+    id?: true
+    email?: true
+    planCode?: true
+    amount?: true
+    currency?: true
+    orderId?: true
+    paymentId?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type PortalPaymentMaxAggregateInputType = {
+    id?: true
+    email?: true
+    planCode?: true
+    amount?: true
+    currency?: true
+    orderId?: true
+    paymentId?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type PortalPaymentCountAggregateInputType = {
+    id?: true
+    email?: true
+    planCode?: true
+    amount?: true
+    currency?: true
+    orderId?: true
+    paymentId?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PortalPaymentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PortalPayment to aggregate.
+     */
+    where?: PortalPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortalPayments to fetch.
+     */
+    orderBy?: PortalPaymentOrderByWithRelationInput | PortalPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PortalPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortalPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortalPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PortalPayments
+    **/
+    _count?: true | PortalPaymentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PortalPaymentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PortalPaymentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PortalPaymentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PortalPaymentMaxAggregateInputType
+  }
+
+  export type GetPortalPaymentAggregateType<T extends PortalPaymentAggregateArgs> = {
+        [P in keyof T & keyof AggregatePortalPayment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePortalPayment[P]>
+      : GetScalarType<T[P], AggregatePortalPayment[P]>
+  }
+
+
+
+
+  export type PortalPaymentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PortalPaymentWhereInput
+    orderBy?: PortalPaymentOrderByWithAggregationInput | PortalPaymentOrderByWithAggregationInput[]
+    by: PortalPaymentScalarFieldEnum[] | PortalPaymentScalarFieldEnum
+    having?: PortalPaymentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PortalPaymentCountAggregateInputType | true
+    _avg?: PortalPaymentAvgAggregateInputType
+    _sum?: PortalPaymentSumAggregateInputType
+    _min?: PortalPaymentMinAggregateInputType
+    _max?: PortalPaymentMaxAggregateInputType
+  }
+
+  export type PortalPaymentGroupByOutputType = {
+    id: string
+    email: string
+    planCode: string
+    amount: number
+    currency: string
+    orderId: string
+    paymentId: string | null
+    status: string
+    createdAt: Date
+    _count: PortalPaymentCountAggregateOutputType | null
+    _avg: PortalPaymentAvgAggregateOutputType | null
+    _sum: PortalPaymentSumAggregateOutputType | null
+    _min: PortalPaymentMinAggregateOutputType | null
+    _max: PortalPaymentMaxAggregateOutputType | null
+  }
+
+  type GetPortalPaymentGroupByPayload<T extends PortalPaymentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PortalPaymentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PortalPaymentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PortalPaymentGroupByOutputType[P]>
+            : GetScalarType<T[P], PortalPaymentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PortalPaymentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    planCode?: boolean
+    amount?: boolean
+    currency?: boolean
+    orderId?: boolean
+    paymentId?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["portalPayment"]>
+
+  export type PortalPaymentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    planCode?: boolean
+    amount?: boolean
+    currency?: boolean
+    orderId?: boolean
+    paymentId?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["portalPayment"]>
+
+  export type PortalPaymentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    planCode?: boolean
+    amount?: boolean
+    currency?: boolean
+    orderId?: boolean
+    paymentId?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["portalPayment"]>
+
+  export type PortalPaymentSelectScalar = {
+    id?: boolean
+    email?: boolean
+    planCode?: boolean
+    amount?: boolean
+    currency?: boolean
+    orderId?: boolean
+    paymentId?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type PortalPaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "planCode" | "amount" | "currency" | "orderId" | "paymentId" | "status" | "createdAt", ExtArgs["result"]["portalPayment"]>
+
+  export type $PortalPaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PortalPayment"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      email: string
+      planCode: string
+      amount: number
+      currency: string
+      orderId: string
+      paymentId: string | null
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["portalPayment"]>
+    composites: {}
+  }
+
+  type PortalPaymentGetPayload<S extends boolean | null | undefined | PortalPaymentDefaultArgs> = $Result.GetResult<Prisma.$PortalPaymentPayload, S>
+
+  type PortalPaymentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PortalPaymentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PortalPaymentCountAggregateInputType | true
+    }
+
+  export interface PortalPaymentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PortalPayment'], meta: { name: 'PortalPayment' } }
+    /**
+     * Find zero or one PortalPayment that matches the filter.
+     * @param {PortalPaymentFindUniqueArgs} args - Arguments to find a PortalPayment
+     * @example
+     * // Get one PortalPayment
+     * const portalPayment = await prisma.portalPayment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PortalPaymentFindUniqueArgs>(args: SelectSubset<T, PortalPaymentFindUniqueArgs<ExtArgs>>): Prisma__PortalPaymentClient<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PortalPayment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PortalPaymentFindUniqueOrThrowArgs} args - Arguments to find a PortalPayment
+     * @example
+     * // Get one PortalPayment
+     * const portalPayment = await prisma.portalPayment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PortalPaymentFindUniqueOrThrowArgs>(args: SelectSubset<T, PortalPaymentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PortalPaymentClient<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PortalPayment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalPaymentFindFirstArgs} args - Arguments to find a PortalPayment
+     * @example
+     * // Get one PortalPayment
+     * const portalPayment = await prisma.portalPayment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PortalPaymentFindFirstArgs>(args?: SelectSubset<T, PortalPaymentFindFirstArgs<ExtArgs>>): Prisma__PortalPaymentClient<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PortalPayment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalPaymentFindFirstOrThrowArgs} args - Arguments to find a PortalPayment
+     * @example
+     * // Get one PortalPayment
+     * const portalPayment = await prisma.portalPayment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PortalPaymentFindFirstOrThrowArgs>(args?: SelectSubset<T, PortalPaymentFindFirstOrThrowArgs<ExtArgs>>): Prisma__PortalPaymentClient<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PortalPayments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalPaymentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PortalPayments
+     * const portalPayments = await prisma.portalPayment.findMany()
+     * 
+     * // Get first 10 PortalPayments
+     * const portalPayments = await prisma.portalPayment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const portalPaymentWithIdOnly = await prisma.portalPayment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PortalPaymentFindManyArgs>(args?: SelectSubset<T, PortalPaymentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PortalPayment.
+     * @param {PortalPaymentCreateArgs} args - Arguments to create a PortalPayment.
+     * @example
+     * // Create one PortalPayment
+     * const PortalPayment = await prisma.portalPayment.create({
+     *   data: {
+     *     // ... data to create a PortalPayment
+     *   }
+     * })
+     * 
+     */
+    create<T extends PortalPaymentCreateArgs>(args: SelectSubset<T, PortalPaymentCreateArgs<ExtArgs>>): Prisma__PortalPaymentClient<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PortalPayments.
+     * @param {PortalPaymentCreateManyArgs} args - Arguments to create many PortalPayments.
+     * @example
+     * // Create many PortalPayments
+     * const portalPayment = await prisma.portalPayment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PortalPaymentCreateManyArgs>(args?: SelectSubset<T, PortalPaymentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PortalPayments and returns the data saved in the database.
+     * @param {PortalPaymentCreateManyAndReturnArgs} args - Arguments to create many PortalPayments.
+     * @example
+     * // Create many PortalPayments
+     * const portalPayment = await prisma.portalPayment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PortalPayments and only return the `id`
+     * const portalPaymentWithIdOnly = await prisma.portalPayment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PortalPaymentCreateManyAndReturnArgs>(args?: SelectSubset<T, PortalPaymentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PortalPayment.
+     * @param {PortalPaymentDeleteArgs} args - Arguments to delete one PortalPayment.
+     * @example
+     * // Delete one PortalPayment
+     * const PortalPayment = await prisma.portalPayment.delete({
+     *   where: {
+     *     // ... filter to delete one PortalPayment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PortalPaymentDeleteArgs>(args: SelectSubset<T, PortalPaymentDeleteArgs<ExtArgs>>): Prisma__PortalPaymentClient<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PortalPayment.
+     * @param {PortalPaymentUpdateArgs} args - Arguments to update one PortalPayment.
+     * @example
+     * // Update one PortalPayment
+     * const portalPayment = await prisma.portalPayment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PortalPaymentUpdateArgs>(args: SelectSubset<T, PortalPaymentUpdateArgs<ExtArgs>>): Prisma__PortalPaymentClient<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PortalPayments.
+     * @param {PortalPaymentDeleteManyArgs} args - Arguments to filter PortalPayments to delete.
+     * @example
+     * // Delete a few PortalPayments
+     * const { count } = await prisma.portalPayment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PortalPaymentDeleteManyArgs>(args?: SelectSubset<T, PortalPaymentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PortalPayments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalPaymentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PortalPayments
+     * const portalPayment = await prisma.portalPayment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PortalPaymentUpdateManyArgs>(args: SelectSubset<T, PortalPaymentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PortalPayments and returns the data updated in the database.
+     * @param {PortalPaymentUpdateManyAndReturnArgs} args - Arguments to update many PortalPayments.
+     * @example
+     * // Update many PortalPayments
+     * const portalPayment = await prisma.portalPayment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PortalPayments and only return the `id`
+     * const portalPaymentWithIdOnly = await prisma.portalPayment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PortalPaymentUpdateManyAndReturnArgs>(args: SelectSubset<T, PortalPaymentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PortalPayment.
+     * @param {PortalPaymentUpsertArgs} args - Arguments to update or create a PortalPayment.
+     * @example
+     * // Update or create a PortalPayment
+     * const portalPayment = await prisma.portalPayment.upsert({
+     *   create: {
+     *     // ... data to create a PortalPayment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PortalPayment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PortalPaymentUpsertArgs>(args: SelectSubset<T, PortalPaymentUpsertArgs<ExtArgs>>): Prisma__PortalPaymentClient<$Result.GetResult<Prisma.$PortalPaymentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PortalPayments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalPaymentCountArgs} args - Arguments to filter PortalPayments to count.
+     * @example
+     * // Count the number of PortalPayments
+     * const count = await prisma.portalPayment.count({
+     *   where: {
+     *     // ... the filter for the PortalPayments we want to count
+     *   }
+     * })
+    **/
+    count<T extends PortalPaymentCountArgs>(
+      args?: Subset<T, PortalPaymentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PortalPaymentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PortalPayment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalPaymentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PortalPaymentAggregateArgs>(args: Subset<T, PortalPaymentAggregateArgs>): Prisma.PrismaPromise<GetPortalPaymentAggregateType<T>>
+
+    /**
+     * Group by PortalPayment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortalPaymentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PortalPaymentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PortalPaymentGroupByArgs['orderBy'] }
+        : { orderBy?: PortalPaymentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PortalPaymentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPortalPaymentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PortalPayment model
+   */
+  readonly fields: PortalPaymentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PortalPayment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PortalPaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PortalPayment model
+   */
+  interface PortalPaymentFieldRefs {
+    readonly id: FieldRef<"PortalPayment", 'String'>
+    readonly email: FieldRef<"PortalPayment", 'String'>
+    readonly planCode: FieldRef<"PortalPayment", 'String'>
+    readonly amount: FieldRef<"PortalPayment", 'Float'>
+    readonly currency: FieldRef<"PortalPayment", 'String'>
+    readonly orderId: FieldRef<"PortalPayment", 'String'>
+    readonly paymentId: FieldRef<"PortalPayment", 'String'>
+    readonly status: FieldRef<"PortalPayment", 'String'>
+    readonly createdAt: FieldRef<"PortalPayment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PortalPayment findUnique
+   */
+  export type PortalPaymentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalPayment to fetch.
+     */
+    where: PortalPaymentWhereUniqueInput
+  }
+
+  /**
+   * PortalPayment findUniqueOrThrow
+   */
+  export type PortalPaymentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalPayment to fetch.
+     */
+    where: PortalPaymentWhereUniqueInput
+  }
+
+  /**
+   * PortalPayment findFirst
+   */
+  export type PortalPaymentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalPayment to fetch.
+     */
+    where?: PortalPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortalPayments to fetch.
+     */
+    orderBy?: PortalPaymentOrderByWithRelationInput | PortalPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PortalPayments.
+     */
+    cursor?: PortalPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortalPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortalPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PortalPayments.
+     */
+    distinct?: PortalPaymentScalarFieldEnum | PortalPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * PortalPayment findFirstOrThrow
+   */
+  export type PortalPaymentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalPayment to fetch.
+     */
+    where?: PortalPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortalPayments to fetch.
+     */
+    orderBy?: PortalPaymentOrderByWithRelationInput | PortalPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PortalPayments.
+     */
+    cursor?: PortalPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortalPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortalPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PortalPayments.
+     */
+    distinct?: PortalPaymentScalarFieldEnum | PortalPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * PortalPayment findMany
+   */
+  export type PortalPaymentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which PortalPayments to fetch.
+     */
+    where?: PortalPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortalPayments to fetch.
+     */
+    orderBy?: PortalPaymentOrderByWithRelationInput | PortalPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PortalPayments.
+     */
+    cursor?: PortalPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortalPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortalPayments.
+     */
+    skip?: number
+    distinct?: PortalPaymentScalarFieldEnum | PortalPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * PortalPayment create
+   */
+  export type PortalPaymentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PortalPayment.
+     */
+    data: XOR<PortalPaymentCreateInput, PortalPaymentUncheckedCreateInput>
+  }
+
+  /**
+   * PortalPayment createMany
+   */
+  export type PortalPaymentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PortalPayments.
+     */
+    data: PortalPaymentCreateManyInput | PortalPaymentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PortalPayment createManyAndReturn
+   */
+  export type PortalPaymentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * The data used to create many PortalPayments.
+     */
+    data: PortalPaymentCreateManyInput | PortalPaymentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PortalPayment update
+   */
+  export type PortalPaymentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PortalPayment.
+     */
+    data: XOR<PortalPaymentUpdateInput, PortalPaymentUncheckedUpdateInput>
+    /**
+     * Choose, which PortalPayment to update.
+     */
+    where: PortalPaymentWhereUniqueInput
+  }
+
+  /**
+   * PortalPayment updateMany
+   */
+  export type PortalPaymentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PortalPayments.
+     */
+    data: XOR<PortalPaymentUpdateManyMutationInput, PortalPaymentUncheckedUpdateManyInput>
+    /**
+     * Filter which PortalPayments to update
+     */
+    where?: PortalPaymentWhereInput
+    /**
+     * Limit how many PortalPayments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PortalPayment updateManyAndReturn
+   */
+  export type PortalPaymentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * The data used to update PortalPayments.
+     */
+    data: XOR<PortalPaymentUpdateManyMutationInput, PortalPaymentUncheckedUpdateManyInput>
+    /**
+     * Filter which PortalPayments to update
+     */
+    where?: PortalPaymentWhereInput
+    /**
+     * Limit how many PortalPayments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PortalPayment upsert
+   */
+  export type PortalPaymentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PortalPayment to update in case it exists.
+     */
+    where: PortalPaymentWhereUniqueInput
+    /**
+     * In case the PortalPayment found by the `where` argument doesn't exist, create a new PortalPayment with this data.
+     */
+    create: XOR<PortalPaymentCreateInput, PortalPaymentUncheckedCreateInput>
+    /**
+     * In case the PortalPayment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PortalPaymentUpdateInput, PortalPaymentUncheckedUpdateInput>
+  }
+
+  /**
+   * PortalPayment delete
+   */
+  export type PortalPaymentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+    /**
+     * Filter which PortalPayment to delete.
+     */
+    where: PortalPaymentWhereUniqueInput
+  }
+
+  /**
+   * PortalPayment deleteMany
+   */
+  export type PortalPaymentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PortalPayments to delete
+     */
+    where?: PortalPaymentWhereInput
+    /**
+     * Limit how many PortalPayments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PortalPayment without action
+   */
+  export type PortalPaymentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortalPayment
+     */
+    select?: PortalPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortalPayment
+     */
+    omit?: PortalPaymentOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SaasAdmin
+   */
+
+  export type AggregateSaasAdmin = {
+    _count: SaasAdminCountAggregateOutputType | null
+    _min: SaasAdminMinAggregateOutputType | null
+    _max: SaasAdminMaxAggregateOutputType | null
+  }
+
+  export type SaasAdminMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    email: string | null
+    password: string | null
+    createdAt: Date | null
+  }
+
+  export type SaasAdminMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    email: string | null
+    password: string | null
+    createdAt: Date | null
+  }
+
+  export type SaasAdminCountAggregateOutputType = {
+    id: number
+    name: number
+    email: number
+    password: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SaasAdminMinAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    password?: true
+    createdAt?: true
+  }
+
+  export type SaasAdminMaxAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    password?: true
+    createdAt?: true
+  }
+
+  export type SaasAdminCountAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    password?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SaasAdminAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SaasAdmin to aggregate.
+     */
+    where?: SaasAdminWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SaasAdmins to fetch.
+     */
+    orderBy?: SaasAdminOrderByWithRelationInput | SaasAdminOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SaasAdminWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SaasAdmins from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SaasAdmins.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SaasAdmins
+    **/
+    _count?: true | SaasAdminCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SaasAdminMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SaasAdminMaxAggregateInputType
+  }
+
+  export type GetSaasAdminAggregateType<T extends SaasAdminAggregateArgs> = {
+        [P in keyof T & keyof AggregateSaasAdmin]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSaasAdmin[P]>
+      : GetScalarType<T[P], AggregateSaasAdmin[P]>
+  }
+
+
+
+
+  export type SaasAdminGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SaasAdminWhereInput
+    orderBy?: SaasAdminOrderByWithAggregationInput | SaasAdminOrderByWithAggregationInput[]
+    by: SaasAdminScalarFieldEnum[] | SaasAdminScalarFieldEnum
+    having?: SaasAdminScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SaasAdminCountAggregateInputType | true
+    _min?: SaasAdminMinAggregateInputType
+    _max?: SaasAdminMaxAggregateInputType
+  }
+
+  export type SaasAdminGroupByOutputType = {
+    id: string
+    name: string
+    email: string
+    password: string
+    createdAt: Date
+    _count: SaasAdminCountAggregateOutputType | null
+    _min: SaasAdminMinAggregateOutputType | null
+    _max: SaasAdminMaxAggregateOutputType | null
+  }
+
+  type GetSaasAdminGroupByPayload<T extends SaasAdminGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SaasAdminGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SaasAdminGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SaasAdminGroupByOutputType[P]>
+            : GetScalarType<T[P], SaasAdminGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SaasAdminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    password?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["saasAdmin"]>
+
+  export type SaasAdminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    password?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["saasAdmin"]>
+
+  export type SaasAdminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    password?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["saasAdmin"]>
+
+  export type SaasAdminSelectScalar = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    password?: boolean
+    createdAt?: boolean
+  }
+
+  export type SaasAdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "createdAt", ExtArgs["result"]["saasAdmin"]>
+
+  export type $SaasAdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SaasAdmin"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      email: string
+      password: string
+      createdAt: Date
+    }, ExtArgs["result"]["saasAdmin"]>
+    composites: {}
+  }
+
+  type SaasAdminGetPayload<S extends boolean | null | undefined | SaasAdminDefaultArgs> = $Result.GetResult<Prisma.$SaasAdminPayload, S>
+
+  type SaasAdminCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SaasAdminFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SaasAdminCountAggregateInputType | true
+    }
+
+  export interface SaasAdminDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SaasAdmin'], meta: { name: 'SaasAdmin' } }
+    /**
+     * Find zero or one SaasAdmin that matches the filter.
+     * @param {SaasAdminFindUniqueArgs} args - Arguments to find a SaasAdmin
+     * @example
+     * // Get one SaasAdmin
+     * const saasAdmin = await prisma.saasAdmin.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SaasAdminFindUniqueArgs>(args: SelectSubset<T, SaasAdminFindUniqueArgs<ExtArgs>>): Prisma__SaasAdminClient<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SaasAdmin that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SaasAdminFindUniqueOrThrowArgs} args - Arguments to find a SaasAdmin
+     * @example
+     * // Get one SaasAdmin
+     * const saasAdmin = await prisma.saasAdmin.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SaasAdminFindUniqueOrThrowArgs>(args: SelectSubset<T, SaasAdminFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SaasAdminClient<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SaasAdmin that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SaasAdminFindFirstArgs} args - Arguments to find a SaasAdmin
+     * @example
+     * // Get one SaasAdmin
+     * const saasAdmin = await prisma.saasAdmin.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SaasAdminFindFirstArgs>(args?: SelectSubset<T, SaasAdminFindFirstArgs<ExtArgs>>): Prisma__SaasAdminClient<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SaasAdmin that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SaasAdminFindFirstOrThrowArgs} args - Arguments to find a SaasAdmin
+     * @example
+     * // Get one SaasAdmin
+     * const saasAdmin = await prisma.saasAdmin.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SaasAdminFindFirstOrThrowArgs>(args?: SelectSubset<T, SaasAdminFindFirstOrThrowArgs<ExtArgs>>): Prisma__SaasAdminClient<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SaasAdmins that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SaasAdminFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SaasAdmins
+     * const saasAdmins = await prisma.saasAdmin.findMany()
+     * 
+     * // Get first 10 SaasAdmins
+     * const saasAdmins = await prisma.saasAdmin.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const saasAdminWithIdOnly = await prisma.saasAdmin.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SaasAdminFindManyArgs>(args?: SelectSubset<T, SaasAdminFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SaasAdmin.
+     * @param {SaasAdminCreateArgs} args - Arguments to create a SaasAdmin.
+     * @example
+     * // Create one SaasAdmin
+     * const SaasAdmin = await prisma.saasAdmin.create({
+     *   data: {
+     *     // ... data to create a SaasAdmin
+     *   }
+     * })
+     * 
+     */
+    create<T extends SaasAdminCreateArgs>(args: SelectSubset<T, SaasAdminCreateArgs<ExtArgs>>): Prisma__SaasAdminClient<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SaasAdmins.
+     * @param {SaasAdminCreateManyArgs} args - Arguments to create many SaasAdmins.
+     * @example
+     * // Create many SaasAdmins
+     * const saasAdmin = await prisma.saasAdmin.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SaasAdminCreateManyArgs>(args?: SelectSubset<T, SaasAdminCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SaasAdmins and returns the data saved in the database.
+     * @param {SaasAdminCreateManyAndReturnArgs} args - Arguments to create many SaasAdmins.
+     * @example
+     * // Create many SaasAdmins
+     * const saasAdmin = await prisma.saasAdmin.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SaasAdmins and only return the `id`
+     * const saasAdminWithIdOnly = await prisma.saasAdmin.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SaasAdminCreateManyAndReturnArgs>(args?: SelectSubset<T, SaasAdminCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SaasAdmin.
+     * @param {SaasAdminDeleteArgs} args - Arguments to delete one SaasAdmin.
+     * @example
+     * // Delete one SaasAdmin
+     * const SaasAdmin = await prisma.saasAdmin.delete({
+     *   where: {
+     *     // ... filter to delete one SaasAdmin
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SaasAdminDeleteArgs>(args: SelectSubset<T, SaasAdminDeleteArgs<ExtArgs>>): Prisma__SaasAdminClient<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SaasAdmin.
+     * @param {SaasAdminUpdateArgs} args - Arguments to update one SaasAdmin.
+     * @example
+     * // Update one SaasAdmin
+     * const saasAdmin = await prisma.saasAdmin.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SaasAdminUpdateArgs>(args: SelectSubset<T, SaasAdminUpdateArgs<ExtArgs>>): Prisma__SaasAdminClient<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SaasAdmins.
+     * @param {SaasAdminDeleteManyArgs} args - Arguments to filter SaasAdmins to delete.
+     * @example
+     * // Delete a few SaasAdmins
+     * const { count } = await prisma.saasAdmin.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SaasAdminDeleteManyArgs>(args?: SelectSubset<T, SaasAdminDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SaasAdmins.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SaasAdminUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SaasAdmins
+     * const saasAdmin = await prisma.saasAdmin.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SaasAdminUpdateManyArgs>(args: SelectSubset<T, SaasAdminUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SaasAdmins and returns the data updated in the database.
+     * @param {SaasAdminUpdateManyAndReturnArgs} args - Arguments to update many SaasAdmins.
+     * @example
+     * // Update many SaasAdmins
+     * const saasAdmin = await prisma.saasAdmin.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SaasAdmins and only return the `id`
+     * const saasAdminWithIdOnly = await prisma.saasAdmin.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SaasAdminUpdateManyAndReturnArgs>(args: SelectSubset<T, SaasAdminUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SaasAdmin.
+     * @param {SaasAdminUpsertArgs} args - Arguments to update or create a SaasAdmin.
+     * @example
+     * // Update or create a SaasAdmin
+     * const saasAdmin = await prisma.saasAdmin.upsert({
+     *   create: {
+     *     // ... data to create a SaasAdmin
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SaasAdmin we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SaasAdminUpsertArgs>(args: SelectSubset<T, SaasAdminUpsertArgs<ExtArgs>>): Prisma__SaasAdminClient<$Result.GetResult<Prisma.$SaasAdminPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SaasAdmins.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SaasAdminCountArgs} args - Arguments to filter SaasAdmins to count.
+     * @example
+     * // Count the number of SaasAdmins
+     * const count = await prisma.saasAdmin.count({
+     *   where: {
+     *     // ... the filter for the SaasAdmins we want to count
+     *   }
+     * })
+    **/
+    count<T extends SaasAdminCountArgs>(
+      args?: Subset<T, SaasAdminCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SaasAdminCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SaasAdmin.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SaasAdminAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SaasAdminAggregateArgs>(args: Subset<T, SaasAdminAggregateArgs>): Prisma.PrismaPromise<GetSaasAdminAggregateType<T>>
+
+    /**
+     * Group by SaasAdmin.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SaasAdminGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SaasAdminGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SaasAdminGroupByArgs['orderBy'] }
+        : { orderBy?: SaasAdminGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SaasAdminGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSaasAdminGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SaasAdmin model
+   */
+  readonly fields: SaasAdminFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SaasAdmin.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SaasAdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SaasAdmin model
+   */
+  interface SaasAdminFieldRefs {
+    readonly id: FieldRef<"SaasAdmin", 'String'>
+    readonly name: FieldRef<"SaasAdmin", 'String'>
+    readonly email: FieldRef<"SaasAdmin", 'String'>
+    readonly password: FieldRef<"SaasAdmin", 'String'>
+    readonly createdAt: FieldRef<"SaasAdmin", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SaasAdmin findUnique
+   */
+  export type SaasAdminFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * Filter, which SaasAdmin to fetch.
+     */
+    where: SaasAdminWhereUniqueInput
+  }
+
+  /**
+   * SaasAdmin findUniqueOrThrow
+   */
+  export type SaasAdminFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * Filter, which SaasAdmin to fetch.
+     */
+    where: SaasAdminWhereUniqueInput
+  }
+
+  /**
+   * SaasAdmin findFirst
+   */
+  export type SaasAdminFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * Filter, which SaasAdmin to fetch.
+     */
+    where?: SaasAdminWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SaasAdmins to fetch.
+     */
+    orderBy?: SaasAdminOrderByWithRelationInput | SaasAdminOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SaasAdmins.
+     */
+    cursor?: SaasAdminWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SaasAdmins from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SaasAdmins.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SaasAdmins.
+     */
+    distinct?: SaasAdminScalarFieldEnum | SaasAdminScalarFieldEnum[]
+  }
+
+  /**
+   * SaasAdmin findFirstOrThrow
+   */
+  export type SaasAdminFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * Filter, which SaasAdmin to fetch.
+     */
+    where?: SaasAdminWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SaasAdmins to fetch.
+     */
+    orderBy?: SaasAdminOrderByWithRelationInput | SaasAdminOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SaasAdmins.
+     */
+    cursor?: SaasAdminWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SaasAdmins from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SaasAdmins.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SaasAdmins.
+     */
+    distinct?: SaasAdminScalarFieldEnum | SaasAdminScalarFieldEnum[]
+  }
+
+  /**
+   * SaasAdmin findMany
+   */
+  export type SaasAdminFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * Filter, which SaasAdmins to fetch.
+     */
+    where?: SaasAdminWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SaasAdmins to fetch.
+     */
+    orderBy?: SaasAdminOrderByWithRelationInput | SaasAdminOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SaasAdmins.
+     */
+    cursor?: SaasAdminWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SaasAdmins from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SaasAdmins.
+     */
+    skip?: number
+    distinct?: SaasAdminScalarFieldEnum | SaasAdminScalarFieldEnum[]
+  }
+
+  /**
+   * SaasAdmin create
+   */
+  export type SaasAdminCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SaasAdmin.
+     */
+    data: XOR<SaasAdminCreateInput, SaasAdminUncheckedCreateInput>
+  }
+
+  /**
+   * SaasAdmin createMany
+   */
+  export type SaasAdminCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SaasAdmins.
+     */
+    data: SaasAdminCreateManyInput | SaasAdminCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SaasAdmin createManyAndReturn
+   */
+  export type SaasAdminCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * The data used to create many SaasAdmins.
+     */
+    data: SaasAdminCreateManyInput | SaasAdminCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SaasAdmin update
+   */
+  export type SaasAdminUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SaasAdmin.
+     */
+    data: XOR<SaasAdminUpdateInput, SaasAdminUncheckedUpdateInput>
+    /**
+     * Choose, which SaasAdmin to update.
+     */
+    where: SaasAdminWhereUniqueInput
+  }
+
+  /**
+   * SaasAdmin updateMany
+   */
+  export type SaasAdminUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SaasAdmins.
+     */
+    data: XOR<SaasAdminUpdateManyMutationInput, SaasAdminUncheckedUpdateManyInput>
+    /**
+     * Filter which SaasAdmins to update
+     */
+    where?: SaasAdminWhereInput
+    /**
+     * Limit how many SaasAdmins to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SaasAdmin updateManyAndReturn
+   */
+  export type SaasAdminUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * The data used to update SaasAdmins.
+     */
+    data: XOR<SaasAdminUpdateManyMutationInput, SaasAdminUncheckedUpdateManyInput>
+    /**
+     * Filter which SaasAdmins to update
+     */
+    where?: SaasAdminWhereInput
+    /**
+     * Limit how many SaasAdmins to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SaasAdmin upsert
+   */
+  export type SaasAdminUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SaasAdmin to update in case it exists.
+     */
+    where: SaasAdminWhereUniqueInput
+    /**
+     * In case the SaasAdmin found by the `where` argument doesn't exist, create a new SaasAdmin with this data.
+     */
+    create: XOR<SaasAdminCreateInput, SaasAdminUncheckedCreateInput>
+    /**
+     * In case the SaasAdmin was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SaasAdminUpdateInput, SaasAdminUncheckedUpdateInput>
+  }
+
+  /**
+   * SaasAdmin delete
+   */
+  export type SaasAdminDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+    /**
+     * Filter which SaasAdmin to delete.
+     */
+    where: SaasAdminWhereUniqueInput
+  }
+
+  /**
+   * SaasAdmin deleteMany
+   */
+  export type SaasAdminDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SaasAdmins to delete
+     */
+    where?: SaasAdminWhereInput
+    /**
+     * Limit how many SaasAdmins to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SaasAdmin without action
+   */
+  export type SaasAdminDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SaasAdmin
+     */
+    select?: SaasAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SaasAdmin
+     */
+    omit?: SaasAdminOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AppSetting
+   */
+
+  export type AggregateAppSetting = {
+    _count: AppSettingCountAggregateOutputType | null
+    _min: AppSettingMinAggregateOutputType | null
+    _max: AppSettingMaxAggregateOutputType | null
+  }
+
+  export type AppSettingMinAggregateOutputType = {
+    key: string | null
+    value: string | null
+    updatedAt: Date | null
+  }
+
+  export type AppSettingMaxAggregateOutputType = {
+    key: string | null
+    value: string | null
+    updatedAt: Date | null
+  }
+
+  export type AppSettingCountAggregateOutputType = {
+    key: number
+    value: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AppSettingMinAggregateInputType = {
+    key?: true
+    value?: true
+    updatedAt?: true
+  }
+
+  export type AppSettingMaxAggregateInputType = {
+    key?: true
+    value?: true
+    updatedAt?: true
+  }
+
+  export type AppSettingCountAggregateInputType = {
+    key?: true
+    value?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AppSettingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppSetting to aggregate.
+     */
+    where?: AppSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppSettings to fetch.
+     */
+    orderBy?: AppSettingOrderByWithRelationInput | AppSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppSettings
+    **/
+    _count?: true | AppSettingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppSettingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppSettingMaxAggregateInputType
+  }
+
+  export type GetAppSettingAggregateType<T extends AppSettingAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppSetting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppSetting[P]>
+      : GetScalarType<T[P], AggregateAppSetting[P]>
+  }
+
+
+
+
+  export type AppSettingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppSettingWhereInput
+    orderBy?: AppSettingOrderByWithAggregationInput | AppSettingOrderByWithAggregationInput[]
+    by: AppSettingScalarFieldEnum[] | AppSettingScalarFieldEnum
+    having?: AppSettingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppSettingCountAggregateInputType | true
+    _min?: AppSettingMinAggregateInputType
+    _max?: AppSettingMaxAggregateInputType
+  }
+
+  export type AppSettingGroupByOutputType = {
+    key: string
+    value: string
+    updatedAt: Date
+    _count: AppSettingCountAggregateOutputType | null
+    _min: AppSettingMinAggregateOutputType | null
+    _max: AppSettingMaxAggregateOutputType | null
+  }
+
+  type GetAppSettingGroupByPayload<T extends AppSettingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppSettingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppSettingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppSettingGroupByOutputType[P]>
+            : GetScalarType<T[P], AppSettingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppSettingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appSetting"]>
+
+  export type AppSettingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appSetting"]>
+
+  export type AppSettingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appSetting"]>
+
+  export type AppSettingSelectScalar = {
+    key?: boolean
+    value?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AppSettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"key" | "value" | "updatedAt", ExtArgs["result"]["appSetting"]>
+
+  export type $AppSettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppSetting"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      key: string
+      value: string
+      updatedAt: Date
+    }, ExtArgs["result"]["appSetting"]>
+    composites: {}
+  }
+
+  type AppSettingGetPayload<S extends boolean | null | undefined | AppSettingDefaultArgs> = $Result.GetResult<Prisma.$AppSettingPayload, S>
+
+  type AppSettingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AppSettingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AppSettingCountAggregateInputType | true
+    }
+
+  export interface AppSettingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppSetting'], meta: { name: 'AppSetting' } }
+    /**
+     * Find zero or one AppSetting that matches the filter.
+     * @param {AppSettingFindUniqueArgs} args - Arguments to find a AppSetting
+     * @example
+     * // Get one AppSetting
+     * const appSetting = await prisma.appSetting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppSettingFindUniqueArgs>(args: SelectSubset<T, AppSettingFindUniqueArgs<ExtArgs>>): Prisma__AppSettingClient<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AppSetting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AppSettingFindUniqueOrThrowArgs} args - Arguments to find a AppSetting
+     * @example
+     * // Get one AppSetting
+     * const appSetting = await prisma.appSetting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppSettingFindUniqueOrThrowArgs>(args: SelectSubset<T, AppSettingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppSettingClient<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppSetting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppSettingFindFirstArgs} args - Arguments to find a AppSetting
+     * @example
+     * // Get one AppSetting
+     * const appSetting = await prisma.appSetting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppSettingFindFirstArgs>(args?: SelectSubset<T, AppSettingFindFirstArgs<ExtArgs>>): Prisma__AppSettingClient<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppSetting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppSettingFindFirstOrThrowArgs} args - Arguments to find a AppSetting
+     * @example
+     * // Get one AppSetting
+     * const appSetting = await prisma.appSetting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppSettingFindFirstOrThrowArgs>(args?: SelectSubset<T, AppSettingFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppSettingClient<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AppSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppSettingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppSettings
+     * const appSettings = await prisma.appSetting.findMany()
+     * 
+     * // Get first 10 AppSettings
+     * const appSettings = await prisma.appSetting.findMany({ take: 10 })
+     * 
+     * // Only select the `key`
+     * const appSettingWithKeyOnly = await prisma.appSetting.findMany({ select: { key: true } })
+     * 
+     */
+    findMany<T extends AppSettingFindManyArgs>(args?: SelectSubset<T, AppSettingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AppSetting.
+     * @param {AppSettingCreateArgs} args - Arguments to create a AppSetting.
+     * @example
+     * // Create one AppSetting
+     * const AppSetting = await prisma.appSetting.create({
+     *   data: {
+     *     // ... data to create a AppSetting
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppSettingCreateArgs>(args: SelectSubset<T, AppSettingCreateArgs<ExtArgs>>): Prisma__AppSettingClient<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AppSettings.
+     * @param {AppSettingCreateManyArgs} args - Arguments to create many AppSettings.
+     * @example
+     * // Create many AppSettings
+     * const appSetting = await prisma.appSetting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppSettingCreateManyArgs>(args?: SelectSubset<T, AppSettingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppSettings and returns the data saved in the database.
+     * @param {AppSettingCreateManyAndReturnArgs} args - Arguments to create many AppSettings.
+     * @example
+     * // Create many AppSettings
+     * const appSetting = await prisma.appSetting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppSettings and only return the `key`
+     * const appSettingWithKeyOnly = await prisma.appSetting.createManyAndReturn({
+     *   select: { key: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppSettingCreateManyAndReturnArgs>(args?: SelectSubset<T, AppSettingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AppSetting.
+     * @param {AppSettingDeleteArgs} args - Arguments to delete one AppSetting.
+     * @example
+     * // Delete one AppSetting
+     * const AppSetting = await prisma.appSetting.delete({
+     *   where: {
+     *     // ... filter to delete one AppSetting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppSettingDeleteArgs>(args: SelectSubset<T, AppSettingDeleteArgs<ExtArgs>>): Prisma__AppSettingClient<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AppSetting.
+     * @param {AppSettingUpdateArgs} args - Arguments to update one AppSetting.
+     * @example
+     * // Update one AppSetting
+     * const appSetting = await prisma.appSetting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppSettingUpdateArgs>(args: SelectSubset<T, AppSettingUpdateArgs<ExtArgs>>): Prisma__AppSettingClient<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AppSettings.
+     * @param {AppSettingDeleteManyArgs} args - Arguments to filter AppSettings to delete.
+     * @example
+     * // Delete a few AppSettings
+     * const { count } = await prisma.appSetting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppSettingDeleteManyArgs>(args?: SelectSubset<T, AppSettingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppSettingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppSettings
+     * const appSetting = await prisma.appSetting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppSettingUpdateManyArgs>(args: SelectSubset<T, AppSettingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppSettings and returns the data updated in the database.
+     * @param {AppSettingUpdateManyAndReturnArgs} args - Arguments to update many AppSettings.
+     * @example
+     * // Update many AppSettings
+     * const appSetting = await prisma.appSetting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AppSettings and only return the `key`
+     * const appSettingWithKeyOnly = await prisma.appSetting.updateManyAndReturn({
+     *   select: { key: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AppSettingUpdateManyAndReturnArgs>(args: SelectSubset<T, AppSettingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AppSetting.
+     * @param {AppSettingUpsertArgs} args - Arguments to update or create a AppSetting.
+     * @example
+     * // Update or create a AppSetting
+     * const appSetting = await prisma.appSetting.upsert({
+     *   create: {
+     *     // ... data to create a AppSetting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppSetting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppSettingUpsertArgs>(args: SelectSubset<T, AppSettingUpsertArgs<ExtArgs>>): Prisma__AppSettingClient<$Result.GetResult<Prisma.$AppSettingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AppSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppSettingCountArgs} args - Arguments to filter AppSettings to count.
+     * @example
+     * // Count the number of AppSettings
+     * const count = await prisma.appSetting.count({
+     *   where: {
+     *     // ... the filter for the AppSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppSettingCountArgs>(
+      args?: Subset<T, AppSettingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppSettingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppSettingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppSettingAggregateArgs>(args: Subset<T, AppSettingAggregateArgs>): Prisma.PrismaPromise<GetAppSettingAggregateType<T>>
+
+    /**
+     * Group by AppSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppSettingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppSettingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppSettingGroupByArgs['orderBy'] }
+        : { orderBy?: AppSettingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppSettingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppSettingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppSetting model
+   */
+  readonly fields: AppSettingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppSetting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppSettingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppSetting model
+   */
+  interface AppSettingFieldRefs {
+    readonly key: FieldRef<"AppSetting", 'String'>
+    readonly value: FieldRef<"AppSetting", 'String'>
+    readonly updatedAt: FieldRef<"AppSetting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppSetting findUnique
+   */
+  export type AppSettingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which AppSetting to fetch.
+     */
+    where: AppSettingWhereUniqueInput
+  }
+
+  /**
+   * AppSetting findUniqueOrThrow
+   */
+  export type AppSettingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which AppSetting to fetch.
+     */
+    where: AppSettingWhereUniqueInput
+  }
+
+  /**
+   * AppSetting findFirst
+   */
+  export type AppSettingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which AppSetting to fetch.
+     */
+    where?: AppSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppSettings to fetch.
+     */
+    orderBy?: AppSettingOrderByWithRelationInput | AppSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppSettings.
+     */
+    cursor?: AppSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppSettings.
+     */
+    distinct?: AppSettingScalarFieldEnum | AppSettingScalarFieldEnum[]
+  }
+
+  /**
+   * AppSetting findFirstOrThrow
+   */
+  export type AppSettingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which AppSetting to fetch.
+     */
+    where?: AppSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppSettings to fetch.
+     */
+    orderBy?: AppSettingOrderByWithRelationInput | AppSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppSettings.
+     */
+    cursor?: AppSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppSettings.
+     */
+    distinct?: AppSettingScalarFieldEnum | AppSettingScalarFieldEnum[]
+  }
+
+  /**
+   * AppSetting findMany
+   */
+  export type AppSettingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which AppSettings to fetch.
+     */
+    where?: AppSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppSettings to fetch.
+     */
+    orderBy?: AppSettingOrderByWithRelationInput | AppSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppSettings.
+     */
+    cursor?: AppSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppSettings.
+     */
+    skip?: number
+    distinct?: AppSettingScalarFieldEnum | AppSettingScalarFieldEnum[]
+  }
+
+  /**
+   * AppSetting create
+   */
+  export type AppSettingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AppSetting.
+     */
+    data: XOR<AppSettingCreateInput, AppSettingUncheckedCreateInput>
+  }
+
+  /**
+   * AppSetting createMany
+   */
+  export type AppSettingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppSettings.
+     */
+    data: AppSettingCreateManyInput | AppSettingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppSetting createManyAndReturn
+   */
+  export type AppSettingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * The data used to create many AppSettings.
+     */
+    data: AppSettingCreateManyInput | AppSettingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppSetting update
+   */
+  export type AppSettingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AppSetting.
+     */
+    data: XOR<AppSettingUpdateInput, AppSettingUncheckedUpdateInput>
+    /**
+     * Choose, which AppSetting to update.
+     */
+    where: AppSettingWhereUniqueInput
+  }
+
+  /**
+   * AppSetting updateMany
+   */
+  export type AppSettingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppSettings.
+     */
+    data: XOR<AppSettingUpdateManyMutationInput, AppSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which AppSettings to update
+     */
+    where?: AppSettingWhereInput
+    /**
+     * Limit how many AppSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppSetting updateManyAndReturn
+   */
+  export type AppSettingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * The data used to update AppSettings.
+     */
+    data: XOR<AppSettingUpdateManyMutationInput, AppSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which AppSettings to update
+     */
+    where?: AppSettingWhereInput
+    /**
+     * Limit how many AppSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppSetting upsert
+   */
+  export type AppSettingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AppSetting to update in case it exists.
+     */
+    where: AppSettingWhereUniqueInput
+    /**
+     * In case the AppSetting found by the `where` argument doesn't exist, create a new AppSetting with this data.
+     */
+    create: XOR<AppSettingCreateInput, AppSettingUncheckedCreateInput>
+    /**
+     * In case the AppSetting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppSettingUpdateInput, AppSettingUncheckedUpdateInput>
+  }
+
+  /**
+   * AppSetting delete
+   */
+  export type AppSettingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+    /**
+     * Filter which AppSetting to delete.
+     */
+    where: AppSettingWhereUniqueInput
+  }
+
+  /**
+   * AppSetting deleteMany
+   */
+  export type AppSettingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppSettings to delete
+     */
+    where?: AppSettingWhereInput
+    /**
+     * Limit how many AppSettings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppSetting without action
+   */
+  export type AppSettingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppSetting
+     */
+    select?: AppSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppSetting
+     */
+    omit?: AppSettingOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -3384,6 +9003,70 @@ export namespace Prisma {
   };
 
   export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
+
+
+  export const SubscriptionPlanScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    name: 'name',
+    months: 'months',
+    price: 'price',
+    currency: 'currency',
+    active: 'active',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SubscriptionPlanScalarFieldEnum = (typeof SubscriptionPlanScalarFieldEnum)[keyof typeof SubscriptionPlanScalarFieldEnum]
+
+
+  export const PortalSubscriptionScalarFieldEnum: {
+    id: 'id',
+    email: 'email',
+    clientId: 'clientId',
+    plan: 'plan',
+    startDate: 'startDate',
+    expiryDate: 'expiryDate',
+    status: 'status',
+    syncTokenHash: 'syncTokenHash',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PortalSubscriptionScalarFieldEnum = (typeof PortalSubscriptionScalarFieldEnum)[keyof typeof PortalSubscriptionScalarFieldEnum]
+
+
+  export const PortalPaymentScalarFieldEnum: {
+    id: 'id',
+    email: 'email',
+    planCode: 'planCode',
+    amount: 'amount',
+    currency: 'currency',
+    orderId: 'orderId',
+    paymentId: 'paymentId',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type PortalPaymentScalarFieldEnum = (typeof PortalPaymentScalarFieldEnum)[keyof typeof PortalPaymentScalarFieldEnum]
+
+
+  export const SaasAdminScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    password: 'password',
+    createdAt: 'createdAt'
+  };
+
+  export type SaasAdminScalarFieldEnum = (typeof SaasAdminScalarFieldEnum)[keyof typeof SaasAdminScalarFieldEnum]
+
+
+  export const AppSettingScalarFieldEnum: {
+    key: 'key',
+    value: 'value',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AppSettingScalarFieldEnum = (typeof AppSettingScalarFieldEnum)[keyof typeof AppSettingScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3475,6 +9158,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -3723,6 +9420,315 @@ export namespace Prisma {
     encryptedPassword?: StringWithAggregatesFilter<"Tenant"> | string
     dbUrl?: StringWithAggregatesFilter<"Tenant"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
+  }
+
+  export type SubscriptionPlanWhereInput = {
+    AND?: SubscriptionPlanWhereInput | SubscriptionPlanWhereInput[]
+    OR?: SubscriptionPlanWhereInput[]
+    NOT?: SubscriptionPlanWhereInput | SubscriptionPlanWhereInput[]
+    id?: StringFilter<"SubscriptionPlan"> | string
+    code?: StringFilter<"SubscriptionPlan"> | string
+    name?: StringFilter<"SubscriptionPlan"> | string
+    months?: IntFilter<"SubscriptionPlan"> | number
+    price?: FloatFilter<"SubscriptionPlan"> | number
+    currency?: StringFilter<"SubscriptionPlan"> | string
+    active?: BoolFilter<"SubscriptionPlan"> | boolean
+    updatedAt?: DateTimeFilter<"SubscriptionPlan"> | Date | string
+  }
+
+  export type SubscriptionPlanOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    months?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    active?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SubscriptionPlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: SubscriptionPlanWhereInput | SubscriptionPlanWhereInput[]
+    OR?: SubscriptionPlanWhereInput[]
+    NOT?: SubscriptionPlanWhereInput | SubscriptionPlanWhereInput[]
+    name?: StringFilter<"SubscriptionPlan"> | string
+    months?: IntFilter<"SubscriptionPlan"> | number
+    price?: FloatFilter<"SubscriptionPlan"> | number
+    currency?: StringFilter<"SubscriptionPlan"> | string
+    active?: BoolFilter<"SubscriptionPlan"> | boolean
+    updatedAt?: DateTimeFilter<"SubscriptionPlan"> | Date | string
+  }, "id" | "code">
+
+  export type SubscriptionPlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    months?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    active?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SubscriptionPlanCountOrderByAggregateInput
+    _avg?: SubscriptionPlanAvgOrderByAggregateInput
+    _max?: SubscriptionPlanMaxOrderByAggregateInput
+    _min?: SubscriptionPlanMinOrderByAggregateInput
+    _sum?: SubscriptionPlanSumOrderByAggregateInput
+  }
+
+  export type SubscriptionPlanScalarWhereWithAggregatesInput = {
+    AND?: SubscriptionPlanScalarWhereWithAggregatesInput | SubscriptionPlanScalarWhereWithAggregatesInput[]
+    OR?: SubscriptionPlanScalarWhereWithAggregatesInput[]
+    NOT?: SubscriptionPlanScalarWhereWithAggregatesInput | SubscriptionPlanScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SubscriptionPlan"> | string
+    code?: StringWithAggregatesFilter<"SubscriptionPlan"> | string
+    name?: StringWithAggregatesFilter<"SubscriptionPlan"> | string
+    months?: IntWithAggregatesFilter<"SubscriptionPlan"> | number
+    price?: FloatWithAggregatesFilter<"SubscriptionPlan"> | number
+    currency?: StringWithAggregatesFilter<"SubscriptionPlan"> | string
+    active?: BoolWithAggregatesFilter<"SubscriptionPlan"> | boolean
+    updatedAt?: DateTimeWithAggregatesFilter<"SubscriptionPlan"> | Date | string
+  }
+
+  export type PortalSubscriptionWhereInput = {
+    AND?: PortalSubscriptionWhereInput | PortalSubscriptionWhereInput[]
+    OR?: PortalSubscriptionWhereInput[]
+    NOT?: PortalSubscriptionWhereInput | PortalSubscriptionWhereInput[]
+    id?: StringFilter<"PortalSubscription"> | string
+    email?: StringFilter<"PortalSubscription"> | string
+    clientId?: StringFilter<"PortalSubscription"> | string
+    plan?: StringFilter<"PortalSubscription"> | string
+    startDate?: DateTimeFilter<"PortalSubscription"> | Date | string
+    expiryDate?: DateTimeFilter<"PortalSubscription"> | Date | string
+    status?: StringFilter<"PortalSubscription"> | string
+    syncTokenHash?: StringNullableFilter<"PortalSubscription"> | string | null
+    updatedAt?: DateTimeFilter<"PortalSubscription"> | Date | string
+  }
+
+  export type PortalSubscriptionOrderByWithRelationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    clientId?: SortOrder
+    plan?: SortOrder
+    startDate?: SortOrder
+    expiryDate?: SortOrder
+    status?: SortOrder
+    syncTokenHash?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortalSubscriptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    email?: string
+    AND?: PortalSubscriptionWhereInput | PortalSubscriptionWhereInput[]
+    OR?: PortalSubscriptionWhereInput[]
+    NOT?: PortalSubscriptionWhereInput | PortalSubscriptionWhereInput[]
+    clientId?: StringFilter<"PortalSubscription"> | string
+    plan?: StringFilter<"PortalSubscription"> | string
+    startDate?: DateTimeFilter<"PortalSubscription"> | Date | string
+    expiryDate?: DateTimeFilter<"PortalSubscription"> | Date | string
+    status?: StringFilter<"PortalSubscription"> | string
+    syncTokenHash?: StringNullableFilter<"PortalSubscription"> | string | null
+    updatedAt?: DateTimeFilter<"PortalSubscription"> | Date | string
+  }, "id" | "email">
+
+  export type PortalSubscriptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    clientId?: SortOrder
+    plan?: SortOrder
+    startDate?: SortOrder
+    expiryDate?: SortOrder
+    status?: SortOrder
+    syncTokenHash?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: PortalSubscriptionCountOrderByAggregateInput
+    _max?: PortalSubscriptionMaxOrderByAggregateInput
+    _min?: PortalSubscriptionMinOrderByAggregateInput
+  }
+
+  export type PortalSubscriptionScalarWhereWithAggregatesInput = {
+    AND?: PortalSubscriptionScalarWhereWithAggregatesInput | PortalSubscriptionScalarWhereWithAggregatesInput[]
+    OR?: PortalSubscriptionScalarWhereWithAggregatesInput[]
+    NOT?: PortalSubscriptionScalarWhereWithAggregatesInput | PortalSubscriptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PortalSubscription"> | string
+    email?: StringWithAggregatesFilter<"PortalSubscription"> | string
+    clientId?: StringWithAggregatesFilter<"PortalSubscription"> | string
+    plan?: StringWithAggregatesFilter<"PortalSubscription"> | string
+    startDate?: DateTimeWithAggregatesFilter<"PortalSubscription"> | Date | string
+    expiryDate?: DateTimeWithAggregatesFilter<"PortalSubscription"> | Date | string
+    status?: StringWithAggregatesFilter<"PortalSubscription"> | string
+    syncTokenHash?: StringNullableWithAggregatesFilter<"PortalSubscription"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"PortalSubscription"> | Date | string
+  }
+
+  export type PortalPaymentWhereInput = {
+    AND?: PortalPaymentWhereInput | PortalPaymentWhereInput[]
+    OR?: PortalPaymentWhereInput[]
+    NOT?: PortalPaymentWhereInput | PortalPaymentWhereInput[]
+    id?: StringFilter<"PortalPayment"> | string
+    email?: StringFilter<"PortalPayment"> | string
+    planCode?: StringFilter<"PortalPayment"> | string
+    amount?: FloatFilter<"PortalPayment"> | number
+    currency?: StringFilter<"PortalPayment"> | string
+    orderId?: StringFilter<"PortalPayment"> | string
+    paymentId?: StringNullableFilter<"PortalPayment"> | string | null
+    status?: StringFilter<"PortalPayment"> | string
+    createdAt?: DateTimeFilter<"PortalPayment"> | Date | string
+  }
+
+  export type PortalPaymentOrderByWithRelationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    planCode?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    orderId?: SortOrder
+    paymentId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PortalPaymentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    orderId?: string
+    paymentId?: string
+    AND?: PortalPaymentWhereInput | PortalPaymentWhereInput[]
+    OR?: PortalPaymentWhereInput[]
+    NOT?: PortalPaymentWhereInput | PortalPaymentWhereInput[]
+    email?: StringFilter<"PortalPayment"> | string
+    planCode?: StringFilter<"PortalPayment"> | string
+    amount?: FloatFilter<"PortalPayment"> | number
+    currency?: StringFilter<"PortalPayment"> | string
+    status?: StringFilter<"PortalPayment"> | string
+    createdAt?: DateTimeFilter<"PortalPayment"> | Date | string
+  }, "id" | "orderId" | "paymentId">
+
+  export type PortalPaymentOrderByWithAggregationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    planCode?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    orderId?: SortOrder
+    paymentId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: PortalPaymentCountOrderByAggregateInput
+    _avg?: PortalPaymentAvgOrderByAggregateInput
+    _max?: PortalPaymentMaxOrderByAggregateInput
+    _min?: PortalPaymentMinOrderByAggregateInput
+    _sum?: PortalPaymentSumOrderByAggregateInput
+  }
+
+  export type PortalPaymentScalarWhereWithAggregatesInput = {
+    AND?: PortalPaymentScalarWhereWithAggregatesInput | PortalPaymentScalarWhereWithAggregatesInput[]
+    OR?: PortalPaymentScalarWhereWithAggregatesInput[]
+    NOT?: PortalPaymentScalarWhereWithAggregatesInput | PortalPaymentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PortalPayment"> | string
+    email?: StringWithAggregatesFilter<"PortalPayment"> | string
+    planCode?: StringWithAggregatesFilter<"PortalPayment"> | string
+    amount?: FloatWithAggregatesFilter<"PortalPayment"> | number
+    currency?: StringWithAggregatesFilter<"PortalPayment"> | string
+    orderId?: StringWithAggregatesFilter<"PortalPayment"> | string
+    paymentId?: StringNullableWithAggregatesFilter<"PortalPayment"> | string | null
+    status?: StringWithAggregatesFilter<"PortalPayment"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PortalPayment"> | Date | string
+  }
+
+  export type SaasAdminWhereInput = {
+    AND?: SaasAdminWhereInput | SaasAdminWhereInput[]
+    OR?: SaasAdminWhereInput[]
+    NOT?: SaasAdminWhereInput | SaasAdminWhereInput[]
+    id?: StringFilter<"SaasAdmin"> | string
+    name?: StringFilter<"SaasAdmin"> | string
+    email?: StringFilter<"SaasAdmin"> | string
+    password?: StringFilter<"SaasAdmin"> | string
+    createdAt?: DateTimeFilter<"SaasAdmin"> | Date | string
+  }
+
+  export type SaasAdminOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SaasAdminWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    email?: string
+    AND?: SaasAdminWhereInput | SaasAdminWhereInput[]
+    OR?: SaasAdminWhereInput[]
+    NOT?: SaasAdminWhereInput | SaasAdminWhereInput[]
+    name?: StringFilter<"SaasAdmin"> | string
+    password?: StringFilter<"SaasAdmin"> | string
+    createdAt?: DateTimeFilter<"SaasAdmin"> | Date | string
+  }, "id" | "email">
+
+  export type SaasAdminOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+    _count?: SaasAdminCountOrderByAggregateInput
+    _max?: SaasAdminMaxOrderByAggregateInput
+    _min?: SaasAdminMinOrderByAggregateInput
+  }
+
+  export type SaasAdminScalarWhereWithAggregatesInput = {
+    AND?: SaasAdminScalarWhereWithAggregatesInput | SaasAdminScalarWhereWithAggregatesInput[]
+    OR?: SaasAdminScalarWhereWithAggregatesInput[]
+    NOT?: SaasAdminScalarWhereWithAggregatesInput | SaasAdminScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SaasAdmin"> | string
+    name?: StringWithAggregatesFilter<"SaasAdmin"> | string
+    email?: StringWithAggregatesFilter<"SaasAdmin"> | string
+    password?: StringWithAggregatesFilter<"SaasAdmin"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SaasAdmin"> | Date | string
+  }
+
+  export type AppSettingWhereInput = {
+    AND?: AppSettingWhereInput | AppSettingWhereInput[]
+    OR?: AppSettingWhereInput[]
+    NOT?: AppSettingWhereInput | AppSettingWhereInput[]
+    key?: StringFilter<"AppSetting"> | string
+    value?: StringFilter<"AppSetting"> | string
+    updatedAt?: DateTimeFilter<"AppSetting"> | Date | string
+  }
+
+  export type AppSettingOrderByWithRelationInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppSettingWhereUniqueInput = Prisma.AtLeast<{
+    key?: string
+    AND?: AppSettingWhereInput | AppSettingWhereInput[]
+    OR?: AppSettingWhereInput[]
+    NOT?: AppSettingWhereInput | AppSettingWhereInput[]
+    value?: StringFilter<"AppSetting"> | string
+    updatedAt?: DateTimeFilter<"AppSetting"> | Date | string
+  }, "key">
+
+  export type AppSettingOrderByWithAggregationInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AppSettingCountOrderByAggregateInput
+    _max?: AppSettingMaxOrderByAggregateInput
+    _min?: AppSettingMinOrderByAggregateInput
+  }
+
+  export type AppSettingScalarWhereWithAggregatesInput = {
+    AND?: AppSettingScalarWhereWithAggregatesInput | AppSettingScalarWhereWithAggregatesInput[]
+    OR?: AppSettingScalarWhereWithAggregatesInput[]
+    NOT?: AppSettingScalarWhereWithAggregatesInput | AppSettingScalarWhereWithAggregatesInput[]
+    key?: StringWithAggregatesFilter<"AppSetting"> | string
+    value?: StringWithAggregatesFilter<"AppSetting"> | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AppSetting"> | Date | string
   }
 
   export type SuperAdminCreateInput = {
@@ -4033,6 +10039,349 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SubscriptionPlanCreateInput = {
+    id?: string
+    code: string
+    name: string
+    months: number
+    price: number
+    currency?: string
+    active?: boolean
+    updatedAt?: Date | string
+  }
+
+  export type SubscriptionPlanUncheckedCreateInput = {
+    id?: string
+    code: string
+    name: string
+    months: number
+    price: number
+    currency?: string
+    active?: boolean
+    updatedAt?: Date | string
+  }
+
+  export type SubscriptionPlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    months?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SubscriptionPlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    months?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SubscriptionPlanCreateManyInput = {
+    id?: string
+    code: string
+    name: string
+    months: number
+    price: number
+    currency?: string
+    active?: boolean
+    updatedAt?: Date | string
+  }
+
+  export type SubscriptionPlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    months?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SubscriptionPlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    months?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortalSubscriptionCreateInput = {
+    id?: string
+    email: string
+    clientId: string
+    plan?: string
+    startDate?: Date | string
+    expiryDate?: Date | string
+    status?: string
+    syncTokenHash?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type PortalSubscriptionUncheckedCreateInput = {
+    id?: string
+    email: string
+    clientId: string
+    plan?: string
+    startDate?: Date | string
+    expiryDate?: Date | string
+    status?: string
+    syncTokenHash?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type PortalSubscriptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
+    plan?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    syncTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortalSubscriptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
+    plan?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    syncTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortalSubscriptionCreateManyInput = {
+    id?: string
+    email: string
+    clientId: string
+    plan?: string
+    startDate?: Date | string
+    expiryDate?: Date | string
+    status?: string
+    syncTokenHash?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type PortalSubscriptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
+    plan?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    syncTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortalSubscriptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
+    plan?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    syncTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortalPaymentCreateInput = {
+    id?: string
+    email: string
+    planCode: string
+    amount: number
+    currency?: string
+    orderId: string
+    paymentId?: string | null
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type PortalPaymentUncheckedCreateInput = {
+    id?: string
+    email: string
+    planCode: string
+    amount: number
+    currency?: string
+    orderId: string
+    paymentId?: string | null
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type PortalPaymentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortalPaymentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortalPaymentCreateManyInput = {
+    id?: string
+    email: string
+    planCode: string
+    amount: number
+    currency?: string
+    orderId: string
+    paymentId?: string | null
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type PortalPaymentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortalPaymentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    planCode?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SaasAdminCreateInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    createdAt?: Date | string
+  }
+
+  export type SaasAdminUncheckedCreateInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    createdAt?: Date | string
+  }
+
+  export type SaasAdminUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SaasAdminUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SaasAdminCreateManyInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    createdAt?: Date | string
+  }
+
+  export type SaasAdminUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SaasAdminUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppSettingCreateInput = {
+    key: string
+    value: string
+    updatedAt?: Date | string
+  }
+
+  export type AppSettingUncheckedCreateInput = {
+    key: string
+    value: string
+    updatedAt?: Date | string
+  }
+
+  export type AppSettingUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppSettingUncheckedUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppSettingCreateManyInput = {
+    key: string
+    value: string
+    updatedAt?: Date | string
+  }
+
+  export type AppSettingUpdateManyMutationInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppSettingUncheckedUpdateManyInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -4316,6 +10665,225 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type SubscriptionPlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    months?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    active?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SubscriptionPlanAvgOrderByAggregateInput = {
+    months?: SortOrder
+    price?: SortOrder
+  }
+
+  export type SubscriptionPlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    months?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    active?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SubscriptionPlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    months?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    active?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SubscriptionPlanSumOrderByAggregateInput = {
+    months?: SortOrder
+    price?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type PortalSubscriptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    clientId?: SortOrder
+    plan?: SortOrder
+    startDate?: SortOrder
+    expiryDate?: SortOrder
+    status?: SortOrder
+    syncTokenHash?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortalSubscriptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    clientId?: SortOrder
+    plan?: SortOrder
+    startDate?: SortOrder
+    expiryDate?: SortOrder
+    status?: SortOrder
+    syncTokenHash?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortalSubscriptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    clientId?: SortOrder
+    plan?: SortOrder
+    startDate?: SortOrder
+    expiryDate?: SortOrder
+    status?: SortOrder
+    syncTokenHash?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortalPaymentCountOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    planCode?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    orderId?: SortOrder
+    paymentId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PortalPaymentAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type PortalPaymentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    planCode?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    orderId?: SortOrder
+    paymentId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PortalPaymentMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    planCode?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    orderId?: SortOrder
+    paymentId?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PortalPaymentSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type SaasAdminCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SaasAdminMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SaasAdminMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AppSettingCountOrderByAggregateInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppSettingMaxOrderByAggregateInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppSettingMinOrderByAggregateInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -4338,6 +10906,22 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -4502,6 +11086,49 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
 

@@ -20,6 +20,15 @@ const add401Interceptor = (client: any) => {
   client.interceptors.response.use(
     (response: any) => response,
     (error: any) => {
+      if (
+        error?.response?.status === 402 &&
+        error?.response?.data?.code === "SUBSCRIPTION_EXPIRED" &&
+        typeof window !== "undefined"
+      ) {
+        window.dispatchEvent(
+          new CustomEvent("subscription-expired", { detail: error.response.data }),
+        );
+      }
       if (error?.response?.status === 401) {
         console.warn("⛔ 401 detected → Auto logout");
         forceLogout();

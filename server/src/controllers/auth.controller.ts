@@ -7,6 +7,7 @@ import { getTenantPrisma } from "../prisma-client/tenant-client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { normalizeLoginInput } from "../utils/normalizer/loginNormalizer";
+import { isEnforced, syncFromCloud, getState } from "../services/subscription.service";
 
 export async function loginController(req: Request, res: Response) {
 
@@ -95,6 +96,18 @@ export async function loginController(req: Request, res: Response) {
 
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(401).json({ error: "Invalid password" });
+
+    // Subscription: refresh from the portal at login (best-effort). The very
+    // first activation must be online. Expired subscriptions may still sign in
+    // (view/export only) - the subscriptionGuard blocks writes.
+    if (isEnforced()) {
+      const sync = await syncFromCloud({ email: normalizeEmail.email, password });
+      if (!sync.ok && getState().status === "NOT_ACTIVATED") {
+        return res.status(403).json({
+          error: "First-time activation needs internet. Connect and sign in again.",
+        });
+      }
+    }
 
     // const clientAdminId = userType === "ADMIN"
     // ? user.id

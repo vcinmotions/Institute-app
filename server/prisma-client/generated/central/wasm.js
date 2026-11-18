@@ -137,6 +137,55 @@ exports.Prisma.TenantScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.SubscriptionPlanScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  months: 'months',
+  price: 'price',
+  currency: 'currency',
+  active: 'active',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PortalSubscriptionScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  clientId: 'clientId',
+  plan: 'plan',
+  startDate: 'startDate',
+  expiryDate: 'expiryDate',
+  status: 'status',
+  syncTokenHash: 'syncTokenHash',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PortalPaymentScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  planCode: 'planCode',
+  amount: 'amount',
+  currency: 'currency',
+  orderId: 'orderId',
+  paymentId: 'paymentId',
+  status: 'status',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SaasAdminScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AppSettingScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -157,7 +206,12 @@ exports.Role = exports.$Enums.Role = {
 
 exports.Prisma.ModelName = {
   SuperAdmin: 'SuperAdmin',
-  Tenant: 'Tenant'
+  Tenant: 'Tenant',
+  SubscriptionPlan: 'SubscriptionPlan',
+  PortalSubscription: 'PortalSubscription',
+  PortalPayment: 'PortalPayment',
+  SaasAdmin: 'SaasAdmin',
+  AppSetting: 'AppSetting'
 };
 /**
  * Create the Client
@@ -207,13 +261,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../../prisma-client/generated/central\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel SuperAdmin {\n  id          String   @id @default(uuid())\n  name        String\n  email       String   @unique\n  password    String\n  contact     String?\n  position    String\n  country     String?\n  state       String?\n  city        String?\n  zipCode     String?\n  fullAddress String?\n  createdAt   DateTime @default(now())\n\n  currentSessionToken String?\n  lastLoginAt         DateTime?\n\n  role Role @default(MASTER_ADMIN)\n\n  // 🆕 ADD THESE\n  basicComplete   Boolean @default(false)\n  addressComplete Boolean @default(false)\n}\n\nmodel Tenant {\n  id                String   @id @default(uuid())\n  name              String\n  contact           String\n  fullAddress       String\n  logo              String?\n  certificateName   String?\n  stamp             String?\n  sign              String?\n  position          String\n  country           String\n  state             String\n  city              String\n  zipCode           String\n  instituteName     String   @unique\n  tenantId          String   @unique\n  slug              String   @unique // 👈 REQUIRED\n  email             String?  @unique // add this line\n  password          String?\n  encryptedPassword String\n  dbUrl             String\n  createdAt         DateTime @default(now())\n}\n\nenum Role {\n  MASTER_ADMIN\n}\n",
-  "inlineSchemaHash": "b599bce6d06940b7935a923dea6fb3efdd41455ab7ea2d37a995df1aeeb1136f",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../../prisma-client/generated/central\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel SuperAdmin {\n  id          String   @id @default(uuid())\n  name        String\n  email       String   @unique\n  password    String\n  contact     String?\n  position    String\n  country     String?\n  state       String?\n  city        String?\n  zipCode     String?\n  fullAddress String?\n  createdAt   DateTime @default(now())\n\n  currentSessionToken String?\n  lastLoginAt         DateTime?\n\n  role Role @default(MASTER_ADMIN)\n\n  // 🆕 ADD THESE\n  basicComplete   Boolean @default(false)\n  addressComplete Boolean @default(false)\n}\n\nmodel Tenant {\n  id                String   @id @default(uuid())\n  name              String\n  contact           String\n  fullAddress       String\n  logo              String?\n  certificateName   String?\n  stamp             String?\n  sign              String?\n  position          String\n  country           String\n  state             String\n  city              String\n  zipCode           String\n  instituteName     String   @unique\n  tenantId          String   @unique\n  slug              String   @unique // 👈 REQUIRED\n  email             String?  @unique // add this line\n  password          String?\n  encryptedPassword String\n  dbUrl             String\n  createdAt         DateTime @default(now())\n}\n\nenum Role {\n  MASTER_ADMIN\n}\n\n// Subscription price list, managed by the master admin on the web portal.\nmodel SubscriptionPlan {\n  id        String   @id @default(uuid())\n  code      String   @unique // SIX_MONTH | ONE_YEAR\n  name      String\n  months    Int\n  price     Float\n  currency  String   @default(\"INR\")\n  active    Boolean  @default(true)\n  updatedAt DateTime @updatedAt\n}\n\n// One subscription per institute, written by the web portal after payment.\nmodel PortalSubscription {\n  id            String   @id @default(uuid())\n  email         String   @unique // tenant login email\n  clientId      String // tenant.tenantId\n  plan          String   @default(\"NONE\")\n  startDate     DateTime @default(now())\n  expiryDate    DateTime @default(now())\n  status        String   @default(\"EXPIRED\") // ACTIVE | EXPIRED | SUSPENDED | REVOKED\n  syncTokenHash String?\n  updatedAt     DateTime @updatedAt\n}\n\nmodel PortalPayment {\n  id        String   @id @default(uuid())\n  email     String\n  planCode  String\n  amount    Float\n  currency  String   @default(\"INR\")\n  orderId   String   @unique\n  paymentId String?  @unique\n  status    String   @default(\"CREATED\") // CREATED | PAID | FAILED\n  createdAt DateTime @default(now())\n}\n\n// SaaS owner account for the hosted portal (/saas/login). Separate from the\n// per-install MASTER_ADMIN used inside the EXE.\nmodel SaasAdmin {\n  id        String   @id @default(uuid())\n  name      String\n  email     String   @unique\n  password  String\n  createdAt DateTime @default(now())\n}\n\n// Global settings shared by every EXE client (key -> JSON string).\nmodel AppSetting {\n  key       String   @id\n  value     String\n  updatedAt DateTime @updatedAt\n}\n",
+  "inlineSchemaHash": "eb3ea22c3f5dbabd8d5ef652ea3eae4ad3199da8cd2dba0dbdb112e88cc1bbf4",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"SuperAdmin\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contact\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zipCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"currentSessionToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastLoginAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"basicComplete\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"addressComplete\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null},\"Tenant\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contact\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"certificateName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stamp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sign\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zipCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"instituteName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"encryptedPassword\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dbUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"SuperAdmin\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contact\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zipCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"currentSessionToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastLoginAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"basicComplete\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"addressComplete\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null},\"Tenant\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contact\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"certificateName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stamp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sign\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zipCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"instituteName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"encryptedPassword\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dbUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"SubscriptionPlan\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"months\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"currency\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"active\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"PortalSubscription\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"plan\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"expiryDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"syncTokenHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"PortalPayment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"planCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"currency\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"orderId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"paymentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"SaasAdmin\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"AppSetting\":{\"fields\":[{\"name\":\"key\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

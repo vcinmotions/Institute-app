@@ -59,3 +59,56 @@ model Tenant {
 enum Role {
   MASTER_ADMIN
 }
+// Subscription price list, managed by the master admin on the web portal.
+model SubscriptionPlan {
+  id         String   @id @default(uuid())
+  code       String   @unique // SIX_MONTH | ONE_YEAR
+  name       String
+  months     Int
+  price      Float
+  currency   String   @default("INR")
+  active     Boolean  @default(true)
+  updatedAt  DateTime @updatedAt
+}
+
+// One subscription per institute, written by the web portal after payment.
+model PortalSubscription {
+  id            String   @id @default(uuid())
+  email         String   @unique // tenant login email
+  clientId      String   // tenant.tenantId
+  plan          String   @default("NONE")
+  startDate     DateTime @default(now())
+  expiryDate    DateTime @default(now())
+  status        String   @default("EXPIRED") // ACTIVE | EXPIRED | SUSPENDED | REVOKED
+  syncTokenHash String?
+  updatedAt     DateTime @updatedAt
+}
+
+model PortalPayment {
+  id          String   @id @default(uuid())
+  email       String
+  planCode    String
+  amount      Float
+  currency    String   @default("INR")
+  orderId     String   @unique
+  paymentId   String?  @unique
+  status      String   @default("CREATED") // CREATED | PAID | FAILED
+  createdAt   DateTime @default(now())
+}
+
+// SaaS owner account for the hosted portal (/saas/login). Separate from the
+// per-install MASTER_ADMIN used inside the EXE.
+model SaasAdmin {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+// Global settings shared by every EXE client (key -> JSON string).
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

@@ -52,6 +52,7 @@ interface ElectronAuthAPI {
 
 interface ElectronAPI {
   restartApp: () => void;
+  openExternal?: (url: string) => Promise<boolean>;
   selectBackupFile: () => Promise<string | null>;
   saveBackupFile: (sourcePath: string) => Promise<void>;
   performRestore: (filePath: string) => Promise<void>;

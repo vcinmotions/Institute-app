@@ -34,6 +34,7 @@ import PhoneInput from "@/components/form/group-input/PhoneInput";
 import { countries } from "@/components/common/CountriesCode";
 import { normalizeEmail, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { portalApi, setPortalToken } from "@/lib/portalApi";
 
 const CompanySchema = z.object({
     name: z.string().min(1, "Display Name is required"),
@@ -57,9 +58,31 @@ const CompanySchema = z.object({
 });
 
 type CompanyData = z.infer<typeof CompanySchema>;
+
+const FIELD_LABELS: Record<keyof CompanyData, string> = {
+    name: "Display name",
+    instituteName: "Institute name",
+    email: "Username",
+    password: "Password",
+    contact: "Contact number",
+    country: "Country",
+    state: "State",
+    city: "City",
+    zipCode: "Zip code",
+    fullAddress: "Full address",
+    financialStartDate: "Financial start date",
+    financialEndDate: "Financial end date",
+};
 type FormErrors = Partial<Record<keyof CompanyData, string>>;
 
-export default function CompanyForm() {
+/**
+ * Company registration form.
+ * - Default: master admin creates a company inside the app.
+ * - portal: public website registration; after saving, the customer goes to
+ *   the subscription page to pay (Razorpay).
+ */
+export default function CompanyForm({ portal = false, plan = "" }: { portal?: boolean; plan?: string }) {
+    const [submitting, setSubmitting] = useState(false);
     const [newCompany, setNewCompany] = useState<CompanyData>({
         name: "",
         instituteName: "",
@@ -174,7 +197,7 @@ export default function CompanyForm() {
 
         Object.entries(newCompany).forEach(([key, value]) => {
             if (!String(value).trim()) {
-                newErrors[key as keyof CompanyData] = `${key} is required`;
+                newErrors[key as keyof CompanyData] = `${FIELD_LABELS[key as keyof CompanyData] ?? key} is required`;
             }
         });
 
@@ -394,7 +417,7 @@ export default function CompanyForm() {
         }
 
         const token = sessionStorage.getItem("token");
-        if (!token) {
+        if (!portal && !token) {
             setAlert({
                 show: true,
                 title: "Unauthorized",
@@ -436,6 +459,26 @@ export default function CompanyForm() {
             certificateName: selectedCertificate,
         };
 
+        if (portal) {
+            setSubmitting(true);
+            try {
+                const { data } = await portalApi.post("/portal/register", admissionPayload);
+                setPortalToken(data.token);
+                router.push(`/subscription${plan ? `?plan=${plan}` : ""}`);
+            } catch (err: any) {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                setAlert({
+                    show: true,
+                    title: "Registration failed",
+                    message: err?.response?.data?.error || "Could not register. Please try again.",
+                    variant: "error",
+                });
+            } finally {
+                setSubmitting(false);
+            }
+            return;
+        }
+
         createCompany(admissionPayload, {
             onSuccess: () => {
                 setNewCompany({
@@ -476,7 +519,7 @@ export default function CompanyForm() {
 
     return (
         <div>
-            <PageBreadcrumb pageTitle="Create Company" />
+            {!portal && <PageBreadcrumb pageTitle="Create Company" />}
 
             <div className="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/3 shadow-sm">
                 <div className="flex flex-col gap-6">
@@ -484,7 +527,7 @@ export default function CompanyForm() {
                     {/* Header & Alerts */}
                     <div className="border-b pb-4 dark:border-gray-700">
                         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-50">Company Information</h2>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to register a new company.</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{portal ? "Register your institute, then choose a plan and pay online." : "Fill in the details below to register a new company."}</p>
                     </div>
 
                     {error && <Alert variant={"error"} title={""} message={error} showLink={false} />}
@@ -680,14 +723,16 @@ export default function CompanyForm() {
                     {/* Action Bar */}
                     <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
                         <Button
-                            disabled={loading === true}
+                            disabled={portal ? submitting : loading === true}
                             size="sm"
                             tabIndex={8}
                             variant="primary"
                             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
                             onClick={handleSubmit}
                         >
-                            {loading === true ? "Creating..." : "Save Company"}
+                            {portal
+                                ? submitting ? "Creating your account..." : "Register & continue to payment"
+                                : loading === true ? "Creating..." : "Save Company"}
                         </Button>
                     </div>
 

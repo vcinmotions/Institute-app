@@ -36,11 +36,21 @@ import attendanceRoute from "./routes/attendance.routes";
 import taskRoute from "./routes/task.routes";
 import testRoute from "./routes/test.routes";
 import systemRoute from "./routes/system.backup.routes";
+import subscriptionRoute from "./routes/subscription.routes";
+import { subscriptionGuard } from "./middlewares/subscriptionGuard.middleware";
+import { syncFromCloud, isEnforced } from "./services/subscription.service";
 
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(
+  express.json({
+    // Razorpay webhook signatures are computed over the raw bytes.
+    verify: (req: any, _res, buf) => {
+      if (req.originalUrl?.includes("/portal/razorpay-webhook")) req.rawBody = buf;
+    },
+  })
+);
 
 // Serve static files from the 'uploads' directory
 //app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
@@ -94,6 +104,14 @@ cron.schedule("*/15 * * * *", async () => {
   await runAllTenantFollowUps();
 });
 
+// Re-validate the subscription with the portal every 5 minutes (no-op when offline).
+if (isEnforced()) {
+  cron.schedule("*/5 * * * *", () => {
+    syncFromCloud().catch(() => {});
+  });
+  syncFromCloud().catch(() => {});
+}
+
 app.use("/api", tenantRoutes);
 app.use("/api", MasterRoute);
 app.use("/api", systemRoute);
@@ -106,7 +124,9 @@ app.use("/api/auth", authRoute);
 
 app.use(authMiddleware);
 app.use(roleGuard);
+app.use(subscriptionGuard);
 app.use(stripSecrets);
+app.use("/api", subscriptionRoute);
 app.use("/api", dashboardRoutes);
 app.use("/api", AdmissionRoute);
 app.use("/api", attendanceRoute);

@@ -165,6 +165,55 @@ exports.Prisma.TenantScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.SubscriptionPlanScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  months: 'months',
+  price: 'price',
+  currency: 'currency',
+  active: 'active',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PortalSubscriptionScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  clientId: 'clientId',
+  plan: 'plan',
+  startDate: 'startDate',
+  expiryDate: 'expiryDate',
+  status: 'status',
+  syncTokenHash: 'syncTokenHash',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PortalPaymentScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  planCode: 'planCode',
+  amount: 'amount',
+  currency: 'currency',
+  orderId: 'orderId',
+  paymentId: 'paymentId',
+  status: 'status',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SaasAdminScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AppSettingScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -185,7 +234,12 @@ exports.Role = exports.$Enums.Role = {
 
 exports.Prisma.ModelName = {
   SuperAdmin: 'SuperAdmin',
-  Tenant: 'Tenant'
+  Tenant: 'Tenant',
+  SubscriptionPlan: 'SubscriptionPlan',
+  PortalSubscription: 'PortalSubscription',
+  PortalPayment: 'PortalPayment',
+  SaasAdmin: 'SaasAdmin',
+  AppSetting: 'AppSetting'
 };
 
 /**

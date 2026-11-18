@@ -1,5 +1,5 @@
 const { autoUpdater } = require("electron-updater");
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog, shell } = require("electron");
 const { spawn, spawnSync } = require("child_process");
 const path = require("path");
 const net = require("net");
@@ -388,6 +388,24 @@ process.on("SIGTERM", () => {
 });
 
 // ─── IPC HANDLERS ────────────────────────────────────────────────────────────
+// Opens the subscription portal in the default browser (https + allowlisted host only).
+function isAllowedExternal(url) {
+  try {
+    const u = new URL(url);
+    const portal = process.env.SUBSCRIPTION_PORTAL_URL;
+    if (!portal || u.protocol !== "https:") return false;
+    return u.hostname === new URL(portal).hostname;
+  } catch {
+    return false;
+  }
+}
+
+ipcMain.handle("open-external", async (_e, url) => {
+  if (!isAllowedExternal(url)) return false;
+  await shell.openExternal(url);
+  return true;
+});
+
 ipcMain.on("restart-app", () => {
   killChildren();
   app.relaunch();

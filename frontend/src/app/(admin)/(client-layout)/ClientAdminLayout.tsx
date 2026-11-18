@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import SubscriptionGate from "@/components/subscription/SubscriptionGate";
 import { useSidebar } from "@/context/SidebarContext";
 import { useDispatch } from "react-redux";
 import { setCountry, setStateLocation, setUser } from "@/store/slices/authSlice";
@@ -73,6 +74,7 @@ export default function ClientAdminLayout({
         <Backdrop />
 
         <div className={`flex-1 transition-all duration-300 ${margin}`}>
+          <SubscriptionGate />
           <AppHeader />
           <AppKeyHeader />
 
