@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useCourseStore } from "@/store/courseStore";
 import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -136,6 +137,11 @@ export default function TestForm() {
         });
         reset();
         setTimeout(() => router.back(), 1200);
+      },
+      onError: (error: any) => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
       },
     });
   };

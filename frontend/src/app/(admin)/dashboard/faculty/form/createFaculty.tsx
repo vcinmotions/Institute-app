@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 // Assuming these are your standard imports based on your code:
@@ -313,7 +314,10 @@ export default function FacultyForm() {
           router.back();
         }, 1000);
       },
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
         // Handle error natively via redux/toast
       },
     });

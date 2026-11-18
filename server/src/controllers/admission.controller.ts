@@ -155,6 +155,11 @@ export async function upsertAdmissionConfig(req: any, res: any) {
 
     const { prefix, suffix, separator, numberLength } = req.body;
 
+    const len = Number(numberLength);
+    if (!Number.isInteger(len) || len < 1 || len > 10) {
+      return res.status(400).json({ error: "Number length must be a whole number from 1 to 10" });
+    }
+
     const config = await prisma.admissionNumberConfig.upsert({
       where: { clientAdminId: user.clientAdminId },
 

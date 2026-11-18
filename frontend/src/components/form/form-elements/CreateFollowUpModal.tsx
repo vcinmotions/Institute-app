@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateNextFollowUp } from "@/hooks/useCreateNextFollowUp";
@@ -120,8 +121,7 @@ export default function CreateFollowUpModal({
   //       setErrors({});
   //       onClose();
   //     } catch (error) {
-  //       console.error("Failed to create follow-up:", error);
-  //       setErrors({ remark: "Failed to create follow-up. Please try again." });
+  //         //       setErrors({ remark: getApiErrorMessage(error, "Failed to save the follow-up. Please try again.") });
   //     }
   //   };
 
@@ -179,19 +179,18 @@ export default function CreateFollowUpModal({
         },
 
         onError: (error: any) => {
-          console.error("Failed to create follow-up:", error);
-          setErrors({ remark: "Failed to create follow-up. Please try again." });
+                    setErrors({ remark: getApiErrorMessage(error, "Failed to save the follow-up. Please try again.") });
           // Optional: show error alert
           setAlert({
             show: true,
             title: "Error",
-            message: "Failed to create follow-up. Please try again.",
+            message: getApiErrorMessage(error, "Failed to save the follow-up. Please try again."),
             variant: "error",
           });
 
           setTimeout(
             () => setAlert({ show: false, title: "", message: "", variant: "" }),
-            2000,
+            6000,
           );
         },
       },

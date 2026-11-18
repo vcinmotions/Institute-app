@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
 import { RootState } from "@/store";
@@ -95,7 +96,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
   const modalBodyRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
   const { inputRefs, scrollToError } = useScrollToError();
-  const { mutate: editStudent } = useEditStudent();
+  const { mutateAsync: editStudent } = useEditStudent();
 
   // Constants
   const countries = [
@@ -283,7 +284,10 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
       });
       setTimeout(() => onCloseModal(), 1500);
     } catch (error) {
-      console.error(error);
+      setShowChangeLog(false);
+      modalBodyRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+      setAlert({ show: true, title: "Update failed", message: getApiErrorMessage(error), variant: "error" });
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
     }
   };
 

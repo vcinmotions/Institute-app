@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCourseStore } from "@/store/courseStore";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -199,7 +200,10 @@ export default function EditTestForm({ onCloseModal, testData }: EditTestFormPro
                     reset();
                     setTimeout(() => handleCancelClose(), 1200);
                 },
-                onError: () => {
+                onError: (error: any) => {
+                  // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+                  setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+                  setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 },
             }

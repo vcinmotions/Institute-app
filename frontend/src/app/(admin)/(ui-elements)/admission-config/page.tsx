@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
@@ -77,8 +78,8 @@ export default function AdmissionConfigPage() {
                 setAlert(true);
                 setTimeout(() => setAlert(false), 2000);
             },
-            onError: () => {
-                toast.error("Failed to save config");
+            onError: (error: any) => {
+                toast.error(getApiErrorMessage(error, "Failed to save config"));
             },
         });
     };

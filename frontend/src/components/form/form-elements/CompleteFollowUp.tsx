@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateCompleteFollowUp } from "@/hooks/useCompleteFollowUp";
@@ -122,11 +123,11 @@ export default function CompleteFollowUpModal({
 
           onClose();
         },
-        onError: () => {
-          console.error("Failed to create follow-up");
-          setErrors({
-            remark: "Failed to create follow-up. Please try again.",
-          });
+        onError: (error: any) => {
+          const message = getApiErrorMessage(error, "Failed to complete the follow-up. Please try again.");
+          setErrors({ remark: message });
+          setAlert({ show: true, title: "Error", message, variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
         },
       }
     );

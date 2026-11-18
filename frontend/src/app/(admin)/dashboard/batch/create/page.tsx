@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
@@ -186,7 +187,10 @@ export default function BatchForm() {
         }, 1000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
         // You already handle error via redux + toast
       },
     });

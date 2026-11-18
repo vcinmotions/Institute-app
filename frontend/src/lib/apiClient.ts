@@ -29,7 +29,11 @@ const add401Interceptor = (client: any) => {
           new CustomEvent("subscription-expired", { detail: error.response.data }),
         );
       }
-      if (error?.response?.status === 401) {
+      // A 401 from the login call itself just means a wrong username/password:
+      // stay on the page and let the form show the message. Only expired sessions log out.
+      const url = String(error?.config?.url ?? "");
+      const isLoginCall = /\/auth\/(master-)?login/.test(url);
+      if (error?.response?.status === 401 && !isLoginCall) {
         console.warn("⛔ 401 detected → Auto logout");
         forceLogout();
       }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { ChevronDownIcon, EnvelopeIcon } from "@/icons";
@@ -724,11 +725,10 @@ export default function AdmissionForm() {
           }, 3000);
         },
         onError: (error: any) => {
-          console.error("Advance payment error:", error);
           setAlert({
             show: true,
             title: "Error",
-            message: error.message || "Failed to process advance payment. Please try again.",
+            message: getApiErrorMessage(error, "Failed to process advance payment. Please try again."),
             variant: "error",
           });
         }
@@ -873,7 +873,7 @@ export default function AdmissionForm() {
 
       onError: (error: any) => {
         // Shown to the user below (not console.error: that opens the Next.js error overlay).
-        const reason = error?.response?.data?.error;
+        const reason = getApiErrorMessage(error, "");
         window.scrollTo({
           top: 0, behavior: "smooth"
         })

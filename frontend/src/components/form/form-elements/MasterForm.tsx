@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from '../Label';
 import Input from '../input/InputField';
 import Select from '../Select';
@@ -41,7 +42,7 @@ export default function MasterForm({ onCloseModal }: DefaultInputsProps) {
   });
 
   const [errors, setErrors] = useState<Partial<EnquiryData>>({});
-  const { mutate: createEnquiry } = useCreateEnquiry();
+  const { mutateAsync: createEnquiry } = useCreateEnquiry();
    const countries = [
     { code: "IN", label: "+91" },
     { code: "US", label: "+1" },
@@ -141,7 +142,8 @@ export default function MasterForm({ onCloseModal }: DefaultInputsProps) {
         }, 3000);
 
     } catch (error) {
-      //alert("Failed to create enquiry.");
+      setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
     }
   };
 

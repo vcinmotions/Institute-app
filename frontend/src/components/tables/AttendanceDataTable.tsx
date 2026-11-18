@@ -1,5 +1,6 @@
 "use client";
 import { SERVER_ORIGIN } from "@/lib/config";
+import { getApiErrorMessage } from "@/lib/apiError";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -75,8 +76,11 @@ export default function AttendanceDataTable({
     mutationFn: async (data: any) => await markAttendance(data),
     onSuccess: () => alert("✅ Attendance saved!"),
     onError: (err) => {
-      console.error("Error saving attendance:", err);
-      alert("❌ Failed to save attendance");
+      const reason = getApiErrorMessage(err, "Failed to save attendance");
+      const hint = /faculty not found/i.test(reason)
+        ? " Attendance must be marked while signed in as a faculty member."
+        : "";
+      alert("❌ " + reason + hint);
     },
   });
 

@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
@@ -257,19 +258,19 @@ export default function CourseCompletionForm({
         }, 2000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
         window.scrollTo({ top: 0, behavior: "smooth" });
 
         setAlert({
           show: true,
           title: "Error",
-          message: "Something went wrong while completing the course.",
+          message: getApiErrorMessage(error, "Something went wrong while completing the course."),
           variant: "error",
         });
 
         setTimeout(() => {
           setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        }, 6000);
       },
     });
   };

@@ -100,7 +100,16 @@ import { normalizeToLowercase, titleCase } from "../utils/Normalize";
 // import { activityLogger } from "../utils/activityLogger"; // optional
 
 export const createLab = async (req: Request, res: Response) => {
-  const { name, location, totalPCs, timeSlots } = req.body;
+  const { name, location, totalPCs: rawPCs, timeSlots } = req.body;
+  const totalPCs = Number(rawPCs); // the form may send it as text
+
+  if (!name || !String(name).trim()) {
+    return res.status(400).json({ error: "Lab name is required" });
+  }
+  const pcCount = Number(totalPCs);
+  if (!Number.isInteger(pcCount) || pcCount < 1) {
+    return res.status(400).json({ error: "Total PCs must be a whole number of 1 or more" });
+  }
 
   console.log("GET LAB DATA IN BODY:", req.body);
   try {
@@ -202,9 +211,7 @@ export const createLab = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error("❌ Error creating lab:", error);
-    res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    res.status(500).json({ error: "Could not create the lab. Please try again." });
   }
 };
 
@@ -218,7 +225,16 @@ async function batchHasStudents(tenantPrisma: any, batchId: number) {
 
 export async function updateLabController(req: Request, res: Response) {
   const { id } = req.params;
-  const { name, location, totalPCs, timeSlots } = req.body;
+  const { name, location, totalPCs: rawPCs, timeSlots } = req.body;
+  const totalPCs = Number(rawPCs); // the form may send it as text
+
+  if (!name || !String(name).trim()) {
+    return res.status(400).json({ error: "Lab name is required" });
+  }
+  const pcCount = Number(totalPCs);
+  if (!Number.isInteger(pcCount) || pcCount < 1) {
+    return res.status(400).json({ error: "Total PCs must be a whole number of 1 or more" });
+  }
 
   console.log("GET LAB DATA IN BODY FOR UPDATING:", req.body);
   try {
@@ -246,6 +262,10 @@ export async function updateLabController(req: Request, res: Response) {
     });
 
     console.log("GET EXISTING LAB DATA:", existingLab);
+
+    if (!existingLab) {
+      return res.status(404).json({ error: "Lab not found" });
+    }
 
     const existingLabTimeSlot = await tenantPrisma.labTimeSlot.findMany({
       where: {

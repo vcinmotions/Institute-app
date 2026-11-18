@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import { useRouter } from "next/navigation";
@@ -137,6 +138,11 @@ export default function SourceForm() {
         setTimeout(() => {
           router.back();
         }, 1000);
+      },
+      onError: (error: any) => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
       },
     });
   };

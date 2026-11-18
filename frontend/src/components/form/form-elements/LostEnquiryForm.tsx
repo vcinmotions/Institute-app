@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateLostEnquiry } from "@/hooks/useCompleteFollowUp";
@@ -26,7 +27,7 @@ export default function LostEnquiryModal({
   const [scheduledAt, setScheduledAt] = useState<string>("");
   const [errors, setErrors] = useState<Partial<FollowUpData>>({});
   const { refetch } = useFollowUp(enquiryId);
-  const { mutate: createLostEnquiry } = useCreateLostEnquiry(); // Destructure the function
+  const { mutateAsync: createLostEnquiry } = useCreateLostEnquiry(); // Destructure the function
 
     const [alert, setAlert] = useState<{
           show: boolean;
@@ -85,8 +86,10 @@ setAlert({
       setErrors({});
       onClose();
     } catch (error) {
-      console.error("Failed to create follow-up:", error);
-      setErrors({ remark: "Failed to create follow-up. Please try again." });
+      const message = getApiErrorMessage(error, "Could not save. Please try again.");
+      setErrors({ remark: message });
+      setAlert({ show: true, title: "Error", message, variant: "error" });
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
     }
   };
 

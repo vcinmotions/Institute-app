@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
@@ -242,7 +243,10 @@ export default function CourseForm({
             onCloseModal();
           }, 1000);
         },
-        onError: () => {
+        onError: (error: any) => {
+          // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+          setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
           window.scrollTo({ top: 0, behavior: "smooth" });
         },
       }

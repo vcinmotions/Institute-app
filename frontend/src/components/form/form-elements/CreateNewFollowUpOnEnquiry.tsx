@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateInitialFollowUp } from "@/hooks/useCreateInitialFollowUp";
@@ -106,7 +107,8 @@ export default function CreateNewFollowUpOnEnquiryModal({
             onClose();
           },
           onError: (err: any) => {
-            console.error("Mutation save tracking error failure:", err);
+            setAlert({ show: true, title: "Error", message: getApiErrorMessage(err), variant: "error" });
+            setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
           }
         }
       );
