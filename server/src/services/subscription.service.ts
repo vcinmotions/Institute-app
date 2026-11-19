@@ -51,6 +51,15 @@ export type SubscriptionState = {
 const CLOCK_TOLERANCE_MS = 10 * 60 * 1000;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+export const EXPIRED_MESSAGE =
+  "Your software subscription has expired. The application is currently in View-Only Mode. Please renew your subscription through the web portal to restore full access.";
+
+/** How often the server re-validates with the portal (minutes). Configurable via SUBSCRIPTION_SYNC_MINUTES. */
+export const syncIntervalMs = () => {
+  const m = Number(process.env.SUBSCRIPTION_SYNC_MINUTES);
+  return (Number.isFinite(m) && m >= 1 ? m : 5) * 60 * 1000;
+};
+
 export const isEnforced = () => !!process.env.SUBSCRIPTION_API_URL;
 
 const filePath = () => path.join(getUserDataPath(), "data", "subscription.json");
@@ -198,7 +207,7 @@ export function getState(): SubscriptionState {
       status: payload.status,
       locked: true,
       daysLeft: Math.max(daysLeft, 0),
-      message: `Subscription is ${payload.status.toLowerCase()}. Renew online to continue editing.`,
+      message: payload.status === "EXPIRED" ? EXPIRED_MESSAGE : `Your software subscription is ${payload.status.toLowerCase()}. The application is currently in View-Only Mode. Please contact support or renew through the web portal to restore full access.`,
     });
   }
   if (!(expiry > now)) {
@@ -207,7 +216,7 @@ export function getState(): SubscriptionState {
       status: "EXPIRED",
       locked: true,
       daysLeft: 0,
-      message: "Your subscription has expired. Data is view/export only until you renew online.",
+      message: EXPIRED_MESSAGE,
     });
   }
   return state({

@@ -30,8 +30,10 @@ console.log("DB_PROVIDER IN SERVER:", process.env.DB_PROVIDER);
     const centralDbUrl = getCentralDbUrl();
 
 const PORT = process.env.PORT || 5001;
-const server = app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// HOST: "127.0.0.1" = this PC only (standalone), "0.0.0.0" = reachable on the LAN (server PC).
+const HOST = process.env.HOST || "0.0.0.0";
+const server = app.listen(Number(PORT), HOST, () => {
+  console.log(`Server running on http://${HOST}:${PORT}`);
 });
 
 // Start socket server

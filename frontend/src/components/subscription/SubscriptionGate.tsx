@@ -115,7 +115,7 @@ export default function SubscriptionGate() {
         >
           <span>
             {state.locked
-              ? `${state.message} (view and export only)`
+              ? state.message
               : `Subscription expires in ${state.daysLeft} day(s). Renew online to avoid interruption.`}
           </span>
           <button
@@ -134,10 +134,13 @@ export default function SubscriptionGate() {
             aria-modal="true"
             className="w-full max-w-md rounded-xl bg-white p-6 text-center shadow-xl dark:bg-gray-900 dark:text-white"
           >
-            <h2 className="mb-2 text-xl font-semibold">Subscription expired</h2>
+            <h2 className="mb-2 text-xl font-semibold">View-Only Mode</h2>
             <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
-              {state.message} You can still view and export your data, but adding or editing
-              records is disabled until you renew on the web portal.
+              {state.message}
+            </p>
+            <p className="mb-4 text-xs text-gray-500">
+              You can still log in, view and search your records and export reports. Adding,
+              editing or deleting is disabled until you renew.
             </p>
             {support && <p className="mb-3 text-xs text-gray-500">Need help? {support}</p>}
             <div className="flex flex-col gap-2">

@@ -39,7 +39,7 @@ import systemRoute from "./routes/system.backup.routes";
 import subscriptionRoute from "./routes/subscription.routes";
 import expenseRoute from "./routes/expense.routes";
 import { subscriptionGuard } from "./middlewares/subscriptionGuard.middleware";
-import { syncFromCloud, isEnforced } from "./services/subscription.service";
+import { syncFromCloud, isEnforced, syncIntervalMs, getState } from "./services/subscription.service";
 
 
 const app = express();
@@ -107,14 +107,19 @@ cron.schedule("*/15 * * * *", async () => {
 
 // Re-validate the subscription with the portal every 5 minutes (no-op when offline).
 if (isEnforced()) {
-  cron.schedule("*/5 * * * *", () => {
+  setInterval(() => {
     syncFromCloud().catch(() => {});
-  });
+  }, syncIntervalMs());
   syncFromCloud().catch(() => {});
 }
 
+// Minimal, non-sensitive flag so the desktop shell can refuse a restore while View-Only.
+app.get("/api/subscription/locked", (_req, res) => res.json({ locked: getState().locked }));
+
 app.use("/api", tenantRoutes);
 app.use("/api", MasterRoute);
+// Restoring a backup overwrites the database, so it is blocked in View-Only Mode too.
+app.use("/api/restore", subscriptionGuard);
 app.use("/api", systemRoute);
 
 //app.use(tenantResolverMiddleware);

@@ -10,8 +10,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveBackupFile: (sourcePath) =>
     ipcRenderer.invoke("save-backup-file", sourcePath),
 
-  // ✅ ADD THIS
   performRestore: (filePath) =>
     ipcRenderer.invoke("perform-restore", filePath),
-});
 
+  // Standalone / LAN mode setup (used by installer/mode-setup.html)
+  mode: {
+    get: () => ipcRenderer.invoke("mode:get"),
+    test: (cfg) => ipcRenderer.invoke("mode:test", cfg),
+    save: (cfg) => ipcRenderer.invoke("mode:save", cfg),
+    cancel: () => ipcRenderer.invoke("mode:cancel"),
+  },
+});

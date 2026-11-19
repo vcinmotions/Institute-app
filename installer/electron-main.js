@@ -1,9 +1,11 @@
 const { autoUpdater } = require("electron-updater");
-const { app, BrowserWindow, ipcMain, dialog, shell } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog, shell, Menu } = require("electron");
 const { spawn, spawnSync } = require("child_process");
 const path = require("path");
 const net = require("net");
 const fs = require("fs");
+const os = require("os");
+const http = require("http");
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const isDev = !app.isPackaged;
@@ -44,6 +46,105 @@ process.on("unhandledRejection", (reason) => log.error("Unhandled Rejection:", r
 // ─── PROCESS HANDLES ─────────────────────────────────────────────────────────
 let backendProcess = null;
 let frontendProcess = null;
+
+// ─── RUN MODE (Standalone / LAN Server / LAN Client) ─────────────────────────
+// Chosen once by the administrator and kept in mode-config.json. The app never
+// switches mode on its own; changing it needs File > Connection & Mode Settings.
+const MODE_CONFIG_PATH = path.join(app.getPath("userData"), "mode-config.json");
+const MODES = ["STANDALONE", "LAN_SERVER", "LAN_CLIENT"];
+
+function readModeConfig() {
+  try {
+    const c = JSON.parse(fs.readFileSync(MODE_CONFIG_PATH, "utf8"));
+    if (!MODES.includes(c.mode)) return null;
+    if (c.mode === "LAN_CLIENT" && !c.host) return null;
+    return c;
+  } catch {
+    return null;
+  }
+}
+
+function writeModeConfig(cfg) {
+  fs.mkdirSync(path.dirname(MODE_CONFIG_PATH), { recursive: true });
+  fs.writeFileSync(MODE_CONFIG_PATH, JSON.stringify(cfg, null, 2), "utf8");
+}
+
+function normalizeModeConfig(raw) {
+  if (!raw || !MODES.includes(raw.mode)) throw new Error("Invalid mode");
+  if (raw.mode !== "LAN_CLIENT") return { mode: raw.mode };
+  const host = String(raw.host || "").trim();
+  // Only a plain IPv4 address or host name - no URL, path or credentials.
+  if (!/^[A-Za-z0-9]([A-Za-z0-9.-]{0,251}[A-Za-z0-9])?$/.test(host)) throw new Error("Invalid server address");
+  const port = Number(raw.port) || 5001;
+  const frontendPort = Number(raw.frontendPort) || 3000;
+  for (const p of [port, frontendPort]) {
+    if (!Number.isInteger(p) || p < 1 || p > 65535) throw new Error("Invalid port");
+  }
+  return { mode: "LAN_CLIENT", host, port, frontendPort };
+}
+
+function localIPv4s() {
+  const out = [];
+  for (const list of Object.values(os.networkInterfaces())) {
+    for (const i of list || []) {
+      if (i.family === "IPv4" && !i.internal) out.push(i.address);
+    }
+  }
+  return out;
+}
+
+function httpProbe(url, timeoutMs = 4000) {
+  return new Promise((resolve) => {
+    const req = http.get(url, { timeout: timeoutMs }, (res) => {
+      res.resume();
+      resolve({ ok: res.statusCode >= 200 && res.statusCode < 500, message: `reachable (HTTP ${res.statusCode})` });
+    });
+    req.on("timeout", () => { req.destroy(); resolve({ ok: false, message: "timed out - check the IP and that the server is running" }); });
+    req.on("error", (e) => resolve({ ok: false, message: e.code === "ECONNREFUSED" ? "refused - server not running or blocked by firewall" : (e.code || e.message) }));
+  });
+}
+
+function httpProbeJson(url, timeoutMs = 4000) {
+  return new Promise((resolve) => {
+    const req = http.get(url, { timeout: timeoutMs }, (res) => {
+      let body = "";
+      res.on("data", (d) => (body += d));
+      res.on("end", () => {
+        try { resolve(JSON.parse(body)); } catch { resolve(null); }
+      });
+    });
+    req.on("timeout", () => { req.destroy(); resolve(null); });
+    req.on("error", () => resolve(null));
+  });
+}
+
+async function testServerConnection(cfg) {
+  const host = cfg.host;
+  const [backend, frontend] = await Promise.all([
+    httpProbe(`http://${host}:${cfg.port}/api/setup/status`),
+    httpProbe(`http://${host}:${cfg.frontendPort}/`),
+  ]);
+  return { backend, frontend };
+}
+
+// LAN server: try to open the two ports in Windows Firewall (needs admin; failure is non-fatal).
+function ensureFirewallRules() {
+  if (!isWin) return { ok: true };
+  let allOk = true;
+  for (const [name, port] of [["VC Inmotions Backend", BACKEND_PORT], ["VC Inmotions App", FRONTEND_PORT]]) {
+    const check = spawnSync("netsh", ["advfirewall", "firewall", "show", "rule", `name=${name}`], { windowsHide: true });
+    if (check.status === 0) continue; // rule already exists
+    const add = spawnSync(
+      "netsh",
+      ["advfirewall", "firewall", "add", "rule", `name=${name}`, "dir=in", "action=allow", "protocol=TCP", `localport=${port}`, "profile=private,domain"],
+      { windowsHide: true }
+    );
+    if (add.status !== 0) allOk = false;
+  }
+  return { ok: allOk };
+}
+
+let modeSetupContext = { isChange: false, error: "" };
 
 // ─── ENV LOADING ──────────────────────────────────────────────────────────────
 function loadEnvFile(filePath) {
@@ -126,7 +227,7 @@ function waitForPort(port, timeout = STARTUP_TIMEOUT) {
 }
 
 // ─── BACKEND ─────────────────────────────────────────────────────────────────
-function startBackend() {
+function startBackend(lanServer = false) {
   const backendDir = isDev
     ? path.join(__dirname, "../server")
     : path.join(RESOURCES_PATH, "server");
@@ -142,6 +243,8 @@ function startBackend() {
       env: {
         ...process.env,
         PORT: String(BACKEND_PORT),
+        // Standalone: reachable from this PC only. LAN server: reachable from the network.
+        HOST: lanServer ? "0.0.0.0" : "127.0.0.1",
         APP_ENV: "prod",
         NODE_ENV: isDev ? "development" : "production",
         USER_DATA_PATH,
@@ -177,7 +280,7 @@ function startBackend() {
 }
 
 // ─── FRONTEND ────────────────────────────────────────────────────────────────
-function startFrontend() {
+function startFrontend(lanServer = false) {
   if (isDev) return waitForPort(FRONTEND_PORT, STARTUP_TIMEOUT);
 
   const frontendDir = path.join(RESOURCES_PATH, "frontend", "standalone", "frontend");
@@ -194,7 +297,12 @@ function startFrontend() {
   return new Promise((resolve, reject) => {
     frontendProcess = spawn(NODE_PATH, [frontendServerPath], {
       cwd: frontendDir,
-      env: { ...process.env, NODE_ENV: "production", PORT: String(FRONTEND_PORT) },
+      env: {
+        ...process.env,
+        NODE_ENV: "production",
+        PORT: String(FRONTEND_PORT),
+        HOSTNAME: lanServer ? "0.0.0.0" : "127.0.0.1",
+      },
       windowsHide: true,
     });
 
@@ -307,10 +415,51 @@ async function createWindow() {
   await win.loadURL(LOADING_HTML);
   win.show();
 
+  const cfg = readModeConfig();
+
+  // First run (or settings requested): ask the administrator how this PC should run.
+  if (!cfg || modeSetupContext.isChange) {
+    await win.loadFile(path.join(__dirname, "mode-setup.html"));
+    return;
+  }
+
+  // LAN client: no local database or services - use the server computer.
+  if (cfg.mode === "LAN_CLIENT") {
+    const probe = await testServerConnection(cfg);
+    if (!probe.backend.ok || !probe.frontend.ok) {
+      modeSetupContext = {
+        isChange: true,
+        error: `Cannot reach the server at ${cfg.host}. Backend: ${probe.backend.message}. App: ${probe.frontend.message}. Check the server computer is on, then Test connection / Save again.`,
+      };
+      await win.loadFile(path.join(__dirname, "mode-setup.html"));
+      return;
+    }
+    await win.loadURL(`http://${cfg.host}:${cfg.frontendPort}`);
+    if (!isDev && app.isPackaged) setupAutoUpdater();
+    return;
+  }
+
+  const lanServer = cfg.mode === "LAN_SERVER";
+
   try {
     prepareUserDataFolders();
-    await startBackend();
-    await startFrontend();
+    await startBackend(lanServer);
+    await startFrontend(lanServer);
+    if (lanServer) {
+      const fw = ensureFirewallRules();
+      if (!fw.ok) {
+        dialog.showMessageBox({
+          type: "warning",
+          title: "Allow other computers to connect",
+          message: "Windows Firewall may block other computers from connecting.",
+          detail:
+            "Run these two commands once in an Administrator Command Prompt on this computer:\n\n" +
+            `netsh advfirewall firewall add rule name="VC Inmotions Backend" dir=in action=allow protocol=TCP localport=${BACKEND_PORT}\n` +
+            `netsh advfirewall firewall add rule name="VC Inmotions App" dir=in action=allow protocol=TCP localport=${FRONTEND_PORT}\n\n` +
+            `Other computers connect to: ${localIPv4s().join(", ") || "(no network found)"}`,
+        });
+      }
+    }
   } catch (err) {
     log.error("Startup failed:", err);
     
@@ -362,9 +511,10 @@ app.whenReady().then(() => {
   } catch (err) {
     log.error(err.message);
     dialog.showErrorBox("Configuration Error", String(err.message));
-    app.exit(1); 
+    app.exit(1);
     return;
   }
+  buildMenu();
   createWindow();
 });
 
@@ -406,6 +556,74 @@ ipcMain.handle("open-external", async (_e, url) => {
   return true;
 });
 
+// ── Mode setup (Standalone / LAN) ──
+ipcMain.handle("mode:get", () => ({
+  config: readModeConfig(),
+  ips: localIPv4s(),
+  isChange: modeSetupContext.isChange,
+  error: modeSetupContext.error,
+}));
+
+ipcMain.handle("mode:test", async (_e, raw) => {
+  try {
+    const cfg = normalizeModeConfig({ mode: "LAN_CLIENT", ...raw });
+    return await testServerConnection(cfg);
+  } catch (err) {
+    const bad = { ok: false, message: err.message };
+    return { backend: bad, frontend: bad };
+  }
+});
+
+ipcMain.handle("mode:save", (_e, raw) => {
+  const cfg = normalizeModeConfig(raw);
+  writeModeConfig(cfg);
+  log.info("Run mode saved:", cfg.mode);
+  killChildren();
+  app.relaunch();
+  app.quit();
+});
+
+ipcMain.handle("mode:cancel", () => {
+  killChildren();
+  app.relaunch();
+  app.quit();
+});
+
+async function confirmAndOpenModeSettings(win) {
+  const { response } = await dialog.showMessageBox(win, {
+    type: "warning",
+    title: "Change connection mode",
+    message: "Change how this computer runs VC Inmotions?",
+    detail:
+      "Only an administrator should do this. Your data is not deleted, but this computer will use a different database location after you save: " +
+      "Standalone and Server use this computer's data; Client uses the server computer's data.",
+    buttons: ["Continue", "Cancel"],
+    defaultId: 1,
+    cancelId: 1,
+  });
+  if (response !== 0) return;
+  modeSetupContext = { isChange: true, error: "" };
+  (win || BrowserWindow.getAllWindows()[0])?.loadFile(path.join(__dirname, "mode-setup.html"));
+}
+
+function buildMenu() {
+  const template = [
+    {
+      label: "File",
+      submenu: [
+        { label: "Connection & Mode Settings…", click: (_i, win) => confirmAndOpenModeSettings(win) },
+        { type: "separator" },
+        { role: "quit" },
+      ],
+    },
+    { role: "editMenu" },
+    { role: "viewMenu" },
+    { role: "windowMenu" },
+    { role: "help", submenu: [{ label: "About", click: () => dialog.showMessageBox({ message: `VC Inmotions ${app.getVersion()}` }) }] },
+  ];
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+
 ipcMain.on("restart-app", () => {
   killChildren();
   app.relaunch();
@@ -423,6 +641,21 @@ ipcMain.handle("select-backup-file", async () => {
 
 ipcMain.handle("perform-restore", async (_, filePath) => {
   log.info("Restore triggered from UI:", filePath);
+
+  // A client PC has no local database, and a restore overwrites data - refuse in View-Only Mode.
+  const cfg = readModeConfig();
+  if (cfg?.mode === "LAN_CLIENT") {
+    dialog.showErrorBox("Restore not available", "Restore must be done on the server computer.");
+    return;
+  }
+  const lock = await httpProbeJson(`http://127.0.0.1:${BACKEND_PORT}/api/subscription/locked`);
+  if (lock?.locked) {
+    dialog.showErrorBox(
+      "View-Only Mode",
+      "Your software subscription has expired. The application is currently in View-Only Mode. Please renew your subscription through the web portal to restore full access."
+    );
+    return;
+  }
 
   const restoreModulePath = isDev
     ? path.join(__dirname, "../server/dist/src/utils/restoreBackUp.js")
