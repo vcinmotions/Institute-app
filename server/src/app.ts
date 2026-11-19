@@ -43,7 +43,32 @@ import { syncFromCloud, isEnforced, syncIntervalMs, getState } from "./services/
 
 
 const app = express();
-app.use(cors());
+
+// Allow this PC (localhost) and other computers on the institute's private network
+// (LAN mode: the app is opened from http://<server-ip>:3000). Public sites are not allowed.
+const isAllowedOrigin = (origin?: string) => {
+  if (!origin) return true; // same-origin / non-browser clients
+  try {
+    const h = new URL(origin).hostname;
+    return (
+      h === "localhost" ||
+      h === "127.0.0.1" ||
+      /^10\./.test(h) ||
+      /^192\.168\./.test(h) ||
+      /^172\.(1[6-9]|2\d|3[01])\./.test(h) ||
+      /^169\.254\./.test(h)
+    );
+  } catch {
+    return false;
+  }
+};
+app.use(
+  cors({
+    origin: (origin, cb) => cb(null, isAllowedOrigin(origin)),
+    credentials: true,
+    exposedHeaders: ["Content-Disposition"],
+  })
+);
 app.use(
   express.json({
     // Razorpay webhook signatures are computed over the raw bytes.
@@ -94,7 +119,6 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // // Attach CORS middleware with dynamic logic
 // app.use(cors(dynamicCors));
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true, exposedHeaders: ["Content-Disposition"] })); // Or whatever port your React app runs on
 
 // // Core middleware
 // app.use(express.json());
