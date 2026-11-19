@@ -87,6 +87,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -189,6 +192,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -231,7 +239,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Projects\\Jagrut Project\\Institute app\\Institute-app\\server\\prisma\\central\\schema.sqlite.prisma",
+    "sourceFilePath": "D:\\Projects\\Jagrut Project\\Institute app\\Institute-app\\server\\prisma\\central\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -244,18 +252,18 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
   "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": "CENTRAL_DATABASE_URL",
+        "fromEnvVar": "DATABASE_URL",
         "value": null
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../../prisma-client/generated/central\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"CENTRAL_DATABASE_URL\")\n}\n\n// ✅ Copy all models from Postgres schema here\nmodel SuperAdmin {\n  id          String   @id @default(uuid())\n  name        String\n  email       String   @unique\n  password    String\n  contact     String?\n  position    String\n  country     String?\n  state       String?\n  city        String?\n  zipCode     String?\n  fullAddress String?\n  createdAt   DateTime @default(now())\n\n  currentSessionToken String?\n  lastLoginAt         DateTime?\n\n  role Role @default(MASTER_ADMIN)\n\n  // 🆕 ADD THESE (MUST MATCH POSTGRES)\n  basicComplete   Boolean @default(false)\n  addressComplete Boolean @default(false)\n}\n\nmodel Tenant {\n  id                String   @id @default(uuid())\n  name              String\n  contact           String\n  fullAddress       String\n  logo              String?\n  certificateName   String?\n  stamp             String?\n  sign              String?\n  position          String\n  country           String\n  state             String\n  city              String\n  zipCode           String\n  instituteName     String   @unique\n  tenantId          String   @unique\n  slug              String   @unique\n  email             String?  @unique\n  businessEmail     String?\n  password          String?\n  encryptedPassword String\n  dbUrl             String\n  createdAt         DateTime @default(now())\n}\n\nenum Role {\n  MASTER_ADMIN\n}\n\n// Subscription price list, managed by the master admin on the web portal.\nmodel SubscriptionPlan {\n  id        String   @id @default(uuid())\n  code      String   @unique // SIX_MONTH | ONE_YEAR\n  name      String\n  months    Int\n  price     Float\n  currency  String   @default(\"INR\")\n  active    Boolean  @default(true)\n  updatedAt DateTime @updatedAt\n}\n\n// One subscription per institute, written by the web portal after payment.\nmodel PortalSubscription {\n  id            String   @id @default(uuid())\n  email         String   @unique // tenant login email\n  clientId      String // tenant.tenantId\n  plan          String   @default(\"NONE\")\n  startDate     DateTime @default(now())\n  expiryDate    DateTime @default(now())\n  status        String   @default(\"EXPIRED\") // ACTIVE | EXPIRED | SUSPENDED | REVOKED\n  syncTokenHash String?\n  updatedAt     DateTime @updatedAt\n}\n\nmodel PortalPayment {\n  id        String   @id @default(uuid())\n  email     String\n  planCode  String\n  amount    Float\n  currency  String   @default(\"INR\")\n  orderId   String   @unique\n  paymentId String?  @unique\n  status    String   @default(\"CREATED\") // CREATED | PAID | FAILED\n  createdAt DateTime @default(now())\n}\n\n// SaaS owner account for the hosted portal (/saas/login). Separate from the\n// per-install MASTER_ADMIN used inside the EXE.\nmodel SaasAdmin {\n  id        String   @id @default(uuid())\n  name      String\n  email     String   @unique\n  password  String\n  createdAt DateTime @default(now())\n}\n\n// Global settings shared by every EXE client (key -> JSON string).\nmodel AppSetting {\n  key       String   @id\n  value     String\n  updatedAt DateTime @updatedAt\n}\n",
-  "inlineSchemaHash": "536b960fcdd7aa9a1e4b3d8a8413f677901775df8c22023ea8a8a1a2c50bf3bd",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../../prisma-client/generated/central\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel SuperAdmin {\n  id          String   @id @default(uuid())\n  name        String\n  email       String   @unique\n  password    String\n  contact     String?\n  position    String\n  country     String?\n  state       String?\n  city        String?\n  zipCode     String?\n  fullAddress String?\n  createdAt   DateTime @default(now())\n\n  currentSessionToken String?\n  lastLoginAt         DateTime?\n\n  role Role @default(MASTER_ADMIN)\n\n  // 🆕 ADD THESE\n  basicComplete   Boolean @default(false)\n  addressComplete Boolean @default(false)\n}\n\nmodel Tenant {\n  id                String   @id @default(uuid())\n  name              String\n  contact           String\n  fullAddress       String\n  logo              String?\n  certificateName   String?\n  stamp             String?\n  sign              String?\n  position          String\n  country           String\n  state             String\n  city              String\n  zipCode           String\n  instituteName     String   @unique\n  tenantId          String   @unique\n  slug              String   @unique // 👈 REQUIRED\n  email             String?  @unique // add this line\n  businessEmail     String?\n  password          String?\n  encryptedPassword String\n  dbUrl             String\n  createdAt         DateTime @default(now())\n}\n\nenum Role {\n  MASTER_ADMIN\n}\n\n// Subscription price list, managed by the master admin on the web portal.\nmodel SubscriptionPlan {\n  id        String   @id @default(uuid())\n  code      String   @unique // SIX_MONTH | ONE_YEAR\n  name      String\n  months    Int\n  price     Float\n  currency  String   @default(\"INR\")\n  active    Boolean  @default(true)\n  updatedAt DateTime @updatedAt\n}\n\n// One subscription per institute, written by the web portal after payment.\nmodel PortalSubscription {\n  id            String   @id @default(uuid())\n  email         String   @unique // tenant login email\n  clientId      String // tenant.tenantId\n  plan          String   @default(\"NONE\")\n  startDate     DateTime @default(now())\n  expiryDate    DateTime @default(now())\n  status        String   @default(\"EXPIRED\") // ACTIVE | EXPIRED | SUSPENDED | REVOKED\n  syncTokenHash String?\n  updatedAt     DateTime @updatedAt\n}\n\nmodel PortalPayment {\n  id        String   @id @default(uuid())\n  email     String\n  planCode  String\n  amount    Float\n  currency  String   @default(\"INR\")\n  orderId   String   @unique\n  paymentId String?  @unique\n  status    String   @default(\"CREATED\") // CREATED | PAID | FAILED\n  createdAt DateTime @default(now())\n}\n\n// SaaS owner account for the hosted portal (/saas/login). Separate from the\n// per-install MASTER_ADMIN used inside the EXE.\nmodel SaasAdmin {\n  id        String   @id @default(uuid())\n  name      String\n  email     String   @unique\n  password  String\n  createdAt DateTime @default(now())\n}\n\n// Global settings shared by every EXE client (key -> JSON string).\nmodel AppSetting {\n  key       String   @id\n  value     String\n  updatedAt DateTime @updatedAt\n}\n",
+  "inlineSchemaHash": "8b512b392c722e23e2a8fc310cbc41488ae6b0fdc55ad9dcaf5b792a2ed55c39",
   "copyEngine": true
 }
 config.dirname = '/'
@@ -267,7 +275,7 @@ config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({
   parsed: {
-    CENTRAL_DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['CENTRAL_DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.CENTRAL_DATABASE_URL || undefined
+    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
   }
 })
 
