@@ -1,11 +1,11 @@
 {
   "name": "vcinmotions-application",
-  "version": "1.0.14",
+  "version": "1.0.16",
   "main": "installer/electron-main.js",
   "private": true,
   "scripts": {
     "dev": "electron .",
-    "build": "electron-builder"
+    "build": "node scripts/prepare-server-modules.js && electron-builder"
   },
   "build": {
     "appId": "com.vcinmotions.app",
@@ -20,12 +20,7 @@
       }
     ],
     "files": [
-      "installer/**",
-      "server/dist/**",
-      "frontend/.next/standalone/**",
-      "frontend/.next/static/**",
-      "frontend/public/**",
-      ".env"
+      "installer/**"
     ],
     "extraResources": [
       {
@@ -37,7 +32,7 @@
         "to": "frontend/standalone"
       },
       {
-        "from": "server/node_modules",
+        "from": "build/server-modules/node_modules",
         "to": "server/dist/node_modules"
       },
       {
@@ -49,8 +44,8 @@
         "to": "server/dist/assets"
       },
       {
-        "from": "frontend/.next",
-        "to": "frontend/standalone/frontend/.next"
+        "from": "frontend/.next/static",
+        "to": "frontend/standalone/frontend/.next/static"
       },
       {
         "from": "frontend/public",
@@ -75,7 +70,11 @@
     "win": {
       "target": "nsis",
       "sign": false
-    }
+    },
+    "electronLanguages": [
+      "en-US"
+    ],
+    "compression": "maximum"
   },
   "devDependencies": {
     "electron": "^30.0.0",
