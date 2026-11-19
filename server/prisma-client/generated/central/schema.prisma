@@ -50,6 +50,7 @@ model Tenant {
   tenantId          String   @unique
   slug              String   @unique // 👈 REQUIRED
   email             String?  @unique // add this line
+  businessEmail     String?
   password          String?
   encryptedPassword String
   dbUrl             String

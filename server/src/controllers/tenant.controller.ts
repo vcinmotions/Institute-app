@@ -133,7 +133,8 @@ export async function createTenantController(req: Request, res: Response) {
       logo ?? "", // logo is required
       stamp ?? "", // convert null → ""
       sign ?? "",
-      certificateName ?? "" // or certificate ?? ""
+      certificateName ?? "", // or certificate ?? ""
+      normalized.businessEmail
     );
     return res.status(201).json({
       message: `Tenant "${instituteName}" created successfully.`,

@@ -23,7 +23,7 @@ import Alert from "@/components/ui/alert/Alert";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
-import { ChevronDownIcon } from "@/icons";
+import { ChevronDownIcon, EyeIcon, EyeCloseIcon } from "@/icons";
 import { useRouter } from "next/navigation";
 
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -39,8 +39,10 @@ import { portalApi, setPortalToken } from "@/lib/portalApi";
 const CompanySchema = z.object({
     name: z.string().min(1, "Display Name is required"),
     instituteName: z.string().min(1, "Institute Name is required"),
-    email: z.string().email("Invalid email"),
-    password: z.string().min(4, "Password must be at least 4 characters"),
+    businessEmail: z.string().email("Enter a valid business email"),
+    email: z.string().min(1, "Username is required"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(1, "Confirm your password"),
     contact: z
         .string()
         .min(10, "Contact must be 10 digits")
@@ -62,8 +64,10 @@ type CompanyData = z.infer<typeof CompanySchema>;
 const FIELD_LABELS: Record<keyof CompanyData, string> = {
     name: "Display name",
     instituteName: "Institute name",
+    businessEmail: "Business email",
     email: "Username",
     password: "Password",
+    confirmPassword: "Confirm password",
     contact: "Contact number",
     country: "Country",
     state: "State",
@@ -83,11 +87,15 @@ type FormErrors = Partial<Record<keyof CompanyData, string>>;
  */
 export default function CompanyForm({ portal = false, plan = "" }: { portal?: boolean; plan?: string }) {
     const [submitting, setSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [newCompany, setNewCompany] = useState<CompanyData>({
         name: "",
         instituteName: "",
+        businessEmail: "",
         email: "",
         password: "",
+        confirmPassword: "",
         contact: "",
         country: "IN",
         state: "",
@@ -148,6 +156,7 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                 ...prev,
                 name: form.name ?? "",
                 instituteName: form.instituteName ?? "",
+                businessEmail: form.businessEmail ?? "",
                 email: form.email ?? "",
                 password: form.password ?? "",
                 contact: form.contact ?? "",
@@ -165,8 +174,10 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
         setNewCompany({
             name: "",
             instituteName: "",
+            businessEmail: "",
             email: "",
             password: "",
+            confirmPassword: "",
             contact: "",
             country: "",
             state: "",
@@ -201,8 +212,18 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
             }
         });
 
+        if (!newErrors.businessEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newCompany.businessEmail.trim())) {
+            newErrors.businessEmail = "Enter a valid business email";
+        }
+        if (!newErrors.password && newCompany.password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters";
+        }
+        if (!newErrors.confirmPassword && newCompany.confirmPassword !== newCompany.password) {
+            newErrors.confirmPassword = "Passwords do not match";
+        }
+
         setErrors(newErrors);
-        setTimeout(() => setErrors({}), 2000);
+        setTimeout(() => setErrors({}), 3000);
 
         return {
             isValid: Object.keys(newErrors).length === 0,
@@ -299,6 +320,21 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
             }));
 
             setField("name", displayName);
+            return;
+        }
+
+        if (field === "businessEmail") {
+            const cleaned = value.toLowerCase().trim();
+            setNewCompany((prev) => ({ ...prev, businessEmail: cleaned }));
+            setField("businessEmail", cleaned);
+            setErrors((prev) => ({ ...prev, businessEmail: "" }));
+            return;
+        }
+
+        if (field === "confirmPassword") {
+            // Kept out of the shared store so the password is not stored twice.
+            setNewCompany((prev) => ({ ...prev, confirmPassword: value }));
+            setErrors((prev) => ({ ...prev, confirmPassword: "" }));
             return;
         }
 
@@ -439,6 +475,7 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
         const admissionPayload = {
             name: titleCase(newCompany.name).trim(),
             email: normalizeEmail(newCompany.email).trim(),
+            businessEmail: normalizeEmail(newCompany.businessEmail).trim(),
             contact: newCompany.contact,
             instituteName: newCompany.instituteName.trim(),
             password: newCompany.password.trim(),
@@ -484,8 +521,10 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                 setNewCompany({
                     name: "",
                     instituteName: "",
+                    businessEmail: "",
                     email: "",
                     password: "",
+                    confirmPassword: "",
                     contact: "",
                     country: "",
                     state: "",
@@ -578,31 +617,16 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                                 {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                             </div>
 
-                            <div ref={(el) => { inputRefs.current.email = el; }}>
-                                <Label>Username *</Label>
+                            <div ref={(el) => { inputRefs.current.businessEmail = el; }}>
+                                <Label>Business Email *</Label>
                                 <Input
-                                    type="text"
+                                    type="email"
                                     tabIndex={3}
-                                    placeholder="Enter Username"
-                                    value={normalizeEmail(newCompany.email)}
-                                    onChange={(e) => handleChange("email", e.target.value)}
+                                    placeholder="e.g. info@yourinstitute.com"
+                                    value={newCompany.businessEmail}
+                                    onChange={(e) => handleChange("businessEmail", e.target.value)}
                                 />
-                                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-                            </div>
-
-                            <div ref={(el) => { inputRefs.current.password = el; }}>
-                                <Label>Password *</Label>
-                                <div className="relative">
-                                    <Input
-                                        type="text"
-                                        tabIndex={4}
-                                        placeholder="Enter password"
-                                        value={newCompany.password}
-                                        onChange={(e) => handleChange("password", e.target.value)}
-                                        className="pr-10"
-                                    />
-                                </div>
-                                {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+                                {errors.businessEmail && <p className="mt-1 text-sm text-red-500">{errors.businessEmail}</p>}
                             </div>
 
                             <div ref={(el) => { inputRefs.current.contact = el; }}>
@@ -645,7 +669,87 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                         </div>
                     </div>
 
-                    {/* Section 2: Address Information */}
+                    {/* Section 2: Sign up / Account credentials */}
+                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
+                        <h3 className="mb-1 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Sign Up Details</h3>
+                        <p className="mb-4 text-xs text-gray-500 dark:text-gray-400">You will use this username and password to sign in to the app.</p>
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+
+                            <div ref={(el) => { inputRefs.current.email = el; }}>
+                                <Label>Username *</Label>
+                                <Input
+                                    type="text"
+                                    tabIndex={4}
+                                    placeholder="Enter Username"
+                                    autoComplete="username"
+                                    value={normalizeEmail(newCompany.email)}
+                                    onChange={(e) => handleChange("email", e.target.value)}
+                                />
+                                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                            </div>
+
+                            <div ref={(el) => { inputRefs.current.password = el; }}>
+                                <Label>Password *</Label>
+                                <div className="relative">
+                                    <Input
+                                        type={showPassword ? "text" : "password"}
+                                        tabIndex={5}
+                                        placeholder="At least 6 characters"
+                                        autoComplete="new-password"
+                                        className="pr-11"
+                                        value={newCompany.password}
+                                        onChange={(e) => handleChange("password", e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        tabIndex={-1}
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                        onClick={() => setShowPassword((v) => !v)}
+                                        className="absolute top-1/2 right-4 z-30 -translate-y-1/2 cursor-pointer"
+                                    >
+                                        {showPassword ? (
+                                            <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                                        ) : (
+                                            <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                                        )}
+                                    </button>
+                                </div>
+                                {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+                            </div>
+
+                            <div ref={(el) => { inputRefs.current.confirmPassword = el; }}>
+                                <Label>Confirm Password *</Label>
+                                <div className="relative">
+                                    <Input
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        tabIndex={6}
+                                        placeholder="Re-enter password"
+                                        autoComplete="new-password"
+                                        className="pr-11"
+                                        value={newCompany.confirmPassword}
+                                        onChange={(e) => handleChange("confirmPassword", e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        tabIndex={-1}
+                                        aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                        onClick={() => setShowConfirmPassword((v) => !v)}
+                                        className="absolute top-1/2 right-4 z-30 -translate-y-1/2 cursor-pointer"
+                                    >
+                                        {showConfirmPassword ? (
+                                            <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                                        ) : (
+                                            <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                                        )}
+                                    </button>
+                                </div>
+                                {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Section 3: Address Information */}
                     <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
                         <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Address Information</h3>
                         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">

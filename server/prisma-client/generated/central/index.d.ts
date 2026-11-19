@@ -2602,6 +2602,7 @@ export namespace Prisma {
     tenantId: string | null
     slug: string | null
     email: string | null
+    businessEmail: string | null
     password: string | null
     encryptedPassword: string | null
     dbUrl: string | null
@@ -2626,6 +2627,7 @@ export namespace Prisma {
     tenantId: string | null
     slug: string | null
     email: string | null
+    businessEmail: string | null
     password: string | null
     encryptedPassword: string | null
     dbUrl: string | null
@@ -2650,6 +2652,7 @@ export namespace Prisma {
     tenantId: number
     slug: number
     email: number
+    businessEmail: number
     password: number
     encryptedPassword: number
     dbUrl: number
@@ -2676,6 +2679,7 @@ export namespace Prisma {
     tenantId?: true
     slug?: true
     email?: true
+    businessEmail?: true
     password?: true
     encryptedPassword?: true
     dbUrl?: true
@@ -2700,6 +2704,7 @@ export namespace Prisma {
     tenantId?: true
     slug?: true
     email?: true
+    businessEmail?: true
     password?: true
     encryptedPassword?: true
     dbUrl?: true
@@ -2724,6 +2729,7 @@ export namespace Prisma {
     tenantId?: true
     slug?: true
     email?: true
+    businessEmail?: true
     password?: true
     encryptedPassword?: true
     dbUrl?: true
@@ -2821,6 +2827,7 @@ export namespace Prisma {
     tenantId: string
     slug: string
     email: string | null
+    businessEmail: string | null
     password: string | null
     encryptedPassword: string
     dbUrl: string
@@ -2862,6 +2869,7 @@ export namespace Prisma {
     tenantId?: boolean
     slug?: boolean
     email?: boolean
+    businessEmail?: boolean
     password?: boolean
     encryptedPassword?: boolean
     dbUrl?: boolean
@@ -2886,6 +2894,7 @@ export namespace Prisma {
     tenantId?: boolean
     slug?: boolean
     email?: boolean
+    businessEmail?: boolean
     password?: boolean
     encryptedPassword?: boolean
     dbUrl?: boolean
@@ -2910,6 +2919,7 @@ export namespace Prisma {
     tenantId?: boolean
     slug?: boolean
     email?: boolean
+    businessEmail?: boolean
     password?: boolean
     encryptedPassword?: boolean
     dbUrl?: boolean
@@ -2934,13 +2944,14 @@ export namespace Prisma {
     tenantId?: boolean
     slug?: boolean
     email?: boolean
+    businessEmail?: boolean
     password?: boolean
     encryptedPassword?: boolean
     dbUrl?: boolean
     createdAt?: boolean
   }
 
-  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "position" | "country" | "state" | "city" | "zipCode" | "instituteName" | "tenantId" | "slug" | "email" | "password" | "encryptedPassword" | "dbUrl" | "createdAt", ExtArgs["result"]["tenant"]>
+  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "position" | "country" | "state" | "city" | "zipCode" | "instituteName" | "tenantId" | "slug" | "email" | "businessEmail" | "password" | "encryptedPassword" | "dbUrl" | "createdAt", ExtArgs["result"]["tenant"]>
 
   export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Tenant"
@@ -2963,6 +2974,7 @@ export namespace Prisma {
       tenantId: string
       slug: string
       email: string | null
+      businessEmail: string | null
       password: string | null
       encryptedPassword: string
       dbUrl: string
@@ -3407,6 +3419,7 @@ export namespace Prisma {
     readonly tenantId: FieldRef<"Tenant", 'String'>
     readonly slug: FieldRef<"Tenant", 'String'>
     readonly email: FieldRef<"Tenant", 'String'>
+    readonly businessEmail: FieldRef<"Tenant", 'String'>
     readonly password: FieldRef<"Tenant", 'String'>
     readonly encryptedPassword: FieldRef<"Tenant", 'String'>
     readonly dbUrl: FieldRef<"Tenant", 'String'>
@@ -8996,6 +9009,7 @@ export namespace Prisma {
     tenantId: 'tenantId',
     slug: 'slug',
     email: 'email',
+    businessEmail: 'businessEmail',
     password: 'password',
     encryptedPassword: 'encryptedPassword',
     dbUrl: 'dbUrl',
@@ -9311,6 +9325,7 @@ export namespace Prisma {
     tenantId?: StringFilter<"Tenant"> | string
     slug?: StringFilter<"Tenant"> | string
     email?: StringNullableFilter<"Tenant"> | string | null
+    businessEmail?: StringNullableFilter<"Tenant"> | string | null
     password?: StringNullableFilter<"Tenant"> | string | null
     encryptedPassword?: StringFilter<"Tenant"> | string
     dbUrl?: StringFilter<"Tenant"> | string
@@ -9335,6 +9350,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     slug?: SortOrder
     email?: SortOrderInput | SortOrder
+    businessEmail?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
@@ -9362,6 +9378,7 @@ export namespace Prisma {
     state?: StringFilter<"Tenant"> | string
     city?: StringFilter<"Tenant"> | string
     zipCode?: StringFilter<"Tenant"> | string
+    businessEmail?: StringNullableFilter<"Tenant"> | string | null
     password?: StringNullableFilter<"Tenant"> | string | null
     encryptedPassword?: StringFilter<"Tenant"> | string
     dbUrl?: StringFilter<"Tenant"> | string
@@ -9386,6 +9403,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     slug?: SortOrder
     email?: SortOrderInput | SortOrder
+    businessEmail?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
@@ -9416,6 +9434,7 @@ export namespace Prisma {
     tenantId?: StringWithAggregatesFilter<"Tenant"> | string
     slug?: StringWithAggregatesFilter<"Tenant"> | string
     email?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
+    businessEmail?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
     password?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
     encryptedPassword?: StringWithAggregatesFilter<"Tenant"> | string
     dbUrl?: StringWithAggregatesFilter<"Tenant"> | string
@@ -9889,6 +9908,7 @@ export namespace Prisma {
     tenantId: string
     slug: string
     email?: string | null
+    businessEmail?: string | null
     password?: string | null
     encryptedPassword: string
     dbUrl: string
@@ -9913,6 +9933,7 @@ export namespace Prisma {
     tenantId: string
     slug: string
     email?: string | null
+    businessEmail?: string | null
     password?: string | null
     encryptedPassword: string
     dbUrl: string
@@ -9937,6 +9958,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    businessEmail?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
@@ -9961,6 +9983,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    businessEmail?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
@@ -9985,6 +10008,7 @@ export namespace Prisma {
     tenantId: string
     slug: string
     email?: string | null
+    businessEmail?: string | null
     password?: string | null
     encryptedPassword: string
     dbUrl: string
@@ -10009,6 +10033,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    businessEmail?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
@@ -10033,6 +10058,7 @@ export namespace Prisma {
     tenantId?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    businessEmail?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
@@ -10611,6 +10637,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     slug?: SortOrder
     email?: SortOrder
+    businessEmail?: SortOrder
     password?: SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
@@ -10635,6 +10662,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     slug?: SortOrder
     email?: SortOrder
+    businessEmail?: SortOrder
     password?: SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
@@ -10659,6 +10687,7 @@ export namespace Prisma {
     tenantId?: SortOrder
     slug?: SortOrder
     email?: SortOrder
+    businessEmail?: SortOrder
     password?: SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder

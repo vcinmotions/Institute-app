@@ -134,3 +134,45 @@ export async function updateSettings(req: Request, res: Response) {
     res.status(500).json({ error: "Failed to save settings" });
   }
 }
+
+// ---------- Registered / subscribed institutes ----------
+
+export async function listInstitutes(_req: Request, res: Response) {
+  const prisma = getCentralPrisma();
+  const [tenants, subs, payments] = await Promise.all([
+    prisma.tenant.findMany({
+      select: {
+        tenantId: true, instituteName: true, name: true, email: true, businessEmail: true,
+        contact: true, city: true, state: true, country: true, createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.portalSubscription.findMany(),
+    prisma.portalPayment.findMany({ where: { status: "PAID" } }),
+  ]);
+
+  const subByEmail = new Map(subs.map((s) => [s.email, s]));
+  const paidByEmail = new Map<string, number>();
+  for (const p of payments) paidByEmail.set(p.email, (paidByEmail.get(p.email) ?? 0) + p.amount);
+
+  const now = new Date();
+  const rows = tenants.map((t) => {
+    const s = t.email ? subByEmail.get(t.email) : undefined;
+    const subscribed = !!s && s.plan !== "NONE";
+    let status: "ACTIVE" | "EXPIRED" | "SUSPENDED" | "REVOKED" | "NOT_SUBSCRIBED" = "NOT_SUBSCRIBED";
+    if (s && subscribed) {
+      if (s.status === "ACTIVE") status = s.expiryDate > now ? "ACTIVE" : "EXPIRED";
+      else status = s.status as any;
+    }
+    return {
+      ...t,
+      plan: subscribed ? s!.plan : null,
+      status,
+      startDate: subscribed ? s!.startDate : null,
+      expiryDate: subscribed ? s!.expiryDate : null,
+      totalPaid: t.email ? paidByEmail.get(t.email) ?? 0 : 0,
+    };
+  });
+
+  res.json(rows);
+}

@@ -159,6 +159,7 @@ exports.Prisma.TenantScalarFieldEnum = {
   tenantId: 'tenantId',
   slug: 'slug',
   email: 'email',
+  businessEmail: 'businessEmail',
   password: 'password',
   encryptedPassword: 'encryptedPassword',
   dbUrl: 'dbUrl',

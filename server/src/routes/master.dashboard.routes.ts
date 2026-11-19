@@ -12,11 +12,11 @@ import { createMasterAddressController } from "../controllers/master.setup.contr
 
 import { listPlans, listPlansAdmin, updatePlan } from "../controllers/plan.controller";
 import {
-  portalAuth, registerInstitute, portalLogin, portalMe,
+  portalAuth, registerInstitute, portalLogin, portalMe, portalPayments,
   createOrder, verifyPayment, razorpayWebhook, syncSubscription,
 } from "../controllers/portal.controller";
 import {
-  saasAuth, saasLogin, saasMe, getPublicSettings, getSettingsAdmin, updateSettings,
+  saasAuth, saasLogin, saasMe, getPublicSettings, getSettingsAdmin, updateSettings, listInstitutes,
 } from "../controllers/saas.controller";
 const router = express.Router();
 
@@ -29,6 +29,7 @@ router.post("/setup/address", createMasterAddressController);
 router.post("/portal/register", registerInstitute);
 router.post("/portal/login", portalLogin);
 router.get("/portal/me", portalAuth, portalMe);
+router.get("/portal/payments", portalAuth, portalPayments);
 router.post("/portal/order", portalAuth, createOrder);
 router.post("/portal/verify", portalAuth, verifyPayment);
 router.post("/portal/razorpay-webhook", razorpayWebhook);
@@ -41,6 +42,7 @@ router.post("/saas/login", saasLogin);
 router.get("/saas/me", saasAuth, saasMe);
 router.get("/saas/plans", saasAuth, listPlansAdmin);
 router.put("/saas/plans/:code", saasAuth, updatePlan);
+router.get("/saas/institutes", saasAuth, listInstitutes);
 router.get("/saas/settings", saasAuth, getSettingsAdmin);
 router.put("/saas/settings", saasAuth, updateSettings);
 router.get("/app-settings", getPublicSettings); // global settings for all EXE clients

@@ -52,6 +52,7 @@ model Tenant {
   tenantId  String   @unique
   slug      String   @unique
   email     String?   @unique
+  businessEmail String?
   password  String?
   encryptedPassword  String
   dbUrl     String

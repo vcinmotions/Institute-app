@@ -47,6 +47,9 @@ export async function registerInstitute(req: Request, res: Response) {
     n.state, n.city, n.zipCode, n.fullAddress, n.financialStartDate, n.financialEndDate,
   ];
   if (required.some((v) => !v)) return res.status(400).json({ error: "Missing required fields." });
+  if (!n.businessEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(n.businessEmail)) {
+    return res.status(400).json({ error: "Please enter a valid business email." });
+  }
   if (String(n.password).length < 6) {
     return res.status(400).json({ error: "Password must be at least 6 characters long." });
   }
@@ -63,7 +66,7 @@ export async function registerInstitute(req: Request, res: Response) {
     await createTenant(
       n.name!, n.instituteName!, n.email!, n.password!, n.contact!, n.country!,
       n.state!, n.city!, n.zipCode!, n.fullAddress!, n.financialStartDate!, n.financialEndDate!,
-      "", "", "", n.certificateName ?? ""
+      "", "", "", n.certificateName ?? "", n.businessEmail
     );
 
     const tenant = await prisma.tenant.findUnique({ where: { email: n.email! } });
@@ -96,14 +99,33 @@ export async function portalMe(req: Request, res: Response) {
   const email = (req as any).portalEmail as string;
   const prisma = getCentralPrisma();
   const sub = await prisma.portalSubscription.findUnique({ where: { email } });
+  const tenant = await prisma.tenant.findUnique({
+    where: { email },
+    select: {
+      instituteName: true, name: true, businessEmail: true, contact: true,
+      fullAddress: true, city: true, state: true, country: true, zipCode: true, createdAt: true,
+    },
+  });
   const active = !!sub && sub.status === "ACTIVE" && sub.expiryDate > new Date();
   res.json({
+    profile: tenant,
+    startDate: sub?.startDate ?? null,
     email,
     status: active ? "ACTIVE" : sub?.status === "ACTIVE" ? "EXPIRED" : sub?.status ?? "EXPIRED",
     plan: sub?.plan ?? "NONE",
     expiryDate: sub?.expiryDate ?? null,
     daysLeft: sub ? Math.max(0, Math.ceil((+sub.expiryDate - Date.now()) / 86400000)) : 0,
   });
+}
+
+export async function portalPayments(req: Request, res: Response) {
+  const email = (req as any).portalEmail as string;
+  const rows = await getCentralPrisma().portalPayment.findMany({
+    where: { email, status: "PAID" },
+    orderBy: { createdAt: "desc" },
+    select: { orderId: true, paymentId: true, planCode: true, amount: true, currency: true, createdAt: true },
+  });
+  res.json(rows);
 }
 
 // ---------- Razorpay ----------

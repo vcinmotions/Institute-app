@@ -701,7 +701,8 @@ export async function createTenant(
   logo: string,
   stamp: string,
   sign: string,
-  certificateName: string
+  certificateName: string,
+  businessEmail?: string | null
 ) {
   if (
     !name ||
@@ -883,6 +884,7 @@ export async function createTenant(
       tenantId: tenantId.toString(),
       name,
       email,
+      businessEmail: businessEmail || null,
       contact,
       country,
       state,

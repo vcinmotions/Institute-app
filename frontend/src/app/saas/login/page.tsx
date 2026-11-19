@@ -33,8 +33,8 @@ export default function SaasLogin() {
       >
         <h1 className="text-xl font-semibold dark:text-white">SaaS Admin Sign In</h1>
         <input
-          type="email"
-          placeholder="Email"
+          type="text"
+          placeholder="Username or email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           className="w-full rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
