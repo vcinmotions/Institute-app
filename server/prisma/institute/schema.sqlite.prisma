@@ -633,7 +633,11 @@ model Test {
   name              String
   status            TestStatus       @default(DRAFT)  // 👈 Add default
 
-  batchId           Int           
+  testDate          DateTime?
+  totalMarks        Int?
+  description       String?
+
+  batchId           Int
   batch   Batch @relation(fields: [batchId], references: [id])
 
   courseId Int

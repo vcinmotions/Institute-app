@@ -555,6 +555,9 @@ model Test {
   id            Int           @id @default(autoincrement())
   name          String
   status        TestStatus    @default(DRAFT)
+  testDate      DateTime?
+  totalMarks    Int?
+  description   String?
   batchId       Int
   courseId      Int
   clientAdminId String

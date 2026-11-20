@@ -43138,12 +43138,14 @@ export namespace Prisma {
 
   export type TestAvgAggregateOutputType = {
     id: number | null
+    totalMarks: number | null
     batchId: number | null
     courseId: number | null
   }
 
   export type TestSumAggregateOutputType = {
     id: number | null
+    totalMarks: number | null
     batchId: number | null
     courseId: number | null
   }
@@ -43152,6 +43154,9 @@ export namespace Prisma {
     id: number | null
     name: string | null
     status: $Enums.TestStatus | null
+    testDate: Date | null
+    totalMarks: number | null
+    description: string | null
     batchId: number | null
     courseId: number | null
     clientAdminId: string | null
@@ -43161,6 +43166,9 @@ export namespace Prisma {
     id: number | null
     name: string | null
     status: $Enums.TestStatus | null
+    testDate: Date | null
+    totalMarks: number | null
+    description: string | null
     batchId: number | null
     courseId: number | null
     clientAdminId: string | null
@@ -43170,6 +43178,9 @@ export namespace Prisma {
     id: number
     name: number
     status: number
+    testDate: number
+    totalMarks: number
+    description: number
     batchId: number
     courseId: number
     clientAdminId: number
@@ -43179,12 +43190,14 @@ export namespace Prisma {
 
   export type TestAvgAggregateInputType = {
     id?: true
+    totalMarks?: true
     batchId?: true
     courseId?: true
   }
 
   export type TestSumAggregateInputType = {
     id?: true
+    totalMarks?: true
     batchId?: true
     courseId?: true
   }
@@ -43193,6 +43206,9 @@ export namespace Prisma {
     id?: true
     name?: true
     status?: true
+    testDate?: true
+    totalMarks?: true
+    description?: true
     batchId?: true
     courseId?: true
     clientAdminId?: true
@@ -43202,6 +43218,9 @@ export namespace Prisma {
     id?: true
     name?: true
     status?: true
+    testDate?: true
+    totalMarks?: true
+    description?: true
     batchId?: true
     courseId?: true
     clientAdminId?: true
@@ -43211,6 +43230,9 @@ export namespace Prisma {
     id?: true
     name?: true
     status?: true
+    testDate?: true
+    totalMarks?: true
+    description?: true
     batchId?: true
     courseId?: true
     clientAdminId?: true
@@ -43307,6 +43329,9 @@ export namespace Prisma {
     id: number
     name: string
     status: $Enums.TestStatus
+    testDate: Date | null
+    totalMarks: number | null
+    description: string | null
     batchId: number
     courseId: number
     clientAdminId: string
@@ -43335,6 +43360,9 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     status?: boolean
+    testDate?: boolean
+    totalMarks?: boolean
+    description?: boolean
     batchId?: boolean
     courseId?: boolean
     clientAdminId?: boolean
@@ -43349,6 +43377,9 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     status?: boolean
+    testDate?: boolean
+    totalMarks?: boolean
+    description?: boolean
     batchId?: boolean
     courseId?: boolean
     clientAdminId?: boolean
@@ -43361,6 +43392,9 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     status?: boolean
+    testDate?: boolean
+    totalMarks?: boolean
+    description?: boolean
     batchId?: boolean
     courseId?: boolean
     clientAdminId?: boolean
@@ -43373,12 +43407,15 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     status?: boolean
+    testDate?: boolean
+    totalMarks?: boolean
+    description?: boolean
     batchId?: boolean
     courseId?: boolean
     clientAdminId?: boolean
   }
 
-  export type TestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "batchId" | "courseId" | "clientAdminId", ExtArgs["result"]["test"]>
+  export type TestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "testDate" | "totalMarks" | "description" | "batchId" | "courseId" | "clientAdminId", ExtArgs["result"]["test"]>
   export type TestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     StudentTest?: boolean | Test$StudentTestArgs<ExtArgs>
     batch?: boolean | BatchDefaultArgs<ExtArgs>
@@ -43409,6 +43446,9 @@ export namespace Prisma {
       id: number
       name: string
       status: $Enums.TestStatus
+      testDate: Date | null
+      totalMarks: number | null
+      description: string | null
       batchId: number
       courseId: number
       clientAdminId: string
@@ -43842,6 +43882,9 @@ export namespace Prisma {
     readonly id: FieldRef<"Test", 'Int'>
     readonly name: FieldRef<"Test", 'String'>
     readonly status: FieldRef<"Test", 'TestStatus'>
+    readonly testDate: FieldRef<"Test", 'DateTime'>
+    readonly totalMarks: FieldRef<"Test", 'Int'>
+    readonly description: FieldRef<"Test", 'String'>
     readonly batchId: FieldRef<"Test", 'Int'>
     readonly courseId: FieldRef<"Test", 'Int'>
     readonly clientAdminId: FieldRef<"Test", 'String'>
@@ -49597,6 +49640,9 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     status: 'status',
+    testDate: 'testDate',
+    totalMarks: 'totalMarks',
+    description: 'description',
     batchId: 'batchId',
     courseId: 'courseId',
     clientAdminId: 'clientAdminId'
@@ -52607,6 +52653,9 @@ export namespace Prisma {
     id?: IntFilter<"Test"> | number
     name?: StringFilter<"Test"> | string
     status?: EnumTestStatusFilter<"Test"> | $Enums.TestStatus
+    testDate?: DateTimeNullableFilter<"Test"> | Date | string | null
+    totalMarks?: IntNullableFilter<"Test"> | number | null
+    description?: StringNullableFilter<"Test"> | string | null
     batchId?: IntFilter<"Test"> | number
     courseId?: IntFilter<"Test"> | number
     clientAdminId?: StringFilter<"Test"> | string
@@ -52620,6 +52669,9 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     status?: SortOrder
+    testDate?: SortOrderInput | SortOrder
+    totalMarks?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     batchId?: SortOrder
     courseId?: SortOrder
     clientAdminId?: SortOrder
@@ -52636,6 +52688,9 @@ export namespace Prisma {
     NOT?: TestWhereInput | TestWhereInput[]
     name?: StringFilter<"Test"> | string
     status?: EnumTestStatusFilter<"Test"> | $Enums.TestStatus
+    testDate?: DateTimeNullableFilter<"Test"> | Date | string | null
+    totalMarks?: IntNullableFilter<"Test"> | number | null
+    description?: StringNullableFilter<"Test"> | string | null
     batchId?: IntFilter<"Test"> | number
     courseId?: IntFilter<"Test"> | number
     clientAdminId?: StringFilter<"Test"> | string
@@ -52649,6 +52704,9 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     status?: SortOrder
+    testDate?: SortOrderInput | SortOrder
+    totalMarks?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     batchId?: SortOrder
     courseId?: SortOrder
     clientAdminId?: SortOrder
@@ -52666,6 +52724,9 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Test"> | number
     name?: StringWithAggregatesFilter<"Test"> | string
     status?: EnumTestStatusWithAggregatesFilter<"Test"> | $Enums.TestStatus
+    testDate?: DateTimeNullableWithAggregatesFilter<"Test"> | Date | string | null
+    totalMarks?: IntNullableWithAggregatesFilter<"Test"> | number | null
+    description?: StringNullableWithAggregatesFilter<"Test"> | string | null
     batchId?: IntWithAggregatesFilter<"Test"> | number
     courseId?: IntWithAggregatesFilter<"Test"> | number
     clientAdminId?: StringWithAggregatesFilter<"Test"> | string
@@ -55826,6 +55887,9 @@ export namespace Prisma {
   export type TestCreateInput = {
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     StudentTest?: StudentTestCreateNestedManyWithoutTestInput
     batch: BatchCreateNestedOneWithoutTestsInput
     clientAdmin: ClientAdminCreateNestedOneWithoutTestsInput
@@ -55836,6 +55900,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     batchId: number
     courseId: number
     clientAdminId: string
@@ -55845,6 +55912,9 @@ export namespace Prisma {
   export type TestUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     StudentTest?: StudentTestUpdateManyWithoutTestNestedInput
     batch?: BatchUpdateOneRequiredWithoutTestsNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutTestsNestedInput
@@ -55855,6 +55925,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     batchId?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
@@ -55865,6 +55938,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     batchId: number
     courseId: number
     clientAdminId: string
@@ -55873,12 +55949,18 @@ export namespace Prisma {
   export type TestUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TestUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     batchId?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
@@ -58489,6 +58571,9 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     status?: SortOrder
+    testDate?: SortOrder
+    totalMarks?: SortOrder
+    description?: SortOrder
     batchId?: SortOrder
     courseId?: SortOrder
     clientAdminId?: SortOrder
@@ -58496,6 +58581,7 @@ export namespace Prisma {
 
   export type TestAvgOrderByAggregateInput = {
     id?: SortOrder
+    totalMarks?: SortOrder
     batchId?: SortOrder
     courseId?: SortOrder
   }
@@ -58504,6 +58590,9 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     status?: SortOrder
+    testDate?: SortOrder
+    totalMarks?: SortOrder
+    description?: SortOrder
     batchId?: SortOrder
     courseId?: SortOrder
     clientAdminId?: SortOrder
@@ -58513,6 +58602,9 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     status?: SortOrder
+    testDate?: SortOrder
+    totalMarks?: SortOrder
+    description?: SortOrder
     batchId?: SortOrder
     courseId?: SortOrder
     clientAdminId?: SortOrder
@@ -58520,6 +58612,7 @@ export namespace Prisma {
 
   export type TestSumOrderByAggregateInput = {
     id?: SortOrder
+    totalMarks?: SortOrder
     batchId?: SortOrder
     courseId?: SortOrder
   }
@@ -64587,6 +64680,9 @@ export namespace Prisma {
   export type TestCreateWithoutClientAdminInput = {
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     StudentTest?: StudentTestCreateNestedManyWithoutTestInput
     batch: BatchCreateNestedOneWithoutTestsInput
     course: CourseCreateNestedOneWithoutTestsInput
@@ -64596,6 +64692,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     batchId: number
     courseId: number
     StudentTest?: StudentTestUncheckedCreateNestedManyWithoutTestInput
@@ -65454,6 +65553,9 @@ export namespace Prisma {
     id?: IntFilter<"Test"> | number
     name?: StringFilter<"Test"> | string
     status?: EnumTestStatusFilter<"Test"> | $Enums.TestStatus
+    testDate?: DateTimeNullableFilter<"Test"> | Date | string | null
+    totalMarks?: IntNullableFilter<"Test"> | number | null
+    description?: StringNullableFilter<"Test"> | string | null
     batchId?: IntFilter<"Test"> | number
     courseId?: IntFilter<"Test"> | number
     clientAdminId?: StringFilter<"Test"> | string
@@ -69279,6 +69381,9 @@ export namespace Prisma {
   export type TestCreateWithoutCourseInput = {
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     StudentTest?: StudentTestCreateNestedManyWithoutTestInput
     batch: BatchCreateNestedOneWithoutTestsInput
     clientAdmin: ClientAdminCreateNestedOneWithoutTestsInput
@@ -69288,6 +69393,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     batchId: number
     clientAdminId: string
     StudentTest?: StudentTestUncheckedCreateNestedManyWithoutTestInput
@@ -70286,6 +70394,9 @@ export namespace Prisma {
   export type TestCreateWithoutBatchInput = {
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     StudentTest?: StudentTestCreateNestedManyWithoutTestInput
     clientAdmin: ClientAdminCreateNestedOneWithoutTestsInput
     course: CourseCreateNestedOneWithoutTestsInput
@@ -70295,6 +70406,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     courseId: number
     clientAdminId: string
     StudentTest?: StudentTestUncheckedCreateNestedManyWithoutTestInput
@@ -77353,6 +77467,9 @@ export namespace Prisma {
   export type TestCreateWithoutStudentTestInput = {
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     batch: BatchCreateNestedOneWithoutTestsInput
     clientAdmin: ClientAdminCreateNestedOneWithoutTestsInput
     course: CourseCreateNestedOneWithoutTestsInput
@@ -77362,6 +77479,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     batchId: number
     courseId: number
     clientAdminId: string
@@ -77641,6 +77761,9 @@ export namespace Prisma {
   export type TestUpdateWithoutStudentTestInput = {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     batch?: BatchUpdateOneRequiredWithoutTestsNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutTestsNestedInput
     course?: CourseUpdateOneRequiredWithoutTestsNestedInput
@@ -77650,6 +77773,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     batchId?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
@@ -79629,6 +79755,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     batchId: number
     courseId: number
   }
@@ -80612,6 +80741,9 @@ export namespace Prisma {
   export type TestUpdateWithoutClientAdminInput = {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     StudentTest?: StudentTestUpdateManyWithoutTestNestedInput
     batch?: BatchUpdateOneRequiredWithoutTestsNestedInput
     course?: CourseUpdateOneRequiredWithoutTestsNestedInput
@@ -80621,6 +80753,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     batchId?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
     StudentTest?: StudentTestUncheckedUpdateManyWithoutTestNestedInput
@@ -80630,6 +80765,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     batchId?: IntFieldUpdateOperationsInput | number
     courseId?: IntFieldUpdateOperationsInput | number
   }
@@ -81446,6 +81584,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     batchId: number
     clientAdminId: string
   }
@@ -81845,6 +81986,9 @@ export namespace Prisma {
   export type TestUpdateWithoutCourseInput = {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     StudentTest?: StudentTestUpdateManyWithoutTestNestedInput
     batch?: BatchUpdateOneRequiredWithoutTestsNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutTestsNestedInput
@@ -81854,6 +81998,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     batchId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
     StudentTest?: StudentTestUncheckedUpdateManyWithoutTestNestedInput
@@ -81863,6 +82010,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     batchId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
@@ -81922,6 +82072,9 @@ export namespace Prisma {
     id?: number
     name: string
     status?: $Enums.TestStatus
+    testDate?: Date | string | null
+    totalMarks?: number | null
+    description?: string | null
     courseId: number
     clientAdminId: string
   }
@@ -82010,6 +82163,9 @@ export namespace Prisma {
   export type TestUpdateWithoutBatchInput = {
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     StudentTest?: StudentTestUpdateManyWithoutTestNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutTestsNestedInput
     course?: CourseUpdateOneRequiredWithoutTestsNestedInput
@@ -82019,6 +82175,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     courseId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
     StudentTest?: StudentTestUncheckedUpdateManyWithoutTestNestedInput
@@ -82028,6 +82187,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     status?: EnumTestStatusFieldUpdateOperationsInput | $Enums.TestStatus
+    testDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     courseId?: IntFieldUpdateOperationsInput | number
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }

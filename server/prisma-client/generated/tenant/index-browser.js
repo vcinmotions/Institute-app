@@ -498,6 +498,9 @@ exports.Prisma.TestScalarFieldEnum = {
   id: 'id',
   name: 'name',
   status: 'status',
+  testDate: 'testDate',
+  totalMarks: 'totalMarks',
+  description: 'description',
   batchId: 'batchId',
   courseId: 'courseId',
   clientAdminId: 'clientAdminId'
