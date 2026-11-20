@@ -702,7 +702,8 @@ export async function createTenant(
   stamp: string,
   sign: string,
   certificateName: string,
-  businessEmail?: string | null
+  businessEmail?: string | null,
+  parentTenantId?: string | null
 ) {
   if (
     !name ||
@@ -897,6 +898,7 @@ export async function createTenant(
       password: hashedPassword,
       encryptedPassword: encryptedPass,
       dbUrl,
+      parentTenantId: parentTenantId || null,
     },
   });
   

@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import { getCentralPrisma } from "../prisma-client/central-client";
 import { createTenant } from "../utils/createTenant";
 import { normalizeTenantInput } from "../utils/normalizer/tenantNormalizer";
+import { parseMaxUsers } from "../utils/userTiers";
+import { readSettings } from "./saas.controller";
 import { signPayload, SubscriptionPayload } from "../services/subscription.service";
 
 /**
@@ -36,6 +38,29 @@ export function portalAuth(req: Request, res: Response, next: NextFunction) {
   } catch {
     res.status(401).json({ error: "Session expired, please sign in again" });
   }
+}
+
+/**
+ * A company is a tenant whose parentTenantId points at its master institute.
+ * Companies share the master's subscription (one payment covers all of them).
+ */
+async function resolveOwner(email: string) {
+  const prisma = getCentralPrisma();
+  const tenant = await prisma.tenant.findUnique({ where: { email } });
+  if (!tenant) return { tenant: null, master: null, ownerEmail: email };
+  if (!tenant.parentTenantId) return { tenant, master: tenant, ownerEmail: email };
+  const master = await prisma.tenant.findUnique({ where: { id: tenant.parentTenantId } });
+  return { tenant, master, ownerEmail: master?.email ?? email };
+}
+
+/** Only the master institute may buy plans or manage companies. */
+export async function masterOnly(req: Request, res: Response, next: NextFunction) {
+  const { tenant } = await resolveOwner((req as any).portalEmail);
+  if (!tenant) return res.status(404).json({ error: "Account not found" });
+  if (tenant.parentTenantId) {
+    return res.status(403).json({ error: "This is managed by the master institute." });
+  }
+  next();
 }
 
 // ---------- Registration / login ----------
@@ -73,7 +98,12 @@ export async function registerInstitute(req: Request, res: Response) {
     await prisma.portalSubscription.upsert({
       where: { email: n.email! },
       update: {},
-      create: { email: n.email!, clientId: tenant?.tenantId ?? "", status: "EXPIRED" },
+      create: {
+        email: n.email!,
+        clientId: tenant?.tenantId ?? "",
+        status: "EXPIRED",
+        maxUsers: parseMaxUsers(req.body?.maxUsers),
+      },
     });
 
     res.status(201).json({ token: portalToken(n.email!), email: n.email });
@@ -98,7 +128,9 @@ export async function portalLogin(req: Request, res: Response) {
 export async function portalMe(req: Request, res: Response) {
   const email = (req as any).portalEmail as string;
   const prisma = getCentralPrisma();
-  const sub = await prisma.portalSubscription.findUnique({ where: { email } });
+  const { master, ownerEmail } = await resolveOwner(email);
+  const isCompany = !!master && master.email !== email;
+  const sub = await prisma.portalSubscription.findUnique({ where: { email: ownerEmail } });
   const tenant = await prisma.tenant.findUnique({
     where: { email },
     select: {
@@ -109,6 +141,9 @@ export async function portalMe(req: Request, res: Response) {
   const active = !!sub && sub.status === "ACTIVE" && sub.expiryDate > new Date();
   res.json({
     profile: tenant,
+    isCompany,
+    maxUsers: sub?.maxUsers ?? 1,
+    masterName: isCompany ? master?.instituteName ?? null : null,
     startDate: sub?.startDate ?? null,
     email,
     status: active ? "ACTIVE" : sub?.status === "ACTIVE" ? "EXPIRED" : sub?.status ?? "EXPIRED",
@@ -119,7 +154,7 @@ export async function portalMe(req: Request, res: Response) {
 }
 
 export async function portalPayments(req: Request, res: Response) {
-  const email = (req as any).portalEmail as string;
+  const { ownerEmail: email } = await resolveOwner((req as any).portalEmail as string);
   const rows = await getCentralPrisma().portalPayment.findMany({
     where: { email, status: "PAID" },
     orderBy: { createdAt: "desc" },
@@ -147,15 +182,19 @@ export async function createOrder(req: Request, res: Response) {
     if (!plan || !plan.active || !(plan.price > 0)) {
       return res.status(400).json({ error: "This plan is not available" });
     }
+    const maxUsers = parseMaxUsers(req.body?.maxUsers);
+    const mult = (await readSettings()).userTierMultipliers?.[String(maxUsers)] ?? 1;
+    // Total = plan price x tier multiplier; always computed here, never trusted from the browser.
+    const total = Math.round(plan.price * mult * 100) / 100;
     const rz = razorpayAuth();
     const r = await fetch("https://api.razorpay.com/v1/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: rz.header },
       body: JSON.stringify({
-        amount: Math.round(plan.price * 100),
+        amount: Math.round(total * 100),
         currency: plan.currency,
         receipt: `sub_${Date.now()}`,
-        notes: { email, plan: plan.code },
+        notes: { email, plan: plan.code, maxUsers: String(maxUsers) },
       }),
     });
     const order: any = await r.json();
@@ -164,7 +203,7 @@ export async function createOrder(req: Request, res: Response) {
       return res.status(502).json({ error: "Could not start payment" });
     }
     await prisma.portalPayment.create({
-      data: { email, planCode: plan.code, amount: plan.price, currency: plan.currency, orderId: order.id },
+      data: { email, planCode: plan.code, amount: total, currency: plan.currency, maxUsers, orderId: order.id },
     });
     res.json({
       keyId: rz.id,
@@ -206,6 +245,7 @@ async function applyPayment(orderId: string, paymentId: string) {
       startDate: sub && base > now ? sub.startDate : now,
       expiryDate: addMonths(base, plan.months),
       status: "ACTIVE",
+      maxUsers: pay.maxUsers,
     },
     create: {
       email: pay.email,
@@ -214,6 +254,7 @@ async function applyPayment(orderId: string, paymentId: string) {
       startDate: now,
       expiryDate: addMonths(now, plan.months),
       status: "ACTIVE",
+      maxUsers: pay.maxUsers,
     },
   });
   return pay;
@@ -308,13 +349,21 @@ export async function syncSubscription(req: Request, res: Response) {
       });
     }
 
+    // Companies inherit the master institute's subscription.
+    const { master } = await resolveOwner(email);
+    const src =
+      master && master.email !== email
+        ? (await prisma.portalSubscription.findUnique({ where: { email: master.email! } })) ?? sub
+        : sub;
+
     const payload: SubscriptionPayload = {
       clientId: sub.clientId,
       email,
-      plan: sub.plan,
-      startDate: sub.startDate.toISOString(),
-      expiryDate: sub.expiryDate.toISOString(),
-      status: sub.status as SubscriptionPayload["status"],
+      plan: src.plan,
+      startDate: src.startDate.toISOString(),
+      expiryDate: src.expiryDate.toISOString(),
+      status: src.status as SubscriptionPayload["status"],
+      maxUsers: src.maxUsers,
       issuedAt: new Date().toISOString(),
     };
     res.json({ ...signPayload(payload), syncToken: newToken });
@@ -322,4 +371,79 @@ export async function syncSubscription(req: Request, res: Response) {
     console.error("sync failed:", e);
     res.status(500).json({ error: "Sync failed" });
   }
+}
+
+// ---------- Companies under a master institute ----------
+
+const companyRow = {
+  id: true, name: true, instituteName: true, email: true, businessEmail: true,
+  contact: true, city: true, state: true, country: true, createdAt: true,
+} as const;
+
+export async function listCompanies(req: Request, res: Response) {
+  const prisma = getCentralPrisma();
+  const master = await prisma.tenant.findUnique({ where: { email: (req as any).portalEmail } });
+  if (!master) return res.status(404).json({ error: "Account not found" });
+  const rows = await prisma.tenant.findMany({
+    where: { parentTenantId: master.id },
+    select: companyRow,
+    orderBy: { createdAt: "asc" },
+  });
+  res.json(rows);
+}
+
+export async function createCompany(req: Request, res: Response) {
+  const n = normalizeTenantInput(req.body);
+  const required = [
+    n.name, n.instituteName, n.email, n.password, n.contact, n.country,
+    n.state, n.city, n.zipCode, n.fullAddress, n.financialStartDate, n.financialEndDate,
+  ];
+  if (required.some((v) => !v)) return res.status(400).json({ error: "Missing required fields." });
+  if (String(n.password).length < 6) {
+    return res.status(400).json({ error: "Password must be at least 6 characters long." });
+  }
+
+  try {
+    const prisma = getCentralPrisma();
+    const master = await prisma.tenant.findUnique({ where: { email: (req as any).portalEmail } });
+    if (!master) return res.status(404).json({ error: "Account not found" });
+
+    // Companies can only be added while the master's subscription is active (paid).
+    const sub = await prisma.portalSubscription.findUnique({ where: { email: master.email! } });
+    if (!sub || sub.status !== "ACTIVE" || sub.expiryDate <= new Date()) {
+      return res.status(402).json({
+        error: "Please activate a paid subscription before adding companies.",
+      });
+    }
+
+    if (await prisma.tenant.findUnique({ where: { email: n.email! } })) {
+      return res.status(409).json({ error: "Username already exists. Please choose a different username." });
+    }
+    if (await prisma.tenant.findUnique({ where: { instituteName: n.instituteName! } })) {
+      return res.status(409).json({ error: "Company name already exists. Please choose a different name." });
+    }
+
+    await createTenant(
+      n.name!, n.instituteName!, n.email!, n.password!, n.contact!, n.country!,
+      n.state!, n.city!, n.zipCode!, n.fullAddress!, n.financialStartDate!, n.financialEndDate!,
+      "", "", "", n.certificateName ?? "", n.businessEmail ?? master.businessEmail, master.id
+    );
+
+    const created = await prisma.tenant.findUnique({ where: { email: n.email! }, select: companyRow });
+    res.status(201).json(created);
+  } catch (e: any) {
+    console.error("create company failed:", e);
+    res.status(500).json({ error: "Could not create the company" });
+  }
+}
+
+/** Master opens one of its companies in the portal (issues a portal token for it). */
+export async function switchCompany(req: Request, res: Response) {
+  const prisma = getCentralPrisma();
+  const master = await prisma.tenant.findUnique({ where: { email: (req as any).portalEmail } });
+  const company = await prisma.tenant.findUnique({ where: { id: String(req.params.id) } });
+  if (!master || !company || company.parentTenantId !== master.id || !company.email) {
+    return res.status(404).json({ error: "Company not found" });
+  }
+  res.json({ token: portalToken(company.email), email: company.email });
 }

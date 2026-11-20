@@ -7,6 +7,7 @@ import { getTenantPrisma } from "../prisma-client/tenant-client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { normalizeLoginInput } from "../utils/normalizer/loginNormalizer";
+import { canClaimSession, claimSession, sessionKey, limitMessage } from "../services/sessionLimit.service";
 import { isEnforced, syncFromCloud, getState } from "../services/subscription.service";
 
 export async function loginController(req: Request, res: Response) {
@@ -131,6 +132,12 @@ export async function loginController(req: Request, res: Response) {
     );
 
 
+    // Simultaneous-login limit from the purchased plan.
+    const slot = sessionKey(String(tenantInfo.id), String(userType), user.id as any);
+    if (!canClaimSession(slot).ok) {
+      return res.status(403).json({ code: "LOGIN_LIMIT", error: limitMessage(canClaimSession(slot).max) });
+    }
+
     const payload = {
       id: user.id,
       email: normalizeEmail.email,
@@ -185,6 +192,8 @@ export async function loginController(req: Request, res: Response) {
         },
       });
     }
+
+    claimSession(slot);
 
     // 6. Return success response with token
     return res.status(200).json({

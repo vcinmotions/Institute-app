@@ -5,6 +5,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { getTenantPrisma } from "../prisma-client/tenant-client";
 import { getTenantDbUrlById } from "../utils/tenantDbUrl";
 import dotenv from "dotenv";
+import { claimSession, sessionKey, limitMessage } from "../services/sessionLimit.service";
 dotenv.config({ path: ".env" });
 
 declare global {
@@ -103,6 +104,12 @@ export const authMiddleware = async (
         error:
           "You have been logged out because your account was used on another device.",
       });
+    }
+
+    // Simultaneous-login limit (counts this user as active).
+    const claim = claimSession(sessionKey(String(decoded.tenantId ?? ""), String(userType), id));
+    if (!claim.ok) {
+      return res.status(403).json({ code: "LOGIN_LIMIT", error: limitMessage(claim.max) });
     }
 
     next();

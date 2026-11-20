@@ -22,6 +22,7 @@ export type SubscriptionPayload = {
   startDate: string;
   expiryDate: string;
   status: "ACTIVE" | "EXPIRED" | "SUSPENDED" | "REVOKED";
+  maxUsers?: number; // max simultaneous logins
   issuedAt: string;
 };
 
@@ -42,6 +43,7 @@ export type SubscriptionState = {
   daysLeft: number | null;
   expiryDate: string | null;
   plan: string | null;
+  maxUsers: number | null;
   lastSyncAt: string | null;
   renewUrl: string | null;
   message: string;
@@ -121,6 +123,7 @@ function state(
     daysLeft: null,
     expiryDate: null,
     plan: null,
+    maxUsers: null,
     lastSyncAt: null,
     renewUrl: renewUrl(),
     settings: readRecord()?.settings ?? {},
@@ -138,6 +141,7 @@ export function getState(): SubscriptionState {
       daysLeft: null,
       expiryDate: null,
       plan: null,
+      maxUsers: null,
       lastSyncAt: null,
       renewUrl: null,
       settings: {},
@@ -198,6 +202,7 @@ export function getState(): SubscriptionState {
   const base = {
     expiryDate: payload.expiryDate,
     plan: payload.plan,
+    maxUsers: payload.maxUsers ?? null,
     lastSyncAt: rec.lastSyncAt ?? null,
   };
 

@@ -35,6 +35,7 @@ import { countries } from "@/components/common/CountriesCode";
 import { normalizeEmail, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { portalApi, setPortalToken } from "@/lib/portalApi";
+import { USER_TIERS, tierLabel } from "@/lib/userTiers";
 
 const CompanySchema = z.object({
     name: z.string().min(1, "Display Name is required"),
@@ -88,6 +89,7 @@ type FormErrors = Partial<Record<keyof CompanyData, string>>;
 export default function CompanyForm({ portal = false, plan = "" }: { portal?: boolean; plan?: string }) {
     const [submitting, setSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [maxUsers, setMaxUsers] = useState("1");
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [newCompany, setNewCompany] = useState<CompanyData>({
         name: "",
@@ -484,6 +486,7 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
             financialYear,
             financialStartDate: newCompany.financialStartDate,
             financialEndDate: newCompany.financialEndDate,
+            maxUsers: Number(maxUsers),
 
             state: newCompany.state,
             city: newCompany.city,
@@ -665,6 +668,22 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                                 />
                                 {errors.financialEndDate && <p className="mt-1 text-sm text-red-500">{errors.financialEndDate}</p>}
                             </div>
+
+                            {portal && (
+                                <div>
+                                    <Label>Maximum simultaneous logins *</Label>
+                                    <select
+                                        value={maxUsers}
+                                        onChange={(e) => setMaxUsers(e.target.value)}
+                                        className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                    >
+                                        {USER_TIERS.map((n) => (
+                                            <option key={n} value={n}>{tierLabel(n)}</option>
+                                        ))}
+                                    </select>
+                                    <p className="mt-1 text-xs text-gray-500">You can change this when you renew.</p>
+                                </div>
+                            )}
 
                         </div>
                     </div>

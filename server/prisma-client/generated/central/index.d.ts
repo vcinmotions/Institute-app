@@ -2606,6 +2606,7 @@ export namespace Prisma {
     password: string | null
     encryptedPassword: string | null
     dbUrl: string | null
+    parentTenantId: string | null
     createdAt: Date | null
   }
 
@@ -2631,6 +2632,7 @@ export namespace Prisma {
     password: string | null
     encryptedPassword: string | null
     dbUrl: string | null
+    parentTenantId: string | null
     createdAt: Date | null
   }
 
@@ -2656,6 +2658,7 @@ export namespace Prisma {
     password: number
     encryptedPassword: number
     dbUrl: number
+    parentTenantId: number
     createdAt: number
     _all: number
   }
@@ -2683,6 +2686,7 @@ export namespace Prisma {
     password?: true
     encryptedPassword?: true
     dbUrl?: true
+    parentTenantId?: true
     createdAt?: true
   }
 
@@ -2708,6 +2712,7 @@ export namespace Prisma {
     password?: true
     encryptedPassword?: true
     dbUrl?: true
+    parentTenantId?: true
     createdAt?: true
   }
 
@@ -2733,6 +2738,7 @@ export namespace Prisma {
     password?: true
     encryptedPassword?: true
     dbUrl?: true
+    parentTenantId?: true
     createdAt?: true
     _all?: true
   }
@@ -2831,6 +2837,7 @@ export namespace Prisma {
     password: string | null
     encryptedPassword: string
     dbUrl: string
+    parentTenantId: string | null
     createdAt: Date
     _count: TenantCountAggregateOutputType | null
     _min: TenantMinAggregateOutputType | null
@@ -2873,6 +2880,7 @@ export namespace Prisma {
     password?: boolean
     encryptedPassword?: boolean
     dbUrl?: boolean
+    parentTenantId?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["tenant"]>
 
@@ -2898,6 +2906,7 @@ export namespace Prisma {
     password?: boolean
     encryptedPassword?: boolean
     dbUrl?: boolean
+    parentTenantId?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["tenant"]>
 
@@ -2923,6 +2932,7 @@ export namespace Prisma {
     password?: boolean
     encryptedPassword?: boolean
     dbUrl?: boolean
+    parentTenantId?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["tenant"]>
 
@@ -2948,10 +2958,11 @@ export namespace Prisma {
     password?: boolean
     encryptedPassword?: boolean
     dbUrl?: boolean
+    parentTenantId?: boolean
     createdAt?: boolean
   }
 
-  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "position" | "country" | "state" | "city" | "zipCode" | "instituteName" | "tenantId" | "slug" | "email" | "businessEmail" | "password" | "encryptedPassword" | "dbUrl" | "createdAt", ExtArgs["result"]["tenant"]>
+  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "position" | "country" | "state" | "city" | "zipCode" | "instituteName" | "tenantId" | "slug" | "email" | "businessEmail" | "password" | "encryptedPassword" | "dbUrl" | "parentTenantId" | "createdAt", ExtArgs["result"]["tenant"]>
 
   export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Tenant"
@@ -2978,6 +2989,7 @@ export namespace Prisma {
       password: string | null
       encryptedPassword: string
       dbUrl: string
+      parentTenantId: string | null
       createdAt: Date
     }, ExtArgs["result"]["tenant"]>
     composites: {}
@@ -3423,6 +3435,7 @@ export namespace Prisma {
     readonly password: FieldRef<"Tenant", 'String'>
     readonly encryptedPassword: FieldRef<"Tenant", 'String'>
     readonly dbUrl: FieldRef<"Tenant", 'String'>
+    readonly parentTenantId: FieldRef<"Tenant", 'String'>
     readonly createdAt: FieldRef<"Tenant", 'DateTime'>
   }
     
@@ -4868,8 +4881,18 @@ export namespace Prisma {
 
   export type AggregatePortalSubscription = {
     _count: PortalSubscriptionCountAggregateOutputType | null
+    _avg: PortalSubscriptionAvgAggregateOutputType | null
+    _sum: PortalSubscriptionSumAggregateOutputType | null
     _min: PortalSubscriptionMinAggregateOutputType | null
     _max: PortalSubscriptionMaxAggregateOutputType | null
+  }
+
+  export type PortalSubscriptionAvgAggregateOutputType = {
+    maxUsers: number | null
+  }
+
+  export type PortalSubscriptionSumAggregateOutputType = {
+    maxUsers: number | null
   }
 
   export type PortalSubscriptionMinAggregateOutputType = {
@@ -4881,6 +4904,7 @@ export namespace Prisma {
     expiryDate: Date | null
     status: string | null
     syncTokenHash: string | null
+    maxUsers: number | null
     updatedAt: Date | null
   }
 
@@ -4893,6 +4917,7 @@ export namespace Prisma {
     expiryDate: Date | null
     status: string | null
     syncTokenHash: string | null
+    maxUsers: number | null
     updatedAt: Date | null
   }
 
@@ -4905,10 +4930,19 @@ export namespace Prisma {
     expiryDate: number
     status: number
     syncTokenHash: number
+    maxUsers: number
     updatedAt: number
     _all: number
   }
 
+
+  export type PortalSubscriptionAvgAggregateInputType = {
+    maxUsers?: true
+  }
+
+  export type PortalSubscriptionSumAggregateInputType = {
+    maxUsers?: true
+  }
 
   export type PortalSubscriptionMinAggregateInputType = {
     id?: true
@@ -4919,6 +4953,7 @@ export namespace Prisma {
     expiryDate?: true
     status?: true
     syncTokenHash?: true
+    maxUsers?: true
     updatedAt?: true
   }
 
@@ -4931,6 +4966,7 @@ export namespace Prisma {
     expiryDate?: true
     status?: true
     syncTokenHash?: true
+    maxUsers?: true
     updatedAt?: true
   }
 
@@ -4943,6 +4979,7 @@ export namespace Prisma {
     expiryDate?: true
     status?: true
     syncTokenHash?: true
+    maxUsers?: true
     updatedAt?: true
     _all?: true
   }
@@ -4985,6 +5022,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PortalSubscriptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PortalSubscriptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PortalSubscriptionMinAggregateInputType
@@ -5015,6 +5064,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PortalSubscriptionCountAggregateInputType | true
+    _avg?: PortalSubscriptionAvgAggregateInputType
+    _sum?: PortalSubscriptionSumAggregateInputType
     _min?: PortalSubscriptionMinAggregateInputType
     _max?: PortalSubscriptionMaxAggregateInputType
   }
@@ -5028,8 +5079,11 @@ export namespace Prisma {
     expiryDate: Date
     status: string
     syncTokenHash: string | null
+    maxUsers: number
     updatedAt: Date
     _count: PortalSubscriptionCountAggregateOutputType | null
+    _avg: PortalSubscriptionAvgAggregateOutputType | null
+    _sum: PortalSubscriptionSumAggregateOutputType | null
     _min: PortalSubscriptionMinAggregateOutputType | null
     _max: PortalSubscriptionMaxAggregateOutputType | null
   }
@@ -5057,6 +5111,7 @@ export namespace Prisma {
     expiryDate?: boolean
     status?: boolean
     syncTokenHash?: boolean
+    maxUsers?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["portalSubscription"]>
 
@@ -5069,6 +5124,7 @@ export namespace Prisma {
     expiryDate?: boolean
     status?: boolean
     syncTokenHash?: boolean
+    maxUsers?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["portalSubscription"]>
 
@@ -5081,6 +5137,7 @@ export namespace Prisma {
     expiryDate?: boolean
     status?: boolean
     syncTokenHash?: boolean
+    maxUsers?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["portalSubscription"]>
 
@@ -5093,10 +5150,11 @@ export namespace Prisma {
     expiryDate?: boolean
     status?: boolean
     syncTokenHash?: boolean
+    maxUsers?: boolean
     updatedAt?: boolean
   }
 
-  export type PortalSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "clientId" | "plan" | "startDate" | "expiryDate" | "status" | "syncTokenHash" | "updatedAt", ExtArgs["result"]["portalSubscription"]>
+  export type PortalSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "clientId" | "plan" | "startDate" | "expiryDate" | "status" | "syncTokenHash" | "maxUsers" | "updatedAt", ExtArgs["result"]["portalSubscription"]>
 
   export type $PortalSubscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PortalSubscription"
@@ -5110,6 +5168,7 @@ export namespace Prisma {
       expiryDate: Date
       status: string
       syncTokenHash: string | null
+      maxUsers: number
       updatedAt: Date
     }, ExtArgs["result"]["portalSubscription"]>
     composites: {}
@@ -5542,6 +5601,7 @@ export namespace Prisma {
     readonly expiryDate: FieldRef<"PortalSubscription", 'DateTime'>
     readonly status: FieldRef<"PortalSubscription", 'String'>
     readonly syncTokenHash: FieldRef<"PortalSubscription", 'String'>
+    readonly maxUsers: FieldRef<"PortalSubscription", 'Int'>
     readonly updatedAt: FieldRef<"PortalSubscription", 'DateTime'>
   }
     
@@ -5923,10 +5983,12 @@ export namespace Prisma {
 
   export type PortalPaymentAvgAggregateOutputType = {
     amount: number | null
+    maxUsers: number | null
   }
 
   export type PortalPaymentSumAggregateOutputType = {
     amount: number | null
+    maxUsers: number | null
   }
 
   export type PortalPaymentMinAggregateOutputType = {
@@ -5935,6 +5997,7 @@ export namespace Prisma {
     planCode: string | null
     amount: number | null
     currency: string | null
+    maxUsers: number | null
     orderId: string | null
     paymentId: string | null
     status: string | null
@@ -5947,6 +6010,7 @@ export namespace Prisma {
     planCode: string | null
     amount: number | null
     currency: string | null
+    maxUsers: number | null
     orderId: string | null
     paymentId: string | null
     status: string | null
@@ -5959,6 +6023,7 @@ export namespace Prisma {
     planCode: number
     amount: number
     currency: number
+    maxUsers: number
     orderId: number
     paymentId: number
     status: number
@@ -5969,10 +6034,12 @@ export namespace Prisma {
 
   export type PortalPaymentAvgAggregateInputType = {
     amount?: true
+    maxUsers?: true
   }
 
   export type PortalPaymentSumAggregateInputType = {
     amount?: true
+    maxUsers?: true
   }
 
   export type PortalPaymentMinAggregateInputType = {
@@ -5981,6 +6048,7 @@ export namespace Prisma {
     planCode?: true
     amount?: true
     currency?: true
+    maxUsers?: true
     orderId?: true
     paymentId?: true
     status?: true
@@ -5993,6 +6061,7 @@ export namespace Prisma {
     planCode?: true
     amount?: true
     currency?: true
+    maxUsers?: true
     orderId?: true
     paymentId?: true
     status?: true
@@ -6005,6 +6074,7 @@ export namespace Prisma {
     planCode?: true
     amount?: true
     currency?: true
+    maxUsers?: true
     orderId?: true
     paymentId?: true
     status?: true
@@ -6104,6 +6174,7 @@ export namespace Prisma {
     planCode: string
     amount: number
     currency: string
+    maxUsers: number
     orderId: string
     paymentId: string | null
     status: string
@@ -6135,6 +6206,7 @@ export namespace Prisma {
     planCode?: boolean
     amount?: boolean
     currency?: boolean
+    maxUsers?: boolean
     orderId?: boolean
     paymentId?: boolean
     status?: boolean
@@ -6147,6 +6219,7 @@ export namespace Prisma {
     planCode?: boolean
     amount?: boolean
     currency?: boolean
+    maxUsers?: boolean
     orderId?: boolean
     paymentId?: boolean
     status?: boolean
@@ -6159,6 +6232,7 @@ export namespace Prisma {
     planCode?: boolean
     amount?: boolean
     currency?: boolean
+    maxUsers?: boolean
     orderId?: boolean
     paymentId?: boolean
     status?: boolean
@@ -6171,13 +6245,14 @@ export namespace Prisma {
     planCode?: boolean
     amount?: boolean
     currency?: boolean
+    maxUsers?: boolean
     orderId?: boolean
     paymentId?: boolean
     status?: boolean
     createdAt?: boolean
   }
 
-  export type PortalPaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "planCode" | "amount" | "currency" | "orderId" | "paymentId" | "status" | "createdAt", ExtArgs["result"]["portalPayment"]>
+  export type PortalPaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "planCode" | "amount" | "currency" | "maxUsers" | "orderId" | "paymentId" | "status" | "createdAt", ExtArgs["result"]["portalPayment"]>
 
   export type $PortalPaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PortalPayment"
@@ -6188,6 +6263,7 @@ export namespace Prisma {
       planCode: string
       amount: number
       currency: string
+      maxUsers: number
       orderId: string
       paymentId: string | null
       status: string
@@ -6620,6 +6696,7 @@ export namespace Prisma {
     readonly planCode: FieldRef<"PortalPayment", 'String'>
     readonly amount: FieldRef<"PortalPayment", 'Float'>
     readonly currency: FieldRef<"PortalPayment", 'String'>
+    readonly maxUsers: FieldRef<"PortalPayment", 'Int'>
     readonly orderId: FieldRef<"PortalPayment", 'String'>
     readonly paymentId: FieldRef<"PortalPayment", 'String'>
     readonly status: FieldRef<"PortalPayment", 'String'>
@@ -9013,6 +9090,7 @@ export namespace Prisma {
     password: 'password',
     encryptedPassword: 'encryptedPassword',
     dbUrl: 'dbUrl',
+    parentTenantId: 'parentTenantId',
     createdAt: 'createdAt'
   };
 
@@ -9042,6 +9120,7 @@ export namespace Prisma {
     expiryDate: 'expiryDate',
     status: 'status',
     syncTokenHash: 'syncTokenHash',
+    maxUsers: 'maxUsers',
     updatedAt: 'updatedAt'
   };
 
@@ -9054,6 +9133,7 @@ export namespace Prisma {
     planCode: 'planCode',
     amount: 'amount',
     currency: 'currency',
+    maxUsers: 'maxUsers',
     orderId: 'orderId',
     paymentId: 'paymentId',
     status: 'status',
@@ -9329,6 +9409,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"Tenant"> | string | null
     encryptedPassword?: StringFilter<"Tenant"> | string
     dbUrl?: StringFilter<"Tenant"> | string
+    parentTenantId?: StringNullableFilter<"Tenant"> | string | null
     createdAt?: DateTimeFilter<"Tenant"> | Date | string
   }
 
@@ -9354,6 +9435,7 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
+    parentTenantId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
   }
 
@@ -9382,6 +9464,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"Tenant"> | string | null
     encryptedPassword?: StringFilter<"Tenant"> | string
     dbUrl?: StringFilter<"Tenant"> | string
+    parentTenantId?: StringNullableFilter<"Tenant"> | string | null
     createdAt?: DateTimeFilter<"Tenant"> | Date | string
   }, "id" | "instituteName" | "tenantId" | "slug" | "email">
 
@@ -9407,6 +9490,7 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
+    parentTenantId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: TenantCountOrderByAggregateInput
     _max?: TenantMaxOrderByAggregateInput
@@ -9438,6 +9522,7 @@ export namespace Prisma {
     password?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
     encryptedPassword?: StringWithAggregatesFilter<"Tenant"> | string
     dbUrl?: StringWithAggregatesFilter<"Tenant"> | string
+    parentTenantId?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
   }
 
@@ -9522,6 +9607,7 @@ export namespace Prisma {
     expiryDate?: DateTimeFilter<"PortalSubscription"> | Date | string
     status?: StringFilter<"PortalSubscription"> | string
     syncTokenHash?: StringNullableFilter<"PortalSubscription"> | string | null
+    maxUsers?: IntFilter<"PortalSubscription"> | number
     updatedAt?: DateTimeFilter<"PortalSubscription"> | Date | string
   }
 
@@ -9534,6 +9620,7 @@ export namespace Prisma {
     expiryDate?: SortOrder
     status?: SortOrder
     syncTokenHash?: SortOrderInput | SortOrder
+    maxUsers?: SortOrder
     updatedAt?: SortOrder
   }
 
@@ -9549,6 +9636,7 @@ export namespace Prisma {
     expiryDate?: DateTimeFilter<"PortalSubscription"> | Date | string
     status?: StringFilter<"PortalSubscription"> | string
     syncTokenHash?: StringNullableFilter<"PortalSubscription"> | string | null
+    maxUsers?: IntFilter<"PortalSubscription"> | number
     updatedAt?: DateTimeFilter<"PortalSubscription"> | Date | string
   }, "id" | "email">
 
@@ -9561,10 +9649,13 @@ export namespace Prisma {
     expiryDate?: SortOrder
     status?: SortOrder
     syncTokenHash?: SortOrderInput | SortOrder
+    maxUsers?: SortOrder
     updatedAt?: SortOrder
     _count?: PortalSubscriptionCountOrderByAggregateInput
+    _avg?: PortalSubscriptionAvgOrderByAggregateInput
     _max?: PortalSubscriptionMaxOrderByAggregateInput
     _min?: PortalSubscriptionMinOrderByAggregateInput
+    _sum?: PortalSubscriptionSumOrderByAggregateInput
   }
 
   export type PortalSubscriptionScalarWhereWithAggregatesInput = {
@@ -9579,6 +9670,7 @@ export namespace Prisma {
     expiryDate?: DateTimeWithAggregatesFilter<"PortalSubscription"> | Date | string
     status?: StringWithAggregatesFilter<"PortalSubscription"> | string
     syncTokenHash?: StringNullableWithAggregatesFilter<"PortalSubscription"> | string | null
+    maxUsers?: IntWithAggregatesFilter<"PortalSubscription"> | number
     updatedAt?: DateTimeWithAggregatesFilter<"PortalSubscription"> | Date | string
   }
 
@@ -9591,6 +9683,7 @@ export namespace Prisma {
     planCode?: StringFilter<"PortalPayment"> | string
     amount?: FloatFilter<"PortalPayment"> | number
     currency?: StringFilter<"PortalPayment"> | string
+    maxUsers?: IntFilter<"PortalPayment"> | number
     orderId?: StringFilter<"PortalPayment"> | string
     paymentId?: StringNullableFilter<"PortalPayment"> | string | null
     status?: StringFilter<"PortalPayment"> | string
@@ -9603,6 +9696,7 @@ export namespace Prisma {
     planCode?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    maxUsers?: SortOrder
     orderId?: SortOrder
     paymentId?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -9620,6 +9714,7 @@ export namespace Prisma {
     planCode?: StringFilter<"PortalPayment"> | string
     amount?: FloatFilter<"PortalPayment"> | number
     currency?: StringFilter<"PortalPayment"> | string
+    maxUsers?: IntFilter<"PortalPayment"> | number
     status?: StringFilter<"PortalPayment"> | string
     createdAt?: DateTimeFilter<"PortalPayment"> | Date | string
   }, "id" | "orderId" | "paymentId">
@@ -9630,6 +9725,7 @@ export namespace Prisma {
     planCode?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    maxUsers?: SortOrder
     orderId?: SortOrder
     paymentId?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -9650,6 +9746,7 @@ export namespace Prisma {
     planCode?: StringWithAggregatesFilter<"PortalPayment"> | string
     amount?: FloatWithAggregatesFilter<"PortalPayment"> | number
     currency?: StringWithAggregatesFilter<"PortalPayment"> | string
+    maxUsers?: IntWithAggregatesFilter<"PortalPayment"> | number
     orderId?: StringWithAggregatesFilter<"PortalPayment"> | string
     paymentId?: StringNullableWithAggregatesFilter<"PortalPayment"> | string | null
     status?: StringWithAggregatesFilter<"PortalPayment"> | string
@@ -9912,6 +10009,7 @@ export namespace Prisma {
     password?: string | null
     encryptedPassword: string
     dbUrl: string
+    parentTenantId?: string | null
     createdAt?: Date | string
   }
 
@@ -9937,6 +10035,7 @@ export namespace Prisma {
     password?: string | null
     encryptedPassword: string
     dbUrl: string
+    parentTenantId?: string | null
     createdAt?: Date | string
   }
 
@@ -9962,6 +10061,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
+    parentTenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -9987,6 +10087,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
+    parentTenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10012,6 +10113,7 @@ export namespace Prisma {
     password?: string | null
     encryptedPassword: string
     dbUrl: string
+    parentTenantId?: string | null
     createdAt?: Date | string
   }
 
@@ -10037,6 +10139,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
+    parentTenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10062,6 +10165,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
+    parentTenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10151,6 +10255,7 @@ export namespace Prisma {
     expiryDate?: Date | string
     status?: string
     syncTokenHash?: string | null
+    maxUsers?: number
     updatedAt?: Date | string
   }
 
@@ -10163,6 +10268,7 @@ export namespace Prisma {
     expiryDate?: Date | string
     status?: string
     syncTokenHash?: string | null
+    maxUsers?: number
     updatedAt?: Date | string
   }
 
@@ -10175,6 +10281,7 @@ export namespace Prisma {
     expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     syncTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    maxUsers?: IntFieldUpdateOperationsInput | number
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10187,6 +10294,7 @@ export namespace Prisma {
     expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     syncTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    maxUsers?: IntFieldUpdateOperationsInput | number
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10199,6 +10307,7 @@ export namespace Prisma {
     expiryDate?: Date | string
     status?: string
     syncTokenHash?: string | null
+    maxUsers?: number
     updatedAt?: Date | string
   }
 
@@ -10211,6 +10320,7 @@ export namespace Prisma {
     expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     syncTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    maxUsers?: IntFieldUpdateOperationsInput | number
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10223,6 +10333,7 @@ export namespace Prisma {
     expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     syncTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    maxUsers?: IntFieldUpdateOperationsInput | number
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10232,6 +10343,7 @@ export namespace Prisma {
     planCode: string
     amount: number
     currency?: string
+    maxUsers?: number
     orderId: string
     paymentId?: string | null
     status?: string
@@ -10244,6 +10356,7 @@ export namespace Prisma {
     planCode: string
     amount: number
     currency?: string
+    maxUsers?: number
     orderId: string
     paymentId?: string | null
     status?: string
@@ -10256,6 +10369,7 @@ export namespace Prisma {
     planCode?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
+    maxUsers?: IntFieldUpdateOperationsInput | number
     orderId?: StringFieldUpdateOperationsInput | string
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -10268,6 +10382,7 @@ export namespace Prisma {
     planCode?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
+    maxUsers?: IntFieldUpdateOperationsInput | number
     orderId?: StringFieldUpdateOperationsInput | string
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -10280,6 +10395,7 @@ export namespace Prisma {
     planCode: string
     amount: number
     currency?: string
+    maxUsers?: number
     orderId: string
     paymentId?: string | null
     status?: string
@@ -10292,6 +10408,7 @@ export namespace Prisma {
     planCode?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
+    maxUsers?: IntFieldUpdateOperationsInput | number
     orderId?: StringFieldUpdateOperationsInput | string
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -10304,6 +10421,7 @@ export namespace Prisma {
     planCode?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
+    maxUsers?: IntFieldUpdateOperationsInput | number
     orderId?: StringFieldUpdateOperationsInput | string
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -10641,6 +10759,7 @@ export namespace Prisma {
     password?: SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
+    parentTenantId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -10666,6 +10785,7 @@ export namespace Prisma {
     password?: SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
+    parentTenantId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -10691,6 +10811,7 @@ export namespace Prisma {
     password?: SortOrder
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
+    parentTenantId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -10800,7 +10921,12 @@ export namespace Prisma {
     expiryDate?: SortOrder
     status?: SortOrder
     syncTokenHash?: SortOrder
+    maxUsers?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type PortalSubscriptionAvgOrderByAggregateInput = {
+    maxUsers?: SortOrder
   }
 
   export type PortalSubscriptionMaxOrderByAggregateInput = {
@@ -10812,6 +10938,7 @@ export namespace Prisma {
     expiryDate?: SortOrder
     status?: SortOrder
     syncTokenHash?: SortOrder
+    maxUsers?: SortOrder
     updatedAt?: SortOrder
   }
 
@@ -10824,7 +10951,12 @@ export namespace Prisma {
     expiryDate?: SortOrder
     status?: SortOrder
     syncTokenHash?: SortOrder
+    maxUsers?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type PortalSubscriptionSumOrderByAggregateInput = {
+    maxUsers?: SortOrder
   }
 
   export type PortalPaymentCountOrderByAggregateInput = {
@@ -10833,6 +10965,7 @@ export namespace Prisma {
     planCode?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    maxUsers?: SortOrder
     orderId?: SortOrder
     paymentId?: SortOrder
     status?: SortOrder
@@ -10841,6 +10974,7 @@ export namespace Prisma {
 
   export type PortalPaymentAvgOrderByAggregateInput = {
     amount?: SortOrder
+    maxUsers?: SortOrder
   }
 
   export type PortalPaymentMaxOrderByAggregateInput = {
@@ -10849,6 +10983,7 @@ export namespace Prisma {
     planCode?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    maxUsers?: SortOrder
     orderId?: SortOrder
     paymentId?: SortOrder
     status?: SortOrder
@@ -10861,6 +10996,7 @@ export namespace Prisma {
     planCode?: SortOrder
     amount?: SortOrder
     currency?: SortOrder
+    maxUsers?: SortOrder
     orderId?: SortOrder
     paymentId?: SortOrder
     status?: SortOrder
@@ -10869,6 +11005,7 @@ export namespace Prisma {
 
   export type PortalPaymentSumOrderByAggregateInput = {
     amount?: SortOrder
+    maxUsers?: SortOrder
   }
 
   export type SaasAdminCountOrderByAggregateInput = {

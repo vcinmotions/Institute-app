@@ -54,6 +54,7 @@ model Tenant {
   password          String?
   encryptedPassword String
   dbUrl             String
+  parentTenantId    String? // set when this tenant is a company under a master institute
   createdAt         DateTime @default(now())
 }
 
@@ -83,6 +84,7 @@ model PortalSubscription {
   expiryDate    DateTime @default(now())
   status        String   @default("EXPIRED") // ACTIVE | EXPIRED | SUSPENDED | REVOKED
   syncTokenHash String?
+  maxUsers      Int      @default(1) // max simultaneous logins bought
   updatedAt     DateTime @updatedAt
 }
 
@@ -92,6 +94,7 @@ model PortalPayment {
   planCode  String
   amount    Float
   currency  String   @default("INR")
+  maxUsers  Int      @default(1)
   orderId   String   @unique
   paymentId String?  @unique
   status    String   @default("CREATED") // CREATED | PAID | FAILED

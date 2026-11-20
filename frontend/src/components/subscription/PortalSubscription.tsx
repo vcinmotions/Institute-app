@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import PortalCompanies from "./PortalCompanies";
+import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel } from "@/lib/userTiers";
 import { portalApi, getPortalToken, setPortalToken, portalAuthHeader } from "@/lib/portalApi";
 
 declare global {
@@ -32,6 +34,9 @@ type Me = {
   startDate: string | null;
   daysLeft: number;
   profile: Profile;
+  isCompany?: boolean;
+  maxUsers?: number;
+  masterName?: string | null;
 };
 type Payment = {
   orderId: string;
@@ -42,12 +47,13 @@ type Payment = {
   createdAt: string;
 };
 
-type Tab = "overview" | "plans" | "billing" | "account";
+type Tab = "overview" | "plans" | "billing" | "companies" | "account";
 
 const NAV: { id: Tab; label: string; icon: string }[] = [
   { id: "overview", label: "Overview", icon: "🏠" },
   { id: "plans", label: "Plans & Payment", icon: "💳" },
   { id: "billing", label: "Billing History", icon: "🧾" },
+  { id: "companies", label: "Companies", icon: "🏢" },
   { id: "account", label: "My Institute", icon: "🏫" },
 ];
 
@@ -77,6 +83,8 @@ export default function PortalSubscription() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [maxUsers, setMaxUsers] = useState(1);
+  const [mult, setMult] = useState<Record<string, number>>(DEFAULT_TIER_MULTIPLIERS);
   const [login, setLogin] = useState({ email: "", password: "" });
   const [tab, setTab] = useState<Tab>(wantedPlan ? "plans" : "overview");
 
@@ -88,6 +96,7 @@ export default function PortalSubscription() {
         portalApi.get("/portal/payments", { headers: portalAuthHeader() }).catch(() => ({ data: [] })),
       ]);
       setMe(m.data);
+      if (m.data?.maxUsers) setMaxUsers(m.data.maxUsers);
       setPlans(p.data);
       setPayments(pay.data);
       setAuthed(true);
@@ -97,6 +106,13 @@ export default function PortalSubscription() {
     } finally {
       setChecking(false);
     }
+  }, []);
+
+  useEffect(() => {
+    portalApi
+      .get("/app-settings")
+      .then((r) => r.data?.userTierMultipliers && setMult(r.data.userTierMultipliers))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -129,7 +145,7 @@ export default function PortalSubscription() {
       if (!(await loadRazorpay())) throw new Error("Could not load the payment window");
       const { data: o } = await portalApi.post(
         "/portal/order",
-        { plan: plan.code },
+        { plan: plan.code, maxUsers },
         { headers: portalAuthHeader() },
       );
       const rz = new window.Razorpay({
@@ -238,7 +254,7 @@ export default function PortalSubscription() {
           <p className="mb-1 hidden px-3 pt-2 text-xs font-medium uppercase tracking-wider text-gray-400 md:block">
             Menu
           </p>
-          {NAV.map((n) => (
+          {NAV.filter((n) => !(me?.isCompany && (n.id === "plans" || n.id === "companies"))).map((n) => (
             <button
               key={n.id}
               onClick={() => {
@@ -371,6 +387,24 @@ export default function PortalSubscription() {
                   ? "Renewing adds the new period on top of your current expiry date."
                   : "Pick a plan and pay securely online. Your subscription starts right after payment."}
               </p>
+              <div className={card}>
+                <label className="block text-sm font-medium">Maximum simultaneous logins</label>
+                <select
+                  value={maxUsers}
+                  onChange={(e) => setMaxUsers(Number(e.target.value))}
+                  className="mt-2 w-full max-w-xs rounded-lg border border-gray-300 px-3 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                >
+                  {USER_TIERS.map((n) => (
+                    <option key={n} value={n}>
+                      {tierLabel(n)}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-2 text-xs text-gray-500">
+                  How many people can be signed in at the same time. Price = plan price × the multiplier for this
+                  choice. Renewing lets you raise or lower it.
+                </p>
+              </div>
               <div className="grid gap-6 md:grid-cols-2">
                 {plans.map((p) => {
                   const featured = p.code === "ONE_YEAR";
@@ -387,8 +421,12 @@ export default function PortalSubscription() {
                         </span>
                       )}
                       <h2 className="text-xl font-semibold">{p.name}</h2>
-                      <p className="mt-2 text-4xl font-bold">₹{p.price}</p>
-                      <p className="text-xs text-gray-500">for {p.months} months</p>
+                      <p className="mt-2 text-4xl font-bold">
+                        ₹{(Math.round(p.price * (mult[String(maxUsers)] ?? 1) * 100) / 100).toLocaleString("en-IN")}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        for {p.months} months · {tierLabel(maxUsers)}
+                      </p>
                       <ul className="mt-4 space-y-1.5 text-sm text-gray-600 dark:text-gray-300">
                         {["All modules included", "Windows app access", "Private database & backup"].map((i) => (
                           <li key={i} className="flex gap-2">
@@ -442,6 +480,17 @@ export default function PortalSubscription() {
                 </tbody>
               </table>
             </div>
+          )}
+
+          {/* ---------- Companies ---------- */}
+          {tab === "companies" && !me?.isCompany && (
+            <PortalCompanies
+              active={!!active}
+              onSwitch={async () => {
+                setTab("overview");
+                await load();
+              }}
+            />
           )}
 
           {/* ---------- Account ---------- */}

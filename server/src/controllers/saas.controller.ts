@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS } from "../utils/userTiers";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getCentralPrisma } from "../prisma-client/central-client";
@@ -58,6 +59,7 @@ export type GlobalSettings = {
   supportPhone: string;
   renewalReminderDays: number; // show the expiry banner this many days before
   minAppVersion: string; // EXEs older than this show an "update available" notice
+  userTierMultipliers: Record<string, number>; // price multiplier per login-count tier
 };
 
 export const DEFAULT_SETTINGS: GlobalSettings = {
@@ -67,6 +69,7 @@ export const DEFAULT_SETTINGS: GlobalSettings = {
   supportPhone: "",
   renewalReminderDays: 7,
   minAppVersion: "",
+  userTierMultipliers: DEFAULT_TIER_MULTIPLIERS,
 };
 
 export async function readSettings(): Promise<GlobalSettings> {
@@ -90,6 +93,15 @@ function clean(body: any): { ok: true; value: Partial<GlobalSettings> } | { ok: 
   if ("supportEmail" in body) v.supportEmail = String(body.supportEmail).trim().slice(0, 120);
   if ("supportPhone" in body) v.supportPhone = String(body.supportPhone).trim().slice(0, 30);
   if ("minAppVersion" in body) v.minAppVersion = String(body.minAppVersion).trim().slice(0, 20);
+  if ("userTierMultipliers" in body) {
+    const out: Record<string, number> = {};
+    for (const t of USER_TIERS) {
+      const n = Number(body.userTierMultipliers?.[String(t)]);
+      if (!(n > 0) || n > 1000) return { ok: false, error: `Multiplier for ${t} user(s) must be greater than 0` };
+      out[String(t)] = n;
+    }
+    v.userTierMultipliers = out;
+  }
   if ("renewalReminderDays" in body) {
     const n = Number(body.renewalReminderDays);
     if (!Number.isInteger(n) || n < 0 || n > 90) {

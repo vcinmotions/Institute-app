@@ -12,7 +12,7 @@ import { createMasterAddressController } from "../controllers/master.setup.contr
 
 import { listPlans, listPlansAdmin, updatePlan } from "../controllers/plan.controller";
 import {
-  portalAuth, registerInstitute, portalLogin, portalMe, portalPayments,
+  portalAuth, masterOnly, listCompanies, createCompany, switchCompany, registerInstitute, portalLogin, portalMe, portalPayments,
   createOrder, verifyPayment, razorpayWebhook, syncSubscription,
 } from "../controllers/portal.controller";
 import {
@@ -30,8 +30,11 @@ router.post("/portal/register", registerInstitute);
 router.post("/portal/login", portalLogin);
 router.get("/portal/me", portalAuth, portalMe);
 router.get("/portal/payments", portalAuth, portalPayments);
-router.post("/portal/order", portalAuth, createOrder);
-router.post("/portal/verify", portalAuth, verifyPayment);
+router.post("/portal/order", portalAuth, masterOnly, createOrder);
+router.post("/portal/verify", portalAuth, masterOnly, verifyPayment);
+router.get("/portal/companies", portalAuth, masterOnly, listCompanies);
+router.post("/portal/companies", portalAuth, masterOnly, createCompany);
+router.post("/portal/companies/:id/switch", portalAuth, masterOnly, switchCompany);
 router.post("/portal/razorpay-webhook", razorpayWebhook);
 router.post("/subscription/sync", syncSubscription); // called by the EXE
 

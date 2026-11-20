@@ -163,6 +163,7 @@ exports.Prisma.TenantScalarFieldEnum = {
   password: 'password',
   encryptedPassword: 'encryptedPassword',
   dbUrl: 'dbUrl',
+  parentTenantId: 'parentTenantId',
   createdAt: 'createdAt'
 };
 
@@ -186,6 +187,7 @@ exports.Prisma.PortalSubscriptionScalarFieldEnum = {
   expiryDate: 'expiryDate',
   status: 'status',
   syncTokenHash: 'syncTokenHash',
+  maxUsers: 'maxUsers',
   updatedAt: 'updatedAt'
 };
 
@@ -195,6 +197,7 @@ exports.Prisma.PortalPaymentScalarFieldEnum = {
   planCode: 'planCode',
   amount: 'amount',
   currency: 'currency',
+  maxUsers: 'maxUsers',
   orderId: 'orderId',
   paymentId: 'paymentId',
   status: 'status',
