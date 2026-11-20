@@ -91,11 +91,18 @@ export async function addFacultyController(req: Request, res: Response) {
 }
 
 export async function updateFacultyController(req: Request, res: Response) {
-  const { name, email, contact, batchId } = req.body;
+  const { name, email, contact, batchId, password } = req.body;
   const { id } = req.params;
 
   if (!name || !email || !contact) {
     return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  // Optional: admin may set a new password while editing.
+  if (password !== undefined && password !== null && password !== "") {
+    if (typeof password !== "string" || password.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters." });
+    }
   }
 
 
@@ -126,6 +133,7 @@ export async function updateFacultyController(req: Request, res: Response) {
         name,
         email,
         contact,
+        ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
         role: "FACULTY",
         country: clientAdmin.country,
         state: clientAdmin.state,

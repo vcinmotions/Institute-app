@@ -15,6 +15,7 @@ import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { setBatches } from "@/store/slices/batchSlice";
 import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { EyeIcon, EyeCloseIcon } from "@/icons";
 import MultiSelect from "../MultiSelect";
 
 type FormErrors = Partial<Record<keyof FacultyData, string>>;
@@ -71,6 +72,8 @@ export default function EditFacultyForm({
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [resetPassword, setResetPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { mutate: editFaculty } = useEditFaculty();
 
   useEffect(() => {
@@ -110,8 +113,9 @@ export default function EditFacultyForm({
         contact: facultyData.contact || "",
         courseId: facultyData.courseId || "",
         batchId: facultyData.batches?.map((b: any) => b.id.toString()) || [],
-        password: facultyData.password || "",
+        password: "",
       });
+      setResetPassword(false);
     }
   }, [facultyData]);
 
@@ -128,6 +132,10 @@ export default function EditFacultyForm({
 
     if (!newFaculty.contact.trim()) {
       newErrors.contact = "Contact is required.";
+    }
+
+    if (resetPassword && newFaculty.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters.";
     }
 
     setErrors(newErrors);
@@ -236,10 +244,13 @@ export default function EditFacultyForm({
 
     const id = facultyData.id;
 
+    const { password: _pw, ...rest } = newFaculty;
     const normalizedFaculty = {
-      ...newFaculty,
+      ...rest,
       name: titleCase(newFaculty.name),
       contact: normalizePhone(newFaculty.contact),
+      // Only send a password when the admin chose to reset it.
+      ...(resetPassword && newFaculty.password ? { password: newFaculty.password } : {}),
     };
 
     editFaculty(
@@ -321,6 +332,52 @@ export default function EditFacultyForm({
                 onChange={(e) => handleChange("name", e.target.value)}
               />
               {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+            </div>
+
+            <div className="order-last md:col-span-2 lg:col-span-3" ref={(el) => { inputRefs.current.password = el; }}>
+              <Label>Password</Label>
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+<Input
+                  type={showPassword ? "text" : "password"}
+                  tabIndex={resetPassword ? 2 : -1}
+                  disabled={!resetPassword}
+                  placeholder={resetPassword ? "Enter new password" : "••••••••"}
+                  value={newFaculty.password}
+                  onChange={(e) => handleChange("password", e.target.value)}
+                />
+{resetPassword && (
+<button
+ type="button"
+ tabIndex={-1}
+ onClick={() => setShowPassword((v) => !v)}
+ aria-label={showPassword ? "Hide password" : "Show password"}
+ className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+>
+{showPassword ? (
+<EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+) : (
+<EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+)}
+</button>
+)}
+</div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    if (resetPassword) {
+                      setResetPassword(false); setShowPassword(false);
+                      handleChange("password", "");
+                    } else {
+                      setResetPassword(true);
+                    }
+                  }}
+                >
+                  {resetPassword ? "Cancel" : "Reset Password"}
+                </Button>
+              </div>
+              {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
             </div>
 
             <div ref={(el) => { inputRefs.current.email = el; }}>

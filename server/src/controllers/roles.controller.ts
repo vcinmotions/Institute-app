@@ -93,7 +93,7 @@ export async function createRoleUserController(req: Request, res: Response) {
 // ✅ Update a new Role-based User (sub-admin)
 // =============================
 export async function updateRoleUserController(req: Request, res: Response) {
-  const { name, email, role } = req.body;
+  const { name, email, role, password } = req.body;
   const id = String(req.params.id);
 
   if (!name || !email || !role) {
@@ -119,11 +119,19 @@ export async function updateRoleUserController(req: Request, res: Response) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
-    const clientAdminId = user.clientAdminId;
+    // Optional password reset: only the main admin account may do this.
+    let hashedPassword: string | undefined;
+    if (password !== undefined && password !== null && password !== "") {
+      if ((user as any).userType !== "ADMIN") {
+        return res.status(403).json({ error: "Only the admin can reset a user's password." });
+      }
+      if (typeof password !== "string" || password.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters." });
+      }
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
 
-    // ✅ Check for existing user with same email
-
-    // ✅ Create RoleUser
+    // ✅ Update RoleUser
     const newRoleUser = await tenantPrisma.roleUser.update({
       where: {
         id,
@@ -132,6 +140,7 @@ export async function updateRoleUserController(req: Request, res: Response) {
         name,
         email,
         role,
+        ...(hashedPassword ? { password: hashedPassword } : {}),
       },
     });
 

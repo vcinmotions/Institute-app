@@ -14,6 +14,7 @@ import { RootState } from "@/store";
 import { useEditRoles } from "@/hooks/useEditRoles";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { EyeIcon, EyeCloseIcon } from "@/icons";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
@@ -40,6 +41,9 @@ export default function EditRolesForm({
     role: "",
   });
   const user = useSelector((state: RootState) => state.auth.user);
+  const canResetPassword = user?.role === "ADMIN";
+  const [resetPassword, setResetPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { inputRefs, scrollToError } = useScrollToError();
   const [errors, setErrors] = useState<FormErrors>({});
   const [alert, setAlert] = useState<{
@@ -60,9 +64,10 @@ export default function EditRolesForm({
     setFormData({
       name: roleData.name || "",
       email: roleData.email || "",
-      password: roleData.password || "",
+      password: "",
       role: roleData.role || "",
     });
+    setResetPassword(false);
   }, [roleData]);
 
   const { mutate: editRolesBasedAdmin } = useEditRoles();
@@ -87,6 +92,10 @@ export default function EditRolesForm({
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) newErrors.email = "Email is required.";
     if (!formData.role.trim()) newErrors.role = "Please select a role.";
+
+    if (resetPassword && formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters.";
+    }
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 2000);
@@ -158,9 +167,14 @@ export default function EditRolesForm({
     const id = roleData.id;
     console.log("GET roleData ID IN HABDLE SUBMIT:", id);
 
+    const { password: _pw, ...rest } = formData;
     const normalizeRole = {
-      ...formData,
+      ...rest,
       name: titleCase(formData.name),
+      // Only send a password when the admin chose to reset it.
+      ...(canResetPassword && resetPassword && formData.password
+        ? { password: formData.password }
+        : {}),
     };
 
     editRolesBasedAdmin(
@@ -255,6 +269,61 @@ export default function EditRolesForm({
                 <p className="mt-1 text-sm text-red-500">{errors.email}</p>
               )}
             </div>
+
+            {canResetPassword && (
+              <div
+                className="md:col-span-2"
+                ref={(el) => {
+                  if (inputRefs.current) inputRefs.current.password = el;
+                }}
+              >
+                <Label>Password</Label>
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+<Input
+                    type={showPassword ? "text" : "password"}
+                    tabIndex={resetPassword ? 3 : -1}
+                    disabled={!resetPassword}
+                    placeholder={resetPassword ? "Enter new password" : "••••••••"}
+                    value={formData.password}
+                    onChange={(e) => handleChange("password", e.target.value)}
+                  />
+{resetPassword && (
+<button
+ type="button"
+ tabIndex={-1}
+ onClick={() => setShowPassword((v) => !v)}
+ aria-label={showPassword ? "Hide password" : "Show password"}
+ className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+>
+{showPassword ? (
+<EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+) : (
+<EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+)}
+</button>
+)}
+</div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      if (resetPassword) {
+                        setResetPassword(false); setShowPassword(false);
+                        handleChange("password", "");
+                      } else {
+                        setResetPassword(true);
+                      }
+                    }}
+                  >
+                    {resetPassword ? "Cancel" : "Reset Password"}
+                  </Button>
+                </div>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
