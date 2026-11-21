@@ -12,7 +12,7 @@ import { createMasterAddressController } from "../controllers/master.setup.contr
 
 import { listPlans, listPlansAdmin, updatePlan } from "../controllers/plan.controller";
 import {
-  portalAuth, masterOnly, listCompanies, createCompany, switchCompany, registerInstitute, portalLogin, portalMe, portalPayments,
+  portalAuth, masterOnly, listCompanies, createCompany, switchCompany, registerInstitute, portalLogin, portalMe, portalUpdateProfile, portalPayments,
   createOrder, verifyPayment, razorpayWebhook, syncSubscription,
 } from "../controllers/portal.controller";
 import {
@@ -29,6 +29,7 @@ router.post("/setup/address", createMasterAddressController);
 router.post("/portal/register", registerInstitute);
 router.post("/portal/login", portalLogin);
 router.get("/portal/me", portalAuth, portalMe);
+router.put("/portal/profile", portalAuth, portalUpdateProfile);
 router.get("/portal/payments", portalAuth, portalPayments);
 router.post("/portal/order", portalAuth, masterOnly, createOrder);
 router.post("/portal/verify", portalAuth, masterOnly, verifyPayment);

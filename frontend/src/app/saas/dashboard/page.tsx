@@ -1,5 +1,6 @@
 "use client";
 
+import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel } from "@/lib/userTiers";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { saasApi, getSaasToken, setSaasToken } from "@/lib/saasApi";
@@ -11,6 +12,7 @@ type Plan = {
   price: number;
   currency: string;
   active: boolean;
+  tierPrices?: Record<string, number | string>;
 };
 
 type Institute = {
@@ -60,6 +62,7 @@ type Settings = {
   supportPhone: string;
   renewalReminderDays: number;
   minAppVersion: string;
+  userTierMultipliers?: Record<string, number>;
 };
 
 const input =
@@ -119,7 +122,7 @@ export default function SaasDashboard() {
     setSaving(p.code);
     setMsg("");
     try {
-      await saasApi.put(`/saas/plans/${p.code}`, { price: Number(p.price), active: p.active });
+      await saasApi.put(`/saas/plans/${p.code}`, { price: Number(p.price), active: p.active, tierPrices: p.tierPrices ?? {} });
       setMsg(`${p.name} saved`);
     } catch (e: any) {
       setMsg(e?.response?.data?.error || "Save failed");
@@ -301,17 +304,34 @@ export default function SaasDashboard() {
                   Show on website
                 </label>
               </div>
-              <div className="flex items-end gap-3">
-                <label className="flex-1 text-sm">
-                  Price ({p.currency})
-                  <input
-                    type="number"
-                    min={0}
-                    value={p.price}
-                    onChange={(e) => changePlan(p.code, { price: e.target.value as any })}
-                    className={input}
-                  />
-                </label>
+              <p className="mb-3 text-xs text-gray-500">
+                Set the price for each login count (maximum people signed in at the same time). Leave a
+                box blank to use the automatic price: the 1-login price × the standard multiplier for that login count.
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {USER_TIERS.map((n) => {
+                  const mult = settings?.userTierMultipliers?.[String(n)] ?? DEFAULT_TIER_MULTIPLIERS[String(n)] ?? 1;
+                  const auto = Math.round(Number(p.price || 0) * mult * 100) / 100;
+                  return (
+                    <label key={n} className="text-sm">
+                      {tierLabel(n)} ({p.currency})
+                      <input
+                        type="number"
+                        min={0}
+                        value={n === 1 ? p.price : p.tierPrices?.[String(n)] ?? ""}
+                        placeholder={n === 1 ? "" : `Auto: ${auto}`}
+                        onChange={(e) =>
+                          n === 1
+                            ? changePlan(p.code, { price: e.target.value as any })
+                            : changePlan(p.code, { tierPrices: { ...(p.tierPrices ?? {}), [String(n)]: e.target.value } })
+                        }
+                        className={input}
+                      />
+                    </label>
+                  );
+                })}
+              </div>
+              <div className="mt-4 flex justify-end">
                 <button onClick={() => savePlan(p)} disabled={saving === p.code} className={btn}>
                   {saving === p.code ? "Saving..." : "Save"}
                 </button>

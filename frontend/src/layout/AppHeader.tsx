@@ -34,6 +34,10 @@ const AppHeader: React.FC = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Admin: instituteName on the user; role users / faculty: via their clientAdmin.
+  const companyName: string =
+    (user as any)?.instituteName || (user as any)?.clientAdmin?.instituteName || "CRM";
+
   const activeFinancialYear = user?.financialYears?.find((fy: any) => fy.isActive);
 
   const formattedDate = currentTime.toLocaleDateString("en-IN", {
@@ -82,8 +86,11 @@ const AppHeader: React.FC = () => {
             )}
           </button>
 
-          <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200">
-            <span className="text-[10px] text-blue-600">CRM</span>
+          <div
+            title={companyName}
+            className="inline-flex h-9 max-w-[220px] items-center justify-center rounded-lg border border-gray-200 px-3 text-gray-500 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+          >
+            <span className="truncate text-xs font-medium text-blue-600">{companyName}</span>
           </div>
 
           <Link href="/dashboard" className="block lg:hidden transition-opacity hover:opacity-90">

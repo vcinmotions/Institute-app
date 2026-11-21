@@ -1,3 +1,4 @@
+import { readTierPrices, resolvePlanPrice } from "./plan.controller";
 import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
@@ -153,6 +154,39 @@ export async function portalMe(req: Request, res: Response) {
   });
 }
 
+// Institute name and username identify the institute's database, so only the
+// contact/profile details below can be edited from the portal.
+export async function portalUpdateProfile(req: Request, res: Response) {
+  const email = (req as any).portalEmail as string;
+  const n = normalizeTenantInput(req.body);
+  const required = [n.name, n.contact, n.country, n.state, n.city, n.zipCode, n.fullAddress];
+  if (required.some((v) => !v)) return res.status(400).json({ error: "Please fill in all required fields." });
+  if (!n.businessEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(n.businessEmail)) {
+    return res.status(400).json({ error: "Please enter a valid business email." });
+  }
+  const digits = String(n.contact).replace(/\D/g, "");
+  if (digits.length < 8 || digits.length > 15) {
+    return res.status(400).json({ error: "Please enter a valid contact number." });
+  }
+  try {
+    const profile = await getCentralPrisma().tenant.update({
+      where: { email },
+      data: {
+        name: n.name!, businessEmail: n.businessEmail, contact: n.contact!, country: n.country!,
+        state: n.state!, city: n.city!, zipCode: n.zipCode!, fullAddress: n.fullAddress!,
+      },
+      select: {
+        instituteName: true, name: true, businessEmail: true, contact: true,
+        fullAddress: true, city: true, state: true, country: true, zipCode: true, createdAt: true,
+      },
+    });
+    res.json({ message: "Institute details updated.", profile });
+  } catch (e) {
+    console.error("portal profile update failed:", e);
+    res.status(500).json({ error: "Could not update details. Please try again." });
+  }
+}
+
 export async function portalPayments(req: Request, res: Response) {
   const { ownerEmail: email } = await resolveOwner((req as any).portalEmail as string);
   const rows = await getCentralPrisma().portalPayment.findMany({
@@ -183,9 +217,9 @@ export async function createOrder(req: Request, res: Response) {
       return res.status(400).json({ error: "This plan is not available" });
     }
     const maxUsers = parseMaxUsers(req.body?.maxUsers);
-    const mult = (await readSettings()).userTierMultipliers?.[String(maxUsers)] ?? 1;
-    // Total = plan price x tier multiplier; always computed here, never trusted from the browser.
-    const total = Math.round(plan.price * mult * 100) / 100;
+    // Explicit price for this plan + login count (set by the super admin), else plan price x multiplier.
+    // Always computed here, never trusted from the browser.
+    const total = resolvePlanPrice(plan, await readTierPrices(), (await readSettings()).userTierMultipliers, maxUsers);
     const rz = razorpayAuth();
     const r = await fetch("https://api.razorpay.com/v1/orders", {
       method: "POST",

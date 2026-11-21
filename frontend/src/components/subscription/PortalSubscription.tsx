@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import PortalCompanies from "./PortalCompanies";
+import PortalProfileCard from "./PortalProfileCard";
 import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel } from "@/lib/userTiers";
 import { portalApi, getPortalToken, setPortalToken, portalAuthHeader } from "@/lib/portalApi";
 
@@ -13,7 +14,14 @@ declare global {
   }
 }
 
-type Plan = { code: string; name: string; months: number; price: number; currency: string };
+type Plan = { code: string; name: string; months: number; price: number; currency: string; tierPrices?: Record<string, number> };
+
+// Explicit price for this login count if the admin set one, else plan price x multiplier.
+const planPrice = (p: Plan, users: number, mult: Record<string, number>) => {
+  const explicit = Number(p.tierPrices?.[String(users)]);
+  if (users !== 1 && explicit > 0) return Math.round(explicit * 100) / 100;
+  return Math.round(p.price * (mult[String(users)] ?? 1) * 100) / 100;
+};
 type Profile = {
   instituteName: string;
   name: string;
@@ -401,8 +409,7 @@ export default function PortalSubscription() {
                   ))}
                 </select>
                 <p className="mt-2 text-xs text-gray-500">
-                  How many people can be signed in at the same time. Price = plan price × the multiplier for this
-                  choice. Renewing lets you raise or lower it.
+                  How many people can be signed in at the same time. The price shown on each plan is for this choice. Renewing lets you raise or lower it.
                 </p>
               </div>
               <div className="grid gap-6 md:grid-cols-2">
@@ -422,7 +429,7 @@ export default function PortalSubscription() {
                       )}
                       <h2 className="text-xl font-semibold">{p.name}</h2>
                       <p className="mt-2 text-4xl font-bold">
-                        ₹{(Math.round(p.price * (mult[String(maxUsers)] ?? 1) * 100) / 100).toLocaleString("en-IN")}
+                        ₹{planPrice(p, maxUsers, mult).toLocaleString("en-IN")}
                       </p>
                       <p className="text-xs text-gray-500">
                         for {p.months} months · {tierLabel(maxUsers)}
@@ -494,30 +501,8 @@ export default function PortalSubscription() {
           )}
 
           {/* ---------- Account ---------- */}
-          {tab === "account" && (
-            <div className={card}>
-              <dl className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
-                {[
-                  ["Institute name", me?.profile?.instituteName],
-                  ["Display name", me?.profile?.name],
-                  ["Username", me?.email],
-                  ["Business email", me?.profile?.businessEmail],
-                  ["Contact", me?.profile?.contact],
-                  ["Registered on", fmt(me?.profile?.createdAt)],
-                  [
-                    "Address",
-                    [me?.profile?.fullAddress, me?.profile?.city, me?.profile?.state, me?.profile?.country, me?.profile?.zipCode]
-                      .filter(Boolean)
-                      .join(", "),
-                  ],
-                ].map(([label, value]) => (
-                  <div key={label as string} className={label === "Address" ? "sm:col-span-2" : ""}>
-                    <dt className="text-xs text-gray-500">{label}</dt>
-                    <dd className="mt-0.5 font-medium">{value || "—"}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+          {tab === "account" && me && (
+            <PortalProfileCard profile={me.profile} email={me.email} onSaved={load} />
           )}
         </main>
       </div>

@@ -10,6 +10,7 @@ import { ReduxProvider } from "@/providers/ReduxProvider";
 import GlobalEscBack from "./utils/GlobalEscBack";
 import ReactQueryProvider from "./ReactQueryProvider";
 import GlobalDisableSignin from "./utils/GlobalDisableSignin";
+import GlobalDateYearGuard from "./utils/GlobalDateYearGuard";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
               <SidebarProvider>
                 <NotificationProvider>{children}</NotificationProvider>
                 <GlobalDisableSignin />
+                <GlobalDateYearGuard />
               </SidebarProvider>
               <GlobalEscBack />
             </ThemeProvider>
