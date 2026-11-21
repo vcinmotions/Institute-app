@@ -399,6 +399,7 @@ export async function syncSubscription(req: Request, res: Response) {
       status: src.status as SubscriptionPayload["status"],
       maxUsers: src.maxUsers,
       issuedAt: new Date().toISOString(),
+      nonce: req.body?.nonce ? String(req.body.nonce).slice(0, 64) : undefined,
     };
     res.json({ ...signPayload(payload), syncToken: newToken });
   } catch (e) {

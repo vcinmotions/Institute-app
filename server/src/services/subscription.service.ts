@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import os from "os";
 import { getUserDataPath } from "../middlewares/runtimePaths";
 
 /**
@@ -10,7 +11,17 @@ import { getUserDataPath } from "../middlewares/runtimePaths";
  * It returns a payload signed with its PRIVATE key; the EXE only knows the
  * PUBLIC key (SUBSCRIPTION_PUBLIC_KEY, base64 PEM). The signed record is kept in
  * the local data folder so the app keeps working offline. Editing the file
- * invalidates the signature; rolling the clock back is detected via lastSeenAt.
+ * invalidates the signature. Changing the PC date/time cannot extend a
+ * subscription:
+ *  - online: every sync compares the PC clock with the portal's signed server
+ *    time (payload.issuedAt, bound to a one-time nonce so it cannot be
+ *    replayed). A clock that differs by more than the tolerance locks the app
+ *    until it is corrected.
+ *  - offline: a protected "last seen" high-water mark catches a clock set
+ *    earlier than the app has already seen, and the newest file timestamp in
+ *    the temp/app folders catches rollbacks past the last time the app ran.
+ * Limit: a PC that is kept offline AND frozen at one date cannot be detected
+ * by any software; it is blocked again at the next online sync.
  *
  * Enforcement is OFF when SUBSCRIPTION_API_URL is not configured (dev / legacy).
  */
@@ -23,7 +34,8 @@ export type SubscriptionPayload = {
   expiryDate: string;
   status: "ACTIVE" | "EXPIRED" | "SUSPENDED" | "REVOKED";
   maxUsers?: number; // max simultaneous logins
-  issuedAt: string;
+  issuedAt: string; // portal (server) time when signed - the trusted clock
+  nonce?: string; // echo of the EXE one-time request nonce (anti-replay)
 };
 
 type StoredRecord = {
@@ -33,6 +45,9 @@ type StoredRecord = {
   lastSyncAt?: string;
   lastSeenAt?: string;
   lastSeenMac?: string;
+  clockFlag?: "OK" | "BAD"; // result of the last server-time comparison
+  evidenceFloor?: number; // newest file timestamp seen when the clock was last verified online
+  clockMac?: string; // HMAC over clockFlag + evidenceFloor
   settings?: Record<string, any>; // global settings from the SaaS admin (display only)
 };
 
@@ -52,6 +67,10 @@ export type SubscriptionState = {
 
 const CLOCK_TOLERANCE_MS = 10 * 60 * 1000;
 const DAY_MS = 24 * 60 * 60 * 1000;
+// A file stamped further in the future than this proves the clock was set back.
+const EVIDENCE_TOLERANCE_MS = 2 * DAY_MS;
+const CLOCK_MESSAGE =
+  "The date/time on this computer is incorrect. Set the correct date and time, then connect to the internet to re-validate.";
 
 export const EXPIRED_MESSAGE =
   "Your software subscription has expired. The application is currently in View-Only Mode. Please renew your subscription through the web portal to restore full access.";
@@ -131,6 +150,42 @@ function state(
   };
 }
 
+
+const clockMacOf = (flag: string, floor: number) => macOf(`clock:${flag}:${floor}`);
+
+/**
+ * Newest file timestamp in the temp folder and the app data folder. The OS stamps
+ * these with the real clock whenever anything is written, so a value far ahead of
+ * "now" means the clock was moved back after the PC (or app) was used.
+ * Cached for 5 minutes; set SUBSCRIPTION_FILE_CLOCK_CHECK=off to disable.
+ */
+let evidenceCache: { at: number; val: number } | null = null;
+function newestEvidenceMs(): number {
+  if (process.env.SUBSCRIPTION_FILE_CLOCK_CHECK === "off") return 0;
+  const t = Date.now();
+  if (evidenceCache && t >= evidenceCache.at && t - evidenceCache.at < 5 * 60 * 1000) return evidenceCache.val;
+  let newest = 0;
+  const dirs = [os.tmpdir(), getUserDataPath(), path.join(getUserDataPath(), "data")];
+  for (const dir of dirs) {
+    try {
+      const names = fs.readdirSync(dir).slice(0, 1500);
+      for (const n of names) {
+        try {
+          const m = fs.statSync(path.join(dir, n)).mtimeMs;
+          if (m > newest) newest = m;
+        } catch {}
+      }
+    } catch {}
+  }
+  evidenceCache = { at: t, val: newest };
+  return newest;
+}
+
+function validRecordLastSeen(rec: StoredRecord | null): number {
+  if (!rec?.lastSeenAt || rec.lastSeenMac !== macOf(rec.lastSeenAt)) return 0;
+  return Date.parse(rec.lastSeenAt) || 0;
+}
+
 /** Computes the current state from local data only (works offline). */
 export function getState(): SubscriptionState {
   if (!isEnforced()) {
@@ -176,7 +231,7 @@ export function getState(): SubscriptionState {
       return state({
         status: "CLOCK_TAMPERED",
         locked: true,
-        message: "System date/time problem detected. Connect to the internet to re-validate.",
+        message: CLOCK_MESSAGE,
       });
     }
     lastSeen = Date.parse(rec.lastSeenAt) || 0;
@@ -187,7 +242,7 @@ export function getState(): SubscriptionState {
       locked: true,
       expiryDate: payload.expiryDate,
       plan: payload.plan,
-      message: "System date is earlier than the last time the app was used. Fix the date or go online.",
+      message: CLOCK_MESSAGE,
     });
   }
   if (now > lastSeen) {
@@ -195,6 +250,31 @@ export function getState(): SubscriptionState {
     try {
       writeRecord({ ...rec, lastSeenAt: iso, lastSeenMac: macOf(iso) });
     } catch {}
+  }
+
+  // Last online check found the PC clock different from the portal's clock.
+  const flagOk = !rec.clockFlag || rec.clockMac === clockMacOf(rec.clockFlag, rec.evidenceFloor ?? 0);
+  if (!flagOk || rec.clockFlag === "BAD") {
+    return state({
+      status: "CLOCK_TAMPERED",
+      locked: true,
+      expiryDate: payload.expiryDate,
+      plan: payload.plan,
+      message: CLOCK_MESSAGE,
+    });
+  }
+
+  // Files stamped in the future prove the clock was moved back (offline rollback).
+  const evidence = newestEvidenceMs();
+  const floor = rec.clockFlag ? rec.evidenceFloor ?? 0 : 0;
+  if (evidence > now + EVIDENCE_TOLERANCE_MS && evidence > floor + EVIDENCE_TOLERANCE_MS) {
+    return state({
+      status: "CLOCK_TAMPERED",
+      locked: true,
+      expiryDate: payload.expiryDate,
+      plan: payload.plan,
+      message: CLOCK_MESSAGE,
+    });
   }
 
   const expiry = Date.parse(payload.expiryDate);
@@ -254,6 +334,7 @@ export async function syncFromCloud(credentials?: {
   }
   if (!email) return { ok: false, error: "No account to sync" };
 
+  const nonce = crypto.randomBytes(16).toString("hex"); // one-time: the signed reply must echo it
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 8000);
   try {
@@ -264,6 +345,7 @@ export async function syncFromCloud(credentials?: {
         email,
         password: credentials?.password,
         syncToken: rec?.syncToken,
+        nonce,
       }),
       signal: ctrl.signal,
     });
@@ -274,11 +356,26 @@ export async function syncFromCloud(credentials?: {
     if (!payloadJson || !signature || !verify(payloadJson, signature)) {
       return { ok: false, error: "Invalid subscription response" };
     }
-    const nowIso = new Date().toISOString();
-    let seen = nowIso;
-    if (rec?.lastSeenAt && rec.lastSeenMac === macOf(rec.lastSeenAt) && Date.parse(rec.lastSeenAt) > Date.now()) {
-      seen = rec.lastSeenAt;
+    // Reject a replayed / stale reply, and use the portal's signed time as the trusted clock.
+    const signed = JSON.parse(payloadJson) as SubscriptionPayload;
+    const serverMs = Date.parse(signed.issuedAt);
+    if (signed.nonce !== nonce || !Number.isFinite(serverMs)) {
+      return { ok: false, error: "Invalid subscription response" };
     }
+    const localMs = Date.now();
+    const clockOk = Math.abs(localMs - serverMs) <= CLOCK_TOLERANCE_MS;
+    const prevSeen = validRecordLastSeen(rec);
+
+    // Healthy clock: high-water mark = true time (a stale "future" mark from an earlier wrong
+    // clock is discarded). Bad clock: never move it down, and lock until the clock is fixed.
+    const seenMs = clockOk
+      ? Math.max(serverMs, localMs, prevSeen && prevSeen <= serverMs + CLOCK_TOLERANCE_MS ? prevSeen : 0)
+      : Math.max(prevSeen, serverMs);
+    const seen = new Date(seenMs).toISOString();
+    evidenceCache = null;
+    const floor = clockOk ? newestEvidenceMs() : rec?.evidenceFloor ?? 0;
+    const flag: "OK" | "BAD" = clockOk ? "OK" : "BAD";
+    const nowIso = new Date(localMs).toISOString();
     writeRecord({
       payloadJson,
       signature,
@@ -286,8 +383,12 @@ export async function syncFromCloud(credentials?: {
       lastSyncAt: nowIso,
       lastSeenAt: seen,
       lastSeenMac: macOf(seen),
+      clockFlag: flag,
+      evidenceFloor: floor,
+      clockMac: clockMacOf(flag, floor),
       settings: (await fetchGlobalSettings(api)) ?? rec?.settings,
     });
+    if (!clockOk) return { ok: false, error: CLOCK_MESSAGE };
     return { ok: true };
   } catch (e: any) {
     return { ok: false, error: e?.name === "AbortError" ? "Portal timed out" : "Offline" };

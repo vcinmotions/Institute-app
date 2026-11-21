@@ -46,6 +46,12 @@ export function loadEnv() {
     override: false,
   });
 
+  // Portal-only secrets (e.g. SUBSCRIPTION_PRIVATE_KEY). Not committed, not shipped in the EXE.
+  dotenv.config({
+    path: path.join(rootDir, ".env.portal"),
+    override: false,
+  });
+
   loaded = true;
 }
 
