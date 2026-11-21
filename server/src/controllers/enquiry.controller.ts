@@ -187,6 +187,10 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
       return res.status(409).json({ error: err.message });
     }
 
+    if (err.message?.includes("Source Type not found")) {
+      return res.status(400).json({ error: err.message });
+    }
+
     if (err.name === "ZodError") {
       console.error("Zod validation failed:", (err.issues ?? err.errors));
       return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });

@@ -143,6 +143,21 @@ export async function updateClientAdmin(req: Request, res: Response) {
   }
 }
 
+// Resolve the owning clientAdmin id for any user type (admin, role user, faculty)
+async function resolveClientAdminId(tenantPrisma: any, user: any): Promise<string | null> {
+  const email = user.email;
+  if (user.userType === "ROLE_USER") {
+    const ru = await tenantPrisma.roleUser.findUnique({ where: { email }, select: { clientAdminId: true } });
+    return ru?.clientAdminId ?? null;
+  }
+  if (user.userType === "FACULTY") {
+    const f = await tenantPrisma.faculty.findUnique({ where: { email }, select: { clientAdminId: true } });
+    return f?.clientAdminId ?? null;
+  }
+  const ca = await tenantPrisma.clientAdmin.findUnique({ where: { email }, select: { id: true } });
+  return ca?.id ?? null;
+}
+
 export async function getFollowUpStats(req: Request, res: Response) {
   try {
     const tenantPrisma = req.tenantPrisma;
@@ -152,14 +167,9 @@ export async function getFollowUpStats(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    const clientAdminId = await resolveClientAdminId(tenantPrisma, user);
 
-    // Get client admin for this user
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email },
-    });
-
-    if (!clientAdmin) {
+    if (!clientAdminId) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
@@ -169,27 +179,31 @@ export async function getFollowUpStats(req: Request, res: Response) {
         tenantPrisma.followUp.count({
           where: {
             followUpStatus: "PENDING",
-            enquiry: { clientAdminId: clientAdmin.id },
+            enquiry: { clientAdminId: clientAdminId },
           },
         }),
         tenantPrisma.followUp.count({
           where: {
             followUpStatus: "MISSED",
-            enquiry: { clientAdminId: clientAdmin.id },
+            enquiry: { clientAdminId: clientAdminId },
           },
         }),
         tenantPrisma.followUp.count({
           where: {
             followUpStatus: "COMPLETED",
-            enquiry: { clientAdminId: clientAdmin.id },
+            enquiry: { clientAdminId: clientAdminId },
           },
         }),
         tenantPrisma.followUp.count({
           where: {
-            enquiry: { clientAdminId: clientAdmin.id },
+            enquiry: { clientAdminId: clientAdminId },
           },
         }),
       ]);
+
+    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
+      where: { id: clientAdminId },
+    });
 
     return res.status(200).json({
       clientAdmin,
@@ -215,20 +229,16 @@ export async function getPendingFollowUps(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    const clientAdminId = await resolveClientAdminId(tenantPrisma, user);
 
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email },
-    });
-
-    if (!clientAdmin) {
+    if (!clientAdminId) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
     const followUps = await tenantPrisma.followUp.findMany({
       where: {
         followUpStatus: "PENDING",
-        enquiry: { clientAdminId: clientAdmin.id },
+        enquiry: { clientAdminId: clientAdminId },
       },
       include: {
         enquiry: true,
@@ -254,20 +264,16 @@ export async function getMissedFollowUps(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    const clientAdminId = await resolveClientAdminId(tenantPrisma, user);
 
-    const clientAdmin = await tenantPrisma.clientAdmin.findUnique({
-      where: { email },
-    });
-
-    if (!clientAdmin) {
+    if (!clientAdminId) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
     const followUps = await tenantPrisma.followUp.findMany({
       where: {
         followUpStatus: "MISSED",
-        enquiry: { clientAdminId: clientAdmin.id },
+        enquiry: { clientAdminId: clientAdminId },
       },
       include: {
         enquiry: true,
