@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import CompanySwitcher from "@/components/common/CompanySwitcher";
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -86,12 +87,7 @@ const AppHeader: React.FC = () => {
             )}
           </button>
 
-          <div
-            title={companyName}
-            className="inline-flex h-9 max-w-[220px] items-center justify-center rounded-lg border border-gray-200 px-3 text-gray-500 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-          >
-            <span className="truncate text-xs font-medium text-blue-600">{companyName}</span>
-          </div>
+          <CompanySwitcher fallbackName={companyName} />
 
           <Link href="/dashboard" className="block lg:hidden transition-opacity hover:opacity-90">
             <Image width={120} height={28} className="dark:hidden" src="/images/logo/logo.svg" alt="ERP Logo" unoptimized />

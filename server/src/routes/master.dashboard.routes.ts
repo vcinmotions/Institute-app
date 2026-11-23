@@ -6,13 +6,13 @@ import {
   updateMasterAdmin,
 } from "../controllers//master.dashboard.controller";
 import { masterAuthMiddleware } from "../middlewares/master.auth.middleware";
-import { setupCentralController } from "../controllers/setup.controller";
+import { setupCentralController, setupIdentityController, setupResyncController } from "../controllers/setup.controller";
 import { setupStatusController } from "../controllers/setup-status.controller";
 import { createMasterAddressController } from "../controllers/master.setup.controller";
 
 import { listPlans, listPlansAdmin, updatePlan } from "../controllers/plan.controller";
 import {
-  portalAuth, masterOnly, listCompanies, createCompany, switchCompany, registerInstitute, portalLogin, portalMe, portalUpdateProfile, portalPayments,
+  portalAuth, masterOnly, listCompanies, createCompany, updateCompany, registerInstitute, portalLogin, portalIdentity, portalMe, portalUpdateProfile, portalPayments,
   createOrder, verifyPayment, razorpayWebhook, syncSubscription,
 } from "../controllers/portal.controller";
 import {
@@ -23,11 +23,14 @@ const router = express.Router();
 router.get("/setup/status", setupStatusController);
 
 router.post("/setup", setupCentralController);
+router.get("/setup/identity", setupIdentityController);
+router.post("/setup/resync", setupResyncController);
 router.post("/setup/address", createMasterAddressController);
 
 // ---- Web portal (public / portal-token) ----
 router.post("/portal/register", registerInstitute);
 router.post("/portal/login", portalLogin);
+router.post("/portal/identity", portalIdentity);
 router.get("/portal/me", portalAuth, portalMe);
 router.put("/portal/profile", portalAuth, portalUpdateProfile);
 router.get("/portal/payments", portalAuth, portalPayments);
@@ -35,7 +38,7 @@ router.post("/portal/order", portalAuth, masterOnly, createOrder);
 router.post("/portal/verify", portalAuth, masterOnly, verifyPayment);
 router.get("/portal/companies", portalAuth, masterOnly, listCompanies);
 router.post("/portal/companies", portalAuth, masterOnly, createCompany);
-router.post("/portal/companies/:id/switch", portalAuth, masterOnly, switchCompany);
+router.put("/portal/companies/:id", portalAuth, masterOnly, updateCompany);
 router.post("/portal/razorpay-webhook", razorpayWebhook);
 router.post("/subscription/sync", syncSubscription); // called by the EXE
 

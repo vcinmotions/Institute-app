@@ -1214,3 +1214,29 @@ export const deletedEnquiry = async (token: string, id: any) => {
 //   });
 //   return response.data;
 // };
+
+
+// ---- Company selection / session ----
+export const selectCompany = async (body: { email: string; selectionToken: string; companyId: string }) => {
+  try {
+    const response = await apiClient.post("/auth/select-company", body);
+    return response.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.error || "Could not open the company.");
+  }
+};
+
+export const switchCompanyApi = async (companyId: string) => {
+  const response = await apiClient.post("/auth/switch-company", { companyId });
+  return response.data;
+};
+
+export const fetchMyCompanies = async () => {
+  const response = await apiClient.get("/my-companies");
+  return response.data as { currentCompanyId: string; companies: { id: string; name: string; role: string }[] };
+};
+
+export const sendHeartbeat = async () => {
+  const response = await apiClient.post("/auth/heartbeat");
+  return response.data;
+};

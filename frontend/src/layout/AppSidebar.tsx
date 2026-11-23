@@ -243,6 +243,13 @@ const navItems: NavItem[] = [
     path: "/dashboard/reports",
     roles: ["ADMIN"],
   },
+  {
+    group: "Administration",
+    icon: <UserIcon />,
+    name: "Compare Companies",
+    path: "/dashboard/reports/compare",
+    roles: ["ADMIN", "ACCOUNTANT"],
+  },
 
   // --- SYSTEM ADMIN ---
   {

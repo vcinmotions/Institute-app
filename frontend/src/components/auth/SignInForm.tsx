@@ -9,7 +9,8 @@ import { EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { useLoginUser } from "@/hooks/useLoginUser";
+import { useLoginUser, useSelectCompany, CompanyPrompt } from "@/hooks/useLoginUser";
+import Select from "@/components/form/Select";
 
 export default function SignInForm() {
   const [password, setPassword] = useState("");
@@ -19,7 +20,10 @@ export default function SignInForm() {
   const [inputError, setInputError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { mutate, error, isPending } = useLoginUser();
+  const [prompt, setPrompt] = useState<CompanyPrompt | null>(null);
+  const [companyId, setCompanyId] = useState("");
+  const { mutate, error, isPending } = useLoginUser({ onNeedsCompany: setPrompt });
+  const pick = useSelectCompany();
   const firstInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -90,6 +94,51 @@ export default function SignInForm() {
     // Passes clean, lowered data value down to your backend mutation process
     mutate({ email: identifier.trim().toLowerCase(), password });
   };
+
+  // Step 2: a user with several companies picks the one to work in.
+  if (prompt) {
+    const err = (pick.error as Error | null)?.message;
+    return (
+      <div className="flex w-full flex-1 flex-col lg:w-full">
+        <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
+          <h1 className="mb-2 text-2xl font-semibold text-gray-800 sm:text-3xl dark:text-white/90">Select company</h1>
+          <p className="mb-5 text-sm text-gray-500 dark:text-gray-400">
+            You have access to more than one company. Choose the one you want to work in.
+          </p>
+          {err && (
+            <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-500 dark:bg-red-950/30 dark:text-red-400">{err}</div>
+          )}
+          <Label>Company <span className="text-red-500">*</span></Label>
+          <Select
+            searchable
+            options={prompt.companies.map((c) => ({ label: c.name, value: c.id }))}
+            placeholder="Select company"
+            value={companyId}
+            onChange={setCompanyId}
+          />
+          <div className="mt-6 flex gap-3">
+            <Button
+              className="w-full disabled:cursor-not-allowed disabled:opacity-60"
+              size="sm"
+              disabled={!companyId || pick.isPending}
+              onClick={() =>
+                pick.mutate({ email: prompt.email, selectionToken: prompt.selectionToken, companyId })
+              }
+            >
+              {pick.isPending ? "Opening..." : "Continue"}
+            </Button>
+            <button
+              type="button"
+              onClick={() => { setPrompt(null); setCompanyId(""); setPassword(""); pick.reset(); }}
+              className="rounded-lg px-4 text-sm text-gray-500 hover:text-gray-700"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full flex-1 flex-col lg:w-full">

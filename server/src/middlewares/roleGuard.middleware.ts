@@ -31,6 +31,8 @@ const RULES: Rule[] = [
   { test: /^\/(create-student-payment|advance-payment|create-op)/, roles: ["ADMIN", "ACCOUNTANT"] },
   { test: /^\/(profit|financial-summary|outstanding)/, roles: ["ADMIN", "ACCOUNTANT"] },
   { test: /^\/expense/, roles: ["ADMIN", "ACCOUNTANT"] },
+  // Reports (also the cross-company comparison, which checks the role per company as well).
+  { test: /^\/reports/, roles: ["ADMIN", "ACCOUNTANT"] },
 
   // --- front office: ADMIN + FRONT_DESK ---
   { test: /^\/(admission-new|edit-student|add-course|student-course)/, methods: ["POST", "PUT"], roles: ["ADMIN", "FRONT_DESK"] },

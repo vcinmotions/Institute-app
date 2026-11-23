@@ -1,55 +1,75 @@
 import { getState } from "./subscription.service";
+import { getTenantPrisma } from "../prisma-client/tenant-client";
 
 /**
- * Simultaneous-login limit. One slot per signed-in user (single-device login means
- * a user never holds two). A slot is freed when the user is idle for IDLE_MS.
- * Kept in memory on the server that serves the app; a restart simply re-registers
- * active users on their next request.
+ * Simultaneous-login limit, counted institute-wide (all companies share one database).
+ *
+ * Each signed-in user holds one ActiveSession row. The app sends a heartbeat every
+ * minute; a row with no heartbeat for SESSION_TIMEOUT_SECONDS is treated as gone, so
+ * a crashed app, power cut or lost network can never keep a seat forever.
  */
-const IDLE_MS = (Number(process.env.SESSION_IDLE_MINUTES) || 30) * 60 * 1000;
-const slots = new Map<string, number>(); // "tenant:userType:id" -> lastSeen
+type Db = ReturnType<typeof getTenantPrisma>;
+export type SessionWho = { userType: string; userId: string | number; clientAdminId?: string | null };
 
-const tenantOf = (key: string) => key.split(":")[0];
-
-function prune(now: number) {
-  for (const [k, t] of slots) if (now - t > IDLE_MS) slots.delete(k);
-}
+export const SESSION_TIMEOUT_MS = (Number(process.env.SESSION_TIMEOUT_SECONDS) || 180) * 1000;
 
 function limit(): number | null {
   const s = getState();
   return s.enforced && s.maxUsers ? s.maxUsers : null; // null = unlimited
 }
 
-export const sessionKey = (tenantId: string, userType: string, id: string | number) =>
-  `${tenantId}:${userType}:${id}`;
+const key = (w: SessionWho) => ({ userType_userId: { userType: String(w.userType), userId: String(w.userId) } });
 
-/** Returns false (and does not register) when the limit is reached for a new user. */
-export function claimSession(key: string): { ok: boolean; max: number | null } {
-  const now = Date.now();
-  prune(now);
-  const max = limit();
-  if (slots.has(key) || max === null) {
-    slots.set(key, now);
-    return { ok: true, max };
-  }
-  const used = [...slots.keys()].filter((k) => tenantOf(k) === tenantOf(key)).length;
-  if (used >= max) return { ok: false, max };
-  slots.set(key, now);
-  return { ok: true, max };
+/** Removes sessions that stopped sending heartbeats. */
+export async function pruneSessions(db: Db) {
+  await db.activeSession.deleteMany({ where: { lastSeenAt: { lt: new Date(Date.now() - SESSION_TIMEOUT_MS) } } });
+}
+
+export async function countActiveSessions(db: Db) {
+  await pruneSessions(db);
+  return db.activeSession.count();
 }
 
 /** Same check without registering (used before issuing a login token). */
-export function canClaimSession(key: string): { ok: boolean; max: number | null } {
-  const now = Date.now();
-  prune(now);
+export async function canClaimSession(db: Db, who: SessionWho): Promise<{ ok: boolean; max: number | null }> {
   const max = limit();
-  if (slots.has(key) || max === null) return { ok: true, max };
-  const used = [...slots.keys()].filter((k) => tenantOf(k) === tenantOf(key)).length;
-  return { ok: used < max, max };
+  if (max === null) return { ok: true, max };
+  await pruneSessions(db);
+  if (await db.activeSession.findUnique({ where: key(who) })) return { ok: true, max };
+  return { ok: (await db.activeSession.count()) < max, max };
 }
 
-export function releaseSession(key: string) {
-  slots.delete(key);
+/** Registers or refreshes a session. Returns ok=false when a NEW user would exceed the limit. */
+export async function claimSession(
+  db: Db,
+  who: SessionWho,
+  deviceInfo?: string
+): Promise<{ ok: boolean; max: number | null }> {
+  const max = limit();
+  await pruneSessions(db);
+  const existing = await db.activeSession.findUnique({ where: key(who) });
+  if (!existing && max !== null && (await db.activeSession.count()) >= max) return { ok: false, max };
+  const clientAdminId = who.clientAdminId ?? "";
+  if (existing) {
+    await db.activeSession.update({
+      where: key(who),
+      data: { lastSeenAt: new Date(), ...(clientAdminId ? { clientAdminId } : {}) },
+    });
+  } else {
+    await db.activeSession.create({
+      data: {
+        userType: String(who.userType),
+        userId: String(who.userId),
+        clientAdminId,
+        deviceInfo: deviceInfo ?? null,
+      },
+    });
+  }
+  return { ok: true, max };
+}
+
+export async function releaseSession(db: Db, who: SessionWho) {
+  await db.activeSession.deleteMany({ where: { userType: String(who.userType), userId: String(who.userId) } });
 }
 
 export const limitMessage = (max: number | null) =>

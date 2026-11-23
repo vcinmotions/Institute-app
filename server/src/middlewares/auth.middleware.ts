@@ -5,7 +5,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { getTenantPrisma } from "../prisma-client/tenant-client";
 import { getTenantDbUrlById } from "../utils/tenantDbUrl";
 import dotenv from "dotenv";
-import { claimSession, sessionKey, limitMessage } from "../services/sessionLimit.service";
+import { claimSession, limitMessage } from "../services/sessionLimit.service";
 dotenv.config({ path: ".env" });
 
 declare global {
@@ -17,6 +17,10 @@ declare global {
     }
   }
 }
+
+// Refresh a user's seat at most this often (the app also sends a heartbeat every minute).
+const TOUCH_EVERY_MS = 30 * 1000;
+const lastTouch = new Map<string, number>();
 
 export const authMiddleware = async (
   req: Request,
@@ -99,6 +103,10 @@ export const authMiddleware = async (
     // 🚨 Single Device Check
     const incomingToken = token;
 
+    if (!dbUser.currentSessionToken) {
+      // Cleared by an explicit sign-out: the old token can never be reused.
+      return res.status(401).json({ code: "SESSION_ENDED", error: "You have been signed out. Please sign in again." });
+    }
     if (dbUser.currentSessionToken !== incomingToken) {
       return res.status(401).json({
         error:
@@ -106,10 +114,18 @@ export const authMiddleware = async (
       });
     }
 
-    // Simultaneous-login limit (counts this user as active).
-    const claim = claimSession(sessionKey(String(decoded.tenantId ?? ""), String(userType), id));
-    if (!claim.ok) {
-      return res.status(403).json({ code: "LOGIN_LIMIT", error: limitMessage(claim.max) });
+    // Simultaneous-login limit, counted institute-wide. A seat that timed out
+    // (no heartbeat) is re-registered here when there is room.
+    const who = { userType: String(userType), userId: String(id), clientAdminId: decoded.clientAdminId };
+    const tk = `${dbUrl}|${who.userType}|${who.userId}`;
+    const now = Date.now();
+    if (!lastTouch.has(tk) || now - (lastTouch.get(tk) as number) > TOUCH_EVERY_MS) {
+      const claim = await claimSession(tenantPrisma, who);
+      if (!claim.ok) {
+        lastTouch.delete(tk);
+        return res.status(403).json({ code: "LOGIN_LIMIT", error: limitMessage(claim.max) });
+      }
+      lastTouch.set(tk, now);
     }
 
     next();

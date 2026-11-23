@@ -193,6 +193,21 @@ export type Certificate = $Result.DefaultSelection<Prisma.$CertificatePayload>
  * 
  */
 export type FinancialRecord = $Result.DefaultSelection<Prisma.$FinancialRecordPayload>
+/**
+ * Model Branch
+ * 
+ */
+export type Branch = $Result.DefaultSelection<Prisma.$BranchPayload>
+/**
+ * Model UserCompanyAccess
+ * 
+ */
+export type UserCompanyAccess = $Result.DefaultSelection<Prisma.$UserCompanyAccessPayload>
+/**
+ * Model ActiveSession
+ * 
+ */
+export type ActiveSession = $Result.DefaultSelection<Prisma.$ActiveSessionPayload>
 
 /**
  * Enums
@@ -797,6 +812,36 @@ export class PrismaClient<
     * ```
     */
   get financialRecord(): Prisma.FinancialRecordDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.branch`: Exposes CRUD operations for the **Branch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Branches
+    * const branches = await prisma.branch.findMany()
+    * ```
+    */
+  get branch(): Prisma.BranchDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userCompanyAccess`: Exposes CRUD operations for the **UserCompanyAccess** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserCompanyAccesses
+    * const userCompanyAccesses = await prisma.userCompanyAccess.findMany()
+    * ```
+    */
+  get userCompanyAccess(): Prisma.UserCompanyAccessDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.activeSession`: Exposes CRUD operations for the **ActiveSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ActiveSessions
+    * const activeSessions = await prisma.activeSession.findMany()
+    * ```
+    */
+  get activeSession(): Prisma.ActiveSessionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1273,7 +1318,10 @@ export namespace Prisma {
     StudentTest: 'StudentTest',
     CourseCompletion: 'CourseCompletion',
     Certificate: 'Certificate',
-    FinancialRecord: 'FinancialRecord'
+    FinancialRecord: 'FinancialRecord',
+    Branch: 'Branch',
+    UserCompanyAccess: 'UserCompanyAccess',
+    ActiveSession: 'ActiveSession'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1292,7 +1340,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "clientAdmin" | "financialYear" | "roleUser" | "activityLog" | "enquiry" | "sourceType" | "enquiryCourse" | "followUp" | "notification" | "admissionNumberConfig" | "paymentReceiptConfig" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord"
+      modelProps: "clientAdmin" | "financialYear" | "roleUser" | "activityLog" | "enquiry" | "sourceType" | "enquiryCourse" | "followUp" | "notification" | "admissionNumberConfig" | "paymentReceiptConfig" | "student" | "course" | "courseFeeStructure" | "batch" | "batchCourse" | "faculty" | "lab" | "labTimeSlot" | "paymentStructureType" | "installmentDetail" | "labAllocation" | "studentCourse" | "feeStructure" | "studentFeeLog" | "studentFee" | "stationeryItem" | "stationeryIssue" | "attendanceRecord" | "task" | "studentTask" | "test" | "studentTest" | "courseCompletion" | "certificate" | "financialRecord" | "branch" | "userCompanyAccess" | "activeSession"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3960,6 +4008,228 @@ export namespace Prisma {
           }
         }
       }
+      Branch: {
+        payload: Prisma.$BranchPayload<ExtArgs>
+        fields: Prisma.BranchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BranchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BranchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>
+          }
+          findFirst: {
+            args: Prisma.BranchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BranchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>
+          }
+          findMany: {
+            args: Prisma.BranchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>[]
+          }
+          create: {
+            args: Prisma.BranchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>
+          }
+          createMany: {
+            args: Prisma.BranchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BranchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>[]
+          }
+          delete: {
+            args: Prisma.BranchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>
+          }
+          update: {
+            args: Prisma.BranchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>
+          }
+          deleteMany: {
+            args: Prisma.BranchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BranchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BranchUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>[]
+          }
+          upsert: {
+            args: Prisma.BranchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchPayload>
+          }
+          aggregate: {
+            args: Prisma.BranchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBranch>
+          }
+          groupBy: {
+            args: Prisma.BranchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BranchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BranchCountArgs<ExtArgs>
+            result: $Utils.Optional<BranchCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserCompanyAccess: {
+        payload: Prisma.$UserCompanyAccessPayload<ExtArgs>
+        fields: Prisma.UserCompanyAccessFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserCompanyAccessFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserCompanyAccessFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>
+          }
+          findFirst: {
+            args: Prisma.UserCompanyAccessFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserCompanyAccessFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>
+          }
+          findMany: {
+            args: Prisma.UserCompanyAccessFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>[]
+          }
+          create: {
+            args: Prisma.UserCompanyAccessCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>
+          }
+          createMany: {
+            args: Prisma.UserCompanyAccessCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserCompanyAccessCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>[]
+          }
+          delete: {
+            args: Prisma.UserCompanyAccessDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>
+          }
+          update: {
+            args: Prisma.UserCompanyAccessUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserCompanyAccessDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserCompanyAccessUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserCompanyAccessUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserCompanyAccessUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserCompanyAccessPayload>
+          }
+          aggregate: {
+            args: Prisma.UserCompanyAccessAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserCompanyAccess>
+          }
+          groupBy: {
+            args: Prisma.UserCompanyAccessGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserCompanyAccessGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserCompanyAccessCountArgs<ExtArgs>
+            result: $Utils.Optional<UserCompanyAccessCountAggregateOutputType> | number
+          }
+        }
+      }
+      ActiveSession: {
+        payload: Prisma.$ActiveSessionPayload<ExtArgs>
+        fields: Prisma.ActiveSessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ActiveSessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ActiveSessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+          }
+          findFirst: {
+            args: Prisma.ActiveSessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ActiveSessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+          }
+          findMany: {
+            args: Prisma.ActiveSessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>[]
+          }
+          create: {
+            args: Prisma.ActiveSessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+          }
+          createMany: {
+            args: Prisma.ActiveSessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ActiveSessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>[]
+          }
+          delete: {
+            args: Prisma.ActiveSessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+          }
+          update: {
+            args: Prisma.ActiveSessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ActiveSessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ActiveSessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ActiveSessionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ActiveSessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActiveSessionPayload>
+          }
+          aggregate: {
+            args: Prisma.ActiveSessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateActiveSession>
+          }
+          groupBy: {
+            args: Prisma.ActiveSessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ActiveSessionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ActiveSessionCountArgs<ExtArgs>
+            result: $Utils.Optional<ActiveSessionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4092,6 +4362,9 @@ export namespace Prisma {
     courseCompletion?: CourseCompletionOmit
     certificate?: CertificateOmit
     financialRecord?: FinancialRecordOmit
+    branch?: BranchOmit
+    userCompanyAccess?: UserCompanyAccessOmit
+    activeSession?: ActiveSessionOmit
   }
 
   /* Types for Logging */
@@ -4172,6 +4445,8 @@ export namespace Prisma {
    */
 
   export type ClientAdminCountOutputType = {
+    userAccess: number
+    branches: number
     activities: number
     attendanceRecords: number
     batches: number
@@ -4202,6 +4477,8 @@ export namespace Prisma {
   }
 
   export type ClientAdminCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    userAccess?: boolean | ClientAdminCountOutputTypeCountUserAccessArgs
+    branches?: boolean | ClientAdminCountOutputTypeCountBranchesArgs
     activities?: boolean | ClientAdminCountOutputTypeCountActivitiesArgs
     attendanceRecords?: boolean | ClientAdminCountOutputTypeCountAttendanceRecordsArgs
     batches?: boolean | ClientAdminCountOutputTypeCountBatchesArgs
@@ -4240,6 +4517,20 @@ export namespace Prisma {
      * Select specific fields to fetch from the ClientAdminCountOutputType
      */
     select?: ClientAdminCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ClientAdminCountOutputType without action
+   */
+  export type ClientAdminCountOutputTypeCountUserAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserCompanyAccessWhereInput
+  }
+
+  /**
+   * ClientAdminCountOutputType without action
+   */
+  export type ClientAdminCountOutputTypeCountBranchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BranchWhereInput
   }
 
   /**
@@ -4429,6 +4720,37 @@ export namespace Prisma {
    */
   export type ClientAdminCountOutputTypeCountTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TestWhereInput
+  }
+
+
+  /**
+   * Count Type RoleUserCountOutputType
+   */
+
+  export type RoleUserCountOutputType = {
+    companyAccess: number
+  }
+
+  export type RoleUserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    companyAccess?: boolean | RoleUserCountOutputTypeCountCompanyAccessArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RoleUserCountOutputType without action
+   */
+  export type RoleUserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoleUserCountOutputType
+     */
+    select?: RoleUserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RoleUserCountOutputType without action
+   */
+  export type RoleUserCountOutputTypeCountCompanyAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserCompanyAccessWhereInput
   }
 
 
@@ -5177,6 +5499,64 @@ export namespace Prisma {
 
 
   /**
+   * Count Type BranchCountOutputType
+   */
+
+  export type BranchCountOutputType = {
+    labs: number
+    batches: number
+    students: number
+    enquiries: number
+  }
+
+  export type BranchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    labs?: boolean | BranchCountOutputTypeCountLabsArgs
+    batches?: boolean | BranchCountOutputTypeCountBatchesArgs
+    students?: boolean | BranchCountOutputTypeCountStudentsArgs
+    enquiries?: boolean | BranchCountOutputTypeCountEnquiriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchCountOutputType
+     */
+    select?: BranchCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeCountLabsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LabWhereInput
+  }
+
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeCountBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchWhereInput
+  }
+
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentWhereInput
+  }
+
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeCountEnquiriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EnquiryWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -5191,6 +5571,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminMinAggregateOutputType = {
+    isMaster: boolean | null
     id: string | null
     name: string | null
     email: string | null
@@ -5215,6 +5596,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminMaxAggregateOutputType = {
+    isMaster: boolean | null
     id: string | null
     name: string | null
     email: string | null
@@ -5239,6 +5621,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCountAggregateOutputType = {
+    isMaster: number
     id: number
     name: number
     email: number
@@ -5265,6 +5648,7 @@ export namespace Prisma {
 
 
   export type ClientAdminMinAggregateInputType = {
+    isMaster?: true
     id?: true
     name?: true
     email?: true
@@ -5289,6 +5673,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminMaxAggregateInputType = {
+    isMaster?: true
     id?: true
     name?: true
     email?: true
@@ -5313,6 +5698,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCountAggregateInputType = {
+    isMaster?: true
     id?: true
     name?: true
     email?: true
@@ -5410,6 +5796,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminGroupByOutputType = {
+    isMaster: boolean
     id: string
     name: string
     email: string
@@ -5451,6 +5838,7 @@ export namespace Prisma {
 
 
   export type ClientAdminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    isMaster?: boolean
     id?: boolean
     name?: boolean
     email?: boolean
@@ -5472,6 +5860,8 @@ export namespace Prisma {
     role?: boolean
     currentSessionToken?: boolean
     lastLoginAt?: boolean
+    userAccess?: boolean | ClientAdmin$userAccessArgs<ExtArgs>
+    branches?: boolean | ClientAdmin$branchesArgs<ExtArgs>
     activities?: boolean | ClientAdmin$activitiesArgs<ExtArgs>
     attendanceRecords?: boolean | ClientAdmin$attendanceRecordsArgs<ExtArgs>
     batches?: boolean | ClientAdmin$batchesArgs<ExtArgs>
@@ -5503,6 +5893,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["clientAdmin"]>
 
   export type ClientAdminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    isMaster?: boolean
     id?: boolean
     name?: boolean
     email?: boolean
@@ -5527,6 +5918,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["clientAdmin"]>
 
   export type ClientAdminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    isMaster?: boolean
     id?: boolean
     name?: boolean
     email?: boolean
@@ -5551,6 +5943,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["clientAdmin"]>
 
   export type ClientAdminSelectScalar = {
+    isMaster?: boolean
     id?: boolean
     name?: boolean
     email?: boolean
@@ -5574,8 +5967,10 @@ export namespace Prisma {
     lastLoginAt?: boolean
   }
 
-  export type ClientAdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "instituteName" | "slug" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "contact" | "position" | "country" | "state" | "city" | "zipCode" | "createdAt" | "role" | "currentSessionToken" | "lastLoginAt", ExtArgs["result"]["clientAdmin"]>
+  export type ClientAdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"isMaster" | "id" | "name" | "email" | "password" | "instituteName" | "slug" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "contact" | "position" | "country" | "state" | "city" | "zipCode" | "createdAt" | "role" | "currentSessionToken" | "lastLoginAt", ExtArgs["result"]["clientAdmin"]>
   export type ClientAdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    userAccess?: boolean | ClientAdmin$userAccessArgs<ExtArgs>
+    branches?: boolean | ClientAdmin$branchesArgs<ExtArgs>
     activities?: boolean | ClientAdmin$activitiesArgs<ExtArgs>
     attendanceRecords?: boolean | ClientAdmin$attendanceRecordsArgs<ExtArgs>
     batches?: boolean | ClientAdmin$batchesArgs<ExtArgs>
@@ -5611,6 +6006,8 @@ export namespace Prisma {
   export type $ClientAdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClientAdmin"
     objects: {
+      userAccess: Prisma.$UserCompanyAccessPayload<ExtArgs>[]
+      branches: Prisma.$BranchPayload<ExtArgs>[]
       activities: Prisma.$ActivityLogPayload<ExtArgs>[]
       attendanceRecords: Prisma.$AttendanceRecordPayload<ExtArgs>[]
       batches: Prisma.$BatchPayload<ExtArgs>[]
@@ -5640,6 +6037,7 @@ export namespace Prisma {
       tests: Prisma.$TestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
+      isMaster: boolean
       id: string
       name: string
       email: string
@@ -5744,8 +6142,8 @@ export namespace Prisma {
      * // Get first 10 ClientAdmins
      * const clientAdmins = await prisma.clientAdmin.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const clientAdminWithIdOnly = await prisma.clientAdmin.findMany({ select: { id: true } })
+     * // Only select the `isMaster`
+     * const clientAdminWithIsMasterOnly = await prisma.clientAdmin.findMany({ select: { isMaster: true } })
      * 
      */
     findMany<T extends ClientAdminFindManyArgs>(args?: SelectSubset<T, ClientAdminFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -5789,9 +6187,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many ClientAdmins and only return the `id`
-     * const clientAdminWithIdOnly = await prisma.clientAdmin.createManyAndReturn({
-     *   select: { id: true },
+     * // Create many ClientAdmins and only return the `isMaster`
+     * const clientAdminWithIsMasterOnly = await prisma.clientAdmin.createManyAndReturn({
+     *   select: { isMaster: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -5880,9 +6278,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ClientAdmins and only return the `id`
-     * const clientAdminWithIdOnly = await prisma.clientAdmin.updateManyAndReturn({
-     *   select: { id: true },
+     * // Update zero or more ClientAdmins and only return the `isMaster`
+     * const clientAdminWithIsMasterOnly = await prisma.clientAdmin.updateManyAndReturn({
+     *   select: { isMaster: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6055,6 +6453,8 @@ export namespace Prisma {
    */
   export interface Prisma__ClientAdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    userAccess<T extends ClientAdmin$userAccessArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$userAccessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    branches<T extends ClientAdmin$branchesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$branchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     activities<T extends ClientAdmin$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendanceRecords<T extends ClientAdmin$attendanceRecordsArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$attendanceRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendanceRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batches<T extends ClientAdmin$batchesArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdmin$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6111,6 +6511,7 @@ export namespace Prisma {
    * Fields of the ClientAdmin model
    */
   interface ClientAdminFieldRefs {
+    readonly isMaster: FieldRef<"ClientAdmin", 'Boolean'>
     readonly id: FieldRef<"ClientAdmin", 'String'>
     readonly name: FieldRef<"ClientAdmin", 'String'>
     readonly email: FieldRef<"ClientAdmin", 'String'>
@@ -6517,6 +6918,54 @@ export namespace Prisma {
      * Limit how many ClientAdmins to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ClientAdmin.userAccess
+   */
+  export type ClientAdmin$userAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    where?: UserCompanyAccessWhereInput
+    orderBy?: UserCompanyAccessOrderByWithRelationInput | UserCompanyAccessOrderByWithRelationInput[]
+    cursor?: UserCompanyAccessWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserCompanyAccessScalarFieldEnum | UserCompanyAccessScalarFieldEnum[]
+  }
+
+  /**
+   * ClientAdmin.branches
+   */
+  export type ClientAdmin$branchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    where?: BranchWhereInput
+    orderBy?: BranchOrderByWithRelationInput | BranchOrderByWithRelationInput[]
+    cursor?: BranchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BranchScalarFieldEnum | BranchScalarFieldEnum[]
   }
 
   /**
@@ -8498,7 +8947,9 @@ export namespace Prisma {
     currentSessionToken?: boolean
     lastLoginAt?: boolean
     clientAdminId?: boolean
+    companyAccess?: boolean | RoleUser$companyAccessArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+    _count?: boolean | RoleUserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["roleUser"]>
 
   export type RoleUserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8553,7 +9004,9 @@ export namespace Prisma {
 
   export type RoleUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "createdAt" | "country" | "state" | "city" | "zipCode" | "currentSessionToken" | "lastLoginAt" | "clientAdminId", ExtArgs["result"]["roleUser"]>
   export type RoleUserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    companyAccess?: boolean | RoleUser$companyAccessArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+    _count?: boolean | RoleUserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RoleUserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
@@ -8565,6 +9018,7 @@ export namespace Prisma {
   export type $RoleUserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "RoleUser"
     objects: {
+      companyAccess: Prisma.$UserCompanyAccessPayload<ExtArgs>[]
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8975,6 +9429,7 @@ export namespace Prisma {
    */
   export interface Prisma__RoleUserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    companyAccess<T extends RoleUser$companyAccessArgs<ExtArgs> = {}>(args?: Subset<T, RoleUser$companyAccessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9411,6 +9866,30 @@ export namespace Prisma {
      * Limit how many RoleUsers to delete.
      */
     limit?: number
+  }
+
+  /**
+   * RoleUser.companyAccess
+   */
+  export type RoleUser$companyAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    where?: UserCompanyAccessWhereInput
+    orderBy?: UserCompanyAccessOrderByWithRelationInput | UserCompanyAccessOrderByWithRelationInput[]
+    cursor?: UserCompanyAccessWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserCompanyAccessScalarFieldEnum | UserCompanyAccessScalarFieldEnum[]
   }
 
   /**
@@ -10529,6 +11008,7 @@ export namespace Prisma {
   }
 
   export type EnquiryAvgAggregateOutputType = {
+    branchId: number | null
     srNo: number | null
     age: number | null
     sourceId: number | null
@@ -10536,6 +11016,7 @@ export namespace Prisma {
   }
 
   export type EnquirySumAggregateOutputType = {
+    branchId: number | null
     srNo: number | null
     age: number | null
     sourceId: number | null
@@ -10543,6 +11024,7 @@ export namespace Prisma {
   }
 
   export type EnquiryMinAggregateOutputType = {
+    branchId: number | null
     id: string | null
     srNo: number | null
     name: string | null
@@ -10568,6 +11050,7 @@ export namespace Prisma {
   }
 
   export type EnquiryMaxAggregateOutputType = {
+    branchId: number | null
     id: string | null
     srNo: number | null
     name: string | null
@@ -10593,6 +11076,7 @@ export namespace Prisma {
   }
 
   export type EnquiryCountAggregateOutputType = {
+    branchId: number
     id: number
     srNo: number
     name: number
@@ -10620,6 +11104,7 @@ export namespace Prisma {
 
 
   export type EnquiryAvgAggregateInputType = {
+    branchId?: true
     srNo?: true
     age?: true
     sourceId?: true
@@ -10627,6 +11112,7 @@ export namespace Prisma {
   }
 
   export type EnquirySumAggregateInputType = {
+    branchId?: true
     srNo?: true
     age?: true
     sourceId?: true
@@ -10634,6 +11120,7 @@ export namespace Prisma {
   }
 
   export type EnquiryMinAggregateInputType = {
+    branchId?: true
     id?: true
     srNo?: true
     name?: true
@@ -10659,6 +11146,7 @@ export namespace Prisma {
   }
 
   export type EnquiryMaxAggregateInputType = {
+    branchId?: true
     id?: true
     srNo?: true
     name?: true
@@ -10684,6 +11172,7 @@ export namespace Prisma {
   }
 
   export type EnquiryCountAggregateInputType = {
+    branchId?: true
     id?: true
     srNo?: true
     name?: true
@@ -10796,6 +11285,7 @@ export namespace Prisma {
   }
 
   export type EnquiryGroupByOutputType = {
+    branchId: number | null
     id: string
     srNo: number
     name: string
@@ -10840,6 +11330,7 @@ export namespace Prisma {
 
 
   export type EnquirySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     srNo?: boolean
     name?: boolean
@@ -10862,6 +11353,7 @@ export namespace Prisma {
     isConverted?: boolean
     studentId?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Enquiry$branchArgs<ExtArgs>
     source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
@@ -10872,6 +11364,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["enquiry"]>
 
   export type EnquirySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     srNo?: boolean
     name?: boolean
@@ -10894,12 +11387,14 @@ export namespace Prisma {
     isConverted?: boolean
     studentId?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Enquiry$branchArgs<ExtArgs>
     source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
   }, ExtArgs["result"]["enquiry"]>
 
   export type EnquirySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     srNo?: boolean
     name?: boolean
@@ -10922,12 +11417,14 @@ export namespace Prisma {
     isConverted?: boolean
     studentId?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Enquiry$branchArgs<ExtArgs>
     source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
   }, ExtArgs["result"]["enquiry"]>
 
   export type EnquirySelectScalar = {
+    branchId?: boolean
     id?: boolean
     srNo?: boolean
     name?: boolean
@@ -10952,8 +11449,9 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "city" | "course" | "gender" | "dob" | "sourceId" | "referedBy" | "takenBy" | "leadStatus" | "enquiryDate" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
+  export type EnquiryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"branchId" | "id" | "srNo" | "name" | "contact" | "alternateContact" | "email" | "age" | "location" | "city" | "course" | "gender" | "dob" | "sourceId" | "referedBy" | "takenBy" | "leadStatus" | "enquiryDate" | "createdAt" | "updatedAt" | "isConverted" | "studentId" | "clientAdminId", ExtArgs["result"]["enquiry"]>
   export type EnquiryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Enquiry$branchArgs<ExtArgs>
     source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
@@ -10963,11 +11461,13 @@ export namespace Prisma {
     _count?: boolean | EnquiryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EnquiryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Enquiry$branchArgs<ExtArgs>
     source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
   }
   export type EnquiryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Enquiry$branchArgs<ExtArgs>
     source?: boolean | Enquiry$sourceArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     student?: boolean | Enquiry$studentArgs<ExtArgs>
@@ -10976,6 +11476,7 @@ export namespace Prisma {
   export type $EnquiryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Enquiry"
     objects: {
+      branch: Prisma.$BranchPayload<ExtArgs> | null
       source: Prisma.$SourceTypePayload<ExtArgs> | null
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
       student: Prisma.$StudentPayload<ExtArgs> | null
@@ -10984,6 +11485,7 @@ export namespace Prisma {
       notification: Prisma.$NotificationPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
+      branchId: number | null
       id: string
       srNo: number
       name: string
@@ -11089,8 +11591,8 @@ export namespace Prisma {
      * // Get first 10 Enquiries
      * const enquiries = await prisma.enquiry.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const enquiryWithIdOnly = await prisma.enquiry.findMany({ select: { id: true } })
+     * // Only select the `branchId`
+     * const enquiryWithBranchIdOnly = await prisma.enquiry.findMany({ select: { branchId: true } })
      * 
      */
     findMany<T extends EnquiryFindManyArgs>(args?: SelectSubset<T, EnquiryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -11134,9 +11636,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Enquiries and only return the `id`
-     * const enquiryWithIdOnly = await prisma.enquiry.createManyAndReturn({
-     *   select: { id: true },
+     * // Create many Enquiries and only return the `branchId`
+     * const enquiryWithBranchIdOnly = await prisma.enquiry.createManyAndReturn({
+     *   select: { branchId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -11225,9 +11727,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Enquiries and only return the `id`
-     * const enquiryWithIdOnly = await prisma.enquiry.updateManyAndReturn({
-     *   select: { id: true },
+     * // Update zero or more Enquiries and only return the `branchId`
+     * const enquiryWithBranchIdOnly = await prisma.enquiry.updateManyAndReturn({
+     *   select: { branchId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -11400,6 +11902,7 @@ export namespace Prisma {
    */
   export interface Prisma__EnquiryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    branch<T extends Enquiry$branchArgs<ExtArgs> = {}>(args?: Subset<T, Enquiry$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     source<T extends Enquiry$sourceArgs<ExtArgs> = {}>(args?: Subset<T, Enquiry$sourceArgs<ExtArgs>>): Prisma__SourceTypeClient<$Result.GetResult<Prisma.$SourceTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     student<T extends Enquiry$studentArgs<ExtArgs> = {}>(args?: Subset<T, Enquiry$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -11435,6 +11938,7 @@ export namespace Prisma {
    * Fields of the Enquiry model
    */
   interface EnquiryFieldRefs {
+    readonly branchId: FieldRef<"Enquiry", 'Int'>
     readonly id: FieldRef<"Enquiry", 'String'>
     readonly srNo: FieldRef<"Enquiry", 'Int'>
     readonly name: FieldRef<"Enquiry", 'String'>
@@ -11850,6 +12354,25 @@ export namespace Prisma {
      * Limit how many Enquiries to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Enquiry.branch
+   */
+  export type Enquiry$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    where?: BranchWhereInput
   }
 
   /**
@@ -18681,16 +19204,19 @@ export namespace Prisma {
   }
 
   export type StudentAvgAggregateOutputType = {
+    branchId: number | null
     id: number | null
     serialNumber: number | null
   }
 
   export type StudentSumAggregateOutputType = {
+    branchId: number | null
     id: number | null
     serialNumber: number | null
   }
 
   export type StudentMinAggregateOutputType = {
+    branchId: number | null
     id: number | null
     serialNumber: number | null
     studentCode: string | null
@@ -18721,6 +19247,7 @@ export namespace Prisma {
   }
 
   export type StudentMaxAggregateOutputType = {
+    branchId: number | null
     id: number | null
     serialNumber: number | null
     studentCode: string | null
@@ -18751,6 +19278,7 @@ export namespace Prisma {
   }
 
   export type StudentCountAggregateOutputType = {
+    branchId: number
     id: number
     serialNumber: number
     studentCode: number
@@ -18783,16 +19311,19 @@ export namespace Prisma {
 
 
   export type StudentAvgAggregateInputType = {
+    branchId?: true
     id?: true
     serialNumber?: true
   }
 
   export type StudentSumAggregateInputType = {
+    branchId?: true
     id?: true
     serialNumber?: true
   }
 
   export type StudentMinAggregateInputType = {
+    branchId?: true
     id?: true
     serialNumber?: true
     studentCode?: true
@@ -18823,6 +19354,7 @@ export namespace Prisma {
   }
 
   export type StudentMaxAggregateInputType = {
+    branchId?: true
     id?: true
     serialNumber?: true
     studentCode?: true
@@ -18853,6 +19385,7 @@ export namespace Prisma {
   }
 
   export type StudentCountAggregateInputType = {
+    branchId?: true
     id?: true
     serialNumber?: true
     studentCode?: true
@@ -18970,6 +19503,7 @@ export namespace Prisma {
   }
 
   export type StudentGroupByOutputType = {
+    branchId: number | null
     id: number
     serialNumber: number
     studentCode: string
@@ -19019,6 +19553,7 @@ export namespace Prisma {
 
 
   export type StudentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     serialNumber?: boolean
     studentCode?: boolean
@@ -19046,6 +19581,7 @@ export namespace Prisma {
     updatedAt?: boolean
     clientAdminId?: boolean
     qualification?: boolean
+    branch?: boolean | Student$branchArgs<ExtArgs>
     attendance?: boolean | Student$attendanceArgs<ExtArgs>
     certificates?: boolean | Student$certificatesArgs<ExtArgs>
     completions?: boolean | Student$completionsArgs<ExtArgs>
@@ -19063,6 +19599,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["student"]>
 
   export type StudentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     serialNumber?: boolean
     studentCode?: boolean
@@ -19090,10 +19627,12 @@ export namespace Prisma {
     updatedAt?: boolean
     clientAdminId?: boolean
     qualification?: boolean
+    branch?: boolean | Student$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
   export type StudentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     serialNumber?: boolean
     studentCode?: boolean
@@ -19121,10 +19660,12 @@ export namespace Prisma {
     updatedAt?: boolean
     clientAdminId?: boolean
     qualification?: boolean
+    branch?: boolean | Student$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
   export type StudentSelectScalar = {
+    branchId?: boolean
     id?: boolean
     serialNumber?: boolean
     studentCode?: boolean
@@ -19154,8 +19695,9 @@ export namespace Prisma {
     qualification?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serialNumber" | "studentCode" | "admissionNumber" | "fullName" | "fatherName" | "photoUrl" | "contact" | "parentsContact" | "email" | "residentialAddress" | "permenantAddress" | "dob" | "gender" | "religion" | "idProofType" | "idProofNumber" | "localAddressProofType" | "localAddressProofNumber" | "referedBy" | "idCard" | "bag" | "admissionDate" | "createdAt" | "updatedAt" | "clientAdminId" | "qualification", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"branchId" | "id" | "serialNumber" | "studentCode" | "admissionNumber" | "fullName" | "fatherName" | "photoUrl" | "contact" | "parentsContact" | "email" | "residentialAddress" | "permenantAddress" | "dob" | "gender" | "religion" | "idProofType" | "idProofNumber" | "localAddressProofType" | "localAddressProofNumber" | "referedBy" | "idCard" | "bag" | "admissionDate" | "createdAt" | "updatedAt" | "clientAdminId" | "qualification", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Student$branchArgs<ExtArgs>
     attendance?: boolean | Student$attendanceArgs<ExtArgs>
     certificates?: boolean | Student$certificatesArgs<ExtArgs>
     completions?: boolean | Student$completionsArgs<ExtArgs>
@@ -19172,15 +19714,18 @@ export namespace Prisma {
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Student$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
   export type StudentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Student$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
 
   export type $StudentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Student"
     objects: {
+      branch: Prisma.$BranchPayload<ExtArgs> | null
       attendance: Prisma.$AttendanceRecordPayload<ExtArgs>[]
       certificates: Prisma.$CertificatePayload<ExtArgs>[]
       completions: Prisma.$CourseCompletionPayload<ExtArgs>[]
@@ -19196,6 +19741,7 @@ export namespace Prisma {
       tests: Prisma.$StudentTestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
+      branchId: number | null
       id: number
       serialNumber: number
       studentCode: string
@@ -19306,8 +19852,8 @@ export namespace Prisma {
      * // Get first 10 Students
      * const students = await prisma.student.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const studentWithIdOnly = await prisma.student.findMany({ select: { id: true } })
+     * // Only select the `branchId`
+     * const studentWithBranchIdOnly = await prisma.student.findMany({ select: { branchId: true } })
      * 
      */
     findMany<T extends StudentFindManyArgs>(args?: SelectSubset<T, StudentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -19351,9 +19897,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Students and only return the `id`
-     * const studentWithIdOnly = await prisma.student.createManyAndReturn({
-     *   select: { id: true },
+     * // Create many Students and only return the `branchId`
+     * const studentWithBranchIdOnly = await prisma.student.createManyAndReturn({
+     *   select: { branchId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -19442,9 +19988,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Students and only return the `id`
-     * const studentWithIdOnly = await prisma.student.updateManyAndReturn({
-     *   select: { id: true },
+     * // Update zero or more Students and only return the `branchId`
+     * const studentWithBranchIdOnly = await prisma.student.updateManyAndReturn({
+     *   select: { branchId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -19617,6 +20163,7 @@ export namespace Prisma {
    */
   export interface Prisma__StudentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    branch<T extends Student$branchArgs<ExtArgs> = {}>(args?: Subset<T, Student$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     attendance<T extends Student$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Student$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendanceRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificates<T extends Student$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, Student$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     completions<T extends Student$completionsArgs<ExtArgs> = {}>(args?: Subset<T, Student$completionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -19659,6 +20206,7 @@ export namespace Prisma {
    * Fields of the Student model
    */
   interface StudentFieldRefs {
+    readonly branchId: FieldRef<"Student", 'Int'>
     readonly id: FieldRef<"Student", 'Int'>
     readonly serialNumber: FieldRef<"Student", 'Int'>
     readonly studentCode: FieldRef<"Student", 'String'>
@@ -20079,6 +20627,25 @@ export namespace Prisma {
      * Limit how many Students to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Student.branch
+   */
+  export type Student$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    where?: BranchWhereInput
   }
 
   /**
@@ -23015,18 +23582,21 @@ export namespace Prisma {
   }
 
   export type BatchAvgAggregateOutputType = {
+    branchId: number | null
     id: number | null
     facultyId: number | null
     labTimeSlotId: number | null
   }
 
   export type BatchSumAggregateOutputType = {
+    branchId: number | null
     id: number | null
     facultyId: number | null
     labTimeSlotId: number | null
   }
 
   export type BatchMinAggregateOutputType = {
+    branchId: number | null
     id: number | null
     name: string | null
     facultyId: number | null
@@ -23035,6 +23605,7 @@ export namespace Prisma {
   }
 
   export type BatchMaxAggregateOutputType = {
+    branchId: number | null
     id: number | null
     name: string | null
     facultyId: number | null
@@ -23043,6 +23614,7 @@ export namespace Prisma {
   }
 
   export type BatchCountAggregateOutputType = {
+    branchId: number
     id: number
     name: number
     facultyId: number
@@ -23053,18 +23625,21 @@ export namespace Prisma {
 
 
   export type BatchAvgAggregateInputType = {
+    branchId?: true
     id?: true
     facultyId?: true
     labTimeSlotId?: true
   }
 
   export type BatchSumAggregateInputType = {
+    branchId?: true
     id?: true
     facultyId?: true
     labTimeSlotId?: true
   }
 
   export type BatchMinAggregateInputType = {
+    branchId?: true
     id?: true
     name?: true
     facultyId?: true
@@ -23073,6 +23648,7 @@ export namespace Prisma {
   }
 
   export type BatchMaxAggregateInputType = {
+    branchId?: true
     id?: true
     name?: true
     facultyId?: true
@@ -23081,6 +23657,7 @@ export namespace Prisma {
   }
 
   export type BatchCountAggregateInputType = {
+    branchId?: true
     id?: true
     name?: true
     facultyId?: true
@@ -23176,6 +23753,7 @@ export namespace Prisma {
   }
 
   export type BatchGroupByOutputType = {
+    branchId: number | null
     id: number
     name: string
     facultyId: number | null
@@ -23203,11 +23781,13 @@ export namespace Prisma {
 
 
   export type BatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     name?: boolean
     facultyId?: boolean
     labTimeSlotId?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Batch$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     faculty?: boolean | Batch$facultyArgs<ExtArgs>
     labTimeSlot?: boolean | LabTimeSlotDefaultArgs<ExtArgs>
@@ -23219,28 +23799,33 @@ export namespace Prisma {
   }, ExtArgs["result"]["batch"]>
 
   export type BatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     name?: boolean
     facultyId?: boolean
     labTimeSlotId?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Batch$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     faculty?: boolean | Batch$facultyArgs<ExtArgs>
     labTimeSlot?: boolean | LabTimeSlotDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
 
   export type BatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     name?: boolean
     facultyId?: boolean
     labTimeSlotId?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Batch$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     faculty?: boolean | Batch$facultyArgs<ExtArgs>
     labTimeSlot?: boolean | LabTimeSlotDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
 
   export type BatchSelectScalar = {
+    branchId?: boolean
     id?: boolean
     name?: boolean
     facultyId?: boolean
@@ -23248,8 +23833,9 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "facultyId" | "labTimeSlotId" | "clientAdminId", ExtArgs["result"]["batch"]>
+  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"branchId" | "id" | "name" | "facultyId" | "labTimeSlotId" | "clientAdminId", ExtArgs["result"]["batch"]>
   export type BatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Batch$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     faculty?: boolean | Batch$facultyArgs<ExtArgs>
     labTimeSlot?: boolean | LabTimeSlotDefaultArgs<ExtArgs>
@@ -23260,11 +23846,13 @@ export namespace Prisma {
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Batch$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     faculty?: boolean | Batch$facultyArgs<ExtArgs>
     labTimeSlot?: boolean | LabTimeSlotDefaultArgs<ExtArgs>
   }
   export type BatchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Batch$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     faculty?: boolean | Batch$facultyArgs<ExtArgs>
     labTimeSlot?: boolean | LabTimeSlotDefaultArgs<ExtArgs>
@@ -23273,6 +23861,7 @@ export namespace Prisma {
   export type $BatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Batch"
     objects: {
+      branch: Prisma.$BranchPayload<ExtArgs> | null
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
       faculty: Prisma.$FacultyPayload<ExtArgs> | null
       labTimeSlot: Prisma.$LabTimeSlotPayload<ExtArgs>
@@ -23282,6 +23871,7 @@ export namespace Prisma {
       tests: Prisma.$TestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
+      branchId: number | null
       id: number
       name: string
       facultyId: number | null
@@ -23370,8 +23960,8 @@ export namespace Prisma {
      * // Get first 10 Batches
      * const batches = await prisma.batch.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const batchWithIdOnly = await prisma.batch.findMany({ select: { id: true } })
+     * // Only select the `branchId`
+     * const batchWithBranchIdOnly = await prisma.batch.findMany({ select: { branchId: true } })
      * 
      */
     findMany<T extends BatchFindManyArgs>(args?: SelectSubset<T, BatchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -23415,9 +24005,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Batches and only return the `id`
-     * const batchWithIdOnly = await prisma.batch.createManyAndReturn({
-     *   select: { id: true },
+     * // Create many Batches and only return the `branchId`
+     * const batchWithBranchIdOnly = await prisma.batch.createManyAndReturn({
+     *   select: { branchId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -23506,9 +24096,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Batches and only return the `id`
-     * const batchWithIdOnly = await prisma.batch.updateManyAndReturn({
-     *   select: { id: true },
+     * // Update zero or more Batches and only return the `branchId`
+     * const batchWithBranchIdOnly = await prisma.batch.updateManyAndReturn({
+     *   select: { branchId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -23681,6 +24271,7 @@ export namespace Prisma {
    */
   export interface Prisma__BatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    branch<T extends Batch$branchArgs<ExtArgs> = {}>(args?: Subset<T, Batch$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     faculty<T extends Batch$facultyArgs<ExtArgs> = {}>(args?: Subset<T, Batch$facultyArgs<ExtArgs>>): Prisma__FacultyClient<$Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     labTimeSlot<T extends LabTimeSlotDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LabTimeSlotDefaultArgs<ExtArgs>>): Prisma__LabTimeSlotClient<$Result.GetResult<Prisma.$LabTimeSlotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -23717,6 +24308,7 @@ export namespace Prisma {
    * Fields of the Batch model
    */
   interface BatchFieldRefs {
+    readonly branchId: FieldRef<"Batch", 'Int'>
     readonly id: FieldRef<"Batch", 'Int'>
     readonly name: FieldRef<"Batch", 'String'>
     readonly facultyId: FieldRef<"Batch", 'Int'>
@@ -24115,6 +24707,25 @@ export namespace Prisma {
      * Limit how many Batches to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Batch.branch
+   */
+  export type Batch$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    where?: BranchWhereInput
   }
 
   /**
@@ -26699,16 +27310,19 @@ export namespace Prisma {
   }
 
   export type LabAvgAggregateOutputType = {
+    branchId: number | null
     id: number | null
     totalPCs: number | null
   }
 
   export type LabSumAggregateOutputType = {
+    branchId: number | null
     id: number | null
     totalPCs: number | null
   }
 
   export type LabMinAggregateOutputType = {
+    branchId: number | null
     id: number | null
     name: string | null
     location: string | null
@@ -26718,6 +27332,7 @@ export namespace Prisma {
   }
 
   export type LabMaxAggregateOutputType = {
+    branchId: number | null
     id: number | null
     name: string | null
     location: string | null
@@ -26727,6 +27342,7 @@ export namespace Prisma {
   }
 
   export type LabCountAggregateOutputType = {
+    branchId: number
     id: number
     name: number
     location: number
@@ -26738,16 +27354,19 @@ export namespace Prisma {
 
 
   export type LabAvgAggregateInputType = {
+    branchId?: true
     id?: true
     totalPCs?: true
   }
 
   export type LabSumAggregateInputType = {
+    branchId?: true
     id?: true
     totalPCs?: true
   }
 
   export type LabMinAggregateInputType = {
+    branchId?: true
     id?: true
     name?: true
     location?: true
@@ -26757,6 +27376,7 @@ export namespace Prisma {
   }
 
   export type LabMaxAggregateInputType = {
+    branchId?: true
     id?: true
     name?: true
     location?: true
@@ -26766,6 +27386,7 @@ export namespace Prisma {
   }
 
   export type LabCountAggregateInputType = {
+    branchId?: true
     id?: true
     name?: true
     location?: true
@@ -26862,6 +27483,7 @@ export namespace Prisma {
   }
 
   export type LabGroupByOutputType = {
+    branchId: number | null
     id: number
     name: string
     location: string | null
@@ -26890,12 +27512,14 @@ export namespace Prisma {
 
 
   export type LabSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     name?: boolean
     location?: boolean
     totalPCs?: boolean
     isActive?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Lab$branchArgs<ExtArgs>
     financialRecords?: boolean | Lab$financialRecordsArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     timeSlots?: boolean | Lab$timeSlotsArgs<ExtArgs>
@@ -26903,26 +27527,31 @@ export namespace Prisma {
   }, ExtArgs["result"]["lab"]>
 
   export type LabSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     name?: boolean
     location?: boolean
     totalPCs?: boolean
     isActive?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Lab$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lab"]>
 
   export type LabSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branchId?: boolean
     id?: boolean
     name?: boolean
     location?: boolean
     totalPCs?: boolean
     isActive?: boolean
     clientAdminId?: boolean
+    branch?: boolean | Lab$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lab"]>
 
   export type LabSelectScalar = {
+    branchId?: boolean
     id?: boolean
     name?: boolean
     location?: boolean
@@ -26931,28 +27560,33 @@ export namespace Prisma {
     clientAdminId?: boolean
   }
 
-  export type LabOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "location" | "totalPCs" | "isActive" | "clientAdminId", ExtArgs["result"]["lab"]>
+  export type LabOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"branchId" | "id" | "name" | "location" | "totalPCs" | "isActive" | "clientAdminId", ExtArgs["result"]["lab"]>
   export type LabInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Lab$branchArgs<ExtArgs>
     financialRecords?: boolean | Lab$financialRecordsArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
     timeSlots?: boolean | Lab$timeSlotsArgs<ExtArgs>
     _count?: boolean | LabCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LabIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Lab$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
   export type LabIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | Lab$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }
 
   export type $LabPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Lab"
     objects: {
+      branch: Prisma.$BranchPayload<ExtArgs> | null
       financialRecords: Prisma.$FinancialRecordPayload<ExtArgs>[]
       clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
       timeSlots: Prisma.$LabTimeSlotPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
+      branchId: number | null
       id: number
       name: string
       location: string | null
@@ -27042,8 +27676,8 @@ export namespace Prisma {
      * // Get first 10 Labs
      * const labs = await prisma.lab.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const labWithIdOnly = await prisma.lab.findMany({ select: { id: true } })
+     * // Only select the `branchId`
+     * const labWithBranchIdOnly = await prisma.lab.findMany({ select: { branchId: true } })
      * 
      */
     findMany<T extends LabFindManyArgs>(args?: SelectSubset<T, LabFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LabPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -27087,9 +27721,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Labs and only return the `id`
-     * const labWithIdOnly = await prisma.lab.createManyAndReturn({
-     *   select: { id: true },
+     * // Create many Labs and only return the `branchId`
+     * const labWithBranchIdOnly = await prisma.lab.createManyAndReturn({
+     *   select: { branchId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -27178,9 +27812,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Labs and only return the `id`
-     * const labWithIdOnly = await prisma.lab.updateManyAndReturn({
-     *   select: { id: true },
+     * // Update zero or more Labs and only return the `branchId`
+     * const labWithBranchIdOnly = await prisma.lab.updateManyAndReturn({
+     *   select: { branchId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -27353,6 +27987,7 @@ export namespace Prisma {
    */
   export interface Prisma__LabClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    branch<T extends Lab$branchArgs<ExtArgs> = {}>(args?: Subset<T, Lab$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     financialRecords<T extends Lab$financialRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Lab$financialRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     timeSlots<T extends Lab$timeSlotsArgs<ExtArgs> = {}>(args?: Subset<T, Lab$timeSlotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LabTimeSlotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -27385,6 +28020,7 @@ export namespace Prisma {
    * Fields of the Lab model
    */
   interface LabFieldRefs {
+    readonly branchId: FieldRef<"Lab", 'Int'>
     readonly id: FieldRef<"Lab", 'Int'>
     readonly name: FieldRef<"Lab", 'String'>
     readonly location: FieldRef<"Lab", 'String'>
@@ -27784,6 +28420,25 @@ export namespace Prisma {
      * Limit how many Labs to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Lab.branch
+   */
+  export type Lab$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    where?: BranchWhereInput
   }
 
   /**
@@ -49157,6 +49812,3351 @@ export namespace Prisma {
 
 
   /**
+   * Model Branch
+   */
+
+  export type AggregateBranch = {
+    _count: BranchCountAggregateOutputType | null
+    _avg: BranchAvgAggregateOutputType | null
+    _sum: BranchSumAggregateOutputType | null
+    _min: BranchMinAggregateOutputType | null
+    _max: BranchMaxAggregateOutputType | null
+  }
+
+  export type BranchAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type BranchSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type BranchMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    city: string | null
+    address: string | null
+    contact: string | null
+    isDefault: boolean | null
+    isActive: boolean | null
+    createdAt: Date | null
+    clientAdminId: string | null
+  }
+
+  export type BranchMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    city: string | null
+    address: string | null
+    contact: string | null
+    isDefault: boolean | null
+    isActive: boolean | null
+    createdAt: Date | null
+    clientAdminId: string | null
+  }
+
+  export type BranchCountAggregateOutputType = {
+    id: number
+    name: number
+    city: number
+    address: number
+    contact: number
+    isDefault: number
+    isActive: number
+    createdAt: number
+    clientAdminId: number
+    _all: number
+  }
+
+
+  export type BranchAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type BranchSumAggregateInputType = {
+    id?: true
+  }
+
+  export type BranchMinAggregateInputType = {
+    id?: true
+    name?: true
+    city?: true
+    address?: true
+    contact?: true
+    isDefault?: true
+    isActive?: true
+    createdAt?: true
+    clientAdminId?: true
+  }
+
+  export type BranchMaxAggregateInputType = {
+    id?: true
+    name?: true
+    city?: true
+    address?: true
+    contact?: true
+    isDefault?: true
+    isActive?: true
+    createdAt?: true
+    clientAdminId?: true
+  }
+
+  export type BranchCountAggregateInputType = {
+    id?: true
+    name?: true
+    city?: true
+    address?: true
+    contact?: true
+    isDefault?: true
+    isActive?: true
+    createdAt?: true
+    clientAdminId?: true
+    _all?: true
+  }
+
+  export type BranchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Branch to aggregate.
+     */
+    where?: BranchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Branches to fetch.
+     */
+    orderBy?: BranchOrderByWithRelationInput | BranchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BranchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Branches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Branches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Branches
+    **/
+    _count?: true | BranchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BranchAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BranchSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BranchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BranchMaxAggregateInputType
+  }
+
+  export type GetBranchAggregateType<T extends BranchAggregateArgs> = {
+        [P in keyof T & keyof AggregateBranch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBranch[P]>
+      : GetScalarType<T[P], AggregateBranch[P]>
+  }
+
+
+
+
+  export type BranchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BranchWhereInput
+    orderBy?: BranchOrderByWithAggregationInput | BranchOrderByWithAggregationInput[]
+    by: BranchScalarFieldEnum[] | BranchScalarFieldEnum
+    having?: BranchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BranchCountAggregateInputType | true
+    _avg?: BranchAvgAggregateInputType
+    _sum?: BranchSumAggregateInputType
+    _min?: BranchMinAggregateInputType
+    _max?: BranchMaxAggregateInputType
+  }
+
+  export type BranchGroupByOutputType = {
+    id: number
+    name: string
+    city: string | null
+    address: string | null
+    contact: string | null
+    isDefault: boolean
+    isActive: boolean
+    createdAt: Date
+    clientAdminId: string
+    _count: BranchCountAggregateOutputType | null
+    _avg: BranchAvgAggregateOutputType | null
+    _sum: BranchSumAggregateOutputType | null
+    _min: BranchMinAggregateOutputType | null
+    _max: BranchMaxAggregateOutputType | null
+  }
+
+  type GetBranchGroupByPayload<T extends BranchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BranchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BranchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BranchGroupByOutputType[P]>
+            : GetScalarType<T[P], BranchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BranchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    city?: boolean
+    address?: boolean
+    contact?: boolean
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    clientAdminId?: boolean
+    labs?: boolean | Branch$labsArgs<ExtArgs>
+    batches?: boolean | Branch$batchesArgs<ExtArgs>
+    students?: boolean | Branch$studentsArgs<ExtArgs>
+    enquiries?: boolean | Branch$enquiriesArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+    _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["branch"]>
+
+  export type BranchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    city?: boolean
+    address?: boolean
+    contact?: boolean
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    clientAdminId?: boolean
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["branch"]>
+
+  export type BranchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    city?: boolean
+    address?: boolean
+    contact?: boolean
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    clientAdminId?: boolean
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["branch"]>
+
+  export type BranchSelectScalar = {
+    id?: boolean
+    name?: boolean
+    city?: boolean
+    address?: boolean
+    contact?: boolean
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    clientAdminId?: boolean
+  }
+
+  export type BranchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "city" | "address" | "contact" | "isDefault" | "isActive" | "createdAt" | "clientAdminId", ExtArgs["result"]["branch"]>
+  export type BranchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    labs?: boolean | Branch$labsArgs<ExtArgs>
+    batches?: boolean | Branch$batchesArgs<ExtArgs>
+    students?: boolean | Branch$studentsArgs<ExtArgs>
+    enquiries?: boolean | Branch$enquiriesArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+    _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BranchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+  export type BranchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+
+  export type $BranchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Branch"
+    objects: {
+      labs: Prisma.$LabPayload<ExtArgs>[]
+      batches: Prisma.$BatchPayload<ExtArgs>[]
+      students: Prisma.$StudentPayload<ExtArgs>[]
+      enquiries: Prisma.$EnquiryPayload<ExtArgs>[]
+      clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      city: string | null
+      address: string | null
+      contact: string | null
+      isDefault: boolean
+      isActive: boolean
+      createdAt: Date
+      clientAdminId: string
+    }, ExtArgs["result"]["branch"]>
+    composites: {}
+  }
+
+  type BranchGetPayload<S extends boolean | null | undefined | BranchDefaultArgs> = $Result.GetResult<Prisma.$BranchPayload, S>
+
+  type BranchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BranchFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BranchCountAggregateInputType | true
+    }
+
+  export interface BranchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Branch'], meta: { name: 'Branch' } }
+    /**
+     * Find zero or one Branch that matches the filter.
+     * @param {BranchFindUniqueArgs} args - Arguments to find a Branch
+     * @example
+     * // Get one Branch
+     * const branch = await prisma.branch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BranchFindUniqueArgs>(args: SelectSubset<T, BranchFindUniqueArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Branch that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BranchFindUniqueOrThrowArgs} args - Arguments to find a Branch
+     * @example
+     * // Get one Branch
+     * const branch = await prisma.branch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BranchFindUniqueOrThrowArgs>(args: SelectSubset<T, BranchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Branch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchFindFirstArgs} args - Arguments to find a Branch
+     * @example
+     * // Get one Branch
+     * const branch = await prisma.branch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BranchFindFirstArgs>(args?: SelectSubset<T, BranchFindFirstArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Branch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchFindFirstOrThrowArgs} args - Arguments to find a Branch
+     * @example
+     * // Get one Branch
+     * const branch = await prisma.branch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BranchFindFirstOrThrowArgs>(args?: SelectSubset<T, BranchFindFirstOrThrowArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Branches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Branches
+     * const branches = await prisma.branch.findMany()
+     * 
+     * // Get first 10 Branches
+     * const branches = await prisma.branch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const branchWithIdOnly = await prisma.branch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BranchFindManyArgs>(args?: SelectSubset<T, BranchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Branch.
+     * @param {BranchCreateArgs} args - Arguments to create a Branch.
+     * @example
+     * // Create one Branch
+     * const Branch = await prisma.branch.create({
+     *   data: {
+     *     // ... data to create a Branch
+     *   }
+     * })
+     * 
+     */
+    create<T extends BranchCreateArgs>(args: SelectSubset<T, BranchCreateArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Branches.
+     * @param {BranchCreateManyArgs} args - Arguments to create many Branches.
+     * @example
+     * // Create many Branches
+     * const branch = await prisma.branch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BranchCreateManyArgs>(args?: SelectSubset<T, BranchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Branches and returns the data saved in the database.
+     * @param {BranchCreateManyAndReturnArgs} args - Arguments to create many Branches.
+     * @example
+     * // Create many Branches
+     * const branch = await prisma.branch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Branches and only return the `id`
+     * const branchWithIdOnly = await prisma.branch.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BranchCreateManyAndReturnArgs>(args?: SelectSubset<T, BranchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Branch.
+     * @param {BranchDeleteArgs} args - Arguments to delete one Branch.
+     * @example
+     * // Delete one Branch
+     * const Branch = await prisma.branch.delete({
+     *   where: {
+     *     // ... filter to delete one Branch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BranchDeleteArgs>(args: SelectSubset<T, BranchDeleteArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Branch.
+     * @param {BranchUpdateArgs} args - Arguments to update one Branch.
+     * @example
+     * // Update one Branch
+     * const branch = await prisma.branch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BranchUpdateArgs>(args: SelectSubset<T, BranchUpdateArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Branches.
+     * @param {BranchDeleteManyArgs} args - Arguments to filter Branches to delete.
+     * @example
+     * // Delete a few Branches
+     * const { count } = await prisma.branch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BranchDeleteManyArgs>(args?: SelectSubset<T, BranchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Branches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Branches
+     * const branch = await prisma.branch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BranchUpdateManyArgs>(args: SelectSubset<T, BranchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Branches and returns the data updated in the database.
+     * @param {BranchUpdateManyAndReturnArgs} args - Arguments to update many Branches.
+     * @example
+     * // Update many Branches
+     * const branch = await prisma.branch.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Branches and only return the `id`
+     * const branchWithIdOnly = await prisma.branch.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BranchUpdateManyAndReturnArgs>(args: SelectSubset<T, BranchUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Branch.
+     * @param {BranchUpsertArgs} args - Arguments to update or create a Branch.
+     * @example
+     * // Update or create a Branch
+     * const branch = await prisma.branch.upsert({
+     *   create: {
+     *     // ... data to create a Branch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Branch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BranchUpsertArgs>(args: SelectSubset<T, BranchUpsertArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Branches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchCountArgs} args - Arguments to filter Branches to count.
+     * @example
+     * // Count the number of Branches
+     * const count = await prisma.branch.count({
+     *   where: {
+     *     // ... the filter for the Branches we want to count
+     *   }
+     * })
+    **/
+    count<T extends BranchCountArgs>(
+      args?: Subset<T, BranchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BranchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Branch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BranchAggregateArgs>(args: Subset<T, BranchAggregateArgs>): Prisma.PrismaPromise<GetBranchAggregateType<T>>
+
+    /**
+     * Group by Branch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BranchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BranchGroupByArgs['orderBy'] }
+        : { orderBy?: BranchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BranchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBranchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Branch model
+   */
+  readonly fields: BranchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Branch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BranchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    labs<T extends Branch$labsArgs<ExtArgs> = {}>(args?: Subset<T, Branch$labsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LabPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    batches<T extends Branch$batchesArgs<ExtArgs> = {}>(args?: Subset<T, Branch$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    students<T extends Branch$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Branch$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    enquiries<T extends Branch$enquiriesArgs<ExtArgs> = {}>(args?: Subset<T, Branch$enquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Branch model
+   */
+  interface BranchFieldRefs {
+    readonly id: FieldRef<"Branch", 'Int'>
+    readonly name: FieldRef<"Branch", 'String'>
+    readonly city: FieldRef<"Branch", 'String'>
+    readonly address: FieldRef<"Branch", 'String'>
+    readonly contact: FieldRef<"Branch", 'String'>
+    readonly isDefault: FieldRef<"Branch", 'Boolean'>
+    readonly isActive: FieldRef<"Branch", 'Boolean'>
+    readonly createdAt: FieldRef<"Branch", 'DateTime'>
+    readonly clientAdminId: FieldRef<"Branch", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Branch findUnique
+   */
+  export type BranchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * Filter, which Branch to fetch.
+     */
+    where: BranchWhereUniqueInput
+  }
+
+  /**
+   * Branch findUniqueOrThrow
+   */
+  export type BranchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * Filter, which Branch to fetch.
+     */
+    where: BranchWhereUniqueInput
+  }
+
+  /**
+   * Branch findFirst
+   */
+  export type BranchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * Filter, which Branch to fetch.
+     */
+    where?: BranchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Branches to fetch.
+     */
+    orderBy?: BranchOrderByWithRelationInput | BranchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Branches.
+     */
+    cursor?: BranchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Branches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Branches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Branches.
+     */
+    distinct?: BranchScalarFieldEnum | BranchScalarFieldEnum[]
+  }
+
+  /**
+   * Branch findFirstOrThrow
+   */
+  export type BranchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * Filter, which Branch to fetch.
+     */
+    where?: BranchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Branches to fetch.
+     */
+    orderBy?: BranchOrderByWithRelationInput | BranchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Branches.
+     */
+    cursor?: BranchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Branches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Branches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Branches.
+     */
+    distinct?: BranchScalarFieldEnum | BranchScalarFieldEnum[]
+  }
+
+  /**
+   * Branch findMany
+   */
+  export type BranchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * Filter, which Branches to fetch.
+     */
+    where?: BranchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Branches to fetch.
+     */
+    orderBy?: BranchOrderByWithRelationInput | BranchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Branches.
+     */
+    cursor?: BranchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Branches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Branches.
+     */
+    skip?: number
+    distinct?: BranchScalarFieldEnum | BranchScalarFieldEnum[]
+  }
+
+  /**
+   * Branch create
+   */
+  export type BranchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Branch.
+     */
+    data: XOR<BranchCreateInput, BranchUncheckedCreateInput>
+  }
+
+  /**
+   * Branch createMany
+   */
+  export type BranchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Branches.
+     */
+    data: BranchCreateManyInput | BranchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Branch createManyAndReturn
+   */
+  export type BranchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * The data used to create many Branches.
+     */
+    data: BranchCreateManyInput | BranchCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Branch update
+   */
+  export type BranchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Branch.
+     */
+    data: XOR<BranchUpdateInput, BranchUncheckedUpdateInput>
+    /**
+     * Choose, which Branch to update.
+     */
+    where: BranchWhereUniqueInput
+  }
+
+  /**
+   * Branch updateMany
+   */
+  export type BranchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Branches.
+     */
+    data: XOR<BranchUpdateManyMutationInput, BranchUncheckedUpdateManyInput>
+    /**
+     * Filter which Branches to update
+     */
+    where?: BranchWhereInput
+    /**
+     * Limit how many Branches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Branch updateManyAndReturn
+   */
+  export type BranchUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * The data used to update Branches.
+     */
+    data: XOR<BranchUpdateManyMutationInput, BranchUncheckedUpdateManyInput>
+    /**
+     * Filter which Branches to update
+     */
+    where?: BranchWhereInput
+    /**
+     * Limit how many Branches to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Branch upsert
+   */
+  export type BranchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Branch to update in case it exists.
+     */
+    where: BranchWhereUniqueInput
+    /**
+     * In case the Branch found by the `where` argument doesn't exist, create a new Branch with this data.
+     */
+    create: XOR<BranchCreateInput, BranchUncheckedCreateInput>
+    /**
+     * In case the Branch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BranchUpdateInput, BranchUncheckedUpdateInput>
+  }
+
+  /**
+   * Branch delete
+   */
+  export type BranchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    /**
+     * Filter which Branch to delete.
+     */
+    where: BranchWhereUniqueInput
+  }
+
+  /**
+   * Branch deleteMany
+   */
+  export type BranchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Branches to delete
+     */
+    where?: BranchWhereInput
+    /**
+     * Limit how many Branches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Branch.labs
+   */
+  export type Branch$labsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lab
+     */
+    select?: LabSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lab
+     */
+    omit?: LabOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LabInclude<ExtArgs> | null
+    where?: LabWhereInput
+    orderBy?: LabOrderByWithRelationInput | LabOrderByWithRelationInput[]
+    cursor?: LabWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LabScalarFieldEnum | LabScalarFieldEnum[]
+  }
+
+  /**
+   * Branch.batches
+   */
+  export type Branch$batchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Batch
+     */
+    omit?: BatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    where?: BatchWhereInput
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    cursor?: BatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BatchScalarFieldEnum | BatchScalarFieldEnum[]
+  }
+
+  /**
+   * Branch.students
+   */
+  export type Branch$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Student
+     */
+    select?: StudentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Student
+     */
+    omit?: StudentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentInclude<ExtArgs> | null
+    where?: StudentWhereInput
+    orderBy?: StudentOrderByWithRelationInput | StudentOrderByWithRelationInput[]
+    cursor?: StudentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentScalarFieldEnum | StudentScalarFieldEnum[]
+  }
+
+  /**
+   * Branch.enquiries
+   */
+  export type Branch$enquiriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Enquiry
+     */
+    select?: EnquirySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Enquiry
+     */
+    omit?: EnquiryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EnquiryInclude<ExtArgs> | null
+    where?: EnquiryWhereInput
+    orderBy?: EnquiryOrderByWithRelationInput | EnquiryOrderByWithRelationInput[]
+    cursor?: EnquiryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EnquiryScalarFieldEnum | EnquiryScalarFieldEnum[]
+  }
+
+  /**
+   * Branch without action
+   */
+  export type BranchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserCompanyAccess
+   */
+
+  export type AggregateUserCompanyAccess = {
+    _count: UserCompanyAccessCountAggregateOutputType | null
+    _min: UserCompanyAccessMinAggregateOutputType | null
+    _max: UserCompanyAccessMaxAggregateOutputType | null
+  }
+
+  export type UserCompanyAccessMinAggregateOutputType = {
+    id: string | null
+    roleUserId: string | null
+    clientAdminId: string | null
+    role: $Enums.UserRole | null
+    createdAt: Date | null
+  }
+
+  export type UserCompanyAccessMaxAggregateOutputType = {
+    id: string | null
+    roleUserId: string | null
+    clientAdminId: string | null
+    role: $Enums.UserRole | null
+    createdAt: Date | null
+  }
+
+  export type UserCompanyAccessCountAggregateOutputType = {
+    id: number
+    roleUserId: number
+    clientAdminId: number
+    role: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type UserCompanyAccessMinAggregateInputType = {
+    id?: true
+    roleUserId?: true
+    clientAdminId?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type UserCompanyAccessMaxAggregateInputType = {
+    id?: true
+    roleUserId?: true
+    clientAdminId?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type UserCompanyAccessCountAggregateInputType = {
+    id?: true
+    roleUserId?: true
+    clientAdminId?: true
+    role?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type UserCompanyAccessAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserCompanyAccess to aggregate.
+     */
+    where?: UserCompanyAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserCompanyAccesses to fetch.
+     */
+    orderBy?: UserCompanyAccessOrderByWithRelationInput | UserCompanyAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserCompanyAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserCompanyAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserCompanyAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserCompanyAccesses
+    **/
+    _count?: true | UserCompanyAccessCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserCompanyAccessMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserCompanyAccessMaxAggregateInputType
+  }
+
+  export type GetUserCompanyAccessAggregateType<T extends UserCompanyAccessAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserCompanyAccess]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserCompanyAccess[P]>
+      : GetScalarType<T[P], AggregateUserCompanyAccess[P]>
+  }
+
+
+
+
+  export type UserCompanyAccessGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserCompanyAccessWhereInput
+    orderBy?: UserCompanyAccessOrderByWithAggregationInput | UserCompanyAccessOrderByWithAggregationInput[]
+    by: UserCompanyAccessScalarFieldEnum[] | UserCompanyAccessScalarFieldEnum
+    having?: UserCompanyAccessScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserCompanyAccessCountAggregateInputType | true
+    _min?: UserCompanyAccessMinAggregateInputType
+    _max?: UserCompanyAccessMaxAggregateInputType
+  }
+
+  export type UserCompanyAccessGroupByOutputType = {
+    id: string
+    roleUserId: string
+    clientAdminId: string
+    role: $Enums.UserRole
+    createdAt: Date
+    _count: UserCompanyAccessCountAggregateOutputType | null
+    _min: UserCompanyAccessMinAggregateOutputType | null
+    _max: UserCompanyAccessMaxAggregateOutputType | null
+  }
+
+  type GetUserCompanyAccessGroupByPayload<T extends UserCompanyAccessGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserCompanyAccessGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserCompanyAccessGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserCompanyAccessGroupByOutputType[P]>
+            : GetScalarType<T[P], UserCompanyAccessGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserCompanyAccessSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleUserId?: boolean
+    clientAdminId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    roleUser?: boolean | RoleUserDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userCompanyAccess"]>
+
+  export type UserCompanyAccessSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleUserId?: boolean
+    clientAdminId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    roleUser?: boolean | RoleUserDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userCompanyAccess"]>
+
+  export type UserCompanyAccessSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleUserId?: boolean
+    clientAdminId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    roleUser?: boolean | RoleUserDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userCompanyAccess"]>
+
+  export type UserCompanyAccessSelectScalar = {
+    id?: boolean
+    roleUserId?: boolean
+    clientAdminId?: boolean
+    role?: boolean
+    createdAt?: boolean
+  }
+
+  export type UserCompanyAccessOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "roleUserId" | "clientAdminId" | "role" | "createdAt", ExtArgs["result"]["userCompanyAccess"]>
+  export type UserCompanyAccessInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    roleUser?: boolean | RoleUserDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+  export type UserCompanyAccessIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    roleUser?: boolean | RoleUserDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+  export type UserCompanyAccessIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    roleUser?: boolean | RoleUserDefaultArgs<ExtArgs>
+    clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
+  }
+
+  export type $UserCompanyAccessPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserCompanyAccess"
+    objects: {
+      roleUser: Prisma.$RoleUserPayload<ExtArgs>
+      clientAdmin: Prisma.$ClientAdminPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      roleUserId: string
+      clientAdminId: string
+      role: $Enums.UserRole
+      createdAt: Date
+    }, ExtArgs["result"]["userCompanyAccess"]>
+    composites: {}
+  }
+
+  type UserCompanyAccessGetPayload<S extends boolean | null | undefined | UserCompanyAccessDefaultArgs> = $Result.GetResult<Prisma.$UserCompanyAccessPayload, S>
+
+  type UserCompanyAccessCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserCompanyAccessFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserCompanyAccessCountAggregateInputType | true
+    }
+
+  export interface UserCompanyAccessDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserCompanyAccess'], meta: { name: 'UserCompanyAccess' } }
+    /**
+     * Find zero or one UserCompanyAccess that matches the filter.
+     * @param {UserCompanyAccessFindUniqueArgs} args - Arguments to find a UserCompanyAccess
+     * @example
+     * // Get one UserCompanyAccess
+     * const userCompanyAccess = await prisma.userCompanyAccess.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserCompanyAccessFindUniqueArgs>(args: SelectSubset<T, UserCompanyAccessFindUniqueArgs<ExtArgs>>): Prisma__UserCompanyAccessClient<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserCompanyAccess that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserCompanyAccessFindUniqueOrThrowArgs} args - Arguments to find a UserCompanyAccess
+     * @example
+     * // Get one UserCompanyAccess
+     * const userCompanyAccess = await prisma.userCompanyAccess.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserCompanyAccessFindUniqueOrThrowArgs>(args: SelectSubset<T, UserCompanyAccessFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserCompanyAccessClient<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserCompanyAccess that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCompanyAccessFindFirstArgs} args - Arguments to find a UserCompanyAccess
+     * @example
+     * // Get one UserCompanyAccess
+     * const userCompanyAccess = await prisma.userCompanyAccess.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserCompanyAccessFindFirstArgs>(args?: SelectSubset<T, UserCompanyAccessFindFirstArgs<ExtArgs>>): Prisma__UserCompanyAccessClient<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserCompanyAccess that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCompanyAccessFindFirstOrThrowArgs} args - Arguments to find a UserCompanyAccess
+     * @example
+     * // Get one UserCompanyAccess
+     * const userCompanyAccess = await prisma.userCompanyAccess.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserCompanyAccessFindFirstOrThrowArgs>(args?: SelectSubset<T, UserCompanyAccessFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserCompanyAccessClient<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserCompanyAccesses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCompanyAccessFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserCompanyAccesses
+     * const userCompanyAccesses = await prisma.userCompanyAccess.findMany()
+     * 
+     * // Get first 10 UserCompanyAccesses
+     * const userCompanyAccesses = await prisma.userCompanyAccess.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userCompanyAccessWithIdOnly = await prisma.userCompanyAccess.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserCompanyAccessFindManyArgs>(args?: SelectSubset<T, UserCompanyAccessFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserCompanyAccess.
+     * @param {UserCompanyAccessCreateArgs} args - Arguments to create a UserCompanyAccess.
+     * @example
+     * // Create one UserCompanyAccess
+     * const UserCompanyAccess = await prisma.userCompanyAccess.create({
+     *   data: {
+     *     // ... data to create a UserCompanyAccess
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserCompanyAccessCreateArgs>(args: SelectSubset<T, UserCompanyAccessCreateArgs<ExtArgs>>): Prisma__UserCompanyAccessClient<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserCompanyAccesses.
+     * @param {UserCompanyAccessCreateManyArgs} args - Arguments to create many UserCompanyAccesses.
+     * @example
+     * // Create many UserCompanyAccesses
+     * const userCompanyAccess = await prisma.userCompanyAccess.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserCompanyAccessCreateManyArgs>(args?: SelectSubset<T, UserCompanyAccessCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserCompanyAccesses and returns the data saved in the database.
+     * @param {UserCompanyAccessCreateManyAndReturnArgs} args - Arguments to create many UserCompanyAccesses.
+     * @example
+     * // Create many UserCompanyAccesses
+     * const userCompanyAccess = await prisma.userCompanyAccess.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserCompanyAccesses and only return the `id`
+     * const userCompanyAccessWithIdOnly = await prisma.userCompanyAccess.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserCompanyAccessCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCompanyAccessCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserCompanyAccess.
+     * @param {UserCompanyAccessDeleteArgs} args - Arguments to delete one UserCompanyAccess.
+     * @example
+     * // Delete one UserCompanyAccess
+     * const UserCompanyAccess = await prisma.userCompanyAccess.delete({
+     *   where: {
+     *     // ... filter to delete one UserCompanyAccess
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserCompanyAccessDeleteArgs>(args: SelectSubset<T, UserCompanyAccessDeleteArgs<ExtArgs>>): Prisma__UserCompanyAccessClient<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserCompanyAccess.
+     * @param {UserCompanyAccessUpdateArgs} args - Arguments to update one UserCompanyAccess.
+     * @example
+     * // Update one UserCompanyAccess
+     * const userCompanyAccess = await prisma.userCompanyAccess.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserCompanyAccessUpdateArgs>(args: SelectSubset<T, UserCompanyAccessUpdateArgs<ExtArgs>>): Prisma__UserCompanyAccessClient<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserCompanyAccesses.
+     * @param {UserCompanyAccessDeleteManyArgs} args - Arguments to filter UserCompanyAccesses to delete.
+     * @example
+     * // Delete a few UserCompanyAccesses
+     * const { count } = await prisma.userCompanyAccess.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserCompanyAccessDeleteManyArgs>(args?: SelectSubset<T, UserCompanyAccessDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserCompanyAccesses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCompanyAccessUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserCompanyAccesses
+     * const userCompanyAccess = await prisma.userCompanyAccess.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserCompanyAccessUpdateManyArgs>(args: SelectSubset<T, UserCompanyAccessUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserCompanyAccesses and returns the data updated in the database.
+     * @param {UserCompanyAccessUpdateManyAndReturnArgs} args - Arguments to update many UserCompanyAccesses.
+     * @example
+     * // Update many UserCompanyAccesses
+     * const userCompanyAccess = await prisma.userCompanyAccess.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserCompanyAccesses and only return the `id`
+     * const userCompanyAccessWithIdOnly = await prisma.userCompanyAccess.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserCompanyAccessUpdateManyAndReturnArgs>(args: SelectSubset<T, UserCompanyAccessUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserCompanyAccess.
+     * @param {UserCompanyAccessUpsertArgs} args - Arguments to update or create a UserCompanyAccess.
+     * @example
+     * // Update or create a UserCompanyAccess
+     * const userCompanyAccess = await prisma.userCompanyAccess.upsert({
+     *   create: {
+     *     // ... data to create a UserCompanyAccess
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserCompanyAccess we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserCompanyAccessUpsertArgs>(args: SelectSubset<T, UserCompanyAccessUpsertArgs<ExtArgs>>): Prisma__UserCompanyAccessClient<$Result.GetResult<Prisma.$UserCompanyAccessPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserCompanyAccesses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCompanyAccessCountArgs} args - Arguments to filter UserCompanyAccesses to count.
+     * @example
+     * // Count the number of UserCompanyAccesses
+     * const count = await prisma.userCompanyAccess.count({
+     *   where: {
+     *     // ... the filter for the UserCompanyAccesses we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserCompanyAccessCountArgs>(
+      args?: Subset<T, UserCompanyAccessCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserCompanyAccessCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserCompanyAccess.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCompanyAccessAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserCompanyAccessAggregateArgs>(args: Subset<T, UserCompanyAccessAggregateArgs>): Prisma.PrismaPromise<GetUserCompanyAccessAggregateType<T>>
+
+    /**
+     * Group by UserCompanyAccess.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCompanyAccessGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserCompanyAccessGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserCompanyAccessGroupByArgs['orderBy'] }
+        : { orderBy?: UserCompanyAccessGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserCompanyAccessGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserCompanyAccessGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserCompanyAccess model
+   */
+  readonly fields: UserCompanyAccessFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserCompanyAccess.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserCompanyAccessClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    roleUser<T extends RoleUserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoleUserDefaultArgs<ExtArgs>>): Prisma__RoleUserClient<$Result.GetResult<Prisma.$RoleUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    clientAdmin<T extends ClientAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientAdminDefaultArgs<ExtArgs>>): Prisma__ClientAdminClient<$Result.GetResult<Prisma.$ClientAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserCompanyAccess model
+   */
+  interface UserCompanyAccessFieldRefs {
+    readonly id: FieldRef<"UserCompanyAccess", 'String'>
+    readonly roleUserId: FieldRef<"UserCompanyAccess", 'String'>
+    readonly clientAdminId: FieldRef<"UserCompanyAccess", 'String'>
+    readonly role: FieldRef<"UserCompanyAccess", 'UserRole'>
+    readonly createdAt: FieldRef<"UserCompanyAccess", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserCompanyAccess findUnique
+   */
+  export type UserCompanyAccessFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCompanyAccess to fetch.
+     */
+    where: UserCompanyAccessWhereUniqueInput
+  }
+
+  /**
+   * UserCompanyAccess findUniqueOrThrow
+   */
+  export type UserCompanyAccessFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCompanyAccess to fetch.
+     */
+    where: UserCompanyAccessWhereUniqueInput
+  }
+
+  /**
+   * UserCompanyAccess findFirst
+   */
+  export type UserCompanyAccessFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCompanyAccess to fetch.
+     */
+    where?: UserCompanyAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserCompanyAccesses to fetch.
+     */
+    orderBy?: UserCompanyAccessOrderByWithRelationInput | UserCompanyAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserCompanyAccesses.
+     */
+    cursor?: UserCompanyAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserCompanyAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserCompanyAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserCompanyAccesses.
+     */
+    distinct?: UserCompanyAccessScalarFieldEnum | UserCompanyAccessScalarFieldEnum[]
+  }
+
+  /**
+   * UserCompanyAccess findFirstOrThrow
+   */
+  export type UserCompanyAccessFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCompanyAccess to fetch.
+     */
+    where?: UserCompanyAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserCompanyAccesses to fetch.
+     */
+    orderBy?: UserCompanyAccessOrderByWithRelationInput | UserCompanyAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserCompanyAccesses.
+     */
+    cursor?: UserCompanyAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserCompanyAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserCompanyAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserCompanyAccesses.
+     */
+    distinct?: UserCompanyAccessScalarFieldEnum | UserCompanyAccessScalarFieldEnum[]
+  }
+
+  /**
+   * UserCompanyAccess findMany
+   */
+  export type UserCompanyAccessFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which UserCompanyAccesses to fetch.
+     */
+    where?: UserCompanyAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserCompanyAccesses to fetch.
+     */
+    orderBy?: UserCompanyAccessOrderByWithRelationInput | UserCompanyAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserCompanyAccesses.
+     */
+    cursor?: UserCompanyAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserCompanyAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserCompanyAccesses.
+     */
+    skip?: number
+    distinct?: UserCompanyAccessScalarFieldEnum | UserCompanyAccessScalarFieldEnum[]
+  }
+
+  /**
+   * UserCompanyAccess create
+   */
+  export type UserCompanyAccessCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserCompanyAccess.
+     */
+    data: XOR<UserCompanyAccessCreateInput, UserCompanyAccessUncheckedCreateInput>
+  }
+
+  /**
+   * UserCompanyAccess createMany
+   */
+  export type UserCompanyAccessCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserCompanyAccesses.
+     */
+    data: UserCompanyAccessCreateManyInput | UserCompanyAccessCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserCompanyAccess createManyAndReturn
+   */
+  export type UserCompanyAccessCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserCompanyAccesses.
+     */
+    data: UserCompanyAccessCreateManyInput | UserCompanyAccessCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserCompanyAccess update
+   */
+  export type UserCompanyAccessUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserCompanyAccess.
+     */
+    data: XOR<UserCompanyAccessUpdateInput, UserCompanyAccessUncheckedUpdateInput>
+    /**
+     * Choose, which UserCompanyAccess to update.
+     */
+    where: UserCompanyAccessWhereUniqueInput
+  }
+
+  /**
+   * UserCompanyAccess updateMany
+   */
+  export type UserCompanyAccessUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserCompanyAccesses.
+     */
+    data: XOR<UserCompanyAccessUpdateManyMutationInput, UserCompanyAccessUncheckedUpdateManyInput>
+    /**
+     * Filter which UserCompanyAccesses to update
+     */
+    where?: UserCompanyAccessWhereInput
+    /**
+     * Limit how many UserCompanyAccesses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserCompanyAccess updateManyAndReturn
+   */
+  export type UserCompanyAccessUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * The data used to update UserCompanyAccesses.
+     */
+    data: XOR<UserCompanyAccessUpdateManyMutationInput, UserCompanyAccessUncheckedUpdateManyInput>
+    /**
+     * Filter which UserCompanyAccesses to update
+     */
+    where?: UserCompanyAccessWhereInput
+    /**
+     * Limit how many UserCompanyAccesses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserCompanyAccess upsert
+   */
+  export type UserCompanyAccessUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserCompanyAccess to update in case it exists.
+     */
+    where: UserCompanyAccessWhereUniqueInput
+    /**
+     * In case the UserCompanyAccess found by the `where` argument doesn't exist, create a new UserCompanyAccess with this data.
+     */
+    create: XOR<UserCompanyAccessCreateInput, UserCompanyAccessUncheckedCreateInput>
+    /**
+     * In case the UserCompanyAccess was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserCompanyAccessUpdateInput, UserCompanyAccessUncheckedUpdateInput>
+  }
+
+  /**
+   * UserCompanyAccess delete
+   */
+  export type UserCompanyAccessDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+    /**
+     * Filter which UserCompanyAccess to delete.
+     */
+    where: UserCompanyAccessWhereUniqueInput
+  }
+
+  /**
+   * UserCompanyAccess deleteMany
+   */
+  export type UserCompanyAccessDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserCompanyAccesses to delete
+     */
+    where?: UserCompanyAccessWhereInput
+    /**
+     * Limit how many UserCompanyAccesses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserCompanyAccess without action
+   */
+  export type UserCompanyAccessDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCompanyAccess
+     */
+    select?: UserCompanyAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserCompanyAccess
+     */
+    omit?: UserCompanyAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserCompanyAccessInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ActiveSession
+   */
+
+  export type AggregateActiveSession = {
+    _count: ActiveSessionCountAggregateOutputType | null
+    _min: ActiveSessionMinAggregateOutputType | null
+    _max: ActiveSessionMaxAggregateOutputType | null
+  }
+
+  export type ActiveSessionMinAggregateOutputType = {
+    id: string | null
+    userType: string | null
+    userId: string | null
+    clientAdminId: string | null
+    deviceInfo: string | null
+    createdAt: Date | null
+    lastSeenAt: Date | null
+  }
+
+  export type ActiveSessionMaxAggregateOutputType = {
+    id: string | null
+    userType: string | null
+    userId: string | null
+    clientAdminId: string | null
+    deviceInfo: string | null
+    createdAt: Date | null
+    lastSeenAt: Date | null
+  }
+
+  export type ActiveSessionCountAggregateOutputType = {
+    id: number
+    userType: number
+    userId: number
+    clientAdminId: number
+    deviceInfo: number
+    createdAt: number
+    lastSeenAt: number
+    _all: number
+  }
+
+
+  export type ActiveSessionMinAggregateInputType = {
+    id?: true
+    userType?: true
+    userId?: true
+    clientAdminId?: true
+    deviceInfo?: true
+    createdAt?: true
+    lastSeenAt?: true
+  }
+
+  export type ActiveSessionMaxAggregateInputType = {
+    id?: true
+    userType?: true
+    userId?: true
+    clientAdminId?: true
+    deviceInfo?: true
+    createdAt?: true
+    lastSeenAt?: true
+  }
+
+  export type ActiveSessionCountAggregateInputType = {
+    id?: true
+    userType?: true
+    userId?: true
+    clientAdminId?: true
+    deviceInfo?: true
+    createdAt?: true
+    lastSeenAt?: true
+    _all?: true
+  }
+
+  export type ActiveSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActiveSession to aggregate.
+     */
+    where?: ActiveSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActiveSessions to fetch.
+     */
+    orderBy?: ActiveSessionOrderByWithRelationInput | ActiveSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ActiveSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActiveSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActiveSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ActiveSessions
+    **/
+    _count?: true | ActiveSessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ActiveSessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ActiveSessionMaxAggregateInputType
+  }
+
+  export type GetActiveSessionAggregateType<T extends ActiveSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateActiveSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateActiveSession[P]>
+      : GetScalarType<T[P], AggregateActiveSession[P]>
+  }
+
+
+
+
+  export type ActiveSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActiveSessionWhereInput
+    orderBy?: ActiveSessionOrderByWithAggregationInput | ActiveSessionOrderByWithAggregationInput[]
+    by: ActiveSessionScalarFieldEnum[] | ActiveSessionScalarFieldEnum
+    having?: ActiveSessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ActiveSessionCountAggregateInputType | true
+    _min?: ActiveSessionMinAggregateInputType
+    _max?: ActiveSessionMaxAggregateInputType
+  }
+
+  export type ActiveSessionGroupByOutputType = {
+    id: string
+    userType: string
+    userId: string
+    clientAdminId: string
+    deviceInfo: string | null
+    createdAt: Date
+    lastSeenAt: Date
+    _count: ActiveSessionCountAggregateOutputType | null
+    _min: ActiveSessionMinAggregateOutputType | null
+    _max: ActiveSessionMaxAggregateOutputType | null
+  }
+
+  type GetActiveSessionGroupByPayload<T extends ActiveSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ActiveSessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ActiveSessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ActiveSessionGroupByOutputType[P]>
+            : GetScalarType<T[P], ActiveSessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ActiveSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userType?: boolean
+    userId?: boolean
+    clientAdminId?: boolean
+    deviceInfo?: boolean
+    createdAt?: boolean
+    lastSeenAt?: boolean
+  }, ExtArgs["result"]["activeSession"]>
+
+  export type ActiveSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userType?: boolean
+    userId?: boolean
+    clientAdminId?: boolean
+    deviceInfo?: boolean
+    createdAt?: boolean
+    lastSeenAt?: boolean
+  }, ExtArgs["result"]["activeSession"]>
+
+  export type ActiveSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userType?: boolean
+    userId?: boolean
+    clientAdminId?: boolean
+    deviceInfo?: boolean
+    createdAt?: boolean
+    lastSeenAt?: boolean
+  }, ExtArgs["result"]["activeSession"]>
+
+  export type ActiveSessionSelectScalar = {
+    id?: boolean
+    userType?: boolean
+    userId?: boolean
+    clientAdminId?: boolean
+    deviceInfo?: boolean
+    createdAt?: boolean
+    lastSeenAt?: boolean
+  }
+
+  export type ActiveSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userType" | "userId" | "clientAdminId" | "deviceInfo" | "createdAt" | "lastSeenAt", ExtArgs["result"]["activeSession"]>
+
+  export type $ActiveSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ActiveSession"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userType: string
+      userId: string
+      clientAdminId: string
+      deviceInfo: string | null
+      createdAt: Date
+      lastSeenAt: Date
+    }, ExtArgs["result"]["activeSession"]>
+    composites: {}
+  }
+
+  type ActiveSessionGetPayload<S extends boolean | null | undefined | ActiveSessionDefaultArgs> = $Result.GetResult<Prisma.$ActiveSessionPayload, S>
+
+  type ActiveSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ActiveSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ActiveSessionCountAggregateInputType | true
+    }
+
+  export interface ActiveSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ActiveSession'], meta: { name: 'ActiveSession' } }
+    /**
+     * Find zero or one ActiveSession that matches the filter.
+     * @param {ActiveSessionFindUniqueArgs} args - Arguments to find a ActiveSession
+     * @example
+     * // Get one ActiveSession
+     * const activeSession = await prisma.activeSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ActiveSessionFindUniqueArgs>(args: SelectSubset<T, ActiveSessionFindUniqueArgs<ExtArgs>>): Prisma__ActiveSessionClient<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ActiveSession that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ActiveSessionFindUniqueOrThrowArgs} args - Arguments to find a ActiveSession
+     * @example
+     * // Get one ActiveSession
+     * const activeSession = await prisma.activeSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ActiveSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, ActiveSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ActiveSessionClient<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActiveSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActiveSessionFindFirstArgs} args - Arguments to find a ActiveSession
+     * @example
+     * // Get one ActiveSession
+     * const activeSession = await prisma.activeSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ActiveSessionFindFirstArgs>(args?: SelectSubset<T, ActiveSessionFindFirstArgs<ExtArgs>>): Prisma__ActiveSessionClient<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActiveSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActiveSessionFindFirstOrThrowArgs} args - Arguments to find a ActiveSession
+     * @example
+     * // Get one ActiveSession
+     * const activeSession = await prisma.activeSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ActiveSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, ActiveSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ActiveSessionClient<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ActiveSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActiveSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ActiveSessions
+     * const activeSessions = await prisma.activeSession.findMany()
+     * 
+     * // Get first 10 ActiveSessions
+     * const activeSessions = await prisma.activeSession.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const activeSessionWithIdOnly = await prisma.activeSession.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ActiveSessionFindManyArgs>(args?: SelectSubset<T, ActiveSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ActiveSession.
+     * @param {ActiveSessionCreateArgs} args - Arguments to create a ActiveSession.
+     * @example
+     * // Create one ActiveSession
+     * const ActiveSession = await prisma.activeSession.create({
+     *   data: {
+     *     // ... data to create a ActiveSession
+     *   }
+     * })
+     * 
+     */
+    create<T extends ActiveSessionCreateArgs>(args: SelectSubset<T, ActiveSessionCreateArgs<ExtArgs>>): Prisma__ActiveSessionClient<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ActiveSessions.
+     * @param {ActiveSessionCreateManyArgs} args - Arguments to create many ActiveSessions.
+     * @example
+     * // Create many ActiveSessions
+     * const activeSession = await prisma.activeSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ActiveSessionCreateManyArgs>(args?: SelectSubset<T, ActiveSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ActiveSessions and returns the data saved in the database.
+     * @param {ActiveSessionCreateManyAndReturnArgs} args - Arguments to create many ActiveSessions.
+     * @example
+     * // Create many ActiveSessions
+     * const activeSession = await prisma.activeSession.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ActiveSessions and only return the `id`
+     * const activeSessionWithIdOnly = await prisma.activeSession.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ActiveSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, ActiveSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ActiveSession.
+     * @param {ActiveSessionDeleteArgs} args - Arguments to delete one ActiveSession.
+     * @example
+     * // Delete one ActiveSession
+     * const ActiveSession = await prisma.activeSession.delete({
+     *   where: {
+     *     // ... filter to delete one ActiveSession
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ActiveSessionDeleteArgs>(args: SelectSubset<T, ActiveSessionDeleteArgs<ExtArgs>>): Prisma__ActiveSessionClient<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ActiveSession.
+     * @param {ActiveSessionUpdateArgs} args - Arguments to update one ActiveSession.
+     * @example
+     * // Update one ActiveSession
+     * const activeSession = await prisma.activeSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ActiveSessionUpdateArgs>(args: SelectSubset<T, ActiveSessionUpdateArgs<ExtArgs>>): Prisma__ActiveSessionClient<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ActiveSessions.
+     * @param {ActiveSessionDeleteManyArgs} args - Arguments to filter ActiveSessions to delete.
+     * @example
+     * // Delete a few ActiveSessions
+     * const { count } = await prisma.activeSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ActiveSessionDeleteManyArgs>(args?: SelectSubset<T, ActiveSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActiveSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActiveSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ActiveSessions
+     * const activeSession = await prisma.activeSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ActiveSessionUpdateManyArgs>(args: SelectSubset<T, ActiveSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActiveSessions and returns the data updated in the database.
+     * @param {ActiveSessionUpdateManyAndReturnArgs} args - Arguments to update many ActiveSessions.
+     * @example
+     * // Update many ActiveSessions
+     * const activeSession = await prisma.activeSession.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ActiveSessions and only return the `id`
+     * const activeSessionWithIdOnly = await prisma.activeSession.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ActiveSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, ActiveSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ActiveSession.
+     * @param {ActiveSessionUpsertArgs} args - Arguments to update or create a ActiveSession.
+     * @example
+     * // Update or create a ActiveSession
+     * const activeSession = await prisma.activeSession.upsert({
+     *   create: {
+     *     // ... data to create a ActiveSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ActiveSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ActiveSessionUpsertArgs>(args: SelectSubset<T, ActiveSessionUpsertArgs<ExtArgs>>): Prisma__ActiveSessionClient<$Result.GetResult<Prisma.$ActiveSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ActiveSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActiveSessionCountArgs} args - Arguments to filter ActiveSessions to count.
+     * @example
+     * // Count the number of ActiveSessions
+     * const count = await prisma.activeSession.count({
+     *   where: {
+     *     // ... the filter for the ActiveSessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ActiveSessionCountArgs>(
+      args?: Subset<T, ActiveSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ActiveSessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ActiveSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActiveSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ActiveSessionAggregateArgs>(args: Subset<T, ActiveSessionAggregateArgs>): Prisma.PrismaPromise<GetActiveSessionAggregateType<T>>
+
+    /**
+     * Group by ActiveSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActiveSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ActiveSessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ActiveSessionGroupByArgs['orderBy'] }
+        : { orderBy?: ActiveSessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ActiveSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActiveSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ActiveSession model
+   */
+  readonly fields: ActiveSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ActiveSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ActiveSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ActiveSession model
+   */
+  interface ActiveSessionFieldRefs {
+    readonly id: FieldRef<"ActiveSession", 'String'>
+    readonly userType: FieldRef<"ActiveSession", 'String'>
+    readonly userId: FieldRef<"ActiveSession", 'String'>
+    readonly clientAdminId: FieldRef<"ActiveSession", 'String'>
+    readonly deviceInfo: FieldRef<"ActiveSession", 'String'>
+    readonly createdAt: FieldRef<"ActiveSession", 'DateTime'>
+    readonly lastSeenAt: FieldRef<"ActiveSession", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ActiveSession findUnique
+   */
+  export type ActiveSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * Filter, which ActiveSession to fetch.
+     */
+    where: ActiveSessionWhereUniqueInput
+  }
+
+  /**
+   * ActiveSession findUniqueOrThrow
+   */
+  export type ActiveSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * Filter, which ActiveSession to fetch.
+     */
+    where: ActiveSessionWhereUniqueInput
+  }
+
+  /**
+   * ActiveSession findFirst
+   */
+  export type ActiveSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * Filter, which ActiveSession to fetch.
+     */
+    where?: ActiveSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActiveSessions to fetch.
+     */
+    orderBy?: ActiveSessionOrderByWithRelationInput | ActiveSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActiveSessions.
+     */
+    cursor?: ActiveSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActiveSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActiveSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActiveSessions.
+     */
+    distinct?: ActiveSessionScalarFieldEnum | ActiveSessionScalarFieldEnum[]
+  }
+
+  /**
+   * ActiveSession findFirstOrThrow
+   */
+  export type ActiveSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * Filter, which ActiveSession to fetch.
+     */
+    where?: ActiveSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActiveSessions to fetch.
+     */
+    orderBy?: ActiveSessionOrderByWithRelationInput | ActiveSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActiveSessions.
+     */
+    cursor?: ActiveSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActiveSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActiveSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActiveSessions.
+     */
+    distinct?: ActiveSessionScalarFieldEnum | ActiveSessionScalarFieldEnum[]
+  }
+
+  /**
+   * ActiveSession findMany
+   */
+  export type ActiveSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * Filter, which ActiveSessions to fetch.
+     */
+    where?: ActiveSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActiveSessions to fetch.
+     */
+    orderBy?: ActiveSessionOrderByWithRelationInput | ActiveSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ActiveSessions.
+     */
+    cursor?: ActiveSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActiveSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActiveSessions.
+     */
+    skip?: number
+    distinct?: ActiveSessionScalarFieldEnum | ActiveSessionScalarFieldEnum[]
+  }
+
+  /**
+   * ActiveSession create
+   */
+  export type ActiveSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ActiveSession.
+     */
+    data: XOR<ActiveSessionCreateInput, ActiveSessionUncheckedCreateInput>
+  }
+
+  /**
+   * ActiveSession createMany
+   */
+  export type ActiveSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ActiveSessions.
+     */
+    data: ActiveSessionCreateManyInput | ActiveSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ActiveSession createManyAndReturn
+   */
+  export type ActiveSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ActiveSessions.
+     */
+    data: ActiveSessionCreateManyInput | ActiveSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ActiveSession update
+   */
+  export type ActiveSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ActiveSession.
+     */
+    data: XOR<ActiveSessionUpdateInput, ActiveSessionUncheckedUpdateInput>
+    /**
+     * Choose, which ActiveSession to update.
+     */
+    where: ActiveSessionWhereUniqueInput
+  }
+
+  /**
+   * ActiveSession updateMany
+   */
+  export type ActiveSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ActiveSessions.
+     */
+    data: XOR<ActiveSessionUpdateManyMutationInput, ActiveSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which ActiveSessions to update
+     */
+    where?: ActiveSessionWhereInput
+    /**
+     * Limit how many ActiveSessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActiveSession updateManyAndReturn
+   */
+  export type ActiveSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * The data used to update ActiveSessions.
+     */
+    data: XOR<ActiveSessionUpdateManyMutationInput, ActiveSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which ActiveSessions to update
+     */
+    where?: ActiveSessionWhereInput
+    /**
+     * Limit how many ActiveSessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActiveSession upsert
+   */
+  export type ActiveSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ActiveSession to update in case it exists.
+     */
+    where: ActiveSessionWhereUniqueInput
+    /**
+     * In case the ActiveSession found by the `where` argument doesn't exist, create a new ActiveSession with this data.
+     */
+    create: XOR<ActiveSessionCreateInput, ActiveSessionUncheckedCreateInput>
+    /**
+     * In case the ActiveSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ActiveSessionUpdateInput, ActiveSessionUncheckedUpdateInput>
+  }
+
+  /**
+   * ActiveSession delete
+   */
+  export type ActiveSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+    /**
+     * Filter which ActiveSession to delete.
+     */
+    where: ActiveSessionWhereUniqueInput
+  }
+
+  /**
+   * ActiveSession deleteMany
+   */
+  export type ActiveSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActiveSessions to delete
+     */
+    where?: ActiveSessionWhereInput
+    /**
+     * Limit how many ActiveSessions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActiveSession without action
+   */
+  export type ActiveSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActiveSession
+     */
+    select?: ActiveSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActiveSession
+     */
+    omit?: ActiveSessionOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -49171,6 +53171,7 @@ export namespace Prisma {
 
 
   export const ClientAdminScalarFieldEnum: {
+    isMaster: 'isMaster',
     id: 'id',
     name: 'name',
     email: 'email',
@@ -49243,6 +53244,7 @@ export namespace Prisma {
 
 
   export const EnquiryScalarFieldEnum: {
+    branchId: 'branchId',
     id: 'id',
     srNo: 'srNo',
     name: 'name',
@@ -49349,6 +53351,7 @@ export namespace Prisma {
 
 
   export const StudentScalarFieldEnum: {
+    branchId: 'branchId',
     id: 'id',
     serialNumber: 'serialNumber',
     studentCode: 'studentCode',
@@ -49404,6 +53407,7 @@ export namespace Prisma {
 
 
   export const BatchScalarFieldEnum: {
+    branchId: 'branchId',
     id: 'id',
     name: 'name',
     facultyId: 'facultyId',
@@ -49446,6 +53450,7 @@ export namespace Prisma {
 
 
   export const LabScalarFieldEnum: {
+    branchId: 'branchId',
     id: 'id',
     name: 'name',
     location: 'location',
@@ -49713,6 +53718,45 @@ export namespace Prisma {
   export type FinancialRecordScalarFieldEnum = (typeof FinancialRecordScalarFieldEnum)[keyof typeof FinancialRecordScalarFieldEnum]
 
 
+  export const BranchScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    city: 'city',
+    address: 'address',
+    contact: 'contact',
+    isDefault: 'isDefault',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    clientAdminId: 'clientAdminId'
+  };
+
+  export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof BranchScalarFieldEnum]
+
+
+  export const UserCompanyAccessScalarFieldEnum: {
+    id: 'id',
+    roleUserId: 'roleUserId',
+    clientAdminId: 'clientAdminId',
+    role: 'role',
+    createdAt: 'createdAt'
+  };
+
+  export type UserCompanyAccessScalarFieldEnum = (typeof UserCompanyAccessScalarFieldEnum)[keyof typeof UserCompanyAccessScalarFieldEnum]
+
+
+  export const ActiveSessionScalarFieldEnum: {
+    id: 'id',
+    userType: 'userType',
+    userId: 'userId',
+    clientAdminId: 'clientAdminId',
+    deviceInfo: 'deviceInfo',
+    createdAt: 'createdAt',
+    lastSeenAt: 'lastSeenAt'
+  };
+
+  export type ActiveSessionScalarFieldEnum = (typeof ActiveSessionScalarFieldEnum)[keyof typeof ActiveSessionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -49740,6 +53784,13 @@ export namespace Prisma {
   /**
    * Field references
    */
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
 
 
   /**
@@ -49781,13 +53832,6 @@ export namespace Prisma {
    * Reference to a field of type 'UserRole[]'
    */
   export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -49938,6 +53982,7 @@ export namespace Prisma {
     AND?: ClientAdminWhereInput | ClientAdminWhereInput[]
     OR?: ClientAdminWhereInput[]
     NOT?: ClientAdminWhereInput | ClientAdminWhereInput[]
+    isMaster?: BoolFilter<"ClientAdmin"> | boolean
     id?: StringFilter<"ClientAdmin"> | string
     name?: StringFilter<"ClientAdmin"> | string
     email?: StringFilter<"ClientAdmin"> | string
@@ -49959,6 +54004,8 @@ export namespace Prisma {
     role?: EnumUserRoleFilter<"ClientAdmin"> | $Enums.UserRole
     currentSessionToken?: StringNullableFilter<"ClientAdmin"> | string | null
     lastLoginAt?: DateTimeNullableFilter<"ClientAdmin"> | Date | string | null
+    userAccess?: UserCompanyAccessListRelationFilter
+    branches?: BranchListRelationFilter
     activities?: ActivityLogListRelationFilter
     attendanceRecords?: AttendanceRecordListRelationFilter
     batches?: BatchListRelationFilter
@@ -49989,6 +54036,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminOrderByWithRelationInput = {
+    isMaster?: SortOrder
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
@@ -50010,6 +54058,8 @@ export namespace Prisma {
     role?: SortOrder
     currentSessionToken?: SortOrderInput | SortOrder
     lastLoginAt?: SortOrderInput | SortOrder
+    userAccess?: UserCompanyAccessOrderByRelationAggregateInput
+    branches?: BranchOrderByRelationAggregateInput
     activities?: ActivityLogOrderByRelationAggregateInput
     attendanceRecords?: AttendanceRecordOrderByRelationAggregateInput
     batches?: BatchOrderByRelationAggregateInput
@@ -50046,6 +54096,7 @@ export namespace Prisma {
     AND?: ClientAdminWhereInput | ClientAdminWhereInput[]
     OR?: ClientAdminWhereInput[]
     NOT?: ClientAdminWhereInput | ClientAdminWhereInput[]
+    isMaster?: BoolFilter<"ClientAdmin"> | boolean
     name?: StringFilter<"ClientAdmin"> | string
     password?: StringFilter<"ClientAdmin"> | string
     instituteName?: StringFilter<"ClientAdmin"> | string
@@ -50064,6 +54115,8 @@ export namespace Prisma {
     role?: EnumUserRoleFilter<"ClientAdmin"> | $Enums.UserRole
     currentSessionToken?: StringNullableFilter<"ClientAdmin"> | string | null
     lastLoginAt?: DateTimeNullableFilter<"ClientAdmin"> | Date | string | null
+    userAccess?: UserCompanyAccessListRelationFilter
+    branches?: BranchListRelationFilter
     activities?: ActivityLogListRelationFilter
     attendanceRecords?: AttendanceRecordListRelationFilter
     batches?: BatchListRelationFilter
@@ -50094,6 +54147,7 @@ export namespace Prisma {
   }, "id" | "email" | "slug">
 
   export type ClientAdminOrderByWithAggregationInput = {
+    isMaster?: SortOrder
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
@@ -50124,6 +54178,7 @@ export namespace Prisma {
     AND?: ClientAdminScalarWhereWithAggregatesInput | ClientAdminScalarWhereWithAggregatesInput[]
     OR?: ClientAdminScalarWhereWithAggregatesInput[]
     NOT?: ClientAdminScalarWhereWithAggregatesInput | ClientAdminScalarWhereWithAggregatesInput[]
+    isMaster?: BoolWithAggregatesFilter<"ClientAdmin"> | boolean
     id?: StringWithAggregatesFilter<"ClientAdmin"> | string
     name?: StringWithAggregatesFilter<"ClientAdmin"> | string
     email?: StringWithAggregatesFilter<"ClientAdmin"> | string
@@ -50230,6 +54285,7 @@ export namespace Prisma {
     currentSessionToken?: StringNullableFilter<"RoleUser"> | string | null
     lastLoginAt?: DateTimeNullableFilter<"RoleUser"> | Date | string | null
     clientAdminId?: StringFilter<"RoleUser"> | string
+    companyAccess?: UserCompanyAccessListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }
 
@@ -50247,6 +54303,7 @@ export namespace Prisma {
     currentSessionToken?: SortOrderInput | SortOrder
     lastLoginAt?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
+    companyAccess?: UserCompanyAccessOrderByRelationAggregateInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
   }
 
@@ -50267,6 +54324,7 @@ export namespace Prisma {
     currentSessionToken?: StringNullableFilter<"RoleUser"> | string | null
     lastLoginAt?: DateTimeNullableFilter<"RoleUser"> | Date | string | null
     clientAdminId?: StringFilter<"RoleUser"> | string
+    companyAccess?: UserCompanyAccessListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
   }, "id" | "email">
 
@@ -50377,6 +54435,7 @@ export namespace Prisma {
     AND?: EnquiryWhereInput | EnquiryWhereInput[]
     OR?: EnquiryWhereInput[]
     NOT?: EnquiryWhereInput | EnquiryWhereInput[]
+    branchId?: IntNullableFilter<"Enquiry"> | number | null
     id?: StringFilter<"Enquiry"> | string
     srNo?: IntFilter<"Enquiry"> | number
     name?: StringFilter<"Enquiry"> | string
@@ -50399,6 +54458,7 @@ export namespace Prisma {
     isConverted?: BoolFilter<"Enquiry"> | boolean
     studentId?: IntNullableFilter<"Enquiry"> | number | null
     clientAdminId?: StringFilter<"Enquiry"> | string
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     source?: XOR<SourceTypeNullableScalarRelationFilter, SourceTypeWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
@@ -50408,6 +54468,7 @@ export namespace Prisma {
   }
 
   export type EnquiryOrderByWithRelationInput = {
+    branchId?: SortOrderInput | SortOrder
     id?: SortOrder
     srNo?: SortOrder
     name?: SortOrder
@@ -50430,6 +54491,7 @@ export namespace Prisma {
     isConverted?: SortOrder
     studentId?: SortOrderInput | SortOrder
     clientAdminId?: SortOrder
+    branch?: BranchOrderByWithRelationInput
     source?: SourceTypeOrderByWithRelationInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
     student?: StudentOrderByWithRelationInput
@@ -50440,13 +54502,15 @@ export namespace Prisma {
 
   export type EnquiryWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    srNo?: number
     studentId?: number
+    clientAdminId_srNo?: EnquiryClientAdminIdSrNoCompoundUniqueInput
     email_clientAdminId?: EnquiryEmailClientAdminIdCompoundUniqueInput
     contact_clientAdminId?: EnquiryContactClientAdminIdCompoundUniqueInput
     AND?: EnquiryWhereInput | EnquiryWhereInput[]
     OR?: EnquiryWhereInput[]
     NOT?: EnquiryWhereInput | EnquiryWhereInput[]
+    branchId?: IntNullableFilter<"Enquiry"> | number | null
+    srNo?: IntFilter<"Enquiry"> | number
     name?: StringFilter<"Enquiry"> | string
     contact?: StringFilter<"Enquiry"> | string
     alternateContact?: StringNullableFilter<"Enquiry"> | string | null
@@ -50466,15 +54530,17 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Enquiry"> | Date | string
     isConverted?: BoolFilter<"Enquiry"> | boolean
     clientAdminId?: StringFilter<"Enquiry"> | string
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     source?: XOR<SourceTypeNullableScalarRelationFilter, SourceTypeWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     enquiryCourse?: EnquiryCourseListRelationFilter
     followUps?: FollowUpListRelationFilter
     notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
-  }, "id" | "srNo" | "studentId" | "email_clientAdminId" | "contact_clientAdminId">
+  }, "id" | "studentId" | "clientAdminId_srNo" | "email_clientAdminId" | "contact_clientAdminId">
 
   export type EnquiryOrderByWithAggregationInput = {
+    branchId?: SortOrderInput | SortOrder
     id?: SortOrder
     srNo?: SortOrder
     name?: SortOrder
@@ -50508,6 +54574,7 @@ export namespace Prisma {
     AND?: EnquiryScalarWhereWithAggregatesInput | EnquiryScalarWhereWithAggregatesInput[]
     OR?: EnquiryScalarWhereWithAggregatesInput[]
     NOT?: EnquiryScalarWhereWithAggregatesInput | EnquiryScalarWhereWithAggregatesInput[]
+    branchId?: IntNullableWithAggregatesFilter<"Enquiry"> | number | null
     id?: StringWithAggregatesFilter<"Enquiry"> | string
     srNo?: IntWithAggregatesFilter<"Enquiry"> | number
     name?: StringWithAggregatesFilter<"Enquiry"> | string
@@ -50949,6 +55016,7 @@ export namespace Prisma {
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
+    branchId?: IntNullableFilter<"Student"> | number | null
     id?: IntFilter<"Student"> | number
     serialNumber?: IntFilter<"Student"> | number
     studentCode?: StringFilter<"Student"> | string
@@ -50976,6 +55044,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     clientAdminId?: StringFilter<"Student"> | string
     qualification?: StringNullableFilter<"Student"> | string | null
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     attendance?: AttendanceRecordListRelationFilter
     certificates?: CertificateListRelationFilter
     completions?: CourseCompletionListRelationFilter
@@ -50992,6 +55061,7 @@ export namespace Prisma {
   }
 
   export type StudentOrderByWithRelationInput = {
+    branchId?: SortOrderInput | SortOrder
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
@@ -51019,6 +55089,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     clientAdminId?: SortOrder
     qualification?: SortOrderInput | SortOrder
+    branch?: BranchOrderByWithRelationInput
     attendance?: AttendanceRecordOrderByRelationAggregateInput
     certificates?: CertificateOrderByRelationAggregateInput
     completions?: CourseCompletionOrderByRelationAggregateInput
@@ -51036,12 +55107,16 @@ export namespace Prisma {
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    serialNumber?: number
-    studentCode?: string
-    admissionNumber?: string
+    clientAdminId_serialNumber?: StudentClientAdminIdSerialNumberCompoundUniqueInput
+    clientAdminId_studentCode?: StudentClientAdminIdStudentCodeCompoundUniqueInput
+    clientAdminId_admissionNumber?: StudentClientAdminIdAdmissionNumberCompoundUniqueInput
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
+    branchId?: IntNullableFilter<"Student"> | number | null
+    serialNumber?: IntFilter<"Student"> | number
+    studentCode?: StringFilter<"Student"> | string
+    admissionNumber?: StringFilter<"Student"> | string
     fullName?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
     photoUrl?: StringNullableFilter<"Student"> | string | null
@@ -51065,6 +55140,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     clientAdminId?: StringFilter<"Student"> | string
     qualification?: StringNullableFilter<"Student"> | string | null
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     attendance?: AttendanceRecordListRelationFilter
     certificates?: CertificateListRelationFilter
     completions?: CourseCompletionListRelationFilter
@@ -51078,9 +55154,10 @@ export namespace Prisma {
     feeRecords?: StudentFeeListRelationFilter
     tasks?: StudentTaskListRelationFilter
     tests?: StudentTestListRelationFilter
-  }, "id" | "serialNumber" | "studentCode" | "admissionNumber">
+  }, "id" | "clientAdminId_serialNumber" | "clientAdminId_studentCode" | "clientAdminId_admissionNumber">
 
   export type StudentOrderByWithAggregationInput = {
+    branchId?: SortOrderInput | SortOrder
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
@@ -51119,6 +55196,7 @@ export namespace Prisma {
     AND?: StudentScalarWhereWithAggregatesInput | StudentScalarWhereWithAggregatesInput[]
     OR?: StudentScalarWhereWithAggregatesInput[]
     NOT?: StudentScalarWhereWithAggregatesInput | StudentScalarWhereWithAggregatesInput[]
+    branchId?: IntNullableWithAggregatesFilter<"Student"> | number | null
     id?: IntWithAggregatesFilter<"Student"> | number
     serialNumber?: IntWithAggregatesFilter<"Student"> | number
     studentCode?: StringWithAggregatesFilter<"Student"> | string
@@ -51314,11 +55392,13 @@ export namespace Prisma {
     AND?: BatchWhereInput | BatchWhereInput[]
     OR?: BatchWhereInput[]
     NOT?: BatchWhereInput | BatchWhereInput[]
+    branchId?: IntNullableFilter<"Batch"> | number | null
     id?: IntFilter<"Batch"> | number
     name?: StringFilter<"Batch"> | string
     facultyId?: IntNullableFilter<"Batch"> | number | null
     labTimeSlotId?: IntFilter<"Batch"> | number
     clientAdminId?: StringFilter<"Batch"> | string
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     faculty?: XOR<FacultyNullableScalarRelationFilter, FacultyWhereInput> | null
     labTimeSlot?: XOR<LabTimeSlotScalarRelationFilter, LabTimeSlotWhereInput>
@@ -51329,11 +55409,13 @@ export namespace Prisma {
   }
 
   export type BatchOrderByWithRelationInput = {
+    branchId?: SortOrderInput | SortOrder
     id?: SortOrder
     name?: SortOrder
     facultyId?: SortOrderInput | SortOrder
     labTimeSlotId?: SortOrder
     clientAdminId?: SortOrder
+    branch?: BranchOrderByWithRelationInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
     faculty?: FacultyOrderByWithRelationInput
     labTimeSlot?: LabTimeSlotOrderByWithRelationInput
@@ -51349,10 +55431,12 @@ export namespace Prisma {
     AND?: BatchWhereInput | BatchWhereInput[]
     OR?: BatchWhereInput[]
     NOT?: BatchWhereInput | BatchWhereInput[]
+    branchId?: IntNullableFilter<"Batch"> | number | null
     name?: StringFilter<"Batch"> | string
     facultyId?: IntNullableFilter<"Batch"> | number | null
     labTimeSlotId?: IntFilter<"Batch"> | number
     clientAdminId?: StringFilter<"Batch"> | string
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     faculty?: XOR<FacultyNullableScalarRelationFilter, FacultyWhereInput> | null
     labTimeSlot?: XOR<LabTimeSlotScalarRelationFilter, LabTimeSlotWhereInput>
@@ -51363,6 +55447,7 @@ export namespace Prisma {
   }, "id" | "labTimeSlotId_clientAdminId">
 
   export type BatchOrderByWithAggregationInput = {
+    branchId?: SortOrderInput | SortOrder
     id?: SortOrder
     name?: SortOrder
     facultyId?: SortOrderInput | SortOrder
@@ -51379,6 +55464,7 @@ export namespace Prisma {
     AND?: BatchScalarWhereWithAggregatesInput | BatchScalarWhereWithAggregatesInput[]
     OR?: BatchScalarWhereWithAggregatesInput[]
     NOT?: BatchScalarWhereWithAggregatesInput | BatchScalarWhereWithAggregatesInput[]
+    branchId?: IntNullableWithAggregatesFilter<"Batch"> | number | null
     id?: IntWithAggregatesFilter<"Batch"> | number
     name?: StringWithAggregatesFilter<"Batch"> | string
     facultyId?: IntNullableWithAggregatesFilter<"Batch"> | number | null
@@ -51565,24 +55651,28 @@ export namespace Prisma {
     AND?: LabWhereInput | LabWhereInput[]
     OR?: LabWhereInput[]
     NOT?: LabWhereInput | LabWhereInput[]
+    branchId?: IntNullableFilter<"Lab"> | number | null
     id?: IntFilter<"Lab"> | number
     name?: StringFilter<"Lab"> | string
     location?: StringNullableFilter<"Lab"> | string | null
     totalPCs?: IntFilter<"Lab"> | number
     isActive?: BoolFilter<"Lab"> | boolean
     clientAdminId?: StringFilter<"Lab"> | string
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     financialRecords?: FinancialRecordListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     timeSlots?: LabTimeSlotListRelationFilter
   }
 
   export type LabOrderByWithRelationInput = {
+    branchId?: SortOrderInput | SortOrder
     id?: SortOrder
     name?: SortOrder
     location?: SortOrderInput | SortOrder
     totalPCs?: SortOrder
     isActive?: SortOrder
     clientAdminId?: SortOrder
+    branch?: BranchOrderByWithRelationInput
     financialRecords?: FinancialRecordOrderByRelationAggregateInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
     timeSlots?: LabTimeSlotOrderByRelationAggregateInput
@@ -51593,17 +55683,20 @@ export namespace Prisma {
     AND?: LabWhereInput | LabWhereInput[]
     OR?: LabWhereInput[]
     NOT?: LabWhereInput | LabWhereInput[]
+    branchId?: IntNullableFilter<"Lab"> | number | null
     name?: StringFilter<"Lab"> | string
     location?: StringNullableFilter<"Lab"> | string | null
     totalPCs?: IntFilter<"Lab"> | number
     isActive?: BoolFilter<"Lab"> | boolean
     clientAdminId?: StringFilter<"Lab"> | string
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     financialRecords?: FinancialRecordListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
     timeSlots?: LabTimeSlotListRelationFilter
   }, "id">
 
   export type LabOrderByWithAggregationInput = {
+    branchId?: SortOrderInput | SortOrder
     id?: SortOrder
     name?: SortOrder
     location?: SortOrderInput | SortOrder
@@ -51621,6 +55714,7 @@ export namespace Prisma {
     AND?: LabScalarWhereWithAggregatesInput | LabScalarWhereWithAggregatesInput[]
     OR?: LabScalarWhereWithAggregatesInput[]
     NOT?: LabScalarWhereWithAggregatesInput | LabScalarWhereWithAggregatesInput[]
+    branchId?: IntNullableWithAggregatesFilter<"Lab"> | number | null
     id?: IntWithAggregatesFilter<"Lab"> | number
     name?: StringWithAggregatesFilter<"Lab"> | string
     location?: StringNullableWithAggregatesFilter<"Lab"> | string | null
@@ -52082,7 +56176,6 @@ export namespace Prisma {
 
   export type StudentFeeLogWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    receiptNo?: string
     AND?: StudentFeeLogWhereInput | StudentFeeLogWhereInput[]
     OR?: StudentFeeLogWhereInput[]
     NOT?: StudentFeeLogWhereInput | StudentFeeLogWhereInput[]
@@ -52092,8 +56185,9 @@ export namespace Prisma {
     paymentMode?: EnumPaymentModeFilter<"StudentFeeLog"> | $Enums.PaymentMode
     transactionNo?: StringNullableFilter<"StudentFeeLog"> | string | null
     bankName?: StringNullableFilter<"StudentFeeLog"> | string | null
+    receiptNo?: StringFilter<"StudentFeeLog"> | string
     studentFee?: XOR<StudentFeeScalarRelationFilter, StudentFeeWhereInput>
-  }, "id" | "receiptNo">
+  }, "id">
 
   export type StudentFeeLogOrderByWithAggregationInput = {
     id?: SortOrder
@@ -53086,7 +57180,219 @@ export namespace Prisma {
     labId?: IntNullableWithAggregatesFilter<"FinancialRecord"> | number | null
   }
 
+  export type BranchWhereInput = {
+    AND?: BranchWhereInput | BranchWhereInput[]
+    OR?: BranchWhereInput[]
+    NOT?: BranchWhereInput | BranchWhereInput[]
+    id?: IntFilter<"Branch"> | number
+    name?: StringFilter<"Branch"> | string
+    city?: StringNullableFilter<"Branch"> | string | null
+    address?: StringNullableFilter<"Branch"> | string | null
+    contact?: StringNullableFilter<"Branch"> | string | null
+    isDefault?: BoolFilter<"Branch"> | boolean
+    isActive?: BoolFilter<"Branch"> | boolean
+    createdAt?: DateTimeFilter<"Branch"> | Date | string
+    clientAdminId?: StringFilter<"Branch"> | string
+    labs?: LabListRelationFilter
+    batches?: BatchListRelationFilter
+    students?: StudentListRelationFilter
+    enquiries?: EnquiryListRelationFilter
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+  }
+
+  export type BranchOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    city?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    contact?: SortOrderInput | SortOrder
+    isDefault?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    clientAdminId?: SortOrder
+    labs?: LabOrderByRelationAggregateInput
+    batches?: BatchOrderByRelationAggregateInput
+    students?: StudentOrderByRelationAggregateInput
+    enquiries?: EnquiryOrderByRelationAggregateInput
+    clientAdmin?: ClientAdminOrderByWithRelationInput
+  }
+
+  export type BranchWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: BranchWhereInput | BranchWhereInput[]
+    OR?: BranchWhereInput[]
+    NOT?: BranchWhereInput | BranchWhereInput[]
+    name?: StringFilter<"Branch"> | string
+    city?: StringNullableFilter<"Branch"> | string | null
+    address?: StringNullableFilter<"Branch"> | string | null
+    contact?: StringNullableFilter<"Branch"> | string | null
+    isDefault?: BoolFilter<"Branch"> | boolean
+    isActive?: BoolFilter<"Branch"> | boolean
+    createdAt?: DateTimeFilter<"Branch"> | Date | string
+    clientAdminId?: StringFilter<"Branch"> | string
+    labs?: LabListRelationFilter
+    batches?: BatchListRelationFilter
+    students?: StudentListRelationFilter
+    enquiries?: EnquiryListRelationFilter
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+  }, "id">
+
+  export type BranchOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    city?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    contact?: SortOrderInput | SortOrder
+    isDefault?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    clientAdminId?: SortOrder
+    _count?: BranchCountOrderByAggregateInput
+    _avg?: BranchAvgOrderByAggregateInput
+    _max?: BranchMaxOrderByAggregateInput
+    _min?: BranchMinOrderByAggregateInput
+    _sum?: BranchSumOrderByAggregateInput
+  }
+
+  export type BranchScalarWhereWithAggregatesInput = {
+    AND?: BranchScalarWhereWithAggregatesInput | BranchScalarWhereWithAggregatesInput[]
+    OR?: BranchScalarWhereWithAggregatesInput[]
+    NOT?: BranchScalarWhereWithAggregatesInput | BranchScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Branch"> | number
+    name?: StringWithAggregatesFilter<"Branch"> | string
+    city?: StringNullableWithAggregatesFilter<"Branch"> | string | null
+    address?: StringNullableWithAggregatesFilter<"Branch"> | string | null
+    contact?: StringNullableWithAggregatesFilter<"Branch"> | string | null
+    isDefault?: BoolWithAggregatesFilter<"Branch"> | boolean
+    isActive?: BoolWithAggregatesFilter<"Branch"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Branch"> | Date | string
+    clientAdminId?: StringWithAggregatesFilter<"Branch"> | string
+  }
+
+  export type UserCompanyAccessWhereInput = {
+    AND?: UserCompanyAccessWhereInput | UserCompanyAccessWhereInput[]
+    OR?: UserCompanyAccessWhereInput[]
+    NOT?: UserCompanyAccessWhereInput | UserCompanyAccessWhereInput[]
+    id?: StringFilter<"UserCompanyAccess"> | string
+    roleUserId?: StringFilter<"UserCompanyAccess"> | string
+    clientAdminId?: StringFilter<"UserCompanyAccess"> | string
+    role?: EnumUserRoleFilter<"UserCompanyAccess"> | $Enums.UserRole
+    createdAt?: DateTimeFilter<"UserCompanyAccess"> | Date | string
+    roleUser?: XOR<RoleUserScalarRelationFilter, RoleUserWhereInput>
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+  }
+
+  export type UserCompanyAccessOrderByWithRelationInput = {
+    id?: SortOrder
+    roleUserId?: SortOrder
+    clientAdminId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    roleUser?: RoleUserOrderByWithRelationInput
+    clientAdmin?: ClientAdminOrderByWithRelationInput
+  }
+
+  export type UserCompanyAccessWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    roleUserId_clientAdminId?: UserCompanyAccessRoleUserIdClientAdminIdCompoundUniqueInput
+    AND?: UserCompanyAccessWhereInput | UserCompanyAccessWhereInput[]
+    OR?: UserCompanyAccessWhereInput[]
+    NOT?: UserCompanyAccessWhereInput | UserCompanyAccessWhereInput[]
+    roleUserId?: StringFilter<"UserCompanyAccess"> | string
+    clientAdminId?: StringFilter<"UserCompanyAccess"> | string
+    role?: EnumUserRoleFilter<"UserCompanyAccess"> | $Enums.UserRole
+    createdAt?: DateTimeFilter<"UserCompanyAccess"> | Date | string
+    roleUser?: XOR<RoleUserScalarRelationFilter, RoleUserWhereInput>
+    clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
+  }, "id" | "roleUserId_clientAdminId">
+
+  export type UserCompanyAccessOrderByWithAggregationInput = {
+    id?: SortOrder
+    roleUserId?: SortOrder
+    clientAdminId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    _count?: UserCompanyAccessCountOrderByAggregateInput
+    _max?: UserCompanyAccessMaxOrderByAggregateInput
+    _min?: UserCompanyAccessMinOrderByAggregateInput
+  }
+
+  export type UserCompanyAccessScalarWhereWithAggregatesInput = {
+    AND?: UserCompanyAccessScalarWhereWithAggregatesInput | UserCompanyAccessScalarWhereWithAggregatesInput[]
+    OR?: UserCompanyAccessScalarWhereWithAggregatesInput[]
+    NOT?: UserCompanyAccessScalarWhereWithAggregatesInput | UserCompanyAccessScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserCompanyAccess"> | string
+    roleUserId?: StringWithAggregatesFilter<"UserCompanyAccess"> | string
+    clientAdminId?: StringWithAggregatesFilter<"UserCompanyAccess"> | string
+    role?: EnumUserRoleWithAggregatesFilter<"UserCompanyAccess"> | $Enums.UserRole
+    createdAt?: DateTimeWithAggregatesFilter<"UserCompanyAccess"> | Date | string
+  }
+
+  export type ActiveSessionWhereInput = {
+    AND?: ActiveSessionWhereInput | ActiveSessionWhereInput[]
+    OR?: ActiveSessionWhereInput[]
+    NOT?: ActiveSessionWhereInput | ActiveSessionWhereInput[]
+    id?: StringFilter<"ActiveSession"> | string
+    userType?: StringFilter<"ActiveSession"> | string
+    userId?: StringFilter<"ActiveSession"> | string
+    clientAdminId?: StringFilter<"ActiveSession"> | string
+    deviceInfo?: StringNullableFilter<"ActiveSession"> | string | null
+    createdAt?: DateTimeFilter<"ActiveSession"> | Date | string
+    lastSeenAt?: DateTimeFilter<"ActiveSession"> | Date | string
+  }
+
+  export type ActiveSessionOrderByWithRelationInput = {
+    id?: SortOrder
+    userType?: SortOrder
+    userId?: SortOrder
+    clientAdminId?: SortOrder
+    deviceInfo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    lastSeenAt?: SortOrder
+  }
+
+  export type ActiveSessionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userType_userId?: ActiveSessionUserTypeUserIdCompoundUniqueInput
+    AND?: ActiveSessionWhereInput | ActiveSessionWhereInput[]
+    OR?: ActiveSessionWhereInput[]
+    NOT?: ActiveSessionWhereInput | ActiveSessionWhereInput[]
+    userType?: StringFilter<"ActiveSession"> | string
+    userId?: StringFilter<"ActiveSession"> | string
+    clientAdminId?: StringFilter<"ActiveSession"> | string
+    deviceInfo?: StringNullableFilter<"ActiveSession"> | string | null
+    createdAt?: DateTimeFilter<"ActiveSession"> | Date | string
+    lastSeenAt?: DateTimeFilter<"ActiveSession"> | Date | string
+  }, "id" | "userType_userId">
+
+  export type ActiveSessionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userType?: SortOrder
+    userId?: SortOrder
+    clientAdminId?: SortOrder
+    deviceInfo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    lastSeenAt?: SortOrder
+    _count?: ActiveSessionCountOrderByAggregateInput
+    _max?: ActiveSessionMaxOrderByAggregateInput
+    _min?: ActiveSessionMinOrderByAggregateInput
+  }
+
+  export type ActiveSessionScalarWhereWithAggregatesInput = {
+    AND?: ActiveSessionScalarWhereWithAggregatesInput | ActiveSessionScalarWhereWithAggregatesInput[]
+    OR?: ActiveSessionScalarWhereWithAggregatesInput[]
+    NOT?: ActiveSessionScalarWhereWithAggregatesInput | ActiveSessionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ActiveSession"> | string
+    userType?: StringWithAggregatesFilter<"ActiveSession"> | string
+    userId?: StringWithAggregatesFilter<"ActiveSession"> | string
+    clientAdminId?: StringWithAggregatesFilter<"ActiveSession"> | string
+    deviceInfo?: StringNullableWithAggregatesFilter<"ActiveSession"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ActiveSession"> | Date | string
+    lastSeenAt?: DateTimeWithAggregatesFilter<"ActiveSession"> | Date | string
+  }
+
   export type ClientAdminCreateInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -53108,6 +57414,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -53138,6 +57446,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -53159,6 +57468,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -53189,6 +57500,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -53210,6 +57522,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -53240,6 +57554,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -53261,6 +57576,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -53291,6 +57608,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateManyInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -53315,6 +57633,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateManyMutationInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -53339,6 +57658,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateManyInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -53444,6 +57764,7 @@ export namespace Prisma {
     zipCode: string
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    companyAccess?: UserCompanyAccessCreateNestedManyWithoutRoleUserInput
     clientAdmin: ClientAdminCreateNestedOneWithoutRoleUsersInput
   }
 
@@ -53461,6 +57782,7 @@ export namespace Prisma {
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
     clientAdminId: string
+    companyAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutRoleUserInput
   }
 
   export type RoleUserUpdateInput = {
@@ -53476,6 +57798,7 @@ export namespace Prisma {
     zipCode?: StringFieldUpdateOperationsInput | string
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    companyAccess?: UserCompanyAccessUpdateManyWithoutRoleUserNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutRoleUsersNestedInput
   }
 
@@ -53493,6 +57816,7 @@ export namespace Prisma {
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    companyAccess?: UserCompanyAccessUncheckedUpdateManyWithoutRoleUserNestedInput
   }
 
   export type RoleUserCreateManyInput = {
@@ -53631,6 +57955,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    branch?: BranchCreateNestedOneWithoutEnquiriesInput
     source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
@@ -53640,6 +57965,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedCreateInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -53687,6 +58013,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutEnquiriesNestedInput
     source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
@@ -53696,6 +58023,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -53724,6 +58052,7 @@ export namespace Prisma {
   }
 
   export type EnquiryCreateManyInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -53771,6 +58100,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateManyInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -54236,6 +58566,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -54252,6 +58583,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -54319,6 +58651,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -54335,6 +58668,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -54377,6 +58711,7 @@ export namespace Prisma {
   }
 
   export type StudentCreateManyInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -54435,6 +58770,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateManyInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -54629,6 +58965,7 @@ export namespace Prisma {
 
   export type BatchCreateInput = {
     name: string
+    branch?: BranchCreateNestedOneWithoutBatchesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
@@ -54639,6 +58976,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedCreateInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -54652,6 +58990,7 @@ export namespace Prisma {
 
   export type BatchUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: BranchUpdateOneWithoutBatchesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
@@ -54662,6 +59001,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -54674,6 +59014,7 @@ export namespace Prisma {
   }
 
   export type BatchCreateManyInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -54686,6 +59027,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateManyInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -54880,12 +59222,14 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    branch?: BranchCreateNestedOneWithoutLabsInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutLabInput
     clientAdmin: ClientAdminCreateNestedOneWithoutLabsInput
     timeSlots?: LabTimeSlotCreateNestedManyWithoutLabInput
   }
 
   export type LabUncheckedCreateInput = {
+    branchId?: number | null
     id?: number
     name: string
     location?: string | null
@@ -54901,12 +59245,14 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutLabsNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutLabNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutLabsNestedInput
     timeSlots?: LabTimeSlotUpdateManyWithoutLabNestedInput
   }
 
   export type LabUncheckedUpdateInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54918,6 +59264,7 @@ export namespace Prisma {
   }
 
   export type LabCreateManyInput = {
+    branchId?: number | null
     id?: number
     name: string
     location?: string | null
@@ -54934,6 +59281,7 @@ export namespace Prisma {
   }
 
   export type LabUncheckedUpdateManyInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56291,6 +60639,231 @@ export namespace Prisma {
     labId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type BranchCreateInput = {
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    labs?: LabCreateNestedManyWithoutBranchInput
+    batches?: BatchCreateNestedManyWithoutBranchInput
+    students?: StudentCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryCreateNestedManyWithoutBranchInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutBranchesInput
+  }
+
+  export type BranchUncheckedCreateInput = {
+    id?: number
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    clientAdminId: string
+    labs?: LabUncheckedCreateNestedManyWithoutBranchInput
+    batches?: BatchUncheckedCreateNestedManyWithoutBranchInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    labs?: LabUpdateManyWithoutBranchNestedInput
+    batches?: BatchUpdateManyWithoutBranchNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUpdateManyWithoutBranchNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutBranchesNestedInput
+  }
+
+  export type BranchUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    labs?: LabUncheckedUpdateManyWithoutBranchNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutBranchNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
+  export type BranchCreateManyInput = {
+    id?: number
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    clientAdminId: string
+  }
+
+  export type BranchUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BranchUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserCompanyAccessCreateInput = {
+    id?: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+    roleUser: RoleUserCreateNestedOneWithoutCompanyAccessInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutUserAccessInput
+  }
+
+  export type UserCompanyAccessUncheckedCreateInput = {
+    id?: string
+    roleUserId: string
+    clientAdminId: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+  }
+
+  export type UserCompanyAccessUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    roleUser?: RoleUserUpdateOneRequiredWithoutCompanyAccessNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutUserAccessNestedInput
+  }
+
+  export type UserCompanyAccessUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleUserId?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCompanyAccessCreateManyInput = {
+    id?: string
+    roleUserId: string
+    clientAdminId: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+  }
+
+  export type UserCompanyAccessUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCompanyAccessUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleUserId?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActiveSessionCreateInput = {
+    id?: string
+    userType: string
+    userId: string
+    clientAdminId: string
+    deviceInfo?: string | null
+    createdAt?: Date | string
+    lastSeenAt?: Date | string
+  }
+
+  export type ActiveSessionUncheckedCreateInput = {
+    id?: string
+    userType: string
+    userId: string
+    clientAdminId: string
+    deviceInfo?: string | null
+    createdAt?: Date | string
+    lastSeenAt?: Date | string
+  }
+
+  export type ActiveSessionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userType?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActiveSessionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userType?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActiveSessionCreateManyInput = {
+    id?: string
+    userType: string
+    userId: string
+    clientAdminId: string
+    deviceInfo?: string | null
+    createdAt?: Date | string
+    lastSeenAt?: Date | string
+  }
+
+  export type ActiveSessionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userType?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActiveSessionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userType?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -56348,6 +60921,18 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type UserCompanyAccessListRelationFilter = {
+    every?: UserCompanyAccessWhereInput
+    some?: UserCompanyAccessWhereInput
+    none?: UserCompanyAccessWhereInput
+  }
+
+  export type BranchListRelationFilter = {
+    every?: BranchWhereInput
+    some?: BranchWhereInput
+    none?: BranchWhereInput
   }
 
   export type ActivityLogListRelationFilter = {
@@ -56517,6 +61102,14 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
+  export type UserCompanyAccessOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BranchOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ActivityLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -56626,6 +61219,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCountOrderByAggregateInput = {
+    isMaster?: SortOrder
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
@@ -56650,6 +61244,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminMaxOrderByAggregateInput = {
+    isMaster?: SortOrder
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
@@ -56674,6 +61269,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminMinOrderByAggregateInput = {
+    isMaster?: SortOrder
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
@@ -56695,6 +61291,14 @@ export namespace Prisma {
     role?: SortOrder
     currentSessionToken?: SortOrder
     lastLoginAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -56771,11 +61375,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type ClientAdminScalarRelationFilter = {
     is?: ClientAdminWhereInput
     isNot?: ClientAdminWhereInput
@@ -56814,14 +61413,6 @@ export namespace Prisma {
     isActive?: SortOrder
     clientAdminId?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type RoleUserCountOrderByAggregateInput = {
@@ -56902,17 +61493,6 @@ export namespace Prisma {
     clientAdminId?: SortOrder
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -56924,11 +61504,27 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type EnumLeadStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
+  }
+
+  export type BranchNullableScalarRelationFilter = {
+    is?: BranchWhereInput | null
+    isNot?: BranchWhereInput | null
   }
 
   export type SourceTypeNullableScalarRelationFilter = {
@@ -56956,6 +61552,11 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type EnquiryClientAdminIdSrNoCompoundUniqueInput = {
+    clientAdminId: string
+    srNo: number
+  }
+
   export type EnquiryEmailClientAdminIdCompoundUniqueInput = {
     email: string
     clientAdminId: string
@@ -56967,6 +61568,7 @@ export namespace Prisma {
   }
 
   export type EnquiryCountOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     srNo?: SortOrder
     name?: SortOrder
@@ -56992,6 +61594,7 @@ export namespace Prisma {
   }
 
   export type EnquiryAvgOrderByAggregateInput = {
+    branchId?: SortOrder
     srNo?: SortOrder
     age?: SortOrder
     sourceId?: SortOrder
@@ -56999,6 +61602,7 @@ export namespace Prisma {
   }
 
   export type EnquiryMaxOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     srNo?: SortOrder
     name?: SortOrder
@@ -57024,6 +61628,7 @@ export namespace Prisma {
   }
 
   export type EnquiryMinOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     srNo?: SortOrder
     name?: SortOrder
@@ -57049,26 +61654,11 @@ export namespace Prisma {
   }
 
   export type EnquirySumOrderByAggregateInput = {
+    branchId?: SortOrder
     srNo?: SortOrder
     age?: SortOrder
     sourceId?: SortOrder
     studentId?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -57085,6 +61675,22 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -57370,7 +61976,23 @@ export namespace Prisma {
     numberLength?: SortOrder
   }
 
+  export type StudentClientAdminIdSerialNumberCompoundUniqueInput = {
+    clientAdminId: string
+    serialNumber: number
+  }
+
+  export type StudentClientAdminIdStudentCodeCompoundUniqueInput = {
+    clientAdminId: string
+    studentCode: string
+  }
+
+  export type StudentClientAdminIdAdmissionNumberCompoundUniqueInput = {
+    clientAdminId: string
+    admissionNumber: string
+  }
+
   export type StudentCountOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
@@ -57401,11 +62023,13 @@ export namespace Prisma {
   }
 
   export type StudentAvgOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     serialNumber?: SortOrder
   }
 
   export type StudentMaxOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
@@ -57436,6 +62060,7 @@ export namespace Prisma {
   }
 
   export type StudentMinOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     serialNumber?: SortOrder
     studentCode?: SortOrder
@@ -57466,6 +62091,7 @@ export namespace Prisma {
   }
 
   export type StudentSumOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     serialNumber?: SortOrder
   }
@@ -57614,6 +62240,7 @@ export namespace Prisma {
   }
 
   export type BatchCountOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     name?: SortOrder
     facultyId?: SortOrder
@@ -57622,12 +62249,14 @@ export namespace Prisma {
   }
 
   export type BatchAvgOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     facultyId?: SortOrder
     labTimeSlotId?: SortOrder
   }
 
   export type BatchMaxOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     name?: SortOrder
     facultyId?: SortOrder
@@ -57636,6 +62265,7 @@ export namespace Prisma {
   }
 
   export type BatchMinOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     name?: SortOrder
     facultyId?: SortOrder
@@ -57644,6 +62274,7 @@ export namespace Prisma {
   }
 
   export type BatchSumOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     facultyId?: SortOrder
     labTimeSlotId?: SortOrder
@@ -57757,6 +62388,7 @@ export namespace Prisma {
   }
 
   export type LabCountOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     name?: SortOrder
     location?: SortOrder
@@ -57766,11 +62398,13 @@ export namespace Prisma {
   }
 
   export type LabAvgOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     totalPCs?: SortOrder
   }
 
   export type LabMaxOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     name?: SortOrder
     location?: SortOrder
@@ -57780,6 +62414,7 @@ export namespace Prisma {
   }
 
   export type LabMinOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     name?: SortOrder
     location?: SortOrder
@@ -57789,6 +62424,7 @@ export namespace Prisma {
   }
 
   export type LabSumOrderByAggregateInput = {
+    branchId?: SortOrder
     id?: SortOrder
     totalPCs?: SortOrder
   }
@@ -58869,6 +63505,133 @@ export namespace Prisma {
     _max?: NestedEnumRecordTypeFilter<$PrismaModel>
   }
 
+  export type BranchCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    city?: SortOrder
+    address?: SortOrder
+    contact?: SortOrder
+    isDefault?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type BranchAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type BranchMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    city?: SortOrder
+    address?: SortOrder
+    contact?: SortOrder
+    isDefault?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type BranchMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    city?: SortOrder
+    address?: SortOrder
+    contact?: SortOrder
+    isDefault?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    clientAdminId?: SortOrder
+  }
+
+  export type BranchSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type RoleUserScalarRelationFilter = {
+    is?: RoleUserWhereInput
+    isNot?: RoleUserWhereInput
+  }
+
+  export type UserCompanyAccessRoleUserIdClientAdminIdCompoundUniqueInput = {
+    roleUserId: string
+    clientAdminId: string
+  }
+
+  export type UserCompanyAccessCountOrderByAggregateInput = {
+    id?: SortOrder
+    roleUserId?: SortOrder
+    clientAdminId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserCompanyAccessMaxOrderByAggregateInput = {
+    id?: SortOrder
+    roleUserId?: SortOrder
+    clientAdminId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserCompanyAccessMinOrderByAggregateInput = {
+    id?: SortOrder
+    roleUserId?: SortOrder
+    clientAdminId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ActiveSessionUserTypeUserIdCompoundUniqueInput = {
+    userType: string
+    userId: string
+  }
+
+  export type ActiveSessionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userType?: SortOrder
+    userId?: SortOrder
+    clientAdminId?: SortOrder
+    deviceInfo?: SortOrder
+    createdAt?: SortOrder
+    lastSeenAt?: SortOrder
+  }
+
+  export type ActiveSessionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userType?: SortOrder
+    userId?: SortOrder
+    clientAdminId?: SortOrder
+    deviceInfo?: SortOrder
+    createdAt?: SortOrder
+    lastSeenAt?: SortOrder
+  }
+
+  export type ActiveSessionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userType?: SortOrder
+    userId?: SortOrder
+    clientAdminId?: SortOrder
+    deviceInfo?: SortOrder
+    createdAt?: SortOrder
+    lastSeenAt?: SortOrder
+  }
+
+  export type UserCompanyAccessCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<UserCompanyAccessCreateWithoutClientAdminInput, UserCompanyAccessUncheckedCreateWithoutClientAdminInput> | UserCompanyAccessCreateWithoutClientAdminInput[] | UserCompanyAccessUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: UserCompanyAccessCreateOrConnectWithoutClientAdminInput | UserCompanyAccessCreateOrConnectWithoutClientAdminInput[]
+    createMany?: UserCompanyAccessCreateManyClientAdminInputEnvelope
+    connect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+  }
+
+  export type BranchCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<BranchCreateWithoutClientAdminInput, BranchUncheckedCreateWithoutClientAdminInput> | BranchCreateWithoutClientAdminInput[] | BranchUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: BranchCreateOrConnectWithoutClientAdminInput | BranchCreateOrConnectWithoutClientAdminInput[]
+    createMany?: BranchCreateManyClientAdminInputEnvelope
+    connect?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+  }
+
   export type ActivityLogCreateNestedManyWithoutClientAdminInput = {
     create?: XOR<ActivityLogCreateWithoutClientAdminInput, ActivityLogUncheckedCreateWithoutClientAdminInput> | ActivityLogCreateWithoutClientAdminInput[] | ActivityLogUncheckedCreateWithoutClientAdminInput[]
     connectOrCreate?: ActivityLogCreateOrConnectWithoutClientAdminInput | ActivityLogCreateOrConnectWithoutClientAdminInput[]
@@ -59056,6 +63819,20 @@ export namespace Prisma {
     connectOrCreate?: TestCreateOrConnectWithoutClientAdminInput | TestCreateOrConnectWithoutClientAdminInput[]
     createMany?: TestCreateManyClientAdminInputEnvelope
     connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+  }
+
+  export type UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<UserCompanyAccessCreateWithoutClientAdminInput, UserCompanyAccessUncheckedCreateWithoutClientAdminInput> | UserCompanyAccessCreateWithoutClientAdminInput[] | UserCompanyAccessUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: UserCompanyAccessCreateOrConnectWithoutClientAdminInput | UserCompanyAccessCreateOrConnectWithoutClientAdminInput[]
+    createMany?: UserCompanyAccessCreateManyClientAdminInputEnvelope
+    connect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+  }
+
+  export type BranchUncheckedCreateNestedManyWithoutClientAdminInput = {
+    create?: XOR<BranchCreateWithoutClientAdminInput, BranchUncheckedCreateWithoutClientAdminInput> | BranchCreateWithoutClientAdminInput[] | BranchUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: BranchCreateOrConnectWithoutClientAdminInput | BranchCreateOrConnectWithoutClientAdminInput[]
+    createMany?: BranchCreateManyClientAdminInputEnvelope
+    connect?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
   }
 
   export type ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput = {
@@ -59247,6 +64024,10 @@ export namespace Prisma {
     connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -59265,6 +64046,34 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type UserCompanyAccessUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<UserCompanyAccessCreateWithoutClientAdminInput, UserCompanyAccessUncheckedCreateWithoutClientAdminInput> | UserCompanyAccessCreateWithoutClientAdminInput[] | UserCompanyAccessUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: UserCompanyAccessCreateOrConnectWithoutClientAdminInput | UserCompanyAccessCreateOrConnectWithoutClientAdminInput[]
+    upsert?: UserCompanyAccessUpsertWithWhereUniqueWithoutClientAdminInput | UserCompanyAccessUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: UserCompanyAccessCreateManyClientAdminInputEnvelope
+    set?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    disconnect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    delete?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    connect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    update?: UserCompanyAccessUpdateWithWhereUniqueWithoutClientAdminInput | UserCompanyAccessUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: UserCompanyAccessUpdateManyWithWhereWithoutClientAdminInput | UserCompanyAccessUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: UserCompanyAccessScalarWhereInput | UserCompanyAccessScalarWhereInput[]
+  }
+
+  export type BranchUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<BranchCreateWithoutClientAdminInput, BranchUncheckedCreateWithoutClientAdminInput> | BranchCreateWithoutClientAdminInput[] | BranchUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: BranchCreateOrConnectWithoutClientAdminInput | BranchCreateOrConnectWithoutClientAdminInput[]
+    upsert?: BranchUpsertWithWhereUniqueWithoutClientAdminInput | BranchUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: BranchCreateManyClientAdminInputEnvelope
+    set?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+    disconnect?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+    delete?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+    connect?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+    update?: BranchUpdateWithWhereUniqueWithoutClientAdminInput | BranchUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: BranchUpdateManyWithWhereWithoutClientAdminInput | BranchUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: BranchScalarWhereInput | BranchScalarWhereInput[]
   }
 
   export type ActivityLogUpdateManyWithoutClientAdminNestedInput = {
@@ -59643,6 +64452,34 @@ export namespace Prisma {
     update?: TestUpdateWithWhereUniqueWithoutClientAdminInput | TestUpdateWithWhereUniqueWithoutClientAdminInput[]
     updateMany?: TestUpdateManyWithWhereWithoutClientAdminInput | TestUpdateManyWithWhereWithoutClientAdminInput[]
     deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
+  }
+
+  export type UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<UserCompanyAccessCreateWithoutClientAdminInput, UserCompanyAccessUncheckedCreateWithoutClientAdminInput> | UserCompanyAccessCreateWithoutClientAdminInput[] | UserCompanyAccessUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: UserCompanyAccessCreateOrConnectWithoutClientAdminInput | UserCompanyAccessCreateOrConnectWithoutClientAdminInput[]
+    upsert?: UserCompanyAccessUpsertWithWhereUniqueWithoutClientAdminInput | UserCompanyAccessUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: UserCompanyAccessCreateManyClientAdminInputEnvelope
+    set?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    disconnect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    delete?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    connect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    update?: UserCompanyAccessUpdateWithWhereUniqueWithoutClientAdminInput | UserCompanyAccessUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: UserCompanyAccessUpdateManyWithWhereWithoutClientAdminInput | UserCompanyAccessUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: UserCompanyAccessScalarWhereInput | UserCompanyAccessScalarWhereInput[]
+  }
+
+  export type BranchUncheckedUpdateManyWithoutClientAdminNestedInput = {
+    create?: XOR<BranchCreateWithoutClientAdminInput, BranchUncheckedCreateWithoutClientAdminInput> | BranchCreateWithoutClientAdminInput[] | BranchUncheckedCreateWithoutClientAdminInput[]
+    connectOrCreate?: BranchCreateOrConnectWithoutClientAdminInput | BranchCreateOrConnectWithoutClientAdminInput[]
+    upsert?: BranchUpsertWithWhereUniqueWithoutClientAdminInput | BranchUpsertWithWhereUniqueWithoutClientAdminInput[]
+    createMany?: BranchCreateManyClientAdminInputEnvelope
+    set?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+    disconnect?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+    delete?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+    connect?: BranchWhereUniqueInput | BranchWhereUniqueInput[]
+    update?: BranchUpdateWithWhereUniqueWithoutClientAdminInput | BranchUpdateWithWhereUniqueWithoutClientAdminInput[]
+    updateMany?: BranchUpdateManyWithWhereWithoutClientAdminInput | BranchUpdateManyWithWhereWithoutClientAdminInput[]
+    deleteMany?: BranchScalarWhereInput | BranchScalarWhereInput[]
   }
 
   export type ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput = {
@@ -60029,10 +64866,6 @@ export namespace Prisma {
     connect?: ClientAdminWhereUniqueInput
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type ClientAdminUpdateOneRequiredWithoutFinancialYearsNestedInput = {
     create?: XOR<ClientAdminCreateWithoutFinancialYearsInput, ClientAdminUncheckedCreateWithoutFinancialYearsInput>
     connectOrCreate?: ClientAdminCreateOrConnectWithoutFinancialYearsInput
@@ -60041,10 +64874,38 @@ export namespace Prisma {
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutFinancialYearsInput, ClientAdminUpdateWithoutFinancialYearsInput>, ClientAdminUncheckedUpdateWithoutFinancialYearsInput>
   }
 
+  export type UserCompanyAccessCreateNestedManyWithoutRoleUserInput = {
+    create?: XOR<UserCompanyAccessCreateWithoutRoleUserInput, UserCompanyAccessUncheckedCreateWithoutRoleUserInput> | UserCompanyAccessCreateWithoutRoleUserInput[] | UserCompanyAccessUncheckedCreateWithoutRoleUserInput[]
+    connectOrCreate?: UserCompanyAccessCreateOrConnectWithoutRoleUserInput | UserCompanyAccessCreateOrConnectWithoutRoleUserInput[]
+    createMany?: UserCompanyAccessCreateManyRoleUserInputEnvelope
+    connect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+  }
+
   export type ClientAdminCreateNestedOneWithoutRoleUsersInput = {
     create?: XOR<ClientAdminCreateWithoutRoleUsersInput, ClientAdminUncheckedCreateWithoutRoleUsersInput>
     connectOrCreate?: ClientAdminCreateOrConnectWithoutRoleUsersInput
     connect?: ClientAdminWhereUniqueInput
+  }
+
+  export type UserCompanyAccessUncheckedCreateNestedManyWithoutRoleUserInput = {
+    create?: XOR<UserCompanyAccessCreateWithoutRoleUserInput, UserCompanyAccessUncheckedCreateWithoutRoleUserInput> | UserCompanyAccessCreateWithoutRoleUserInput[] | UserCompanyAccessUncheckedCreateWithoutRoleUserInput[]
+    connectOrCreate?: UserCompanyAccessCreateOrConnectWithoutRoleUserInput | UserCompanyAccessCreateOrConnectWithoutRoleUserInput[]
+    createMany?: UserCompanyAccessCreateManyRoleUserInputEnvelope
+    connect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+  }
+
+  export type UserCompanyAccessUpdateManyWithoutRoleUserNestedInput = {
+    create?: XOR<UserCompanyAccessCreateWithoutRoleUserInput, UserCompanyAccessUncheckedCreateWithoutRoleUserInput> | UserCompanyAccessCreateWithoutRoleUserInput[] | UserCompanyAccessUncheckedCreateWithoutRoleUserInput[]
+    connectOrCreate?: UserCompanyAccessCreateOrConnectWithoutRoleUserInput | UserCompanyAccessCreateOrConnectWithoutRoleUserInput[]
+    upsert?: UserCompanyAccessUpsertWithWhereUniqueWithoutRoleUserInput | UserCompanyAccessUpsertWithWhereUniqueWithoutRoleUserInput[]
+    createMany?: UserCompanyAccessCreateManyRoleUserInputEnvelope
+    set?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    disconnect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    delete?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    connect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    update?: UserCompanyAccessUpdateWithWhereUniqueWithoutRoleUserInput | UserCompanyAccessUpdateWithWhereUniqueWithoutRoleUserInput[]
+    updateMany?: UserCompanyAccessUpdateManyWithWhereWithoutRoleUserInput | UserCompanyAccessUpdateManyWithWhereWithoutRoleUserInput[]
+    deleteMany?: UserCompanyAccessScalarWhereInput | UserCompanyAccessScalarWhereInput[]
   }
 
   export type ClientAdminUpdateOneRequiredWithoutRoleUsersNestedInput = {
@@ -60053,6 +64914,20 @@ export namespace Prisma {
     upsert?: ClientAdminUpsertWithoutRoleUsersInput
     connect?: ClientAdminWhereUniqueInput
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutRoleUsersInput, ClientAdminUpdateWithoutRoleUsersInput>, ClientAdminUncheckedUpdateWithoutRoleUsersInput>
+  }
+
+  export type UserCompanyAccessUncheckedUpdateManyWithoutRoleUserNestedInput = {
+    create?: XOR<UserCompanyAccessCreateWithoutRoleUserInput, UserCompanyAccessUncheckedCreateWithoutRoleUserInput> | UserCompanyAccessCreateWithoutRoleUserInput[] | UserCompanyAccessUncheckedCreateWithoutRoleUserInput[]
+    connectOrCreate?: UserCompanyAccessCreateOrConnectWithoutRoleUserInput | UserCompanyAccessCreateOrConnectWithoutRoleUserInput[]
+    upsert?: UserCompanyAccessUpsertWithWhereUniqueWithoutRoleUserInput | UserCompanyAccessUpsertWithWhereUniqueWithoutRoleUserInput[]
+    createMany?: UserCompanyAccessCreateManyRoleUserInputEnvelope
+    set?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    disconnect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    delete?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    connect?: UserCompanyAccessWhereUniqueInput | UserCompanyAccessWhereUniqueInput[]
+    update?: UserCompanyAccessUpdateWithWhereUniqueWithoutRoleUserInput | UserCompanyAccessUpdateWithWhereUniqueWithoutRoleUserInput[]
+    updateMany?: UserCompanyAccessUpdateManyWithWhereWithoutRoleUserInput | UserCompanyAccessUpdateManyWithWhereWithoutRoleUserInput[]
+    deleteMany?: UserCompanyAccessScalarWhereInput | UserCompanyAccessScalarWhereInput[]
   }
 
   export type ClientAdminCreateNestedOneWithoutActivitiesInput = {
@@ -60067,6 +64942,12 @@ export namespace Prisma {
     upsert?: ClientAdminUpsertWithoutActivitiesInput
     connect?: ClientAdminWhereUniqueInput
     update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutActivitiesInput, ClientAdminUpdateWithoutActivitiesInput>, ClientAdminUncheckedUpdateWithoutActivitiesInput>
+  }
+
+  export type BranchCreateNestedOneWithoutEnquiriesInput = {
+    create?: XOR<BranchCreateWithoutEnquiriesInput, BranchUncheckedCreateWithoutEnquiriesInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutEnquiriesInput
+    connect?: BranchWhereUniqueInput
   }
 
   export type SourceTypeCreateNestedOneWithoutEnquiriesInput = {
@@ -60145,6 +65026,16 @@ export namespace Prisma {
 
   export type EnumLeadStatusFieldUpdateOperationsInput = {
     set?: $Enums.LeadStatus
+  }
+
+  export type BranchUpdateOneWithoutEnquiriesNestedInput = {
+    create?: XOR<BranchCreateWithoutEnquiriesInput, BranchUncheckedCreateWithoutEnquiriesInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutEnquiriesInput
+    upsert?: BranchUpsertWithoutEnquiriesInput
+    disconnect?: BranchWhereInput | boolean
+    delete?: BranchWhereInput | boolean
+    connect?: BranchWhereUniqueInput
+    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutEnquiriesInput, BranchUpdateWithoutEnquiriesInput>, BranchUncheckedUpdateWithoutEnquiriesInput>
   }
 
   export type SourceTypeUpdateOneWithoutEnquiriesNestedInput = {
@@ -60447,6 +65338,12 @@ export namespace Prisma {
     update?: XOR<XOR<StudentFeeUpdateToOneWithWhereWithoutNotificationInput, StudentFeeUpdateWithoutNotificationInput>, StudentFeeUncheckedUpdateWithoutNotificationInput>
   }
 
+  export type BranchCreateNestedOneWithoutStudentsInput = {
+    create?: XOR<BranchCreateWithoutStudentsInput, BranchUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutStudentsInput
+    connect?: BranchWhereUniqueInput
+  }
+
   export type AttendanceRecordCreateNestedManyWithoutStudentInput = {
     create?: XOR<AttendanceRecordCreateWithoutStudentInput, AttendanceRecordUncheckedCreateWithoutStudentInput> | AttendanceRecordCreateWithoutStudentInput[] | AttendanceRecordUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: AttendanceRecordCreateOrConnectWithoutStudentInput | AttendanceRecordCreateOrConnectWithoutStudentInput[]
@@ -60617,6 +65514,16 @@ export namespace Prisma {
     connectOrCreate?: StudentTestCreateOrConnectWithoutStudentInput | StudentTestCreateOrConnectWithoutStudentInput[]
     createMany?: StudentTestCreateManyStudentInputEnvelope
     connect?: StudentTestWhereUniqueInput | StudentTestWhereUniqueInput[]
+  }
+
+  export type BranchUpdateOneWithoutStudentsNestedInput = {
+    create?: XOR<BranchCreateWithoutStudentsInput, BranchUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutStudentsInput
+    upsert?: BranchUpsertWithoutStudentsInput
+    disconnect?: BranchWhereInput | boolean
+    delete?: BranchWhereInput | boolean
+    connect?: BranchWhereUniqueInput
+    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutStudentsInput, BranchUpdateWithoutStudentsInput>, BranchUncheckedUpdateWithoutStudentsInput>
   }
 
   export type AttendanceRecordUpdateManyWithoutStudentNestedInput = {
@@ -61634,6 +66541,12 @@ export namespace Prisma {
     deleteMany?: InstallmentDetailScalarWhereInput | InstallmentDetailScalarWhereInput[]
   }
 
+  export type BranchCreateNestedOneWithoutBatchesInput = {
+    create?: XOR<BranchCreateWithoutBatchesInput, BranchUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutBatchesInput
+    connect?: BranchWhereUniqueInput
+  }
+
   export type ClientAdminCreateNestedOneWithoutBatchesInput = {
     create?: XOR<ClientAdminCreateWithoutBatchesInput, ClientAdminUncheckedCreateWithoutBatchesInput>
     connectOrCreate?: ClientAdminCreateOrConnectWithoutBatchesInput
@@ -61706,6 +66619,16 @@ export namespace Prisma {
     connectOrCreate?: TestCreateOrConnectWithoutBatchInput | TestCreateOrConnectWithoutBatchInput[]
     createMany?: TestCreateManyBatchInputEnvelope
     connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+  }
+
+  export type BranchUpdateOneWithoutBatchesNestedInput = {
+    create?: XOR<BranchCreateWithoutBatchesInput, BranchUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutBatchesInput
+    upsert?: BranchUpsertWithoutBatchesInput
+    disconnect?: BranchWhereInput | boolean
+    delete?: BranchWhereInput | boolean
+    connect?: BranchWhereUniqueInput
+    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutBatchesInput, BranchUpdateWithoutBatchesInput>, BranchUncheckedUpdateWithoutBatchesInput>
   }
 
   export type ClientAdminUpdateOneRequiredWithoutBatchesNestedInput = {
@@ -62056,6 +66979,12 @@ export namespace Prisma {
     deleteMany?: StudentTaskScalarWhereInput | StudentTaskScalarWhereInput[]
   }
 
+  export type BranchCreateNestedOneWithoutLabsInput = {
+    create?: XOR<BranchCreateWithoutLabsInput, BranchUncheckedCreateWithoutLabsInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutLabsInput
+    connect?: BranchWhereUniqueInput
+  }
+
   export type FinancialRecordCreateNestedManyWithoutLabInput = {
     create?: XOR<FinancialRecordCreateWithoutLabInput, FinancialRecordUncheckedCreateWithoutLabInput> | FinancialRecordCreateWithoutLabInput[] | FinancialRecordUncheckedCreateWithoutLabInput[]
     connectOrCreate?: FinancialRecordCreateOrConnectWithoutLabInput | FinancialRecordCreateOrConnectWithoutLabInput[]
@@ -62088,6 +67017,16 @@ export namespace Prisma {
     connectOrCreate?: LabTimeSlotCreateOrConnectWithoutLabInput | LabTimeSlotCreateOrConnectWithoutLabInput[]
     createMany?: LabTimeSlotCreateManyLabInputEnvelope
     connect?: LabTimeSlotWhereUniqueInput | LabTimeSlotWhereUniqueInput[]
+  }
+
+  export type BranchUpdateOneWithoutLabsNestedInput = {
+    create?: XOR<BranchCreateWithoutLabsInput, BranchUncheckedCreateWithoutLabsInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutLabsInput
+    upsert?: BranchUpsertWithoutLabsInput
+    disconnect?: BranchWhereInput | boolean
+    delete?: BranchWhereInput | boolean
+    connect?: BranchWhereUniqueInput
+    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutLabsInput, BranchUpdateWithoutLabsInput>, BranchUncheckedUpdateWithoutLabsInput>
   }
 
   export type FinancialRecordUpdateManyWithoutLabNestedInput = {
@@ -63354,6 +68293,221 @@ export namespace Prisma {
     update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutFinancialRecordsInput, StudentUpdateWithoutFinancialRecordsInput>, StudentUncheckedUpdateWithoutFinancialRecordsInput>
   }
 
+  export type LabCreateNestedManyWithoutBranchInput = {
+    create?: XOR<LabCreateWithoutBranchInput, LabUncheckedCreateWithoutBranchInput> | LabCreateWithoutBranchInput[] | LabUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: LabCreateOrConnectWithoutBranchInput | LabCreateOrConnectWithoutBranchInput[]
+    createMany?: LabCreateManyBranchInputEnvelope
+    connect?: LabWhereUniqueInput | LabWhereUniqueInput[]
+  }
+
+  export type BatchCreateNestedManyWithoutBranchInput = {
+    create?: XOR<BatchCreateWithoutBranchInput, BatchUncheckedCreateWithoutBranchInput> | BatchCreateWithoutBranchInput[] | BatchUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BatchCreateOrConnectWithoutBranchInput | BatchCreateOrConnectWithoutBranchInput[]
+    createMany?: BatchCreateManyBranchInputEnvelope
+    connect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+  }
+
+  export type StudentCreateNestedManyWithoutBranchInput = {
+    create?: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput> | StudentCreateWithoutBranchInput[] | StudentUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutBranchInput | StudentCreateOrConnectWithoutBranchInput[]
+    createMany?: StudentCreateManyBranchInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
+  export type EnquiryCreateNestedManyWithoutBranchInput = {
+    create?: XOR<EnquiryCreateWithoutBranchInput, EnquiryUncheckedCreateWithoutBranchInput> | EnquiryCreateWithoutBranchInput[] | EnquiryUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: EnquiryCreateOrConnectWithoutBranchInput | EnquiryCreateOrConnectWithoutBranchInput[]
+    createMany?: EnquiryCreateManyBranchInputEnvelope
+    connect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+  }
+
+  export type ClientAdminCreateNestedOneWithoutBranchesInput = {
+    create?: XOR<ClientAdminCreateWithoutBranchesInput, ClientAdminUncheckedCreateWithoutBranchesInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutBranchesInput
+    connect?: ClientAdminWhereUniqueInput
+  }
+
+  export type LabUncheckedCreateNestedManyWithoutBranchInput = {
+    create?: XOR<LabCreateWithoutBranchInput, LabUncheckedCreateWithoutBranchInput> | LabCreateWithoutBranchInput[] | LabUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: LabCreateOrConnectWithoutBranchInput | LabCreateOrConnectWithoutBranchInput[]
+    createMany?: LabCreateManyBranchInputEnvelope
+    connect?: LabWhereUniqueInput | LabWhereUniqueInput[]
+  }
+
+  export type BatchUncheckedCreateNestedManyWithoutBranchInput = {
+    create?: XOR<BatchCreateWithoutBranchInput, BatchUncheckedCreateWithoutBranchInput> | BatchCreateWithoutBranchInput[] | BatchUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BatchCreateOrConnectWithoutBranchInput | BatchCreateOrConnectWithoutBranchInput[]
+    createMany?: BatchCreateManyBranchInputEnvelope
+    connect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+  }
+
+  export type StudentUncheckedCreateNestedManyWithoutBranchInput = {
+    create?: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput> | StudentCreateWithoutBranchInput[] | StudentUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutBranchInput | StudentCreateOrConnectWithoutBranchInput[]
+    createMany?: StudentCreateManyBranchInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
+  export type EnquiryUncheckedCreateNestedManyWithoutBranchInput = {
+    create?: XOR<EnquiryCreateWithoutBranchInput, EnquiryUncheckedCreateWithoutBranchInput> | EnquiryCreateWithoutBranchInput[] | EnquiryUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: EnquiryCreateOrConnectWithoutBranchInput | EnquiryCreateOrConnectWithoutBranchInput[]
+    createMany?: EnquiryCreateManyBranchInputEnvelope
+    connect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+  }
+
+  export type LabUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<LabCreateWithoutBranchInput, LabUncheckedCreateWithoutBranchInput> | LabCreateWithoutBranchInput[] | LabUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: LabCreateOrConnectWithoutBranchInput | LabCreateOrConnectWithoutBranchInput[]
+    upsert?: LabUpsertWithWhereUniqueWithoutBranchInput | LabUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: LabCreateManyBranchInputEnvelope
+    set?: LabWhereUniqueInput | LabWhereUniqueInput[]
+    disconnect?: LabWhereUniqueInput | LabWhereUniqueInput[]
+    delete?: LabWhereUniqueInput | LabWhereUniqueInput[]
+    connect?: LabWhereUniqueInput | LabWhereUniqueInput[]
+    update?: LabUpdateWithWhereUniqueWithoutBranchInput | LabUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: LabUpdateManyWithWhereWithoutBranchInput | LabUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: LabScalarWhereInput | LabScalarWhereInput[]
+  }
+
+  export type BatchUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<BatchCreateWithoutBranchInput, BatchUncheckedCreateWithoutBranchInput> | BatchCreateWithoutBranchInput[] | BatchUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BatchCreateOrConnectWithoutBranchInput | BatchCreateOrConnectWithoutBranchInput[]
+    upsert?: BatchUpsertWithWhereUniqueWithoutBranchInput | BatchUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: BatchCreateManyBranchInputEnvelope
+    set?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    disconnect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    delete?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    connect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    update?: BatchUpdateWithWhereUniqueWithoutBranchInput | BatchUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: BatchUpdateManyWithWhereWithoutBranchInput | BatchUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: BatchScalarWhereInput | BatchScalarWhereInput[]
+  }
+
+  export type StudentUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput> | StudentCreateWithoutBranchInput[] | StudentUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutBranchInput | StudentCreateOrConnectWithoutBranchInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutBranchInput | StudentUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: StudentCreateManyBranchInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutBranchInput | StudentUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutBranchInput | StudentUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
+  }
+
+  export type EnquiryUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<EnquiryCreateWithoutBranchInput, EnquiryUncheckedCreateWithoutBranchInput> | EnquiryCreateWithoutBranchInput[] | EnquiryUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: EnquiryCreateOrConnectWithoutBranchInput | EnquiryCreateOrConnectWithoutBranchInput[]
+    upsert?: EnquiryUpsertWithWhereUniqueWithoutBranchInput | EnquiryUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: EnquiryCreateManyBranchInputEnvelope
+    set?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    disconnect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    delete?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    connect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    update?: EnquiryUpdateWithWhereUniqueWithoutBranchInput | EnquiryUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: EnquiryUpdateManyWithWhereWithoutBranchInput | EnquiryUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: EnquiryScalarWhereInput | EnquiryScalarWhereInput[]
+  }
+
+  export type ClientAdminUpdateOneRequiredWithoutBranchesNestedInput = {
+    create?: XOR<ClientAdminCreateWithoutBranchesInput, ClientAdminUncheckedCreateWithoutBranchesInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutBranchesInput
+    upsert?: ClientAdminUpsertWithoutBranchesInput
+    connect?: ClientAdminWhereUniqueInput
+    update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutBranchesInput, ClientAdminUpdateWithoutBranchesInput>, ClientAdminUncheckedUpdateWithoutBranchesInput>
+  }
+
+  export type LabUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<LabCreateWithoutBranchInput, LabUncheckedCreateWithoutBranchInput> | LabCreateWithoutBranchInput[] | LabUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: LabCreateOrConnectWithoutBranchInput | LabCreateOrConnectWithoutBranchInput[]
+    upsert?: LabUpsertWithWhereUniqueWithoutBranchInput | LabUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: LabCreateManyBranchInputEnvelope
+    set?: LabWhereUniqueInput | LabWhereUniqueInput[]
+    disconnect?: LabWhereUniqueInput | LabWhereUniqueInput[]
+    delete?: LabWhereUniqueInput | LabWhereUniqueInput[]
+    connect?: LabWhereUniqueInput | LabWhereUniqueInput[]
+    update?: LabUpdateWithWhereUniqueWithoutBranchInput | LabUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: LabUpdateManyWithWhereWithoutBranchInput | LabUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: LabScalarWhereInput | LabScalarWhereInput[]
+  }
+
+  export type BatchUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<BatchCreateWithoutBranchInput, BatchUncheckedCreateWithoutBranchInput> | BatchCreateWithoutBranchInput[] | BatchUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BatchCreateOrConnectWithoutBranchInput | BatchCreateOrConnectWithoutBranchInput[]
+    upsert?: BatchUpsertWithWhereUniqueWithoutBranchInput | BatchUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: BatchCreateManyBranchInputEnvelope
+    set?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    disconnect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    delete?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    connect?: BatchWhereUniqueInput | BatchWhereUniqueInput[]
+    update?: BatchUpdateWithWhereUniqueWithoutBranchInput | BatchUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: BatchUpdateManyWithWhereWithoutBranchInput | BatchUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: BatchScalarWhereInput | BatchScalarWhereInput[]
+  }
+
+  export type StudentUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput> | StudentCreateWithoutBranchInput[] | StudentUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutBranchInput | StudentCreateOrConnectWithoutBranchInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutBranchInput | StudentUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: StudentCreateManyBranchInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutBranchInput | StudentUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutBranchInput | StudentUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
+  }
+
+  export type EnquiryUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<EnquiryCreateWithoutBranchInput, EnquiryUncheckedCreateWithoutBranchInput> | EnquiryCreateWithoutBranchInput[] | EnquiryUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: EnquiryCreateOrConnectWithoutBranchInput | EnquiryCreateOrConnectWithoutBranchInput[]
+    upsert?: EnquiryUpsertWithWhereUniqueWithoutBranchInput | EnquiryUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: EnquiryCreateManyBranchInputEnvelope
+    set?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    disconnect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    delete?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    connect?: EnquiryWhereUniqueInput | EnquiryWhereUniqueInput[]
+    update?: EnquiryUpdateWithWhereUniqueWithoutBranchInput | EnquiryUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: EnquiryUpdateManyWithWhereWithoutBranchInput | EnquiryUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: EnquiryScalarWhereInput | EnquiryScalarWhereInput[]
+  }
+
+  export type RoleUserCreateNestedOneWithoutCompanyAccessInput = {
+    create?: XOR<RoleUserCreateWithoutCompanyAccessInput, RoleUserUncheckedCreateWithoutCompanyAccessInput>
+    connectOrCreate?: RoleUserCreateOrConnectWithoutCompanyAccessInput
+    connect?: RoleUserWhereUniqueInput
+  }
+
+  export type ClientAdminCreateNestedOneWithoutUserAccessInput = {
+    create?: XOR<ClientAdminCreateWithoutUserAccessInput, ClientAdminUncheckedCreateWithoutUserAccessInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutUserAccessInput
+    connect?: ClientAdminWhereUniqueInput
+  }
+
+  export type RoleUserUpdateOneRequiredWithoutCompanyAccessNestedInput = {
+    create?: XOR<RoleUserCreateWithoutCompanyAccessInput, RoleUserUncheckedCreateWithoutCompanyAccessInput>
+    connectOrCreate?: RoleUserCreateOrConnectWithoutCompanyAccessInput
+    upsert?: RoleUserUpsertWithoutCompanyAccessInput
+    connect?: RoleUserWhereUniqueInput
+    update?: XOR<XOR<RoleUserUpdateToOneWithWhereWithoutCompanyAccessInput, RoleUserUpdateWithoutCompanyAccessInput>, RoleUserUncheckedUpdateWithoutCompanyAccessInput>
+  }
+
+  export type ClientAdminUpdateOneRequiredWithoutUserAccessNestedInput = {
+    create?: XOR<ClientAdminCreateWithoutUserAccessInput, ClientAdminUncheckedCreateWithoutUserAccessInput>
+    connectOrCreate?: ClientAdminCreateOrConnectWithoutUserAccessInput
+    upsert?: ClientAdminUpsertWithoutUserAccessInput
+    connect?: ClientAdminWhereUniqueInput
+    update?: XOR<XOR<ClientAdminUpdateToOneWithWhereWithoutUserAccessInput, ClientAdminUpdateWithoutUserAccessInput>, ClientAdminUncheckedUpdateWithoutUserAccessInput>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -63411,6 +68565,25 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -63426,17 +68599,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -63505,51 +68667,11 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -63577,6 +68699,33 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -63741,6 +68890,69 @@ export namespace Prisma {
     _max?: NestedEnumRecordTypeFilter<$PrismaModel>
   }
 
+  export type UserCompanyAccessCreateWithoutClientAdminInput = {
+    id?: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+    roleUser: RoleUserCreateNestedOneWithoutCompanyAccessInput
+  }
+
+  export type UserCompanyAccessUncheckedCreateWithoutClientAdminInput = {
+    id?: string
+    roleUserId: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+  }
+
+  export type UserCompanyAccessCreateOrConnectWithoutClientAdminInput = {
+    where: UserCompanyAccessWhereUniqueInput
+    create: XOR<UserCompanyAccessCreateWithoutClientAdminInput, UserCompanyAccessUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type UserCompanyAccessCreateManyClientAdminInputEnvelope = {
+    data: UserCompanyAccessCreateManyClientAdminInput | UserCompanyAccessCreateManyClientAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BranchCreateWithoutClientAdminInput = {
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    labs?: LabCreateNestedManyWithoutBranchInput
+    batches?: BatchCreateNestedManyWithoutBranchInput
+    students?: StudentCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchUncheckedCreateWithoutClientAdminInput = {
+    id?: number
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    labs?: LabUncheckedCreateNestedManyWithoutBranchInput
+    batches?: BatchUncheckedCreateNestedManyWithoutBranchInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchCreateOrConnectWithoutClientAdminInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutClientAdminInput, BranchUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type BranchCreateManyClientAdminInputEnvelope = {
+    data: BranchCreateManyClientAdminInput | BranchCreateManyClientAdminInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ActivityLogCreateWithoutClientAdminInput = {
     id?: string
     entity: string
@@ -63800,6 +69012,7 @@ export namespace Prisma {
 
   export type BatchCreateWithoutClientAdminInput = {
     name: string
+    branch?: BranchCreateNestedOneWithoutBatchesInput
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
     batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
@@ -63809,6 +69022,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedCreateWithoutClientAdminInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -63979,6 +69193,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    branch?: BranchCreateNestedOneWithoutEnquiriesInput
     source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
@@ -63987,6 +69202,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedCreateWithoutClientAdminInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -64193,11 +69409,13 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    branch?: BranchCreateNestedOneWithoutLabsInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutLabInput
     timeSlots?: LabTimeSlotCreateNestedManyWithoutLabInput
   }
 
   export type LabUncheckedCreateWithoutClientAdminInput = {
+    branchId?: number | null
     id?: number
     name: string
     location?: string | null
@@ -64316,6 +69534,7 @@ export namespace Prisma {
     zipCode: string
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    companyAccess?: UserCompanyAccessCreateNestedManyWithoutRoleUserInput
   }
 
   export type RoleUserUncheckedCreateWithoutClientAdminInput = {
@@ -64331,6 +69550,7 @@ export namespace Prisma {
     zipCode: string
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    companyAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutRoleUserInput
   }
 
   export type RoleUserCreateOrConnectWithoutClientAdminInput = {
@@ -64423,6 +69643,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -64438,6 +69659,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutClientAdminInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -64710,6 +69932,64 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserCompanyAccessUpsertWithWhereUniqueWithoutClientAdminInput = {
+    where: UserCompanyAccessWhereUniqueInput
+    update: XOR<UserCompanyAccessUpdateWithoutClientAdminInput, UserCompanyAccessUncheckedUpdateWithoutClientAdminInput>
+    create: XOR<UserCompanyAccessCreateWithoutClientAdminInput, UserCompanyAccessUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type UserCompanyAccessUpdateWithWhereUniqueWithoutClientAdminInput = {
+    where: UserCompanyAccessWhereUniqueInput
+    data: XOR<UserCompanyAccessUpdateWithoutClientAdminInput, UserCompanyAccessUncheckedUpdateWithoutClientAdminInput>
+  }
+
+  export type UserCompanyAccessUpdateManyWithWhereWithoutClientAdminInput = {
+    where: UserCompanyAccessScalarWhereInput
+    data: XOR<UserCompanyAccessUpdateManyMutationInput, UserCompanyAccessUncheckedUpdateManyWithoutClientAdminInput>
+  }
+
+  export type UserCompanyAccessScalarWhereInput = {
+    AND?: UserCompanyAccessScalarWhereInput | UserCompanyAccessScalarWhereInput[]
+    OR?: UserCompanyAccessScalarWhereInput[]
+    NOT?: UserCompanyAccessScalarWhereInput | UserCompanyAccessScalarWhereInput[]
+    id?: StringFilter<"UserCompanyAccess"> | string
+    roleUserId?: StringFilter<"UserCompanyAccess"> | string
+    clientAdminId?: StringFilter<"UserCompanyAccess"> | string
+    role?: EnumUserRoleFilter<"UserCompanyAccess"> | $Enums.UserRole
+    createdAt?: DateTimeFilter<"UserCompanyAccess"> | Date | string
+  }
+
+  export type BranchUpsertWithWhereUniqueWithoutClientAdminInput = {
+    where: BranchWhereUniqueInput
+    update: XOR<BranchUpdateWithoutClientAdminInput, BranchUncheckedUpdateWithoutClientAdminInput>
+    create: XOR<BranchCreateWithoutClientAdminInput, BranchUncheckedCreateWithoutClientAdminInput>
+  }
+
+  export type BranchUpdateWithWhereUniqueWithoutClientAdminInput = {
+    where: BranchWhereUniqueInput
+    data: XOR<BranchUpdateWithoutClientAdminInput, BranchUncheckedUpdateWithoutClientAdminInput>
+  }
+
+  export type BranchUpdateManyWithWhereWithoutClientAdminInput = {
+    where: BranchScalarWhereInput
+    data: XOR<BranchUpdateManyMutationInput, BranchUncheckedUpdateManyWithoutClientAdminInput>
+  }
+
+  export type BranchScalarWhereInput = {
+    AND?: BranchScalarWhereInput | BranchScalarWhereInput[]
+    OR?: BranchScalarWhereInput[]
+    NOT?: BranchScalarWhereInput | BranchScalarWhereInput[]
+    id?: IntFilter<"Branch"> | number
+    name?: StringFilter<"Branch"> | string
+    city?: StringNullableFilter<"Branch"> | string | null
+    address?: StringNullableFilter<"Branch"> | string | null
+    contact?: StringNullableFilter<"Branch"> | string | null
+    isDefault?: BoolFilter<"Branch"> | boolean
+    isActive?: BoolFilter<"Branch"> | boolean
+    createdAt?: DateTimeFilter<"Branch"> | Date | string
+    clientAdminId?: StringFilter<"Branch"> | string
+  }
+
   export type ActivityLogUpsertWithWhereUniqueWithoutClientAdminInput = {
     where: ActivityLogWhereUniqueInput
     update: XOR<ActivityLogUpdateWithoutClientAdminInput, ActivityLogUncheckedUpdateWithoutClientAdminInput>
@@ -64789,6 +70069,7 @@ export namespace Prisma {
     AND?: BatchScalarWhereInput | BatchScalarWhereInput[]
     OR?: BatchScalarWhereInput[]
     NOT?: BatchScalarWhereInput | BatchScalarWhereInput[]
+    branchId?: IntNullableFilter<"Batch"> | number | null
     id?: IntFilter<"Batch"> | number
     name?: StringFilter<"Batch"> | string
     facultyId?: IntNullableFilter<"Batch"> | number | null
@@ -64928,6 +70209,7 @@ export namespace Prisma {
     AND?: EnquiryScalarWhereInput | EnquiryScalarWhereInput[]
     OR?: EnquiryScalarWhereInput[]
     NOT?: EnquiryScalarWhereInput | EnquiryScalarWhereInput[]
+    branchId?: IntNullableFilter<"Enquiry"> | number | null
     id?: StringFilter<"Enquiry"> | string
     srNo?: IntFilter<"Enquiry"> | number
     name?: StringFilter<"Enquiry"> | string
@@ -65127,6 +70409,7 @@ export namespace Prisma {
     AND?: LabScalarWhereInput | LabScalarWhereInput[]
     OR?: LabScalarWhereInput[]
     NOT?: LabScalarWhereInput | LabScalarWhereInput[]
+    branchId?: IntNullableFilter<"Lab"> | number | null
     id?: IntFilter<"Lab"> | number
     name?: StringFilter<"Lab"> | string
     location?: StringNullableFilter<"Lab"> | string | null
@@ -65334,6 +70617,7 @@ export namespace Prisma {
     AND?: StudentScalarWhereInput | StudentScalarWhereInput[]
     OR?: StudentScalarWhereInput[]
     NOT?: StudentScalarWhereInput | StudentScalarWhereInput[]
+    branchId?: IntNullableFilter<"Student"> | number | null
     id?: IntFilter<"Student"> | number
     serialNumber?: IntFilter<"Student"> | number
     studentCode?: StringFilter<"Student"> | string
@@ -65562,6 +70846,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutFinancialYearsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -65583,6 +70868,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -65612,6 +70899,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutFinancialYearsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -65633,6 +70921,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -65678,6 +70968,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutFinancialYearsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -65699,6 +70990,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -65728,6 +71021,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutFinancialYearsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -65749,6 +71043,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -65777,7 +71073,32 @@ export namespace Prisma {
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
+  export type UserCompanyAccessCreateWithoutRoleUserInput = {
+    id?: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+    clientAdmin: ClientAdminCreateNestedOneWithoutUserAccessInput
+  }
+
+  export type UserCompanyAccessUncheckedCreateWithoutRoleUserInput = {
+    id?: string
+    clientAdminId: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+  }
+
+  export type UserCompanyAccessCreateOrConnectWithoutRoleUserInput = {
+    where: UserCompanyAccessWhereUniqueInput
+    create: XOR<UserCompanyAccessCreateWithoutRoleUserInput, UserCompanyAccessUncheckedCreateWithoutRoleUserInput>
+  }
+
+  export type UserCompanyAccessCreateManyRoleUserInputEnvelope = {
+    data: UserCompanyAccessCreateManyRoleUserInput | UserCompanyAccessCreateManyRoleUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ClientAdminCreateWithoutRoleUsersInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -65799,6 +71120,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -65828,6 +71151,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutRoleUsersInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -65849,6 +71173,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -65882,6 +71208,22 @@ export namespace Prisma {
     create: XOR<ClientAdminCreateWithoutRoleUsersInput, ClientAdminUncheckedCreateWithoutRoleUsersInput>
   }
 
+  export type UserCompanyAccessUpsertWithWhereUniqueWithoutRoleUserInput = {
+    where: UserCompanyAccessWhereUniqueInput
+    update: XOR<UserCompanyAccessUpdateWithoutRoleUserInput, UserCompanyAccessUncheckedUpdateWithoutRoleUserInput>
+    create: XOR<UserCompanyAccessCreateWithoutRoleUserInput, UserCompanyAccessUncheckedCreateWithoutRoleUserInput>
+  }
+
+  export type UserCompanyAccessUpdateWithWhereUniqueWithoutRoleUserInput = {
+    where: UserCompanyAccessWhereUniqueInput
+    data: XOR<UserCompanyAccessUpdateWithoutRoleUserInput, UserCompanyAccessUncheckedUpdateWithoutRoleUserInput>
+  }
+
+  export type UserCompanyAccessUpdateManyWithWhereWithoutRoleUserInput = {
+    where: UserCompanyAccessScalarWhereInput
+    data: XOR<UserCompanyAccessUpdateManyMutationInput, UserCompanyAccessUncheckedUpdateManyWithoutRoleUserInput>
+  }
+
   export type ClientAdminUpsertWithoutRoleUsersInput = {
     update: XOR<ClientAdminUpdateWithoutRoleUsersInput, ClientAdminUncheckedUpdateWithoutRoleUsersInput>
     create: XOR<ClientAdminCreateWithoutRoleUsersInput, ClientAdminUncheckedCreateWithoutRoleUsersInput>
@@ -65894,6 +71236,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutRoleUsersInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -65915,6 +71258,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -65944,6 +71289,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutRoleUsersInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -65965,6 +71311,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -65994,6 +71342,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutActivitiesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -66015,6 +71364,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
@@ -66044,6 +71395,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutActivitiesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -66065,6 +71417,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
@@ -66110,6 +71464,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutActivitiesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -66131,6 +71486,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
@@ -66160,6 +71517,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutActivitiesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -66181,6 +71539,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -66209,6 +71569,40 @@ export namespace Prisma {
     tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
   }
 
+  export type BranchCreateWithoutEnquiriesInput = {
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    labs?: LabCreateNestedManyWithoutBranchInput
+    batches?: BatchCreateNestedManyWithoutBranchInput
+    students?: StudentCreateNestedManyWithoutBranchInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutBranchesInput
+  }
+
+  export type BranchUncheckedCreateWithoutEnquiriesInput = {
+    id?: number
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    clientAdminId: string
+    labs?: LabUncheckedCreateNestedManyWithoutBranchInput
+    batches?: BatchUncheckedCreateNestedManyWithoutBranchInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchCreateOrConnectWithoutEnquiriesInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutEnquiriesInput, BranchUncheckedCreateWithoutEnquiriesInput>
+  }
+
   export type SourceTypeCreateWithoutEnquiriesInput = {
     name: string
     slug: string
@@ -66228,6 +71622,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutEnquiriesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -66249,6 +71644,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -66278,6 +71675,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutEnquiriesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -66299,6 +71697,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -66358,6 +71758,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -66373,6 +71774,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutEnquiryInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -66496,6 +71898,46 @@ export namespace Prisma {
     create: XOR<NotificationCreateWithoutEnquiryInput, NotificationUncheckedCreateWithoutEnquiryInput>
   }
 
+  export type BranchUpsertWithoutEnquiriesInput = {
+    update: XOR<BranchUpdateWithoutEnquiriesInput, BranchUncheckedUpdateWithoutEnquiriesInput>
+    create: XOR<BranchCreateWithoutEnquiriesInput, BranchUncheckedCreateWithoutEnquiriesInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutEnquiriesInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutEnquiriesInput, BranchUncheckedUpdateWithoutEnquiriesInput>
+  }
+
+  export type BranchUpdateWithoutEnquiriesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    labs?: LabUpdateManyWithoutBranchNestedInput
+    batches?: BatchUpdateManyWithoutBranchNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutBranchesNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutEnquiriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    labs?: LabUncheckedUpdateManyWithoutBranchNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutBranchNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
   export type SourceTypeUpsertWithoutEnquiriesInput = {
     update: XOR<SourceTypeUpdateWithoutEnquiriesInput, SourceTypeUncheckedUpdateWithoutEnquiriesInput>
     create: XOR<SourceTypeCreateWithoutEnquiriesInput, SourceTypeUncheckedCreateWithoutEnquiriesInput>
@@ -66532,6 +71974,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutEnquiriesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -66553,6 +71996,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -66582,6 +72027,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutEnquiriesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -66603,6 +72049,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -66668,6 +72116,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -66683,6 +72132,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutEnquiryInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -66820,6 +72270,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    branch?: BranchCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
@@ -66828,6 +72279,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedCreateWithoutSourceInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -66881,6 +72333,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutEnquiryCourseInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -66902,6 +72355,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -66931,6 +72386,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutEnquiryCourseInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -66952,6 +72408,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -67051,6 +72509,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    branch?: BranchCreateNestedOneWithoutEnquiriesInput
     source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
@@ -67059,6 +72518,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedCreateWithoutEnquiryCourseInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -67102,6 +72562,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutEnquiryCourseInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -67123,6 +72584,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -67152,6 +72615,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutEnquiryCourseInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -67173,6 +72637,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -67284,6 +72750,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutEnquiriesNestedInput
     source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
@@ -67292,6 +72759,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateWithoutEnquiryCourseInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -67338,6 +72806,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    branch?: BranchCreateNestedOneWithoutEnquiriesInput
     source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
@@ -67346,6 +72815,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedCreateWithoutFollowUpsInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -67433,6 +72903,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutEnquiriesNestedInput
     source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
@@ -67441,6 +72912,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateWithoutFollowUpsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -67499,6 +72971,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutNotificationsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -67520,6 +72993,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -67549,6 +73024,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutNotificationsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -67570,6 +73046,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -67623,6 +73101,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    branch?: BranchCreateNestedOneWithoutEnquiriesInput
     source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     student?: StudentCreateNestedOneWithoutEnquiryInput
@@ -67631,6 +73110,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedCreateWithoutNotificationInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -67745,6 +73225,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutNotificationsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -67766,6 +73247,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -67795,6 +73278,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutNotificationsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -67816,6 +73300,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -67875,6 +73361,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutEnquiriesNestedInput
     source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
@@ -67883,6 +73370,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateWithoutNotificationInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -67992,6 +73480,40 @@ export namespace Prisma {
     feeLogs?: StudentFeeLogUncheckedUpdateManyWithoutStudentFeeNestedInput
   }
 
+  export type BranchCreateWithoutStudentsInput = {
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    labs?: LabCreateNestedManyWithoutBranchInput
+    batches?: BatchCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryCreateNestedManyWithoutBranchInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutBranchesInput
+  }
+
+  export type BranchUncheckedCreateWithoutStudentsInput = {
+    id?: number
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    clientAdminId: string
+    labs?: LabUncheckedCreateNestedManyWithoutBranchInput
+    batches?: BatchUncheckedCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchCreateOrConnectWithoutStudentsInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutStudentsInput, BranchUncheckedCreateWithoutStudentsInput>
+  }
+
   export type AttendanceRecordCreateWithoutStudentInput = {
     date: Date | string
     present: boolean
@@ -68095,6 +73617,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isConverted?: boolean
+    branch?: BranchCreateNestedOneWithoutEnquiriesInput
     source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
     enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
@@ -68103,6 +73626,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedCreateWithoutStudentInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -68254,6 +73778,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutStudentsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -68275,6 +73800,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -68304,6 +73831,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -68325,6 +73853,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -68520,6 +74050,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BranchUpsertWithoutStudentsInput = {
+    update: XOR<BranchUpdateWithoutStudentsInput, BranchUncheckedUpdateWithoutStudentsInput>
+    create: XOR<BranchCreateWithoutStudentsInput, BranchUncheckedCreateWithoutStudentsInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutStudentsInput, BranchUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type BranchUpdateWithoutStudentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    labs?: LabUpdateManyWithoutBranchNestedInput
+    batches?: BatchUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUpdateManyWithoutBranchNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutBranchesNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    labs?: LabUncheckedUpdateManyWithoutBranchNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
   export type AttendanceRecordUpsertWithWhereUniqueWithoutStudentInput = {
     where: AttendanceRecordWhereUniqueInput
     update: XOR<AttendanceRecordUpdateWithoutStudentInput, AttendanceRecordUncheckedUpdateWithoutStudentInput>
@@ -68599,6 +74169,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutEnquiriesNestedInput
     source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
@@ -68607,6 +74178,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateWithoutStudentInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -68709,6 +74281,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutStudentsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -68730,6 +74303,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -68759,6 +74334,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -68780,6 +74356,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -68950,6 +74528,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutCoursesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -68971,6 +74550,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -69000,6 +74581,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutCoursesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -69021,6 +74603,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -69481,6 +75065,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutCoursesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -69502,6 +75087,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -69531,6 +75118,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutCoursesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -69552,6 +75140,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -69767,6 +75357,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutCourseFeeStructuresInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -69788,6 +75379,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -69817,6 +75410,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutCourseFeeStructuresInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -69838,6 +75432,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -69952,6 +75548,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutCourseFeeStructuresInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -69973,6 +75570,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -70002,6 +75601,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutCourseFeeStructuresInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -70023,6 +75623,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -70129,7 +75731,42 @@ export namespace Prisma {
     amount?: FloatFilter<"InstallmentDetail"> | number
   }
 
+  export type BranchCreateWithoutBatchesInput = {
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    labs?: LabCreateNestedManyWithoutBranchInput
+    students?: StudentCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryCreateNestedManyWithoutBranchInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutBranchesInput
+  }
+
+  export type BranchUncheckedCreateWithoutBatchesInput = {
+    id?: number
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    clientAdminId: string
+    labs?: LabUncheckedCreateNestedManyWithoutBranchInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchCreateOrConnectWithoutBatchesInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutBatchesInput, BranchUncheckedCreateWithoutBatchesInput>
+  }
+
   export type ClientAdminCreateWithoutBatchesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -70151,6 +75788,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
@@ -70180,6 +75819,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutBatchesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -70201,6 +75841,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
@@ -70424,6 +76066,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BranchUpsertWithoutBatchesInput = {
+    update: XOR<BranchUpdateWithoutBatchesInput, BranchUncheckedUpdateWithoutBatchesInput>
+    create: XOR<BranchCreateWithoutBatchesInput, BranchUncheckedCreateWithoutBatchesInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutBatchesInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutBatchesInput, BranchUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type BranchUpdateWithoutBatchesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    labs?: LabUpdateManyWithoutBranchNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUpdateManyWithoutBranchNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutBranchesNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutBatchesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    labs?: LabUncheckedUpdateManyWithoutBranchNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
   export type ClientAdminUpsertWithoutBatchesInput = {
     update: XOR<ClientAdminUpdateWithoutBatchesInput, ClientAdminUncheckedUpdateWithoutBatchesInput>
     create: XOR<ClientAdminCreateWithoutBatchesInput, ClientAdminUncheckedCreateWithoutBatchesInput>
@@ -70436,6 +76118,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutBatchesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -70457,6 +76140,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
@@ -70486,6 +76171,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutBatchesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -70507,6 +76193,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -70685,6 +76373,7 @@ export namespace Prisma {
 
   export type BatchCreateWithoutBatchCoursesInput = {
     name: string
+    branch?: BranchCreateNestedOneWithoutBatchesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
@@ -70694,6 +76383,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedCreateWithoutBatchCoursesInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -70768,6 +76458,7 @@ export namespace Prisma {
 
   export type BatchUpdateWithoutBatchCoursesInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: BranchUpdateOneWithoutBatchesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
@@ -70777,6 +76468,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateWithoutBatchCoursesInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -70870,6 +76562,7 @@ export namespace Prisma {
 
   export type BatchCreateWithoutFacultyInput = {
     name: string
+    branch?: BranchCreateNestedOneWithoutBatchesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
     batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
@@ -70879,6 +76572,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedCreateWithoutFacultyInput = {
+    branchId?: number | null
     id?: number
     name: string
     labTimeSlotId: number
@@ -70900,6 +76594,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutFacultiesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -70921,6 +76616,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -70950,6 +76647,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutFacultiesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -70971,6 +76669,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -71121,6 +76821,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutFacultiesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -71142,6 +76843,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -71171,6 +76874,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutFacultiesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -71192,6 +76896,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -71252,6 +76958,40 @@ export namespace Prisma {
     data: XOR<StudentTaskUpdateManyMutationInput, StudentTaskUncheckedUpdateManyWithoutFacultyInput>
   }
 
+  export type BranchCreateWithoutLabsInput = {
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    batches?: BatchCreateNestedManyWithoutBranchInput
+    students?: StudentCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryCreateNestedManyWithoutBranchInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutBranchesInput
+  }
+
+  export type BranchUncheckedCreateWithoutLabsInput = {
+    id?: number
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    clientAdminId: string
+    batches?: BatchUncheckedCreateNestedManyWithoutBranchInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchCreateOrConnectWithoutLabsInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutLabsInput, BranchUncheckedCreateWithoutLabsInput>
+  }
+
   export type FinancialRecordCreateWithoutLabInput = {
     id?: string
     recordType: $Enums.RecordType
@@ -71289,6 +77029,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutLabsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -71310,6 +77051,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -71339,6 +77082,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutLabsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -71360,6 +77104,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -71424,6 +77170,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BranchUpsertWithoutLabsInput = {
+    update: XOR<BranchUpdateWithoutLabsInput, BranchUncheckedUpdateWithoutLabsInput>
+    create: XOR<BranchCreateWithoutLabsInput, BranchUncheckedCreateWithoutLabsInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutLabsInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutLabsInput, BranchUncheckedUpdateWithoutLabsInput>
+  }
+
+  export type BranchUpdateWithoutLabsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batches?: BatchUpdateManyWithoutBranchNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUpdateManyWithoutBranchNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutBranchesNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutLabsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    batches?: BatchUncheckedUpdateManyWithoutBranchNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
   export type FinancialRecordUpsertWithWhereUniqueWithoutLabInput = {
     where: FinancialRecordWhereUniqueInput
     update: XOR<FinancialRecordUpdateWithoutLabInput, FinancialRecordUncheckedUpdateWithoutLabInput>
@@ -71452,6 +77238,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutLabsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -71473,6 +77260,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -71502,6 +77291,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -71523,6 +77313,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -71569,6 +77361,7 @@ export namespace Prisma {
 
   export type BatchCreateWithoutLabTimeSlotInput = {
     name: string
+    branch?: BranchCreateNestedOneWithoutBatchesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
@@ -71578,6 +77371,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedCreateWithoutLabTimeSlotInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -71624,6 +77418,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutLabTimeSlotsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -71645,6 +77440,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -71674,6 +77471,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutLabTimeSlotsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -71695,6 +77493,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -71733,11 +77533,13 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    branch?: BranchCreateNestedOneWithoutLabsInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutLabInput
     clientAdmin: ClientAdminCreateNestedOneWithoutLabsInput
   }
 
   export type LabUncheckedCreateWithoutTimeSlotsInput = {
+    branchId?: number | null
     id?: number
     name: string
     location?: string | null
@@ -71796,6 +77598,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutLabTimeSlotsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -71817,6 +77620,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -71846,6 +77651,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabTimeSlotsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -71867,6 +77673,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -71911,11 +77719,13 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutLabsNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutLabNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutLabsNestedInput
   }
 
   export type LabUncheckedUpdateWithoutTimeSlotsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72017,6 +77827,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutLabAllocationsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -72038,6 +77849,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -72067,6 +77880,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutLabAllocationsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -72088,6 +77902,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -72173,6 +77989,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -72188,6 +78005,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutLabAllocationsInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -72245,6 +78063,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutLabAllocationsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -72266,6 +78085,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -72295,6 +78116,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutLabAllocationsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -72316,6 +78138,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -72413,6 +78237,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -72428,6 +78253,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutLabAllocationsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -72519,6 +78345,7 @@ export namespace Prisma {
 
   export type BatchCreateWithoutStudentCoursesInput = {
     name: string
+    branch?: BranchCreateNestedOneWithoutBatchesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
@@ -72528,6 +78355,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedCreateWithoutStudentCoursesInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -72544,6 +78372,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutStudentCoursesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -72565,6 +78394,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -72594,6 +78425,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentCoursesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -72615,6 +78447,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -72720,6 +78554,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -72735,6 +78570,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutStudentCoursesInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -72837,6 +78673,7 @@ export namespace Prisma {
 
   export type BatchUpdateWithoutStudentCoursesInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: BranchUpdateOneWithoutBatchesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
@@ -72846,6 +78683,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateWithoutStudentCoursesInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -72868,6 +78706,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutStudentCoursesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -72889,6 +78728,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -72918,6 +78759,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentCoursesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -72939,6 +78781,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -73056,6 +78900,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -73071,6 +78916,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutStudentCoursesInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -73112,6 +78958,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutFeeStructuresInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -73133,6 +78980,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -73162,6 +79011,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutFeeStructuresInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -73183,6 +79033,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -73306,6 +79158,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -73321,6 +79174,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutFeeStructuresInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -73378,6 +79232,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutFeeStructuresInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -73399,6 +79254,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -73428,6 +79285,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutFeeStructuresInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -73449,6 +79307,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -73590,6 +79450,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -73605,6 +79466,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutFeeStructuresInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -73765,6 +79627,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutStudentFeesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -73786,6 +79649,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -73815,6 +79680,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentFeesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -73836,6 +79702,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -73941,6 +79809,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -73956,6 +79825,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutFeeRecordsInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -74073,6 +79943,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutStudentFeesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -74094,6 +79965,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -74123,6 +79996,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentFeesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -74144,6 +80018,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -74261,6 +80137,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -74276,6 +80153,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutFeeRecordsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -74376,6 +80254,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutStationeryItemsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -74397,6 +80276,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -74426,6 +80307,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutStationeryItemsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -74447,6 +80329,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -74508,6 +80392,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutStationeryItemsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -74529,6 +80414,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -74558,6 +80445,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutStationeryItemsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -74579,6 +80467,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -74608,6 +80498,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutStationeryIssuesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -74629,6 +80520,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -74658,6 +80551,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutStationeryIssuesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -74679,6 +80573,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -74804,6 +80700,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -74819,6 +80716,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutStationeryInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -74876,6 +80774,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutStationeryIssuesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -74897,6 +80796,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -74926,6 +80827,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutStationeryIssuesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -74947,6 +80849,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -75090,6 +80994,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -75105,6 +81010,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutStationeryInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -75146,6 +81052,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutAttendanceRecordsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -75167,6 +81074,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateCreateNestedManyWithoutClientAdminInput
@@ -75196,6 +81105,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutAttendanceRecordsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -75217,6 +81127,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
@@ -75368,6 +81280,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
@@ -75383,6 +81296,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutAttendanceInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -75440,6 +81354,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutAttendanceRecordsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -75461,6 +81376,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
@@ -75490,6 +81407,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutAttendanceRecordsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -75511,6 +81429,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -75680,6 +81600,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
@@ -75695,6 +81616,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutAttendanceInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -75774,6 +81696,7 @@ export namespace Prisma {
 
   export type BatchCreateWithoutTasksInput = {
     name: string
+    branch?: BranchCreateNestedOneWithoutBatchesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
@@ -75783,6 +81706,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedCreateWithoutTasksInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -75799,6 +81723,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutTasksInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -75820,6 +81745,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -75849,6 +81776,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutTasksInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -75870,6 +81798,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -75978,6 +81908,7 @@ export namespace Prisma {
 
   export type BatchUpdateWithoutTasksInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: BranchUpdateOneWithoutBatchesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
@@ -75987,6 +81918,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateWithoutTasksInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -76009,6 +81941,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutTasksInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -76030,6 +81963,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -76059,6 +81994,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutTasksInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -76080,6 +82016,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -76161,6 +82099,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutStudentTasksInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -76182,6 +82121,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -76211,6 +82152,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentTasksInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -76232,6 +82174,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -76383,6 +82327,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -76398,6 +82343,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutTasksInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -76477,6 +82423,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutStudentTasksInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -76498,6 +82445,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -76527,6 +82476,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentTasksInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -76548,6 +82498,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -76717,6 +82669,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -76732,6 +82685,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutTasksInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -76841,6 +82795,7 @@ export namespace Prisma {
 
   export type BatchCreateWithoutTestsInput = {
     name: string
+    branch?: BranchCreateNestedOneWithoutBatchesInput
     clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
     faculty?: FacultyCreateNestedOneWithoutBatchesInput
     labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
@@ -76850,6 +82805,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedCreateWithoutTestsInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -76866,6 +82822,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutTestsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -76887,6 +82844,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -76916,6 +82875,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutTestsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -76937,6 +82897,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -77045,6 +83007,7 @@ export namespace Prisma {
 
   export type BatchUpdateWithoutTestsInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: BranchUpdateOneWithoutBatchesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
@@ -77054,6 +83017,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateWithoutTestsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -77076,6 +83040,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutTestsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -77097,6 +83062,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -77126,6 +83093,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutTestsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -77147,6 +83115,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -77228,6 +83198,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutStudentTestsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -77249,6 +83220,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -77278,6 +83251,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutStudentTestsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -77299,6 +83273,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -77404,6 +83380,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -77419,6 +83396,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutTestsInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -77504,6 +83482,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutStudentTestsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -77525,6 +83504,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -77554,6 +83535,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutStudentTestsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -77575,6 +83557,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -77692,6 +83676,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -77707,6 +83692,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutTestsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -77782,6 +83768,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutCourseCompletionsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -77803,6 +83790,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -77832,6 +83821,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutCourseCompletionsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -77853,6 +83843,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -77944,6 +83936,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
@@ -77959,6 +83952,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutCompletionsInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -78016,6 +84010,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutCourseCompletionsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -78037,6 +84032,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -78066,6 +84063,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutCourseCompletionsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -78087,6 +84085,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -78190,6 +84190,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
@@ -78205,6 +84206,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutCompletionsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -78246,6 +84248,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutCertificatesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -78267,6 +84270,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -78296,6 +84301,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutCertificatesInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -78317,6 +84323,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -78454,6 +84462,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
     enquiry?: EnquiryCreateNestedOneWithoutStudentInput
@@ -78469,6 +84478,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutCertificatesInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -78526,6 +84536,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutCertificatesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -78547,6 +84558,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -78576,6 +84589,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutCertificatesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -78597,6 +84611,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -78752,6 +84768,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
     enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
@@ -78767,6 +84784,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutCertificatesInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -78808,6 +84826,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminCreateWithoutFinancialRecordsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -78829,6 +84848,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
     batches?: BatchCreateNestedManyWithoutClientAdminInput
@@ -78858,6 +84879,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedCreateWithoutFinancialRecordsInput = {
+    isMaster?: boolean
     id?: string
     name: string
     email: string
@@ -78879,6 +84901,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     currentSessionToken?: string | null
     lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
     activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
     attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
     batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
@@ -79009,11 +85033,13 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    branch?: BranchCreateNestedOneWithoutLabsInput
     clientAdmin: ClientAdminCreateNestedOneWithoutLabsInput
     timeSlots?: LabTimeSlotCreateNestedManyWithoutLabInput
   }
 
   export type LabUncheckedCreateWithoutFinancialRecordsInput = {
+    branchId?: number | null
     id?: number
     name: string
     location?: string | null
@@ -79054,6 +85080,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     qualification?: string | null
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
     certificates?: CertificateCreateNestedManyWithoutStudentInput
     completions?: CourseCompletionCreateNestedManyWithoutStudentInput
@@ -79069,6 +85096,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutFinancialRecordsInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -79126,6 +85154,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUpdateWithoutFinancialRecordsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -79147,6 +85176,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUpdateManyWithoutClientAdminNestedInput
@@ -79176,6 +85207,7 @@ export namespace Prisma {
   }
 
   export type ClientAdminUncheckedUpdateWithoutFinancialRecordsInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -79197,6 +85229,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
     activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
     attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
     batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
@@ -79345,11 +85379,13 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutLabsNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutLabsNestedInput
     timeSlots?: LabTimeSlotUpdateManyWithoutLabNestedInput
   }
 
   export type LabUncheckedUpdateWithoutFinancialRecordsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -79396,6 +85432,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -79411,6 +85448,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutFinancialRecordsInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -79451,6 +85489,847 @@ export namespace Prisma {
     tests?: StudentTestUncheckedUpdateManyWithoutStudentNestedInput
   }
 
+  export type LabCreateWithoutBranchInput = {
+    name: string
+    location?: string | null
+    totalPCs: number
+    isActive?: boolean
+    financialRecords?: FinancialRecordCreateNestedManyWithoutLabInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutLabsInput
+    timeSlots?: LabTimeSlotCreateNestedManyWithoutLabInput
+  }
+
+  export type LabUncheckedCreateWithoutBranchInput = {
+    id?: number
+    name: string
+    location?: string | null
+    totalPCs: number
+    isActive?: boolean
+    clientAdminId: string
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutLabInput
+    timeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutLabInput
+  }
+
+  export type LabCreateOrConnectWithoutBranchInput = {
+    where: LabWhereUniqueInput
+    create: XOR<LabCreateWithoutBranchInput, LabUncheckedCreateWithoutBranchInput>
+  }
+
+  export type LabCreateManyBranchInputEnvelope = {
+    data: LabCreateManyBranchInput | LabCreateManyBranchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchCreateWithoutBranchInput = {
+    name: string
+    clientAdmin: ClientAdminCreateNestedOneWithoutBatchesInput
+    faculty?: FacultyCreateNestedOneWithoutBatchesInput
+    labTimeSlot: LabTimeSlotCreateNestedOneWithoutBatchesInput
+    batchCourses?: BatchCourseCreateNestedManyWithoutBatchInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutBatchInput
+    tasks?: TaskCreateNestedManyWithoutBatchInput
+    tests?: TestCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutBranchInput = {
+    id?: number
+    name: string
+    facultyId?: number | null
+    labTimeSlotId: number
+    clientAdminId: string
+    batchCourses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutBatchInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutBatchInput
+    tests?: TestUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutBranchInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutBranchInput, BatchUncheckedCreateWithoutBranchInput>
+  }
+
+  export type BatchCreateManyBranchInputEnvelope = {
+    data: BatchCreateManyBranchInput | BatchCreateManyBranchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentCreateWithoutBranchInput = {
+    serialNumber: number
+    studentCode: string
+    admissionNumber: string
+    fullName: string
+    fatherName?: string | null
+    photoUrl?: string | null
+    contact: string
+    parentsContact?: string | null
+    email?: string | null
+    residentialAddress?: string | null
+    permenantAddress?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    religion?: string | null
+    idProofType?: string | null
+    idProofNumber?: string | null
+    localAddressProofType?: string | null
+    localAddressProofNumber?: string | null
+    referedBy?: string | null
+    idCard?: boolean
+    bag?: boolean
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    qualification?: string | null
+    attendance?: AttendanceRecordCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    completions?: CourseCompletionCreateNestedManyWithoutStudentInput
+    enquiry?: EnquiryCreateNestedOneWithoutStudentInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutStudentInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutStudentInput
+    labAllocations?: LabAllocationCreateNestedManyWithoutStudentInput
+    stationery?: StationeryIssueCreateNestedManyWithoutStudentInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutStudentsInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutStudentInput
+    feeRecords?: StudentFeeCreateNestedManyWithoutStudentInput
+    tasks?: StudentTaskCreateNestedManyWithoutStudentInput
+    tests?: StudentTestCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutBranchInput = {
+    id?: number
+    serialNumber: number
+    studentCode: string
+    admissionNumber: string
+    fullName: string
+    fatherName?: string | null
+    photoUrl?: string | null
+    contact: string
+    parentsContact?: string | null
+    email?: string | null
+    residentialAddress?: string | null
+    permenantAddress?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    religion?: string | null
+    idProofType?: string | null
+    idProofNumber?: string | null
+    localAddressProofType?: string | null
+    localAddressProofNumber?: string | null
+    referedBy?: string | null
+    idCard?: boolean
+    bag?: boolean
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clientAdminId: string
+    qualification?: string | null
+    attendance?: AttendanceRecordUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    completions?: CourseCompletionUncheckedCreateNestedManyWithoutStudentInput
+    enquiry?: EnquiryUncheckedCreateNestedOneWithoutStudentInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutStudentInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutStudentInput
+    labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutStudentInput
+    stationery?: StationeryIssueUncheckedCreateNestedManyWithoutStudentInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutStudentInput
+    feeRecords?: StudentFeeUncheckedCreateNestedManyWithoutStudentInput
+    tasks?: StudentTaskUncheckedCreateNestedManyWithoutStudentInput
+    tests?: StudentTestUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutBranchInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput>
+  }
+
+  export type StudentCreateManyBranchInputEnvelope = {
+    data: StudentCreateManyBranchInput | StudentCreateManyBranchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EnquiryCreateWithoutBranchInput = {
+    id?: string
+    srNo: number
+    name: string
+    contact: string
+    alternateContact?: string | null
+    email?: string | null
+    age?: number | null
+    location?: string | null
+    city?: string | null
+    course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
+    referedBy?: string | null
+    takenBy?: string | null
+    leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isConverted?: boolean
+    source?: SourceTypeCreateNestedOneWithoutEnquiriesInput
+    clientAdmin: ClientAdminCreateNestedOneWithoutEnquiriesInput
+    student?: StudentCreateNestedOneWithoutEnquiryInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutEnquiryInput
+    followUps?: FollowUpCreateNestedManyWithoutEnquiryInput
+    notification?: NotificationCreateNestedOneWithoutEnquiryInput
+  }
+
+  export type EnquiryUncheckedCreateWithoutBranchInput = {
+    id?: string
+    srNo: number
+    name: string
+    contact: string
+    alternateContact?: string | null
+    email?: string | null
+    age?: number | null
+    location?: string | null
+    city?: string | null
+    course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
+    sourceId?: number | null
+    referedBy?: string | null
+    takenBy?: string | null
+    leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isConverted?: boolean
+    studentId?: number | null
+    clientAdminId: string
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutEnquiryInput
+    followUps?: FollowUpUncheckedCreateNestedManyWithoutEnquiryInput
+    notification?: NotificationUncheckedCreateNestedOneWithoutEnquiryInput
+  }
+
+  export type EnquiryCreateOrConnectWithoutBranchInput = {
+    where: EnquiryWhereUniqueInput
+    create: XOR<EnquiryCreateWithoutBranchInput, EnquiryUncheckedCreateWithoutBranchInput>
+  }
+
+  export type EnquiryCreateManyBranchInputEnvelope = {
+    data: EnquiryCreateManyBranchInput | EnquiryCreateManyBranchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ClientAdminCreateWithoutBranchesInput = {
+    isMaster?: boolean
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
+    batches?: BatchCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateCreateNestedManyWithoutClientAdminInput
+    courses?: CourseCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
+    labs?: LabCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationCreateNestedManyWithoutClientAdminInput
+    roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
+    students?: StudentCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminUncheckedCreateWithoutBranchesInput = {
+    isMaster?: boolean
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    userAccess?: UserCompanyAccessUncheckedCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
+    courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
+    labs?: LabUncheckedCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
+    roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
+    students?: StudentUncheckedCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminCreateOrConnectWithoutBranchesInput = {
+    where: ClientAdminWhereUniqueInput
+    create: XOR<ClientAdminCreateWithoutBranchesInput, ClientAdminUncheckedCreateWithoutBranchesInput>
+  }
+
+  export type LabUpsertWithWhereUniqueWithoutBranchInput = {
+    where: LabWhereUniqueInput
+    update: XOR<LabUpdateWithoutBranchInput, LabUncheckedUpdateWithoutBranchInput>
+    create: XOR<LabCreateWithoutBranchInput, LabUncheckedCreateWithoutBranchInput>
+  }
+
+  export type LabUpdateWithWhereUniqueWithoutBranchInput = {
+    where: LabWhereUniqueInput
+    data: XOR<LabUpdateWithoutBranchInput, LabUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type LabUpdateManyWithWhereWithoutBranchInput = {
+    where: LabScalarWhereInput
+    data: XOR<LabUpdateManyMutationInput, LabUncheckedUpdateManyWithoutBranchInput>
+  }
+
+  export type BatchUpsertWithWhereUniqueWithoutBranchInput = {
+    where: BatchWhereUniqueInput
+    update: XOR<BatchUpdateWithoutBranchInput, BatchUncheckedUpdateWithoutBranchInput>
+    create: XOR<BatchCreateWithoutBranchInput, BatchUncheckedCreateWithoutBranchInput>
+  }
+
+  export type BatchUpdateWithWhereUniqueWithoutBranchInput = {
+    where: BatchWhereUniqueInput
+    data: XOR<BatchUpdateWithoutBranchInput, BatchUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type BatchUpdateManyWithWhereWithoutBranchInput = {
+    where: BatchScalarWhereInput
+    data: XOR<BatchUpdateManyMutationInput, BatchUncheckedUpdateManyWithoutBranchInput>
+  }
+
+  export type StudentUpsertWithWhereUniqueWithoutBranchInput = {
+    where: StudentWhereUniqueInput
+    update: XOR<StudentUpdateWithoutBranchInput, StudentUncheckedUpdateWithoutBranchInput>
+    create: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput>
+  }
+
+  export type StudentUpdateWithWhereUniqueWithoutBranchInput = {
+    where: StudentWhereUniqueInput
+    data: XOR<StudentUpdateWithoutBranchInput, StudentUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type StudentUpdateManyWithWhereWithoutBranchInput = {
+    where: StudentScalarWhereInput
+    data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutBranchInput>
+  }
+
+  export type EnquiryUpsertWithWhereUniqueWithoutBranchInput = {
+    where: EnquiryWhereUniqueInput
+    update: XOR<EnquiryUpdateWithoutBranchInput, EnquiryUncheckedUpdateWithoutBranchInput>
+    create: XOR<EnquiryCreateWithoutBranchInput, EnquiryUncheckedCreateWithoutBranchInput>
+  }
+
+  export type EnquiryUpdateWithWhereUniqueWithoutBranchInput = {
+    where: EnquiryWhereUniqueInput
+    data: XOR<EnquiryUpdateWithoutBranchInput, EnquiryUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type EnquiryUpdateManyWithWhereWithoutBranchInput = {
+    where: EnquiryScalarWhereInput
+    data: XOR<EnquiryUpdateManyMutationInput, EnquiryUncheckedUpdateManyWithoutBranchInput>
+  }
+
+  export type ClientAdminUpsertWithoutBranchesInput = {
+    update: XOR<ClientAdminUpdateWithoutBranchesInput, ClientAdminUncheckedUpdateWithoutBranchesInput>
+    create: XOR<ClientAdminCreateWithoutBranchesInput, ClientAdminUncheckedCreateWithoutBranchesInput>
+    where?: ClientAdminWhereInput
+  }
+
+  export type ClientAdminUpdateToOneWithWhereWithoutBranchesInput = {
+    where?: ClientAdminWhereInput
+    data: XOR<ClientAdminUpdateWithoutBranchesInput, ClientAdminUncheckedUpdateWithoutBranchesInput>
+  }
+
+  export type ClientAdminUpdateWithoutBranchesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
+    roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type ClientAdminUncheckedUpdateWithoutBranchesInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userAccess?: UserCompanyAccessUncheckedUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUncheckedUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUncheckedUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUncheckedUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
+    roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type RoleUserCreateWithoutCompanyAccessInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    clientAdmin: ClientAdminCreateNestedOneWithoutRoleUsersInput
+  }
+
+  export type RoleUserUncheckedCreateWithoutCompanyAccessInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    clientAdminId: string
+  }
+
+  export type RoleUserCreateOrConnectWithoutCompanyAccessInput = {
+    where: RoleUserWhereUniqueInput
+    create: XOR<RoleUserCreateWithoutCompanyAccessInput, RoleUserUncheckedCreateWithoutCompanyAccessInput>
+  }
+
+  export type ClientAdminCreateWithoutUserAccessInput = {
+    isMaster?: boolean
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    branches?: BranchCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordCreateNestedManyWithoutClientAdminInput
+    batches?: BatchCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateCreateNestedManyWithoutClientAdminInput
+    courses?: CourseCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordCreateNestedManyWithoutClientAdminInput
+    financialYears?: FinancialYearCreateNestedManyWithoutClientAdminInput
+    labs?: LabCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationCreateNestedManyWithoutClientAdminInput
+    roleUsers?: RoleUserCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemCreateNestedManyWithoutClientAdminInput
+    students?: StudentCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskCreateNestedManyWithoutClientAdminInput
+    tests?: TestCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminUncheckedCreateWithoutUserAccessInput = {
+    isMaster?: boolean
+    id?: string
+    name: string
+    email: string
+    password: string
+    instituteName: string
+    slug: string
+    fullAddress: string
+    logo?: string | null
+    certificateName?: string | null
+    stamp?: string | null
+    sign?: string | null
+    contact: string
+    position: string
+    country: string
+    state: string
+    city: string
+    zipCode: string
+    createdAt?: Date | string
+    role?: $Enums.UserRole
+    currentSessionToken?: string | null
+    lastLoginAt?: Date | string | null
+    branches?: BranchUncheckedCreateNestedManyWithoutClientAdminInput
+    activities?: ActivityLogUncheckedCreateNestedManyWithoutClientAdminInput
+    attendanceRecords?: AttendanceRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    batches?: BatchUncheckedCreateNestedManyWithoutClientAdminInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutClientAdminInput
+    courses?: CourseUncheckedCreateNestedManyWithoutClientAdminInput
+    courseCompletions?: CourseCompletionUncheckedCreateNestedManyWithoutClientAdminInput
+    courseFeeStructures?: CourseFeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiries?: EnquiryUncheckedCreateNestedManyWithoutClientAdminInput
+    enquiryCourse?: EnquiryCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutClientAdminInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutClientAdminInput
+    financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutClientAdminInput
+    financialYears?: FinancialYearUncheckedCreateNestedManyWithoutClientAdminInput
+    labs?: LabUncheckedCreateNestedManyWithoutClientAdminInput
+    labAllocations?: LabAllocationUncheckedCreateNestedManyWithoutClientAdminInput
+    labTimeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutClientAdminInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutClientAdminInput
+    roleUsers?: RoleUserUncheckedCreateNestedManyWithoutClientAdminInput
+    stationeryIssues?: StationeryIssueUncheckedCreateNestedManyWithoutClientAdminInput
+    StationeryItems?: StationeryItemUncheckedCreateNestedManyWithoutClientAdminInput
+    students?: StudentUncheckedCreateNestedManyWithoutClientAdminInput
+    studentCourses?: StudentCourseUncheckedCreateNestedManyWithoutClientAdminInput
+    studentFees?: StudentFeeUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTasks?: StudentTaskUncheckedCreateNestedManyWithoutClientAdminInput
+    studentTests?: StudentTestUncheckedCreateNestedManyWithoutClientAdminInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutClientAdminInput
+    tests?: TestUncheckedCreateNestedManyWithoutClientAdminInput
+  }
+
+  export type ClientAdminCreateOrConnectWithoutUserAccessInput = {
+    where: ClientAdminWhereUniqueInput
+    create: XOR<ClientAdminCreateWithoutUserAccessInput, ClientAdminUncheckedCreateWithoutUserAccessInput>
+  }
+
+  export type RoleUserUpsertWithoutCompanyAccessInput = {
+    update: XOR<RoleUserUpdateWithoutCompanyAccessInput, RoleUserUncheckedUpdateWithoutCompanyAccessInput>
+    create: XOR<RoleUserCreateWithoutCompanyAccessInput, RoleUserUncheckedCreateWithoutCompanyAccessInput>
+    where?: RoleUserWhereInput
+  }
+
+  export type RoleUserUpdateToOneWithWhereWithoutCompanyAccessInput = {
+    where?: RoleUserWhereInput
+    data: XOR<RoleUserUpdateWithoutCompanyAccessInput, RoleUserUncheckedUpdateWithoutCompanyAccessInput>
+  }
+
+  export type RoleUserUpdateWithoutCompanyAccessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutRoleUsersNestedInput
+  }
+
+  export type RoleUserUncheckedUpdateWithoutCompanyAccessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ClientAdminUpsertWithoutUserAccessInput = {
+    update: XOR<ClientAdminUpdateWithoutUserAccessInput, ClientAdminUncheckedUpdateWithoutUserAccessInput>
+    create: XOR<ClientAdminCreateWithoutUserAccessInput, ClientAdminUncheckedCreateWithoutUserAccessInput>
+    where?: ClientAdminWhereInput
+  }
+
+  export type ClientAdminUpdateToOneWithWhereWithoutUserAccessInput = {
+    where?: ClientAdminWhereInput
+    data: XOR<ClientAdminUpdateWithoutUserAccessInput, ClientAdminUncheckedUpdateWithoutUserAccessInput>
+  }
+
+  export type ClientAdminUpdateWithoutUserAccessInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branches?: BranchUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutClientAdminNestedInput
+    financialYears?: FinancialYearUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUpdateManyWithoutClientAdminNestedInput
+    roleUsers?: RoleUserUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type ClientAdminUncheckedUpdateWithoutUserAccessInput = {
+    isMaster?: BoolFieldUpdateOperationsInput | boolean
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    fullAddress?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateName?: NullableStringFieldUpdateOperationsInput | string | null
+    stamp?: NullableStringFieldUpdateOperationsInput | string | null
+    sign?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    position?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    zipCode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branches?: BranchUncheckedUpdateManyWithoutClientAdminNestedInput
+    activities?: ActivityLogUncheckedUpdateManyWithoutClientAdminNestedInput
+    attendanceRecords?: AttendanceRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutClientAdminNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutClientAdminNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseCompletions?: CourseCompletionUncheckedUpdateManyWithoutClientAdminNestedInput
+    courseFeeStructures?: CourseFeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutClientAdminNestedInput
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutClientAdminNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutClientAdminNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutClientAdminNestedInput
+    financialYears?: FinancialYearUncheckedUpdateManyWithoutClientAdminNestedInput
+    labs?: LabUncheckedUpdateManyWithoutClientAdminNestedInput
+    labAllocations?: LabAllocationUncheckedUpdateManyWithoutClientAdminNestedInput
+    labTimeSlots?: LabTimeSlotUncheckedUpdateManyWithoutClientAdminNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutClientAdminNestedInput
+    roleUsers?: RoleUserUncheckedUpdateManyWithoutClientAdminNestedInput
+    stationeryIssues?: StationeryIssueUncheckedUpdateManyWithoutClientAdminNestedInput
+    StationeryItems?: StationeryItemUncheckedUpdateManyWithoutClientAdminNestedInput
+    students?: StudentUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentFees?: StudentFeeUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTasks?: StudentTaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    studentTests?: StudentTestUncheckedUpdateManyWithoutClientAdminNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutClientAdminNestedInput
+    tests?: TestUncheckedUpdateManyWithoutClientAdminNestedInput
+  }
+
+  export type UserCompanyAccessCreateManyClientAdminInput = {
+    id?: string
+    roleUserId: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+  }
+
+  export type BranchCreateManyClientAdminInput = {
+    id?: number
+    name: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    isDefault?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
   export type ActivityLogCreateManyClientAdminInput = {
     id?: string
     entity: string
@@ -79471,6 +86350,7 @@ export namespace Prisma {
   }
 
   export type BatchCreateManyClientAdminInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -79510,6 +86390,7 @@ export namespace Prisma {
   }
 
   export type EnquiryCreateManyClientAdminInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -79589,6 +86470,7 @@ export namespace Prisma {
   }
 
   export type LabCreateManyClientAdminInput = {
+    branchId?: number | null
     id?: number
     name: string
     location?: string | null
@@ -79656,6 +86538,7 @@ export namespace Prisma {
   }
 
   export type StudentCreateManyClientAdminInput = {
+    branchId?: number | null
     id?: number
     serialNumber: number
     studentCode: string
@@ -79762,6 +86645,67 @@ export namespace Prisma {
     courseId: number
   }
 
+  export type UserCompanyAccessUpdateWithoutClientAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    roleUser?: RoleUserUpdateOneRequiredWithoutCompanyAccessNestedInput
+  }
+
+  export type UserCompanyAccessUncheckedUpdateWithoutClientAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleUserId?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCompanyAccessUncheckedUpdateManyWithoutClientAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleUserId?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BranchUpdateWithoutClientAdminInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    labs?: LabUpdateManyWithoutBranchNestedInput
+    batches?: BatchUpdateManyWithoutBranchNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUpdateManyWithoutBranchNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    labs?: LabUncheckedUpdateManyWithoutBranchNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutBranchNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
+    enquiries?: EnquiryUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
+  export type BranchUncheckedUpdateManyWithoutClientAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ActivityLogUpdateWithoutClientAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
     entity?: StringFieldUpdateOperationsInput | string
@@ -79820,6 +86764,7 @@ export namespace Prisma {
 
   export type BatchUpdateWithoutClientAdminInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: BranchUpdateOneWithoutBatchesNestedInput
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
@@ -79829,6 +86774,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateWithoutClientAdminInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -79840,6 +86786,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateManyWithoutClientAdminInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -79988,6 +86935,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutEnquiriesNestedInput
     source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
@@ -79996,6 +86944,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateWithoutClientAdminInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -80023,6 +86972,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateManyWithoutClientAdminInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -80221,11 +87171,13 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutLabsNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutLabNestedInput
     timeSlots?: LabTimeSlotUpdateManyWithoutLabNestedInput
   }
 
   export type LabUncheckedUpdateWithoutClientAdminInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -80236,6 +87188,7 @@ export namespace Prisma {
   }
 
   export type LabUncheckedUpdateManyWithoutClientAdminInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -80339,6 +87292,7 @@ export namespace Prisma {
     zipCode?: StringFieldUpdateOperationsInput | string
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    companyAccess?: UserCompanyAccessUpdateManyWithoutRoleUserNestedInput
   }
 
   export type RoleUserUncheckedUpdateWithoutClientAdminInput = {
@@ -80354,6 +87308,7 @@ export namespace Prisma {
     zipCode?: StringFieldUpdateOperationsInput | string
     currentSessionToken?: NullableStringFieldUpdateOperationsInput | string | null
     lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    companyAccess?: UserCompanyAccessUncheckedUpdateManyWithoutRoleUserNestedInput
   }
 
   export type RoleUserUncheckedUpdateManyWithoutClientAdminInput = {
@@ -80448,6 +87403,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
     certificates?: CertificateUpdateManyWithoutStudentNestedInput
     completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
@@ -80463,6 +87419,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutClientAdminInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -80504,6 +87461,7 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateManyWithoutClientAdminInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     serialNumber?: IntFieldUpdateOperationsInput | number
     studentCode?: StringFieldUpdateOperationsInput | string
@@ -80772,6 +87730,34 @@ export namespace Prisma {
     courseId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type UserCompanyAccessCreateManyRoleUserInput = {
+    id?: string
+    clientAdminId: string
+    role: $Enums.UserRole
+    createdAt?: Date | string
+  }
+
+  export type UserCompanyAccessUpdateWithoutRoleUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutUserAccessNestedInput
+  }
+
+  export type UserCompanyAccessUncheckedUpdateWithoutRoleUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCompanyAccessUncheckedUpdateManyWithoutRoleUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EnquiryCourseCreateManyEnquiryInput = {
     id?: number
     courseId: number
@@ -80838,6 +87824,7 @@ export namespace Prisma {
   }
 
   export type EnquiryCreateManySourceInput = {
+    branchId?: number | null
     id?: string
     srNo: number
     name: string
@@ -80881,6 +87868,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isConverted?: BoolFieldUpdateOperationsInput | boolean
+    branch?: BranchUpdateOneWithoutEnquiriesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
     student?: StudentUpdateOneWithoutEnquiryNestedInput
     enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
@@ -80889,6 +87877,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateWithoutSourceInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -80916,6 +87905,7 @@ export namespace Prisma {
   }
 
   export type EnquiryUncheckedUpdateManyWithoutSourceInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: StringFieldUpdateOperationsInput | string
     srNo?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
@@ -82205,6 +89195,7 @@ export namespace Prisma {
   }
 
   export type BatchCreateManyFacultyInput = {
+    branchId?: number | null
     id?: number
     name: string
     labTimeSlotId: number
@@ -82269,6 +89260,7 @@ export namespace Prisma {
 
   export type BatchUpdateWithoutFacultyInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: BranchUpdateOneWithoutBatchesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
     labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
@@ -82278,6 +89270,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateWithoutFacultyInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     labTimeSlotId?: IntFieldUpdateOperationsInput | number
@@ -82289,6 +89282,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateManyWithoutFacultyInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     labTimeSlotId?: IntFieldUpdateOperationsInput | number
@@ -82467,6 +89461,7 @@ export namespace Prisma {
   }
 
   export type BatchCreateManyLabTimeSlotInput = {
+    branchId?: number | null
     id?: number
     name: string
     facultyId?: number | null
@@ -82483,6 +89478,7 @@ export namespace Prisma {
 
   export type BatchUpdateWithoutLabTimeSlotInput = {
     name?: StringFieldUpdateOperationsInput | string
+    branch?: BranchUpdateOneWithoutBatchesNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
     faculty?: FacultyUpdateOneWithoutBatchesNestedInput
     batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
@@ -82492,6 +89488,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateWithoutLabTimeSlotInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -82503,6 +89500,7 @@ export namespace Prisma {
   }
 
   export type BatchUncheckedUpdateManyWithoutLabTimeSlotInput = {
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     facultyId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -82795,6 +89793,333 @@ export namespace Prisma {
     totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
     marksObtained?: NullableIntFieldUpdateOperationsInput | number | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LabCreateManyBranchInput = {
+    id?: number
+    name: string
+    location?: string | null
+    totalPCs: number
+    isActive?: boolean
+    clientAdminId: string
+  }
+
+  export type BatchCreateManyBranchInput = {
+    id?: number
+    name: string
+    facultyId?: number | null
+    labTimeSlotId: number
+    clientAdminId: string
+  }
+
+  export type StudentCreateManyBranchInput = {
+    id?: number
+    serialNumber: number
+    studentCode: string
+    admissionNumber: string
+    fullName: string
+    fatherName?: string | null
+    photoUrl?: string | null
+    contact: string
+    parentsContact?: string | null
+    email?: string | null
+    residentialAddress?: string | null
+    permenantAddress?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    religion?: string | null
+    idProofType?: string | null
+    idProofNumber?: string | null
+    localAddressProofType?: string | null
+    localAddressProofNumber?: string | null
+    referedBy?: string | null
+    idCard?: boolean
+    bag?: boolean
+    admissionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clientAdminId: string
+    qualification?: string | null
+  }
+
+  export type EnquiryCreateManyBranchInput = {
+    id?: string
+    srNo: number
+    name: string
+    contact: string
+    alternateContact?: string | null
+    email?: string | null
+    age?: number | null
+    location?: string | null
+    city?: string | null
+    course?: string | null
+    gender?: string | null
+    dob?: Date | string | null
+    sourceId?: number | null
+    referedBy?: string | null
+    takenBy?: string | null
+    leadStatus?: $Enums.LeadStatus
+    enquiryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isConverted?: boolean
+    studentId?: number | null
+    clientAdminId: string
+  }
+
+  export type LabUpdateWithoutBranchInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPCs?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    financialRecords?: FinancialRecordUpdateManyWithoutLabNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutLabsNestedInput
+    timeSlots?: LabTimeSlotUpdateManyWithoutLabNestedInput
+  }
+
+  export type LabUncheckedUpdateWithoutBranchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPCs?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutLabNestedInput
+    timeSlots?: LabTimeSlotUncheckedUpdateManyWithoutLabNestedInput
+  }
+
+  export type LabUncheckedUpdateManyWithoutBranchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPCs?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchUpdateWithoutBranchInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutBatchesNestedInput
+    faculty?: FacultyUpdateOneWithoutBatchesNestedInput
+    labTimeSlot?: LabTimeSlotUpdateOneRequiredWithoutBatchesNestedInput
+    batchCourses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUpdateManyWithoutBatchNestedInput
+    tests?: TestUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutBranchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    facultyId?: NullableIntFieldUpdateOperationsInput | number | null
+    labTimeSlotId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    batchCourses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutBatchNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutBatchNestedInput
+    tests?: TestUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateManyWithoutBranchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    facultyId?: NullableIntFieldUpdateOperationsInput | number | null
+    labTimeSlotId?: IntFieldUpdateOperationsInput | number
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudentUpdateWithoutBranchInput = {
+    serialNumber?: IntFieldUpdateOperationsInput | number
+    studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    idProofType?: NullableStringFieldUpdateOperationsInput | string | null
+    idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    localAddressProofType?: NullableStringFieldUpdateOperationsInput | string | null
+    localAddressProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    idCard?: BoolFieldUpdateOperationsInput | boolean
+    bag?: BoolFieldUpdateOperationsInput | boolean
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    attendance?: AttendanceRecordUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    completions?: CourseCompletionUpdateManyWithoutStudentNestedInput
+    enquiry?: EnquiryUpdateOneWithoutStudentNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutStudentNestedInput
+    financialRecords?: FinancialRecordUpdateManyWithoutStudentNestedInput
+    labAllocations?: LabAllocationUpdateManyWithoutStudentNestedInput
+    stationery?: StationeryIssueUpdateManyWithoutStudentNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutStudentsNestedInput
+    studentCourses?: StudentCourseUpdateManyWithoutStudentNestedInput
+    feeRecords?: StudentFeeUpdateManyWithoutStudentNestedInput
+    tasks?: StudentTaskUpdateManyWithoutStudentNestedInput
+    tests?: StudentTestUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutBranchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serialNumber?: IntFieldUpdateOperationsInput | number
+    studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    idProofType?: NullableStringFieldUpdateOperationsInput | string | null
+    idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    localAddressProofType?: NullableStringFieldUpdateOperationsInput | string | null
+    localAddressProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    idCard?: BoolFieldUpdateOperationsInput | boolean
+    bag?: BoolFieldUpdateOperationsInput | boolean
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    attendance?: AttendanceRecordUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    completions?: CourseCompletionUncheckedUpdateManyWithoutStudentNestedInput
+    enquiry?: EnquiryUncheckedUpdateOneWithoutStudentNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutStudentNestedInput
+    financialRecords?: FinancialRecordUncheckedUpdateManyWithoutStudentNestedInput
+    labAllocations?: LabAllocationUncheckedUpdateManyWithoutStudentNestedInput
+    stationery?: StationeryIssueUncheckedUpdateManyWithoutStudentNestedInput
+    studentCourses?: StudentCourseUncheckedUpdateManyWithoutStudentNestedInput
+    feeRecords?: StudentFeeUncheckedUpdateManyWithoutStudentNestedInput
+    tasks?: StudentTaskUncheckedUpdateManyWithoutStudentNestedInput
+    tests?: StudentTestUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateManyWithoutBranchInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serialNumber?: IntFieldUpdateOperationsInput | number
+    studentCode?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: StringFieldUpdateOperationsInput | string
+    parentsContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    residentialAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    permenantAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    idProofType?: NullableStringFieldUpdateOperationsInput | string | null
+    idProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    localAddressProofType?: NullableStringFieldUpdateOperationsInput | string | null
+    localAddressProofNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    idCard?: BoolFieldUpdateOperationsInput | boolean
+    bag?: BoolFieldUpdateOperationsInput | boolean
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EnquiryUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    takenBy?: NullableStringFieldUpdateOperationsInput | string | null
+    leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isConverted?: BoolFieldUpdateOperationsInput | boolean
+    source?: SourceTypeUpdateOneWithoutEnquiriesNestedInput
+    clientAdmin?: ClientAdminUpdateOneRequiredWithoutEnquiriesNestedInput
+    student?: StudentUpdateOneWithoutEnquiryNestedInput
+    enquiryCourse?: EnquiryCourseUpdateManyWithoutEnquiryNestedInput
+    followUps?: FollowUpUpdateManyWithoutEnquiryNestedInput
+    notification?: NotificationUpdateOneWithoutEnquiryNestedInput
+  }
+
+  export type EnquiryUncheckedUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    takenBy?: NullableStringFieldUpdateOperationsInput | string | null
+    leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isConverted?: BoolFieldUpdateOperationsInput | boolean
+    studentId?: NullableIntFieldUpdateOperationsInput | number | null
+    clientAdminId?: StringFieldUpdateOperationsInput | string
+    enquiryCourse?: EnquiryCourseUncheckedUpdateManyWithoutEnquiryNestedInput
+    followUps?: FollowUpUncheckedUpdateManyWithoutEnquiryNestedInput
+    notification?: NotificationUncheckedUpdateOneWithoutEnquiryNestedInput
+  }
+
+  export type EnquiryUncheckedUpdateManyWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    srNo?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    alternateContact?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceId?: NullableIntFieldUpdateOperationsInput | number | null
+    referedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    takenBy?: NullableStringFieldUpdateOperationsInput | string | null
+    leadStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    enquiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isConverted?: BoolFieldUpdateOperationsInput | boolean
+    studentId?: NullableIntFieldUpdateOperationsInput | number | null
     clientAdminId?: StringFieldUpdateOperationsInput | string
   }
 

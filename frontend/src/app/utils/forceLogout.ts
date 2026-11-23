@@ -1,3 +1,4 @@
+import { serverLogout } from "@/lib/session";
 // export const forceLogout = () => {
 //   if (typeof window !== "undefined") {
 //     sessionStorage.removeItem("token");
@@ -8,6 +9,7 @@
 
 export const forceLogout = () => {
   if (typeof window !== "undefined") {
+    serverLogout(); // free the seat on the server before the token is dropped
     sessionStorage.removeItem("token");
 
     window.localStorage.clear();

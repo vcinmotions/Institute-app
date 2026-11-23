@@ -106,6 +106,7 @@ export async function addStudentPaymentController(req: Request, res: Response) {
 
     // 🎓 3. Generate unique student code
     const lastStudent = await tenantPrisma.student.findFirst({
+      where: { clientAdminId }, // numbering is per company
       orderBy: { id: "desc" },
       select: { studentCode: true, serialNumber: true },
     });

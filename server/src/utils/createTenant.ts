@@ -703,7 +703,8 @@ export async function createTenant(
   sign: string,
   certificateName: string,
   businessEmail?: string | null,
-  parentTenantId?: string | null
+  parentTenantId?: string | null,
+  centralId?: string | null // keep the same institute id as the central web server
 ) {
   if (
     !name ||
@@ -882,6 +883,7 @@ export async function createTenant(
 
   await centralPrisma.tenant.create({ 
     data: {
+      ...(centralId ? { id: centralId } : {}),
       tenantId: tenantId.toString(),
       name,
       email,

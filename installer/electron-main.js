@@ -396,6 +396,32 @@ const LOADING_HTML = `data:text/html;charset=utf-8,${encodeURIComponent(`<!DOCTY
 </html>`)}`;
 
 // ─── WINDOW ──────────────────────────────────────────────────────────────────
+const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/** Tells the server to end this window's session (frees the concurrent-login seat). Never blocks closing for long. */
+async function logoutBeforeClose(win) {
+  try {
+    if (win.isDestroyed()) return;
+    const token = await Promise.race([
+      win.webContents.executeJavaScript('window.sessionStorage.getItem("token")'),
+      delay(1000),
+    ]);
+    if (!token || typeof token !== "string") return;
+    const cfg = readModeConfig();
+    const host = cfg && cfg.mode === "LAN_CLIENT" ? cfg.host : "127.0.0.1";
+    const port = cfg && cfg.mode === "LAN_CLIENT" ? cfg.port : BACKEND_PORT;
+    await Promise.race([
+      fetch(`http://${host}:${port}/api/auth/logout`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {}),
+      delay(2500),
+    ]);
+  } catch (err) {
+    log.warn(`logout on close failed: ${err.message}`);
+  }
+}
+
 async function createWindow() {
   const win = new BrowserWindow({
     width: 1400,
@@ -411,6 +437,17 @@ async function createWindow() {
   });
 
   win.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
+
+  // Closing the EXE signs the user out first, so the login seat is released at once.
+  // (A crash or power cut is covered by the server's heartbeat timeout.)
+  let closing = false;
+  win.on("close", async (e) => {
+    if (closing) return;
+    e.preventDefault();
+    closing = true;
+    await logoutBeforeClose(win);
+    if (!win.isDestroyed()) win.close();
+  });
 
   await win.loadURL(LOADING_HTML);
   win.show();
@@ -433,6 +470,27 @@ async function createWindow() {
       };
       await win.loadFile(path.join(__dirname, "mode-setup.html"));
       return;
+    }
+    // The server must already be set up, and must be the same institute this PC connected to before.
+    // A client PC never runs first-time setup and never creates its own database.
+    const identity = await httpProbeJson(`http://${cfg.host}:${cfg.port}/api/setup/identity`);
+    let identityError = "";
+    if (!identity) {
+      identityError = "The server did not answer the institute check. Update the server computer to the latest version.";
+    } else if (!identity.initialized) {
+      identityError =
+        "The server computer has not been set up yet. Ask the Master Super Admin to open the app on the server computer and complete the Institute Setup first.";
+    } else if (cfg.instituteId && cfg.instituteId !== identity.instituteId) {
+      identityError = `This computer was connected to a different institute. The server at ${cfg.host} now belongs to "${identity.instituteName}". Switching institute is not allowed from a client computer.`;
+    }
+    if (identityError) {
+      modeSetupContext = { isChange: true, error: identityError };
+      await win.loadFile(path.join(__dirname, "mode-setup.html"));
+      return;
+    }
+    if (!cfg.instituteId) {
+      // Remember which institute this client belongs to.
+      writeModeConfig({ ...cfg, instituteId: identity.instituteId, instituteName: identity.instituteName });
     }
     await win.loadURL(`http://${cfg.host}:${cfg.frontendPort}`);
     if (!isDev && app.isPackaged) setupAutoUpdater();

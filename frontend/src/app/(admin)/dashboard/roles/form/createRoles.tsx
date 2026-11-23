@@ -15,6 +15,7 @@ import { useRoleStore } from "@/store/roleStore";
 import { useRouter } from "next/navigation";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import CompanyAccessPicker, { CompanyAssignment } from "@/components/form/CompanyAccessPicker";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
@@ -38,6 +39,8 @@ export default function RolesForm() {
   const { inputRefs, scrollToError } = useScrollToError();
   const router = useRouter();
   const [errors, setErrors] = useState<FormErrors>({});
+  const [companies, setCompanies] = useState<CompanyAssignment[]>([]);
+  const [multi, setMulti] = useState(false);
 
   const [alert, setAlert] = useState<{
     show: boolean;
@@ -78,7 +81,9 @@ export default function RolesForm() {
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) newErrors.email = "Email is required.";
     if (!formData.password.trim()) newErrors.password = "Password is required.";
-    if (!formData.role.trim()) newErrors.role = "Please select a role.";
+    if (multi) {
+      if (companies.length === 0) newErrors.role = "Tick at least one company.";
+    } else if (!formData.role.trim()) newErrors.role = "Please select a role.";
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), 2000);
@@ -168,7 +173,8 @@ export default function RolesForm() {
 
     const normalizeRole = {
       ...formData,
-      name: titleCase(formData.name)
+      name: titleCase(formData.name),
+      ...(multi ? { role: companies[0].role, companies } : {}),
     };
 
     createRolesBasedAdmin(normalizeRole, {
@@ -276,9 +282,10 @@ export default function RolesForm() {
                 )}
               </div>
 
+              <CompanyAccessPicker value={companies} onChange={setCompanies} onMulti={setMulti} />
               <div ref={(el) => { if (inputRefs.current) inputRefs.current.role = el; }}>
-                <Label>Assign Role *</Label>
-                <div className="relative">
+                {!multi && <Label>Assign Role *</Label>}
+                <div className={multi ? "hidden" : "relative"}>
                   <Select
                     tabIndex={4}
                     options={roles}

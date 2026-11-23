@@ -15,6 +15,7 @@ import { useEditRoles } from "@/hooks/useEditRoles";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { EyeIcon, EyeCloseIcon } from "@/icons";
+import CompanyAccessPicker, { CompanyAssignment } from "../CompanyAccessPicker";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
@@ -43,6 +44,8 @@ export default function EditRolesForm({
   const user = useSelector((state: RootState) => state.auth.user);
   const canResetPassword = user?.role === "ADMIN";
   const [resetPassword, setResetPassword] = useState(false);
+  const [companies, setCompanies] = useState<CompanyAssignment[]>([]);
+  const [multi, setMulti] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { inputRefs, scrollToError } = useScrollToError();
   const [errors, setErrors] = useState<FormErrors>({});
@@ -68,6 +71,12 @@ export default function EditRolesForm({
       role: roleData.role || "",
     });
     setResetPassword(false);
+    // Companies this user can already work in (older users: just their own company).
+    const existing: CompanyAssignment[] = (roleData.companyAccess ?? []).map((a: any) => ({
+      companyId: a.clientAdminId,
+      role: a.role,
+    }));
+    setCompanies(existing);
   }, [roleData]);
 
   const { mutate: editRolesBasedAdmin } = useEditRoles();
@@ -91,7 +100,9 @@ export default function EditRolesForm({
 
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) newErrors.email = "Email is required.";
-    if (!formData.role.trim()) newErrors.role = "Please select a role.";
+    if (multi) {
+      if (companies.length === 0) newErrors.role = "Tick at least one company.";
+    } else if (!formData.role.trim()) newErrors.role = "Please select a role.";
 
     if (resetPassword && formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters.";
@@ -171,6 +182,7 @@ export default function EditRolesForm({
     const normalizeRole = {
       ...rest,
       name: titleCase(formData.name),
+      ...(multi ? { role: companies[0].role, companies } : {}),
       // Only send a password when the admin chose to reset it.
       ...(canResetPassword && resetPassword && formData.password
         ? { password: formData.password }
@@ -338,8 +350,9 @@ export default function EditRolesForm({
                 if (inputRefs.current) inputRefs.current.role = el;
               }}
             >
-              <Label>Assign Role *</Label>
-              <div className="relative">
+              <CompanyAccessPicker value={companies} onChange={setCompanies} onMulti={setMulti} defaultRole={formData.role || "FRONT_DESK"} />
+              {!multi && <Label>Assign Role *</Label>}
+              <div className={multi ? "hidden" : "relative"}>
                 <Select
                   tabIndex={3}
                   options={roles}

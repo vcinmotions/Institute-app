@@ -3,6 +3,7 @@ import {
   createRoleUserController,
   getRoleUsersController,
   updateRoleUserController,
+  getMyCompaniesController,
 } from "../controllers/roles.controller";
 
 const router = express.Router();
@@ -10,5 +11,6 @@ const router = express.Router();
 router.post("/role-user", createRoleUserController);
 router.put("/edit-role-user/:id", updateRoleUserController);
 router.get("/role-user", getRoleUsersController);
+router.get("/my-companies", getMyCompaniesController);
 
 export default router;

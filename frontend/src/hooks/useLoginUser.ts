@@ -1,60 +1,58 @@
-
 import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "@/lib/api";
+import { loginUser, selectCompany } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import {
-  setTenant,
-  setToken,
-  setUser,
-  setLoading,
-} from "@/store/slices/authSlice";
+import { setToken, setUser } from "@/store/slices/authSlice";
+import { persistLogin, CompanyChoice } from "@/lib/session";
 
-export const useLoginUser = () => {
+export type CompanyPrompt = {
+  email: string;
+  selectionToken: string;
+  companies: CompanyChoice[];
+};
+
+/** Saves the session and opens the dashboard. */
+function useCompleteLogin() {
   const router = useRouter();
   const dispatch = useDispatch();
+  return (data: any) => {
+    dispatch(setUser(data));
+    dispatch(setToken(data.token));
+    persistLogin(data);
+    router.replace(data.role === "MASTER_ADMIN" ? "/master-dashboard" : "/dashboard");
+  };
+}
 
+/**
+ * Step 1 of sign-in. A user with one company goes straight in; a user with
+ * several gets onNeedsCompany() and must pick one (step 2: useSelectCompany).
+ */
+export const useLoginUser = (opts?: { onNeedsCompany?: (p: CompanyPrompt) => void }) => {
+  const complete = useCompleteLogin();
   return useMutation({
     mutationFn: loginUser,
-    // mutationFn: async () => {
-
-    //       dispatch(setLoading(true));
-
-    //       await createUser;
-
-    //     },
-    onSuccess: async (data) => {
-      console.log("Login Successful:", data);
-
-      // Save user + token to Redux
-      dispatch(setUser(data));
-
-      dispatch(setToken(data.token));
-
-      dispatch(setToken(data.token));
-
-      // ✅ PERSIST LOGIN (THIS IS THE KEY)
-      window.localStorage.setItem("auth", JSON.stringify({
-        token: data.token,
-        email: data.email,
-        role: data.role,
-        userType: data.userType,
-        dbUrl: data.dbUrl,
-        loggedAt: Date.now(),
-      }));
-
-      console.log("Get User Data in Login and Saved in Redux:", data);
-
-      // ✅ Role-based redirect logic
-      if (data.role === "MASTER_ADMIN") {
-        router.replace("/master-dashboard");
-      } else {
-        router.replace("/dashboard");
+    onSuccess: (data, vars) => {
+      if (data?.needsCompany) {
+        opts?.onNeedsCompany?.({
+          email: String(vars.email).trim().toLowerCase(),
+          selectionToken: data.selectionToken,
+          companies: data.companies,
+        });
+        return;
       }
+      complete(data);
     },
     onError: (error: any) => {
       console.warn("Login error:", error?.message);
-      console.log("error in login", error.message);
     },
+  });
+};
+
+/** Step 2 of sign-in for users with several companies. */
+export const useSelectCompany = () => {
+  const complete = useCompleteLogin();
+  return useMutation({
+    mutationFn: selectCompany,
+    onSuccess: (data) => complete(data),
   });
 };

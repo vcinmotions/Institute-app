@@ -35,7 +35,7 @@ import { countries } from "@/components/common/CountriesCode";
 import { normalizeEmail, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { portalApi, setPortalToken } from "@/lib/portalApi";
-import { USER_TIERS, tierLabel } from "@/lib/userTiers";
+import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel, planPrice, Plan } from "@/lib/userTiers";
 
 const CompanySchema = z.object({
     name: z.string().min(1, "Display Name is required"),
@@ -86,10 +86,22 @@ type FormErrors = Partial<Record<keyof CompanyData, string>>;
  * - portal: public website registration; after saving, the customer goes to
  *   the subscription page to pay (Razorpay).
  */
-export default function CompanyForm({ portal = false, plan = "" }: { portal?: boolean; plan?: string }) {
+export default function CompanyForm({ portal = false, plan = "", trialDefault = false }: { portal?: boolean; plan?: string; trialDefault?: boolean }) {
     const [submitting, setSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [maxUsers, setMaxUsers] = useState("1");
+    const [trial, setTrial] = useState(trialDefault); // 1-month free trial instead of paying now
+    // Live price for the chosen number of simultaneous logins (portal registration only).
+    const [plans, setPlans] = useState<Plan[]>([]);
+    const [mult, setMult] = useState<Record<string, number>>(DEFAULT_TIER_MULTIPLIERS);
+    useEffect(() => {
+        if (!portal) return;
+        portalApi.get("/plans").then((r) => setPlans(r.data)).catch(() => {});
+        portalApi
+            .get("/app-settings")
+            .then((r) => r.data?.userTierMultipliers && setMult(r.data.userTierMultipliers))
+            .catch(() => {});
+    }, [portal]);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [newCompany, setNewCompany] = useState<CompanyData>({
         name: "",
@@ -487,6 +499,7 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
             financialStartDate: newCompany.financialStartDate,
             financialEndDate: newCompany.financialEndDate,
             maxUsers: Number(maxUsers),
+            ...(portal && trial ? { trial: true } : {}),
 
             state: newCompany.state,
             city: newCompany.city,
@@ -504,7 +517,8 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
             try {
                 const { data } = await portalApi.post("/portal/register", admissionPayload);
                 setPortalToken(data.token);
-                router.push(`/subscription${plan ? `?plan=${plan}` : ""}`);
+                // A trial is already active, so go to the overview; otherwise on to choose a plan and pay.
+                router.push(data.trial ? "/subscription" : `/subscription${plan ? `?plan=${plan}` : ""}`);
             } catch (err: any) {
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 setAlert({
@@ -682,6 +696,36 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                                         ))}
                                     </select>
                                     <p className="mt-1 text-xs text-gray-500">You can change this when you renew.</p>
+                                    <label className={`mt-3 flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 text-sm ${trial ? "border-green-500 bg-green-50 dark:bg-green-500/10" : "border-gray-200 dark:border-gray-700"}`}>
+                                        <input type="checkbox" checked={trial} onChange={(e) => setTrial(e.target.checked)} className="mt-0.5 h-4 w-4" />
+                                        <span>
+                                            <b className="text-gray-900 dark:text-white">Start with a 1-month free trial</b>
+                                            <span className="block text-xs text-gray-500">
+                                                New customers only. No payment now; pick a plan any time before the month ends.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    {plans.length > 0 && (
+                                        <div className="mt-3 space-y-1.5">
+                                            {plans.map((p) => (
+                                                <div
+                                                    key={p.code}
+                                                    className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm ${
+                                                        plan === p.code
+                                                            ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10"
+                                                            : "border-gray-200 dark:border-gray-700"
+                                                    }`}
+                                                >
+                                                    <span className="text-gray-600 dark:text-gray-300">
+                                                        {p.name} ({p.months} months)
+                                                    </span>
+                                                    <span className="font-semibold text-gray-900 dark:text-white">
+                                                        ₹{planPrice(p, Number(maxUsers), mult).toLocaleString("en-IN")}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
@@ -807,12 +851,10 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                                     <Select
                                         options={state.map((s) => ({ label: s.name, value: s.isoCode }))}
                                         placeholder="Select State"
+                                        searchable
                                         onChange={(value) => handleChange("state", value)}
                                         defaultValue={newCompany.state}
                                     />
-                                    <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                        <ChevronDownIcon />
-                                    </span>
                                 </div>
                                 {errors.state && <p className="mt-1 text-sm text-red-500">{errors.state}</p>}
                             </div>
@@ -822,6 +864,7 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                                 <Select
                                     options={city.map((c) => ({ label: c.name, value: c.name }))}
                                     placeholder="Select City"
+                                    searchable
                                     onChange={(value) => handleChange("city", value)}
                                     defaultValue={newCompany.city}
                                 />
@@ -845,6 +888,26 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
 
                     {/* Action Bar */}
                     <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
+                        {portal && trial && (
+                            <div className="mr-auto text-right text-sm sm:mr-4">
+                                <b className="text-base text-green-600">Free for 1 month</b>
+                                <span className="ml-2 text-xs text-gray-500">then from ₹{plans.length ? Math.min(...plans.map((p) => planPrice(p, Number(maxUsers), mult))).toLocaleString("en-IN") : "-"}</span>
+                            </div>
+                        )}
+                        {portal && !trial && plans.length > 0 && (
+                            <div className="mr-auto text-right text-sm text-gray-600 sm:mr-4 dark:text-gray-300">
+                                <span className="text-xs text-gray-500">{tierLabel(Number(maxUsers))} · </span>
+                                {plans.map((p, i) => (
+                                    <span key={p.code}>
+                                        {i > 0 && <span className="mx-1 text-gray-400">|</span>}
+                                        {p.months} mo{" "}
+                                        <b className="text-base text-gray-900 dark:text-white">
+                                            ₹{planPrice(p, Number(maxUsers), mult).toLocaleString("en-IN")}
+                                        </b>
+                                    </span>
+                                ))}
+                            </div>
+                        )}
                         <Button
                             disabled={portal ? submitting : loading === true}
                             size="sm"
@@ -854,7 +917,7 @@ export default function CompanyForm({ portal = false, plan = "" }: { portal?: bo
                             onClick={handleSubmit}
                         >
                             {portal
-                                ? submitting ? "Creating your account..." : "Register & continue to payment"
+                                ? submitting ? "Creating your account..." : trial ? "Register & start free trial" : "Register & continue to payment"
                                 : loading === true ? "Creating..." : "Save Company"}
                         </Button>
                     </div>

@@ -122,6 +122,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 });
 
 exports.Prisma.ClientAdminScalarFieldEnum = {
+  isMaster: 'isMaster',
   id: 'id',
   name: 'name',
   email: 'email',
@@ -182,6 +183,7 @@ exports.Prisma.ActivityLogScalarFieldEnum = {
 };
 
 exports.Prisma.EnquiryScalarFieldEnum = {
+  branchId: 'branchId',
   id: 'id',
   srNo: 'srNo',
   name: 'name',
@@ -267,6 +269,7 @@ exports.Prisma.PaymentReceiptConfigScalarFieldEnum = {
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
+  branchId: 'branchId',
   id: 'id',
   serialNumber: 'serialNumber',
   studentCode: 'studentCode',
@@ -313,6 +316,7 @@ exports.Prisma.CourseFeeStructureScalarFieldEnum = {
 };
 
 exports.Prisma.BatchScalarFieldEnum = {
+  branchId: 'branchId',
   id: 'id',
   name: 'name',
   facultyId: 'facultyId',
@@ -346,6 +350,7 @@ exports.Prisma.FacultyScalarFieldEnum = {
 };
 
 exports.Prisma.LabScalarFieldEnum = {
+  branchId: 'branchId',
   id: 'id',
   name: 'name',
   location: 'location',
@@ -556,6 +561,36 @@ exports.Prisma.FinancialRecordScalarFieldEnum = {
   labId: 'labId'
 };
 
+exports.Prisma.BranchScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  city: 'city',
+  address: 'address',
+  contact: 'contact',
+  isDefault: 'isDefault',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  clientAdminId: 'clientAdminId'
+};
+
+exports.Prisma.UserCompanyAccessScalarFieldEnum = {
+  id: 'id',
+  roleUserId: 'roleUserId',
+  clientAdminId: 'clientAdminId',
+  role: 'role',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ActiveSessionScalarFieldEnum = {
+  id: 'id',
+  userType: 'userType',
+  userId: 'userId',
+  clientAdminId: 'clientAdminId',
+  deviceInfo: 'deviceInfo',
+  createdAt: 'createdAt',
+  lastSeenAt: 'lastSeenAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -664,7 +699,10 @@ exports.Prisma.ModelName = {
   StudentTest: 'StudentTest',
   CourseCompletion: 'CourseCompletion',
   Certificate: 'Certificate',
-  FinancialRecord: 'FinancialRecord'
+  FinancialRecord: 'FinancialRecord',
+  Branch: 'Branch',
+  UserCompanyAccess: 'UserCompanyAccess',
+  ActiveSession: 'ActiveSession'
 };
 
 /**

@@ -9,6 +9,9 @@ datasource db {
 }
 
 model ClientAdmin {
+  isMaster  Boolean  @default(false)
+  userAccess UserCompanyAccess[]
+  branches Branch[]
   id                  String               @id @default(uuid())
   name                String
   email               String               @unique
@@ -73,6 +76,7 @@ model FinancialYear {
 }
 
 model RoleUser {
+  companyAccess UserCompanyAccess[]
   id                  String      @id @default(uuid())
   name                String
   email               String      @unique
@@ -101,8 +105,10 @@ model ActivityLog {
 }
 
 model Enquiry {
+  branchId  Int?
+  branch    Branch?  @relation(fields: [branchId], references: [id])
   id               String          @id @default(uuid())
-  srNo             Int             @unique
+  srNo             Int             
   name             String
   contact          String
   alternateContact String?
@@ -132,6 +138,7 @@ model Enquiry {
   followUps        FollowUp[]
   notification     Notification?
 
+  @@unique([clientAdminId, srNo])
   @@unique([email, clientAdminId])
   @@unique([contact, clientAdminId])
 }
@@ -217,10 +224,12 @@ model PaymentReceiptConfig {
 }
 
 model Student {
+  branchId  Int?
+  branch    Branch?  @relation(fields: [branchId], references: [id])
   id                 Int                @id @default(autoincrement())
-  serialNumber       Int                @unique
-  studentCode        String             @unique
-  admissionNumber    String             @unique
+  serialNumber       Int
+  studentCode        String
+  admissionNumber    String
   fullName           String
   fatherName         String?
   photoUrl           String?
@@ -253,6 +262,10 @@ model Student {
   labAllocations     LabAllocation[]
   stationery         StationeryIssue[]
   clientAdmin        ClientAdmin        @relation(fields: [clientAdminId], references: [id])
+
+  @@unique([clientAdminId, serialNumber])
+  @@unique([clientAdminId, studentCode])
+  @@unique([clientAdminId, admissionNumber])
   studentCourses     StudentCourse[]
   feeRecords         StudentFee[]
   tasks              StudentTask[]
@@ -294,6 +307,8 @@ model CourseFeeStructure {
 }
 
 model Batch {
+  branchId  Int?
+  branch    Branch?  @relation(fields: [branchId], references: [id])
   id             Int             @id @default(autoincrement())
   name           String
   facultyId      Int?
@@ -345,6 +360,8 @@ model Faculty {
 }
 
 model Lab {
+  branchId  Int?
+  branch    Branch?  @relation(fields: [branchId], references: [id])
   id               Int               @id @default(autoincrement())
   name             String
   location         String?
@@ -447,8 +464,10 @@ model StudentFeeLog {
   transactionNo String?    
   bankName      String?
 
-  receiptNo    String      @unique
+  receiptNo    String
   studentFee   StudentFee  @relation(fields: [studentFeeId], references: [id])
+
+  @@index([receiptNo])
 }
 
 model StudentFee {
@@ -689,4 +708,51 @@ enum TestStatus {
 enum TaskStatus {
   DRAFT
   PUBLISHED
+}
+
+// A physical location of the institute (scenario: one institute, many locations).
+model Branch {
+  id        Int      @id @default(autoincrement())
+  name      String   // e.g. "Gandhinagar"
+  city      String?
+  address   String?
+  contact   String?
+  isDefault Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  labs      Lab[]
+  batches   Batch[]
+  students  Student[]
+  enquiries Enquiry[]
+
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+}
+
+// One account can be used in several companies of the institute, with a role per company.
+model UserCompanyAccess {
+  id            String      @id @default(uuid())
+  roleUserId    String
+  roleUser      RoleUser    @relation(fields: [roleUserId], references: [id], onDelete: Cascade)
+  clientAdminId String
+  clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id], onDelete: Cascade)
+  role          UserRole
+  createdAt     DateTime    @default(now())
+
+  @@unique([roleUserId, clientAdminId])
+}
+
+// One row per signed-in user. Counted institute-wide against the subscription's user limit.
+model ActiveSession {
+  id            String   @id @default(uuid())
+  userType      String   // ADMIN | ROLE_USER | FACULTY
+  userId        String
+  clientAdminId String   // company the user is working in
+  deviceInfo    String?
+  createdAt     DateTime @default(now())
+  lastSeenAt    DateTime @default(now())
+
+  @@unique([userType, userId])
+  @@index([lastSeenAt])
 }

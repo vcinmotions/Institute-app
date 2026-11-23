@@ -6,7 +6,9 @@ import { useSearchParams } from "next/navigation";
 import CompanyForm from "@/app/(admin)/master-dashboard/company/form/createCompany";
 
 function SignupInner() {
-  const plan = useSearchParams().get("plan") || "";
+  const params = useSearchParams();
+  const plan = params.get("plan") || "";
+  const trial = params.get("trial") === "1"; // arrived from the "Start free trial" card
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
       <div className="mx-auto max-w-5xl">
@@ -21,7 +23,7 @@ function SignupInner() {
             <span aria-hidden>←</span> Back to home
           </Link>
         </div>
-        <CompanyForm portal plan={plan} />
+        <CompanyForm portal plan={plan} trialDefault={trial} />
       </div>
     </main>
   );

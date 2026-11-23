@@ -5,3 +5,19 @@ export const DEFAULT_TIER_MULTIPLIERS: Record<string, number> = {
 };
 
 export const tierLabel = (n: number) => `${n} User${n === 1 ? "" : "s"}`;
+
+export type Plan = {
+  code: string;
+  name: string;
+  months: number;
+  price: number;
+  currency: string;
+  tierPrices?: Record<string, number>;
+};
+
+// Explicit price for this login count if the admin set one, else plan price x multiplier.
+export const planPrice = (p: Plan, users: number, mult: Record<string, number>) => {
+  const explicit = Number(p.tierPrices?.[String(users)]);
+  if (users !== 1 && explicit > 0) return Math.round(explicit * 100) / 100;
+  return Math.round(p.price * (mult[String(users)] ?? 1) * 100) / 100;
+};

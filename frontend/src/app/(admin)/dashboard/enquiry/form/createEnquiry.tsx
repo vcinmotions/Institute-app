@@ -487,6 +487,7 @@ export default function EnquiryForm() {
                   options={city.map((c) => ({ label: c.name, value: c.name }))}
                   tabIndex={7}
                   placeholder="Select City"
+                  searchable
                   onChange={(value) => handleChange("city", value)}
                   value={newEnquiry.city}
                 />

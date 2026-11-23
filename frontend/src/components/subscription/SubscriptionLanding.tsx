@@ -38,6 +38,7 @@ const HIGHLIGHTS = [
 
 const FAQ = [
   { q: "Do I need to register anything before subscribing?", a: "No. Choose a plan, register your institute on the next page and pay online. Nothing else is required." },
+  { q: "Is there a free trial?", a: "Yes. New customers can start with a 1-month free trial when they register: no payment up front, and you pick a plan before the month ends. One trial per business email or phone number." },
   { q: "Where do I use the software after paying?", a: "Install the Windows app and sign in with the username and password you chose while registering." },
   { q: "How do I renew?", a: "Use “Sign in to manage or renew” on this page, sign in with your account and pay for a new plan." },
   { q: "Is my institute's data kept separate from others?", a: "Yes. Every institute gets its own database, so your records are never mixed with anyone else's." },
@@ -48,6 +49,21 @@ export default function SubscriptionLanding() {
   const [plans, setPlans] = useState<
     { id: string; name: string; price: string; note: string; featured?: boolean }[]
   >([]);
+
+  // The page appears after a client-side check, so the browser's own scroll to "#pricing" can
+  // fire before the section exists. Scroll to the hash once the landing page is on screen.
+  useEffect(() => {
+    const go = () => {
+      const id = window.location.hash.replace("#", "");
+      if (id) document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    const t = window.setTimeout(go, 50);
+    window.addEventListener("hashchange", go);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("hashchange", go);
+    };
+  }, []);
 
   // Prices are set by the super admin (Subscription Pricing page).
   useEffect(() => {
@@ -197,13 +213,38 @@ export default function SubscriptionLanding() {
 
       {/* Pricing */}
       <section id="pricing" className="scroll-mt-20 bg-gray-50 py-16 dark:bg-gray-900/50">
-        <div className="mx-auto max-w-4xl px-4 text-center">
+        <div className="mx-auto max-w-6xl px-4 text-center">
           <h2 className="text-3xl font-bold md:text-4xl">Simple, transparent pricing</h2>
           <p className="mt-3 text-gray-600 dark:text-gray-300">
             Every plan includes all modules. Pick the length that fits you.
           </p>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className={`mx-auto mt-10 grid gap-6 ${plans.length > 1 ? "max-w-5xl md:grid-cols-3" : "max-w-md"}`}>
+            {/* Free trial for new customers */}
+            <div className="relative rounded-2xl border border-green-500/60 bg-white p-8 text-left shadow-sm dark:bg-gray-900">
+              <span className="absolute -top-3 left-6 rounded-full bg-green-500 px-3 py-1 text-xs font-medium text-white">
+                New customers
+              </span>
+              <p className="text-sm text-gray-500">Try everything first</p>
+              <h3 className="mt-1 text-2xl font-semibold">Free Trial</h3>
+              <p className="mt-4 text-4xl font-bold">
+                ₹0 <span className="text-base font-medium text-gray-500">for 1 month</span>
+              </p>
+              <ul className="mt-5 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                {["All modules included", "Windows app access", "No payment needed to start", "Choose a plan before it ends"].map((i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="text-green-500">✓</span> {i}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/signup?trial=1"
+                className="mt-6 block rounded-lg bg-green-500 px-4 py-3 text-center font-medium text-white hover:bg-green-600"
+              >
+                Start free trial
+              </Link>
+            </div>
+
             {plans.map((p) => (
               <div
                 key={p.id}

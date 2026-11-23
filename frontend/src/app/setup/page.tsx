@@ -23,40 +23,34 @@ export default function SetupPage() {
   async function handleSubmit(e: any) {
     e.preventDefault();
     setLoading(true);
+    setMsg("");
 
     const form = new FormData(e.target);
-    const data = Object.fromEntries(form.entries());
-
-    // 🔹 force email to lowercase
-    if (typeof data.email === "string") {
-      data.email = data.email.trim().toLowerCase();
-    }
-
-    // 🔹 password to space safety
-    if (typeof data.password === "string") {
-      data.password = data.password.trim();
-    }
+    const email = String(form.get("email") ?? "").trim().toLowerCase();
+    const password = String(form.get("password") ?? "").trim();
 
     try {
+      // The central server confirms this is the Master Institute Super Admin and returns
+      // the institute, its companies and its subscription; this PC builds its database from that.
       const res = await fetch(`${API_BASE_URL}/setup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ email, password }),
       });
 
       const json = await res.json();
       if (!res.ok) throw new Error(json.error);
 
-      setMsg("✅ Initial Setup Complete...");
-        
-      window.localStorage.setItem("email", JSON.stringify({email: data.email,}));
+      const sub = json.subscription?.status;
+      setMsg(
+        `✅ ${json.instituteName} is ready with ${json.companies} compan${json.companies === 1 ? "y" : "ies"}.` +
+          (sub && sub !== "ACTIVE" ? ` Subscription: ${sub}. Renew it on the web portal.` : ""),
+      );
 
       setTimeout(() => {
-        if (res.ok) {
-          // @ts-ignore
-          router.replace("/setup/address")
-        }
-      }, 1000);
+        // @ts-ignore
+        router.replace("/signin");
+      }, 2500);
     } catch (err: any) {
       setMsg("❌ " + err.message);
     } finally {
@@ -65,7 +59,7 @@ export default function SetupPage() {
   }
 
   return (
-    <SetupModalCard title="Initial Setup">
+    <SetupModalCard title="Institute Setup">
       <div className="space-y-6">
         {msg && (
           <Alert
@@ -76,30 +70,20 @@ export default function SetupPage() {
           />
         )}
 
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Sign in with your Master Institute account from the web portal. Only the Master Super Admin can set up
+          this computer. Other computers in your office connect to this one and do not need setup.
+        </p>
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <Label>Client ID</Label>
-            <Input
-              ref={firstInputRef}
-              name="clientId"
-              placeholder="Client ID"
-              required
-            />
+            <Label>Master Super Admin email / username</Label>
+            <Input ref={firstInputRef} name="email" required placeholder="Enter your portal login" autoComplete="username" />
           </div>
 
           <div>
-            <Label>Institite Name</Label>
-            <Input name="name" className="capitalize" required placeholder="Enter Institute Name" />
-          </div>
-
-          <div>
-            <Label>Registered Email</Label>
-            <Input name="email" required placeholder="Enter Email" />
-          </div>
-
-          <div>
-            <Label> Password</Label>
-            <Input type="password" name="password" required placeholder="Enter Password" />
+            <Label>Password</Label>
+            <Input type="password" name="password" required placeholder="Enter your portal password" autoComplete="current-password" />
           </div>
 
           <div className="mt-4 flex justify-end gap-3">
@@ -112,7 +96,7 @@ export default function SetupPage() {
               Cancel
             </Button> */}
             <Button size="sm" className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" disabled={loading}>
-              {loading ? "Setting up..." : "Create System"}
+              {loading ? "Verifying and setting up..." : "Activate this computer"}
             </Button>
           </div>
         </form>

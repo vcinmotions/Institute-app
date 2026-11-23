@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import PortalCompanies from "./PortalCompanies";
 import PortalProfileCard from "./PortalProfileCard";
-import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel } from "@/lib/userTiers";
+import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel, planPrice, Plan } from "@/lib/userTiers";
 import { portalApi, getPortalToken, setPortalToken, portalAuthHeader } from "@/lib/portalApi";
 
 declare global {
@@ -14,14 +14,6 @@ declare global {
   }
 }
 
-type Plan = { code: string; name: string; months: number; price: number; currency: string; tierPrices?: Record<string, number> };
-
-// Explicit price for this login count if the admin set one, else plan price x multiplier.
-const planPrice = (p: Plan, users: number, mult: Record<string, number>) => {
-  const explicit = Number(p.tierPrices?.[String(users)]);
-  if (users !== 1 && explicit > 0) return Math.round(explicit * 100) / 100;
-  return Math.round(p.price * (mult[String(users)] ?? 1) * 100) / 100;
-};
 type Profile = {
   instituteName: string;
   name: string;
@@ -219,7 +211,7 @@ export default function PortalSubscription() {
               </button>
               <p className="text-center text-sm text-gray-500">
                 New here?{" "}
-                <Link href="/" className="text-brand-500 underline">
+                <Link href="/#pricing" className="text-brand-500 underline">
                   See plans and register
                 </Link>
               </p>
@@ -232,8 +224,9 @@ export default function PortalSubscription() {
 
   // ---------------- Signed in: admin-style layout ----------------
   const active = me?.status === "ACTIVE";
+  const isTrial = me?.plan === "TRIAL";
   const currentPlan = plans.find((p) => p.code === me?.plan);
-  const totalDays = currentPlan ? currentPlan.months * 30 : 0;
+  const totalDays = isTrial ? 30 : currentPlan ? currentPlan.months * 30 : 0;
   const pct = active && totalDays ? Math.min(100, Math.round(((me?.daysLeft ?? 0) / totalDays) * 100)) : 0;
   const expiringSoon = active && (me?.daysLeft ?? 0) <= 10;
   const displayName = me?.profile?.name || me?.profile?.instituteName || me?.email;
@@ -327,13 +320,17 @@ export default function PortalSubscription() {
                 <p className="text-sm text-gray-500">Hello, {displayName}</p>
                 <div className="mt-1 flex flex-wrap items-center justify-between gap-3">
                   <h2 className="text-2xl font-semibold">
-                    {active ? `${me?.daysLeft} day(s) left on your plan` : "No active subscription"}
+                    {active
+                      ? isTrial
+                        ? `Free trial: ${me?.daysLeft} day(s) left`
+                        : `${me?.daysLeft} day(s) left on your plan`
+                      : "No active subscription"}
                   </h2>
                   <button
                     onClick={() => setTab("plans")}
                     className="rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600"
                   >
-                    {active ? "Renew / extend" : "Choose a plan"}
+                    {isTrial ? "Choose a plan" : active ? "Renew / extend" : "Choose a plan"}
                   </button>
                 </div>
 
@@ -350,6 +347,11 @@ export default function PortalSubscription() {
                     </p>
                   </div>
                 )}
+                {isTrial && active && !expiringSoon && (
+                  <p className="mt-4 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-500/10 dark:text-green-400">
+                    You are on the free trial with everything included. Choose a plan before it ends to keep using the app.
+                  </p>
+                )}
                 {expiringSoon && (
                   <p className="mt-4 rounded-lg bg-orange-50 px-3 py-2 text-sm text-orange-700 dark:bg-orange-500/10 dark:text-orange-400">
                     Your plan ends soon. Renew now so the app keeps working without a break.
@@ -362,7 +364,7 @@ export default function PortalSubscription() {
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {[
-                  ["Current plan", currentPlan?.name ?? (active ? me?.plan : "None")],
+                  ["Current plan", isTrial ? "Free trial" : (currentPlan?.name ?? (active ? me?.plan : "None"))],
                   ["Status", badge[0]],
                   ["Valid until", fmt(me?.expiryDate)],
                   ["Total paid", `₹${totalPaid.toLocaleString("en-IN")}`],

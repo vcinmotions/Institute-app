@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getCentralPrisma } from "../prisma-client/central-client";
 import { createTenant } from "../utils/createTenant";
+import { instituteDb, ensureMasterCompany, createCompanyRow } from "../utils/institute";
 import { normalizeTenantInput } from "../utils/normalizer/tenantNormalizer";
 import { parseMaxUsers } from "../utils/userTiers";
 import { readSettings } from "./saas.controller";
@@ -23,6 +24,15 @@ function addMonths(d: Date, months: number) {
   r.setMonth(r.getMonth() + months);
   return r;
 }
+
+// Free trial for new customers: one per business email / phone number, ever.
+export const TRIAL_PLAN = "TRIAL";
+const TRIAL_MONTHS = Number(process.env.TRIAL_MONTHS) || 1;
+const trialKeys = (businessEmail: string | null, contact: string | null) =>
+  [
+    businessEmail ? `trial:email:${businessEmail.toLowerCase()}` : "",
+    contact ? `trial:phone:${String(contact).replace(/\D/g, "").slice(-10)}` : "",
+  ].filter(Boolean);
 
 function portalToken(email: string) {
   return jwt.sign({ role: "PORTAL", email }, process.env.JWT_SECRET!, { expiresIn: "2h" });
@@ -80,6 +90,8 @@ export async function registerInstitute(req: Request, res: Response) {
     return res.status(400).json({ error: "Password must be at least 6 characters long." });
   }
 
+  const wantsTrial = req.body?.trial === true || req.body?.trial === "true";
+
   try {
     const prisma = getCentralPrisma();
     if (await prisma.tenant.findUnique({ where: { email: n.email! } })) {
@@ -87,6 +99,17 @@ export async function registerInstitute(req: Request, res: Response) {
     }
     if (await prisma.tenant.findUnique({ where: { instituteName: n.instituteName! } })) {
       return res.status(409).json({ error: "Institute name already exists. Please choose a different institute name." });
+    }
+
+    // Checked BEFORE anything is created, so a refused trial leaves nothing behind.
+    const keys = trialKeys(n.businessEmail, n.contact);
+    if (wantsTrial) {
+      const used = await prisma.appSetting.findMany({ where: { key: { in: keys } } });
+      if (used.length > 0) {
+        return res.status(409).json({
+          error: "A free trial was already used with this business email or phone number. Please choose a plan to continue.",
+        });
+      }
     }
 
     await createTenant(
@@ -102,12 +125,20 @@ export async function registerInstitute(req: Request, res: Response) {
       create: {
         email: n.email!,
         clientId: tenant?.tenantId ?? "",
-        status: "EXPIRED",
+        ...(wantsTrial
+          ? { plan: TRIAL_PLAN, status: "ACTIVE", startDate: new Date(), expiryDate: addMonths(new Date(), TRIAL_MONTHS) }
+          : { status: "EXPIRED" }),
         maxUsers: parseMaxUsers(req.body?.maxUsers),
       },
     });
 
-    res.status(201).json({ token: portalToken(n.email!), email: n.email });
+    if (wantsTrial) {
+      for (const key of keys) {
+        await prisma.appSetting.upsert({ where: { key }, update: { value: n.email! }, create: { key, value: n.email! } });
+      }
+    }
+
+    res.status(201).json({ token: portalToken(n.email!), email: n.email, trial: wantsTrial });
   } catch (e: any) {
     console.error("portal register failed:", e);
     res.status(500).json({ error: "Registration failed. Please try again." });
@@ -122,6 +153,62 @@ export async function portalLogin(req: Request, res: Response) {
     return res.status(401).json({ error: "Invalid email or password" });
   }
   res.json({ token: portalToken(email), email });
+}
+
+// ---------- First-time EXE setup: who is this institute? ----------
+
+/**
+ * Called by the desktop EXE during first-time setup. Only the MASTER institute's own
+ * credentials work (a company or normal user cannot authorise an installation).
+ * Returns the institute identity, its companies and its subscription status.
+ * Nothing secret is returned: the EXE keeps its own hash of the password.
+ */
+export async function portalIdentity(req: Request, res: Response) {
+  const email = normEmail(req.body?.email);
+  const password = String(req.body?.password ?? "");
+  const prisma = getCentralPrisma();
+  const tenant = email ? await prisma.tenant.findUnique({ where: { email } }) : null;
+  if (!tenant?.password || !(await bcrypt.compare(password, tenant.password))) {
+    return res.status(401).json({ error: "Invalid email or password" });
+  }
+  if (tenant.parentTenantId) {
+    return res.status(403).json({ error: "Only the Master Institute Super Admin can set up an installation." });
+  }
+  try {
+    const db = instituteDb(tenant);
+    await ensureMasterCompany(db);
+    const companies = await db.clientAdmin.findMany({
+      orderBy: { createdAt: "asc" },
+      include: { financialYears: { where: { isActive: true }, take: 1 } },
+    });
+    const sub = await prisma.portalSubscription.findUnique({ where: { email: tenant.email! } });
+    const active = !!sub && sub.status === "ACTIVE" && sub.expiryDate > new Date();
+    res.json({
+      instituteId: tenant.id,
+      instituteName: tenant.instituteName,
+      slug: tenant.slug,
+      owner: {
+        name: tenant.name, email: tenant.email, businessEmail: tenant.businessEmail, contact: tenant.contact,
+        country: tenant.country, state: tenant.state, city: tenant.city, zipCode: tenant.zipCode,
+        fullAddress: tenant.fullAddress,
+      },
+      companies: companies.map((c: any) => ({
+        name: c.name, instituteName: c.instituteName, contact: c.contact, country: c.country, state: c.state,
+        city: c.city, zipCode: c.zipCode, fullAddress: c.fullAddress, isMaster: c.isMaster,
+        financialStartDate: c.financialYears?.[0]?.startDate ?? null,
+        financialEndDate: c.financialYears?.[0]?.endDate ?? null,
+      })),
+      subscription: {
+        status: active ? "ACTIVE" : sub?.status === "ACTIVE" ? "EXPIRED" : sub?.status ?? "NONE",
+        plan: sub?.plan ?? "NONE",
+        expiryDate: sub?.expiryDate ?? null,
+        maxUsers: sub?.maxUsers ?? 1,
+      },
+    });
+  } catch (e) {
+    console.error("portal identity failed:", e);
+    res.status(500).json({ error: "Could not read the institute details. Please try again." });
+  }
 }
 
 // ---------- Subscription status ----------
@@ -410,75 +497,106 @@ export async function syncSubscription(req: Request, res: Response) {
 
 // ---------- Companies under a master institute ----------
 
-const companyRow = {
-  id: true, name: true, instituteName: true, email: true, businessEmail: true,
-  contact: true, city: true, state: true, country: true, createdAt: true,
-} as const;
+// ---------- Companies (rows inside the institute's one database) ----------
 
-export async function listCompanies(req: Request, res: Response) {
+const companyView = (c: any) => ({
+  id: c.id,
+  name: c.name,
+  instituteName: c.instituteName,
+  contact: c.contact,
+  city: c.city,
+  state: c.state,
+  country: c.country,
+  zipCode: c.zipCode,
+  fullAddress: c.fullAddress,
+  isMaster: !!c.isMaster,
+  createdAt: c.createdAt,
+});
+
+async function masterContext(req: Request) {
   const prisma = getCentralPrisma();
   const master = await prisma.tenant.findUnique({ where: { email: (req as any).portalEmail } });
-  if (!master) return res.status(404).json({ error: "Account not found" });
-  const rows = await prisma.tenant.findMany({
-    where: { parentTenantId: master.id },
-    select: companyRow,
-    orderBy: { createdAt: "asc" },
-  });
-  res.json(rows);
+  if (!master || master.parentTenantId) return null;
+  return { prisma, master, db: instituteDb(master) };
+}
+
+export async function listCompanies(req: Request, res: Response) {
+  const ctx = await masterContext(req);
+  if (!ctx) return res.status(404).json({ error: "Account not found" });
+  await ensureMasterCompany(ctx.db);
+  const rows = await ctx.db.clientAdmin.findMany({ orderBy: { createdAt: "asc" } });
+  res.json(rows.map(companyView));
 }
 
 export async function createCompany(req: Request, res: Response) {
   const n = normalizeTenantInput(req.body);
   const required = [
-    n.name, n.instituteName, n.email, n.password, n.contact, n.country,
+    n.name, n.instituteName, n.contact, n.country,
     n.state, n.city, n.zipCode, n.fullAddress, n.financialStartDate, n.financialEndDate,
   ];
   if (required.some((v) => !v)) return res.status(400).json({ error: "Missing required fields." });
-  if (String(n.password).length < 6) {
-    return res.status(400).json({ error: "Password must be at least 6 characters long." });
-  }
 
   try {
-    const prisma = getCentralPrisma();
-    const master = await prisma.tenant.findUnique({ where: { email: (req as any).portalEmail } });
-    if (!master) return res.status(404).json({ error: "Account not found" });
+    const ctx = await masterContext(req);
+    if (!ctx) return res.status(404).json({ error: "Account not found" });
 
     // Companies can only be added while the master's subscription is active (paid).
-    const sub = await prisma.portalSubscription.findUnique({ where: { email: master.email! } });
+    const sub = await ctx.prisma.portalSubscription.findUnique({ where: { email: ctx.master.email! } });
     if (!sub || sub.status !== "ACTIVE" || sub.expiryDate <= new Date()) {
-      return res.status(402).json({
-        error: "Please activate a paid subscription before adding companies.",
-      });
+      return res.status(402).json({ error: "Please activate a paid subscription before adding companies." });
     }
 
-    if (await prisma.tenant.findUnique({ where: { email: n.email! } })) {
-      return res.status(409).json({ error: "Username already exists. Please choose a different username." });
-    }
-    if (await prisma.tenant.findUnique({ where: { instituteName: n.instituteName! } })) {
+    await ensureMasterCompany(ctx.db);
+    const all = await ctx.db.clientAdmin.findMany({ select: { instituteName: true } });
+    if (all.some((c: any) => c.instituteName.toLowerCase() === n.instituteName!.toLowerCase())) {
       return res.status(409).json({ error: "Company name already exists. Please choose a different name." });
     }
 
-    await createTenant(
-      n.name!, n.instituteName!, n.email!, n.password!, n.contact!, n.country!,
-      n.state!, n.city!, n.zipCode!, n.fullAddress!, n.financialStartDate!, n.financialEndDate!,
-      "", "", "", n.certificateName ?? "", n.businessEmail ?? master.businessEmail, master.id
-    );
-
-    const created = await prisma.tenant.findUnique({ where: { email: n.email! }, select: companyRow });
-    res.status(201).json(created);
+    const created = await createCompanyRow(ctx.db, ctx.master.slug, {
+      name: n.name!, instituteName: n.instituteName!, contact: n.contact!, country: n.country!,
+      state: n.state!, city: n.city!, zipCode: n.zipCode!, fullAddress: n.fullAddress!,
+      financialStartDate: n.financialStartDate!, financialEndDate: n.financialEndDate!,
+      certificateName: n.certificateName,
+    });
+    res.status(201).json(companyView(created));
   } catch (e: any) {
     console.error("create company failed:", e);
     res.status(500).json({ error: "Could not create the company" });
   }
 }
 
-/** Master opens one of its companies in the portal (issues a portal token for it). */
-export async function switchCompany(req: Request, res: Response) {
-  const prisma = getCentralPrisma();
-  const master = await prisma.tenant.findUnique({ where: { email: (req as any).portalEmail } });
-  const company = await prisma.tenant.findUnique({ where: { id: String(req.params.id) } });
-  if (!master || !company || company.parentTenantId !== master.id || !company.email) {
-    return res.status(404).json({ error: "Company not found" });
+/** Master edits a company's name, contact and address. */
+export async function updateCompany(req: Request, res: Response) {
+  const ctx = await masterContext(req);
+  if (!ctx) return res.status(404).json({ error: "Account not found" });
+  const company = await ctx.db.clientAdmin.findUnique({ where: { id: String(req.params.id) } });
+  if (!company) return res.status(404).json({ error: "Company not found" });
+
+  const n = normalizeTenantInput(req.body);
+  const required = [n.name, n.instituteName, n.contact, n.country, n.state, n.city, n.zipCode, n.fullAddress];
+  if (required.some((v) => !v)) return res.status(400).json({ error: "Please fill in all required fields." });
+  const digits = String(n.contact).replace(/\D/g, "");
+  if (digits.length < 8 || digits.length > 15) {
+    return res.status(400).json({ error: "Please enter a valid contact number." });
   }
-  res.json({ token: portalToken(company.email), email: company.email });
+  const others = await ctx.db.clientAdmin.findMany({
+    where: { NOT: { id: company.id } },
+    select: { instituteName: true },
+  });
+  if (others.some((c: any) => c.instituteName.toLowerCase() === n.instituteName!.toLowerCase())) {
+    return res.status(409).json({ error: "Company name already exists. Please choose a different name." });
+  }
+  try {
+    const updated = await ctx.db.clientAdmin.update({
+      where: { id: company.id },
+      data: {
+        name: n.name!, instituteName: n.instituteName!, contact: n.contact!, country: n.country!,
+        state: n.state!, city: n.city!, zipCode: n.zipCode!, fullAddress: n.fullAddress!,
+      },
+    });
+    res.json(companyView(updated));
+  } catch (e) {
+    console.error("update company failed:", e);
+    res.status(500).json({ error: "Could not update the company" });
+  }
 }
