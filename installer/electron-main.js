@@ -210,8 +210,10 @@ function loadGlobalEnv() {
     ? path.join(__dirname, "../server")
     : path.join(RESOURCES_PATH, "server", "dist");
 
-  loadEnvFile(path.join(basePath, ".env"));
+  // .env.prod first: the first file to set a key wins, and production settings must beat the
+  // generic .env (which may carry development values such as a localhost licence-server address).
   loadEnvFile(path.join(basePath, ".env.prod"));
+  loadEnvFile(path.join(basePath, ".env"));
 
   if (!process.env.BACKUP_SECRET) {
     throw new Error("BACKUP_SECRET not loaded — check .env / .env.prod");

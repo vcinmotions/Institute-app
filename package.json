@@ -1,6 +1,6 @@
 {
   "name": "vcinmotions-application",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "main": "installer/electron-main.js",
   "private": true,
   "scripts": {
