@@ -30,6 +30,7 @@ type Institute = {
   startDate: string | null;
   expiryDate: string | null;
   totalPaid: number;
+  isCompany?: boolean;
 };
 
 const STATUS_STYLE: Record<string, string> = {
@@ -65,6 +66,116 @@ type Settings = {
   userTierMultipliers?: Record<string, number>;
 };
 
+// "2026-11-23T14:30" (local time) <-> ISO, for the date-time picker.
+const toLocalInput = (iso: string | null) => {
+  const d = iso ? new Date(iso) : new Date();
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+};
+const addMonthsTo = (local: string, months: number) => {
+  const base = new Date(local);
+  const from = isNaN(+base) || +base < Date.now() ? new Date() : base; // extend from the later of now / current expiry
+  from.setMonth(from.getMonth() + months);
+  return toLocalInput(from.toISOString());
+};
+
+/** Popup: make an institute active / inactive and set its expiry date and time. */
+function ManageInstituteModal({
+  inst,
+  onClose,
+  onSaved,
+}: {
+  inst: Institute;
+  onClose: () => void;
+  onSaved: (patch: Partial<Institute>) => void;
+}) {
+  const [active, setActive] = useState(inst.status === "ACTIVE" || inst.status === "EXPIRED" ? inst.status === "ACTIVE" : false);
+  const [expiry, setExpiry] = useState(toLocalInput(inst.expiryDate && new Date(inst.expiryDate) > new Date() ? inst.expiryDate : null));
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  const save = async () => {
+    setError("");
+    if (isNaN(+new Date(expiry))) return setError("Enter a valid expiry date and time.");
+    if (active && new Date(expiry) <= new Date()) return setError("To make an institute active, pick an expiry in the future.");
+    setBusy(true);
+    try {
+      const { data } = await saasApi.put(`/saas/institutes/${inst.tenantId}/subscription`, {
+        status: active ? "ACTIVE" : "SUSPENDED",
+        expiryDate: new Date(expiry).toISOString(),
+      });
+      onSaved(data);
+      onClose();
+    } catch (e: any) {
+      setError(e?.response?.data?.error || "Could not save. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+      <div className={`${card} w-full max-w-md`} onClick={(e) => e.stopPropagation()}>
+        <h3 className="text-lg font-semibold">{inst.name || inst.instituteName}</h3>
+        <p className="text-xs text-gray-500">@{inst.email}</p>
+
+        <p className="mt-5 text-sm font-medium">Status</p>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {[
+            { v: true, label: "Active", hint: "App works normally", on: "border-green-500 bg-green-50 text-green-700 dark:bg-green-500/10" },
+            { v: false, label: "Inactive", hint: "App becomes view-only", on: "border-red-500 bg-red-50 text-red-700 dark:bg-red-500/10" },
+          ].map((o) => (
+            <button
+              key={o.label}
+              type="button"
+              onClick={() => setActive(o.v)}
+              className={`rounded-lg border px-3 py-2 text-left text-sm ${active === o.v ? o.on : "border-gray-200 dark:border-gray-700"}`}
+            >
+              <b className="block">{o.label}</b>
+              <span className="text-xs opacity-80">{o.hint}</span>
+            </button>
+          ))}
+        </div>
+
+        <label className="mt-5 block text-sm font-medium">
+          Expiry date and time
+          <input type="datetime-local" value={expiry} onChange={(e) => setExpiry(e.target.value)} className={input} />
+        </label>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {[
+            ["+1 month", 1],
+            ["+3 months", 3],
+            ["+6 months", 6],
+            ["+1 year", 12],
+          ].map(([label, m]) => (
+            <button
+              key={String(label)}
+              type="button"
+              onClick={() => setExpiry(addMonthsTo(expiry, Number(m)))}
+              className="rounded-full border border-gray-300 px-3 py-1 text-xs hover:border-brand-500 hover:text-brand-500 dark:border-gray-700"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-gray-500">
+          The desktop app picks the change up at its next licence check, within a few minutes while it is online.
+        </p>
+
+        {error && <p className="mt-3 text-sm text-red-500">{error}</p>}
+        <div className="mt-5 flex justify-end gap-3">
+          <button onClick={onClose} className="rounded-lg px-4 py-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-300">
+            Cancel
+          </button>
+          <button onClick={save} disabled={busy} className={btn}>
+            {busy ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const input =
   "mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white";
 const card =
@@ -83,6 +194,7 @@ export default function SaasDashboard() {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [msg, setMsg] = useState("");
   const [saving, setSaving] = useState<string | null>(null);
+  const [managing, setManaging] = useState<Institute | null>(null);
 
   useEffect(() => {
     if (!getSaasToken()) {
@@ -239,7 +351,7 @@ export default function SaasDashboard() {
                 <table className="w-full min-w-[900px] text-left text-sm">
                   <thead className="border-b border-gray-200 text-xs uppercase text-gray-500 dark:border-gray-800">
                     <tr>
-                      {["Institute", "Contact", "Location", "Registered", "Plan", "Status", "Expires", "Paid (₹)"].map((h) => (
+                      {["Institute", "Contact", "Location", "Registered", "Plan", "Status", "Expires", "Paid (₹)", ""].map((h) => (
                         <th key={h} className="px-4 py-3 font-medium">{h}</th>
                       ))}
                     </tr>
@@ -272,11 +384,20 @@ export default function SaasDashboard() {
                           )}
                         </td>
                         <td className="px-4 py-3">{i.totalPaid ? i.totalPaid.toLocaleString("en-IN") : "—"}</td>
+                        <td className="px-4 py-3 text-right">
+                          {i.isCompany ? (
+                            <span className="text-xs text-gray-400" title="Follows its master institute">Company</span>
+                          ) : (
+                            <button onClick={() => setManaging(i)} className="text-sm font-medium text-brand-500 hover:underline">
+                              Manage
+                            </button>
+                          )}
+                        </td>
                       </tr>
                     ))}
                     {shown.length === 0 && (
                       <tr>
-                        <td colSpan={8} className="px-4 py-10 text-center text-gray-500">
+                        <td colSpan={9} className="px-4 py-10 text-center text-gray-500">
                           No institutes found.
                         </td>
                       </tr>
@@ -287,6 +408,17 @@ export default function SaasDashboard() {
             </>
           );
         })()}
+
+        {managing && (
+          <ManageInstituteModal
+            inst={managing}
+            onClose={() => setManaging(null)}
+            onSaved={(patch) => {
+              setInstitutes((list) => list.map((x) => (x.tenantId === managing.tenantId ? { ...x, ...patch } : x)));
+              setMsg(`${managing.name || managing.instituteName} updated`);
+            }}
+          />
+        )}
 
         {tab === "plans" &&
           plans.map((p) => (

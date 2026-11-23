@@ -155,7 +155,7 @@ export async function listInstitutes(_req: Request, res: Response) {
     prisma.tenant.findMany({
       select: {
         tenantId: true, instituteName: true, name: true, email: true, businessEmail: true,
-        contact: true, city: true, state: true, country: true, createdAt: true,
+        contact: true, city: true, state: true, country: true, createdAt: true, parentTenantId: true,
       },
       orderBy: { createdAt: "desc" },
     }),
@@ -178,6 +178,7 @@ export async function listInstitutes(_req: Request, res: Response) {
     }
     return {
       ...t,
+      isCompany: !!t.parentTenantId, // legacy company logins follow their master's subscription
       plan: subscribed ? s!.plan : null,
       status,
       startDate: subscribed ? s!.startDate : null,
@@ -187,4 +188,68 @@ export async function listInstitutes(_req: Request, res: Response) {
   });
 
   res.json(rows);
+}
+
+
+/**
+ * SaaS admin: switch an institute active / inactive and set its expiry date and time.
+ * Inactive = SUSPENDED, so the desktop app locks (view only) at its next licence check.
+ */
+export async function updateInstituteSubscription(req: Request, res: Response) {
+  const prisma = getCentralPrisma();
+  const tenant = await prisma.tenant.findUnique({ where: { tenantId: String(req.params.tenantId) } });
+  if (!tenant || !tenant.email) return res.status(404).json({ error: "Institute not found" });
+  if (tenant.parentTenantId) {
+    return res.status(400).json({ error: "This is a company login. It follows its master institute's subscription." });
+  }
+
+  const wantStatus = req.body?.status;
+  if (wantStatus !== undefined && wantStatus !== "ACTIVE" && wantStatus !== "SUSPENDED") {
+    return res.status(400).json({ error: "Status must be ACTIVE or SUSPENDED." });
+  }
+  let expiry: Date | undefined;
+  if (req.body?.expiryDate !== undefined && req.body?.expiryDate !== null && req.body?.expiryDate !== "") {
+    expiry = new Date(req.body.expiryDate);
+    if (isNaN(+expiry)) return res.status(400).json({ error: "Enter a valid expiry date and time." });
+  }
+
+  const sub =
+    (await prisma.portalSubscription.findUnique({ where: { email: tenant.email } })) ??
+    (await prisma.portalSubscription.create({
+      data: { email: tenant.email, clientId: tenant.tenantId, plan: "NONE", status: "EXPIRED" },
+    }));
+
+  const nextExpiry = expiry ?? sub.expiryDate;
+  const now = new Date();
+  let nextStatus: string = wantStatus ?? sub.status;
+  // Extending a lapsed (non-suspended) subscription into the future makes it active again.
+  if (!wantStatus && sub.status === "EXPIRED" && sub.plan !== "NONE" && nextExpiry > now) nextStatus = "ACTIVE";
+  if (nextStatus === "ACTIVE" && nextExpiry <= now) {
+    return res.status(400).json({ error: "To make an institute active, set an expiry date and time in the future." });
+  }
+
+  const firstActivation = sub.plan === "NONE" && nextStatus === "ACTIVE";
+  const updated = await prisma.portalSubscription.update({
+    where: { email: tenant.email },
+    data: {
+      status: nextStatus,
+      expiryDate: nextExpiry,
+      ...(firstActivation ? { plan: "MANUAL", startDate: now } : {}),
+    },
+  });
+  console.log(`SaaS admin set ${tenant.instituteName}: ${updated.status}, expires ${updated.expiryDate.toISOString()}`);
+
+  const subscribed = updated.plan !== "NONE";
+  const status = !subscribed
+    ? "NOT_SUBSCRIBED"
+    : updated.status === "ACTIVE"
+      ? updated.expiryDate > now ? "ACTIVE" : "EXPIRED"
+      : updated.status;
+  res.json({
+    tenantId: tenant.tenantId,
+    plan: subscribed ? updated.plan : null,
+    status,
+    startDate: subscribed ? updated.startDate : null,
+    expiryDate: subscribed ? updated.expiryDate : null,
+  });
 }

@@ -298,6 +298,12 @@ export async function createOrder(req: Request, res: Response) {
   const code = String(req.body?.plan ?? "");
   try {
     const prisma = getCentralPrisma();
+    // An institute the SaaS admin made inactive cannot buy its way back in; support re-activates it.
+    const { ownerEmail } = await resolveOwner(email);
+    const current = await prisma.portalSubscription.findUnique({ where: { email: ownerEmail } });
+    if (current?.status === "SUSPENDED" || current?.status === "REVOKED") {
+      return res.status(403).json({ error: "This account is inactive. Please contact support to re-activate it." });
+    }
     const plan = await prisma.subscriptionPlan.findUnique({ where: { code } });
     // Price always comes from the database (set by the super admin), never from the browser.
     if (!plan || !plan.active || !(plan.price > 0)) {

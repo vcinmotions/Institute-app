@@ -90,7 +90,14 @@ export async function readInstalledInstitute(): Promise<{ id: string; name: stri
       prisma.appSetting.findUnique({ where: { key: KEY_ID } }),
       prisma.appSetting.findUnique({ where: { key: KEY_NAME } }),
     ]);
-    return id ? { id: id.value, name: name?.value ?? "" } : null;
+    if (id) return { id: id.value, name: name?.value ?? "" };
+    // Installed before institute ids existed (older setup): use the institute record already stored here.
+    const legacy = await prisma.tenant.findFirst({
+      where: { parentTenantId: null },
+      orderBy: { createdAt: "asc" },
+      select: { id: true, instituteName: true },
+    });
+    return legacy ? { id: legacy.id, name: legacy.instituteName } : null;
   } catch {
     return null;
   }
@@ -204,9 +211,11 @@ export async function setupCentralController(req: Request, res: Response) {
 
 /** Public, secret-free: lets another PC on the LAN confirm which institute this server belongs to. */
 export async function setupIdentityController(_req: Request, res: Response) {
-  const inst = await readInstalledInstitute();
+  // "Initialized" means setup finished, whichever version of the app did it.
+  const initialized = (await readSetupState()) === "FULL_DONE";
+  const inst = initialized ? await readInstalledInstitute() : null;
   res.json({
-    initialized: !!inst && (await readSetupState()) === "FULL_DONE",
+    initialized,
     instituteId: inst?.id ?? null,
     instituteName: inst?.name ?? null,
   });

@@ -16,7 +16,7 @@ import {
   createOrder, verifyPayment, razorpayWebhook, syncSubscription,
 } from "../controllers/portal.controller";
 import {
-  saasAuth, saasLogin, saasMe, getPublicSettings, getSettingsAdmin, updateSettings, listInstitutes,
+  saasAuth, saasLogin, saasMe, getPublicSettings, getSettingsAdmin, updateSettings, listInstitutes, updateInstituteSubscription,
 } from "../controllers/saas.controller";
 const router = express.Router();
 
@@ -50,6 +50,7 @@ router.get("/saas/me", saasAuth, saasMe);
 router.get("/saas/plans", saasAuth, listPlansAdmin);
 router.put("/saas/plans/:code", saasAuth, updatePlan);
 router.get("/saas/institutes", saasAuth, listInstitutes);
+router.put("/saas/institutes/:tenantId/subscription", saasAuth, updateInstituteSubscription);
 router.get("/saas/settings", saasAuth, getSettingsAdmin);
 router.put("/saas/settings", saasAuth, updateSettings);
 router.get("/app-settings", getPublicSettings); // global settings for all EXE clients

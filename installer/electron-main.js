@@ -473,14 +473,23 @@ async function createWindow() {
     }
     // The server must already be set up, and must be the same institute this PC connected to before.
     // A client PC never runs first-time setup and never creates its own database.
-    const identity = await httpProbeJson(`http://${cfg.host}:${cfg.port}/api/setup/identity`);
+    let identity = await httpProbeJson(`http://${cfg.host}:${cfg.port}/api/setup/identity`);
+    if (!identity || typeof identity.initialized !== "boolean") {
+      // An older server has no identity check (its login guard answers with a JSON error instead).
+      // Fall back to its setup status so it still works, just without the institute check.
+      const st = await httpProbeJson(`http://${cfg.host}:${cfg.port}/api/setup/status`);
+      identity =
+        st && typeof st.setupComplete === "string"
+          ? { initialized: st.setupComplete === "FULL_DONE", instituteId: null, instituteName: null }
+          : null;
+    }
     let identityError = "";
     if (!identity) {
-      identityError = "The server did not answer the institute check. Update the server computer to the latest version.";
-    } else if (!identity.initialized) {
+      identityError = `The server at ${cfg.host} did not answer. Check the server computer is on and the app is running there.`;
+    } else if (identity.initialized === false) {
       identityError =
         "The server computer has not been set up yet. Ask the Master Super Admin to open the app on the server computer and complete the Institute Setup first.";
-    } else if (cfg.instituteId && cfg.instituteId !== identity.instituteId) {
+    } else if (cfg.instituteId && identity.instituteId && cfg.instituteId !== identity.instituteId) {
       identityError = `This computer was connected to a different institute. The server at ${cfg.host} now belongs to "${identity.instituteName}". Switching institute is not allowed from a client computer.`;
     }
     if (identityError) {
@@ -488,7 +497,7 @@ async function createWindow() {
       await win.loadFile(path.join(__dirname, "mode-setup.html"));
       return;
     }
-    if (!cfg.instituteId) {
+    if (!cfg.instituteId && identity.instituteId) {
       // Remember which institute this client belongs to.
       writeModeConfig({ ...cfg, instituteId: identity.instituteId, instituteName: identity.instituteName });
     }
