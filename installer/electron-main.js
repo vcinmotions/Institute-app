@@ -118,6 +118,42 @@ function httpProbeJson(url, timeoutMs = 4000) {
   });
 }
 
+/**
+ * Is the server computer set up, and is it the institute this PC belongs to?
+ * Works with every server version: the server's setup STATUS is the source of truth for "set up",
+ * because older servers wrongly report "not initialized" on /setup/identity after an older setup.
+ */
+async function checkServerIdentity(cfg) {
+  const base = `http://${cfg.host}:${cfg.port}/api/setup`;
+  let identity = await httpProbeJson(`${base}/identity`);
+  const hasIdentity = identity && typeof identity.initialized === "boolean";
+  const st = await httpProbeJson(`${base}/status`);
+  const statusKnown = st && typeof st.setupComplete === "string";
+  const setUp = statusKnown ? st.setupComplete === "FULL_DONE" : hasIdentity ? identity.initialized : null;
+
+  if (setUp === null) {
+    return { identity: null, error: `The server at ${cfg.host} did not answer. Check the server computer is on and the app is running there.` };
+  }
+  if (!setUp) {
+    return {
+      identity,
+      error: "The server computer has not been set up yet. Ask the Master Super Admin to open the app on the server computer and complete the Institute Setup first.",
+    };
+  }
+  identity = {
+    initialized: true,
+    instituteId: hasIdentity ? identity.instituteId : null,
+    instituteName: hasIdentity ? identity.instituteName : null,
+  };
+  if (cfg.instituteId && identity.instituteId && cfg.instituteId !== identity.instituteId) {
+    return {
+      identity,
+      error: `This computer was connected to a different institute. The server at ${cfg.host} now belongs to "${identity.instituteName}". Switching institute is not allowed from a client computer.`,
+    };
+  }
+  return { identity, error: "" };
+}
+
 async function testServerConnection(cfg) {
   const host = cfg.host;
   const [backend, frontend] = await Promise.all([
@@ -398,27 +434,56 @@ const LOADING_HTML = `data:text/html;charset=utf-8,${encodeURIComponent(`<!DOCTY
 // ─── WINDOW ──────────────────────────────────────────────────────────────────
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** Tells the server to end this window's session (frees the concurrent-login seat). Never blocks closing for long. */
+/**
+ * Signs the user out when the window closes:
+ *  1. tells the server to end the session (frees the concurrent-login seat, kills the token), and
+ *  2. wipes the saved session in the page, so the next launch shows the login screen instead of
+ *     restoring the old user. Step 2 runs even when step 1 cannot reach the server.
+ * Never blocks closing for more than a few seconds.
+ */
 async function logoutBeforeClose(win) {
+  let token = null;
   try {
     if (win.isDestroyed()) return;
-    const token = await Promise.race([
+    token = await Promise.race([
       win.webContents.executeJavaScript('window.sessionStorage.getItem("token")'),
       delay(1000),
     ]);
-    if (!token || typeof token !== "string") return;
-    const cfg = readModeConfig();
-    const host = cfg && cfg.mode === "LAN_CLIENT" ? cfg.host : "127.0.0.1";
-    const port = cfg && cfg.mode === "LAN_CLIENT" ? cfg.port : BACKEND_PORT;
-    await Promise.race([
-      fetch(`http://${host}:${port}/api/auth/logout`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      }).catch(() => {}),
-      delay(2500),
-    ]);
   } catch (err) {
-    log.warn(`logout on close failed: ${err.message}`);
+    log.warn(`logout on close: could not read the session: ${err.message}`);
+  }
+
+  if (token && typeof token === "string") {
+    try {
+      const cfg = readModeConfig();
+      const host = cfg && cfg.mode === "LAN_CLIENT" ? cfg.host : "127.0.0.1";
+      const port = cfg && cfg.mode === "LAN_CLIENT" ? cfg.port : BACKEND_PORT;
+      const res = await Promise.race([
+        fetch(`http://${host}:${port}/api/auth/logout`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        }).catch((e) => ({ status: `error: ${e.message}` })),
+        delay(2500).then(() => ({ status: "timed out" })),
+      ]);
+      log.info(`logout on close: server answered ${res && res.status}`);
+    } catch (err) {
+      log.warn(`logout on close failed: ${err.message}`);
+    }
+  } else {
+    log.info("logout on close: nobody was signed in");
+  }
+
+  try {
+    if (!win.isDestroyed()) {
+      await Promise.race([
+        win.webContents.executeJavaScript(
+          'try { window.sessionStorage.removeItem("token"); window.localStorage.removeItem("auth"); } catch (e) {}'
+        ),
+        delay(1000),
+      ]);
+    }
+  } catch (err) {
+    log.warn(`logout on close: could not clear the saved session: ${err.message}`);
   }
 }
 
@@ -473,25 +538,7 @@ async function createWindow() {
     }
     // The server must already be set up, and must be the same institute this PC connected to before.
     // A client PC never runs first-time setup and never creates its own database.
-    let identity = await httpProbeJson(`http://${cfg.host}:${cfg.port}/api/setup/identity`);
-    if (!identity || typeof identity.initialized !== "boolean") {
-      // An older server has no identity check (its login guard answers with a JSON error instead).
-      // Fall back to its setup status so it still works, just without the institute check.
-      const st = await httpProbeJson(`http://${cfg.host}:${cfg.port}/api/setup/status`);
-      identity =
-        st && typeof st.setupComplete === "string"
-          ? { initialized: st.setupComplete === "FULL_DONE", instituteId: null, instituteName: null }
-          : null;
-    }
-    let identityError = "";
-    if (!identity) {
-      identityError = `The server at ${cfg.host} did not answer. Check the server computer is on and the app is running there.`;
-    } else if (identity.initialized === false) {
-      identityError =
-        "The server computer has not been set up yet. Ask the Master Super Admin to open the app on the server computer and complete the Institute Setup first.";
-    } else if (cfg.instituteId && identity.instituteId && cfg.instituteId !== identity.instituteId) {
-      identityError = `This computer was connected to a different institute. The server at ${cfg.host} now belongs to "${identity.instituteName}". Switching institute is not allowed from a client computer.`;
-    }
+    const { identity, error: identityError } = await checkServerIdentity(cfg);
     if (identityError) {
       modeSetupContext = { isChange: true, error: identityError };
       await win.loadFile(path.join(__dirname, "mode-setup.html"));
