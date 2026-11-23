@@ -79,9 +79,11 @@ export async function loginController(req: Request, res: Response) {
     if (isEnforced()) {
       const sync = await syncFromCloud({ email: normalizeEmail.email, password });
       if (!sync.ok && getState().status === "NOT_ACTIVATED") {
-        return res.status(403).json({
-          error: "First-time activation needs internet. Connect and sign in again.",
-        });
+        // Say what actually went wrong; "needs internet" was shown for every failure.
+        const why = sync.error === "Offline" || sync.error === "Portal timed out"
+          ? "The licence server could not be reached. Check the internet connection and try again."
+          : `The licence server refused the activation (${sync.error ?? "unknown error"}). Contact support.`;
+        return res.status(403).json({ error: `First-time activation failed. ${why}` });
       }
     }
 
