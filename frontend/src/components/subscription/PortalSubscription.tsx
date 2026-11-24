@@ -226,7 +226,13 @@ export default function PortalSubscription() {
   const active = me?.status === "ACTIVE";
   const isTrial = me?.plan === "TRIAL";
   const currentPlan = plans.find((p) => p.code === me?.plan);
-  const totalDays = isTrial ? 30 : currentPlan ? currentPlan.months * 30 : 0;
+  // Plans like MANUAL (set by the SaaS admin) are not in the plan list, so fall back to the
+  // real start -> expiry span; otherwise the bar would stay empty.
+  const spanDays =
+    me?.startDate && me?.expiryDate
+      ? Math.round((new Date(me.expiryDate).getTime() - new Date(me.startDate).getTime()) / 86400000)
+      : 0;
+  const totalDays = isTrial ? 30 : currentPlan ? currentPlan.months * 30 : spanDays;
   const pct = active && totalDays ? Math.min(100, Math.round(((me?.daysLeft ?? 0) / totalDays) * 100)) : 0;
   const expiringSoon = active && (me?.daysLeft ?? 0) <= 10;
   const displayName = me?.profile?.name || me?.profile?.instituteName || me?.email;
