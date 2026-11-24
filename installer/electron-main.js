@@ -659,7 +659,10 @@ function isAllowedExternal(url) {
   try {
     const u = new URL(url);
     const portal = process.env.SUBSCRIPTION_PORTAL_URL;
-    if (!portal || u.protocol !== "https:") return false;
+    if (!portal) return false;
+    const isLocal = ["localhost", "127.0.0.1"].includes(u.hostname);
+    // https always; plain http only for a local test portal.
+    if (u.protocol !== "https:" && !(u.protocol === "http:" && isLocal)) return false;
     return u.hostname === new URL(portal).hostname;
   } catch {
     return false;

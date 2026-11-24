@@ -32,7 +32,7 @@ export default function SubscriptionGate() {
   const [state, setState] = useState<SubState | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [checking, setChecking] = useState(false);
- 
+  const [renewError, setRenewError] = useState<string | null>(null);
 
   const load = useCallback(async (refresh: boolean) => {
     try {
@@ -81,10 +81,18 @@ export default function SubscriptionGate() {
   if (!state || !state.enforced) return null;
 
   const openRenew = async () => {
+    setRenewError(null);
     const url = state.renewUrl;
-    if (!url) return;
-    const ok = await window.electronAPI?.openExternal?.(url);
-    if (!ok) window.open(url, "_blank", "noopener,noreferrer");
+    if (!url) {
+      setRenewError("Renewal link is not configured. Please contact support.");
+      return;
+    }
+    if (window.electronAPI?.openExternal) {
+      const ok = await window.electronAPI.openExternal(url).catch(() => false);
+      if (!ok) setRenewError("Could not open the renewal page. Please contact support.");
+      return;
+    }
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const recheck = async () => {
@@ -117,6 +125,7 @@ export default function SubscriptionGate() {
             {state.locked
               ? state.message
               : `Subscription expires in ${state.daysLeft} day(s). Renew online to avoid interruption.`}
+            {renewError && <span className="ml-2 font-semibold">{renewError}</span>}
           </span>
           <button
             onClick={openRenew}
@@ -143,6 +152,7 @@ export default function SubscriptionGate() {
               editing or deleting is disabled until you renew.
             </p>
             {support && <p className="mb-3 text-xs text-gray-500">Need help? {support}</p>}
+            {renewError && <p className="mb-3 text-xs text-red-600">{renewError}</p>}
             <div className="flex flex-col gap-2">
               <button
                 onClick={openRenew}
