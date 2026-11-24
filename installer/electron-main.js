@@ -1,5 +1,5 @@
 const { autoUpdater } = require("electron-updater");
-const { app, BrowserWindow, ipcMain, dialog, shell, Menu } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog, shell, Menu, Tray, Notification } = require("electron");
 const { spawn, spawnSync } = require("child_process");
 const path = require("path");
 const net = require("net");
@@ -46,6 +46,9 @@ process.on("unhandledRejection", (reason) => log.error("Unhandled Rejection:", r
 // ─── PROCESS HANDLES ─────────────────────────────────────────────────────────
 let backendProcess = null;
 let frontendProcess = null;
+let mainWindow = null;
+let tray = null;
+let isQuitting = false; // true only when the user really exits (tray Quit / File > Exit / relaunch)
 
 // ─── RUN MODE (Standalone / LAN Server / LAN Client) ─────────────────────────
 // Chosen once by the administrator and kept in mode-config.json. The app never
@@ -507,12 +510,22 @@ async function createWindow() {
 
   // Closing the EXE signs the user out first, so the login seat is released at once.
   // (A crash or power cut is covered by the server's heartbeat timeout.)
+  mainWindow = win;
   let closing = false;
   win.on("close", async (e) => {
     if (closing) return;
     e.preventDefault();
     closing = true;
     await logoutBeforeClose(win);
+    // LAN server PC: closing the window must NOT stop the server, or every client PC loses
+    // its connection. Hide to the system tray instead; the tray "Quit" really exits.
+    const c = readModeConfig();
+    if (c && c.mode === "LAN_SERVER" && !isQuitting) {
+      if (!win.isDestroyed()) win.hide();
+      createTray();
+      closing = false;
+      return;
+    }
     if (!win.isDestroyed()) win.close();
   });
 
@@ -599,6 +612,37 @@ async function createWindow() {
   if (!isDev && app.isPackaged) setupAutoUpdater();
 }
 
+// ─── SYSTEM TRAY (LAN server keeps running when the window is closed) ────────
+function showMainWindow() {
+  const win = mainWindow;
+  if (!win || win.isDestroyed()) {
+    createWindow();
+    return;
+  }
+  // The session was cleared on close, so reload to land on the login screen.
+  win.loadURL(`http://localhost:${FRONTEND_PORT}`).catch(() => {});
+  win.show();
+  win.focus();
+}
+
+function createTray() {
+  if (tray) return;
+  tray = new Tray(path.join(__dirname, "icons", isWin ? "app.ico" : "app.png"));
+  tray.setToolTip("VC Inmotions Server - running (other computers can connect)");
+  tray.setContextMenu(
+    Menu.buildFromTemplate([
+      { label: "Open VC Inmotions", click: showMainWindow },
+      { type: "separator" },
+      { label: "Quit (stops the server for all computers)", click: () => app.quit() },
+    ])
+  );
+  tray.on("double-click", showMainWindow);
+  new Notification({
+    title: "VC Inmotions Server is still running",
+    body: "Other computers stay connected. Use the tray icon to open or quit.",
+  }).show();
+}
+
 // ─── PROCESS TREE TERMINATION ────────────────────────────────────────────────
 function killProcessTree(proc) {
   if (!proc || !proc.pid) return;
@@ -621,6 +665,7 @@ function killChildren() {
 
 // ─── APP LIFECYCLE ────────────────────────────────────────────────────────────
 app.whenReady().then(() => {
+  if (!gotLock) return;
   try {
     verifyProductionRuntime();
     loadGlobalEnv();
@@ -632,6 +677,18 @@ app.whenReady().then(() => {
   }
   buildMenu();
   createWindow();
+});
+
+// Only one copy per PC: opening the EXE again just brings the running one forward.
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  app.quit();
+} else {
+  app.on("second-instance", () => showMainWindow());
+}
+
+app.on("before-quit", () => {
+  isQuitting = true;
 });
 
 app.on("window-all-closed", () => {

@@ -1,6 +1,6 @@
 {
   "name": "vcinmotions-application",
-  "version": "1.0.27",
+  "version": "1.0.29",
   "main": "installer/electron-main.js",
   "private": true,
   "scripts": {
@@ -66,6 +66,10 @@
     ],
     "directories": {
       "output": "dist"
+    },
+    "nsis": {
+      "include": "installer/installer.nsh",
+      "deleteAppDataOnUninstall": false
     },
     "win": {
       "target": "nsis",
