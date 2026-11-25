@@ -326,7 +326,6 @@ export default function EditFacultyForm({
               <Input
                 ref={firstInputRef}
                 type="text"
-                tabIndex={1}
                 placeholder="Ex. Full Stack Developer"
                 value={newFaculty.name}
                 onChange={(e) => handleChange("name", e.target.value)}
@@ -340,7 +339,7 @@ export default function EditFacultyForm({
                 <div className="relative flex-1">
 <Input
                   type={showPassword ? "text" : "password"}
-                  tabIndex={resetPassword ? 2 : -1}
+                  tabIndex={resetPassword ? 0 : -1}
                   disabled={!resetPassword}
                   placeholder={resetPassword ? "Enter new password" : "••••••••"}
                   value={newFaculty.password}
@@ -384,7 +383,6 @@ export default function EditFacultyForm({
               <Label>Email</Label>
               <Input
                 type="text"
-                tabIndex={2}
                 readOnly
                 placeholder="Ex. Full Stack Developer"
                 value={newFaculty.email}
@@ -406,7 +404,6 @@ export default function EditFacultyForm({
               <PhoneInput
                 selectPosition="start"
                 countries={countries}
-                tabIndex={3}
                 value={newFaculty.contact}
                 onKeyDown={handleKeyDown}
                 placeholder="Enter Contact"
@@ -418,7 +415,6 @@ export default function EditFacultyForm({
             <div className="lg:col-span-2" ref={(el) => { inputRefs.current.courseId = el; }}>
               <div className="relative">
                 <MultiSelect
-                  tabIndex={4}
                   label="Select Courses"
                   options={batchOptions.map((b) => ({
                     value: String(b.value),
@@ -440,14 +436,12 @@ export default function EditFacultyForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={5}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={6}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

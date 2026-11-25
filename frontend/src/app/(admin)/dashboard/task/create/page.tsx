@@ -465,7 +465,7 @@
 //                 placeholder="Select an option"
 //                 onChange={(value) => handleChange("paymentType", value)}
 //                 className="dark:bg-dark-900"
-//                 tabIndex={5}
+//
 //               />
 //               <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
 //                 <ChevronDownIcon />
@@ -548,7 +548,7 @@
 //             {/* <Button
 //               size="sm"
 //               variant="outline"
-//               tabIndex={8}
+//
 //               onClick={handleResetForm}
 //             >
 //               Clear

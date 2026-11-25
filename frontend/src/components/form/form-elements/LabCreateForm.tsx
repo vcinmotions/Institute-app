@@ -201,7 +201,6 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
           <Label>Lab Name</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="Ex. LAB-06"
             value={lab.name}
@@ -215,7 +214,6 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
           <Label>Location</Label>
           <Input
             type="text"
-            tabIndex={2}
             placeholder="Ex. Building D - Floor 1"
             value={lab.location}
             onChange={(e) => handleChange("location", e.target.value)}
@@ -229,7 +227,6 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
         <div>
           <Label>Total PCs</Label>
           <Input
-            tabIndex={3}
             type="number"
             placeholder="Ex. 15"
             value={lab.totalPCs}
@@ -247,7 +244,6 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
             <div key={index} className="mb-3 flex gap-3">
               <Input
                 type="text"
-                tabIndex={4}
                 placeholder="Day (e.g., Daily)"
                 value={slot.day}
                 onChange={(e) =>

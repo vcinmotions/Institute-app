@@ -317,7 +317,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Input
                 type="text"
                 ref={firstInputRef}
-                tabIndex={1}
                 placeholder="e.g. John Doe"
                 value={newEnquiry.name}
                 onChange={(e) => handleBasicChange("name", e.target.value)}
@@ -330,7 +329,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Email</Label>
               <div className="relative">
                 <Input
-                  tabIndex={2}
                   placeholder="info@gmail.com"
                   type="email"
                   className="w-full rounded border border-gray-300 bg-white pl-[45px] pr-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -347,7 +345,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="contact">
               <Label>Student Contact <span className="text-red-500">*</span></Label>
               <PhoneInput
-                tabIndex={3}
                 selectPosition="start"
                 countries={countries}
                 placeholder="+91 00000 00000"
@@ -360,7 +357,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="parentsContact">
               <Label>Alternate Contact (Parents)</Label>
               <PhoneInput
-                tabIndex={4}
                 selectPosition="start"
                 countries={countries}
                 placeholder="+91 55555 00000"
@@ -374,7 +370,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Father's Name</Label>
               <Input
                 type="text"
-                tabIndex={5}
                 placeholder="e.g. Robert Doe"
                 value={filledEnquiryData.fatherName}
                 onChange={(e) => handleExtendedChange("fatherName", e.target.value)}
@@ -385,7 +380,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="dob">
               <Label>Date Of Birth</Label>
               <Input
-                tabIndex={6}
                 type="date"
                 value={filledEnquiryData.dob}
                 onChange={(e) => handleExtendedChange("dob", e.target.value)}
@@ -398,7 +392,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Gender</Label>
               <div className="relative">
                 <Select
-                  tabIndex={7}
                   options={genders}
                   placeholder="Select Gender"
                   onChange={(value) => handleExtendedChange("gender", value)}
@@ -415,7 +408,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Qualification</Label>
               <Input
                 type="text"
-                tabIndex={8}
                 placeholder="e.g. B.Tech"
                 value={filledEnquiryData.qualification}
                 onChange={(e) => handleExtendedChange("qualification", e.target.value)}
@@ -436,7 +428,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Select ID Proof</Label>
               <div className="relative">
                 <Select
-                  tabIndex={9}
                   options={options}
                   placeholder="Select an option"
                   value={filledEnquiryData.idProofType}
@@ -457,7 +448,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
                 Number
               </Label>
               <Input
-                tabIndex={10}
                 type="text"
                 placeholder="Enter ID Number"
                 onChange={(e) => handleExtendedChange("idProofNumber", e.target.value)}
@@ -469,7 +459,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="residentialAddress">
               <Label>Residential Address</Label>
               <Input
-                tabIndex={11}
                 type="text"
                 placeholder="e.g. Mumbai, Maharashtra"
                 value={filledEnquiryData.residentialAddress}
@@ -481,7 +470,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="permenantAddress">
               <Label>Permanent Address</Label>
               <Input
-                tabIndex={12}
                 type="text"
                 placeholder="e.g. Pune, Maharashtra"
                 value={filledEnquiryData.permenantAddress}
@@ -497,7 +485,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
           <Button
             size="sm"
             variant="outline"
-            tabIndex={13}
             onClick={onCloseModal}
             className="min-w-[100px] rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           >
@@ -506,7 +493,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
           <Button
             size="sm"
             variant="primary"
-            tabIndex={14}
             onClick={handleSubmit}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
           >

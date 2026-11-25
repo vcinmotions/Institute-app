@@ -117,7 +117,7 @@ export default function ExpensePage() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             <label className="text-sm text-gray-700 dark:text-gray-300 lg:col-span-2">
               Description *
-              <input
+              <input autoFocus
                 className={field}
                 placeholder="e.g. Electricity bill, Rent, Stationery"
                 value={form.description}

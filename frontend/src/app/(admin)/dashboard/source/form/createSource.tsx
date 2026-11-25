@@ -192,7 +192,6 @@ export default function SourceForm() {
                 <Label>Source Name *</Label>
                 <Input
                   ref={firstInputRef}
-                  tabIndex={1}
                   type="text"
                   placeholder="Ex. Google Ads, Referral"
                   value={titleCase(newSource.name)}
@@ -218,7 +217,6 @@ export default function SourceForm() {
             </Button>
             <Button
               size="sm"
-              tabIndex={2}
               variant="primary"
               onClick={handleSubmit}
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"

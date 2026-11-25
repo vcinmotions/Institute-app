@@ -255,7 +255,6 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
               <Label>Student Name *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Enter Student Name"
                 value={student.name}
@@ -270,7 +269,6 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
                 <PhoneInput
                   selectPosition="start"
                   countries={countries}
-                  tabIndex={2}
                   onKeyDown={handleKeyDown}
                   placeholder="Enter Contact"
                   onChange={handlePhoneNumberChange}
@@ -284,7 +282,6 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
             <div>
               <Label>Due Amount *</Label>
               <Input
-                tabIndex={3}
                 type="number"
                 min={0}
                 placeholder="Ex. 1500"
@@ -298,7 +295,7 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
 
             <div>
               <Label>Admission Date</Label>
-              <DateField tabIndex={4}
+              <DateField
                 className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 value={student.admissionDate} onChange={(v) => handleDateChange("admissionDate", v)}
               />
@@ -315,14 +312,12 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
           <Button
             size="sm"
             variant="outline"
-            tabIndex={5}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={6}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

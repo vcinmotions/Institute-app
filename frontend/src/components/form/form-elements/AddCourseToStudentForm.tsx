@@ -277,7 +277,6 @@ export default function CourseForm({
               <div className="relative" data-master="course">
                 <Select
                   ref={firstInputRef}
-                  tabIndex={1}
                   options={filteredCourses.map((course) => ({
                     label: course.name,
                     value: course.id.toString(), // 📑 FIXED: Added .toString() here
@@ -301,7 +300,6 @@ export default function CourseForm({
               <Label>Select Batch *</Label>
               <div className="relative" data-master="batch">
                 <Select
-                  tabIndex={2}
                   options={filteredBatches}
                   placeholder="Select a batch"
                   onChange={(value) => handleChange("batchId", value)}
@@ -321,7 +319,6 @@ export default function CourseForm({
             <div>
               <Label>Admission Date *</Label>
               <Input
-                tabIndex={5}
                 type="datetime-local"
                 value={filledCoursedata.admissionDate}
                 onChange={(e) => handleChange("admissionDate", e.target.value)}
@@ -337,7 +334,6 @@ export default function CourseForm({
               <Label>Select Payment Type *</Label>
               <div className="relative" data-master="payment">
                 <Select
-                  tabIndex={10}
                   options={paymentTypeOption.map((type: any) => ({
                     label: type,
                     value: type.toString(), // 📑 FIXED: Added .toString() here safely
@@ -363,7 +359,6 @@ export default function CourseForm({
                   <Label>Select Installment Type *</Label>
                   <div className="relative" data-master="installment">
                     <Select
-                      tabIndex={11}
                       options={installmentTypeOption.map(
                         (ins: { id: number; number: any; amount: any }) => ({
                           label: `${ins.number} Installments - ₹${ins.amount}`,
@@ -391,7 +386,6 @@ export default function CourseForm({
             <div>
               <Label>Fee Amount</Label>
               <Input
-                tabIndex={3}
                 type="text"
                 placeholder="₹ 0.00"
                 value={filledCoursedata.feeAmount}
@@ -410,7 +404,6 @@ export default function CourseForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={6}
             onClick={onCloseModal}
             className="min-w-[100px] rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           >
@@ -419,7 +412,6 @@ export default function CourseForm({
           <Button
             size="sm"
             variant="primary"
-            tabIndex={7}
             onClick={handleSubmit}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
           >

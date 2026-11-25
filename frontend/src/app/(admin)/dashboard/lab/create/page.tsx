@@ -329,7 +329,7 @@
 //               <div key={index} className="mb-3 flex gap-3">
 //                 <Input
 //                   type="text"
-//                   tabIndex={4}
+//
 //                   placeholder="Day (e.g., Daily)"
 //                   value={slot.day}
 //                   onChange={(e) =>

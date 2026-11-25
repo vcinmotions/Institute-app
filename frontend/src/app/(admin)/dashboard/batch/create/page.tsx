@@ -223,7 +223,6 @@ export default function BatchForm() {
             <Label>Batch Name *</Label>
             <Input
               ref={firstInputRef}
-              tabIndex={1}
               type="text"
               placeholder="LAB-01 Morning Batch"
               value={name}
@@ -278,7 +277,6 @@ export default function BatchForm() {
                 value={selectedLab ? selectedLab.toString() : ""} // ⭐ brings back placeholder
                 placeholder={selectedLab === null ? "Choose Lab" : ""}
                 className="dark:bg-dark-900"
-                tabIndex={2}
               />
               <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 {selectedLab !== null ? (
@@ -314,7 +312,6 @@ export default function BatchForm() {
                   selectedTimeSlot === null ? "Choose Time Slot" : ""
                 }
                 className="dark:bg-dark-900"
-                tabIndex={3}
               />
               <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 {selectedTimeSlot !== null ? (
@@ -349,7 +346,6 @@ export default function BatchForm() {
                 }}
                 placeholder="Select Faculty"
                 className="dark:bg-dark-900"
-                tabIndex={4}
               />
               <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 <ChevronDownIcon />
@@ -362,12 +358,11 @@ export default function BatchForm() {
             <Button
               size="sm"
               variant="outline"
-              tabIndex={5}
               onClick={handleResetForm}
             >
               Close
             </Button>
-            <Button size="sm" tabIndex={6} onClick={handleSubmit}>
+            <Button size="sm" onClick={handleSubmit}>
               Save
             </Button>
           </div>

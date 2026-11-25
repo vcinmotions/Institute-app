@@ -151,7 +151,6 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
           <Label>Batch Name</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="LAB-01 Morning Batch"
             value={name}
@@ -200,7 +199,6 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
               }}
               placeholder="Choose Lab"
               className="dark:bg-dark-900"
-              tabIndex={2}
             />
             <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <ChevronDownIcon />
@@ -221,7 +219,6 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
               onChange={(val) => setSelectedTimeSlot(Number(val))}
               placeholder="Choose Time Slot"
               className="dark:bg-dark-900"
-              tabIndex={3}
             />
             <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <ChevronDownIcon />
@@ -244,7 +241,6 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
               onChange={(val) => setSelectedFaculty(Number(val))}
               placeholder="Select Faculty"
               className="dark:bg-dark-900"
-              tabIndex={4}
             />
             <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <ChevronDownIcon />
@@ -257,12 +253,11 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
           <Button
             size="sm"
             variant="outline"
-            tabIndex={5}
             onClick={onCloseModal}
           >
             Close
           </Button>
-          <Button size="sm" tabIndex={6} onClick={handleSubmit}>
+          <Button size="sm" onClick={handleSubmit}>
             Save
           </Button>
         </div>

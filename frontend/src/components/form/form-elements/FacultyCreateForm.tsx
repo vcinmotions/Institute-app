@@ -347,7 +347,6 @@ export default function FacultyForm({
           <Label>Faculty Name</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="Ex. Full Stack Developer"
             value={newFaculty.name}
@@ -360,7 +359,6 @@ export default function FacultyForm({
           <Label>Email</Label>
           <Input
             type="text"
-            tabIndex={2}
             placeholder="Ex. Full Stack Developer"
             value={newFaculty.email}
             onChange={(e) => handleChange("email", e.target.value)}
@@ -374,7 +372,6 @@ export default function FacultyForm({
           <Label>Password</Label>
           <Input
             type="text"
-            tabIndex={3}
             placeholder="password"
             value={newFaculty.password}
             onChange={(e) => handleChange("password", e.target.value)}
@@ -388,7 +385,6 @@ export default function FacultyForm({
           <Label>Contact No.</Label>
           <Input
             type="text"
-            tabIndex={4}
             placeholder="Info Demo"
             value={newFaculty.contact}
             onChange={(e) => handleChange("contact", e.target.value)}
@@ -402,7 +398,6 @@ export default function FacultyForm({
           <Label>Select Course</Label>
           <div className="relative">
             <Select
-              tabIndex={5}
               options={courseOptions}
               placeholder="Select an option"
               onChange={(value) => handleChange("courseId", value)}
@@ -418,7 +413,6 @@ export default function FacultyForm({
           <Label>Select Batch</Label>
           <div className="relative">
             <Select
-              tabIndex={6}
               options={batchOptions}
               placeholder="Select an option"
               onChange={(value) => handleChange("batchId", value)}
@@ -441,7 +435,7 @@ export default function FacultyForm({
             value={newFaculty.joiningDate}
             onChange={(e) => handleChange("joiningDate", e.target.value)}         
           /> */}
-          <DateField tabIndex={7}
+          <DateField
             className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
             value={newFaculty.joiningDate} onChange={(v) => handleDateChange("joiningDate", v)}
           />
@@ -454,12 +448,11 @@ export default function FacultyForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={8}
             onClick={onCloseModal}
           >
             Close
           </Button>
-          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={9} onClick={handleSubmit}>
+          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

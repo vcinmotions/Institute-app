@@ -389,7 +389,6 @@ export default function EnquiryForm() {
                   type="text"
                   placeholder="Enter Name"
                   value={titleCase(newEnquiry.name)}
-                  tabIndex={1}
                   onChange={(e) => handleChange("name", e.target.value)}
                 />
                 {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
@@ -399,7 +398,6 @@ export default function EnquiryForm() {
                 <Label>Gender</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={2}
                     options={genders.map((item) => ({ label: item.label, value: item.value }))}
                     placeholder="Select Gender"
                     onChange={(value) => handleChange("gender", value)}
@@ -415,7 +413,7 @@ export default function EnquiryForm() {
 
               <div>
                 <Label>Date Of Birth</Label>
-                <DateField tabIndex={3}
+                <DateField
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                   value={newEnquiry.dob} onChange={(v) => handleDateChange("dob", v)}
                 />
@@ -432,7 +430,6 @@ export default function EnquiryForm() {
                 <Label>Contact No. *</Label>
                 <div className="relative">
                   <PhoneNumberInput
-                    tabIndex={4}
                     placeholder="Enter Contact"
                     value={newEnquiry.contact}
                     onChange={handlePhoneNumberChange}
@@ -448,7 +445,6 @@ export default function EnquiryForm() {
                 <Label>Alternate Contact No.</Label>
                 <div className="relative">
                   <PhoneNumberInput
-                    tabIndex={5}
                     placeholder="Enter Alternate"
                     value={newEnquiry.alternateContact}
                     onChange={handleAlternatePhoneNumberChange}
@@ -467,7 +463,6 @@ export default function EnquiryForm() {
                     placeholder="Enter Email"
                     type="text"
                     className="pl-[55px]"
-                    tabIndex={6}
                     value={normalizeEmail(newEnquiry.email)}
                     onChange={(e) => handleChange("email", e.target.value)}
                   />
@@ -482,7 +477,6 @@ export default function EnquiryForm() {
                 <Label>City</Label>
                 <Select
                   options={city.map((c) => ({ label: c.name, value: c.name }))}
-                  tabIndex={7}
                   placeholder="Select City"
                   searchable
                   onChange={(value) => handleChange("city", value)}
@@ -497,7 +491,6 @@ export default function EnquiryForm() {
                   type="text"
                   placeholder="Enter Locality"
                   value={normalizeToLowercase(newEnquiry.location)}
-                  tabIndex={8}
                   onChange={(e) => handleChange("location", e.target.value)}
                 />
                 {errors.location && <p className="mt-1 text-sm text-red-500">{errors.location}</p>}
@@ -514,7 +507,6 @@ export default function EnquiryForm() {
                 <div className="relative" data-master="course">
                   <MultiSelect
                     ref={jumpInputRef}
-                    tabIndex={9}
                     tooltip={true}
                     content="Create Course if not in list."
                     label="Select Courses *"
@@ -532,7 +524,7 @@ export default function EnquiryForm() {
 
               <div>
                 <Label>Enquiry Date</Label>
-                <DateField tabIndex={10}
+                <DateField
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                   value={newEnquiry.enquiryDate} onChange={(v) => handleDateChange("enquiryDate", v)}
                 />
@@ -543,7 +535,6 @@ export default function EnquiryForm() {
                 <Label>Source</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={11}
                     options={sourceList.map((item) => ({ label: item.name, value: item.slug }))}
                     placeholder="Select Source"
                     onChange={(value) => handleChange("source", value)}
@@ -563,7 +554,6 @@ export default function EnquiryForm() {
                   type="text"
                   placeholder="Enter Reference"
                   value={newEnquiry.referedBy}
-                  tabIndex={12}
                   onChange={(e) => handleChange("referedBy", e.target.value)}
                 />
                 {errors.referedBy && <p className="mt-1 text-sm text-red-500">{errors.referedBy}</p>}
@@ -575,7 +565,6 @@ export default function EnquiryForm() {
                   type="text"
                   placeholder="Taken By"
                   value={newEnquiry.takenBy}
-                  tabIndex={13}
                   onChange={(e) => handleChange("takenBy", e.target.value)}
                 />
                 {errors.takenBy && <p className="mt-1 text-sm text-red-500">{errors.takenBy}</p>}
@@ -588,7 +577,6 @@ export default function EnquiryForm() {
           <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
             <Button
               size="sm"
-              tabIndex={14}
               variant="primary"
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
               onClick={handleSubmit}

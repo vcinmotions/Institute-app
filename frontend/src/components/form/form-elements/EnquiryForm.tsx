@@ -318,7 +318,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             type="text"
             placeholder="Info Demo"
             value={newEnquiry.name}
-            tabIndex={1}
             onChange={(e) => handleChange("name", e.target.value)} />
           {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
         </div>
@@ -330,7 +329,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
               placeholder="info@gmail.com"
               type="text"
               className="pl-[62px]"
-              tabIndex={2}
               value={newEnquiry.email}
               onChange={(e) => handleChange("email", e.target.value)} />
             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
@@ -342,7 +340,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
         <div>
           <Label>Conatct No. *</Label>
           <PhoneInput
-            tabIndex={3}
             selectPosition="start"
             countries={countries}
             placeholder="+91 55555 00000"
@@ -355,7 +352,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
         <div>
           <Label>Alternate Conatct No.</Label>
           <PhoneInput
-            tabIndex={3}
             selectPosition="start"
             countries={countries}
             placeholder="+91 55555 00000"
@@ -371,14 +367,12 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             type="number"
             placeholder="Enter Age"
             value={newEnquiry.age as number}
-            tabIndex={1}
             onChange={(e) => handleChange("age", e.target.value)} />
           {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
         </div>
 
         <div className="relative">
           <Select
-            tabIndex={8}
             options={genders.map((item) => ({
               label: item.label,
               value: item.value,
@@ -399,7 +393,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             type="text"
             placeholder="Enter Age"
             value={newEnquiry.location}
-            tabIndex={1}
             onChange={(e) => handleChange("location", e.target.value)} />
           {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </div>
@@ -410,7 +403,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             type="text"
             placeholder="Enter Age"
             value={newEnquiry.dob}
-            tabIndex={1}
             onChange={(e) => handleChange("dob", e.target.value)} />
           {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
         </div>
@@ -459,7 +451,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
               onChange={(value) => handleChange("course", value)}
               defaultValue={newEnquiry.course} // Bind selected course
               className="dark:bg-dark-900"
-              tabIndex={4}
             />
             <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
               <ChevronDownIcon />
@@ -474,7 +465,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
             type="text"
             placeholder="Enter Age"
             value={newEnquiry.referedBy}
-            tabIndex={1}
             onChange={(e) => handleChange("referedBy", e.target.value)} />
           {errors.referedBy && <p className="text-red-500 text-sm">{errors.referedBy}</p>}
         </div>
@@ -487,7 +477,6 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
               placeholder="Select an option"
               onChange={(value) => handleChange("source", value)}
               className="dark:bg-dark-900"
-              tabIndex={5}
             />
             <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
               <ChevronDownIcon />
@@ -497,10 +486,10 @@ export default function EnquiryForm({ onCloseModal, courses }: DefaultInputsProp
         </div>
 
         <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-          <Button size="sm" variant="outline" tabIndex={6} onClick={onCloseModal}>
+          <Button size="sm" variant="outline" onClick={onCloseModal}>
             Close
           </Button>
-          <Button size="sm" tabIndex={7} onClick={handleSubmit}>
+          <Button size="sm" onClick={handleSubmit}>
             Save
           </Button>
         </div>

@@ -159,7 +159,7 @@ export default function MasterForm({ onCloseModal }: DefaultInputsProps) {
           />)}
         <div>
           <Label>Name</Label>
-          <Input
+          <Input autoFocus
             type="text"
             placeholder="Info Demo"
             value={newEnquiry.name}

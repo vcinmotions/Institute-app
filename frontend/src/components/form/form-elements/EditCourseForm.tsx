@@ -351,7 +351,6 @@ export default function EditCourseForm({
               <Label>Course Name *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Ex. Full Stack Developer"
                 value={titleCase(newCourse.name)}
@@ -364,7 +363,6 @@ export default function EditCourseForm({
               <Label>Duration (Months) *</Label>
               <Input
                 type="number"
-                tabIndex={2}
                 min={0}
                 placeholder="12"
                 value={newCourse.durationMonths}
@@ -378,7 +376,6 @@ export default function EditCourseForm({
               <Input
                 type="number"
                 min={0}
-                tabIndex={3}
                 placeholder="12000"
                 value={newCourse.totalAmount}
                 onChange={(e) => handleChange("totalAmount", e.target.value)}
@@ -467,14 +464,12 @@ export default function EditCourseForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={4}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={5}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

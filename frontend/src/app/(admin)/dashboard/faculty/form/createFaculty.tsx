@@ -362,7 +362,6 @@ export default function FacultyForm() {
                 <Label>Faculty Name *</Label>
                 <Input
                   ref={firstInputRef}
-                  tabIndex={1}
                   type="text"
                   placeholder="Ex. Full Stack Developer"
                   value={titleCase(newFaculty.name)}
@@ -377,7 +376,6 @@ export default function FacultyForm() {
                 <Input
                   type="text"
                   readOnly
-                  tabIndex={2}
                   placeholder="Generated Automatically"
                   value={newFaculty.email}
                   onChange={(e) => handleChange("email", e.target.value)}
@@ -390,7 +388,6 @@ export default function FacultyForm() {
                 <Label>Password *</Label>
                 <Input
                   type="text"
-                  tabIndex={3}
                   placeholder="Enter Password"
                   value={newFaculty.password}
                   onChange={(e) => handleChange("password", e.target.value)}
@@ -405,7 +402,6 @@ export default function FacultyForm() {
                   <PhoneInput
                     selectPosition="start"
                     countries={countries}
-                    tabIndex={4}
                     onKeyDown={handleKeyDown}
                     placeholder="Enter Contact"
                     onChange={handlePhoneNumberChange}
@@ -429,7 +425,6 @@ export default function FacultyForm() {
                 </Label>
                 <div className="relative" data-master="course">
                   <Select
-                    tabIndex={5}
                     options={courseOptions}
                     placeholder="Select an option"
                     onChange={(value: string) => handleChange("courseId", value)}
@@ -445,7 +440,6 @@ export default function FacultyForm() {
                 <Label>Select Batch *</Label>
                 <div className="relative" data-master="batch">
                   <Select
-                    tabIndex={6}
                     options={batchOptions}
                     placeholder="Select an option"
                     onChange={(value: string) => handleChange("batchId", value)}
@@ -460,7 +454,7 @@ export default function FacultyForm() {
 
               <div ref={(el) => { if (inputRefs.current) inputRefs.current.joiningDate = el; }}>
                 <Label>Joining Date *</Label>
-                <DateField tabIndex={7} value={newFaculty.joiningDate} onChange={(v) => handleDateChange("joiningDate", v)}
+                <DateField value={newFaculty.joiningDate} onChange={(v) => handleDateChange("joiningDate", v)}
                   className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 />
                 {errors.joiningDate && <p className="mt-1 text-sm text-red-500">{errors.joiningDate}</p>}
@@ -480,7 +474,6 @@ export default function FacultyForm() {
             </Button>
             <Button
               size="sm"
-              tabIndex={8}
               variant="primary"
               onClick={handleSubmit}
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"

@@ -340,7 +340,6 @@ export default function LabForm() {
                     <div key={index} className="flex flex-wrap md:flex-nowrap items-center gap-3">
                       <Input
                         type="text"
-                        tabIndex={4}
                         placeholder="Day (e.g., Daily)"
                         value={slot.day}
                         onChange={(e) => handleTimeSlotChange(index, "day", e.target.value)}

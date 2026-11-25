@@ -483,6 +483,18 @@ export default function AdmissionForm() {
     }
   };
 
+  // Alternate Contact input: updates ONLY the alternate number (it used to share the Student Contact handler,
+  // so typing here overwrote the Student Contact and never saved the alternate number).
+  const handleParentsContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 10);
+    setFilledEnquiryData((prev) => ({ ...prev, parentsContact: digitsOnly }));
+    // Optional field: empty or a full 10 digits is fine, anything in between is not.
+    setErrors((prev) => ({
+      ...prev,
+      parentsContact: digitsOnly.length === 0 || digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+    }));
+  };
+
   const handleAlternatePhoneNumberChange = (phoneNumber: string, code: string) => {
     // Extract digits only
     const digitsOnly = phoneNumber.replace(/\D/g, "").slice(0, 10);
@@ -929,7 +941,6 @@ export default function AdmissionForm() {
                   type="text"
                   autoFocus
                   ref={firstInputRef}
-                  tabIndex={1}
                   placeholder="Enter Student Name"
                   value={titleCase(newEnquiry.name)}
                   onChange={(e) => handleChangeNew("name", e.target.value)}
@@ -947,7 +958,6 @@ export default function AdmissionForm() {
                 <Label>Father's Name</Label>
                 <Input
                   type="text"
-                  tabIndex={2}
                   placeholder="Enter Father Name"
                   value={titleCase(filledEnquiryData.fatherName)}
                   onChange={(e) => handleChange("fatherName", e.target.value)}
@@ -965,7 +975,6 @@ export default function AdmissionForm() {
                 <Label>Qualification</Label>
                 <Input
                   type="text"
-                  tabIndex={3}
                   placeholder="Enter Qualification"
                   value={titleCase(filledEnquiryData.qualification)}
                   onChange={(e) => handleChange("qualification", e.target.value)}
@@ -981,7 +990,6 @@ export default function AdmissionForm() {
                 <Label>Gender</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={8}
                     options={genders.map((item) => ({
                       label: item.label,
                       value: item.value,
@@ -1005,7 +1013,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Date Of Birth</Label>
                 <Input
-                  tabIndex={7}
                   type="date"
                   placeholder="Enter DoB"
                   value={filledEnquiryData.dob}
@@ -1029,7 +1036,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Student Contact</Label>
                 {/* <PhoneInput
-                  tabIndex={5}
                   selectPosition="start"
                   countries={countries}
                   placeholder="Enter Student Contact"
@@ -1042,7 +1048,6 @@ export default function AdmissionForm() {
 
                 <div className="relative">
                   <PhoneNumberInput
-                    tabIndex={4}
                     placeholder="Enter Contact"
                     value={newEnquiry.contact}
                     onChange={handlePhoneNumberChange}
@@ -1060,7 +1065,6 @@ export default function AdmissionForm() {
                 <Label>Alternate Contact</Label>
 
                 {/* <PhoneInput
-                  tabIndex={6}
                   selectPosition="start"
                   countries={countries}
                   value={stripCountryCode(filledEnquiryData.parentsContact)}
@@ -1073,10 +1077,9 @@ export default function AdmissionForm() {
 
                 <div className="relative">
                   <PhoneNumberInput
-                    tabIndex={4}
                     placeholder="Enter Alternate Contact"
                     value={filledEnquiryData.parentsContact}
-                    onChange={handlePhoneNumberChange}
+                    onChange={handleParentsContactChange}
                   />
                   {errors.parentsContact && <p className="mt-1 text-sm text-red-500">{errors.parentsContact}</p>}
                   <span className="absolute top-5.5 left-0 -translate-y-1/2 border-r border-gray-200 px-3 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
@@ -1093,7 +1096,6 @@ export default function AdmissionForm() {
                 <Label>Email</Label>
                 <div className="relative">
                   <Input
-                    tabIndex={4}
                     placeholder="Enter Student Email"
                     type="text"
                     className="pl-[55px]"
@@ -1117,7 +1119,6 @@ export default function AdmissionForm() {
                 <Label>Reference Name</Label>
                 <Input
                   type="text"
-                  tabIndex={2}
                   placeholder="Enter Reference"
                   value={titleCase(newEnquiry.referedBy)}
                   onChange={(e) => handleChangeNew("referedBy", e.target.value)}
@@ -1139,7 +1140,6 @@ export default function AdmissionForm() {
             }}>
               <div className="relative" data-master="course">
                 <MultiSelect
-                  tabIndex={10}
                   options={courses.map((course) => ({
                     value: String(course.id),
                     text: course.name,
@@ -1415,7 +1415,6 @@ export default function AdmissionForm() {
                     <Label>Select Id Proof</Label>
                     <div className="relative">
                       <Select
-                        tabIndex={12}
                         options={options}
                         placeholder="Select Id Proof"
                         onChange={(value) => handleChange("idProofType", value)}
@@ -1442,7 +1441,6 @@ export default function AdmissionForm() {
                       Number
                     </Label>
                     <Input
-                      tabIndex={13}
                       type="text"
                       placeholder="Enter Id No."
                       onChange={(e) => handleChange("idProofNumber", e.target.value)}
@@ -1465,7 +1463,6 @@ export default function AdmissionForm() {
                     <Label>Select Local Add. Proof</Label>
                     <div className="relative">
                       <Select
-                        tabIndex={12}
                         options={options}
                         placeholder="Select Id Proof"
                         onChange={(value) => handleChange("localAddressProofType", value)}
@@ -1493,7 +1490,6 @@ export default function AdmissionForm() {
                       Number
                     </Label>
                     <Input
-                      tabIndex={13}
                       type="text"
                       placeholder="Enter Id No."
                       onChange={(e) => handleChange("localAddressProofNumber", e.target.value)}
@@ -1540,7 +1536,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Residential Address</Label>
                 <TextArea
-                  tabIndex={14}
                   placeholder="Enter Student Residential Address"
                   value={filledEnquiryData.residentialAddress}
                   onChange={(value) =>
@@ -1560,7 +1555,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Permenant Address</Label>
                 <TextArea
-                  tabIndex={15}
                   placeholder="Enter Student Permenant Address"
                   value={filledEnquiryData.permenantAddress}
                   onChange={(value) =>
@@ -1605,7 +1599,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Admission Date</Label>
                 <Input
-                  tabIndex={16}
                   type="datetime-local"
                   placeholder="Enter Admission Date"
                   value={filledEnquiryData.admissionDate}
@@ -1651,7 +1644,6 @@ export default function AdmissionForm() {
 
               <div className="lg:col-span-3">
                 <DropzonBoxComponent
-                  tabIndex={17}
                   title="Student Photo"
                   selectedFile={selectedProfilePicture}
                   setSelectedFile={setSelectedProfilePicture}
@@ -1668,12 +1660,11 @@ export default function AdmissionForm() {
 
           {/* Action Bar */}
           <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
-            <Button size="sm" variant="outline" tabIndex={19}>
+            <Button size="sm" variant="outline">
               Clear
             </Button>
             <Button
               size="sm"
-              tabIndex={18}
               variant="primary"
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
               onClick={handleSubmit}

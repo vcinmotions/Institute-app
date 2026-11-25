@@ -283,7 +283,6 @@ export default function EditTaskForm({
           </Label>
           <div className="relative" data-master="course">
             <Select
-              tabIndex={5}
               options={courseOptions}
               value={newTask.courseId}
               placeholder="Select an option"
@@ -305,7 +304,6 @@ export default function EditTaskForm({
           <Label>Select Batch *</Label>
           <div className="relative" data-master="batch">
             <Select
-              tabIndex={6}
               options={batchOptions}
               value={newTask.batchId}
               placeholder="Select an option"
@@ -325,7 +323,6 @@ export default function EditTaskForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={8}
             onClick={onCloseModal}
           >
             Cancel

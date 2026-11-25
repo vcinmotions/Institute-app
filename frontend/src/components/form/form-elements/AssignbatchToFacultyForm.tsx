@@ -233,7 +233,6 @@ export default function AssignBatchFacultyForm({
               <Label>Faculty Name</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Faculty Name"
                 value={newFaculty.name}
@@ -246,7 +245,6 @@ export default function AssignBatchFacultyForm({
             <div>
               <Label>Username (Email)</Label>
               <Input
-                tabIndex={2}
                 type="email"
                 placeholder="Faculty Email"
                 value={newFaculty.email}
@@ -270,7 +268,6 @@ export default function AssignBatchFacultyForm({
               <Label>Select Batch *</Label>
               <div className="relative">
                 <Select
-                  tabIndex={3}
                   options={filteredBatchOptions}
                   placeholder={
                     filteredBatchOptions.length > 0
@@ -296,14 +293,12 @@ export default function AssignBatchFacultyForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={4}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={5}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

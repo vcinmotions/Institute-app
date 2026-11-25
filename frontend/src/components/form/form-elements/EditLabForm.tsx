@@ -293,7 +293,6 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
               <Label>Lab Name *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Ex. LAB-06"
                 value={titleCase(lab.name)}
@@ -306,7 +305,6 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
               <Label>Location *</Label>
               <Input
                 type="text"
-                tabIndex={2}
                 placeholder="Ex. Building D - Floor 1"
                 value={titleCase(lab.location)}
                 onChange={(e) => handleChange("location", e.target.value)}
@@ -319,7 +317,6 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
             <div ref={(el) => { inputRefs.current.totalPCs = el; }}>
               <Label>Total PCs *</Label>
               <Input
-                tabIndex={3}
                 type="number"
                 placeholder="Ex. 15"
                 value={lab.totalPCs}

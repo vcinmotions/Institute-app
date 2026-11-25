@@ -222,7 +222,6 @@ export default function CreateStudentPaymentModal({
               <Label>Amount Paid *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="number"
                 placeholder="Enter amount"
                 value={amountPaid}
@@ -239,7 +238,7 @@ export default function CreateStudentPaymentModal({
             {/* Payment Date Field */}
             <div>
               <Label>Payment Date (DD-MM-YYYY) *</Label>
-              <DateField tabIndex={2} value={paymentDate} onChange={(v) => handleDateChange(v)}
+              <DateField value={paymentDate} onChange={(v) => handleDateChange(v)}
               />
               {errors.paymentDate && (
                 <p className="mt-1 text-sm text-red-500">{errors.paymentDate}</p>
@@ -261,7 +260,6 @@ export default function CreateStudentPaymentModal({
               <Label>Select Mode *</Label>
               <div className="relative">
                 <Select
-                  tabIndex={3}
                   options={paymentModeOptions}
                   placeholder="Select payment mechanism"
                   value={paymentMode}
@@ -329,14 +327,12 @@ export default function CreateStudentPaymentModal({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={4}
             onClick={onCloseModal}
           >
             Cancel
           </Button>
           <Button
             size="sm"
-            tabIndex={5}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

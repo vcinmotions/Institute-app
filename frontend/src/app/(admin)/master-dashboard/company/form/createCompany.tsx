@@ -614,7 +614,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <Input
                                     ref={firstInputRef}
                                     type="text"
-                                    tabIndex={1}
                                     placeholder="Enter Institute Name"
                                     value={titleCase(newCompany.instituteName)}
                                     onChange={(e) => handleChange("instituteName", e.target.value)}
@@ -626,7 +625,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <Label>Display Name *</Label>
                                 <Input
                                     type="text"
-                                    tabIndex={2}
                                     placeholder="Enter Display Name"
                                     value={titleCase(newCompany.name)}
                                     onChange={(e) => handleChange("name", e.target.value)}
@@ -638,7 +636,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <Label>Business Email *</Label>
                                 <Input
                                     type="email"
-                                    tabIndex={3}
                                     placeholder="e.g. info@yourinstitute.com"
                                     value={newCompany.businessEmail}
                                     onChange={(e) => handleChange("businessEmail", e.target.value)}
@@ -651,7 +648,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <PhoneInput
                                     selectPosition="start"
                                     countries={countries}
-                                    tabIndex={5}
                                     onKeyDown={handleKeyDown}
                                     placeholder="Enter Contact"
                                     onChange={handlePhoneNumberChange}
@@ -663,7 +659,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <Label>Financial Start Date *</Label>
                                 <Input
                                     type="date"
-                                    tabIndex={6}
                                     value={newCompany.financialStartDate}
                                     onChange={(e) => handleChange("financialStartDate", e.target.value)}
                                 />
@@ -674,7 +669,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <Label>Financial End Date *</Label>
                                 <Input
                                     type="date"
-                                    tabIndex={7}
                                     value={newCompany.financialEndDate}
                                     readOnly // Prevents direct mutation since it's pre-calculated now
                                     className="bg-gray-100 cursor-not-allowed dark:bg-gray-800"
@@ -742,7 +736,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <Label>Username *</Label>
                                 <Input
                                     type="text"
-                                    tabIndex={4}
                                     placeholder="Enter Username"
                                     autoComplete="username"
                                     value={normalizeEmail(newCompany.email)}
@@ -756,7 +749,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <div className="relative">
                                     <Input
                                         type={showPassword ? "text" : "password"}
-                                        tabIndex={5}
                                         placeholder="At least 6 characters"
                                         autoComplete="new-password"
                                         className="pr-11"
@@ -785,7 +777,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                                 <div className="relative">
                                     <Input
                                         type={showConfirmPassword ? "text" : "password"}
-                                        tabIndex={6}
                                         placeholder="Re-enter password"
                                         autoComplete="new-password"
                                         className="pr-11"
@@ -911,7 +902,6 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
                         <Button
                             disabled={portal ? submitting : loading === true}
                             size="sm"
-                            tabIndex={8}
                             variant="primary"
                             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
                             onClick={handleSubmit}

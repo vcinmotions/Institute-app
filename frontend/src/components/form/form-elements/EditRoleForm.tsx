@@ -258,7 +258,6 @@ export default function EditRolesForm({
               <Label>Name *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Ex. John Doe"
                 value={titleCase(formData.name)}
@@ -277,7 +276,6 @@ export default function EditRolesForm({
               <Label>Username *</Label>
               <Input
                 type="text"
-                tabIndex={2}
                 readOnly
                 placeholder="user@example.com"
                 value={formData.email}
@@ -301,7 +299,7 @@ export default function EditRolesForm({
                   <div className="relative flex-1">
 <Input
                     type={showPassword ? "text" : "password"}
-                    tabIndex={resetPassword ? 3 : -1}
+                    tabIndex={resetPassword ? 0 : -1}
                     disabled={!resetPassword}
                     placeholder={resetPassword ? "Enter new password" : "••••••••"}
                     value={formData.password}
@@ -361,7 +359,6 @@ export default function EditRolesForm({
               {!multi && <Label>Assign Role *</Label>}
               <div className={multi ? "hidden" : "relative"}>
                 <Select
-                  tabIndex={3}
                   options={roles}
                   placeholder="Select Role"
                   value={formData.role}
@@ -384,14 +381,12 @@ export default function EditRolesForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={4}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={5}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

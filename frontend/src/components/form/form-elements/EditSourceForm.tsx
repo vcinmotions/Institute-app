@@ -207,7 +207,6 @@ export default function EditSourceForm({
           <Label>Faculty Name</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="Ex. Full Stack Developer"
             value={newSource.name}
@@ -221,12 +220,11 @@ export default function EditSourceForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={8}
             onClick={onCloseModal}
           >
             Close
           </Button>
-          <Button  size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={9} onClick={handleSubmit}>
+          <Button  size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

@@ -135,7 +135,6 @@ export default function CreateNewFollowUpOnEnquiryModal({
           </label>
           <TextArea
             ref={firstInputRef}
-            tabIndex={1}
             value={remark}
             disabled={isPending}
             className="w-full rounded capitalize border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -154,7 +153,6 @@ export default function CreateNewFollowUpOnEnquiryModal({
           </label>
           <div className="relative w-full">
             <input
-              tabIndex={2}
               type="datetime-local"
               value={scheduledAt}
               disabled={isPending}
@@ -168,14 +166,13 @@ export default function CreateNewFollowUpOnEnquiryModal({
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <Button size="sm" variant="outline" tabIndex={3} disabled={isPending} onClick={onClose}>
+          <Button size="sm" variant="outline" disabled={isPending} onClick={onClose}>
             Cancel
           </Button>
           <Button
             size="sm"
             variant="primary"
             className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900 disabled:opacity-50"
-            tabIndex={4}
             disabled={isPending}
             onClick={handleSubmit}
           >

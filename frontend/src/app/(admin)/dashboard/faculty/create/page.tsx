@@ -419,7 +419,7 @@
 //             <Label>Faculty Name *</Label>
 //             <Input
 //               ref={firstInputRef}
-//               tabIndex={1}
+//
 //               type="text"
 //               placeholder="Ex. Full Stack Developer"
 //               value={titleCase(newFaculty.name)}
@@ -437,7 +437,7 @@
 //             <Input
 //               type="text"
 //               readOnly
-//               tabIndex={2}
+//
 //               placeholder="Ex. Full Stack Developer"
 //               value={newFaculty.email}
 //               onChange={(e) => handleChange("email", e.target.value)}
@@ -453,7 +453,7 @@
 //             <Label>Password *</Label>
 //             <Input
 //               type="text"
-//               tabIndex={3}
+//
 //               placeholder="password"
 //               value={newFaculty.password}
 //               onChange={(e) => handleChange("password", e.target.value)}
@@ -467,7 +467,7 @@
 //             <Label>Contact No. *</Label>
 //             <Input
 //               type="text"
-//               tabIndex={4}
+//
 //               placeholder="Info Demo"
 //               value={newFaculty.contact}
 //               onChange={(e) => handleChange("contact", e.target.value)}
@@ -487,7 +487,7 @@
 //               <PhoneInput
 //                 selectPosition="start"
 //                 countries={countries}
-//                 tabIndex={3}
+//
 //                 onKeyDown={handleKeyDown}
 //                 placeholder="Enter Contact"
 //                 onChange={handlePhoneNumberChange}
@@ -505,7 +505,7 @@
 //             </Label>
 //             <div className="relative" data-master="course">
 //               <Select
-//                 tabIndex={5}
+//
 //                 options={courseOptions}
 //                 placeholder="Select an option"
 //                 onChange={(value) => handleChange("courseId", value)}
@@ -523,7 +523,7 @@
 //             <Label>Select Batch *</Label>
 //             <div className="relative" data-master="batch">
 //               <Select
-//                 tabIndex={6}
+//
 //                 options={batchOptions}
 //                 placeholder="Select an option"
 //                 onChange={(value) => handleChange("batchId", value)}
@@ -550,7 +550,7 @@
 //           /> */}
 //             <Input
 //               type="text"
-//               tabIndex={7}
+//
 //               placeholder="10-10-2025"
 //               className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
 //               value={newFaculty.joiningDate}
@@ -565,7 +565,7 @@
 //             {/* <Button size="sm" variant="outline" onClick={handleResetForm}>
 //               Clear
 //             </Button> */}
-//             <Button size="sm" tabIndex={9} variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
+//             <Button size="sm" variant="primary"  className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
 //               Save
 //             </Button>
 //           </div>

@@ -245,7 +245,6 @@ export default function RolesForm() {
                 <Label>Name *</Label>
                 <Input
                   ref={firstInputRef}
-                  tabIndex={1}
                   type="text"
                   placeholder="Ex. John Doe"
                   value={titleCase(formData.name)}
@@ -262,7 +261,6 @@ export default function RolesForm() {
                 <Input
                   type="text"
                   readOnly
-                  tabIndex={2}
                   placeholder="user@example.com"
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
@@ -277,7 +275,6 @@ export default function RolesForm() {
                 <Label>Password *</Label>
                 <Input
                   type="text"
-                  tabIndex={3}
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) => handleChange("password", e.target.value)}
@@ -293,7 +290,6 @@ export default function RolesForm() {
                 {!multi && <Label>Assign Role *</Label>}
                 <div className={multi ? "hidden" : "relative"}>
                   <Select
-                    tabIndex={4}
                     options={roles}
                     placeholder="Select Role"
                     onChange={(value) => handleChange("role", value)}
@@ -314,7 +310,6 @@ export default function RolesForm() {
           <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
             <Button
               size="sm"
-              tabIndex={5}
               variant="outline"
               onClick={handleCancel}
               className="min-w-[100px] rounded border border-gray-300 bg-white py-1 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -323,7 +318,6 @@ export default function RolesForm() {
             </Button>
             <Button
               size="sm"
-              tabIndex={6}
               variant="primary"
               onClick={handleSubmit}
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"

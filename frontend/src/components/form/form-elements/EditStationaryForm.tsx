@@ -220,7 +220,6 @@ export default function EditStationaryForm({
           <Label>Course</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="Ex. Full Stack Developer"
             value={titleCase(newStationary.name)}
@@ -233,7 +232,6 @@ export default function EditStationaryForm({
           <Label>Duration Weeks</Label>
           <Input
             type="number"
-            tabIndex={2}
             min={0}
             placeholder="12"
             value={newStationary.quantityAvailable}
@@ -248,12 +246,11 @@ export default function EditStationaryForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={7}
             onClick={onCloseModal}
           >
             Close
           </Button>
-          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={8} onClick={handleSubmit}>
+          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

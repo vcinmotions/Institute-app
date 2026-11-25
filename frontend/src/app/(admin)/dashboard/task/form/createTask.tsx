@@ -248,7 +248,6 @@ export default function TaskForm() {
                 <Label>Select Course *</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={2}
                     options={courseOptions}
                     placeholder="Choose course option"
                     onChange={(value) => handleChange("courseId", value)}
@@ -268,7 +267,6 @@ export default function TaskForm() {
                 <Label>Select Batch *</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={3}
                     options={batchOptions}
                     placeholder="Choose batch timetable"
                     onChange={(value) => handleChange("batchId", value)}

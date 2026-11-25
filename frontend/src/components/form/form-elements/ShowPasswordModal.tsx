@@ -35,7 +35,6 @@ export default function ShowEncryptedPassword({
             placeholder="Info Demo"
             readOnly
             value={encryptedPassword}
-            tabIndex={1}
             success
           />
         </div>

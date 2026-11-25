@@ -23,16 +23,55 @@ const ModalCard: React.FC<ComponentCardProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
 
   // 🔑 ESC handler (modal owns ESC)
+  // Keyboard users: Tab / Shift+Tab stay INSIDE the modal (they wrap around) instead of walking into the page behind it.
+  const focusables = () =>
+    Array.from(
+      modalRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      ) ?? [],
+    ).filter((el) => {
+      if ((el as HTMLButtonElement).disabled || el.getAttribute("tabindex") === "-1") return false;
+      if (el instanceof HTMLInputElement && el.type === "hidden") return false;
+      return el.offsetParent !== null; // visible only
+    });
+
   const handleKeys = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
         e.stopPropagation();
         oncloseModal();
+        return;
+      }
+      if (e.key === "Tab") {
+        const list = focusables();
+        if (list.length === 0) return;
+        const first = list[0];
+        const last = list[list.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        const inside = !!active && !!modalRef.current?.contains(active);
+        if (!inside) {
+          e.preventDefault();
+          (e.shiftKey ? last : first).focus();
+        } else if (e.shiftKey && active === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     },
     [oncloseModal],
   );
+
+  // When a modal opens, put the cursor in its first field unless the form already did that itself.
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      if (modalRef.current && !modalRef.current.contains(document.activeElement)) focusables()[0]?.focus();
+    }, 60);
+    return () => window.clearTimeout(t);
+  }, []);
 
   // ✅ Claim ESC on mount, release on unmount
   useEffect(() => {
@@ -98,6 +137,8 @@ const ModalCard: React.FC<ComponentCardProps> = ({
           </h3>
           <button
             onClick={oncloseModal}
+            tabIndex={-1}
+            aria-label="Close"
             className="text-xl font-bold text-gray-400 hover:text-gray-800 dark:hover:text-white"
           >
             &times;

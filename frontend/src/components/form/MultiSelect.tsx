@@ -40,9 +40,43 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null); // 👈 ref for the entire dropdown
 
+  const [active, setActive] = useState(0); // keyboard-highlighted option
+  const listRef = useRef<HTMLDivElement>(null);
+
   const toggleDropdown = () => {
     if (disabled) return;
     setIsOpen((prev) => !prev);
+  };
+
+  // Keep the highlighted option visible while moving with the arrow keys.
+  useEffect(() => {
+    if (!isOpen) return;
+    listRef.current?.querySelector<HTMLElement>(`[data-opt-index="${active}"]`)?.scrollIntoView({ block: "nearest" });
+  }, [active, isOpen]);
+
+  /**
+   * Keyboard support (one Tab stop for the whole control):
+   *  Enter / Space / ArrowDown open it; arrows move; Enter / Space pick or un-pick; Escape closes; Tab moves on.
+   */
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (disabled) return;
+    const last = options.length - 1;
+    if (e.key === "Tab") { setIsOpen(false); return; } // never trap focus
+    if (!isOpen) {
+      if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        const firstSelected = options.findIndex((o) => value.includes(o.value));
+        setActive(firstSelected >= 0 ? firstSelected : 0);
+        setIsOpen(true);
+      }
+      return;
+    }
+    if (e.key === "ArrowDown") { e.preventDefault(); setActive((i) => Math.min(last, i + 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setActive((i) => Math.max(0, i - 1)); }
+    else if (e.key === "Home") { e.preventDefault(); setActive(0); }
+    else if (e.key === "End") { e.preventDefault(); setActive(last); }
+    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (options[active]) handleSelect(options[active].value); }
+    else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setIsOpen(false); }
   };
 
   // const handleSelect = (optionValue: string) => {
@@ -117,7 +151,12 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         <div className="relative flex flex-col items-center">
           <div onClick={toggleDropdown} className="w-full">
             <div
-              tabIndex={tabIndex}
+              tabIndex={disabled ? -1 : 0}
+              role="combobox"
+              aria-haspopup="listbox"
+              aria-expanded={isOpen}
+              aria-label={label}
+              onKeyDown={onKeyDown}
               className="shadow-theme-xs focus:border-brand-300 focus:shadow-focus-ring dark:focus:border-brand-300 mb-2 flex h-11 rounded-lg border border-gray-300 py-1.5 pr-3 pl-3 outline-hidden transition dark:border-gray-700 dark:bg-gray-900"
             >
               <div className="flex flex-auto flex-wrap gap-2">
@@ -156,6 +195,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                     placeholder="Select option"
                   
                     ref={ref}
+                    tabIndex={-1}
                     className="h-full w-full appearance-none border-0 bg-transparent p-1 pr-2 text-sm outline-hidden placeholder:text-gray-800 focus:border-0 focus:ring-0 focus:outline-hidden dark:placeholder:text-white/90"
                     readOnly
                     
@@ -166,6 +206,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               <div className="flex w-7 items-center py-1 pr-1 pl-1">
                 <button
                   type="button"
+                  tabIndex={-1}
                   onClick={toggleDropdown}
                   className="h-5 w-5 cursor-pointer text-gray-700 outline-hidden focus:outline-hidden dark:text-gray-400"
                 >
@@ -196,13 +237,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               className="max-h-select absolute top-full left-0 z-40 w-full overflow-y-auto rounded-lg bg-white shadow-sm dark:bg-gray-900"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex flex-col">
+              <div className="flex flex-col" ref={listRef} role="listbox" aria-multiselectable="true">
                 {options.map((option, index) => (
                   <div key={index}>
                     <div
-                      className={`hover:bg-primary/5 w-full cursor-pointer rounded-t border-b border-gray-200 dark:border-gray-800`}
+                      role="option"
+                      aria-selected={selectedOptions.includes(option.value)}
+                      data-opt-index={index}
+                      className={`hover:bg-primary/5 w-full cursor-pointer rounded-t border-b border-gray-200 dark:border-gray-800 ${index === active ? "bg-brand-50 dark:bg-white/5" : ""}`}
                       onClick={() => handleSelect(option.value)}
-                      tabIndex={tabIndex}
                     >
                       <div
                         className={`relative flex w-full items-center p-2 pl-2 ${
