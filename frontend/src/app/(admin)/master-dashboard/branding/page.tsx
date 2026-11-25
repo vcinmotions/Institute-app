@@ -64,8 +64,19 @@ export default function BrandingPage() {
               className="h-10 w-full rounded border border-gray-300 px-3 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white" />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-500">Logo (PNG, JPG or WEBP, up to 1 MB)</label>
-            <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => pick(e.target.files?.[0] ?? null)} className="block w-full text-sm dark:text-white" />
+            <label className="mb-1 block text-xs font-medium text-gray-500">Institute logo (PNG, JPG or WEBP, up to 1 MB)</label>
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => { e.preventDefault(); pick(e.dataTransfer.files?.[0] ?? null); }}
+              className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-5 text-center dark:border-gray-700"
+            >
+              <p className="text-sm text-gray-600 dark:text-gray-300">{file ? file.name : "Drag and drop your logo here"}</p>
+              <button type="button" onClick={() => fileRef.current?.click()}
+                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 dark:bg-white dark:text-gray-900">
+                {file ? "Choose a different logo" : "Choose logo"}
+              </button>
+              <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => pick(e.target.files?.[0] ?? null)} className="sr-only" aria-label="Upload logo" />
+            </div>
             {(current.logoSrc || file) && (
               <button type="button" className="mt-2 text-xs underline" onClick={() => { setRemoveLogo(true); setFile(null); setPreview(null); if (fileRef.current) fileRef.current.value = ""; }}>
                 Remove logo
