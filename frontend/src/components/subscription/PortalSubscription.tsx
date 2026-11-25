@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import PortalCompanies from "./PortalCompanies";
+import PortalDevices from "./PortalDevices";
 import PortalProfileCard from "./PortalProfileCard";
 import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel, planPrice, Plan } from "@/lib/userTiers";
 import { portalApi, getPortalToken, setPortalToken, portalAuthHeader } from "@/lib/portalApi";
@@ -507,6 +508,7 @@ export default function PortalSubscription() {
               }}
             />
           )}
+          {tab === "companies" && !me?.isCompany && <PortalDevices />}
 
           {/* ---------- Account ---------- */}
           {tab === "account" && me && (

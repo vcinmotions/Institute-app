@@ -39,6 +39,8 @@ import taskRoute from "./routes/task.routes";
 import testRoute from "./routes/test.routes";
 import systemRoute from "./routes/system.backup.routes";
 import subscriptionRoute from "./routes/subscription.routes";
+import activationRoute from "./routes/activation.routes";
+import { activationGate } from "./middlewares/activationGate.middleware";
 import expenseRoute from "./routes/expense.routes";
 import { subscriptionGuard } from "./middlewares/subscriptionGuard.middleware";
 import { syncFromCloud, isEnforced, syncIntervalMs, getState } from "./services/subscription.service";
@@ -142,6 +144,8 @@ if (isEnforced()) {
 // Minimal, non-sensitive flag so the desktop shell can refuse a restore while View-Only.
 app.get("/api/subscription/locked", (_req, res) => res.json({ locked: getState().locked }));
 
+app.use("/api", activationRoute); // public activation screen endpoints
+app.use("/api", activationGate); // nothing else works until this PC is activated
 app.use("/api", tenantRoutes);
 app.use("/api", MasterRoute);
 // Restoring a backup overwrites the database, so it is blocked in View-Only Mode too.

@@ -18,7 +18,24 @@ import {
 import {
   saasAuth, saasLogin, saasMe, getPublicSettings, getSettingsAdmin, updateSettings, listInstitutes, updateInstituteSubscription,
 } from "../controllers/saas.controller";
+import {
+  activateDevice, verifyDevice, saasListKeys, saasCreateKey, saasUpdateKey, saasSetDeviceStatus,
+  portalListKeys, portalDeactivateDevice,
+} from "../controllers/activation.controller";
 const router = express.Router();
+
+// Tiny in-memory throttle for the public activation endpoints (brute-force protection for keys).
+const hits = new Map<string, { n: number; t: number }>();
+function throttle(max: number, windowMs: number): express.RequestHandler {
+  return (req, res, next) => {
+    const k = `${req.ip}:${req.path}`;
+    const now = Date.now();
+    const h = hits.get(k);
+    if (!h || now - h.t > windowMs) hits.set(k, { n: 1, t: now });
+    else if (++h.n > max) return res.status(429).json({ error: "Too many attempts. Try again later." });
+    next();
+  };
+}
 
 router.get("/setup/status", setupStatusController);
 
@@ -42,6 +59,12 @@ router.put("/portal/companies/:id", portalAuth, masterOnly, updateCompany);
 router.post("/portal/razorpay-webhook", razorpayWebhook);
 router.post("/subscription/sync", syncSubscription); // called by the EXE
 
+// ---- EXE activation keys & devices ----
+router.post("/activation/activate", throttle(10, 10 * 60 * 1000), activateDevice); // called by the EXE
+router.post("/activation/verify", throttle(60, 10 * 60 * 1000), verifyDevice); // called by the EXE
+router.get("/portal/activation", portalAuth, masterOnly, portalListKeys);
+router.post("/portal/activation/devices/:id/deactivate", portalAuth, masterOnly, portalDeactivateDevice);
+
 router.get("/plans", listPlans); // public: website landing page
 
 // ---- SaaS Super Admin (hosted portal, /saas/login) ----
@@ -51,6 +74,10 @@ router.get("/saas/plans", saasAuth, listPlansAdmin);
 router.put("/saas/plans/:code", saasAuth, updatePlan);
 router.get("/saas/institutes", saasAuth, listInstitutes);
 router.put("/saas/institutes/:tenantId/subscription", saasAuth, updateInstituteSubscription);
+router.get("/saas/activation-keys", saasAuth, saasListKeys);
+router.post("/saas/activation-keys", saasAuth, saasCreateKey);
+router.put("/saas/activation-keys/:id", saasAuth, saasUpdateKey);
+router.put("/saas/activation-devices/:id", saasAuth, saasSetDeviceStatus);
 router.get("/saas/settings", saasAuth, getSettingsAdmin);
 router.put("/saas/settings", saasAuth, updateSettings);
 router.get("/app-settings", getPublicSettings); // global settings for all EXE clients

@@ -3,6 +3,10 @@ import path from "path";
 import crypto from "crypto";
 import os from "os";
 import { getUserDataPath } from "../middlewares/runtimePaths";
+import { verifyJson, signJson, toPem as toPemShared } from "./licenseCrypto";
+import { localMacKey } from "./device.service";
+import { apiBase, portalBase, getMode, buildConfigBroken } from "./buildConfig.service";
+import { getActivationState, verifyWithPortal } from "./activation.service";
 
 /**
  * Local (EXE) subscription store.
@@ -23,7 +27,7 @@ import { getUserDataPath } from "../middlewares/runtimePaths";
  * Limit: a PC that is kept offline AND frozen at one date cannot be detected
  * by any software; it is blocked again at the next online sync.
  *
- * Enforcement is OFF when SUBSCRIPTION_API_URL is not configured (dev / legacy).
+ * Enforcement and mode come from the signed build config (see buildConfig.service.ts).
  */
 
 export type SubscriptionPayload = {
@@ -63,6 +67,11 @@ export type SubscriptionState = {
   renewUrl: string | null;
   message: string;
   settings: Record<string, any>;
+  /** ENABLED (validate online) | STANDALONE (local, 364 days) | null (unmanaged dev build). */
+  mode?: "ENABLED" | "STANDALONE" | null;
+  /** True until this PC is activated: the whole app (incl. login) is blocked. */
+  blocked?: boolean;
+  activation?: ReturnType<typeof getActivationState>;
 };
 
 const CLOCK_TOLERANCE_MS = 10 * 60 * 1000;
@@ -81,29 +90,16 @@ export const syncIntervalMs = () => {
   return (Number.isFinite(m) && m >= 1 ? m : 5) * 60 * 1000;
 };
 
-export const isEnforced = () => !!process.env.SUBSCRIPTION_API_URL;
+// Enforcement comes from the SIGNED build config (not .env), so it cannot be switched off by editing files.
+export const isEnforced = () => getMode() !== null || !!buildConfigBroken();
 
 const filePath = () => path.join(getUserDataPath(), "data", "subscription.json");
 
-const hmacKey = () => process.env.JWT_SECRET || "vc-inmotions";
+const hmacKey = () => localMacKey(); // PC-bound, not stored in .env
 const macOf = (v: string) =>
   crypto.createHmac("sha256", hmacKey()).update(v).digest("hex");
 
-function toPem(v: string) {
-  return v.includes("BEGIN")
-    ? v.replace(/\\n/g, "\n")
-    : Buffer.from(v, "base64").toString("utf8");
-}
-
-function publicKey(): crypto.KeyObject | null {
-  const v = process.env.SUBSCRIPTION_PUBLIC_KEY;
-  if (!v) return null;
-  try {
-    return crypto.createPublicKey(toPem(v));
-  } catch {
-    return null;
-  }
-}
+const toPem = toPemShared;
 
 function readRecord(): StoredRecord | null {
   try {
@@ -120,18 +116,17 @@ function writeRecord(r: StoredRecord) {
 }
 
 function verify(payloadJson: string, signature: string): boolean {
-  const key = publicKey();
-  if (!key) return false;
+  if (!verifyJson(payloadJson, signature)) return false;
   try {
-    return crypto.verify(null, Buffer.from(payloadJson), key, Buffer.from(signature, "base64"));
+    return !JSON.parse(payloadJson)?.kind; // other signed document types are never a subscription
   } catch {
     return false;
   }
 }
 
 export function renewUrl(): string | null {
-  const base = process.env.SUBSCRIPTION_PORTAL_URL;
-  return base ? `${base.replace(/\/$/, "")}/subscription?renew=1` : null;
+  const base = portalBase();
+  return base ? `${base}/subscription?renew=1` : null;
 }
 
 function state(
@@ -188,7 +183,13 @@ function validRecordLastSeen(rec: StoredRecord | null): number {
 
 /** Computes the current state from local data only (works offline). */
 export function getState(): SubscriptionState {
-  if (!isEnforced()) {
+  const broken = buildConfigBroken();
+  if (broken) {
+    const a = getActivationState();
+    return state({ status: "BUILD_INVALID", locked: true, blocked: true, mode: null, activation: a, message: `${broken} Reinstall the application.` });
+  }
+  const mode = getMode();
+  if (!mode) {
     return {
       enforced: false,
       status: "UNMANAGED",
@@ -200,8 +201,35 @@ export function getState(): SubscriptionState {
       lastSyncAt: null,
       renewUrl: null,
       settings: {},
+      mode: null,
+      blocked: false,
       message: "Subscription checks are not enabled.",
     };
+  }
+
+  // Every PC must be activated with a key first (both modes).
+  const act = getActivationState();
+  if (act.blocked) {
+    return state({ status: act.status, locked: true, blocked: true, mode, activation: act, message: act.message });
+  }
+  if (mode === "STANDALONE") {
+    const lic = act;
+    return state({
+      status: lic.viewOnly ? (lic.status === "CLOCK_TAMPERED" ? "CLOCK_TAMPERED" : "EXPIRED") : "ACTIVE",
+      locked: lic.viewOnly,
+      blocked: false,
+      mode,
+      activation: act,
+      expiryDate: lic.validUntil,
+      plan: "STANDALONE",
+      daysLeft: lic.daysLeft,
+      lastSyncAt: lic.lastVerifiedAt,
+      message: lic.viewOnly ? lic.message : `${lic.daysLeft} day(s) left on the standalone licence.`,
+    });
+  }
+  // ENABLED: a clock problem on the licence also makes the app view-only.
+  if (act.viewOnly) {
+    return state({ status: act.status, locked: true, blocked: false, mode, activation: act, message: act.message });
   }
 
   const rec = readRecord();
@@ -322,8 +350,13 @@ export async function syncFromCloud(credentials?: {
   email: string;
   password: string;
 }): Promise<{ ok: boolean; error?: string }> {
-  const api = process.env.SUBSCRIPTION_API_URL;
-  if (!api) return { ok: true };
+  const mode = getMode();
+  if (!mode) return { ok: true };
+  // Both modes: confirm this PC is still activated and pick up renewals (best effort, offline-safe).
+  const act = await verifyWithPortal().catch(() => ({ ok: false }));
+  if (mode === "STANDALONE") return { ok: act.ok };
+  const api = apiBase();
+  if (!api) return { ok: false, error: "The portal address is not configured in this build." };
 
   const rec = readRecord();
   let email = credentials?.email;

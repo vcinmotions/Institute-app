@@ -48,6 +48,16 @@ export type SaasAdmin = $Result.DefaultSelection<Prisma.$SaasAdminPayload>
  * 
  */
 export type AppSetting = $Result.DefaultSelection<Prisma.$AppSettingPayload>
+/**
+ * Model ActivationKey
+ * 
+ */
+export type ActivationKey = $Result.DefaultSelection<Prisma.$ActivationKeyPayload>
+/**
+ * Model ActivationDevice
+ * 
+ */
+export type ActivationDevice = $Result.DefaultSelection<Prisma.$ActivationDevicePayload>
 
 /**
  * Enums
@@ -252,6 +262,26 @@ export class PrismaClient<
     * ```
     */
   get appSetting(): Prisma.AppSettingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.activationKey`: Exposes CRUD operations for the **ActivationKey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ActivationKeys
+    * const activationKeys = await prisma.activationKey.findMany()
+    * ```
+    */
+  get activationKey(): Prisma.ActivationKeyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.activationDevice`: Exposes CRUD operations for the **ActivationDevice** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ActivationDevices
+    * const activationDevices = await prisma.activationDevice.findMany()
+    * ```
+    */
+  get activationDevice(): Prisma.ActivationDeviceDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -699,7 +729,9 @@ export namespace Prisma {
     PortalSubscription: 'PortalSubscription',
     PortalPayment: 'PortalPayment',
     SaasAdmin: 'SaasAdmin',
-    AppSetting: 'AppSetting'
+    AppSetting: 'AppSetting',
+    ActivationKey: 'ActivationKey',
+    ActivationDevice: 'ActivationDevice'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -718,7 +750,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "superAdmin" | "tenant" | "subscriptionPlan" | "portalSubscription" | "portalPayment" | "saasAdmin" | "appSetting"
+      modelProps: "superAdmin" | "tenant" | "subscriptionPlan" | "portalSubscription" | "portalPayment" | "saasAdmin" | "appSetting" | "activationKey" | "activationDevice"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1240,6 +1272,154 @@ export namespace Prisma {
           }
         }
       }
+      ActivationKey: {
+        payload: Prisma.$ActivationKeyPayload<ExtArgs>
+        fields: Prisma.ActivationKeyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ActivationKeyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ActivationKeyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>
+          }
+          findFirst: {
+            args: Prisma.ActivationKeyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ActivationKeyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>
+          }
+          findMany: {
+            args: Prisma.ActivationKeyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>[]
+          }
+          create: {
+            args: Prisma.ActivationKeyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>
+          }
+          createMany: {
+            args: Prisma.ActivationKeyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ActivationKeyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>[]
+          }
+          delete: {
+            args: Prisma.ActivationKeyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>
+          }
+          update: {
+            args: Prisma.ActivationKeyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>
+          }
+          deleteMany: {
+            args: Prisma.ActivationKeyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ActivationKeyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ActivationKeyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>[]
+          }
+          upsert: {
+            args: Prisma.ActivationKeyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationKeyPayload>
+          }
+          aggregate: {
+            args: Prisma.ActivationKeyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateActivationKey>
+          }
+          groupBy: {
+            args: Prisma.ActivationKeyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ActivationKeyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ActivationKeyCountArgs<ExtArgs>
+            result: $Utils.Optional<ActivationKeyCountAggregateOutputType> | number
+          }
+        }
+      }
+      ActivationDevice: {
+        payload: Prisma.$ActivationDevicePayload<ExtArgs>
+        fields: Prisma.ActivationDeviceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ActivationDeviceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ActivationDeviceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>
+          }
+          findFirst: {
+            args: Prisma.ActivationDeviceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ActivationDeviceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>
+          }
+          findMany: {
+            args: Prisma.ActivationDeviceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>[]
+          }
+          create: {
+            args: Prisma.ActivationDeviceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>
+          }
+          createMany: {
+            args: Prisma.ActivationDeviceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ActivationDeviceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>[]
+          }
+          delete: {
+            args: Prisma.ActivationDeviceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>
+          }
+          update: {
+            args: Prisma.ActivationDeviceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>
+          }
+          deleteMany: {
+            args: Prisma.ActivationDeviceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ActivationDeviceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ActivationDeviceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>[]
+          }
+          upsert: {
+            args: Prisma.ActivationDeviceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivationDevicePayload>
+          }
+          aggregate: {
+            args: Prisma.ActivationDeviceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateActivationDevice>
+          }
+          groupBy: {
+            args: Prisma.ActivationDeviceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ActivationDeviceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ActivationDeviceCountArgs<ExtArgs>
+            result: $Utils.Optional<ActivationDeviceCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1343,6 +1523,8 @@ export namespace Prisma {
     portalPayment?: PortalPaymentOmit
     saasAdmin?: SaasAdminOmit
     appSetting?: AppSettingOmit
+    activationKey?: ActivationKeyOmit
+    activationDevice?: ActivationDeviceOmit
   }
 
   /* Types for Logging */
@@ -1417,6 +1599,36 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type ActivationKeyCountOutputType
+   */
+
+  export type ActivationKeyCountOutputType = {
+    devices: number
+  }
+
+  export type ActivationKeyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    devices?: boolean | ActivationKeyCountOutputTypeCountDevicesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ActivationKeyCountOutputType without action
+   */
+  export type ActivationKeyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKeyCountOutputType
+     */
+    select?: ActivationKeyCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ActivationKeyCountOutputType without action
+   */
+  export type ActivationKeyCountOutputTypeCountDevicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivationDeviceWhereInput
+  }
 
 
   /**
@@ -2413,7 +2625,6 @@ export namespace Prisma {
      * The data used to create many SuperAdmins.
      */
     data: SuperAdminCreateManyInput | SuperAdminCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -2432,7 +2643,6 @@ export namespace Prisma {
      * The data used to create many SuperAdmins.
      */
     data: SuperAdminCreateManyInput | SuperAdminCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -3642,7 +3852,6 @@ export namespace Prisma {
      * The data used to create many Tenants.
      */
     data: TenantCreateManyInput | TenantCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -3661,7 +3870,6 @@ export namespace Prisma {
      * The data used to create many Tenants.
      */
     data: TenantCreateManyInput | TenantCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -4714,7 +4922,6 @@ export namespace Prisma {
      * The data used to create many SubscriptionPlans.
      */
     data: SubscriptionPlanCreateManyInput | SubscriptionPlanCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -4733,7 +4940,6 @@ export namespace Prisma {
      * The data used to create many SubscriptionPlans.
      */
     data: SubscriptionPlanCreateManyInput | SubscriptionPlanCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -5808,7 +6014,6 @@ export namespace Prisma {
      * The data used to create many PortalSubscriptions.
      */
     data: PortalSubscriptionCreateManyInput | PortalSubscriptionCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -5827,7 +6032,6 @@ export namespace Prisma {
      * The data used to create many PortalSubscriptions.
      */
     data: PortalSubscriptionCreateManyInput | PortalSubscriptionCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -6906,7 +7110,6 @@ export namespace Prisma {
      * The data used to create many PortalPayments.
      */
     data: PortalPaymentCreateManyInput | PortalPaymentCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -6925,7 +7128,6 @@ export namespace Prisma {
      * The data used to create many PortalPayments.
      */
     data: PortalPaymentCreateManyInput | PortalPaymentCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -7901,7 +8103,6 @@ export namespace Prisma {
      * The data used to create many SaasAdmins.
      */
     data: SaasAdminCreateManyInput | SaasAdminCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -7920,7 +8121,6 @@ export namespace Prisma {
      * The data used to create many SaasAdmins.
      */
     data: SaasAdminCreateManyInput | SaasAdminCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -8870,7 +9070,6 @@ export namespace Prisma {
      * The data used to create many AppSettings.
      */
     data: AppSettingCreateManyInput | AppSettingCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -8889,7 +9088,6 @@ export namespace Prisma {
      * The data used to create many AppSettings.
      */
     data: AppSettingCreateManyInput | AppSettingCreateManyInput[]
-    skipDuplicates?: boolean
   }
 
   /**
@@ -9032,13 +9230,2306 @@ export namespace Prisma {
 
 
   /**
+   * Model ActivationKey
+   */
+
+  export type AggregateActivationKey = {
+    _count: ActivationKeyCountAggregateOutputType | null
+    _avg: ActivationKeyAvgAggregateOutputType | null
+    _sum: ActivationKeySumAggregateOutputType | null
+    _min: ActivationKeyMinAggregateOutputType | null
+    _max: ActivationKeyMaxAggregateOutputType | null
+  }
+
+  export type ActivationKeyAvgAggregateOutputType = {
+    maxActivations: number | null
+    transferLimit: number | null
+    transfersUsed: number | null
+  }
+
+  export type ActivationKeySumAggregateOutputType = {
+    maxActivations: number | null
+    transferLimit: number | null
+    transfersUsed: number | null
+  }
+
+  export type ActivationKeyMinAggregateOutputType = {
+    id: string | null
+    key: string | null
+    tenantId: string | null
+    instituteName: string | null
+    companyName: string | null
+    maxActivations: number | null
+    transferLimit: number | null
+    transfersUsed: number | null
+    status: string | null
+    firstActivatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type ActivationKeyMaxAggregateOutputType = {
+    id: string | null
+    key: string | null
+    tenantId: string | null
+    instituteName: string | null
+    companyName: string | null
+    maxActivations: number | null
+    transferLimit: number | null
+    transfersUsed: number | null
+    status: string | null
+    firstActivatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type ActivationKeyCountAggregateOutputType = {
+    id: number
+    key: number
+    tenantId: number
+    instituteName: number
+    companyName: number
+    maxActivations: number
+    transferLimit: number
+    transfersUsed: number
+    status: number
+    firstActivatedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ActivationKeyAvgAggregateInputType = {
+    maxActivations?: true
+    transferLimit?: true
+    transfersUsed?: true
+  }
+
+  export type ActivationKeySumAggregateInputType = {
+    maxActivations?: true
+    transferLimit?: true
+    transfersUsed?: true
+  }
+
+  export type ActivationKeyMinAggregateInputType = {
+    id?: true
+    key?: true
+    tenantId?: true
+    instituteName?: true
+    companyName?: true
+    maxActivations?: true
+    transferLimit?: true
+    transfersUsed?: true
+    status?: true
+    firstActivatedAt?: true
+    createdAt?: true
+  }
+
+  export type ActivationKeyMaxAggregateInputType = {
+    id?: true
+    key?: true
+    tenantId?: true
+    instituteName?: true
+    companyName?: true
+    maxActivations?: true
+    transferLimit?: true
+    transfersUsed?: true
+    status?: true
+    firstActivatedAt?: true
+    createdAt?: true
+  }
+
+  export type ActivationKeyCountAggregateInputType = {
+    id?: true
+    key?: true
+    tenantId?: true
+    instituteName?: true
+    companyName?: true
+    maxActivations?: true
+    transferLimit?: true
+    transfersUsed?: true
+    status?: true
+    firstActivatedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ActivationKeyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActivationKey to aggregate.
+     */
+    where?: ActivationKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivationKeys to fetch.
+     */
+    orderBy?: ActivationKeyOrderByWithRelationInput | ActivationKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ActivationKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivationKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivationKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ActivationKeys
+    **/
+    _count?: true | ActivationKeyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ActivationKeyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ActivationKeySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ActivationKeyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ActivationKeyMaxAggregateInputType
+  }
+
+  export type GetActivationKeyAggregateType<T extends ActivationKeyAggregateArgs> = {
+        [P in keyof T & keyof AggregateActivationKey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateActivationKey[P]>
+      : GetScalarType<T[P], AggregateActivationKey[P]>
+  }
+
+
+
+
+  export type ActivationKeyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivationKeyWhereInput
+    orderBy?: ActivationKeyOrderByWithAggregationInput | ActivationKeyOrderByWithAggregationInput[]
+    by: ActivationKeyScalarFieldEnum[] | ActivationKeyScalarFieldEnum
+    having?: ActivationKeyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ActivationKeyCountAggregateInputType | true
+    _avg?: ActivationKeyAvgAggregateInputType
+    _sum?: ActivationKeySumAggregateInputType
+    _min?: ActivationKeyMinAggregateInputType
+    _max?: ActivationKeyMaxAggregateInputType
+  }
+
+  export type ActivationKeyGroupByOutputType = {
+    id: string
+    key: string
+    tenantId: string
+    instituteName: string
+    companyName: string
+    maxActivations: number
+    transferLimit: number
+    transfersUsed: number
+    status: string
+    firstActivatedAt: Date | null
+    createdAt: Date
+    _count: ActivationKeyCountAggregateOutputType | null
+    _avg: ActivationKeyAvgAggregateOutputType | null
+    _sum: ActivationKeySumAggregateOutputType | null
+    _min: ActivationKeyMinAggregateOutputType | null
+    _max: ActivationKeyMaxAggregateOutputType | null
+  }
+
+  type GetActivationKeyGroupByPayload<T extends ActivationKeyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ActivationKeyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ActivationKeyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ActivationKeyGroupByOutputType[P]>
+            : GetScalarType<T[P], ActivationKeyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ActivationKeySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    tenantId?: boolean
+    instituteName?: boolean
+    companyName?: boolean
+    maxActivations?: boolean
+    transferLimit?: boolean
+    transfersUsed?: boolean
+    status?: boolean
+    firstActivatedAt?: boolean
+    createdAt?: boolean
+    devices?: boolean | ActivationKey$devicesArgs<ExtArgs>
+    _count?: boolean | ActivationKeyCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["activationKey"]>
+
+  export type ActivationKeySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    tenantId?: boolean
+    instituteName?: boolean
+    companyName?: boolean
+    maxActivations?: boolean
+    transferLimit?: boolean
+    transfersUsed?: boolean
+    status?: boolean
+    firstActivatedAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["activationKey"]>
+
+  export type ActivationKeySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    tenantId?: boolean
+    instituteName?: boolean
+    companyName?: boolean
+    maxActivations?: boolean
+    transferLimit?: boolean
+    transfersUsed?: boolean
+    status?: boolean
+    firstActivatedAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["activationKey"]>
+
+  export type ActivationKeySelectScalar = {
+    id?: boolean
+    key?: boolean
+    tenantId?: boolean
+    instituteName?: boolean
+    companyName?: boolean
+    maxActivations?: boolean
+    transferLimit?: boolean
+    transfersUsed?: boolean
+    status?: boolean
+    firstActivatedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type ActivationKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "tenantId" | "instituteName" | "companyName" | "maxActivations" | "transferLimit" | "transfersUsed" | "status" | "firstActivatedAt" | "createdAt", ExtArgs["result"]["activationKey"]>
+  export type ActivationKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    devices?: boolean | ActivationKey$devicesArgs<ExtArgs>
+    _count?: boolean | ActivationKeyCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ActivationKeyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ActivationKeyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ActivationKeyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ActivationKey"
+    objects: {
+      devices: Prisma.$ActivationDevicePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      key: string
+      tenantId: string
+      instituteName: string
+      companyName: string
+      maxActivations: number
+      transferLimit: number
+      transfersUsed: number
+      status: string
+      firstActivatedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["activationKey"]>
+    composites: {}
+  }
+
+  type ActivationKeyGetPayload<S extends boolean | null | undefined | ActivationKeyDefaultArgs> = $Result.GetResult<Prisma.$ActivationKeyPayload, S>
+
+  type ActivationKeyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ActivationKeyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ActivationKeyCountAggregateInputType | true
+    }
+
+  export interface ActivationKeyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ActivationKey'], meta: { name: 'ActivationKey' } }
+    /**
+     * Find zero or one ActivationKey that matches the filter.
+     * @param {ActivationKeyFindUniqueArgs} args - Arguments to find a ActivationKey
+     * @example
+     * // Get one ActivationKey
+     * const activationKey = await prisma.activationKey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ActivationKeyFindUniqueArgs>(args: SelectSubset<T, ActivationKeyFindUniqueArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ActivationKey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ActivationKeyFindUniqueOrThrowArgs} args - Arguments to find a ActivationKey
+     * @example
+     * // Get one ActivationKey
+     * const activationKey = await prisma.activationKey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ActivationKeyFindUniqueOrThrowArgs>(args: SelectSubset<T, ActivationKeyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActivationKey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationKeyFindFirstArgs} args - Arguments to find a ActivationKey
+     * @example
+     * // Get one ActivationKey
+     * const activationKey = await prisma.activationKey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ActivationKeyFindFirstArgs>(args?: SelectSubset<T, ActivationKeyFindFirstArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActivationKey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationKeyFindFirstOrThrowArgs} args - Arguments to find a ActivationKey
+     * @example
+     * // Get one ActivationKey
+     * const activationKey = await prisma.activationKey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ActivationKeyFindFirstOrThrowArgs>(args?: SelectSubset<T, ActivationKeyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ActivationKeys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationKeyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ActivationKeys
+     * const activationKeys = await prisma.activationKey.findMany()
+     * 
+     * // Get first 10 ActivationKeys
+     * const activationKeys = await prisma.activationKey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const activationKeyWithIdOnly = await prisma.activationKey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ActivationKeyFindManyArgs>(args?: SelectSubset<T, ActivationKeyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ActivationKey.
+     * @param {ActivationKeyCreateArgs} args - Arguments to create a ActivationKey.
+     * @example
+     * // Create one ActivationKey
+     * const ActivationKey = await prisma.activationKey.create({
+     *   data: {
+     *     // ... data to create a ActivationKey
+     *   }
+     * })
+     * 
+     */
+    create<T extends ActivationKeyCreateArgs>(args: SelectSubset<T, ActivationKeyCreateArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ActivationKeys.
+     * @param {ActivationKeyCreateManyArgs} args - Arguments to create many ActivationKeys.
+     * @example
+     * // Create many ActivationKeys
+     * const activationKey = await prisma.activationKey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ActivationKeyCreateManyArgs>(args?: SelectSubset<T, ActivationKeyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ActivationKeys and returns the data saved in the database.
+     * @param {ActivationKeyCreateManyAndReturnArgs} args - Arguments to create many ActivationKeys.
+     * @example
+     * // Create many ActivationKeys
+     * const activationKey = await prisma.activationKey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ActivationKeys and only return the `id`
+     * const activationKeyWithIdOnly = await prisma.activationKey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ActivationKeyCreateManyAndReturnArgs>(args?: SelectSubset<T, ActivationKeyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ActivationKey.
+     * @param {ActivationKeyDeleteArgs} args - Arguments to delete one ActivationKey.
+     * @example
+     * // Delete one ActivationKey
+     * const ActivationKey = await prisma.activationKey.delete({
+     *   where: {
+     *     // ... filter to delete one ActivationKey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ActivationKeyDeleteArgs>(args: SelectSubset<T, ActivationKeyDeleteArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ActivationKey.
+     * @param {ActivationKeyUpdateArgs} args - Arguments to update one ActivationKey.
+     * @example
+     * // Update one ActivationKey
+     * const activationKey = await prisma.activationKey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ActivationKeyUpdateArgs>(args: SelectSubset<T, ActivationKeyUpdateArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ActivationKeys.
+     * @param {ActivationKeyDeleteManyArgs} args - Arguments to filter ActivationKeys to delete.
+     * @example
+     * // Delete a few ActivationKeys
+     * const { count } = await prisma.activationKey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ActivationKeyDeleteManyArgs>(args?: SelectSubset<T, ActivationKeyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActivationKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationKeyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ActivationKeys
+     * const activationKey = await prisma.activationKey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ActivationKeyUpdateManyArgs>(args: SelectSubset<T, ActivationKeyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActivationKeys and returns the data updated in the database.
+     * @param {ActivationKeyUpdateManyAndReturnArgs} args - Arguments to update many ActivationKeys.
+     * @example
+     * // Update many ActivationKeys
+     * const activationKey = await prisma.activationKey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ActivationKeys and only return the `id`
+     * const activationKeyWithIdOnly = await prisma.activationKey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ActivationKeyUpdateManyAndReturnArgs>(args: SelectSubset<T, ActivationKeyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ActivationKey.
+     * @param {ActivationKeyUpsertArgs} args - Arguments to update or create a ActivationKey.
+     * @example
+     * // Update or create a ActivationKey
+     * const activationKey = await prisma.activationKey.upsert({
+     *   create: {
+     *     // ... data to create a ActivationKey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ActivationKey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ActivationKeyUpsertArgs>(args: SelectSubset<T, ActivationKeyUpsertArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ActivationKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationKeyCountArgs} args - Arguments to filter ActivationKeys to count.
+     * @example
+     * // Count the number of ActivationKeys
+     * const count = await prisma.activationKey.count({
+     *   where: {
+     *     // ... the filter for the ActivationKeys we want to count
+     *   }
+     * })
+    **/
+    count<T extends ActivationKeyCountArgs>(
+      args?: Subset<T, ActivationKeyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ActivationKeyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ActivationKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationKeyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ActivationKeyAggregateArgs>(args: Subset<T, ActivationKeyAggregateArgs>): Prisma.PrismaPromise<GetActivationKeyAggregateType<T>>
+
+    /**
+     * Group by ActivationKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationKeyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ActivationKeyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ActivationKeyGroupByArgs['orderBy'] }
+        : { orderBy?: ActivationKeyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ActivationKeyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActivationKeyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ActivationKey model
+   */
+  readonly fields: ActivationKeyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ActivationKey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ActivationKeyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    devices<T extends ActivationKey$devicesArgs<ExtArgs> = {}>(args?: Subset<T, ActivationKey$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ActivationKey model
+   */
+  interface ActivationKeyFieldRefs {
+    readonly id: FieldRef<"ActivationKey", 'String'>
+    readonly key: FieldRef<"ActivationKey", 'String'>
+    readonly tenantId: FieldRef<"ActivationKey", 'String'>
+    readonly instituteName: FieldRef<"ActivationKey", 'String'>
+    readonly companyName: FieldRef<"ActivationKey", 'String'>
+    readonly maxActivations: FieldRef<"ActivationKey", 'Int'>
+    readonly transferLimit: FieldRef<"ActivationKey", 'Int'>
+    readonly transfersUsed: FieldRef<"ActivationKey", 'Int'>
+    readonly status: FieldRef<"ActivationKey", 'String'>
+    readonly firstActivatedAt: FieldRef<"ActivationKey", 'DateTime'>
+    readonly createdAt: FieldRef<"ActivationKey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ActivationKey findUnique
+   */
+  export type ActivationKeyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationKey to fetch.
+     */
+    where: ActivationKeyWhereUniqueInput
+  }
+
+  /**
+   * ActivationKey findUniqueOrThrow
+   */
+  export type ActivationKeyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationKey to fetch.
+     */
+    where: ActivationKeyWhereUniqueInput
+  }
+
+  /**
+   * ActivationKey findFirst
+   */
+  export type ActivationKeyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationKey to fetch.
+     */
+    where?: ActivationKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivationKeys to fetch.
+     */
+    orderBy?: ActivationKeyOrderByWithRelationInput | ActivationKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActivationKeys.
+     */
+    cursor?: ActivationKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivationKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivationKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActivationKeys.
+     */
+    distinct?: ActivationKeyScalarFieldEnum | ActivationKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ActivationKey findFirstOrThrow
+   */
+  export type ActivationKeyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationKey to fetch.
+     */
+    where?: ActivationKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivationKeys to fetch.
+     */
+    orderBy?: ActivationKeyOrderByWithRelationInput | ActivationKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActivationKeys.
+     */
+    cursor?: ActivationKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivationKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivationKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActivationKeys.
+     */
+    distinct?: ActivationKeyScalarFieldEnum | ActivationKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ActivationKey findMany
+   */
+  export type ActivationKeyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationKeys to fetch.
+     */
+    where?: ActivationKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivationKeys to fetch.
+     */
+    orderBy?: ActivationKeyOrderByWithRelationInput | ActivationKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ActivationKeys.
+     */
+    cursor?: ActivationKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivationKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivationKeys.
+     */
+    skip?: number
+    distinct?: ActivationKeyScalarFieldEnum | ActivationKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ActivationKey create
+   */
+  export type ActivationKeyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ActivationKey.
+     */
+    data: XOR<ActivationKeyCreateInput, ActivationKeyUncheckedCreateInput>
+  }
+
+  /**
+   * ActivationKey createMany
+   */
+  export type ActivationKeyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ActivationKeys.
+     */
+    data: ActivationKeyCreateManyInput | ActivationKeyCreateManyInput[]
+  }
+
+  /**
+   * ActivationKey createManyAndReturn
+   */
+  export type ActivationKeyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * The data used to create many ActivationKeys.
+     */
+    data: ActivationKeyCreateManyInput | ActivationKeyCreateManyInput[]
+  }
+
+  /**
+   * ActivationKey update
+   */
+  export type ActivationKeyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ActivationKey.
+     */
+    data: XOR<ActivationKeyUpdateInput, ActivationKeyUncheckedUpdateInput>
+    /**
+     * Choose, which ActivationKey to update.
+     */
+    where: ActivationKeyWhereUniqueInput
+  }
+
+  /**
+   * ActivationKey updateMany
+   */
+  export type ActivationKeyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ActivationKeys.
+     */
+    data: XOR<ActivationKeyUpdateManyMutationInput, ActivationKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which ActivationKeys to update
+     */
+    where?: ActivationKeyWhereInput
+    /**
+     * Limit how many ActivationKeys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActivationKey updateManyAndReturn
+   */
+  export type ActivationKeyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * The data used to update ActivationKeys.
+     */
+    data: XOR<ActivationKeyUpdateManyMutationInput, ActivationKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which ActivationKeys to update
+     */
+    where?: ActivationKeyWhereInput
+    /**
+     * Limit how many ActivationKeys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActivationKey upsert
+   */
+  export type ActivationKeyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ActivationKey to update in case it exists.
+     */
+    where: ActivationKeyWhereUniqueInput
+    /**
+     * In case the ActivationKey found by the `where` argument doesn't exist, create a new ActivationKey with this data.
+     */
+    create: XOR<ActivationKeyCreateInput, ActivationKeyUncheckedCreateInput>
+    /**
+     * In case the ActivationKey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ActivationKeyUpdateInput, ActivationKeyUncheckedUpdateInput>
+  }
+
+  /**
+   * ActivationKey delete
+   */
+  export type ActivationKeyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+    /**
+     * Filter which ActivationKey to delete.
+     */
+    where: ActivationKeyWhereUniqueInput
+  }
+
+  /**
+   * ActivationKey deleteMany
+   */
+  export type ActivationKeyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActivationKeys to delete
+     */
+    where?: ActivationKeyWhereInput
+    /**
+     * Limit how many ActivationKeys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActivationKey.devices
+   */
+  export type ActivationKey$devicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    where?: ActivationDeviceWhereInput
+    orderBy?: ActivationDeviceOrderByWithRelationInput | ActivationDeviceOrderByWithRelationInput[]
+    cursor?: ActivationDeviceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ActivationDeviceScalarFieldEnum | ActivationDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * ActivationKey without action
+   */
+  export type ActivationKeyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationKey
+     */
+    select?: ActivationKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationKey
+     */
+    omit?: ActivationKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationKeyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ActivationDevice
+   */
+
+  export type AggregateActivationDevice = {
+    _count: ActivationDeviceCountAggregateOutputType | null
+    _min: ActivationDeviceMinAggregateOutputType | null
+    _max: ActivationDeviceMaxAggregateOutputType | null
+  }
+
+  export type ActivationDeviceMinAggregateOutputType = {
+    id: string | null
+    activationKeyId: string | null
+    deviceId: string | null
+    deviceName: string | null
+    os: string | null
+    status: string | null
+    activatedAt: Date | null
+    lastVerifiedAt: Date | null
+    deactivatedAt: Date | null
+  }
+
+  export type ActivationDeviceMaxAggregateOutputType = {
+    id: string | null
+    activationKeyId: string | null
+    deviceId: string | null
+    deviceName: string | null
+    os: string | null
+    status: string | null
+    activatedAt: Date | null
+    lastVerifiedAt: Date | null
+    deactivatedAt: Date | null
+  }
+
+  export type ActivationDeviceCountAggregateOutputType = {
+    id: number
+    activationKeyId: number
+    deviceId: number
+    deviceName: number
+    os: number
+    status: number
+    activatedAt: number
+    lastVerifiedAt: number
+    deactivatedAt: number
+    _all: number
+  }
+
+
+  export type ActivationDeviceMinAggregateInputType = {
+    id?: true
+    activationKeyId?: true
+    deviceId?: true
+    deviceName?: true
+    os?: true
+    status?: true
+    activatedAt?: true
+    lastVerifiedAt?: true
+    deactivatedAt?: true
+  }
+
+  export type ActivationDeviceMaxAggregateInputType = {
+    id?: true
+    activationKeyId?: true
+    deviceId?: true
+    deviceName?: true
+    os?: true
+    status?: true
+    activatedAt?: true
+    lastVerifiedAt?: true
+    deactivatedAt?: true
+  }
+
+  export type ActivationDeviceCountAggregateInputType = {
+    id?: true
+    activationKeyId?: true
+    deviceId?: true
+    deviceName?: true
+    os?: true
+    status?: true
+    activatedAt?: true
+    lastVerifiedAt?: true
+    deactivatedAt?: true
+    _all?: true
+  }
+
+  export type ActivationDeviceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActivationDevice to aggregate.
+     */
+    where?: ActivationDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivationDevices to fetch.
+     */
+    orderBy?: ActivationDeviceOrderByWithRelationInput | ActivationDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ActivationDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivationDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivationDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ActivationDevices
+    **/
+    _count?: true | ActivationDeviceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ActivationDeviceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ActivationDeviceMaxAggregateInputType
+  }
+
+  export type GetActivationDeviceAggregateType<T extends ActivationDeviceAggregateArgs> = {
+        [P in keyof T & keyof AggregateActivationDevice]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateActivationDevice[P]>
+      : GetScalarType<T[P], AggregateActivationDevice[P]>
+  }
+
+
+
+
+  export type ActivationDeviceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivationDeviceWhereInput
+    orderBy?: ActivationDeviceOrderByWithAggregationInput | ActivationDeviceOrderByWithAggregationInput[]
+    by: ActivationDeviceScalarFieldEnum[] | ActivationDeviceScalarFieldEnum
+    having?: ActivationDeviceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ActivationDeviceCountAggregateInputType | true
+    _min?: ActivationDeviceMinAggregateInputType
+    _max?: ActivationDeviceMaxAggregateInputType
+  }
+
+  export type ActivationDeviceGroupByOutputType = {
+    id: string
+    activationKeyId: string
+    deviceId: string
+    deviceName: string
+    os: string
+    status: string
+    activatedAt: Date
+    lastVerifiedAt: Date
+    deactivatedAt: Date | null
+    _count: ActivationDeviceCountAggregateOutputType | null
+    _min: ActivationDeviceMinAggregateOutputType | null
+    _max: ActivationDeviceMaxAggregateOutputType | null
+  }
+
+  type GetActivationDeviceGroupByPayload<T extends ActivationDeviceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ActivationDeviceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ActivationDeviceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ActivationDeviceGroupByOutputType[P]>
+            : GetScalarType<T[P], ActivationDeviceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ActivationDeviceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    activationKeyId?: boolean
+    deviceId?: boolean
+    deviceName?: boolean
+    os?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    lastVerifiedAt?: boolean
+    deactivatedAt?: boolean
+    activationKey?: boolean | ActivationKeyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["activationDevice"]>
+
+  export type ActivationDeviceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    activationKeyId?: boolean
+    deviceId?: boolean
+    deviceName?: boolean
+    os?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    lastVerifiedAt?: boolean
+    deactivatedAt?: boolean
+    activationKey?: boolean | ActivationKeyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["activationDevice"]>
+
+  export type ActivationDeviceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    activationKeyId?: boolean
+    deviceId?: boolean
+    deviceName?: boolean
+    os?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    lastVerifiedAt?: boolean
+    deactivatedAt?: boolean
+    activationKey?: boolean | ActivationKeyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["activationDevice"]>
+
+  export type ActivationDeviceSelectScalar = {
+    id?: boolean
+    activationKeyId?: boolean
+    deviceId?: boolean
+    deviceName?: boolean
+    os?: boolean
+    status?: boolean
+    activatedAt?: boolean
+    lastVerifiedAt?: boolean
+    deactivatedAt?: boolean
+  }
+
+  export type ActivationDeviceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "activationKeyId" | "deviceId" | "deviceName" | "os" | "status" | "activatedAt" | "lastVerifiedAt" | "deactivatedAt", ExtArgs["result"]["activationDevice"]>
+  export type ActivationDeviceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activationKey?: boolean | ActivationKeyDefaultArgs<ExtArgs>
+  }
+  export type ActivationDeviceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activationKey?: boolean | ActivationKeyDefaultArgs<ExtArgs>
+  }
+  export type ActivationDeviceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activationKey?: boolean | ActivationKeyDefaultArgs<ExtArgs>
+  }
+
+  export type $ActivationDevicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ActivationDevice"
+    objects: {
+      activationKey: Prisma.$ActivationKeyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      activationKeyId: string
+      deviceId: string
+      deviceName: string
+      os: string
+      status: string
+      activatedAt: Date
+      lastVerifiedAt: Date
+      deactivatedAt: Date | null
+    }, ExtArgs["result"]["activationDevice"]>
+    composites: {}
+  }
+
+  type ActivationDeviceGetPayload<S extends boolean | null | undefined | ActivationDeviceDefaultArgs> = $Result.GetResult<Prisma.$ActivationDevicePayload, S>
+
+  type ActivationDeviceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ActivationDeviceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ActivationDeviceCountAggregateInputType | true
+    }
+
+  export interface ActivationDeviceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ActivationDevice'], meta: { name: 'ActivationDevice' } }
+    /**
+     * Find zero or one ActivationDevice that matches the filter.
+     * @param {ActivationDeviceFindUniqueArgs} args - Arguments to find a ActivationDevice
+     * @example
+     * // Get one ActivationDevice
+     * const activationDevice = await prisma.activationDevice.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ActivationDeviceFindUniqueArgs>(args: SelectSubset<T, ActivationDeviceFindUniqueArgs<ExtArgs>>): Prisma__ActivationDeviceClient<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ActivationDevice that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ActivationDeviceFindUniqueOrThrowArgs} args - Arguments to find a ActivationDevice
+     * @example
+     * // Get one ActivationDevice
+     * const activationDevice = await prisma.activationDevice.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ActivationDeviceFindUniqueOrThrowArgs>(args: SelectSubset<T, ActivationDeviceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ActivationDeviceClient<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActivationDevice that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationDeviceFindFirstArgs} args - Arguments to find a ActivationDevice
+     * @example
+     * // Get one ActivationDevice
+     * const activationDevice = await prisma.activationDevice.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ActivationDeviceFindFirstArgs>(args?: SelectSubset<T, ActivationDeviceFindFirstArgs<ExtArgs>>): Prisma__ActivationDeviceClient<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActivationDevice that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationDeviceFindFirstOrThrowArgs} args - Arguments to find a ActivationDevice
+     * @example
+     * // Get one ActivationDevice
+     * const activationDevice = await prisma.activationDevice.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ActivationDeviceFindFirstOrThrowArgs>(args?: SelectSubset<T, ActivationDeviceFindFirstOrThrowArgs<ExtArgs>>): Prisma__ActivationDeviceClient<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ActivationDevices that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationDeviceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ActivationDevices
+     * const activationDevices = await prisma.activationDevice.findMany()
+     * 
+     * // Get first 10 ActivationDevices
+     * const activationDevices = await prisma.activationDevice.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const activationDeviceWithIdOnly = await prisma.activationDevice.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ActivationDeviceFindManyArgs>(args?: SelectSubset<T, ActivationDeviceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ActivationDevice.
+     * @param {ActivationDeviceCreateArgs} args - Arguments to create a ActivationDevice.
+     * @example
+     * // Create one ActivationDevice
+     * const ActivationDevice = await prisma.activationDevice.create({
+     *   data: {
+     *     // ... data to create a ActivationDevice
+     *   }
+     * })
+     * 
+     */
+    create<T extends ActivationDeviceCreateArgs>(args: SelectSubset<T, ActivationDeviceCreateArgs<ExtArgs>>): Prisma__ActivationDeviceClient<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ActivationDevices.
+     * @param {ActivationDeviceCreateManyArgs} args - Arguments to create many ActivationDevices.
+     * @example
+     * // Create many ActivationDevices
+     * const activationDevice = await prisma.activationDevice.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ActivationDeviceCreateManyArgs>(args?: SelectSubset<T, ActivationDeviceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ActivationDevices and returns the data saved in the database.
+     * @param {ActivationDeviceCreateManyAndReturnArgs} args - Arguments to create many ActivationDevices.
+     * @example
+     * // Create many ActivationDevices
+     * const activationDevice = await prisma.activationDevice.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ActivationDevices and only return the `id`
+     * const activationDeviceWithIdOnly = await prisma.activationDevice.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ActivationDeviceCreateManyAndReturnArgs>(args?: SelectSubset<T, ActivationDeviceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ActivationDevice.
+     * @param {ActivationDeviceDeleteArgs} args - Arguments to delete one ActivationDevice.
+     * @example
+     * // Delete one ActivationDevice
+     * const ActivationDevice = await prisma.activationDevice.delete({
+     *   where: {
+     *     // ... filter to delete one ActivationDevice
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ActivationDeviceDeleteArgs>(args: SelectSubset<T, ActivationDeviceDeleteArgs<ExtArgs>>): Prisma__ActivationDeviceClient<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ActivationDevice.
+     * @param {ActivationDeviceUpdateArgs} args - Arguments to update one ActivationDevice.
+     * @example
+     * // Update one ActivationDevice
+     * const activationDevice = await prisma.activationDevice.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ActivationDeviceUpdateArgs>(args: SelectSubset<T, ActivationDeviceUpdateArgs<ExtArgs>>): Prisma__ActivationDeviceClient<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ActivationDevices.
+     * @param {ActivationDeviceDeleteManyArgs} args - Arguments to filter ActivationDevices to delete.
+     * @example
+     * // Delete a few ActivationDevices
+     * const { count } = await prisma.activationDevice.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ActivationDeviceDeleteManyArgs>(args?: SelectSubset<T, ActivationDeviceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActivationDevices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationDeviceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ActivationDevices
+     * const activationDevice = await prisma.activationDevice.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ActivationDeviceUpdateManyArgs>(args: SelectSubset<T, ActivationDeviceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActivationDevices and returns the data updated in the database.
+     * @param {ActivationDeviceUpdateManyAndReturnArgs} args - Arguments to update many ActivationDevices.
+     * @example
+     * // Update many ActivationDevices
+     * const activationDevice = await prisma.activationDevice.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ActivationDevices and only return the `id`
+     * const activationDeviceWithIdOnly = await prisma.activationDevice.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ActivationDeviceUpdateManyAndReturnArgs>(args: SelectSubset<T, ActivationDeviceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ActivationDevice.
+     * @param {ActivationDeviceUpsertArgs} args - Arguments to update or create a ActivationDevice.
+     * @example
+     * // Update or create a ActivationDevice
+     * const activationDevice = await prisma.activationDevice.upsert({
+     *   create: {
+     *     // ... data to create a ActivationDevice
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ActivationDevice we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ActivationDeviceUpsertArgs>(args: SelectSubset<T, ActivationDeviceUpsertArgs<ExtArgs>>): Prisma__ActivationDeviceClient<$Result.GetResult<Prisma.$ActivationDevicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ActivationDevices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationDeviceCountArgs} args - Arguments to filter ActivationDevices to count.
+     * @example
+     * // Count the number of ActivationDevices
+     * const count = await prisma.activationDevice.count({
+     *   where: {
+     *     // ... the filter for the ActivationDevices we want to count
+     *   }
+     * })
+    **/
+    count<T extends ActivationDeviceCountArgs>(
+      args?: Subset<T, ActivationDeviceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ActivationDeviceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ActivationDevice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationDeviceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ActivationDeviceAggregateArgs>(args: Subset<T, ActivationDeviceAggregateArgs>): Prisma.PrismaPromise<GetActivationDeviceAggregateType<T>>
+
+    /**
+     * Group by ActivationDevice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivationDeviceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ActivationDeviceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ActivationDeviceGroupByArgs['orderBy'] }
+        : { orderBy?: ActivationDeviceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ActivationDeviceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActivationDeviceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ActivationDevice model
+   */
+  readonly fields: ActivationDeviceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ActivationDevice.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ActivationDeviceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    activationKey<T extends ActivationKeyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ActivationKeyDefaultArgs<ExtArgs>>): Prisma__ActivationKeyClient<$Result.GetResult<Prisma.$ActivationKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ActivationDevice model
+   */
+  interface ActivationDeviceFieldRefs {
+    readonly id: FieldRef<"ActivationDevice", 'String'>
+    readonly activationKeyId: FieldRef<"ActivationDevice", 'String'>
+    readonly deviceId: FieldRef<"ActivationDevice", 'String'>
+    readonly deviceName: FieldRef<"ActivationDevice", 'String'>
+    readonly os: FieldRef<"ActivationDevice", 'String'>
+    readonly status: FieldRef<"ActivationDevice", 'String'>
+    readonly activatedAt: FieldRef<"ActivationDevice", 'DateTime'>
+    readonly lastVerifiedAt: FieldRef<"ActivationDevice", 'DateTime'>
+    readonly deactivatedAt: FieldRef<"ActivationDevice", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ActivationDevice findUnique
+   */
+  export type ActivationDeviceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationDevice to fetch.
+     */
+    where: ActivationDeviceWhereUniqueInput
+  }
+
+  /**
+   * ActivationDevice findUniqueOrThrow
+   */
+  export type ActivationDeviceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationDevice to fetch.
+     */
+    where: ActivationDeviceWhereUniqueInput
+  }
+
+  /**
+   * ActivationDevice findFirst
+   */
+  export type ActivationDeviceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationDevice to fetch.
+     */
+    where?: ActivationDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivationDevices to fetch.
+     */
+    orderBy?: ActivationDeviceOrderByWithRelationInput | ActivationDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActivationDevices.
+     */
+    cursor?: ActivationDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivationDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivationDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActivationDevices.
+     */
+    distinct?: ActivationDeviceScalarFieldEnum | ActivationDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * ActivationDevice findFirstOrThrow
+   */
+  export type ActivationDeviceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationDevice to fetch.
+     */
+    where?: ActivationDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivationDevices to fetch.
+     */
+    orderBy?: ActivationDeviceOrderByWithRelationInput | ActivationDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActivationDevices.
+     */
+    cursor?: ActivationDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivationDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivationDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActivationDevices.
+     */
+    distinct?: ActivationDeviceScalarFieldEnum | ActivationDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * ActivationDevice findMany
+   */
+  export type ActivationDeviceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivationDevices to fetch.
+     */
+    where?: ActivationDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivationDevices to fetch.
+     */
+    orderBy?: ActivationDeviceOrderByWithRelationInput | ActivationDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ActivationDevices.
+     */
+    cursor?: ActivationDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivationDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivationDevices.
+     */
+    skip?: number
+    distinct?: ActivationDeviceScalarFieldEnum | ActivationDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * ActivationDevice create
+   */
+  export type ActivationDeviceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ActivationDevice.
+     */
+    data: XOR<ActivationDeviceCreateInput, ActivationDeviceUncheckedCreateInput>
+  }
+
+  /**
+   * ActivationDevice createMany
+   */
+  export type ActivationDeviceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ActivationDevices.
+     */
+    data: ActivationDeviceCreateManyInput | ActivationDeviceCreateManyInput[]
+  }
+
+  /**
+   * ActivationDevice createManyAndReturn
+   */
+  export type ActivationDeviceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * The data used to create many ActivationDevices.
+     */
+    data: ActivationDeviceCreateManyInput | ActivationDeviceCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ActivationDevice update
+   */
+  export type ActivationDeviceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ActivationDevice.
+     */
+    data: XOR<ActivationDeviceUpdateInput, ActivationDeviceUncheckedUpdateInput>
+    /**
+     * Choose, which ActivationDevice to update.
+     */
+    where: ActivationDeviceWhereUniqueInput
+  }
+
+  /**
+   * ActivationDevice updateMany
+   */
+  export type ActivationDeviceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ActivationDevices.
+     */
+    data: XOR<ActivationDeviceUpdateManyMutationInput, ActivationDeviceUncheckedUpdateManyInput>
+    /**
+     * Filter which ActivationDevices to update
+     */
+    where?: ActivationDeviceWhereInput
+    /**
+     * Limit how many ActivationDevices to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActivationDevice updateManyAndReturn
+   */
+  export type ActivationDeviceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * The data used to update ActivationDevices.
+     */
+    data: XOR<ActivationDeviceUpdateManyMutationInput, ActivationDeviceUncheckedUpdateManyInput>
+    /**
+     * Filter which ActivationDevices to update
+     */
+    where?: ActivationDeviceWhereInput
+    /**
+     * Limit how many ActivationDevices to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ActivationDevice upsert
+   */
+  export type ActivationDeviceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ActivationDevice to update in case it exists.
+     */
+    where: ActivationDeviceWhereUniqueInput
+    /**
+     * In case the ActivationDevice found by the `where` argument doesn't exist, create a new ActivationDevice with this data.
+     */
+    create: XOR<ActivationDeviceCreateInput, ActivationDeviceUncheckedCreateInput>
+    /**
+     * In case the ActivationDevice was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ActivationDeviceUpdateInput, ActivationDeviceUncheckedUpdateInput>
+  }
+
+  /**
+   * ActivationDevice delete
+   */
+  export type ActivationDeviceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+    /**
+     * Filter which ActivationDevice to delete.
+     */
+    where: ActivationDeviceWhereUniqueInput
+  }
+
+  /**
+   * ActivationDevice deleteMany
+   */
+  export type ActivationDeviceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActivationDevices to delete
+     */
+    where?: ActivationDeviceWhereInput
+    /**
+     * Limit how many ActivationDevices to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActivationDevice without action
+   */
+  export type ActivationDeviceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivationDevice
+     */
+    select?: ActivationDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivationDevice
+     */
+    omit?: ActivationDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivationDeviceInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
   export const TransactionIsolationLevel: {
-    ReadUncommitted: 'ReadUncommitted',
-    ReadCommitted: 'ReadCommitted',
-    RepeatableRead: 'RepeatableRead',
     Serializable: 'Serializable'
   };
 
@@ -9163,20 +11654,44 @@ export namespace Prisma {
   export type AppSettingScalarFieldEnum = (typeof AppSettingScalarFieldEnum)[keyof typeof AppSettingScalarFieldEnum]
 
 
+  export const ActivationKeyScalarFieldEnum: {
+    id: 'id',
+    key: 'key',
+    tenantId: 'tenantId',
+    instituteName: 'instituteName',
+    companyName: 'companyName',
+    maxActivations: 'maxActivations',
+    transferLimit: 'transferLimit',
+    transfersUsed: 'transfersUsed',
+    status: 'status',
+    firstActivatedAt: 'firstActivatedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type ActivationKeyScalarFieldEnum = (typeof ActivationKeyScalarFieldEnum)[keyof typeof ActivationKeyScalarFieldEnum]
+
+
+  export const ActivationDeviceScalarFieldEnum: {
+    id: 'id',
+    activationKeyId: 'activationKeyId',
+    deviceId: 'deviceId',
+    deviceName: 'deviceName',
+    os: 'os',
+    status: 'status',
+    activatedAt: 'activatedAt',
+    lastVerifiedAt: 'lastVerifiedAt',
+    deactivatedAt: 'deactivatedAt'
+  };
+
+  export type ActivationDeviceScalarFieldEnum = (typeof ActivationDeviceScalarFieldEnum)[keyof typeof ActivationDeviceScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
-  };
-
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   export const NullsOrder: {
@@ -9200,13 +11715,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'String[]'
-   */
-  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -9214,23 +11722,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Role'
    */
   export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
-    
-
-
-  /**
-   * Reference to a field of type 'Role[]'
-   */
-  export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
     
 
 
@@ -9249,23 +11743,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -9845,6 +12325,169 @@ export namespace Prisma {
     key?: StringWithAggregatesFilter<"AppSetting"> | string
     value?: StringWithAggregatesFilter<"AppSetting"> | string
     updatedAt?: DateTimeWithAggregatesFilter<"AppSetting"> | Date | string
+  }
+
+  export type ActivationKeyWhereInput = {
+    AND?: ActivationKeyWhereInput | ActivationKeyWhereInput[]
+    OR?: ActivationKeyWhereInput[]
+    NOT?: ActivationKeyWhereInput | ActivationKeyWhereInput[]
+    id?: StringFilter<"ActivationKey"> | string
+    key?: StringFilter<"ActivationKey"> | string
+    tenantId?: StringFilter<"ActivationKey"> | string
+    instituteName?: StringFilter<"ActivationKey"> | string
+    companyName?: StringFilter<"ActivationKey"> | string
+    maxActivations?: IntFilter<"ActivationKey"> | number
+    transferLimit?: IntFilter<"ActivationKey"> | number
+    transfersUsed?: IntFilter<"ActivationKey"> | number
+    status?: StringFilter<"ActivationKey"> | string
+    firstActivatedAt?: DateTimeNullableFilter<"ActivationKey"> | Date | string | null
+    createdAt?: DateTimeFilter<"ActivationKey"> | Date | string
+    devices?: ActivationDeviceListRelationFilter
+  }
+
+  export type ActivationKeyOrderByWithRelationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    tenantId?: SortOrder
+    instituteName?: SortOrder
+    companyName?: SortOrder
+    maxActivations?: SortOrder
+    transferLimit?: SortOrder
+    transfersUsed?: SortOrder
+    status?: SortOrder
+    firstActivatedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    devices?: ActivationDeviceOrderByRelationAggregateInput
+  }
+
+  export type ActivationKeyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    key?: string
+    AND?: ActivationKeyWhereInput | ActivationKeyWhereInput[]
+    OR?: ActivationKeyWhereInput[]
+    NOT?: ActivationKeyWhereInput | ActivationKeyWhereInput[]
+    tenantId?: StringFilter<"ActivationKey"> | string
+    instituteName?: StringFilter<"ActivationKey"> | string
+    companyName?: StringFilter<"ActivationKey"> | string
+    maxActivations?: IntFilter<"ActivationKey"> | number
+    transferLimit?: IntFilter<"ActivationKey"> | number
+    transfersUsed?: IntFilter<"ActivationKey"> | number
+    status?: StringFilter<"ActivationKey"> | string
+    firstActivatedAt?: DateTimeNullableFilter<"ActivationKey"> | Date | string | null
+    createdAt?: DateTimeFilter<"ActivationKey"> | Date | string
+    devices?: ActivationDeviceListRelationFilter
+  }, "id" | "key">
+
+  export type ActivationKeyOrderByWithAggregationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    tenantId?: SortOrder
+    instituteName?: SortOrder
+    companyName?: SortOrder
+    maxActivations?: SortOrder
+    transferLimit?: SortOrder
+    transfersUsed?: SortOrder
+    status?: SortOrder
+    firstActivatedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: ActivationKeyCountOrderByAggregateInput
+    _avg?: ActivationKeyAvgOrderByAggregateInput
+    _max?: ActivationKeyMaxOrderByAggregateInput
+    _min?: ActivationKeyMinOrderByAggregateInput
+    _sum?: ActivationKeySumOrderByAggregateInput
+  }
+
+  export type ActivationKeyScalarWhereWithAggregatesInput = {
+    AND?: ActivationKeyScalarWhereWithAggregatesInput | ActivationKeyScalarWhereWithAggregatesInput[]
+    OR?: ActivationKeyScalarWhereWithAggregatesInput[]
+    NOT?: ActivationKeyScalarWhereWithAggregatesInput | ActivationKeyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ActivationKey"> | string
+    key?: StringWithAggregatesFilter<"ActivationKey"> | string
+    tenantId?: StringWithAggregatesFilter<"ActivationKey"> | string
+    instituteName?: StringWithAggregatesFilter<"ActivationKey"> | string
+    companyName?: StringWithAggregatesFilter<"ActivationKey"> | string
+    maxActivations?: IntWithAggregatesFilter<"ActivationKey"> | number
+    transferLimit?: IntWithAggregatesFilter<"ActivationKey"> | number
+    transfersUsed?: IntWithAggregatesFilter<"ActivationKey"> | number
+    status?: StringWithAggregatesFilter<"ActivationKey"> | string
+    firstActivatedAt?: DateTimeNullableWithAggregatesFilter<"ActivationKey"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ActivationKey"> | Date | string
+  }
+
+  export type ActivationDeviceWhereInput = {
+    AND?: ActivationDeviceWhereInput | ActivationDeviceWhereInput[]
+    OR?: ActivationDeviceWhereInput[]
+    NOT?: ActivationDeviceWhereInput | ActivationDeviceWhereInput[]
+    id?: StringFilter<"ActivationDevice"> | string
+    activationKeyId?: StringFilter<"ActivationDevice"> | string
+    deviceId?: StringFilter<"ActivationDevice"> | string
+    deviceName?: StringFilter<"ActivationDevice"> | string
+    os?: StringFilter<"ActivationDevice"> | string
+    status?: StringFilter<"ActivationDevice"> | string
+    activatedAt?: DateTimeFilter<"ActivationDevice"> | Date | string
+    lastVerifiedAt?: DateTimeFilter<"ActivationDevice"> | Date | string
+    deactivatedAt?: DateTimeNullableFilter<"ActivationDevice"> | Date | string | null
+    activationKey?: XOR<ActivationKeyScalarRelationFilter, ActivationKeyWhereInput>
+  }
+
+  export type ActivationDeviceOrderByWithRelationInput = {
+    id?: SortOrder
+    activationKeyId?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    lastVerifiedAt?: SortOrder
+    deactivatedAt?: SortOrderInput | SortOrder
+    activationKey?: ActivationKeyOrderByWithRelationInput
+  }
+
+  export type ActivationDeviceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    activationKeyId_deviceId?: ActivationDeviceActivationKeyIdDeviceIdCompoundUniqueInput
+    AND?: ActivationDeviceWhereInput | ActivationDeviceWhereInput[]
+    OR?: ActivationDeviceWhereInput[]
+    NOT?: ActivationDeviceWhereInput | ActivationDeviceWhereInput[]
+    activationKeyId?: StringFilter<"ActivationDevice"> | string
+    deviceId?: StringFilter<"ActivationDevice"> | string
+    deviceName?: StringFilter<"ActivationDevice"> | string
+    os?: StringFilter<"ActivationDevice"> | string
+    status?: StringFilter<"ActivationDevice"> | string
+    activatedAt?: DateTimeFilter<"ActivationDevice"> | Date | string
+    lastVerifiedAt?: DateTimeFilter<"ActivationDevice"> | Date | string
+    deactivatedAt?: DateTimeNullableFilter<"ActivationDevice"> | Date | string | null
+    activationKey?: XOR<ActivationKeyScalarRelationFilter, ActivationKeyWhereInput>
+  }, "id" | "activationKeyId_deviceId">
+
+  export type ActivationDeviceOrderByWithAggregationInput = {
+    id?: SortOrder
+    activationKeyId?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    lastVerifiedAt?: SortOrder
+    deactivatedAt?: SortOrderInput | SortOrder
+    _count?: ActivationDeviceCountOrderByAggregateInput
+    _max?: ActivationDeviceMaxOrderByAggregateInput
+    _min?: ActivationDeviceMinOrderByAggregateInput
+  }
+
+  export type ActivationDeviceScalarWhereWithAggregatesInput = {
+    AND?: ActivationDeviceScalarWhereWithAggregatesInput | ActivationDeviceScalarWhereWithAggregatesInput[]
+    OR?: ActivationDeviceScalarWhereWithAggregatesInput[]
+    NOT?: ActivationDeviceScalarWhereWithAggregatesInput | ActivationDeviceScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ActivationDevice"> | string
+    activationKeyId?: StringWithAggregatesFilter<"ActivationDevice"> | string
+    deviceId?: StringWithAggregatesFilter<"ActivationDevice"> | string
+    deviceName?: StringWithAggregatesFilter<"ActivationDevice"> | string
+    os?: StringWithAggregatesFilter<"ActivationDevice"> | string
+    status?: StringWithAggregatesFilter<"ActivationDevice"> | string
+    activatedAt?: DateTimeWithAggregatesFilter<"ActivationDevice"> | Date | string
+    lastVerifiedAt?: DateTimeWithAggregatesFilter<"ActivationDevice"> | Date | string
+    deactivatedAt?: DateTimeNullableWithAggregatesFilter<"ActivationDevice"> | Date | string | null
   }
 
   export type SuperAdminCreateInput = {
@@ -10526,10 +13169,195 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ActivationKeyCreateInput = {
+    id?: string
+    key: string
+    tenantId: string
+    instituteName: string
+    companyName: string
+    maxActivations?: number
+    transferLimit?: number
+    transfersUsed?: number
+    status?: string
+    firstActivatedAt?: Date | string | null
+    createdAt?: Date | string
+    devices?: ActivationDeviceCreateNestedManyWithoutActivationKeyInput
+  }
+
+  export type ActivationKeyUncheckedCreateInput = {
+    id?: string
+    key: string
+    tenantId: string
+    instituteName: string
+    companyName: string
+    maxActivations?: number
+    transferLimit?: number
+    transfersUsed?: number
+    status?: string
+    firstActivatedAt?: Date | string | null
+    createdAt?: Date | string
+    devices?: ActivationDeviceUncheckedCreateNestedManyWithoutActivationKeyInput
+  }
+
+  export type ActivationKeyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    maxActivations?: IntFieldUpdateOperationsInput | number
+    transferLimit?: IntFieldUpdateOperationsInput | number
+    transfersUsed?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    devices?: ActivationDeviceUpdateManyWithoutActivationKeyNestedInput
+  }
+
+  export type ActivationKeyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    maxActivations?: IntFieldUpdateOperationsInput | number
+    transferLimit?: IntFieldUpdateOperationsInput | number
+    transfersUsed?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    devices?: ActivationDeviceUncheckedUpdateManyWithoutActivationKeyNestedInput
+  }
+
+  export type ActivationKeyCreateManyInput = {
+    id?: string
+    key: string
+    tenantId: string
+    instituteName: string
+    companyName: string
+    maxActivations?: number
+    transferLimit?: number
+    transfersUsed?: number
+    status?: string
+    firstActivatedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ActivationKeyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    maxActivations?: IntFieldUpdateOperationsInput | number
+    transferLimit?: IntFieldUpdateOperationsInput | number
+    transfersUsed?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivationKeyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    maxActivations?: IntFieldUpdateOperationsInput | number
+    transferLimit?: IntFieldUpdateOperationsInput | number
+    transfersUsed?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivationDeviceCreateInput = {
+    id?: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    status?: string
+    activatedAt?: Date | string
+    lastVerifiedAt?: Date | string
+    deactivatedAt?: Date | string | null
+    activationKey: ActivationKeyCreateNestedOneWithoutDevicesInput
+  }
+
+  export type ActivationDeviceUncheckedCreateInput = {
+    id?: string
+    activationKeyId: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    status?: string
+    activatedAt?: Date | string
+    lastVerifiedAt?: Date | string
+    deactivatedAt?: Date | string | null
+  }
+
+  export type ActivationDeviceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastVerifiedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deactivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    activationKey?: ActivationKeyUpdateOneRequiredWithoutDevicesNestedInput
+  }
+
+  export type ActivationDeviceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    activationKeyId?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastVerifiedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deactivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ActivationDeviceCreateManyInput = {
+    id?: string
+    activationKeyId: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    status?: string
+    activatedAt?: Date | string
+    lastVerifiedAt?: Date | string
+    deactivatedAt?: Date | string | null
+  }
+
+  export type ActivationDeviceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastVerifiedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deactivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ActivationDeviceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    activationKeyId?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastVerifiedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deactivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -10537,14 +13365,13 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -10552,14 +13379,13 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -10569,8 +13395,8 @@ export namespace Prisma {
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -10580,8 +13406,8 @@ export namespace Prisma {
 
   export type EnumRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[]
+    notIn?: $Enums.Role[]
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
@@ -10657,8 +13483,8 @@ export namespace Prisma {
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -10666,7 +13492,6 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
     not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
@@ -10675,8 +13500,8 @@ export namespace Prisma {
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -10684,7 +13509,6 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
     not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
@@ -10693,8 +13517,8 @@ export namespace Prisma {
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -10707,8 +13531,8 @@ export namespace Prisma {
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -10721,8 +13545,8 @@ export namespace Prisma {
 
   export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[]
+    notIn?: $Enums.Role[]
     not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
@@ -10817,8 +13641,8 @@ export namespace Prisma {
 
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -10828,8 +13652,8 @@ export namespace Prisma {
 
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -10882,8 +13706,8 @@ export namespace Prisma {
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -10898,8 +13722,8 @@ export namespace Prisma {
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -11050,6 +13874,116 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type ActivationDeviceListRelationFilter = {
+    every?: ActivationDeviceWhereInput
+    some?: ActivationDeviceWhereInput
+    none?: ActivationDeviceWhereInput
+  }
+
+  export type ActivationDeviceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ActivationKeyCountOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    tenantId?: SortOrder
+    instituteName?: SortOrder
+    companyName?: SortOrder
+    maxActivations?: SortOrder
+    transferLimit?: SortOrder
+    transfersUsed?: SortOrder
+    status?: SortOrder
+    firstActivatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ActivationKeyAvgOrderByAggregateInput = {
+    maxActivations?: SortOrder
+    transferLimit?: SortOrder
+    transfersUsed?: SortOrder
+  }
+
+  export type ActivationKeyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    tenantId?: SortOrder
+    instituteName?: SortOrder
+    companyName?: SortOrder
+    maxActivations?: SortOrder
+    transferLimit?: SortOrder
+    transfersUsed?: SortOrder
+    status?: SortOrder
+    firstActivatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ActivationKeyMinOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    tenantId?: SortOrder
+    instituteName?: SortOrder
+    companyName?: SortOrder
+    maxActivations?: SortOrder
+    transferLimit?: SortOrder
+    transfersUsed?: SortOrder
+    status?: SortOrder
+    firstActivatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ActivationKeySumOrderByAggregateInput = {
+    maxActivations?: SortOrder
+    transferLimit?: SortOrder
+    transfersUsed?: SortOrder
+  }
+
+  export type ActivationKeyScalarRelationFilter = {
+    is?: ActivationKeyWhereInput
+    isNot?: ActivationKeyWhereInput
+  }
+
+  export type ActivationDeviceActivationKeyIdDeviceIdCompoundUniqueInput = {
+    activationKeyId: string
+    deviceId: string
+  }
+
+  export type ActivationDeviceCountOrderByAggregateInput = {
+    id?: SortOrder
+    activationKeyId?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    lastVerifiedAt?: SortOrder
+    deactivatedAt?: SortOrder
+  }
+
+  export type ActivationDeviceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    activationKeyId?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    lastVerifiedAt?: SortOrder
+    deactivatedAt?: SortOrder
+  }
+
+  export type ActivationDeviceMinOrderByAggregateInput = {
+    id?: SortOrder
+    activationKeyId?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    status?: SortOrder
+    activatedAt?: SortOrder
+    lastVerifiedAt?: SortOrder
+    deactivatedAt?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -11090,10 +14024,66 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type ActivationDeviceCreateNestedManyWithoutActivationKeyInput = {
+    create?: XOR<ActivationDeviceCreateWithoutActivationKeyInput, ActivationDeviceUncheckedCreateWithoutActivationKeyInput> | ActivationDeviceCreateWithoutActivationKeyInput[] | ActivationDeviceUncheckedCreateWithoutActivationKeyInput[]
+    connectOrCreate?: ActivationDeviceCreateOrConnectWithoutActivationKeyInput | ActivationDeviceCreateOrConnectWithoutActivationKeyInput[]
+    createMany?: ActivationDeviceCreateManyActivationKeyInputEnvelope
+    connect?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+  }
+
+  export type ActivationDeviceUncheckedCreateNestedManyWithoutActivationKeyInput = {
+    create?: XOR<ActivationDeviceCreateWithoutActivationKeyInput, ActivationDeviceUncheckedCreateWithoutActivationKeyInput> | ActivationDeviceCreateWithoutActivationKeyInput[] | ActivationDeviceUncheckedCreateWithoutActivationKeyInput[]
+    connectOrCreate?: ActivationDeviceCreateOrConnectWithoutActivationKeyInput | ActivationDeviceCreateOrConnectWithoutActivationKeyInput[]
+    createMany?: ActivationDeviceCreateManyActivationKeyInputEnvelope
+    connect?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+  }
+
+  export type ActivationDeviceUpdateManyWithoutActivationKeyNestedInput = {
+    create?: XOR<ActivationDeviceCreateWithoutActivationKeyInput, ActivationDeviceUncheckedCreateWithoutActivationKeyInput> | ActivationDeviceCreateWithoutActivationKeyInput[] | ActivationDeviceUncheckedCreateWithoutActivationKeyInput[]
+    connectOrCreate?: ActivationDeviceCreateOrConnectWithoutActivationKeyInput | ActivationDeviceCreateOrConnectWithoutActivationKeyInput[]
+    upsert?: ActivationDeviceUpsertWithWhereUniqueWithoutActivationKeyInput | ActivationDeviceUpsertWithWhereUniqueWithoutActivationKeyInput[]
+    createMany?: ActivationDeviceCreateManyActivationKeyInputEnvelope
+    set?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+    disconnect?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+    delete?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+    connect?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+    update?: ActivationDeviceUpdateWithWhereUniqueWithoutActivationKeyInput | ActivationDeviceUpdateWithWhereUniqueWithoutActivationKeyInput[]
+    updateMany?: ActivationDeviceUpdateManyWithWhereWithoutActivationKeyInput | ActivationDeviceUpdateManyWithWhereWithoutActivationKeyInput[]
+    deleteMany?: ActivationDeviceScalarWhereInput | ActivationDeviceScalarWhereInput[]
+  }
+
+  export type ActivationDeviceUncheckedUpdateManyWithoutActivationKeyNestedInput = {
+    create?: XOR<ActivationDeviceCreateWithoutActivationKeyInput, ActivationDeviceUncheckedCreateWithoutActivationKeyInput> | ActivationDeviceCreateWithoutActivationKeyInput[] | ActivationDeviceUncheckedCreateWithoutActivationKeyInput[]
+    connectOrCreate?: ActivationDeviceCreateOrConnectWithoutActivationKeyInput | ActivationDeviceCreateOrConnectWithoutActivationKeyInput[]
+    upsert?: ActivationDeviceUpsertWithWhereUniqueWithoutActivationKeyInput | ActivationDeviceUpsertWithWhereUniqueWithoutActivationKeyInput[]
+    createMany?: ActivationDeviceCreateManyActivationKeyInputEnvelope
+    set?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+    disconnect?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+    delete?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+    connect?: ActivationDeviceWhereUniqueInput | ActivationDeviceWhereUniqueInput[]
+    update?: ActivationDeviceUpdateWithWhereUniqueWithoutActivationKeyInput | ActivationDeviceUpdateWithWhereUniqueWithoutActivationKeyInput[]
+    updateMany?: ActivationDeviceUpdateManyWithWhereWithoutActivationKeyInput | ActivationDeviceUpdateManyWithWhereWithoutActivationKeyInput[]
+    deleteMany?: ActivationDeviceScalarWhereInput | ActivationDeviceScalarWhereInput[]
+  }
+
+  export type ActivationKeyCreateNestedOneWithoutDevicesInput = {
+    create?: XOR<ActivationKeyCreateWithoutDevicesInput, ActivationKeyUncheckedCreateWithoutDevicesInput>
+    connectOrCreate?: ActivationKeyCreateOrConnectWithoutDevicesInput
+    connect?: ActivationKeyWhereUniqueInput
+  }
+
+  export type ActivationKeyUpdateOneRequiredWithoutDevicesNestedInput = {
+    create?: XOR<ActivationKeyCreateWithoutDevicesInput, ActivationKeyUncheckedCreateWithoutDevicesInput>
+    connectOrCreate?: ActivationKeyCreateOrConnectWithoutDevicesInput
+    upsert?: ActivationKeyUpsertWithoutDevicesInput
+    connect?: ActivationKeyWhereUniqueInput
+    update?: XOR<XOR<ActivationKeyUpdateToOneWithWhereWithoutDevicesInput, ActivationKeyUpdateWithoutDevicesInput>, ActivationKeyUncheckedUpdateWithoutDevicesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -11106,8 +14096,8 @@ export namespace Prisma {
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -11120,8 +14110,8 @@ export namespace Prisma {
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -11131,8 +14121,8 @@ export namespace Prisma {
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -11142,8 +14132,8 @@ export namespace Prisma {
 
   export type NestedEnumRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[]
+    notIn?: $Enums.Role[]
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
@@ -11154,8 +14144,8 @@ export namespace Prisma {
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    in?: string[]
+    notIn?: string[]
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -11171,8 +14161,8 @@ export namespace Prisma {
 
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -11182,8 +14172,8 @@ export namespace Prisma {
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -11199,8 +14189,8 @@ export namespace Prisma {
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -11210,8 +14200,8 @@ export namespace Prisma {
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -11224,8 +14214,8 @@ export namespace Prisma {
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -11238,8 +14228,8 @@ export namespace Prisma {
 
   export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[]
+    notIn?: $Enums.Role[]
     not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
@@ -11256,8 +14246,8 @@ export namespace Prisma {
 
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -11267,8 +14257,8 @@ export namespace Prisma {
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -11283,8 +14273,8 @@ export namespace Prisma {
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -11295,6 +14285,184 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type ActivationDeviceCreateWithoutActivationKeyInput = {
+    id?: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    status?: string
+    activatedAt?: Date | string
+    lastVerifiedAt?: Date | string
+    deactivatedAt?: Date | string | null
+  }
+
+  export type ActivationDeviceUncheckedCreateWithoutActivationKeyInput = {
+    id?: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    status?: string
+    activatedAt?: Date | string
+    lastVerifiedAt?: Date | string
+    deactivatedAt?: Date | string | null
+  }
+
+  export type ActivationDeviceCreateOrConnectWithoutActivationKeyInput = {
+    where: ActivationDeviceWhereUniqueInput
+    create: XOR<ActivationDeviceCreateWithoutActivationKeyInput, ActivationDeviceUncheckedCreateWithoutActivationKeyInput>
+  }
+
+  export type ActivationDeviceCreateManyActivationKeyInputEnvelope = {
+    data: ActivationDeviceCreateManyActivationKeyInput | ActivationDeviceCreateManyActivationKeyInput[]
+  }
+
+  export type ActivationDeviceUpsertWithWhereUniqueWithoutActivationKeyInput = {
+    where: ActivationDeviceWhereUniqueInput
+    update: XOR<ActivationDeviceUpdateWithoutActivationKeyInput, ActivationDeviceUncheckedUpdateWithoutActivationKeyInput>
+    create: XOR<ActivationDeviceCreateWithoutActivationKeyInput, ActivationDeviceUncheckedCreateWithoutActivationKeyInput>
+  }
+
+  export type ActivationDeviceUpdateWithWhereUniqueWithoutActivationKeyInput = {
+    where: ActivationDeviceWhereUniqueInput
+    data: XOR<ActivationDeviceUpdateWithoutActivationKeyInput, ActivationDeviceUncheckedUpdateWithoutActivationKeyInput>
+  }
+
+  export type ActivationDeviceUpdateManyWithWhereWithoutActivationKeyInput = {
+    where: ActivationDeviceScalarWhereInput
+    data: XOR<ActivationDeviceUpdateManyMutationInput, ActivationDeviceUncheckedUpdateManyWithoutActivationKeyInput>
+  }
+
+  export type ActivationDeviceScalarWhereInput = {
+    AND?: ActivationDeviceScalarWhereInput | ActivationDeviceScalarWhereInput[]
+    OR?: ActivationDeviceScalarWhereInput[]
+    NOT?: ActivationDeviceScalarWhereInput | ActivationDeviceScalarWhereInput[]
+    id?: StringFilter<"ActivationDevice"> | string
+    activationKeyId?: StringFilter<"ActivationDevice"> | string
+    deviceId?: StringFilter<"ActivationDevice"> | string
+    deviceName?: StringFilter<"ActivationDevice"> | string
+    os?: StringFilter<"ActivationDevice"> | string
+    status?: StringFilter<"ActivationDevice"> | string
+    activatedAt?: DateTimeFilter<"ActivationDevice"> | Date | string
+    lastVerifiedAt?: DateTimeFilter<"ActivationDevice"> | Date | string
+    deactivatedAt?: DateTimeNullableFilter<"ActivationDevice"> | Date | string | null
+  }
+
+  export type ActivationKeyCreateWithoutDevicesInput = {
+    id?: string
+    key: string
+    tenantId: string
+    instituteName: string
+    companyName: string
+    maxActivations?: number
+    transferLimit?: number
+    transfersUsed?: number
+    status?: string
+    firstActivatedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ActivationKeyUncheckedCreateWithoutDevicesInput = {
+    id?: string
+    key: string
+    tenantId: string
+    instituteName: string
+    companyName: string
+    maxActivations?: number
+    transferLimit?: number
+    transfersUsed?: number
+    status?: string
+    firstActivatedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ActivationKeyCreateOrConnectWithoutDevicesInput = {
+    where: ActivationKeyWhereUniqueInput
+    create: XOR<ActivationKeyCreateWithoutDevicesInput, ActivationKeyUncheckedCreateWithoutDevicesInput>
+  }
+
+  export type ActivationKeyUpsertWithoutDevicesInput = {
+    update: XOR<ActivationKeyUpdateWithoutDevicesInput, ActivationKeyUncheckedUpdateWithoutDevicesInput>
+    create: XOR<ActivationKeyCreateWithoutDevicesInput, ActivationKeyUncheckedCreateWithoutDevicesInput>
+    where?: ActivationKeyWhereInput
+  }
+
+  export type ActivationKeyUpdateToOneWithWhereWithoutDevicesInput = {
+    where?: ActivationKeyWhereInput
+    data: XOR<ActivationKeyUpdateWithoutDevicesInput, ActivationKeyUncheckedUpdateWithoutDevicesInput>
+  }
+
+  export type ActivationKeyUpdateWithoutDevicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    maxActivations?: IntFieldUpdateOperationsInput | number
+    transferLimit?: IntFieldUpdateOperationsInput | number
+    transfersUsed?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivationKeyUncheckedUpdateWithoutDevicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    instituteName?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    maxActivations?: IntFieldUpdateOperationsInput | number
+    transferLimit?: IntFieldUpdateOperationsInput | number
+    transfersUsed?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivationDeviceCreateManyActivationKeyInput = {
+    id?: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    status?: string
+    activatedAt?: Date | string
+    lastVerifiedAt?: Date | string
+    deactivatedAt?: Date | string | null
+  }
+
+  export type ActivationDeviceUpdateWithoutActivationKeyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastVerifiedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deactivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ActivationDeviceUncheckedUpdateWithoutActivationKeyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastVerifiedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deactivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ActivationDeviceUncheckedUpdateManyWithoutActivationKeyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastVerifiedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deactivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

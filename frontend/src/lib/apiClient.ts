@@ -20,6 +20,9 @@ const add401Interceptor = (client: any) => {
   client.interceptors.response.use(
     (response: any) => response,
     (error: any) => {
+      if (error?.response?.data?.code === "ACTIVATION_REQUIRED" && typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("activation-required"));
+      }
       if (
         error?.response?.status === 402 &&
         error?.response?.data?.code === "SUBSCRIPTION_EXPIRED" &&

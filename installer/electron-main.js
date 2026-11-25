@@ -682,6 +682,13 @@ app.whenReady().then(() => {
 // Only one copy per PC: opening the EXE again just brings the running one forward.
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
+  // A second copy must not open: it would share the same local database and session.
+  try {
+    require("electron").dialog.showErrorBox(
+      "VC-Inmotions is already running",
+      "Only one copy can run on this PC. The running window will be brought to the front."
+    );
+  } catch { /* dialog unavailable */ }
   app.quit();
 } else {
   app.on("second-instance", () => showMainWindow());

@@ -269,9 +269,12 @@ export default function SaasDashboard() {
             <h1 className="text-2xl font-semibold dark:text-white">SaaS Admin</h1>
             <p className="text-sm text-gray-500">{who}</p>
           </div>
-          <button onClick={logout} className="text-sm text-gray-500 underline">
-            Sign out
-          </button>
+          <div className="flex items-center gap-4">
+            <a href="/saas/keys" className="text-sm text-gray-500 underline">Activation keys</a>
+            <button onClick={logout} className="text-sm text-gray-500 underline">
+              Sign out
+            </button>
+          </div>
         </header>
 
         <nav className="flex gap-2">

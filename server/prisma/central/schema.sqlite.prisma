@@ -118,3 +118,35 @@ model AppSetting {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+// ---- EXE activation keys & device tracking (hosted portal) ----
+// One key belongs to one institute + company and allows `maxActivations` PCs.
+model ActivationKey {
+  id               String   @id @default(uuid())
+  key              String   @unique // VCIN-XXXX-XXXX-XXXX-XXXX
+  tenantId         String   // master institute Tenant.id
+  instituteName    String
+  companyName      String
+  maxActivations   Int      @default(1)
+  transferLimit    Int      @default(3) // how many times a PC may be deactivated/replaced
+  transfersUsed    Int      @default(0)
+  status           String   @default("ACTIVE") // ACTIVE | REVOKED
+  firstActivatedAt DateTime?
+  createdAt        DateTime @default(now())
+  devices          ActivationDevice[]
+}
+
+model ActivationDevice {
+  id              String        @id @default(uuid())
+  activationKeyId String
+  deviceId        String
+  deviceName      String
+  os              String        @default("")
+  status          String        @default("ACTIVE") // ACTIVE | INACTIVE
+  activatedAt     DateTime      @default(now())
+  lastVerifiedAt  DateTime      @default(now())
+  deactivatedAt   DateTime?
+  activationKey   ActivationKey @relation(fields: [activationKeyId], references: [id], onDelete: Cascade)
+
+  @@unique([activationKeyId, deviceId])
+}

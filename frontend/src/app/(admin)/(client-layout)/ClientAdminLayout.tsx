@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import IdleLogout from "@/components/common/IdleLogout";
 import SubscriptionGate from "@/components/subscription/SubscriptionGate";
 import SessionKeeper from "@/components/common/SessionKeeper";
 import { useSidebar } from "@/context/SidebarContext";
@@ -77,6 +78,7 @@ export default function ClientAdminLayout({
         <div className={`flex-1 transition-all duration-300 ${margin}`}>
           <SubscriptionGate />
           <SessionKeeper />
+          <IdleLogout />
           <AppHeader />
           <AppKeyHeader />
 

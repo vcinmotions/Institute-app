@@ -11,6 +11,7 @@ import GlobalEscBack from "./utils/GlobalEscBack";
 import ReactQueryProvider from "./ReactQueryProvider";
 import GlobalDisableSignin from "./utils/GlobalDisableSignin";
 import GlobalDateYearGuard from "./utils/GlobalDateYearGuard";
+import ActivationGate from "@/components/subscription/ActivationGate";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout({
               <SidebarProvider>
                 <NotificationProvider>{children}</NotificationProvider>
                 <GlobalDisableSignin />
+                <ActivationGate />
                 <GlobalDateYearGuard />
               </SidebarProvider>
               <GlobalEscBack />

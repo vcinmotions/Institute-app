@@ -115,9 +115,6 @@ Prisma.NullTypes = {
  */
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -218,14 +215,35 @@ exports.Prisma.AppSettingScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ActivationKeyScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  tenantId: 'tenantId',
+  instituteName: 'instituteName',
+  companyName: 'companyName',
+  maxActivations: 'maxActivations',
+  transferLimit: 'transferLimit',
+  transfersUsed: 'transfersUsed',
+  status: 'status',
+  firstActivatedAt: 'firstActivatedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ActivationDeviceScalarFieldEnum = {
+  id: 'id',
+  activationKeyId: 'activationKeyId',
+  deviceId: 'deviceId',
+  deviceName: 'deviceName',
+  os: 'os',
+  status: 'status',
+  activatedAt: 'activatedAt',
+  lastVerifiedAt: 'lastVerifiedAt',
+  deactivatedAt: 'deactivatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
-};
-
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -243,7 +261,9 @@ exports.Prisma.ModelName = {
   PortalSubscription: 'PortalSubscription',
   PortalPayment: 'PortalPayment',
   SaasAdmin: 'SaasAdmin',
-  AppSetting: 'AppSetting'
+  AppSetting: 'AppSetting',
+  ActivationKey: 'ActivationKey',
+  ActivationDevice: 'ActivationDevice'
 };
 
 /**
