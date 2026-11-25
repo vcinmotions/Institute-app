@@ -343,8 +343,8 @@ model Batch {
   faculty   Faculty? @relation(fields: [facultyId], references: [id])
   facultyId Int?
 
-  labTimeSlot   LabTimeSlot @relation(fields: [labTimeSlotId], references: [id])
-  labTimeSlotId Int
+  labTimeSlot   LabTimeSlot? @relation(fields: [labTimeSlotId], references: [id])
+  labTimeSlotId Int?
 
   // ✅ Students in a batch through StudentCourse
   studentCourses StudentCourse[]
@@ -359,6 +359,7 @@ model Batch {
   clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
 
   @@unique([labTimeSlotId, clientAdminId]) // ✅ Only one batch per time slot per institute
+  classType      String          @default("REGULAR") // REGULAR | IELTS | LAB | <custom>
 }
 
 model BatchCourse {

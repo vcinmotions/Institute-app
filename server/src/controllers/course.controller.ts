@@ -298,11 +298,12 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
         })
       : null;
 
-    if (batchExists.labTimeSlotId && !alreadySeated) {
+    const batchLabSlotId = batchExists.labTimeSlotId;
+    if (batchLabSlotId && !alreadySeated) {
       await tenantPrisma.$transaction(async (tx) => {
         // 🧠 Step 1: Get the timeslot + its lab + current allocations
         const labTimeSlot = await tx.labTimeSlot.findUnique({
-          where: { id: batchExists.labTimeSlotId },
+          where: { id: batchLabSlotId },
           include: { allocations: true, lab: true },
         });
 

@@ -1,4 +1,5 @@
 "use client";
+import { batchLabel } from "@/lib/batchLabel";
 import Pagination from "@/components/tables/Pagination";
 import {
   downloadAttendanceExcel,
@@ -67,7 +68,7 @@ export default function AttendanceTable() {
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: batchLabel(b),
   }));
 
   console.log("get Course Info In Faculty Create Form Modal;", course);

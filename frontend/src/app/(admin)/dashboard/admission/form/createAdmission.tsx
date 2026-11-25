@@ -1,5 +1,6 @@
 "use client";
 
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Button from "@/components/ui/button/Button";
@@ -140,9 +141,8 @@ export default function AdmissionForm() {
   ]);
 
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-
-  if (!id) return <p>Invalid admission</p>;
+  // No ?id= means a DIRECT admission (no enquiry); with ?id= it converts that enquiry.
+  const id = searchParams.get("id") ?? "";
 
   const [newEnquiry, setNewEnquiry] = useState<EnquiryData>({
     id: "",
@@ -458,7 +458,7 @@ export default function AdmissionForm() {
     () =>
       batch.map((b: any) => ({
         value: b.id.toString(),
-        label: `${(b.name)} | PCs: ${b.labTimeSlot.availablePCs}`,
+        label: batchLabel(b),
       })),
     [batch]
   );
@@ -521,7 +521,7 @@ export default function AdmissionForm() {
     if (!newEnquiry.contact.trim())
       newErrors.contact = "Contact number is required.";
 
-    if (!newEnquiry.courseId) newErrors.courseId = "Please select a course.";
+    if (!newEnquiry.courseId.length) newErrors.courseId = "Please select a course.";
 
     // 🔹 Extended Admission Details
     // if (!filledEnquiryData.fatherName.trim())

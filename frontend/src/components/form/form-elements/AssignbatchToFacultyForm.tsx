@@ -1,4 +1,5 @@
 "use client";
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useEffect, useRef, useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
@@ -92,7 +93,7 @@ export default function AssignBatchFacultyForm({
     .filter((b: any) => !assignedBatchIds.includes(b.id)) // exclude assigned batches
     .map((b: any) => ({
       value: b.id.toString(),
-      label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+      label: batchLabel(b),
     }));
 
   const handleChange = (field: keyof FacultyBatchData, value: string) => {

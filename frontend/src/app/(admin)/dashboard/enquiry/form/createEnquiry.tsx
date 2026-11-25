@@ -1,4 +1,5 @@
 "use client";
+import DateField from "@/components/form/input/DateField";
 import React, { useState, useEffect, useRef } from "react";
 import { useEnquiryStore } from "@/store/enquiryStore";
 import Button from "@/components/ui/button/Button";
@@ -414,13 +415,9 @@ export default function EnquiryForm() {
 
               <div>
                 <Label>Date Of Birth</Label>
-                <Input
-                  type="text"
-                  tabIndex={3}
-                  placeholder="DD-MM-YYYY"
+                <DateField tabIndex={3}
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                  value={newEnquiry.dob}
-                  onChange={(e) => handleDateChange("dob", e.target.value)}
+                  value={newEnquiry.dob} onChange={(v) => handleDateChange("dob", v)}
                 />
                 {errors.dob && <p className="mt-1 text-sm text-red-500">{errors.dob}</p>}
               </div>
@@ -535,13 +532,9 @@ export default function EnquiryForm() {
 
               <div>
                 <Label>Enquiry Date</Label>
-                <Input
-                  type="text"
-                  tabIndex={10}
-                  placeholder="DD-MM-YYYY"
+                <DateField tabIndex={10}
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                  value={newEnquiry.enquiryDate}
-                  onChange={(e) => handleDateChange("enquiryDate", e.target.value)}
+                  value={newEnquiry.enquiryDate} onChange={(v) => handleDateChange("enquiryDate", v)}
                 />
                 {errors.enquiryDate && <p className="mt-1 text-sm text-red-500">{errors.enquiryDate}</p>}
               </div>

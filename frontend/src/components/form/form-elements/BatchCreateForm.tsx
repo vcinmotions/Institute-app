@@ -25,6 +25,8 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
   const [timeSlots, setTimeSlots] = useState<any[]>([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<number | null>(null);
   const [selectedFaculty, setSelectedFaculty] = useState<number | null>(null);
+  const [classType, setClassType] = useState("REGULAR");
+  const [customClassType, setCustomClassType] = useState("");
 
   const [errors, setErrors] = useState<any>({});
   const [alert, setAlert] = useState({
@@ -57,8 +59,11 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
   const validate = () => {
     const newErrors: any = {};
     if (!name.trim()) newErrors.name = "Batch name is required.";
-    if (!selectedLab) newErrors.lab = "Please select a lab.";
-    if (!selectedTimeSlot) newErrors.timeslot = "Please select a time slot.";
+    // Lab is optional. It is required only for Lab-based classes; if a lab is
+    // chosen for any class type, its time slot must be chosen too.
+    if (classType === "LAB" && !selectedLab) newErrors.lab = "Please select a lab for a lab-based class.";
+    if (selectedLab && !selectedTimeSlot) newErrors.timeslot = "Please select a time slot.";
+    if (classType === "OTHER" && !customClassType.trim()) newErrors.classType = "Enter the class type.";
 
     setErrors(newErrors);
 
@@ -101,7 +106,8 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
 
     const payload = {
       name,
-      labTimeSlotId: Number(selectedTimeSlot),
+      classType: classType === "OTHER" ? customClassType.trim() : classType,
+      labTimeSlotId: selectedLab && selectedTimeSlot ? Number(selectedTimeSlot) : undefined,
       facultyId: selectedFaculty ? Number(selectedFaculty) : undefined,
     };
 
@@ -154,9 +160,35 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
           {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
         </div>
 
+        {/* ✅ Class Type */}
+        <div>
+          <Label>Class Type</Label>
+          <Select
+            options={[
+              { label: "Regular", value: "REGULAR" },
+              { label: "IELTS", value: "IELTS" },
+              { label: "Lab-based", value: "LAB" },
+              { label: "Other", value: "OTHER" },
+            ]}
+            defaultValue="REGULAR"
+            onChange={(val) => setClassType(String(val))}
+            placeholder="Choose Class Type"
+            className="dark:bg-dark-900"
+          />
+          {classType === "OTHER" && (
+            <Input
+              type="text"
+              placeholder="e.g. Spoken English"
+              value={customClassType}
+              onChange={(e) => setCustomClassType(e.target.value)}
+            />
+          )}
+          {errors.classType && <p className="text-sm text-red-500">{errors.classType}</p>}
+        </div>
+
         {/* ✅ Select Lab */}
         <div>
-          <Label>Select Lab</Label>
+          <Label>Select Lab{classType === "LAB" ? "" : " (Optional)"}</Label>
           <div className="relative">
             <Select
               options={labs.map((l) => ({ label: l.name, value: l.id }))}

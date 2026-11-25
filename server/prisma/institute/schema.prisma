@@ -312,17 +312,18 @@ model Batch {
   id             Int             @id @default(autoincrement())
   name           String
   facultyId      Int?
-  labTimeSlotId  Int
+  labTimeSlotId  Int?
   clientAdminId  String
   clientAdmin    ClientAdmin     @relation(fields: [clientAdminId], references: [id])
   faculty        Faculty?        @relation(fields: [facultyId], references: [id])
-  labTimeSlot    LabTimeSlot     @relation(fields: [labTimeSlotId], references: [id])
+  labTimeSlot    LabTimeSlot?     @relation(fields: [labTimeSlotId], references: [id])
   batchCourses   BatchCourse[]
   studentCourses StudentCourse[]
   tasks          Task[]
   tests          Test[]
 
   @@unique([labTimeSlotId, clientAdminId])
+  classType      String          @default("REGULAR") // REGULAR | IELTS | LAB | <custom>
 }
 
 model BatchCourse {

@@ -1,4 +1,6 @@
 "use client";
+import DateField from "@/components/form/input/DateField";
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import { useRouter } from "next/navigation";
@@ -95,7 +97,7 @@ export default function FacultyForm() {
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: batchLabel(b),
   }));
 
   const courseOptions = course.map((course: any) => ({
@@ -458,12 +460,7 @@ export default function FacultyForm() {
 
               <div ref={(el) => { if (inputRefs.current) inputRefs.current.joiningDate = el; }}>
                 <Label>Joining Date *</Label>
-                <Input
-                  type="text"
-                  tabIndex={7}
-                  placeholder="DD-MM-YYYY"
-                  value={newFaculty.joiningDate}
-                  onChange={(e) => handleDateChange("joiningDate", e.target.value)}
+                <DateField tabIndex={7} value={newFaculty.joiningDate} onChange={(v) => handleDateChange("joiningDate", v)}
                   className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 />
                 {errors.joiningDate && <p className="mt-1 text-sm text-red-500">{errors.joiningDate}</p>}

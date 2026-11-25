@@ -1,5 +1,6 @@
 "use client";
 
+import DateField from "@/components/form/input/DateField";
 import React, { useEffect, useRef, useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
@@ -238,12 +239,7 @@ export default function CreateStudentPaymentModal({
             {/* Payment Date Field */}
             <div>
               <Label>Payment Date (DD-MM-YYYY) *</Label>
-              <Input
-                tabIndex={2}
-                type="text"
-                placeholder="DD-MM-YYYY"
-                value={paymentDate}
-                onChange={(e) => handleDateChange(e.target.value)}
+              <DateField tabIndex={2} value={paymentDate} onChange={(v) => handleDateChange(v)}
               />
               {errors.paymentDate && (
                 <p className="mt-1 text-sm text-red-500">{errors.paymentDate}</p>

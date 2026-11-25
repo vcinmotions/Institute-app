@@ -27,6 +27,21 @@ interface LabData {
   timeSlots: TimeSlot[];
 }
 
+const toMin = (t: string) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+function validateSlots(slots: TimeSlot[]): string {
+  for (const s of slots) {
+    if (!s.startTime || !s.endTime) return "Select a start and end time for every time slot.";
+    if (toMin(s.startTime) >= toMin(s.endTime)) return `End time must be after start time (${s.startTime} - ${s.endTime}).`;
+  }
+  for (let i = 0; i < slots.length; i++) for (let j = i + 1; j < slots.length; j++) {
+    const a = slots[i], b = slots[j];
+    const da = (a.day || "daily").trim().toLowerCase(), db = (b.day || "daily").trim().toLowerCase();
+    if ((da === db || da === "daily" || db === "daily") && toMin(a.startTime) < toMin(b.endTime) && toMin(b.startTime) < toMin(a.endTime))
+      return `Time slots ${a.startTime}-${a.endTime} and ${b.startTime}-${b.endTime} overlap.`;
+  }
+  return "";
+}
+
 export default function LabForm({ onCloseModal }: LabFormProps) {
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: createLab } = useCreateLab();
@@ -50,6 +65,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
     message: "",
     variant: "",
   });
+  const [slotError, setSlotError] = useState("");
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -97,10 +113,12 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
     if (!lab.location.trim()) newErrors.location = "Location is required.";
     if (!lab.totalPCs || lab.totalPCs <= 0)
       newErrors.totalPCs = "Total PCs must be greater than 0." as any;
+    const slotMsg = validateSlots(lab.timeSlots);
+    if (slotMsg) setSlotError(slotMsg);
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+    setTimeout(() => { setErrors({}); setSlotError(""); }, 4000);
+    return Object.keys(newErrors).length === 0 && !slotMsg;
   };
 
   const handleSubmit = () => {
@@ -262,6 +280,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
             </div>
           ))}
 
+          {slotError && <p className="mb-2 text-sm text-red-500">{slotError}</p>}
           <Button size="sm" variant="outline" onClick={addTimeSlot}>
             + Add Time Slot
           </Button>

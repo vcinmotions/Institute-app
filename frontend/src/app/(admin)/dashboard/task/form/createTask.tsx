@@ -1,4 +1,5 @@
 "use client";
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import { useCourseStore } from "@/store/courseStore";
@@ -74,7 +75,7 @@ export default function TaskForm() {
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: batchLabel(b),
   }));
 
   const courseOptions = course.map((course: any) => ({

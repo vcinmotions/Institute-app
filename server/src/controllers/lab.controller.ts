@@ -1,3 +1,4 @@
+import { validateTimeSlots } from "../utils/timeSlots";
 import { Request, Response } from "express";
 
 // export async function getLabController(req: Request, res: Response) {
@@ -110,6 +111,9 @@ export const createLab = async (req: Request, res: Response) => {
   if (!Number.isInteger(pcCount) || pcCount < 1) {
     return res.status(400).json({ error: "Total PCs must be a whole number of 1 or more" });
   }
+
+  const slotError = validateTimeSlots(timeSlots);
+  if (slotError) return res.status(400).json({ error: slotError });
 
   console.log("GET LAB DATA IN BODY:", req.body);
   try {
@@ -236,6 +240,9 @@ export async function updateLabController(req: Request, res: Response) {
     return res.status(400).json({ error: "Total PCs must be a whole number of 1 or more" });
   }
 
+  const slotError = validateTimeSlots(timeSlots);
+  if (slotError) return res.status(400).json({ error: slotError });
+
   console.log("GET LAB DATA IN BODY FOR UPDATING:", req.body);
   try {
     const tenantPrisma = req.tenantPrisma;
@@ -316,7 +323,7 @@ export async function updateLabController(req: Request, res: Response) {
       // 🔴 DELETE REMOVED TIMESLOTS (IMPORTANT FIX)
 
       // 1️⃣ Get IDs sent from frontend
-      const incomingSlotIds = timeSlots
+      const incomingSlotIds = (timeSlots ?? [])
         .filter((slot: any) => slot.id)
         .map((slot: any) => slot.id);
 
@@ -357,7 +364,7 @@ export async function updateLabController(req: Request, res: Response) {
     });
 
     // 4️⃣ Process each timeslot
-    for (const slot of timeSlots) {
+    for (const slot of timeSlots ?? []) {
       if (slot.id) {
         // Existing slot → update only if no students
         if (protectedSlotIds.includes(slot.id)) {

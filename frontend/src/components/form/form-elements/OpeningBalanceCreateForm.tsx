@@ -1,4 +1,5 @@
 "use client";
+import DateField from "@/components/form/input/DateField";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
@@ -297,13 +298,9 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
 
             <div>
               <Label>Admission Date</Label>
-              <Input
-                type="text"
-                tabIndex={4}
-                placeholder="DD-MM-YYYY"
+              <DateField tabIndex={4}
                 className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                value={student.admissionDate}
-                onChange={(e) => handleDateChange("admissionDate", e.target.value)}
+                value={student.admissionDate} onChange={(v) => handleDateChange("admissionDate", v)}
               />
               {errors.admissionDate && (
                 <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>

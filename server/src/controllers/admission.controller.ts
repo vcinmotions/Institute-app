@@ -57,6 +57,33 @@ export async function addStudentControllerNew(req: any, res: any) {
     }
 
 
+    // ✅ Duplicate protection (inquiry conversion AND direct admission)
+    if (data.id) {
+      const enq = await prisma.enquiry.findUnique({ where: { id: data.id } });
+      if (!enq) return res.status(404).json({ error: "Enquiry not found" });
+      if (enq.studentId || enq.isConverted) {
+        return res.status(409).json({ error: "This enquiry has already been admitted as a student." });
+      }
+    }
+    {
+      const contact = String(data.contact ?? "").trim();
+      const email = String(data.email ?? "").trim();
+      const dup = await prisma.student.findFirst({
+        where: {
+          OR: [
+            ...(contact ? [{ contact }] : []),
+            ...(email ? [{ email }] : []),
+          ],
+        },
+        select: { fullName: true, admissionNumber: true },
+      });
+      if (dup) {
+        return res.status(409).json({
+          error: `A student with this contact/email already exists (${dup.fullName}, ${dup.admissionNumber}). Add the new course to that student instead of admitting again.`,
+        });
+      }
+    }
+
     // ✅ Call Service Layer
     const result = await createStudentService({
       prisma,

@@ -42,7 +42,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       success = false,
       error = false,
       hint,
-      ...rest
+      onClick,
+      ...restProps
     },
     ref
   ) => {
@@ -74,7 +75,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           tabIndex={tabIndex}
           disabled={disabled}
           className={inputClasses}
-          {...rest}
+          // Clicking anywhere in a date/time field opens its picker (not only the icon).
+          onClick={(e) => {
+            onClick?.(e);
+            if (["date", "time", "datetime-local"].includes(type) && !disabled) {
+              try { (e.currentTarget as any).showPicker?.(); } catch { /* picker already open */ }
+            }
+          }}
+          {...restProps}
         />
 
         {hint && (

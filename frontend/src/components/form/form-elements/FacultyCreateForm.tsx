@@ -1,4 +1,6 @@
 "use client";
+import DateField from "@/components/form/input/DateField";
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
@@ -81,7 +83,7 @@ export default function FacultyForm({
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: batchLabel(b),
   }));
 
   console.log("get User data In Faculty Create Form Modal;", user);
@@ -439,13 +441,9 @@ export default function FacultyForm({
             value={newFaculty.joiningDate}
             onChange={(e) => handleChange("joiningDate", e.target.value)}         
           /> */}
-          <input
-            type="text"
-            tabIndex={7}
-            placeholder="10/10/2025"
+          <DateField tabIndex={7}
             className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-            value={newFaculty.joiningDate}
-            onChange={(e) => handleDateChange("joiningDate", e.target.value)}
+            value={newFaculty.joiningDate} onChange={(v) => handleDateChange("joiningDate", v)}
           />
           {errors.joiningDate && (
             <p className="text-sm text-red-500">{errors.joiningDate}</p>
