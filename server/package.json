@@ -23,6 +23,7 @@
     "seed:labs": "npx ts-node src/scripts/seed-labs-all-tenants.ts",
     "create-centralDB": "npx ts-node src/utils/createCentralDB.ts",
     "migrate-all": "npx ts-node src/scripts/migrate-all-tenants.ts",
+    "db:push:dev": "node scripts/dev-push-postgres.js",
     "db:push:central": "prisma db push --schema=prisma/central/schema.prisma",
     "db:push:tenant": "prisma db push --schema=prisma/institute/schema.prisma",
     "generate:central": "npx prisma generate --schema=prisma/central/schema.prisma",
