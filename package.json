@@ -8,17 +8,11 @@
     "build": "node scripts/prepare-server-modules.js && electron-builder"
   },
   "build": {
-    "appId": "com.vcinmotions.app",
+    "appId": "com.vcinmotions.app.demo",
     "productName": "VC-Inmotions",
-    "artifactName": "${productName}-Setup-${version}.${ext}",
+    "artifactName": "${productName}-Demo-Setup-${version}.${ext}",
     "asar": true,
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "vcinmotions",
-        "repo": "Institute-app"
-      }
-    ],
+    "publish": null,
     "files": [
       "installer/**"
     ],
@@ -69,6 +63,7 @@
     },
     "nsis": {
       "include": "installer/installer.nsh",
+      "guid": "6f1d7a52-3c0e-4b8e-9d2a-5a4e8c3b7d10",
       "deleteAppDataOnUninstall": false
     },
     "win": {

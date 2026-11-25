@@ -7,6 +7,15 @@ const fs = require("fs");
 const os = require("os");
 const http = require("http");
 
+// ─── DEMO BUILD (branch newExeNoSub) ─────────────────────────────────────────
+// No portal / licence checks, its own local database, and a fixed 365-day period
+// (enforced by the backend) after which the app turns View-Only as usual.
+const DEMO_BUILD = true;
+if (DEMO_BUILD) {
+  // Separate data folder so the demo never shares a database, logs or settings with the normal app.
+  app.setPath("userData", path.join(app.getPath("appData"), "VC-Inmotions-Demo"));
+}
+
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const isDev = !app.isPackaged;
 const isWin = process.platform === "win32";
@@ -291,6 +300,7 @@ function startBackend(lanServer = false) {
         USER_DATA_PATH,
         BACKUP_SECRET: process.env.BACKUP_SECRET,
         RESOURCES_PATH,
+        ...(DEMO_BUILD ? { DEMO_MODE: "1", SUBSCRIPTION_API_URL: "", SUBSCRIPTION_PORTAL_URL: "" } : {}),
       },
       windowsHide: !isDev,
     });
@@ -374,6 +384,7 @@ function startFrontend(lanServer = false) {
 
 // ─── AUTO UPDATER ─────────────────────────────────────────────────────────────
 function setupAutoUpdater() {
+  if (DEMO_BUILD) return; // the demo must never replace itself with another build
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
 
@@ -532,7 +543,12 @@ async function createWindow() {
   await win.loadURL(LOADING_HTML);
   win.show();
 
-  const cfg = readModeConfig();
+  let cfg = readModeConfig();
+  if (DEMO_BUILD && !cfg && !modeSetupContext.isChange) {
+    // Demo: always a standalone local server, no mode question.
+    cfg = { mode: "STANDALONE" };
+    writeModeConfig(cfg);
+  }
 
   // First run (or settings requested): ask the administrator how this PC should run.
   if (!cfg || modeSetupContext.isChange) {

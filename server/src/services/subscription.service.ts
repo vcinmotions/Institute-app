@@ -63,6 +63,7 @@ export type SubscriptionState = {
   renewUrl: string | null;
   message: string;
   settings: Record<string, any>;
+  demo?: boolean; // true in the demo build (the UI hides all subscription screens)
 };
 
 const CLOCK_TOLERANCE_MS = 10 * 60 * 1000;
@@ -81,7 +82,16 @@ export const syncIntervalMs = () => {
   return (Number.isFinite(m) && m >= 1 ? m : 5) * 60 * 1000;
 };
 
-export const isEnforced = () => !!process.env.SUBSCRIPTION_API_URL;
+/**
+ * DEMO build: no portal, no signed licence. The first launch starts a fixed 365-day
+ * period kept in a protected local file; afterwards the app is view-only as usual.
+ * The same clock-rollback protection as the normal build stays active.
+ */
+export const isDemo = () => process.env.DEMO_MODE === "1";
+const DEMO_DAYS = 365;
+
+// Portal checks never run in the demo build.
+export const isEnforced = () => !isDemo() && !!process.env.SUBSCRIPTION_API_URL;
 
 const filePath = () => path.join(getUserDataPath(), "data", "subscription.json");
 
@@ -186,8 +196,69 @@ function validRecordLastSeen(rec: StoredRecord | null): number {
   return Date.parse(rec.lastSeenAt) || 0;
 }
 
+const demoFilePath = () => path.join(getUserDataPath(), "data", "demo-license.json");
+type DemoRecord = { startedAt: string; startedMac: string; lastSeenAt: string; lastSeenMac: string };
+
+function readDemo(): DemoRecord | null {
+  try {
+    return JSON.parse(fs.readFileSync(demoFilePath(), "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function writeDemo(r: DemoRecord) {
+  const p = demoFilePath();
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, JSON.stringify(r), "utf8");
+}
+
+function demoState(): SubscriptionState {
+  const base = { enforced: true, demo: true, plan: "DEMO", maxUsers: null, lastSyncAt: null, renewUrl: null, settings: {} };
+  const locked = (status: string, message: string, extra: Partial<SubscriptionState> = {}): SubscriptionState => ({
+    ...base, status, locked: true, daysLeft: 0, expiryDate: null, message, ...extra,
+  });
+  const now = Date.now();
+
+  let rec = readDemo();
+  if (!rec) {
+    // First launch: start the 365 days now.
+    const iso = new Date(now).toISOString();
+    rec = { startedAt: iso, startedMac: macOf(`demo:${iso}`), lastSeenAt: iso, lastSeenMac: macOf(iso) };
+    try { writeDemo(rec); } catch {}
+  }
+
+  if (rec.startedMac !== macOf(`demo:${rec.startedAt}`) || rec.lastSeenMac !== macOf(rec.lastSeenAt)) {
+    return locked("TAMPERED", "Demo licence data is invalid. The application is in View-Only Mode.");
+  }
+  const started = Date.parse(rec.startedAt);
+  const lastSeen = Date.parse(rec.lastSeenAt);
+  if (!Number.isFinite(started) || !Number.isFinite(lastSeen)) {
+    return locked("TAMPERED", "Demo licence data is invalid. The application is in View-Only Mode.");
+  }
+  const expiry = started + DEMO_DAYS * DAY_MS;
+  const expiryDate = new Date(expiry).toISOString();
+
+  // Clock rollback guards (same rules as the normal build).
+  const newest = newestEvidenceMs();
+  if (now + CLOCK_TOLERANCE_MS < lastSeen || newest > now + EVIDENCE_TOLERANCE_MS) {
+    return locked("CLOCK_TAMPERED", CLOCK_MESSAGE, { expiryDate });
+  }
+  if (now > lastSeen) {
+    const iso = new Date(now).toISOString();
+    try { writeDemo({ ...rec, lastSeenAt: iso, lastSeenMac: macOf(iso) }); } catch {}
+  }
+
+  const daysLeft = Math.ceil((expiry - now) / DAY_MS);
+  if (!(expiry > now)) {
+    return locked("EXPIRED", "The demo period has ended. The application is now in View-Only Mode.", { expiryDate });
+  }
+  return { ...base, status: "ACTIVE", locked: false, daysLeft, expiryDate, message: `${daysLeft} day(s) left.` };
+}
+
 /** Computes the current state from local data only (works offline). */
 export function getState(): SubscriptionState {
+  if (isDemo()) return demoState();
   if (!isEnforced()) {
     return {
       enforced: false,

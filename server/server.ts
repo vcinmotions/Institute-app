@@ -4,6 +4,7 @@ loadEnv(); // 👈 FIRST LINE
 import app from "./src/app";
 import { initSocket } from "./src/utils/socket";
 import { runCentralMigrations, runTenantMigrations } from "./src/utils/runMigration";
+import { ensureDemoData } from "./src/utils/demoBootstrap";
 // import { execSync } from "child_process";
 // import path from "path";
 // import fs from "fs";
@@ -32,9 +33,21 @@ console.log("DB_PROVIDER IN SERVER:", process.env.DB_PROVIDER);
 const PORT = process.env.PORT || 5001;
 // HOST: "127.0.0.1" = this PC only (standalone), "0.0.0.0" = reachable on the LAN (server PC).
 const HOST = process.env.HOST || "0.0.0.0";
-const server = app.listen(Number(PORT), HOST, () => {
-  console.log(`Server running on http://${HOST}:${PORT}`);
-});
 
-// Start socket server
-initSocket(server);
+async function start() {
+  // Demo build: create the local demo super admin + "Demo Institute" before accepting requests.
+  try {
+    await ensureDemoData();
+  } catch (err) {
+    console.error("❌ Demo database preparation failed:", err);
+  }
+
+  const server = app.listen(Number(PORT), HOST, () => {
+    console.log(`Server running on http://${HOST}:${PORT}`);
+  });
+
+  // Start socket server
+  initSocket(server);
+}
+
+start();

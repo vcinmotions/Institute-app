@@ -11,6 +11,7 @@ type SubState = {
   expiryDate: string | null;
   renewUrl: string | null;
   message: string;
+  demo?: boolean;
   settings?: {
     announcementActive?: boolean;
     announcementText?: string;
@@ -79,6 +80,15 @@ export default function SubscriptionGate() {
   }, [state]);
 
   if (!state || !state.enforced) return null;
+
+  // Demo build: nothing about subscriptions is shown while it is active. After the demo
+  // period the app is view-only, so a plain notice (no renewal link) explains why.
+  if (state.demo) {
+    if (!state.locked) return null;
+    return (
+      <div className="bg-red-600 px-4 py-2 text-center text-sm text-white">{state.message}</div>
+    );
+  }
 
   const openRenew = async () => {
     setRenewError(null);
