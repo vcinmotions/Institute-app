@@ -115,9 +115,6 @@ Prisma.NullTypes = {
  */
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -188,15 +185,15 @@ exports.Prisma.EnquiryScalarFieldEnum = {
   srNo: 'srNo',
   name: 'name',
   contact: 'contact',
-  alternateContact: 'alternateContact',
   email: 'email',
+  course: 'course',
+  sourceId: 'sourceId',
+  alternateContact: 'alternateContact',
   age: 'age',
   location: 'location',
   city: 'city',
-  course: 'course',
   gender: 'gender',
   dob: 'dob',
-  sourceId: 'sourceId',
   referedBy: 'referedBy',
   takenBy: 'takenBy',
   leadStatus: 'leadStatus',
@@ -276,6 +273,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   admissionNumber: 'admissionNumber',
   fullName: 'fullName',
   fatherName: 'fatherName',
+  qualification: 'qualification',
   photoUrl: 'photoUrl',
   contact: 'contact',
   parentsContact: 'parentsContact',
@@ -295,16 +293,15 @@ exports.Prisma.StudentScalarFieldEnum = {
   admissionDate: 'admissionDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  clientAdminId: 'clientAdminId',
-  qualification: 'qualification'
+  clientAdminId: 'clientAdminId'
 };
 
 exports.Prisma.CourseScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  durationMonths: 'durationMonths',
   description: 'description',
-  clientAdminId: 'clientAdminId',
-  durationMonths: 'durationMonths'
+  clientAdminId: 'clientAdminId'
 };
 
 exports.Prisma.CourseFeeStructureScalarFieldEnum = {
@@ -596,14 +593,24 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN',
