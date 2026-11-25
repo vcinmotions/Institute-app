@@ -9,7 +9,7 @@ import { isLoopback, verifyClientToken } from "../services/clientDevice.service"
 const OPEN = [
   /^\/device-activation\/client\//,
   /^\/subscription\/locked$/,
-  /^\/setup\/(status|identity)$/,
+  /^\/setup\/(status|identity|options)$/,
   /^\/app-settings$/,
   /^\/branding\/public$/,
   /^\/session-settings$/,

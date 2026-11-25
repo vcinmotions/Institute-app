@@ -7,6 +7,7 @@ import {
 } from "../controllers//master.dashboard.controller";
 import { masterAuthMiddleware } from "../middlewares/master.auth.middleware";
 import { setupCompaniesController, setupCentralController, setupIdentityController, setupResyncController } from "../controllers/setup.controller";
+import { setupLocalController, setupDemoController, setupOptionsController } from "../controllers/setup.local.controller";
 import { setupStatusController } from "../controllers/setup-status.controller";
 import { createMasterAddressController } from "../controllers/master.setup.controller";
 
@@ -41,6 +42,9 @@ router.get("/setup/status", setupStatusController);
 
 router.post("/setup/companies", setupCompaniesController);
 router.post("/setup", setupCentralController);
+router.get("/setup/options", setupOptionsController);
+router.post("/setup/local", setupLocalController);
+router.post("/setup/demo", setupDemoController);
 router.get("/setup/identity", setupIdentityController);
 router.post("/setup/resync", setupResyncController);
 router.post("/setup/address", createMasterAddressController);
