@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import SetupModalCard from "@/components/common/SetupModal";
 
 export default function RestoreBackUp() {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState("");
     const [filePath, setFilePath] = useState<string | null>(null);
@@ -132,6 +134,16 @@ export default function RestoreBackUp() {
                 >
                     {loading ? "Restoring..." : "Restore Backup"}
                 </Button>
+
+                {/* GO BACK */}
+                <button
+                    type="button"
+                    onClick={() => router.push("/setup-choice")}
+                    disabled={loading}
+                    className="w-full rounded border border-gray-300 dark:border-gray-700 py-2.5 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50"
+                >
+                    Go back
+                </button>
 
             </div>
         </SetupModalCard>

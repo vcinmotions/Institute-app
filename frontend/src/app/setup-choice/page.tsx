@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/lib/config";
+import ServerInfo from "@/components/common/ServerInfo";
 
 type Logins = { master: { email: string; password: string }; admin: { email: string; password: string } };
 
@@ -12,6 +13,33 @@ export default function SetupChoice() {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
     const [demo, setDemo] = useState<Logins | null>(null);
+    const [desktop, setDesktop] = useState(false);
+    const [client, setClient] = useState(false);
+    const [host, setHost] = useState("");
+    const [port, setPort] = useState("5001");
+    const [fport, setFport] = useState("3000");
+    const [testMsg, setTestMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+    useEffect(() => { setDesktop(!!(window as any).electronAPI?.mode?.save); }, []);
+
+    const testServer = async () => {
+        setBusy(true);
+        setTestMsg(null);
+        try {
+            const r = await (window as any).electronAPI.mode.test({ host: host.trim(), port: Number(port), frontendPort: Number(fport) });
+            const bad = [r?.backend, r?.frontend].find((x: any) => x && !x.ok);
+            setTestMsg(bad ? { ok: false, text: bad.message || "Cannot reach the server." } : { ok: true, text: "Connected to the server." });
+        } catch (e: any) {
+            setTestMsg({ ok: false, text: e?.message || "Test failed" });
+        } finally {
+            setBusy(false);
+        }
+    };
+
+    const saveClient = async () => {
+        setBusy(true);
+        await (window as any).electronAPI.mode.save({ mode: "LAN_CLIENT", host: host.trim(), port: Number(port), frontendPort: Number(fport) }); // restarts the app
+    };
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/setup/options`, { cache: "no-store" })
@@ -60,6 +88,7 @@ export default function SetupChoice() {
                             <p>Email: <span className="font-mono">{demo.master.email}</span></p>
                             <p>Password: <span className="font-mono">{demo.master.password}</span></p>
                         </div>
+                        <ServerInfo />
                         <button onClick={() => router.push("/signin")} className={primary}>Go to sign in</button>
                     </div>
                 ) : (
@@ -74,6 +103,26 @@ export default function SetupChoice() {
                             <button onClick={() => router.push("/setup")} className={primary}>Create New System</button>
                         )}
                         <button onClick={() => router.push("/restore")} disabled={busy} className={secondary}>Restore Backup</button>
+                        {desktop && !client && (
+                            <button onClick={() => setClient(true)} disabled={busy} className={secondary}>Connect to a server (use this PC as a client)</button>
+                        )}
+                        {desktop && client && (
+                            <div className="space-y-2 rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700 dark:text-gray-200">
+                                <p className="font-semibold">Connect to your server PC</p>
+                                <p className="text-xs text-gray-500">Enter the server PC's address (shown on the server after its setup). This PC will use the server's data and restart once.</p>
+                                <input value={host} onChange={(e) => setHost(e.target.value)} placeholder="Server IP, e.g. 192.168.1.10" className="w-full rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-800" />
+                                <div className="flex gap-2">
+                                    <input value={port} onChange={(e) => setPort(e.target.value)} placeholder="Backend port" className="w-1/2 rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-800" />
+                                    <input value={fport} onChange={(e) => setFport(e.target.value)} placeholder="App port" className="w-1/2 rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-800" />
+                                </div>
+                                {testMsg && <p className={testMsg.ok ? "text-green-600" : "text-red-600"}>{testMsg.text}</p>}
+                                <div className="flex gap-2">
+                                    <button onClick={() => setClient(false)} disabled={busy} className="rounded-xl border border-gray-300 px-3 py-2 dark:border-gray-700">Cancel</button>
+                                    <button onClick={testServer} disabled={busy || !host.trim()} className="flex-1 rounded-xl border border-gray-300 px-3 py-2 disabled:opacity-50 dark:border-gray-700">Test connection</button>
+                                    <button onClick={saveClient} disabled={busy || !host.trim()} className="flex-1 rounded-xl bg-black px-3 py-2 text-white disabled:opacity-50">Connect</button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

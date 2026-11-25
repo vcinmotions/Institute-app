@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/lib/config";
+import ServerInfo from "@/components/common/ServerInfo";
 
 const FIELDS: { key: string; label: string; type?: string; section?: string }[] = [
     { key: "instituteName", label: "Institute name", section: "Your institute" },
@@ -50,6 +51,7 @@ export default function SetupLocalPage() {
                 {done ? (
                     <div className="space-y-4">
                         <p className="text-sm text-gray-600 dark:text-gray-300">Setup is complete. Sign in with the institute admin email and password you just chose.</p>
+                        <ServerInfo />
                         <button onClick={() => router.push("/signin")} className="w-full rounded-xl bg-black py-2.5 text-sm font-medium text-white">Go to sign in</button>
                     </div>
                 ) : (
