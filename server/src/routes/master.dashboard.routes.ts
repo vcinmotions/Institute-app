@@ -6,7 +6,7 @@ import {
   updateMasterAdmin,
 } from "../controllers//master.dashboard.controller";
 import { masterAuthMiddleware } from "../middlewares/master.auth.middleware";
-import { setupCentralController, setupIdentityController, setupResyncController } from "../controllers/setup.controller";
+import { setupCompaniesController, setupCentralController, setupIdentityController, setupResyncController } from "../controllers/setup.controller";
 import { setupStatusController } from "../controllers/setup-status.controller";
 import { createMasterAddressController } from "../controllers/master.setup.controller";
 
@@ -19,8 +19,8 @@ import {
   saasAuth, saasLogin, saasMe, getPublicSettings, getSettingsAdmin, updateSettings, listInstitutes, updateInstituteSubscription,
 } from "../controllers/saas.controller";
 import {
-  activateDevice, verifyDevice, saasListKeys, saasCreateKey, saasUpdateKey, saasSetDeviceStatus,
-  portalListKeys, portalDeactivateDevice,
+  activateDevice, claimServer, verifyDevice, saasListKeys, saasCreateKey, saasUpdateKey, saasSetDeviceStatus,
+  portalListKeys, portalDeactivateDevice, saasIssueLocalRenewal,
 } from "../controllers/activation.controller";
 const router = express.Router();
 
@@ -39,6 +39,7 @@ function throttle(max: number, windowMs: number): express.RequestHandler {
 
 router.get("/setup/status", setupStatusController);
 
+router.post("/setup/companies", setupCompaniesController);
 router.post("/setup", setupCentralController);
 router.get("/setup/identity", setupIdentityController);
 router.post("/setup/resync", setupResyncController);
@@ -61,6 +62,7 @@ router.post("/subscription/sync", syncSubscription); // called by the EXE
 
 // ---- EXE activation keys & devices ----
 router.post("/activation/activate", throttle(10, 10 * 60 * 1000), activateDevice); // called by the EXE
+router.post("/activation/claim-server", throttle(10, 10 * 60 * 1000), claimServer); // called by the EXE during first setup
 router.post("/activation/verify", throttle(60, 10 * 60 * 1000), verifyDevice); // called by the EXE
 router.get("/portal/activation", portalAuth, masterOnly, portalListKeys);
 router.post("/portal/activation/devices/:id/deactivate", portalAuth, masterOnly, portalDeactivateDevice);
@@ -77,6 +79,7 @@ router.put("/saas/institutes/:tenantId/subscription", saasAuth, updateInstituteS
 router.get("/saas/activation-keys", saasAuth, saasListKeys);
 router.post("/saas/activation-keys", saasAuth, saasCreateKey);
 router.put("/saas/activation-keys/:id", saasAuth, saasUpdateKey);
+router.post("/saas/local-renewal", saasAuth, saasIssueLocalRenewal);
 router.put("/saas/activation-devices/:id", saasAuth, saasSetDeviceStatus);
 router.get("/saas/settings", saasAuth, getSettingsAdmin);
 router.put("/saas/settings", saasAuth, updateSettings);

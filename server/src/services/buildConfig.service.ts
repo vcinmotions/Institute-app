@@ -18,6 +18,8 @@ export type BuildConfig = {
   mode: "ENABLED" | "STANDALONE";
   apiUrl?: string;
   portalUrl?: string;
+  /** Local mode only: how many months the application is valid from its first run (default 6). */
+  localMonths?: number;
   builtAt: string;
 };
 
@@ -35,21 +37,18 @@ export function getBuildConfig(): BuildConfigResult {
   // The hosted portal itself (holds the private signing key, never shipped in the EXE) is not licensed.
   if (process.env.SUBSCRIPTION_PRIVATE_KEY) return (cache = { ok: false, reason: "UNMANAGED" });
   if (!prod) {
-    // Development: SUBSCRIPTION_MODE env, else legacy behaviour (enforced iff an API URL is configured).
-    const mode = String(process.env.SUBSCRIPTION_MODE || "").toUpperCase();
-    const enabled = mode === "ENABLED" || (!mode && !!process.env.SUBSCRIPTION_API_URL);
-    const standalone = mode === "STANDALONE";
-    if (!enabled && !standalone) {
-      return (cache = { ok: false, reason: "UNMANAGED" });
-    }
+    // Development: ONLY SUBSCRIPTION_MODE=ENABLED turns on keys + portal subscription checks.
+    // Anything else is the local mode: no Server key, no Client key, just a time-limited licence.
+    const enabled = String(process.env.SUBSCRIPTION_MODE || "").trim().toUpperCase() === "ENABLED";
     return (cache = {
       ok: true,
       source: "dev-env",
       config: {
         kind: "BUILD_CONFIG",
-        mode: standalone ? "STANDALONE" : "ENABLED",
+        mode: enabled ? "ENABLED" : "STANDALONE",
         apiUrl: process.env.SUBSCRIPTION_API_URL,
         portalUrl: process.env.SUBSCRIPTION_PORTAL_URL,
+        localMonths: parseMonths(process.env.LOCAL_LICENSE_MONTHS),
         builtAt: "dev",
       },
     });
@@ -71,6 +70,17 @@ export function buildConfigBroken(): string | null {
   const r = getBuildConfig();
   return !r.ok && r.reason !== "UNMANAGED" ? r.reason : null;
 }
+
+/** Months of validity in local mode: LOCAL_LICENSE_MONTHS (whole number 1-120), default 6. */
+export const DEFAULT_LOCAL_MONTHS = 6;
+export function parseMonths(v: unknown): number {
+  const n = Number(v);
+  return Number.isInteger(n) && n >= 1 && n <= 120 ? n : DEFAULT_LOCAL_MONTHS;
+}
+export const localMonths = (): number => {
+  const r = getBuildConfig();
+  return r.ok ? parseMonths(r.config.localMonths) : DEFAULT_LOCAL_MONTHS;
+};
 
 export const getMode = (): "ENABLED" | "STANDALONE" | null => {
   const r = getBuildConfig();

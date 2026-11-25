@@ -6,6 +6,8 @@ import { createCompanyRow, instituteDb } from "../utils/institute";
 import { getCentralPrisma } from "../prisma-client/central-client";
 import { readSetupState } from "./setup-status.controller";
 import { syncFromCloud } from "../services/subscription.service";
+import { apiBase, getMode } from "../services/buildConfig.service";
+import { claimServerFromPortal } from "../services/activation.service";
 
 /**
  * First-time setup of the desktop EXE (on the institute's server PC).
@@ -26,6 +28,7 @@ type Identity = {
     country: string; state: string; city: string; zipCode: string; fullAddress: string;
   };
   companies: {
+    id: string;
     name: string; instituteName: string; contact: string; country: string; state: string; city: string;
     zipCode: string; fullAddress: string; isMaster: boolean;
     financialStartDate: string | null; financialEndDate: string | null;
@@ -36,10 +39,16 @@ type Identity = {
 const KEY_ID = "institute.id";
 const KEY_NAME = "institute.name";
 const KEY_AT = "institute.installedAt";
+// One server = one company: the company this server was set up for, and its two keys (kept in the local database).
+const KEY_SCOPE = "install.scope"; // COMPANY | INSTITUTE (older installs)
+const KEY_COMPANY_ID = "company.id";
+const KEY_COMPANY_NAME = "company.name";
+const KEY_SERVER_KEY = "keys.server";
+const KEY_CLIENT_KEY = "keys.client";
 
 /** Asks the central web server who these credentials belong to. */
 async function fetchIdentity(email: string, password: string): Promise<Identity> {
-  const api = process.env.SUBSCRIPTION_API_URL;
+  const api = apiBase();
   if (!api) {
     throw Object.assign(new Error("This installation is not connected to the central server."), { status: 500 });
   }
@@ -103,12 +112,39 @@ export async function readInstalledInstitute(): Promise<{ id: string; name: stri
   }
 }
 
+/** Setup step 1: sign in and list the institute's companies, so the Super Admin can choose this server's company. */
+export async function setupCompaniesController(req: Request, res: Response) {
+  const email = String(req.body?.email ?? "").trim().toLowerCase();
+  const password = String(req.body?.password ?? "");
+  if (!email || !password) {
+    return res.status(400).json({ error: "Enter the Master Institute Super Admin email and password." });
+  }
+  try {
+    const state = await readSetupState();
+    if (state !== "NOT_STARTED" && (await readInstalledInstitute())) {
+      return res.status(403).json({ error: "Setup has already been completed on this computer." });
+    }
+    const identity = await fetchIdentity(email, password);
+    return res.json({
+      instituteName: identity.instituteName,
+      subscription: identity.subscription,
+      companies: identity.companies.map((c) => ({
+        id: c.id, name: c.name, instituteName: c.instituteName, city: c.city, state: c.state, isMaster: c.isMaster,
+      })),
+    });
+  } catch (err: any) {
+    return res.status(err?.status && err.status < 600 ? err.status : 500).json({ error: err?.message || "Could not sign in." });
+  }
+}
+
 export async function setupCentralController(req: Request, res: Response) {
   const email = String(req.body?.email ?? "").trim().toLowerCase();
   const password = String(req.body?.password ?? "");
   if (!email || !password) {
     return res.status(400).json({ error: "Enter the Master Institute Super Admin email and password." });
   }
+  const companyId = String(req.body?.companyId ?? "");
+  if (!companyId) return res.status(400).json({ error: "Choose the company this server is for." });
 
   let createdCentral = false;
   try {
@@ -120,6 +156,17 @@ export async function setupCentralController(req: Request, res: Response) {
 
     // 2. Authenticate against the central web server (nothing is created locally before this succeeds).
     const identity = await fetchIdentity(email, password);
+    const chosen = identity.companies.find((c) => c.id === companyId);
+    if (!chosen) return res.status(404).json({ error: "That company was not found. Go back and choose again." });
+
+    // 2b. Register THIS PC as the company's server. The portal returns the company's Server key and Client key.
+    //     (Nothing local exists yet; if this fails the Super Admin simply tries again.)
+    //     Local mode (not ENABLED) has no keys: skip this step entirely.
+    const keyed = getMode() === "ENABLED";
+    const claim: { ok: boolean; error?: string; reason?: string; serverKey?: string; clientKey?: string } = keyed
+      ? await claimServerFromPortal({ email, password, companyId })
+      : { ok: true };
+    if (!claim.ok) return res.status(claim.reason === "LIMIT" ? 409 : 400).json({ error: claim.error });
 
     // 3. Local central database + the institute's Super Admin (password stored hashed, never plain).
     const incomplete = state !== "NOT_STARTED"; // an older half-finished setup: start over cleanly
@@ -143,8 +190,8 @@ export async function setupCentralController(req: Request, res: Response) {
       },
     });
 
-    // 4. The institute's ONE database: the primary company first, then the others.
-    const master = identity.companies.find((c) => c.isMaster) ?? identity.companies[0];
+    // 4. This server's database holds ONLY the chosen company (one server = one company).
+    const master = chosen;
     const mfy = financialDates(master ?? { financialStartDate: null, financialEndDate: null });
     await createTenant(
       identity.owner.name, identity.instituteName, identity.owner.email, password,
@@ -164,12 +211,14 @@ export async function setupCentralController(req: Request, res: Response) {
         data: { isMaster: true, ...(master ? { instituteName: master.instituteName } : {}) },
       });
     }
-    for (const c of identity.companies.filter((c) => c !== master)) {
-      const fy = financialDates(c);
-      await createCompanyRow(db, tenant.slug, {
-        name: c.name, instituteName: c.instituteName, contact: c.contact, country: c.country, state: c.state,
-        city: c.city, zipCode: c.zipCode, fullAddress: c.fullAddress,
-        financialStartDate: fy.start, financialEndDate: fy.end,
+    if (primary) {
+      // The primary row becomes the chosen company (name, branch address, contact).
+      await db.clientAdmin.update({
+        where: { id: primary.id },
+        data: {
+          name: chosen.name, instituteName: chosen.instituteName, contact: chosen.contact, country: chosen.country,
+          state: chosen.state, city: chosen.city, zipCode: chosen.zipCode, fullAddress: chosen.fullAddress,
+        },
       });
     }
 
@@ -177,6 +226,11 @@ export async function setupCentralController(req: Request, res: Response) {
     await setSetting(central, KEY_ID, identity.instituteId);
     await setSetting(central, KEY_NAME, identity.instituteName);
     await setSetting(central, KEY_AT, new Date().toISOString());
+    await setSetting(central, KEY_SCOPE, "COMPANY");
+    await setSetting(central, KEY_COMPANY_ID, chosen.id);
+    await setSetting(central, KEY_COMPANY_NAME, chosen.instituteName || chosen.name);
+    if (claim.serverKey) await setSetting(central, KEY_SERVER_KEY, claim.serverKey);
+    if (claim.clientKey) await setSetting(central, KEY_CLIENT_KEY, claim.clientKey);
 
     // 6. Subscription (best effort: the signed licence is stored for offline use).
     const sync = await syncFromCloud({ email, password });
@@ -185,7 +239,9 @@ export async function setupCentralController(req: Request, res: Response) {
       success: true,
       instituteId: identity.instituteId,
       instituteName: identity.instituteName,
-      companies: identity.companies.length,
+      company: chosen.instituteName || chosen.name,
+      serverKey: claim.serverKey,
+      clientKey: claim.clientKey,
       subscription: identity.subscription,
       subscriptionSynced: sync.ok,
     });
@@ -196,7 +252,7 @@ export async function setupCentralController(req: Request, res: Response) {
       try {
         const c = getCentralPrisma();
         await c.tenant.deleteMany();
-        await c.appSetting.deleteMany({ where: { key: { in: [KEY_ID, KEY_NAME, KEY_AT] } } });
+        await c.appSetting.deleteMany({ where: { key: { in: [KEY_ID, KEY_NAME, KEY_AT, KEY_SCOPE, KEY_COMPANY_ID, KEY_COMPANY_NAME, KEY_SERVER_KEY, KEY_CLIENT_KEY] } } });
         await c.superAdmin.deleteMany();
       } catch {
         /* best effort */
@@ -241,6 +297,20 @@ export async function setupResyncController(req: Request, res: Response) {
     const tenant = await central.tenant.findUnique({ where: { id: inst.id } });
     if (!tenant) return res.status(409).json({ error: "The local institute record is missing. Contact support." });
     const db = instituteDb(tenant);
+    const scope = await central.appSetting.findUnique({ where: { key: KEY_SCOPE } });
+    if (scope?.value === "COMPANY") {
+      // One server = one company: only refresh the subscription (and the company's own details); never import other companies.
+      const myId = (await central.appSetting.findUnique({ where: { key: KEY_COMPANY_ID } }))?.value;
+      const mine = identity.companies.find((c) => c.id === myId);
+      const primary = await db.clientAdmin.findFirst({ where: { isMaster: true } });
+      if (mine && primary) {
+        await db.clientAdmin.update({ where: { id: primary.id }, data: {
+          name: mine.name, instituteName: mine.instituteName, contact: mine.contact, country: mine.country,
+          state: mine.state, city: mine.city, zipCode: mine.zipCode, fullAddress: mine.fullAddress } });
+      }
+      const syncOne = await syncFromCloud({ email, password });
+      return res.json({ success: true, companiesAdded: 0, subscriptionSynced: syncOne.ok, subscription: identity.subscription });
+    }
     const have = await db.clientAdmin.findMany({ select: { instituteName: true } });
     const names = new Set(have.map((c: any) => c.instituteName.toLowerCase()));
     let added = 0;

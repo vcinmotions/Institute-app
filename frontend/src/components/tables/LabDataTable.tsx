@@ -171,7 +171,7 @@ export default function LabDataTable({
                           <Tooltip className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5" content="Edit Lab">
                             <button
                               className="rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition"
-                              onClick={() => handleEditLab(item)}
+                              data-perm="update:lab" onClick={() => handleEditLab(item)}
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { allowed, loadPermissions, normalizePath } from "../services/permissions.service";
 
 /**
  * Role based access control for tenant (institute) routes.
@@ -14,7 +15,7 @@ const ADMIN = ["ADMIN"];
 
 const RULES: Rule[] = [
   // --- administration: ADMIN only ---
-  { test: /^\/(role-user|edit-role-user)/, roles: ADMIN },
+  { test: /^\/(role-user|edit-role-user|access-roles)/, roles: ADMIN },
   { test: /^\/user\/?$/, methods: ["PUT"], roles: ADMIN },
   { test: /^\/all-client/, roles: ADMIN },
   { test: /^\/log/, roles: ADMIN },
@@ -43,7 +44,7 @@ const RULES: Rule[] = [
   { test: /^\/course-completion/, roles: ["ADMIN", "FACULTY"] },
 ];
 
-export function roleGuard(req: Request, res: Response, next: NextFunction) {
+export async function roleGuard(req: Request, res: Response, next: NextFunction) {
   const user = req.user;
   if (!user || typeof user === "string") {
     return res.status(401).json({ error: "Unauthorized request" });
@@ -54,6 +55,21 @@ export function roleGuard(req: Request, res: Response, next: NextFunction) {
   // Master tokens never belong on institute routes.
   if (role === "MASTER_ADMIN") {
     return res.status(403).json({ error: "Master admin cannot use institute routes" });
+  }
+
+  // Custom (Super-Admin defined) role: module permissions replace the built-in rules below.
+  const customRoleId = (user as any).customRoleId;
+  if (customRoleId) {
+    try {
+      const perms = await loadPermissions(req.tenantPrisma, Number(customRoleId));
+      if (!allowed(perms, req.method, normalizePath(req.originalUrl))) {
+        return res.status(403).json({ error: "You do not have permission to perform this action" });
+      }
+      return next();
+    } catch (e) {
+      console.error("permission check failed:", e);
+      return res.status(500).json({ error: "Could not verify permissions" });
+    }
   }
 
   // Read-only users may never change data.

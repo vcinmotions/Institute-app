@@ -46,7 +46,13 @@ export default function ActivityDataTable({
                   isHeader
                   className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
                 >
-                  Entity
+                  User
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="text-theme-xs px-5 py-3 text-start font-medium text-gray-500 dark:text-gray-400"
+                >
+                  Module / Record
                 </TableCell>
                 <TableCell
                   isHeader
@@ -63,7 +69,7 @@ export default function ActivityDataTable({
                     className="flex items-center gap-1"
                     onClick={() => onSort("createdAt")}
                   >
-                    Created At
+                    Date &amp; time
                     <span>
                       {sortField === "createdAt" && sortOrder === "asc"
                         ? "▲"
@@ -94,20 +100,25 @@ export default function ActivityDataTable({
                       </div>
                     </TableCell>
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
+                      {item.actorName ?? "-"}
+                      {item.actorRole ? <span className="block text-xs text-gray-400">{item.actorRole}</span> : null}
+                    </TableCell>
+                    <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.entity}
+                      {item.entityId && item.entityId !== "-" ? <span className="block text-xs text-gray-400">#{String(item.entityId).slice(0, 12)}</span> : null}
                     </TableCell>
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
                       {item.message}
                     </TableCell>
                     <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 dark:text-gray-400">
-                      {new Date(item.createdAt).toISOString().split("T")[0]}
+                      {new Date(item.createdAt).toLocaleString("en-IN")}
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={4}
+                    colSpan={5}
                     className="py-6 text-center text-gray-500 dark:text-gray-400"
                   >
                     No Activity Logs found.

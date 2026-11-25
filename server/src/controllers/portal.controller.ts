@@ -1,3 +1,4 @@
+import { ensureCompanyKeys } from "./activation.controller";
 import { readTierPrices, resolvePlanPrice } from "./plan.controller";
 import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
@@ -193,6 +194,7 @@ export async function portalIdentity(req: Request, res: Response) {
         fullAddress: tenant.fullAddress,
       },
       companies: companies.map((c: any) => ({
+        id: c.id,
         name: c.name, instituteName: c.instituteName, contact: c.contact, country: c.country, state: c.state,
         city: c.city, zipCode: c.zipCode, fullAddress: c.fullAddress, isMaster: c.isMaster,
         financialStartDate: c.financialYears?.[0]?.startDate ?? null,
@@ -564,6 +566,8 @@ export async function createCompany(req: Request, res: Response) {
       financialStartDate: n.financialStartDate!, financialEndDate: n.financialEndDate!,
       certificateName: n.certificateName,
     });
+    // Every company gets its Server key and Client key automatically.
+    try { await ensureCompanyKeys(ctx.prisma, ctx.master, created.id, created.instituteName || created.name); } catch (e) { console.error("company keys failed:", e); }
     res.status(201).json(companyView(created));
   } catch (e: any) {
     console.error("create company failed:", e);

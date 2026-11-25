@@ -290,6 +290,7 @@ function startBackend(lanServer = false) {
         NODE_ENV: isDev ? "development" : "production",
         USER_DATA_PATH,
         BACKUP_SECRET: process.env.BACKUP_SECRET,
+        APP_VERSION: app.getVersion(),
         RESOURCES_PATH,
       },
       windowsHide: !isDev,
@@ -372,35 +373,126 @@ function startFrontend(lanServer = false) {
   });
 }
 
+// ─── THIS PC'S ID ─────────────────────────────────────────────────────────────
+// Same recipe as the server (server/src/services/device.service.ts) so the id matches everywhere.
+let cachedDeviceId = null;
+function thisDeviceId() {
+  if (cachedDeviceId) return cachedDeviceId;
+  let raw = "";
+  if (process.platform === "win32") {
+    try {
+      const out = require("child_process").execFileSync(
+        "reg", ["query", "HKLM\\SOFTWARE\\Microsoft\\Cryptography", "/v", "MachineGuid"],
+        { encoding: "utf8", windowsHide: true, timeout: 4000 }
+      );
+      const m = /MachineGuid\s+REG_SZ\s+(\S+)/i.exec(out);
+      if (m) raw = m[1];
+    } catch { /* fall back below */ }
+  }
+  if (!raw) {
+    const macs = Object.values(require("os").networkInterfaces()).flat()
+      .filter((i) => i && !i.internal && i.mac && i.mac !== "00:00:00:00:00:00").map((i) => i.mac).sort();
+    raw = `${require("os").hostname()}|${macs[0] || ""}`;
+  }
+  cachedDeviceId = require("crypto").createHash("sha256").update("vc-device:" + raw).digest("hex").slice(0, 32);
+  return cachedDeviceId;
+}
+ipcMain.handle("device:get", () => ({
+  deviceId: thisDeviceId(),
+  deviceName: require("os").hostname(),
+  os: `${require("os").type()} ${require("os").release()} (${require("os").arch()})`,
+}));
+
 // ─── AUTO UPDATER ─────────────────────────────────────────────────────────────
+// The Super Admin decides: the app only CHECKS and shows the available version. Downloading and installing
+// are started from Master > Software Update (which makes a database backup first). Installers come from the
+// signed GitHub release; electron-updater verifies each download against the sha512 in latest.yml.
+// Data lives in the user-data folder, which an update never touches.
+const UPDATE_HISTORY_FILE = path.join(USER_DATA_PATH, "update-history.json");
+const updateState = { current: app.getVersion(), status: "idle", available: null, progress: 0, error: null, checkedAt: null };
+
+function readUpdateHistory() {
+  try { return JSON.parse(fs.readFileSync(UPDATE_HISTORY_FILE, "utf8")); } catch { return []; }
+}
+function addUpdateHistory(entry) {
+  try {
+    fs.mkdirSync(USER_DATA_PATH, { recursive: true });
+    fs.writeFileSync(UPDATE_HISTORY_FILE, JSON.stringify([{ at: new Date().toISOString(), ...entry }, ...readUpdateHistory()].slice(0, 50)));
+  } catch (e) { log.warn("could not write update history:", e.message); }
+}
+
 function setupAutoUpdater() {
-  autoUpdater.autoDownload = true;
-  autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.autoDownload = false;          // never download without the Super Admin asking
+  autoUpdater.autoInstallOnAppQuit = false;  // never install silently when the app is closed
 
-  autoUpdater.on("checking-for-update", () => log.info("Checking for updates..."));
-  autoUpdater.on("update-available", (info) => log.info("Update available:", info.version));
-  autoUpdater.on("update-not-available", () => log.info("No updates available"));
-  autoUpdater.on("download-progress", (progress) => log.info(`Downloading update: ${progress.percent.toFixed(1)}%`));
-  
-  // Explicitly log channel communication errors
-  autoUpdater.on("error", (err) => log.error("Auto-updater failure caught:", err));
-
-  autoUpdater.on("update-downloaded", async () => {
-    log.info("Update downloaded — prompting user");
-    const { response } = await dialog.showMessageBox({
-      type: "info",
-      title: "Update Ready",
-      message: "A new version has been downloaded. Restart now to apply it?",
-      buttons: ["Restart Now", "Later"],
-    });
-    if (response === 0) {
-      killChildren();
-      autoUpdater.quitAndInstall();
-    }
+  autoUpdater.on("checking-for-update", () => { updateState.status = "checking"; });
+  autoUpdater.on("update-available", (info) => {
+    log.info("Update available:", info.version);
+    Object.assign(updateState, { status: "available", available: info.version, error: null, checkedAt: new Date().toISOString() });
+  });
+  autoUpdater.on("update-not-available", () => {
+    Object.assign(updateState, { status: "idle", available: null, checkedAt: new Date().toISOString() });
+  });
+  autoUpdater.on("download-progress", (p) => { updateState.status = "downloading"; updateState.progress = Math.round(p.percent); });
+  autoUpdater.on("update-downloaded", (info) => {
+    Object.assign(updateState, { status: "downloaded", available: info.version, progress: 100 });
+  });
+  autoUpdater.on("error", (err) => {
+    log.error("Auto-updater failure caught:", err);
+    Object.assign(updateState, { status: "error", error: String(err && err.message ? err.message : err).slice(0, 200) });
   });
 
-  setTimeout(() => autoUpdater.checkForUpdates(), 10_000);
+  setTimeout(() => autoUpdater.checkForUpdates().catch(() => {}), 10_000);
+  setInterval(() => { if (updateState.status === "idle") autoUpdater.checkForUpdates().catch(() => {}); }, 6 * 3600 * 1000);
 }
+
+/** Only the Master (Super) Admin may run updates: verify the token against the local server. */
+async function assertMasterToken(token) {
+  if (!token || typeof token !== "string") throw new Error("Sign in as the Super Admin to update the application.");
+  const cfg = readModeConfig();
+  const host = cfg && cfg.mode === "LAN_CLIENT" ? cfg.host : "127.0.0.1";
+  const port = cfg && cfg.mode === "LAN_CLIENT" ? cfg.port : BACKEND_PORT;
+  const res = await fetch(`http://${host}:${port}/api/master-user`, { headers: { Authorization: `Bearer ${token}` } });
+  if (!res.ok) throw new Error("Only the Super Admin can update the application.");
+}
+
+ipcMain.handle("update:status", () => ({ ...updateState, packaged: app.isPackaged && !isDev, history: readUpdateHistory() }));
+
+ipcMain.handle("update:check", async (_e, token) => {
+  await assertMasterToken(token);
+  if (!app.isPackaged || isDev) throw new Error("Updates are only available in the installed application.");
+  try { await autoUpdater.checkForUpdates(); } catch (e) { updateState.status = "error"; updateState.error = String(e.message || e).slice(0, 200); }
+  return { ...updateState, history: readUpdateHistory() };
+});
+
+ipcMain.handle("update:download", async (_e, token) => {
+  await assertMasterToken(token);
+  if (updateState.status !== "available") throw new Error("There is no update to download.");
+  autoUpdater.downloadUpdate().catch((e) => { updateState.status = "error"; updateState.error = String(e.message || e).slice(0, 200); });
+  updateState.status = "downloading";
+  return { ...updateState };
+});
+
+// The renderer takes a database backup BEFORE calling this (see the Software Update page).
+ipcMain.handle("update:install", async (_e, token) => {
+  await assertMasterToken(token);
+  if (updateState.status !== "downloaded") throw new Error("Download the update first.");
+  addUpdateHistory({ from: app.getVersion(), to: updateState.available, result: "installing" });
+  killChildren();
+  autoUpdater.quitAndInstall();
+});
+
+// Roll back: fetch the installer of an earlier release from the same GitHub project and install it.
+ipcMain.handle("update:rollback", async (_e, token, version) => {
+  await assertMasterToken(token);
+  if (!/^\d+\.\d+\.\d+$/.test(String(version))) throw new Error("Invalid version.");
+  if (!app.isPackaged || isDev) throw new Error("Rollback is only available in the installed application.");
+  autoUpdater.allowDowngrade = true;
+  autoUpdater.setFeedURL({ provider: "generic", url: `https://github.com/vcinmotions/Institute-app/releases/download/v${version}` });
+  addUpdateHistory({ from: app.getVersion(), to: String(version), result: "rollback requested" });
+  await autoUpdater.checkForUpdates();
+  return { ...updateState };
+});
 
 // ─── LOADING SCREEN ──────────────────────────────────────────────────────────
 const LOADING_HTML = `data:text/html;charset=utf-8,${encodeURIComponent(`<!DOCTYPE html>

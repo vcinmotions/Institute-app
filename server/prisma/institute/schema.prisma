@@ -91,6 +91,8 @@ model RoleUser {
   lastLoginAt         DateTime?
   clientAdminId       String
   clientAdmin         ClientAdmin @relation(fields: [clientAdminId], references: [id])
+  customRoleId        Int?
+  customRole          AccessRole? @relation(fields: [customRoleId], references: [id])
 }
 
 model ActivityLog {
@@ -102,6 +104,12 @@ model ActivityLog {
   createdAt     DateTime    @default(now())
   clientAdminId String
   clientAdmin   ClientAdmin @relation(fields: [clientAdminId], references: [id])
+  // Who did it (filled automatically from the signed-in user)
+  actorId   String?
+  actorName String?
+  actorRole String?
+  module    String?
+  ip        String?
 }
 
 model Enquiry {
@@ -756,4 +764,33 @@ model ActiveSession {
 
   @@unique([userType, userId])
   @@index([lastSeenAt])
+}
+
+
+// Super-admin defined roles with per-module View / Add / Update / Delete permissions.
+// Built-in roles (ADMIN, FRONT_DESK, ...) keep working unchanged; a user with customRoleId
+// is governed by these permissions instead.
+model AccessRole {
+  id            Int                    @id @default(autoincrement())
+  name          String
+  description   String?
+  clientAdminId String
+  createdAt     DateTime               @default(now())
+  permissions   AccessRolePermission[]
+  users         RoleUser[]
+
+  @@unique([clientAdminId, name])
+}
+
+model AccessRolePermission {
+  id        Int        @id @default(autoincrement())
+  roleId    Int
+  module    String
+  canView   Boolean    @default(false)
+  canAdd    Boolean    @default(false)
+  canUpdate Boolean    @default(false)
+  canDelete Boolean    @default(false)
+  role      AccessRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, module])
 }

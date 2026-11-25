@@ -14,6 +14,9 @@ export const forceLogout = () => {
 
     window.localStorage.clear();
 
+    // Already on the sign-in page: nothing to leave. Reloading it here is what made it flicker in a loop.
+    if (window.location.pathname.startsWith("/signin")) return;
+
     setTimeout(() => {
       window.location.replace("/signin");
     }, 10); // small delay fixes timing

@@ -1,3 +1,4 @@
+import { validateMobile, validateEmailAddress, validateDate, firstError } from "../validators/common";
 import { formatZodError } from "../utils/httpErrors";
 // controllers/studentController.ts
 import { Request, Response } from "express";
@@ -52,6 +53,14 @@ export async function addStudentControllerNew(req: any, res: any) {
     if (data.admissionDate && isNaN(new Date(data.admissionDate).getTime())) {
       return res.status(400).json({ error: "admissionDate is not a valid date" });
     }
+    const invalid = firstError(
+      validateMobile(data.contact, "Contact number"),
+      validateMobile(data.parentsContact, "Parent's contact number"),
+      validateEmailAddress(data.email),
+      validateDate(data.dob, "Date of birth", { notFuture: true }),
+      validateDate(data.admissionDate, "Admission date")
+    );
+    if (invalid) return res.status(400).json({ error: invalid });
     if (!Array.isArray(data.courseData) || data.courseData.length === 0) {
       return res.status(400).json({ error: "At least one course is required for admission" });
     }

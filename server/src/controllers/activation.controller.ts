@@ -1,19 +1,25 @@
 import crypto from "crypto";
+import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { getCentralPrisma } from "../prisma-client/central-client";
 import { signJson } from "../services/licenseCrypto";
+import { hashClientKey, normalizeKey } from "../services/clientKey";
+import { instituteDb } from "../utils/institute";
 
 /**
- * HOSTED PORTAL side of EXE activation.
- *  - SaaS admin creates activation keys (bound to an institute + company, with a PC limit).
- *  - The EXE activates with the key: the portal registers the PC and returns a SIGNED licence.
- *  - Institute super admin / SaaS admin can deactivate an old PC (limited by transferLimit) so
- *    its slot can be used by a new one.
+ * HOSTED PORTAL side of activation.
+ *
+ * Every company (branch) of an institute has exactly TWO keys, created automatically:
+ *   SERVER key  - activates the one local server PC of that company (1 PC; replaceable by the Super Admin).
+ *   CLIENT key  - typed once on every client PC / laptop that connects to that server (unlimited PCs).
+ *                 Client PCs are checked by the local server against a hash inside the server's signed licence,
+ *                 so they work offline; the portal never counts them.
+ * The server obtains both keys when it is set up (see claimServer) - nobody has to type the Server key.
  */
 const STANDALONE_DAYS = 364;
 const DAY = 24 * 60 * 60 * 1000;
 
-const normKey = (k: unknown) => String(k ?? "").trim().toUpperCase();
+const normKey = normalizeKey;
 
 export function generateKey(): string {
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I
@@ -22,11 +28,36 @@ export function generateKey(): string {
   return `VCIN-${part()}-${part()}-${part()}-${part()}`;
 }
 
-/**
- * Standalone validity = the later of (first activation + 364 days) and the institute's
- * paid subscription expiry. A SUSPENDED subscription ends validity immediately.
- * Renewing online (payment or SaaS admin) therefore restores access at the next licence refresh.
- */
+/** Legacy keys (made by hand, not tied to a company) share one pseudo company for their Client key. */
+const LEGACY_COMPANY = "legacy";
+
+/** Creates the company's Server + Client keys if they do not exist yet. Safe to call repeatedly. */
+export async function ensureCompanyKeys(
+  prisma: any,
+  master: { id: string; instituteName: string },
+  companyId: string,
+  companyName: string
+): Promise<{ server: any; client: any }> {
+  const make = async (kind: "SERVER" | "CLIENT") => {
+    const found = await prisma.activationKey.findFirst({ where: { tenantId: master.id, companyId, kind } });
+    if (found) return found;
+    try {
+      return await prisma.activationKey.create({
+        data: {
+          key: generateKey(), tenantId: master.id, instituteName: master.instituteName, companyName,
+          companyId, kind, maxActivations: kind === "SERVER" ? 1 : 0, // 0 = unlimited (client key)
+          transferLimit: 3,
+        },
+      });
+    } catch (e: any) {
+      if (e?.code === "P2002") return prisma.activationKey.findFirst({ where: { tenantId: master.id, companyId, kind } }); // raced
+      throw e;
+    }
+  };
+  return { server: await make("SERVER"), client: await make("CLIENT") };
+}
+
+/** Standalone validity = later of (first activation + 364 days) and the institute's paid expiry. Suspended = now. */
 export async function licenseValidUntil(prisma: any, key: any): Promise<Date> {
   const first: Date = key.firstActivatedAt ?? new Date();
   let until = new Date(first.getTime() + STANDALONE_DAYS * DAY);
@@ -41,12 +72,31 @@ export async function licenseValidUntil(prisma: any, key: any): Promise<Date> {
   return until;
 }
 
+/** The Client key that goes with a Server key (created on demand for legacy keys). */
+async function clientKeyFor(prisma: any, serverKey: any) {
+  const companyId = serverKey.companyId ?? LEGACY_COMPANY;
+  const found = await prisma.activationKey.findFirst({ where: { tenantId: serverKey.tenantId, companyId, kind: "CLIENT" } });
+  if (found) return found;
+  return prisma.activationKey.create({
+    data: {
+      key: generateKey(), tenantId: serverKey.tenantId, instituteName: serverKey.instituteName,
+      companyName: serverKey.companyName, companyId, kind: "CLIENT", maxActivations: 0, transferLimit: 3,
+    },
+  });
+}
+
 async function issueLicense(prisma: any, key: any, device: any, nonce?: string) {
   const validUntil = await licenseValidUntil(prisma, key);
+  const client = key.kind === "SERVER" ? await clientKeyFor(prisma, key) : null;
   return signJson("ACTIVATION", {
     keyId: key.id,
     institute: key.instituteName,
     company: key.companyName,
+    companyId: key.companyId ?? null,
+    role: "SERVER",
+    // Only a hash: the server can check a typed Client key but cannot be edited into accepting another one.
+    clientKeyId: client?.id ?? null,
+    clientKeyHash: client ? hashClientKey(client.key, client.id) : null,
     deviceId: device.deviceId,
     deviceName: device.deviceName,
     activatedAt: device.activatedAt.toISOString(),
@@ -57,56 +107,122 @@ async function issueLicense(prisma: any, key: any, device: any, nonce?: string) 
   });
 }
 
+type Registered =
+  | { code: 200; key: any; device: any }
+  | { code: number; error: string; reason?: string };
+
+/** Registers a PC on a SERVER key (one PC per key). Atomic. */
+async function registerServerDevice(prisma: any, where: any, deviceId: string, deviceName: string, os: string): Promise<Registered> {
+  return prisma.$transaction(async (tx: any) => {
+    const row = await tx.activationKey.findFirst({ where });
+    if (!row || row.status !== "ACTIVE") return { code: 403, error: "Invalid or revoked activation key." };
+    if (row.kind === "CLIENT") {
+      return { code: 403, error: "This is a Client key. Enter it on a client PC or laptop that connects to your server, not on the server itself.", reason: "CLIENT_KEY" };
+    }
+    let device = await tx.activationDevice.findUnique({
+      where: { activationKeyId_deviceId: { activationKeyId: row.id, deviceId } },
+    });
+    if (device?.status === "INACTIVE") {
+      return { code: 403, error: "This PC was deactivated. Ask your Super Admin to reassign the activation.", reason: "DEVICE_DEACTIVATED" };
+    }
+    if (!device) {
+      // One PC can be the server of only ONE company of an institute.
+      const other = await tx.activationDevice.findFirst({
+        where: { deviceId, status: "ACTIVE", NOT: { activationKeyId: row.id }, activationKey: { tenantId: row.tenantId, kind: "SERVER" } },
+        include: { activationKey: true },
+      });
+      if (other) {
+        return {
+          code: 409,
+          error: `This PC is already the server of ${other.activationKey.companyName}. One server PC serves one company. Use another PC for ${row.companyName}.`,
+          reason: "ALREADY_SERVER",
+        };
+      }
+      const active = await tx.activationDevice.findMany({ where: { activationKeyId: row.id, status: "ACTIVE" } });
+      if (active.length >= row.maxActivations) {
+        const who = active[0]?.deviceName ? ` (${active[0].deviceName})` : "";
+        return {
+          code: 409,
+          error: `${row.companyName} already has its server activated on another PC${who}. A company has one server. The Super Admin can deactivate the old server in the portal first.`,
+          reason: "LIMIT",
+        };
+      }
+      device = await tx.activationDevice.create({ data: { activationKeyId: row.id, deviceId, deviceName, os } });
+    } else {
+      device = await tx.activationDevice.update({ where: { id: device.id }, data: { deviceName, os, lastVerifiedAt: new Date() } });
+    }
+    const k = row.firstActivatedAt ? row : await tx.activationKey.update({ where: { id: row.id }, data: { firstActivatedAt: new Date() } });
+    return { code: 200, key: k, device };
+  });
+}
+
+const deviceBody = (req: Request) => ({
+  deviceId: String(req.body?.deviceId ?? "").trim(),
+  deviceName: String(req.body?.deviceName ?? "Unknown PC").slice(0, 80),
+  os: String(req.body?.os ?? "").slice(0, 80),
+});
+const validDeviceId = (id: string) => /^[a-f0-9]{16,64}$/i.test(id);
+
 // ---------------- EXE-facing (public, rate limited) ----------------
 
+/** Typed-key activation of a server (re-install / older installs). */
 export async function activateDevice(req: Request, res: Response) {
   const key = normKey(req.body?.key);
-  const deviceId = String(req.body?.deviceId ?? "").trim();
-  const deviceName = String(req.body?.deviceName ?? "Unknown PC").slice(0, 80);
-  const os = String(req.body?.os ?? "").slice(0, 80);
-  if (!key || !/^[a-f0-9]{16,64}$/i.test(deviceId)) {
+  const { deviceId, deviceName, os } = deviceBody(req);
+  if (!key || !validDeviceId(deviceId)) {
     return res.status(400).json({ error: "Activation key and device id are required." });
   }
   try {
     const prisma = getCentralPrisma();
-    const out: any = await prisma.$transaction(async (tx: any) => {
-      const row = await tx.activationKey.findUnique({ where: { key } });
-      if (!row || row.status !== "ACTIVE") return { code: 403, error: "Invalid or revoked activation key." };
-
-      let device = await tx.activationDevice.findUnique({
-        where: { activationKeyId_deviceId: { activationKeyId: row.id, deviceId } },
-      });
-      if (device?.status === "INACTIVE") {
-        return { code: 403, error: "This PC was deactivated. Ask your Super Admin to reassign the activation.", reason: "DEVICE_DEACTIVATED" };
-      }
-      if (!device) {
-        const active = await tx.activationDevice.count({ where: { activationKeyId: row.id, status: "ACTIVE" } });
-        if (active >= row.maxActivations) {
-          return { code: 409, error: `Activation limit reached (${active} of ${row.maxActivations} PCs). Deactivate an old PC from the portal first.`, reason: "LIMIT" };
-        }
-        device = await tx.activationDevice.create({
-          data: { activationKeyId: row.id, deviceId, deviceName, os },
-        });
-      } else {
-        device = await tx.activationDevice.update({
-          where: { id: device.id },
-          data: { deviceName, os, lastVerifiedAt: new Date() },
-        });
-      }
-      const k = row.firstActivatedAt
-        ? row
-        : await tx.activationKey.update({ where: { id: row.id }, data: { firstActivatedAt: new Date() } });
-      return { code: 200, key: k, device };
-    });
-    if (out.code !== 200) return res.status(out.code).json({ error: out.error, reason: out.reason });
-    res.json(await issueLicense(prisma, out.key, out.device, req.body?.nonce));
+    const out = await registerServerDevice(prisma, { key }, deviceId, deviceName, os);
+    if (out.code !== 200) return res.status(out.code).json({ error: (out as any).error, reason: (out as any).reason });
+    res.json(await issueLicense(prisma, (out as any).key, (out as any).device, req.body?.nonce));
   } catch (e) {
     console.error("activation failed:", e);
     res.status(500).json({ error: "Activation failed. Please try again." });
   }
 }
 
-/** Periodic check from the EXE: still active? Returns a fresh signed licence (carries renewals). */
+/**
+ * First-time server setup: the Super Admin signs in, chooses the company this server is for, and this call
+ * registers the PC on that company's SERVER key and returns the signed licence plus both keys.
+ */
+export async function claimServer(req: Request, res: Response) {
+  const email = String(req.body?.email ?? "").trim().toLowerCase();
+  const password = String(req.body?.password ?? "");
+  const companyId = String(req.body?.companyId ?? "");
+  const { deviceId, deviceName, os } = deviceBody(req);
+  if (!email || !password || !companyId || !validDeviceId(deviceId)) {
+    return res.status(400).json({ error: "Sign-in details, company and device are required." });
+  }
+  try {
+    const prisma = getCentralPrisma();
+    const tenant = await prisma.tenant.findUnique({ where: { email } });
+    if (!tenant?.password || !(await bcrypt.compare(password, tenant.password))) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+    if (tenant.parentTenantId) return res.status(403).json({ error: "Only the Master Institute Super Admin can set up a server." });
+
+    const company = await instituteDb(tenant).clientAdmin.findUnique({ where: { id: companyId } });
+    if (!company) return res.status(404).json({ error: "That company was not found." });
+
+    const keys = await ensureCompanyKeys(prisma, tenant, company.id, company.instituteName || company.name);
+    const out = await registerServerDevice(prisma, { id: keys.server.id }, deviceId, deviceName, os);
+    if (out.code !== 200) return res.status(out.code).json({ error: (out as any).error, reason: (out as any).reason });
+    const signed = await issueLicense(prisma, (out as any).key, (out as any).device, req.body?.nonce);
+    res.json({
+      ...signed,
+      serverKey: keys.server.key,
+      clientKey: keys.client.key,
+      company: { id: company.id, name: company.name, instituteName: company.instituteName },
+    });
+  } catch (e) {
+    console.error("claim server failed:", e);
+    res.status(500).json({ error: "Could not activate this server. Please try again." });
+  }
+}
+
+/** Periodic check from the server EXE: still active? Returns a fresh signed licence (carries renewals). */
 export async function verifyDevice(req: Request, res: Response) {
   const keyId = String(req.body?.keyId ?? "");
   const deviceId = String(req.body?.deviceId ?? "");
@@ -136,8 +252,10 @@ const deviceView = (d: any) => ({
   activatedAt: d.activatedAt, lastVerifiedAt: d.lastVerifiedAt, deactivatedAt: d.deactivatedAt,
 });
 const keyView = (k: any) => ({
-  id: k.id, key: k.key, instituteName: k.instituteName, companyName: k.companyName,
-  maxActivations: k.maxActivations, activatedPCs: (k.devices ?? []).filter((d: any) => d.status === "ACTIVE").length,
+  id: k.id, key: k.key, kind: k.kind ?? "SERVER", companyId: k.companyId ?? null,
+  instituteName: k.instituteName, companyName: k.companyName,
+  maxActivations: k.maxActivations, unlimited: k.kind === "CLIENT" || k.maxActivations === 0,
+  activatedPCs: (k.devices ?? []).filter((d: any) => d.status === "ACTIVE").length,
   transferLimit: k.transferLimit, transfersUsed: k.transfersUsed, status: k.status,
   firstActivatedAt: k.firstActivatedAt, createdAt: k.createdAt, devices: (k.devices ?? []).map(deviceView),
 });
@@ -145,41 +263,49 @@ const keyView = (k: any) => ({
 // ---------------- SaaS admin ----------------
 
 export async function saasListKeys(_req: Request, res: Response) {
-  const keys = await getCentralPrisma().activationKey.findMany({ include: { devices: true }, orderBy: { createdAt: "desc" } });
+  const keys = await getCentralPrisma().activationKey.findMany({ include: { devices: true }, orderBy: [{ instituteName: "asc" }, { companyName: "asc" }, { kind: "asc" }] });
   res.json({ keys: keys.map(keyView) });
 }
 
+/** SaaS admin: creates (or returns) the Server + Client keys of every company of an institute. */
 export async function saasCreateKey(req: Request, res: Response) {
   const prisma = getCentralPrisma();
   const tenant = await prisma.tenant.findUnique({ where: { tenantId: String(req.body?.tenantId ?? "") } });
   if (!tenant) return res.status(404).json({ error: "Institute not found." });
   const master = tenant.parentTenantId ? await prisma.tenant.findUnique({ where: { id: tenant.parentTenantId } }) : tenant;
-  const owner = master ?? tenant;
-  const companyName = String(req.body?.companyName || tenant.name || tenant.instituteName).slice(0, 120);
-  const maxActivations = Math.max(1, Math.min(500, Number(req.body?.maxActivations) || 1));
-  const transferLimit = Math.max(0, Math.min(100, Number(req.body?.transferLimit ?? 3)));
-  const k = await prisma.activationKey.create({
-    data: { key: generateKey(), tenantId: owner.id, instituteName: owner.instituteName, companyName, maxActivations, transferLimit },
-    include: { devices: true },
-  });
-  res.status(201).json(keyView(k));
+  if (!master) return res.status(404).json({ error: "Institute not found." });
+  try {
+    const out = await ensureInstituteKeys(prisma, master);
+    res.status(201).json({ keys: out.map(keyView) });
+  } catch (e) {
+    console.error("create keys failed:", e);
+    res.status(500).json({ error: "Could not create the keys." });
+  }
+}
+
+/** Ensures every company of the institute has both keys; returns all of the institute's keys. */
+export async function ensureInstituteKeys(prisma: any, master: any) {
+  const db = instituteDb(master);
+  const companies = await db.clientAdmin.findMany({ select: { id: true, name: true, instituteName: true }, orderBy: { createdAt: "asc" } });
+  for (const c of companies) await ensureCompanyKeys(prisma, master, c.id, c.instituteName || c.name);
+  return prisma.activationKey.findMany({ where: { tenantId: master.id }, include: { devices: true }, orderBy: [{ companyName: "asc" }, { kind: "asc" }] });
 }
 
 export async function saasUpdateKey(req: Request, res: Response) {
   const prisma = getCentralPrisma();
   const data: any = {};
-  if (req.body?.maxActivations !== undefined) data.maxActivations = Math.max(1, Math.min(500, Number(req.body.maxActivations) || 1));
+  const existing = await prisma.activationKey.findUnique({ where: { id: String(req.params.id) } });
+  if (!existing) return res.status(404).json({ error: "Key not found." });
+  if (req.body?.maxActivations !== undefined && existing.kind !== "CLIENT") {
+    data.maxActivations = Math.max(1, Math.min(500, Number(req.body.maxActivations) || 1));
+  }
   if (req.body?.transferLimit !== undefined) data.transferLimit = Math.max(0, Math.min(100, Number(req.body.transferLimit) || 0));
   if (req.body?.status === "ACTIVE" || req.body?.status === "REVOKED") data.status = req.body.status;
-  try {
-    const k = await prisma.activationKey.update({ where: { id: String(req.params.id) }, data, include: { devices: true } });
-    res.json(keyView(k));
-  } catch {
-    res.status(404).json({ error: "Key not found." });
-  }
+  const k = await prisma.activationKey.update({ where: { id: existing.id }, data, include: { devices: true } });
+  res.json(keyView(k));
 }
 
-/** SaaS admin may deactivate (no transfer cost) or re-activate a device. */
+/** SaaS admin may deactivate (no transfer cost) or re-activate a server PC. */
 export async function saasSetDeviceStatus(req: Request, res: Response) {
   const status = req.body?.status === "ACTIVE" ? "ACTIVE" : "INACTIVE";
   const prisma = getCentralPrisma();
@@ -187,7 +313,7 @@ export async function saasSetDeviceStatus(req: Request, res: Response) {
   if (!d) return res.status(404).json({ error: "Device not found." });
   if (status === "ACTIVE") {
     const active = await prisma.activationDevice.count({ where: { activationKeyId: d.activationKeyId, status: "ACTIVE" } });
-    if (active >= d.activationKey.maxActivations) return res.status(409).json({ error: "Activation limit reached." });
+    if (active >= d.activationKey.maxActivations) return res.status(409).json({ error: "This company's server is already active on another PC." });
   }
   const u = await prisma.activationDevice.update({
     where: { id: d.id },
@@ -202,8 +328,9 @@ async function ownKeys(email: string) {
   const prisma = getCentralPrisma();
   const me = await prisma.tenant.findUnique({ where: { email } });
   if (!me) return { prisma, keys: [] as any[] };
-  const masterId = me.parentTenantId ?? me.id;
-  const keys = await prisma.activationKey.findMany({ where: { tenantId: masterId }, include: { devices: true }, orderBy: { createdAt: "desc" } });
+  const master = me.parentTenantId ? await prisma.tenant.findUnique({ where: { id: me.parentTenantId } }) : me;
+  if (!master) return { prisma, keys: [] as any[] };
+  const keys = await ensureInstituteKeys(prisma, master); // companies created earlier get their keys here
   return { prisma, keys };
 }
 
@@ -212,10 +339,10 @@ export async function portalListKeys(req: Request, res: Response) {
   res.json({ keys: keys.map(keyView) });
 }
 
-/** Deactivate an old PC so the slot can be reused. Counts against the key's transfer limit. */
+/** Deactivate an old server PC so its company can set up a new one. Counts against the key's transfer limit. */
 export async function portalDeactivateDevice(req: Request, res: Response) {
   const { prisma, keys } = await ownKeys((req as any).portalEmail);
-  const key = keys.find((k) => k.devices.some((d: any) => d.id === req.params.id));
+  const key = keys.find((k: any) => k.devices.some((d: any) => d.id === req.params.id));
   if (!key) return res.status(404).json({ error: "Device not found." });
   const dev = key.devices.find((d: any) => d.id === req.params.id);
   if (dev.status === "INACTIVE") return res.json(deviceView(dev));
@@ -227,4 +354,19 @@ export async function portalDeactivateDevice(req: Request, res: Response) {
     prisma.activationKey.update({ where: { id: key.id }, data: { transfersUsed: { increment: 1 } } }),
   ]);
   res.json(deviceView(u));
+}
+
+/**
+ * SaaS admin: a renewal code for a PC running in local mode (offline renewal). The code is signed, bound to that PC's id
+ * and usable once. Send it to the customer; they paste it under System Settings.
+ */
+export async function saasIssueLocalRenewal(req: Request, res: Response) {
+  const deviceId = String(req.body?.deviceId ?? "").trim().toLowerCase();
+  const months = Number(req.body?.months ?? 6);
+  if (!/^[a-f0-9]{16,64}$/.test(deviceId)) return res.status(400).json({ error: "Enter the PC id shown in the customer's System Settings." });
+  if (!Number.isInteger(months) || months < 1 || months > 60) return res.status(400).json({ error: "Months must be a whole number from 1 to 60." });
+  const signed = signJson("LOCAL_RENEWAL", {
+    deviceId, months, issuedAt: new Date().toISOString(), nonce: crypto.randomBytes(12).toString("hex"),
+  });
+  res.json({ code: Buffer.from(JSON.stringify(signed)).toString("base64"), deviceId, months });
 }

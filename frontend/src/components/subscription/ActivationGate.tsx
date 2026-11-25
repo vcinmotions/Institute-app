@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { apiClient } from "@/lib/apiClient";
+import { publicApi } from "@/lib/apiClient";
 
 type Act = {
   status: string;
@@ -9,6 +9,7 @@ type Act = {
   message: string;
   mode: "ENABLED" | "STANDALONE" | null;
   device?: { deviceId: string; deviceName: string };
+  isLocal?: boolean;
 };
 
 /**
@@ -23,7 +24,7 @@ export default function ActivationGate() {
 
   const load = useCallback(async () => {
     try {
-      const { data } = await apiClient.get<Act>("/device-activation/status");
+      const { data } = await publicApi.get<Act>("/device-activation/status");
       setAct(data);
     } catch {
       // Server not reachable yet: nothing to show.
@@ -43,11 +44,20 @@ export default function ActivationGate() {
 
   if (!act || !act.blocked) return null;
 
+  // A client PC can never activate the server (the server refuses it). Just explain what is wrong.
+  if (act.isLocal === false) {
+    return (
+      <div className="fixed inset-x-0 top-0 z-[190000] bg-red-600 px-4 py-2 text-center text-sm text-white">
+        The server computer is not activated: {act.message} Ask the Super Admin to fix it on the server.
+      </div>
+    );
+  }
+
   const activate = async () => {
     setErr("");
     setBusy(true);
     try {
-      await apiClient.post("/device-activation/activate", { key });
+      await publicApi.post("/device-activation/activate", { key });
       setKey("");
       await load();
       window.location.reload();

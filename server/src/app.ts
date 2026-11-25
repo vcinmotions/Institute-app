@@ -40,6 +40,10 @@ import testRoute from "./routes/test.routes";
 import systemRoute from "./routes/system.backup.routes";
 import subscriptionRoute from "./routes/subscription.routes";
 import activationRoute from "./routes/activation.routes";
+import { startBackupScheduler } from "./services/backup.service";
+import { getUserDataPath } from "./middlewares/runtimePaths";
+import { auditTrail } from "./middlewares/auditTrail.middleware";
+import { clientDeviceGate } from "./middlewares/clientDeviceGate.middleware";
 import { activationGate } from "./middlewares/activationGate.middleware";
 import expenseRoute from "./routes/expense.routes";
 import { subscriptionGuard } from "./middlewares/subscriptionGuard.middleware";
@@ -85,6 +89,8 @@ app.use(
 // Serve static files from the 'uploads' directory
 //app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+// Institute logo uploaded from the Branding screen (kept in the user-data folder, so it survives reinstall).
+app.use("/branding-files", express.static(path.join(getUserDataPath(), "uploads", "branding")));
 
 // // 🔥 Dynamic CORS Middleware
 // const dynamicCors = async (req: any, callback: any) => {
@@ -141,10 +147,13 @@ if (isEnforced()) {
   syncFromCloud().catch(() => {});
 }
 
+startBackupScheduler(); // automatic backups (configurable under System Settings)
+
 // Minimal, non-sensitive flag so the desktop shell can refuse a restore while View-Only.
 app.get("/api/subscription/locked", (_req, res) => res.json({ locked: getState().locked }));
 
 app.use("/api", activationRoute); // public activation screen endpoints
+app.use("/api", clientDeviceGate); // client PCs must have confirmed the company Client key
 app.use("/api", activationGate); // nothing else works until this PC is activated
 app.use("/api", tenantRoutes);
 app.use("/api", MasterRoute);
@@ -159,6 +168,7 @@ app.use("/api/auth", tenantResolverMiddleware);
 app.use("/api/auth", authRoute);
 
 app.use(authMiddleware);
+app.use(auditTrail); // who changed what (see middlewares/auditTrail.middleware.ts)
 app.use(roleGuard);
 app.use(subscriptionGuard);
 app.use(stripSecrets);

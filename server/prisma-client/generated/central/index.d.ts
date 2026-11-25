@@ -58,6 +58,11 @@ export type ActivationKey = $Result.DefaultSelection<Prisma.$ActivationKeyPayloa
  * 
  */
 export type ActivationDevice = $Result.DefaultSelection<Prisma.$ActivationDevicePayload>
+/**
+ * Model ClientDevice
+ * 
+ */
+export type ClientDevice = $Result.DefaultSelection<Prisma.$ClientDevicePayload>
 
 /**
  * Enums
@@ -282,6 +287,16 @@ export class PrismaClient<
     * ```
     */
   get activationDevice(): Prisma.ActivationDeviceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.clientDevice`: Exposes CRUD operations for the **ClientDevice** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClientDevices
+    * const clientDevices = await prisma.clientDevice.findMany()
+    * ```
+    */
+  get clientDevice(): Prisma.ClientDeviceDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -731,7 +746,8 @@ export namespace Prisma {
     SaasAdmin: 'SaasAdmin',
     AppSetting: 'AppSetting',
     ActivationKey: 'ActivationKey',
-    ActivationDevice: 'ActivationDevice'
+    ActivationDevice: 'ActivationDevice',
+    ClientDevice: 'ClientDevice'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -750,7 +766,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "superAdmin" | "tenant" | "subscriptionPlan" | "portalSubscription" | "portalPayment" | "saasAdmin" | "appSetting" | "activationKey" | "activationDevice"
+      modelProps: "superAdmin" | "tenant" | "subscriptionPlan" | "portalSubscription" | "portalPayment" | "saasAdmin" | "appSetting" | "activationKey" | "activationDevice" | "clientDevice"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1420,6 +1436,80 @@ export namespace Prisma {
           }
         }
       }
+      ClientDevice: {
+        payload: Prisma.$ClientDevicePayload<ExtArgs>
+        fields: Prisma.ClientDeviceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClientDeviceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClientDeviceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>
+          }
+          findFirst: {
+            args: Prisma.ClientDeviceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClientDeviceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>
+          }
+          findMany: {
+            args: Prisma.ClientDeviceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>[]
+          }
+          create: {
+            args: Prisma.ClientDeviceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>
+          }
+          createMany: {
+            args: Prisma.ClientDeviceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClientDeviceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>[]
+          }
+          delete: {
+            args: Prisma.ClientDeviceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>
+          }
+          update: {
+            args: Prisma.ClientDeviceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>
+          }
+          deleteMany: {
+            args: Prisma.ClientDeviceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClientDeviceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClientDeviceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>[]
+          }
+          upsert: {
+            args: Prisma.ClientDeviceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClientDevicePayload>
+          }
+          aggregate: {
+            args: Prisma.ClientDeviceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClientDevice>
+          }
+          groupBy: {
+            args: Prisma.ClientDeviceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClientDeviceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClientDeviceCountArgs<ExtArgs>
+            result: $Utils.Optional<ClientDeviceCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1525,6 +1615,7 @@ export namespace Prisma {
     appSetting?: AppSettingOmit
     activationKey?: ActivationKeyOmit
     activationDevice?: ActivationDeviceOmit
+    clientDevice?: ClientDeviceOmit
   }
 
   /* Types for Logging */
@@ -9265,6 +9356,8 @@ export namespace Prisma {
     status: string | null
     firstActivatedAt: Date | null
     createdAt: Date | null
+    companyId: string | null
+    kind: string | null
   }
 
   export type ActivationKeyMaxAggregateOutputType = {
@@ -9279,6 +9372,8 @@ export namespace Prisma {
     status: string | null
     firstActivatedAt: Date | null
     createdAt: Date | null
+    companyId: string | null
+    kind: string | null
   }
 
   export type ActivationKeyCountAggregateOutputType = {
@@ -9293,6 +9388,8 @@ export namespace Prisma {
     status: number
     firstActivatedAt: number
     createdAt: number
+    companyId: number
+    kind: number
     _all: number
   }
 
@@ -9321,6 +9418,8 @@ export namespace Prisma {
     status?: true
     firstActivatedAt?: true
     createdAt?: true
+    companyId?: true
+    kind?: true
   }
 
   export type ActivationKeyMaxAggregateInputType = {
@@ -9335,6 +9434,8 @@ export namespace Prisma {
     status?: true
     firstActivatedAt?: true
     createdAt?: true
+    companyId?: true
+    kind?: true
   }
 
   export type ActivationKeyCountAggregateInputType = {
@@ -9349,6 +9450,8 @@ export namespace Prisma {
     status?: true
     firstActivatedAt?: true
     createdAt?: true
+    companyId?: true
+    kind?: true
     _all?: true
   }
 
@@ -9450,6 +9553,8 @@ export namespace Prisma {
     status: string
     firstActivatedAt: Date | null
     createdAt: Date
+    companyId: string | null
+    kind: string
     _count: ActivationKeyCountAggregateOutputType | null
     _avg: ActivationKeyAvgAggregateOutputType | null
     _sum: ActivationKeySumAggregateOutputType | null
@@ -9483,6 +9588,8 @@ export namespace Prisma {
     status?: boolean
     firstActivatedAt?: boolean
     createdAt?: boolean
+    companyId?: boolean
+    kind?: boolean
     devices?: boolean | ActivationKey$devicesArgs<ExtArgs>
     _count?: boolean | ActivationKeyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["activationKey"]>
@@ -9499,6 +9606,8 @@ export namespace Prisma {
     status?: boolean
     firstActivatedAt?: boolean
     createdAt?: boolean
+    companyId?: boolean
+    kind?: boolean
   }, ExtArgs["result"]["activationKey"]>
 
   export type ActivationKeySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9513,6 +9622,8 @@ export namespace Prisma {
     status?: boolean
     firstActivatedAt?: boolean
     createdAt?: boolean
+    companyId?: boolean
+    kind?: boolean
   }, ExtArgs["result"]["activationKey"]>
 
   export type ActivationKeySelectScalar = {
@@ -9527,9 +9638,11 @@ export namespace Prisma {
     status?: boolean
     firstActivatedAt?: boolean
     createdAt?: boolean
+    companyId?: boolean
+    kind?: boolean
   }
 
-  export type ActivationKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "tenantId" | "instituteName" | "companyName" | "maxActivations" | "transferLimit" | "transfersUsed" | "status" | "firstActivatedAt" | "createdAt", ExtArgs["result"]["activationKey"]>
+  export type ActivationKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "tenantId" | "instituteName" | "companyName" | "maxActivations" | "transferLimit" | "transfersUsed" | "status" | "firstActivatedAt" | "createdAt" | "companyId" | "kind", ExtArgs["result"]["activationKey"]>
   export type ActivationKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     devices?: boolean | ActivationKey$devicesArgs<ExtArgs>
     _count?: boolean | ActivationKeyCountOutputTypeDefaultArgs<ExtArgs>
@@ -9554,6 +9667,8 @@ export namespace Prisma {
       status: string
       firstActivatedAt: Date | null
       createdAt: Date
+      companyId: string | null
+      kind: string
     }, ExtArgs["result"]["activationKey"]>
     composites: {}
   }
@@ -9989,6 +10104,8 @@ export namespace Prisma {
     readonly status: FieldRef<"ActivationKey", 'String'>
     readonly firstActivatedAt: FieldRef<"ActivationKey", 'DateTime'>
     readonly createdAt: FieldRef<"ActivationKey", 'DateTime'>
+    readonly companyId: FieldRef<"ActivationKey", 'String'>
+    readonly kind: FieldRef<"ActivationKey", 'String'>
   }
     
 
@@ -11526,6 +11643,1051 @@ export namespace Prisma {
 
 
   /**
+   * Model ClientDevice
+   */
+
+  export type AggregateClientDevice = {
+    _count: ClientDeviceCountAggregateOutputType | null
+    _min: ClientDeviceMinAggregateOutputType | null
+    _max: ClientDeviceMaxAggregateOutputType | null
+  }
+
+  export type ClientDeviceMinAggregateOutputType = {
+    id: string | null
+    deviceId: string | null
+    deviceName: string | null
+    os: string | null
+    tokenHash: string | null
+    status: string | null
+    confirmedAt: Date | null
+    lastSeenAt: Date | null
+    lastIp: string | null
+  }
+
+  export type ClientDeviceMaxAggregateOutputType = {
+    id: string | null
+    deviceId: string | null
+    deviceName: string | null
+    os: string | null
+    tokenHash: string | null
+    status: string | null
+    confirmedAt: Date | null
+    lastSeenAt: Date | null
+    lastIp: string | null
+  }
+
+  export type ClientDeviceCountAggregateOutputType = {
+    id: number
+    deviceId: number
+    deviceName: number
+    os: number
+    tokenHash: number
+    status: number
+    confirmedAt: number
+    lastSeenAt: number
+    lastIp: number
+    _all: number
+  }
+
+
+  export type ClientDeviceMinAggregateInputType = {
+    id?: true
+    deviceId?: true
+    deviceName?: true
+    os?: true
+    tokenHash?: true
+    status?: true
+    confirmedAt?: true
+    lastSeenAt?: true
+    lastIp?: true
+  }
+
+  export type ClientDeviceMaxAggregateInputType = {
+    id?: true
+    deviceId?: true
+    deviceName?: true
+    os?: true
+    tokenHash?: true
+    status?: true
+    confirmedAt?: true
+    lastSeenAt?: true
+    lastIp?: true
+  }
+
+  export type ClientDeviceCountAggregateInputType = {
+    id?: true
+    deviceId?: true
+    deviceName?: true
+    os?: true
+    tokenHash?: true
+    status?: true
+    confirmedAt?: true
+    lastSeenAt?: true
+    lastIp?: true
+    _all?: true
+  }
+
+  export type ClientDeviceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClientDevice to aggregate.
+     */
+    where?: ClientDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClientDevices to fetch.
+     */
+    orderBy?: ClientDeviceOrderByWithRelationInput | ClientDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClientDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClientDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClientDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClientDevices
+    **/
+    _count?: true | ClientDeviceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClientDeviceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClientDeviceMaxAggregateInputType
+  }
+
+  export type GetClientDeviceAggregateType<T extends ClientDeviceAggregateArgs> = {
+        [P in keyof T & keyof AggregateClientDevice]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClientDevice[P]>
+      : GetScalarType<T[P], AggregateClientDevice[P]>
+  }
+
+
+
+
+  export type ClientDeviceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClientDeviceWhereInput
+    orderBy?: ClientDeviceOrderByWithAggregationInput | ClientDeviceOrderByWithAggregationInput[]
+    by: ClientDeviceScalarFieldEnum[] | ClientDeviceScalarFieldEnum
+    having?: ClientDeviceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClientDeviceCountAggregateInputType | true
+    _min?: ClientDeviceMinAggregateInputType
+    _max?: ClientDeviceMaxAggregateInputType
+  }
+
+  export type ClientDeviceGroupByOutputType = {
+    id: string
+    deviceId: string
+    deviceName: string
+    os: string
+    tokenHash: string
+    status: string
+    confirmedAt: Date
+    lastSeenAt: Date
+    lastIp: string | null
+    _count: ClientDeviceCountAggregateOutputType | null
+    _min: ClientDeviceMinAggregateOutputType | null
+    _max: ClientDeviceMaxAggregateOutputType | null
+  }
+
+  type GetClientDeviceGroupByPayload<T extends ClientDeviceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClientDeviceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClientDeviceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClientDeviceGroupByOutputType[P]>
+            : GetScalarType<T[P], ClientDeviceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClientDeviceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deviceId?: boolean
+    deviceName?: boolean
+    os?: boolean
+    tokenHash?: boolean
+    status?: boolean
+    confirmedAt?: boolean
+    lastSeenAt?: boolean
+    lastIp?: boolean
+  }, ExtArgs["result"]["clientDevice"]>
+
+  export type ClientDeviceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deviceId?: boolean
+    deviceName?: boolean
+    os?: boolean
+    tokenHash?: boolean
+    status?: boolean
+    confirmedAt?: boolean
+    lastSeenAt?: boolean
+    lastIp?: boolean
+  }, ExtArgs["result"]["clientDevice"]>
+
+  export type ClientDeviceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    deviceId?: boolean
+    deviceName?: boolean
+    os?: boolean
+    tokenHash?: boolean
+    status?: boolean
+    confirmedAt?: boolean
+    lastSeenAt?: boolean
+    lastIp?: boolean
+  }, ExtArgs["result"]["clientDevice"]>
+
+  export type ClientDeviceSelectScalar = {
+    id?: boolean
+    deviceId?: boolean
+    deviceName?: boolean
+    os?: boolean
+    tokenHash?: boolean
+    status?: boolean
+    confirmedAt?: boolean
+    lastSeenAt?: boolean
+    lastIp?: boolean
+  }
+
+  export type ClientDeviceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "deviceId" | "deviceName" | "os" | "tokenHash" | "status" | "confirmedAt" | "lastSeenAt" | "lastIp", ExtArgs["result"]["clientDevice"]>
+
+  export type $ClientDevicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClientDevice"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      deviceId: string
+      deviceName: string
+      os: string
+      tokenHash: string
+      status: string
+      confirmedAt: Date
+      lastSeenAt: Date
+      lastIp: string | null
+    }, ExtArgs["result"]["clientDevice"]>
+    composites: {}
+  }
+
+  type ClientDeviceGetPayload<S extends boolean | null | undefined | ClientDeviceDefaultArgs> = $Result.GetResult<Prisma.$ClientDevicePayload, S>
+
+  type ClientDeviceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClientDeviceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClientDeviceCountAggregateInputType | true
+    }
+
+  export interface ClientDeviceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClientDevice'], meta: { name: 'ClientDevice' } }
+    /**
+     * Find zero or one ClientDevice that matches the filter.
+     * @param {ClientDeviceFindUniqueArgs} args - Arguments to find a ClientDevice
+     * @example
+     * // Get one ClientDevice
+     * const clientDevice = await prisma.clientDevice.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClientDeviceFindUniqueArgs>(args: SelectSubset<T, ClientDeviceFindUniqueArgs<ExtArgs>>): Prisma__ClientDeviceClient<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClientDevice that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClientDeviceFindUniqueOrThrowArgs} args - Arguments to find a ClientDevice
+     * @example
+     * // Get one ClientDevice
+     * const clientDevice = await prisma.clientDevice.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClientDeviceFindUniqueOrThrowArgs>(args: SelectSubset<T, ClientDeviceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClientDeviceClient<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClientDevice that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientDeviceFindFirstArgs} args - Arguments to find a ClientDevice
+     * @example
+     * // Get one ClientDevice
+     * const clientDevice = await prisma.clientDevice.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClientDeviceFindFirstArgs>(args?: SelectSubset<T, ClientDeviceFindFirstArgs<ExtArgs>>): Prisma__ClientDeviceClient<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClientDevice that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientDeviceFindFirstOrThrowArgs} args - Arguments to find a ClientDevice
+     * @example
+     * // Get one ClientDevice
+     * const clientDevice = await prisma.clientDevice.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClientDeviceFindFirstOrThrowArgs>(args?: SelectSubset<T, ClientDeviceFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClientDeviceClient<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClientDevices that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientDeviceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClientDevices
+     * const clientDevices = await prisma.clientDevice.findMany()
+     * 
+     * // Get first 10 ClientDevices
+     * const clientDevices = await prisma.clientDevice.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clientDeviceWithIdOnly = await prisma.clientDevice.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClientDeviceFindManyArgs>(args?: SelectSubset<T, ClientDeviceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClientDevice.
+     * @param {ClientDeviceCreateArgs} args - Arguments to create a ClientDevice.
+     * @example
+     * // Create one ClientDevice
+     * const ClientDevice = await prisma.clientDevice.create({
+     *   data: {
+     *     // ... data to create a ClientDevice
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClientDeviceCreateArgs>(args: SelectSubset<T, ClientDeviceCreateArgs<ExtArgs>>): Prisma__ClientDeviceClient<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClientDevices.
+     * @param {ClientDeviceCreateManyArgs} args - Arguments to create many ClientDevices.
+     * @example
+     * // Create many ClientDevices
+     * const clientDevice = await prisma.clientDevice.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClientDeviceCreateManyArgs>(args?: SelectSubset<T, ClientDeviceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClientDevices and returns the data saved in the database.
+     * @param {ClientDeviceCreateManyAndReturnArgs} args - Arguments to create many ClientDevices.
+     * @example
+     * // Create many ClientDevices
+     * const clientDevice = await prisma.clientDevice.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClientDevices and only return the `id`
+     * const clientDeviceWithIdOnly = await prisma.clientDevice.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClientDeviceCreateManyAndReturnArgs>(args?: SelectSubset<T, ClientDeviceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClientDevice.
+     * @param {ClientDeviceDeleteArgs} args - Arguments to delete one ClientDevice.
+     * @example
+     * // Delete one ClientDevice
+     * const ClientDevice = await prisma.clientDevice.delete({
+     *   where: {
+     *     // ... filter to delete one ClientDevice
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClientDeviceDeleteArgs>(args: SelectSubset<T, ClientDeviceDeleteArgs<ExtArgs>>): Prisma__ClientDeviceClient<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClientDevice.
+     * @param {ClientDeviceUpdateArgs} args - Arguments to update one ClientDevice.
+     * @example
+     * // Update one ClientDevice
+     * const clientDevice = await prisma.clientDevice.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClientDeviceUpdateArgs>(args: SelectSubset<T, ClientDeviceUpdateArgs<ExtArgs>>): Prisma__ClientDeviceClient<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClientDevices.
+     * @param {ClientDeviceDeleteManyArgs} args - Arguments to filter ClientDevices to delete.
+     * @example
+     * // Delete a few ClientDevices
+     * const { count } = await prisma.clientDevice.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClientDeviceDeleteManyArgs>(args?: SelectSubset<T, ClientDeviceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClientDevices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientDeviceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClientDevices
+     * const clientDevice = await prisma.clientDevice.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClientDeviceUpdateManyArgs>(args: SelectSubset<T, ClientDeviceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClientDevices and returns the data updated in the database.
+     * @param {ClientDeviceUpdateManyAndReturnArgs} args - Arguments to update many ClientDevices.
+     * @example
+     * // Update many ClientDevices
+     * const clientDevice = await prisma.clientDevice.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClientDevices and only return the `id`
+     * const clientDeviceWithIdOnly = await prisma.clientDevice.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClientDeviceUpdateManyAndReturnArgs>(args: SelectSubset<T, ClientDeviceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClientDevice.
+     * @param {ClientDeviceUpsertArgs} args - Arguments to update or create a ClientDevice.
+     * @example
+     * // Update or create a ClientDevice
+     * const clientDevice = await prisma.clientDevice.upsert({
+     *   create: {
+     *     // ... data to create a ClientDevice
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClientDevice we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClientDeviceUpsertArgs>(args: SelectSubset<T, ClientDeviceUpsertArgs<ExtArgs>>): Prisma__ClientDeviceClient<$Result.GetResult<Prisma.$ClientDevicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClientDevices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientDeviceCountArgs} args - Arguments to filter ClientDevices to count.
+     * @example
+     * // Count the number of ClientDevices
+     * const count = await prisma.clientDevice.count({
+     *   where: {
+     *     // ... the filter for the ClientDevices we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClientDeviceCountArgs>(
+      args?: Subset<T, ClientDeviceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClientDeviceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClientDevice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientDeviceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClientDeviceAggregateArgs>(args: Subset<T, ClientDeviceAggregateArgs>): Prisma.PrismaPromise<GetClientDeviceAggregateType<T>>
+
+    /**
+     * Group by ClientDevice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientDeviceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClientDeviceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClientDeviceGroupByArgs['orderBy'] }
+        : { orderBy?: ClientDeviceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClientDeviceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClientDeviceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClientDevice model
+   */
+  readonly fields: ClientDeviceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClientDevice.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClientDeviceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClientDevice model
+   */
+  interface ClientDeviceFieldRefs {
+    readonly id: FieldRef<"ClientDevice", 'String'>
+    readonly deviceId: FieldRef<"ClientDevice", 'String'>
+    readonly deviceName: FieldRef<"ClientDevice", 'String'>
+    readonly os: FieldRef<"ClientDevice", 'String'>
+    readonly tokenHash: FieldRef<"ClientDevice", 'String'>
+    readonly status: FieldRef<"ClientDevice", 'String'>
+    readonly confirmedAt: FieldRef<"ClientDevice", 'DateTime'>
+    readonly lastSeenAt: FieldRef<"ClientDevice", 'DateTime'>
+    readonly lastIp: FieldRef<"ClientDevice", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClientDevice findUnique
+   */
+  export type ClientDeviceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * Filter, which ClientDevice to fetch.
+     */
+    where: ClientDeviceWhereUniqueInput
+  }
+
+  /**
+   * ClientDevice findUniqueOrThrow
+   */
+  export type ClientDeviceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * Filter, which ClientDevice to fetch.
+     */
+    where: ClientDeviceWhereUniqueInput
+  }
+
+  /**
+   * ClientDevice findFirst
+   */
+  export type ClientDeviceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * Filter, which ClientDevice to fetch.
+     */
+    where?: ClientDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClientDevices to fetch.
+     */
+    orderBy?: ClientDeviceOrderByWithRelationInput | ClientDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClientDevices.
+     */
+    cursor?: ClientDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClientDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClientDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClientDevices.
+     */
+    distinct?: ClientDeviceScalarFieldEnum | ClientDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * ClientDevice findFirstOrThrow
+   */
+  export type ClientDeviceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * Filter, which ClientDevice to fetch.
+     */
+    where?: ClientDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClientDevices to fetch.
+     */
+    orderBy?: ClientDeviceOrderByWithRelationInput | ClientDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClientDevices.
+     */
+    cursor?: ClientDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClientDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClientDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClientDevices.
+     */
+    distinct?: ClientDeviceScalarFieldEnum | ClientDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * ClientDevice findMany
+   */
+  export type ClientDeviceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * Filter, which ClientDevices to fetch.
+     */
+    where?: ClientDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClientDevices to fetch.
+     */
+    orderBy?: ClientDeviceOrderByWithRelationInput | ClientDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClientDevices.
+     */
+    cursor?: ClientDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClientDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClientDevices.
+     */
+    skip?: number
+    distinct?: ClientDeviceScalarFieldEnum | ClientDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * ClientDevice create
+   */
+  export type ClientDeviceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ClientDevice.
+     */
+    data: XOR<ClientDeviceCreateInput, ClientDeviceUncheckedCreateInput>
+  }
+
+  /**
+   * ClientDevice createMany
+   */
+  export type ClientDeviceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClientDevices.
+     */
+    data: ClientDeviceCreateManyInput | ClientDeviceCreateManyInput[]
+  }
+
+  /**
+   * ClientDevice createManyAndReturn
+   */
+  export type ClientDeviceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClientDevices.
+     */
+    data: ClientDeviceCreateManyInput | ClientDeviceCreateManyInput[]
+  }
+
+  /**
+   * ClientDevice update
+   */
+  export type ClientDeviceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ClientDevice.
+     */
+    data: XOR<ClientDeviceUpdateInput, ClientDeviceUncheckedUpdateInput>
+    /**
+     * Choose, which ClientDevice to update.
+     */
+    where: ClientDeviceWhereUniqueInput
+  }
+
+  /**
+   * ClientDevice updateMany
+   */
+  export type ClientDeviceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClientDevices.
+     */
+    data: XOR<ClientDeviceUpdateManyMutationInput, ClientDeviceUncheckedUpdateManyInput>
+    /**
+     * Filter which ClientDevices to update
+     */
+    where?: ClientDeviceWhereInput
+    /**
+     * Limit how many ClientDevices to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClientDevice updateManyAndReturn
+   */
+  export type ClientDeviceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * The data used to update ClientDevices.
+     */
+    data: XOR<ClientDeviceUpdateManyMutationInput, ClientDeviceUncheckedUpdateManyInput>
+    /**
+     * Filter which ClientDevices to update
+     */
+    where?: ClientDeviceWhereInput
+    /**
+     * Limit how many ClientDevices to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClientDevice upsert
+   */
+  export type ClientDeviceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ClientDevice to update in case it exists.
+     */
+    where: ClientDeviceWhereUniqueInput
+    /**
+     * In case the ClientDevice found by the `where` argument doesn't exist, create a new ClientDevice with this data.
+     */
+    create: XOR<ClientDeviceCreateInput, ClientDeviceUncheckedCreateInput>
+    /**
+     * In case the ClientDevice was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClientDeviceUpdateInput, ClientDeviceUncheckedUpdateInput>
+  }
+
+  /**
+   * ClientDevice delete
+   */
+  export type ClientDeviceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+    /**
+     * Filter which ClientDevice to delete.
+     */
+    where: ClientDeviceWhereUniqueInput
+  }
+
+  /**
+   * ClientDevice deleteMany
+   */
+  export type ClientDeviceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClientDevices to delete
+     */
+    where?: ClientDeviceWhereInput
+    /**
+     * Limit how many ClientDevices to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClientDevice without action
+   */
+  export type ClientDeviceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientDevice
+     */
+    select?: ClientDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClientDevice
+     */
+    omit?: ClientDeviceOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -11665,7 +12827,9 @@ export namespace Prisma {
     transfersUsed: 'transfersUsed',
     status: 'status',
     firstActivatedAt: 'firstActivatedAt',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    companyId: 'companyId',
+    kind: 'kind'
   };
 
   export type ActivationKeyScalarFieldEnum = (typeof ActivationKeyScalarFieldEnum)[keyof typeof ActivationKeyScalarFieldEnum]
@@ -11684,6 +12848,21 @@ export namespace Prisma {
   };
 
   export type ActivationDeviceScalarFieldEnum = (typeof ActivationDeviceScalarFieldEnum)[keyof typeof ActivationDeviceScalarFieldEnum]
+
+
+  export const ClientDeviceScalarFieldEnum: {
+    id: 'id',
+    deviceId: 'deviceId',
+    deviceName: 'deviceName',
+    os: 'os',
+    tokenHash: 'tokenHash',
+    status: 'status',
+    confirmedAt: 'confirmedAt',
+    lastSeenAt: 'lastSeenAt',
+    lastIp: 'lastIp'
+  };
+
+  export type ClientDeviceScalarFieldEnum = (typeof ClientDeviceScalarFieldEnum)[keyof typeof ClientDeviceScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -12342,6 +13521,8 @@ export namespace Prisma {
     status?: StringFilter<"ActivationKey"> | string
     firstActivatedAt?: DateTimeNullableFilter<"ActivationKey"> | Date | string | null
     createdAt?: DateTimeFilter<"ActivationKey"> | Date | string
+    companyId?: StringNullableFilter<"ActivationKey"> | string | null
+    kind?: StringFilter<"ActivationKey"> | string
     devices?: ActivationDeviceListRelationFilter
   }
 
@@ -12357,12 +13538,15 @@ export namespace Prisma {
     status?: SortOrder
     firstActivatedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrderInput | SortOrder
+    kind?: SortOrder
     devices?: ActivationDeviceOrderByRelationAggregateInput
   }
 
   export type ActivationKeyWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     key?: string
+    tenantId_companyId_kind?: ActivationKeyTenantIdCompanyIdKindCompoundUniqueInput
     AND?: ActivationKeyWhereInput | ActivationKeyWhereInput[]
     OR?: ActivationKeyWhereInput[]
     NOT?: ActivationKeyWhereInput | ActivationKeyWhereInput[]
@@ -12375,8 +13559,10 @@ export namespace Prisma {
     status?: StringFilter<"ActivationKey"> | string
     firstActivatedAt?: DateTimeNullableFilter<"ActivationKey"> | Date | string | null
     createdAt?: DateTimeFilter<"ActivationKey"> | Date | string
+    companyId?: StringNullableFilter<"ActivationKey"> | string | null
+    kind?: StringFilter<"ActivationKey"> | string
     devices?: ActivationDeviceListRelationFilter
-  }, "id" | "key">
+  }, "id" | "key" | "tenantId_companyId_kind">
 
   export type ActivationKeyOrderByWithAggregationInput = {
     id?: SortOrder
@@ -12390,6 +13576,8 @@ export namespace Prisma {
     status?: SortOrder
     firstActivatedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrderInput | SortOrder
+    kind?: SortOrder
     _count?: ActivationKeyCountOrderByAggregateInput
     _avg?: ActivationKeyAvgOrderByAggregateInput
     _max?: ActivationKeyMaxOrderByAggregateInput
@@ -12412,6 +13600,8 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"ActivationKey"> | string
     firstActivatedAt?: DateTimeNullableWithAggregatesFilter<"ActivationKey"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ActivationKey"> | Date | string
+    companyId?: StringNullableWithAggregatesFilter<"ActivationKey"> | string | null
+    kind?: StringWithAggregatesFilter<"ActivationKey"> | string
   }
 
   export type ActivationDeviceWhereInput = {
@@ -12488,6 +13678,78 @@ export namespace Prisma {
     activatedAt?: DateTimeWithAggregatesFilter<"ActivationDevice"> | Date | string
     lastVerifiedAt?: DateTimeWithAggregatesFilter<"ActivationDevice"> | Date | string
     deactivatedAt?: DateTimeNullableWithAggregatesFilter<"ActivationDevice"> | Date | string | null
+  }
+
+  export type ClientDeviceWhereInput = {
+    AND?: ClientDeviceWhereInput | ClientDeviceWhereInput[]
+    OR?: ClientDeviceWhereInput[]
+    NOT?: ClientDeviceWhereInput | ClientDeviceWhereInput[]
+    id?: StringFilter<"ClientDevice"> | string
+    deviceId?: StringFilter<"ClientDevice"> | string
+    deviceName?: StringFilter<"ClientDevice"> | string
+    os?: StringFilter<"ClientDevice"> | string
+    tokenHash?: StringFilter<"ClientDevice"> | string
+    status?: StringFilter<"ClientDevice"> | string
+    confirmedAt?: DateTimeFilter<"ClientDevice"> | Date | string
+    lastSeenAt?: DateTimeFilter<"ClientDevice"> | Date | string
+    lastIp?: StringNullableFilter<"ClientDevice"> | string | null
+  }
+
+  export type ClientDeviceOrderByWithRelationInput = {
+    id?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    tokenHash?: SortOrder
+    status?: SortOrder
+    confirmedAt?: SortOrder
+    lastSeenAt?: SortOrder
+    lastIp?: SortOrderInput | SortOrder
+  }
+
+  export type ClientDeviceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    deviceId?: string
+    AND?: ClientDeviceWhereInput | ClientDeviceWhereInput[]
+    OR?: ClientDeviceWhereInput[]
+    NOT?: ClientDeviceWhereInput | ClientDeviceWhereInput[]
+    deviceName?: StringFilter<"ClientDevice"> | string
+    os?: StringFilter<"ClientDevice"> | string
+    tokenHash?: StringFilter<"ClientDevice"> | string
+    status?: StringFilter<"ClientDevice"> | string
+    confirmedAt?: DateTimeFilter<"ClientDevice"> | Date | string
+    lastSeenAt?: DateTimeFilter<"ClientDevice"> | Date | string
+    lastIp?: StringNullableFilter<"ClientDevice"> | string | null
+  }, "id" | "deviceId">
+
+  export type ClientDeviceOrderByWithAggregationInput = {
+    id?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    tokenHash?: SortOrder
+    status?: SortOrder
+    confirmedAt?: SortOrder
+    lastSeenAt?: SortOrder
+    lastIp?: SortOrderInput | SortOrder
+    _count?: ClientDeviceCountOrderByAggregateInput
+    _max?: ClientDeviceMaxOrderByAggregateInput
+    _min?: ClientDeviceMinOrderByAggregateInput
+  }
+
+  export type ClientDeviceScalarWhereWithAggregatesInput = {
+    AND?: ClientDeviceScalarWhereWithAggregatesInput | ClientDeviceScalarWhereWithAggregatesInput[]
+    OR?: ClientDeviceScalarWhereWithAggregatesInput[]
+    NOT?: ClientDeviceScalarWhereWithAggregatesInput | ClientDeviceScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ClientDevice"> | string
+    deviceId?: StringWithAggregatesFilter<"ClientDevice"> | string
+    deviceName?: StringWithAggregatesFilter<"ClientDevice"> | string
+    os?: StringWithAggregatesFilter<"ClientDevice"> | string
+    tokenHash?: StringWithAggregatesFilter<"ClientDevice"> | string
+    status?: StringWithAggregatesFilter<"ClientDevice"> | string
+    confirmedAt?: DateTimeWithAggregatesFilter<"ClientDevice"> | Date | string
+    lastSeenAt?: DateTimeWithAggregatesFilter<"ClientDevice"> | Date | string
+    lastIp?: StringNullableWithAggregatesFilter<"ClientDevice"> | string | null
   }
 
   export type SuperAdminCreateInput = {
@@ -13181,6 +14443,8 @@ export namespace Prisma {
     status?: string
     firstActivatedAt?: Date | string | null
     createdAt?: Date | string
+    companyId?: string | null
+    kind?: string
     devices?: ActivationDeviceCreateNestedManyWithoutActivationKeyInput
   }
 
@@ -13196,6 +14460,8 @@ export namespace Prisma {
     status?: string
     firstActivatedAt?: Date | string | null
     createdAt?: Date | string
+    companyId?: string | null
+    kind?: string
     devices?: ActivationDeviceUncheckedCreateNestedManyWithoutActivationKeyInput
   }
 
@@ -13211,6 +14477,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     devices?: ActivationDeviceUpdateManyWithoutActivationKeyNestedInput
   }
 
@@ -13226,6 +14494,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     devices?: ActivationDeviceUncheckedUpdateManyWithoutActivationKeyNestedInput
   }
 
@@ -13241,6 +14511,8 @@ export namespace Prisma {
     status?: string
     firstActivatedAt?: Date | string | null
     createdAt?: Date | string
+    companyId?: string | null
+    kind?: string
   }
 
   export type ActivationKeyUpdateManyMutationInput = {
@@ -13255,6 +14527,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type ActivationKeyUncheckedUpdateManyInput = {
@@ -13269,6 +14543,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type ActivationDeviceCreateInput = {
@@ -13352,6 +14628,90 @@ export namespace Prisma {
     activatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastVerifiedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deactivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ClientDeviceCreateInput = {
+    id?: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    tokenHash: string
+    status?: string
+    confirmedAt?: Date | string
+    lastSeenAt?: Date | string
+    lastIp?: string | null
+  }
+
+  export type ClientDeviceUncheckedCreateInput = {
+    id?: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    tokenHash: string
+    status?: string
+    confirmedAt?: Date | string
+    lastSeenAt?: Date | string
+    lastIp?: string | null
+  }
+
+  export type ClientDeviceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    confirmedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastIp?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ClientDeviceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    confirmedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastIp?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ClientDeviceCreateManyInput = {
+    id?: string
+    deviceId: string
+    deviceName: string
+    os?: string
+    tokenHash: string
+    status?: string
+    confirmedAt?: Date | string
+    lastSeenAt?: Date | string
+    lastIp?: string | null
+  }
+
+  export type ClientDeviceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    confirmedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastIp?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ClientDeviceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    deviceId?: StringFieldUpdateOperationsInput | string
+    deviceName?: StringFieldUpdateOperationsInput | string
+    os?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    confirmedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastIp?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -13884,6 +15244,12 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ActivationKeyTenantIdCompanyIdKindCompoundUniqueInput = {
+    tenantId: string
+    companyId: string
+    kind: string
+  }
+
   export type ActivationKeyCountOrderByAggregateInput = {
     id?: SortOrder
     key?: SortOrder
@@ -13896,6 +15262,8 @@ export namespace Prisma {
     status?: SortOrder
     firstActivatedAt?: SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrder
+    kind?: SortOrder
   }
 
   export type ActivationKeyAvgOrderByAggregateInput = {
@@ -13916,6 +15284,8 @@ export namespace Prisma {
     status?: SortOrder
     firstActivatedAt?: SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrder
+    kind?: SortOrder
   }
 
   export type ActivationKeyMinOrderByAggregateInput = {
@@ -13930,6 +15300,8 @@ export namespace Prisma {
     status?: SortOrder
     firstActivatedAt?: SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrder
+    kind?: SortOrder
   }
 
   export type ActivationKeySumOrderByAggregateInput = {
@@ -13982,6 +15354,42 @@ export namespace Prisma {
     activatedAt?: SortOrder
     lastVerifiedAt?: SortOrder
     deactivatedAt?: SortOrder
+  }
+
+  export type ClientDeviceCountOrderByAggregateInput = {
+    id?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    tokenHash?: SortOrder
+    status?: SortOrder
+    confirmedAt?: SortOrder
+    lastSeenAt?: SortOrder
+    lastIp?: SortOrder
+  }
+
+  export type ClientDeviceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    tokenHash?: SortOrder
+    status?: SortOrder
+    confirmedAt?: SortOrder
+    lastSeenAt?: SortOrder
+    lastIp?: SortOrder
+  }
+
+  export type ClientDeviceMinOrderByAggregateInput = {
+    id?: SortOrder
+    deviceId?: SortOrder
+    deviceName?: SortOrder
+    os?: SortOrder
+    tokenHash?: SortOrder
+    status?: SortOrder
+    confirmedAt?: SortOrder
+    lastSeenAt?: SortOrder
+    lastIp?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -14361,6 +15769,8 @@ export namespace Prisma {
     status?: string
     firstActivatedAt?: Date | string | null
     createdAt?: Date | string
+    companyId?: string | null
+    kind?: string
   }
 
   export type ActivationKeyUncheckedCreateWithoutDevicesInput = {
@@ -14375,6 +15785,8 @@ export namespace Prisma {
     status?: string
     firstActivatedAt?: Date | string | null
     createdAt?: Date | string
+    companyId?: string | null
+    kind?: string
   }
 
   export type ActivationKeyCreateOrConnectWithoutDevicesInput = {
@@ -14405,6 +15817,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type ActivationKeyUncheckedUpdateWithoutDevicesInput = {
@@ -14419,6 +15833,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     firstActivatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type ActivationDeviceCreateManyActivationKeyInput = {

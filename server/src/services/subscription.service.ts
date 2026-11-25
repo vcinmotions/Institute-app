@@ -215,7 +215,7 @@ export function getState(): SubscriptionState {
   if (mode === "STANDALONE") {
     const lic = act;
     return state({
-      status: lic.viewOnly ? (lic.status === "CLOCK_TAMPERED" ? "CLOCK_TAMPERED" : "EXPIRED") : "ACTIVE",
+      status: lic.viewOnly ? (lic.status === "CLOCK_TAMPERED" ? "CLOCK_TAMPERED" : lic.status === "INVALID" ? "TAMPERED" : "EXPIRED") : "ACTIVE",
       locked: lic.viewOnly,
       blocked: false,
       mode,
@@ -224,7 +224,7 @@ export function getState(): SubscriptionState {
       plan: "STANDALONE",
       daysLeft: lic.daysLeft,
       lastSyncAt: lic.lastVerifiedAt,
-      message: lic.viewOnly ? lic.message : `${lic.daysLeft} day(s) left on the standalone licence.`,
+      message: lic.viewOnly ? lic.message : lic.message,
     });
   }
   // ENABLED: a clock problem on the licence also makes the app view-only.
@@ -351,10 +351,9 @@ export async function syncFromCloud(credentials?: {
   password: string;
 }): Promise<{ ok: boolean; error?: string }> {
   const mode = getMode();
-  if (!mode) return { ok: true };
+  if (!mode || mode === "STANDALONE") return { ok: true }; // local mode never calls the portal
   // Both modes: confirm this PC is still activated and pick up renewals (best effort, offline-safe).
   const act = await verifyWithPortal().catch(() => ({ ok: false }));
-  if (mode === "STANDALONE") return { ok: act.ok };
   const api = apiBase();
   if (!api) return { ok: false, error: "The portal address is not configured in this build." };
 

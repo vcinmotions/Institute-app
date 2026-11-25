@@ -6,6 +6,7 @@ import { ensureUniqueEnquiry } from "../domain/enquiry/enquiryRules";
 import { buildEnquiryWhere } from "../filters/enquiry.filter";
 import { buildEnquiryOrderBy } from "../filters/enquiry.sort";
 import { parseDate, parseDateISO } from "../helpers/date";
+import { validateMobile, validateEmailAddress, validateDate, firstError } from "../validators/common";
 import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "../utils/Normalize";
 import { normalizeEnquiryInput } from "../utils/normalizer/enquiryNormalizer";
 
@@ -190,6 +191,13 @@ export async function createEnquiryService({
   data: any;
 }) {
 
+  const invalid = firstError(
+    validateMobile(data.contact, "Contact number"),
+    validateMobile(data.alternateContact, "Alternate contact number"),
+    validateEmailAddress(data.email),
+    validateDate(data.dob, "Date of birth", { notFuture: true })
+  );
+  if (invalid) throw Object.assign(new Error(invalid), { status: 400, validation: true });
   const normalizedData = normalizeEnquiryInput(data);
 
   // 1️⃣ Convert empty strings to null for database safety

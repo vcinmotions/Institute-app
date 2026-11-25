@@ -6,6 +6,18 @@ import { companiesForUser, ensureMasterCompany } from "../utils/institute";
 
 const ALLOWED_ROLES = ["ADMIN", "FRONT_DESK", "ACCOUNTANT", "VIEW_ONLY", "FACULTY"];
 
+
+/** Validates an optional custom (Super-Admin defined) role. Returns {id|null|undefined, error}. undefined = leave unchanged. */
+async function parseCustomRole(db: any, user: any, raw: any): Promise<{ id?: number | null; error?: string }> {
+  if (raw === undefined) return { id: undefined };
+  if (raw === null || raw === "") return { id: null };
+  const id = Number(raw);
+  if (!Number.isInteger(id)) return { error: "Invalid custom role." };
+  const found = await db.accessRole.findFirst({ where: { id, clientAdminId: String(user.clientAdminId) } });
+  if (!found) return { error: "Custom role not found." };
+  return { id };
+}
+
 // =============================
 // ✅ Create a new Role-based User (sub-admin)
 // =============================
@@ -43,7 +55,10 @@ async function parseAssignments(db: any, user: any, raw: any): Promise<{ list?: 
 }
 
 export async function createRoleUserController(req: Request, res: Response) {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
+  const hasCustom = req.body.customRoleId !== undefined && req.body.customRoleId !== null && req.body.customRoleId !== "";
+  // A custom role user is stored with the lowest built-in role (VIEW_ONLY) as a safe base.
+  const role = hasCustom ? "VIEW_ONLY" : req.body.role;
 
   if (!name || !email || !password || !role) {
     return res.status(400).json({
@@ -87,8 +102,11 @@ export async function createRoleUserController(req: Request, res: Response) {
         .json({ error: "User with this email already exists" });
     }
 
+    const custom = await parseCustomRole(tenantPrisma, user, req.body.customRoleId);
+    if (custom.error) return res.status(400).json({ error: custom.error });
     const parsed = await parseAssignments(tenantPrisma, user, req.body.companies);
     if (parsed.error) return res.status(400).json({ error: parsed.error });
+    if (custom.id && parsed.list) parsed.list.forEach((a) => { a.role = "VIEW_ONLY"; });
     // No list given: the user belongs to the company the admin is working in.
     const assignments: Assignment[] = parsed.list ?? [{ companyId: clientAdminId, role }];
     const homeAssignment = assignments.find((a) => a.companyId === clientAdminId) ?? assignments[0];
@@ -103,6 +121,7 @@ export async function createRoleUserController(req: Request, res: Response) {
         email,
         password: hashedPassword,
         role: homeAssignment.role as any,
+        customRoleId: custom.id ?? null,
         country: clientAdmin.country,
         state: clientAdmin.state,
         city: clientAdmin.city,
@@ -136,7 +155,9 @@ export async function createRoleUserController(req: Request, res: Response) {
 // ✅ Update a new Role-based User (sub-admin)
 // =============================
 export async function updateRoleUserController(req: Request, res: Response) {
-  const { name, email, role, password } = req.body;
+  const { name, email, password } = req.body;
+  const customInput = req.body.customRoleId;
+  const role = customInput !== undefined && customInput !== null && customInput !== "" ? "VIEW_ONLY" : req.body.role;
   const id = String(req.params.id);
 
   if (!name || !email || !role) {
@@ -175,8 +196,11 @@ export async function updateRoleUserController(req: Request, res: Response) {
     }
 
     // ✅ Update RoleUser
+    const custom = await parseCustomRole(tenantPrisma, user, req.body.customRoleId);
+    if (custom.error) return res.status(400).json({ error: custom.error });
     const parsed = await parseAssignments(tenantPrisma, user, req.body.companies);
     if (parsed.error) return res.status(400).json({ error: parsed.error });
+    if (custom.id && parsed.list) parsed.list.forEach((a) => { a.role = "VIEW_ONLY"; });
     const assignments = parsed.list;
     const current = await tenantPrisma.roleUser.findUnique({ where: { id }, select: { clientAdminId: true } });
     if (!current) return res.status(404).json({ error: "User not found" });
@@ -198,6 +222,7 @@ export async function updateRoleUserController(req: Request, res: Response) {
           name,
           email,
           role: (home ? home.role : role) as any,
+          ...(custom.id !== undefined ? { customRoleId: custom.id } : {}),
           ...(home ? { clientAdminId: home.companyId } : {}),
           ...(hashedPassword ? { password: hashedPassword } : {}),
         },
@@ -293,6 +318,8 @@ export async function getRoleUsersController(req: Request, res: Response) {
         name: true,
         email: true,
         role: true,
+        customRoleId: true,
+        customRole: { select: { name: true } },
         createdAt: true,
         companyAccess: { select: { clientAdminId: true, role: true } },
       },

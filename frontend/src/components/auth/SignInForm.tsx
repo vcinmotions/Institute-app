@@ -11,8 +11,10 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useLoginUser, useSelectCompany, CompanyPrompt } from "@/hooks/useLoginUser";
 import Select from "@/components/form/Select";
+import { useBranding } from "@/hooks/useBranding";
 
 export default function SignInForm() {
+  const branding = useBranding();
   const [password, setPassword] = useState("");
   const [identifier, setIdentifier] = useState(""); // Can be email or username
   const [showPassword, setShowPassword] = useState(false);
@@ -152,6 +154,12 @@ export default function SignInForm() {
                   : error instanceof Error
                     ? error.message
                     : ((error as any)?.error ?? "Something went wrong.")}
+              </div>
+            )}
+            {(branding.logoSrc || branding.instituteName) && (
+              <div className="mb-4 flex items-center gap-3">
+                {branding.logoSrc && <img src={branding.logoSrc} alt="" className="h-12 w-auto max-w-[160px] object-contain" />}
+                {branding.instituteName && <span className="text-lg font-semibold text-gray-700 dark:text-white/80">{branding.instituteName}</span>}
               </div>
             )}
             <h1 className="text-2xl sm:text-3xl mb-2 font-semibold text-gray-800 dark:text-white/90">

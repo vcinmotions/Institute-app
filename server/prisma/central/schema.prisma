@@ -131,7 +131,12 @@ model ActivationKey {
   status           String   @default("ACTIVE") // ACTIVE | REVOKED
   firstActivatedAt DateTime?
   createdAt        DateTime @default(now())
+  // One company has exactly two keys: SERVER (1 PC, the local server) and CLIENT (unlimited client PCs).
+  companyId        String?  // ClientAdmin.id inside the institute database
+  kind             String   @default("SERVER") // SERVER | CLIENT
   devices          ActivationDevice[]
+
+  @@unique([tenantId, companyId, kind])
 }
 
 model ActivationDevice {
@@ -147,4 +152,17 @@ model ActivationDevice {
   activationKey   ActivationKey @relation(fields: [activationKeyId], references: [id], onDelete: Cascade)
 
   @@unique([activationKeyId, deviceId])
+}
+
+// ---- Local server only: client PCs (laptops / desktops) that confirmed the company's Client key ----
+model ClientDevice {
+  id          String   @id @default(uuid())
+  deviceId    String   @unique
+  deviceName  String
+  os          String   @default("")
+  tokenHash   String
+  status      String   @default("ACTIVE") // ACTIVE | REVOKED
+  confirmedAt DateTime @default(now())
+  lastSeenAt  DateTime @default(now())
+  lastIp      String?
 }

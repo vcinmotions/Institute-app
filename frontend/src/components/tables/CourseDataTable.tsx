@@ -95,7 +95,7 @@ export default function CourseDataTable({
                         >
                           <button
                             className="rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
-                            onClick={() => handleEditLab(item)}
+                            data-perm="update:course" onClick={() => handleEditLab(item)}
                           >
                             <svg
                               width="15"

@@ -8,7 +8,8 @@ import { getState } from "../services/subscription.service";
 const OPEN = [
   /^\/(device-)?activation(\/|$)/,
   /^\/subscription\/(locked|me)$/,
-  /^\/setup\/(status|identity)$/,
+  /^\/setup(\/|$)/, // first-time setup activates the server
+  /^\/subscription\/sync$/,
   /^\/app-settings$/,
 ];
 

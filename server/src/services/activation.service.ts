@@ -6,6 +6,7 @@ import { getUserDataPath } from "../middlewares/runtimePaths";
 import { openSigned } from "./licenseCrypto";
 import { getDeviceInfo, localMacKey } from "./device.service";
 import { apiBase, buildConfigBroken, getMode } from "./buildConfig.service";
+import { getLocalState } from "./localLicense.service";
 
 /**
  * EXE activation (per PC).
@@ -31,6 +32,11 @@ export type ActivationLicense = {
   maxDevices: number;
   issuedAt: string;
   nonce?: string;
+  role?: "SERVER";
+  companyId?: string | null;
+  /** Hash of the company's Client key; client PCs are confirmed against this offline. */
+  clientKeyId?: string | null;
+  clientKeyHash?: string | null;
 };
 
 type Stored = {
@@ -92,22 +98,8 @@ const empty = (p: Partial<ActivationState> & Pick<ActivationState, "status" | "b
   validUntil: null, daysLeft: null, lastVerifiedAt: null, keyId: null, ...p,
 });
 
-/** Evidence of a rolled-back clock: files stamped in the future. Reused from the subscription guard. */
-export function newestFileEvidenceMs(): number {
-  if (process.env.SUBSCRIPTION_FILE_CLOCK_CHECK === "off") return 0;
-  let newest = 0;
-  for (const dir of [os.tmpdir(), getUserDataPath(), path.join(getUserDataPath(), "data")]) {
-    try {
-      for (const n of fs.readdirSync(dir).slice(0, 1500)) {
-        try {
-          const m = fs.statSync(path.join(dir, n)).mtimeMs;
-          if (m > newest) newest = m;
-        } catch { /* skip */ }
-      }
-    } catch { /* skip */ }
-  }
-  return newest;
-}
+export { newestFileEvidenceMs } from "./clockEvidence";
+import { newestFileEvidenceMs } from "./clockEvidence";
 
 export function getActivationState(nowMs: number = Date.now()): ActivationState {
   const broken = buildConfigBroken();
@@ -118,6 +110,9 @@ export function getActivationState(nowMs: number = Date.now()): ActivationState 
   if (!mode) {
     return { ...empty({ status: "UNMANAGED", blocked: false, viewOnly: false, message: "Licensing is not enabled." }), required: false };
   }
+
+  // Local mode (anything but ENABLED): no keys at all. The app is valid for a fixed number of months from its first run.
+  if (mode === "STANDALONE") return getLocalState(nowMs);
 
   const rec = read();
   if (!rec) {
@@ -156,12 +151,8 @@ export function getActivationState(nowMs: number = Date.now()): ActivationState 
     try { write({ ...rec, lastSeenAt: iso, lastSeenMac: mac(`seen:${iso}`) }); } catch { /* read-only disk */ }
   }
 
-  const until = Date.parse(lic.validUntil);
-  const daysLeft = Math.ceil((until - nowMs) / DAY);
-  if (mode === "STANDALONE" && !(until > nowMs)) {
-    return empty({ ...base, status: "ACTIVATED", blocked: false, viewOnly: true, daysLeft: 0, message: "Your standalone licence has expired. The application is in View-Only Mode. Renew online through the subscriber portal to restore full access." });
-  }
-  return empty({ ...base, status: "ACTIVATED", blocked: false, viewOnly: false, daysLeft: mode === "STANDALONE" ? daysLeft : null, message: "Activated." });
+  // Keyed mode: expiry is the portal subscription (see subscription.service); the licence only proves this PC is registered.
+  return empty({ ...base, status: "ACTIVATED", blocked: false, viewOnly: false, daysLeft: null, message: "Activated." });
 }
 
 // ---------------- talking to the portal ----------------
@@ -233,4 +224,30 @@ export async function verifyWithPortal(): Promise<{ ok: boolean; error?: string 
     return { ok: false, error: r.data?.error };
   }
   return { ok: false, error: r.data?.error }; // offline: keep working with the stored licence
+}
+
+/** The verified licence of this server, or null (never trust anything stored next to it). */
+export function readLicenseInfo(): ActivationLicense | null {
+  const rec = read();
+  if (!rec) return null;
+  const lic = openSigned<ActivationLicense>("ACTIVATION", rec.payloadJson, rec.signature);
+  return lic && lic.deviceId === getDeviceInfo().deviceId ? lic : null;
+}
+
+export type ClaimResult = {
+  ok: boolean; error?: string; reason?: string;
+  serverKey?: string; clientKey?: string; company?: { id: string; name: string; instituteName: string };
+};
+
+/**
+ * First-time server setup: the portal registers THIS PC on the chosen company's Server key and returns the signed
+ * licence together with the company's Server key and Client key.
+ */
+export async function claimServerFromPortal(args: { email: string; password: string; companyId: string }): Promise<ClaimResult> {
+  const nonce = crypto.randomBytes(16).toString("hex");
+  const r = await post("/api/activation/claim-server", { ...args, ...getDeviceInfo(), nonce });
+  if (!r.ok) return { ok: false, error: r.data?.error || `Portal error ${r.status}`, reason: r.data?.reason };
+  const stored = storeLicense(r.data.payloadJson, r.data.signature, nonce);
+  if (!stored.ok) return { ok: false, error: stored.error };
+  return { ok: true, serverKey: r.data.serverKey, clientKey: r.data.clientKey, company: r.data.company };
 }

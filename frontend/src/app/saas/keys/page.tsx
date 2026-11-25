@@ -6,7 +6,7 @@ import { saasApi, getSaasToken } from "@/lib/saasApi";
 
 type Dev = { id: string; deviceId: string; deviceName: string; os: string; status: string; activatedAt: string; lastVerifiedAt: string };
 type Key = {
-  id: string; key: string; instituteName: string; companyName: string; maxActivations: number; activatedPCs: number;
+  id: string; key: string; kind?: "SERVER" | "CLIENT"; unlimited?: boolean; instituteName: string; companyName: string; maxActivations: number; activatedPCs: number;
   transferLimit: number; transfersUsed: number; status: string; devices: Dev[];
 };
 type Inst = { tenantId: string; instituteName: string; name: string; isCompany?: boolean };
@@ -18,6 +18,12 @@ export default function ActivationKeysPage() {
   const [insts, setInsts] = useState<Inst[]>([]);
   const [form, setForm] = useState({ tenantId: "", companyName: "", maxActivations: 1, transferLimit: 3 });
   const [msg, setMsg] = useState("");
+  const [rc, setRc] = useState({ deviceId: "", months: 6, code: "" });
+  const makeCode = async () => {
+    setMsg("");
+    try { const { data } = await saasApi.post("/saas/local-renewal", { deviceId: rc.deviceId.trim(), months: rc.months }); setRc((r) => ({ ...r, code: data.code })); }
+    catch (e: any) { setMsg(e?.response?.data?.error || "Could not make the code"); }
+  };
 
   const load = useCallback(async () => {
     try {
@@ -66,7 +72,7 @@ export default function ActivationKeysPage() {
         {msg && <p className="text-sm text-red-600">{msg}</p>}
 
         <section className="rounded-xl bg-white p-4 shadow-sm dark:bg-gray-900">
-          <h2 className="mb-3 font-medium">Generate a key</h2>
+          <h2 className="mb-3 font-medium">Create keys for an institute</h2>
           <div className="grid gap-3 md:grid-cols-5">
             <select className="rounded border p-2 text-sm dark:bg-gray-800" value={form.tenantId} onChange={(e) => setForm({ ...form, tenantId: e.target.value })}>
               <option value="">Select institute / company</option>
@@ -77,22 +83,33 @@ export default function ActivationKeysPage() {
             <input className="rounded border p-2 text-sm dark:bg-gray-800" placeholder="Company name" value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} />
             <input type="number" min={1} className="rounded border p-2 text-sm dark:bg-gray-800" title="Total allowed activations" value={form.maxActivations} onChange={(e) => setForm({ ...form, maxActivations: Number(e.target.value) })} />
             <input type="number" min={0} className="rounded border p-2 text-sm dark:bg-gray-800" title="PC transfer limit" value={form.transferLimit} onChange={(e) => setForm({ ...form, transferLimit: Number(e.target.value) })} />
-            <button onClick={create} disabled={!form.tenantId} className="rounded bg-brand-500 px-3 py-2 text-sm text-white disabled:opacity-50">Generate</button>
+            <button onClick={create} disabled={!form.tenantId} className="rounded bg-brand-500 px-3 py-2 text-sm text-white disabled:opacity-50">Create / show keys</button>
           </div>
-          <p className="mt-2 text-xs text-gray-500">Fields: institute, company name, total allowed activations (PCs), device-transfer limit.</p>
+          <p className="mt-2 text-xs text-gray-500">Every company gets exactly two keys, created automatically: a Server key (1 PC) and a Client key (unlimited PCs / laptops). This button makes any that are missing.</p>
+        </section>
+
+        <section className="rounded-xl bg-white p-4 shadow-sm dark:bg-gray-900">
+          <h2 className="mb-3 font-medium">Renewal code (local mode, no keys)</h2>
+          <div className="grid gap-3 md:grid-cols-4">
+            <input className="rounded border p-2 text-sm font-mono md:col-span-2 dark:bg-gray-800" placeholder="PC id from the customer's System Settings" value={rc.deviceId} onChange={(e) => setRc({ ...rc, deviceId: e.target.value })} />
+            <input type="number" min={1} max={60} className="rounded border p-2 text-sm dark:bg-gray-800" title="Months to add" value={rc.months} onChange={(e) => setRc({ ...rc, months: Number(e.target.value) })} />
+            <button onClick={makeCode} disabled={!rc.deviceId.trim()} className="rounded bg-brand-500 px-3 py-2 text-sm text-white disabled:opacity-50">Make code</button>
+          </div>
+          {rc.code && <textarea readOnly rows={3} value={rc.code} onFocus={(e) => e.currentTarget.select()} className="mt-3 w-full rounded border p-2 font-mono text-[11px] dark:bg-gray-800" />}
+          <p className="mt-2 text-xs text-gray-500">The code works once, only on that PC, and adds the months to its current end date.</p>
         </section>
 
         {keys.map((k) => (
           <section key={k.id} className="rounded-xl bg-white p-4 shadow-sm dark:bg-gray-900">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <p className="font-mono text-base font-semibold">{k.key} {k.status !== "ACTIVE" && <span className="text-red-600">({k.status})</span>}</p>
+                <p className="font-mono text-base font-semibold"><span className="mr-2 rounded bg-gray-100 px-1.5 py-0.5 font-sans text-[10px] dark:bg-gray-800">{k.kind === "CLIENT" ? "CLIENT" : "SERVER"}</span>{k.key} {k.status !== "ACTIVE" && <span className="text-red-600">({k.status})</span>}</p>
                 <p className="text-sm text-gray-500">{k.instituteName} / {k.companyName}</p>
               </div>
               <div className="text-right text-sm">
-                <p>{k.activatedPCs} / {k.maxActivations} PCs activated, transfers {k.transfersUsed}/{k.transferLimit}</p>
+                <p>{k.kind === "CLIENT" ? "Unlimited client PCs (checked by each company server)" : `${k.activatedPCs} / ${k.maxActivations} server PC activated, transfers ${k.transfersUsed}/${k.transferLimit}`}</p>
                 <div className="mt-1 flex justify-end gap-3">
-                  <button className="underline" onClick={() => { const n = prompt("Total allowed activations", String(k.maxActivations)); if (n) patchKey(k.id, { maxActivations: Number(n) }); }}>Change limit</button>
+                  
                   <button className="underline" onClick={() => patchKey(k.id, { status: k.status === "ACTIVE" ? "REVOKED" : "ACTIVE" })}>{k.status === "ACTIVE" ? "Revoke key" : "Restore key"}</button>
                 </div>
               </div>
@@ -110,7 +127,7 @@ export default function ActivationKeysPage() {
                     <td><button className="underline" onClick={() => setDevice(d.id, d.status === "ACTIVE" ? "INACTIVE" : "ACTIVE")}>{d.status === "ACTIVE" ? "Deactivate" : "Reactivate"}</button></td>
                   </tr>
                 ))}
-                {k.devices.length === 0 && <tr><td colSpan={6} className="py-2 text-gray-400">No PC has activated this key yet.</td></tr>}
+                {k.devices.length === 0 && <tr><td colSpan={6} className="py-2 text-gray-400">{k.kind === "CLIENT" ? "Client PCs are managed on each company server." : "No server has activated this key yet."}</td></tr>}
               </tbody>
             </table>
           </section>

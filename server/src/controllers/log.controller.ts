@@ -59,6 +59,9 @@ export async function getLogController(req: Request, res: Response) {
         { action: { contains: search } },
         { entity: { contains: search } },
         { message: { contains: search } },
+        { actorName: { contains: search } },
+        { actorRole: { contains: search } },
+        { module: { contains: search } },
         // Add more searchable fields as needed
       ];
     }

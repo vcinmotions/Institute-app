@@ -196,6 +196,7 @@ export async function addEnquiryControllerNew(req: Request, res: Response) {
       return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     } 
     
+    if (err?.validation) return res.status(400).json({ error: err.message });
     console.error("Error creating enquiry:", err);
     return res.status(500).json({ error: err.message || "Internal server error" });
   }

@@ -11,6 +11,7 @@ export function getApiErrorMessage(error: unknown, fallback = "Something went wr
   if (data?.message && typeof data.message === "string") return data.message;
   if (Array.isArray(data?.details) && data.details[0]?.message) return String(data.details[0].message);
 
+  if (e?.code === "ERR_CANCELED") return "Already submitting - please wait a moment.";
   if (e?.code === "ERR_NETWORK" || (e && !e.response && /network/i.test(String(e.message)))) {
     return "Cannot reach the server. Check that the app is running and try again.";
   }

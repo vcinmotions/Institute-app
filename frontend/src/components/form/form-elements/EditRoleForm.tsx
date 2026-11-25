@@ -1,4 +1,5 @@
 "use client";
+import { useAccessRoles } from "@/hooks/useAccessRoles";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
@@ -68,7 +69,7 @@ export default function EditRolesForm({
       name: roleData.name || "",
       email: roleData.email || "",
       password: "",
-      role: roleData.role || "",
+      role: roleData.customRoleId ? `custom:${roleData.customRoleId}` : roleData.role || "",
     });
     setResetPassword(false);
     // Companies this user can already work in (older users: just their own company).
@@ -81,10 +82,12 @@ export default function EditRolesForm({
 
   const { mutate: editRolesBasedAdmin } = useEditRoles();
 
+  const { data: accessRoles } = useAccessRoles();
   const roles = [
     { value: "FRONT_DESK", label: "Front Desk" },
     { value: "ACCOUNTANT", label: "Accountant" },
     { value: "VIEW_ONLY", label: "View Only" },
+    ...(accessRoles?.roles ?? []).map((r) => ({ value: `custom:${r.id}`, label: `${r.name} (custom)` })),
   ];
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -183,6 +186,10 @@ export default function EditRolesForm({
       ...rest,
       name: titleCase(formData.name),
       ...(multi ? { role: companies[0].role, companies } : {}),
+      // Custom role (Role Access) or built-in role. null clears a previously assigned custom role.
+      ...(!multi && formData.role.startsWith("custom:")
+        ? { role: "VIEW_ONLY", customRoleId: Number(formData.role.split(":")[1]) }
+        : { customRoleId: null }),
       // Only send a password when the admin chose to reset it.
       ...(canResetPassword && resetPassword && formData.password
         ? { password: formData.password }

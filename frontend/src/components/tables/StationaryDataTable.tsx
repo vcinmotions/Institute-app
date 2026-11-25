@@ -106,7 +106,7 @@ export default function StationaryDataTable({
                     <TableCell className="text-theme-sm px-5 py-3 text-gray-500 dark:text-gray-400">
                       <span
                         className={`text-lg text-gray-800 active:opacity-50 dark:text-gray-200 ${"cursor-pointer"}`}
-                        onClick={() => handleEditLab(item)}
+                        data-perm="update:stationary" onClick={() => handleEditLab(item)}
                       >
                         {/* <PencilIcon /> */}
                         <svg

@@ -1,5 +1,6 @@
 "use client";
 
+import Can from "@/components/common/Can";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -130,12 +131,12 @@ export default function EnquiryTable() {
               ]}
             />
 
-            <Link
+            <Can module="enquiry" action="add"><Link
               href="/dashboard/enquiry/create"
               className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
             >
               + Create Record
-            </Link>
+            </Link></Can>
           </div>
         </div>
 

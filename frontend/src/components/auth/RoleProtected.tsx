@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { usePermissions } from "@/hooks/usePermissions";
 
 type RoleProtectedProps = {
   allowedRoles: string[];
@@ -16,14 +17,17 @@ export default function RoleProtected({
 }: RoleProtectedProps) {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
+  // Custom-role users are gated by module permissions (sidebar + server), not by built-in role names.
+  const { custom, loading } = usePermissions();
+  const allowed = !!user && (allowedRoles.includes(user?.role) || custom);
 
   useEffect(() => {
-    if (user && !allowedRoles.includes(user?.role)) {
+    if (user && !loading && !allowed) {
       router.replace("/dashboard");
     }
-  }, [user, allowedRoles, router]);
+  }, [user, allowed, loading, router]);
 
-  if (!user || !allowedRoles.includes(user?.role)) {
+  if (!user || !allowed) {
     return null; // or an Access Denied component
   }
 

@@ -226,7 +226,9 @@ exports.Prisma.ActivationKeyScalarFieldEnum = {
   transfersUsed: 'transfersUsed',
   status: 'status',
   firstActivatedAt: 'firstActivatedAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  companyId: 'companyId',
+  kind: 'kind'
 };
 
 exports.Prisma.ActivationDeviceScalarFieldEnum = {
@@ -239,6 +241,18 @@ exports.Prisma.ActivationDeviceScalarFieldEnum = {
   activatedAt: 'activatedAt',
   lastVerifiedAt: 'lastVerifiedAt',
   deactivatedAt: 'deactivatedAt'
+};
+
+exports.Prisma.ClientDeviceScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  deviceName: 'deviceName',
+  os: 'os',
+  tokenHash: 'tokenHash',
+  status: 'status',
+  confirmedAt: 'confirmedAt',
+  lastSeenAt: 'lastSeenAt',
+  lastIp: 'lastIp'
 };
 
 exports.Prisma.SortOrder = {
@@ -263,7 +277,8 @@ exports.Prisma.ModelName = {
   SaasAdmin: 'SaasAdmin',
   AppSetting: 'AppSetting',
   ActivationKey: 'ActivationKey',
-  ActivationDevice: 'ActivationDevice'
+  ActivationDevice: 'ActivationDevice',
+  ClientDevice: 'ClientDevice'
 };
 
 /**

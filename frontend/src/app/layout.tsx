@@ -11,6 +11,8 @@ import GlobalEscBack from "./utils/GlobalEscBack";
 import ReactQueryProvider from "./ReactQueryProvider";
 import GlobalDisableSignin from "./utils/GlobalDisableSignin";
 import GlobalDateYearGuard from "./utils/GlobalDateYearGuard";
+import ClientKeyGate from "@/components/subscription/ClientKeyGate";
+import ConnectionStatus from "@/components/common/ConnectionStatus";
 import ActivationGate from "@/components/subscription/ActivationGate";
 
 const outfit = Outfit({
@@ -35,6 +37,8 @@ export default function RootLayout({
                 <NotificationProvider>{children}</NotificationProvider>
                 <GlobalDisableSignin />
                 <ActivationGate />
+                <ClientKeyGate />
+                <ConnectionStatus />
                 <GlobalDateYearGuard />
               </SidebarProvider>
               <GlobalEscBack />

@@ -57,6 +57,14 @@ interface ElectronAPI {
   saveBackupFile: (sourcePath: string) => Promise<void>;
   performRestore: (filePath: string) => Promise<void>;
   auth: ElectronAuthAPI;
+  device?: { get: () => Promise<{ deviceId: string; deviceName: string; os: string }> };
+  update?: {
+    status: () => Promise<any>;
+    check: (token: string) => Promise<any>;
+    download: (token: string) => Promise<any>;
+    install: (token: string) => Promise<void>;
+    rollback: (token: string, version: string) => Promise<any>;
+  };
 }
 
 

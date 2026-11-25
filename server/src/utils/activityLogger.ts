@@ -1,6 +1,7 @@
 // src/utils/activityLogger.ts
 
 import { getTenantPrisma } from "../prisma-client/tenant-client";
+import { currentActor } from "./auditContext";
 
 /**
  * Logs activity for any entity in the application.
@@ -17,11 +18,15 @@ export async function logActivity({
   action,
   message,
   dbUrl, // 👈 Add this parameter
+  module,
+  actor,
 }: {
   clientAdminId: string;
   entity: string;
   entityId: string;
-  action: "CREATE" | "UPDATE" | "DELETE";
+  action: "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "LOGOUT" | "LOGIN_FAILED" | "ACTIVATION";
+  module?: string;
+  actor?: { id?: string; name?: string; role?: string };
   message?: string;
   dbUrl: string; // 👈 Add this
 }) {
@@ -36,6 +41,8 @@ export async function logActivity({
     const tenantPrisma = getTenantPrisma(dbUrl);
 
 
+    const ctx = currentActor();
+    if (ctx) ctx.audited = true; // the audit middleware must not add a second, generic row for this request
     await tenantPrisma.activityLog.create({
       data: {
         clientAdminId,
@@ -43,6 +50,11 @@ export async function logActivity({
         entityId,
         action,
         message,
+        module: module ?? null,
+        actorId: actor?.id ?? ctx?.actorId ?? null,
+        actorName: actor?.name ?? ctx?.actorName ?? null,
+        actorRole: actor?.role ?? ctx?.actorRole ?? null,
+        ip: ctx?.ip ?? null,
       },
     });
   } catch (err) {

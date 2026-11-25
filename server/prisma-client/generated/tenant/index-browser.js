@@ -166,7 +166,8 @@ exports.Prisma.RoleUserScalarFieldEnum = {
   zipCode: 'zipCode',
   currentSessionToken: 'currentSessionToken',
   lastLoginAt: 'lastLoginAt',
-  clientAdminId: 'clientAdminId'
+  clientAdminId: 'clientAdminId',
+  customRoleId: 'customRoleId'
 };
 
 exports.Prisma.ActivityLogScalarFieldEnum = {
@@ -176,7 +177,12 @@ exports.Prisma.ActivityLogScalarFieldEnum = {
   action: 'action',
   message: 'message',
   createdAt: 'createdAt',
-  clientAdminId: 'clientAdminId'
+  clientAdminId: 'clientAdminId',
+  actorId: 'actorId',
+  actorName: 'actorName',
+  actorRole: 'actorRole',
+  module: 'module',
+  ip: 'ip'
 };
 
 exports.Prisma.EnquiryScalarFieldEnum = {
@@ -589,6 +595,24 @@ exports.Prisma.ActiveSessionScalarFieldEnum = {
   lastSeenAt: 'lastSeenAt'
 };
 
+exports.Prisma.AccessRoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  clientAdminId: 'clientAdminId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AccessRolePermissionScalarFieldEnum = {
+  id: 'id',
+  roleId: 'roleId',
+  module: 'module',
+  canView: 'canView',
+  canAdd: 'canAdd',
+  canUpdate: 'canUpdate',
+  canDelete: 'canDelete'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -710,7 +734,9 @@ exports.Prisma.ModelName = {
   FinancialRecord: 'FinancialRecord',
   Branch: 'Branch',
   UserCompanyAccess: 'UserCompanyAccess',
-  ActiveSession: 'ActiveSession'
+  ActiveSession: 'ActiveSession',
+  AccessRole: 'AccessRole',
+  AccessRolePermission: 'AccessRolePermission'
 };
 
 /**

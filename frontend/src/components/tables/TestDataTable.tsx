@@ -113,7 +113,7 @@ export default function TestDataTable({
 
                                                 {/* <TableCell className="px-3 py-1.5">
                                                 <Button
-                                                    onClick={() => handlePublish(item)}
+                                                    data-perm="update:test" onClick={() => handlePublish(item)}
                                                     // Dynamic disabling state rule: lock out if already published
                                                     disabled={!isDraft}
                                                     size="sm"
@@ -131,7 +131,7 @@ export default function TestDataTable({
                                                     <button
                                                         className={item.status === "PUBLISHED" ? "rounded border border-brand-500 px-2 py-0.5 text-[11px] font-medium text-brand-600 hover:bg-brand-50 dark:text-brand-400" : "cursor-not-allowed rounded border border-slate-200 px-2 py-0.5 text-[11px] text-slate-400 opacity-50"}
                                                         disabled={item.status !== "PUBLISHED"}
-                                                        onClick={() => router.push(`/dashboard/test/marks?id=${item.id}`)}
+                                                        data-perm="update:test" onClick={() => router.push(`/dashboard/test/marks?id=${item.id}`)}
                                                     >
                                                         Enter marks
                                                     </button>
@@ -144,7 +144,7 @@ export default function TestDataTable({
                                                     >
                                                         <button
                                                             className={item.status === "PUBLISHED" ? "opacity-30 cursor-not-allowed text-slate-600 dark:text-slate-400" : "rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"}
-                                                            onClick={() => handleEditLab(item)}
+                                                            data-perm="update:test" onClick={() => handleEditLab(item)}
                                                             disabled={item.status === "PUBLISHED"}
                                                         >
                                                             <svg

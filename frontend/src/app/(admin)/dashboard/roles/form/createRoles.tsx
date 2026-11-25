@@ -15,6 +15,7 @@ import { useRoleStore } from "@/store/roleStore";
 import { useRouter } from "next/navigation";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { useAccessRoles } from "@/hooks/useAccessRoles";
 import CompanyAccessPicker, { CompanyAssignment } from "@/components/form/CompanyAccessPicker";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
@@ -56,10 +57,13 @@ export default function RolesForm() {
 
   const { mutate: createRolesBasedAdmin } = useCreateRolest();
 
+  const { data: accessRoles } = useAccessRoles();
   const roles = [
     { value: "FRONT_DESK", label: "Front Desk" },
     { value: "ACCOUNTANT", label: "Accountant" },
     { value: "VIEW_ONLY", label: "View Only" },
+    // Roles made by the Super Admin under Role Access (module-wise View / Add / Update / Delete).
+    ...(accessRoles?.roles ?? []).map((r) => ({ value: `custom:${r.id}`, label: `${r.name} (custom)` })),
   ];
 
   const firstInputRef = useRef<HTMLInputElement>(null);
@@ -171,10 +175,12 @@ export default function RolesForm() {
       return;
     }
 
+    const isCustom = !multi && formData.role.startsWith("custom:");
     const normalizeRole = {
       ...formData,
       name: titleCase(formData.name),
       ...(multi ? { role: companies[0].role, companies } : {}),
+      ...(isCustom ? { role: "VIEW_ONLY", customRoleId: Number(formData.role.split(":")[1]) } : {}),
     };
 
     createRolesBasedAdmin(normalizeRole, {

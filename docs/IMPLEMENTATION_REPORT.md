@@ -137,3 +137,154 @@ check; the PC cannot re-activate itself; transfer limit enforced; portal lists k
 - The hosted portal is detected by `SUBSCRIPTION_PRIVATE_KEY`; never ship `.env.portal` inside the EXE.
 - `server/.env` still contains the old `SUBSCRIPTION_*` values; they are ignored in packaged builds.
 - Idle timeout has no settings screen yet.
+
+---
+
+# Phase 3: Role & module-based access (section 7)
+
+| Item | Status | Verified how |
+|------|--------|--------------|
+| Role Management (create / rename / delete roles) | Done | Real controllers against a SQLite DB: 11 checks pass |
+| Role Access (View / Add / Update / Delete per module) | Done | Same run; add/update/delete imply view; unknown modules ignored |
+| Backend enforcement | Done | 22 guard checks pass (14 custom-role, 7 built-in, 1 helper) |
+| Existing roles not broken | Done | ADMIN, FRONT_DESK, ACCOUNTANT, VIEW_ONLY behave as before in the guard test |
+| UI hiding | Partly done | Sidebar, "Create Record" buttons and "Create ..." menu links hide. **Edit/delete icons inside data tables are not hidden yet** (the server still refuses them) |
+| Not clicked through in the running app | - | UI compiles only |
+
+## Design
+- **Built-in roles are untouched.** A user gets a custom role through a new `customRoleId`; the user is stored with the base role
+  `VIEW_ONLY` as a safe default, and the permission engine replaces the old rule list for that user.
+- **One table decides everything** (`permissions.service.ts`): path -> module, HTTP method -> action
+  (GET view, POST add, PUT/PATCH update, DELETE delete; a few POSTs such as hold/lost/attendance mark count as update).
+  Modules: enquiry, admission/students, payments, course, faculty, batch, lab, source, stationary, attendance, tasks, tests,
+  expenses, reports, users, settings.
+- **Read from the database on every request** (5 s cache), so changing a user's role or a role's permissions applies at once, no re-login.
+- **Always off for custom roles:** audit log, role management, tenant list. Non-module GETs (dashboard, analytics) stay readable.
+- **Database (tenant):** `AccessRole`, `AccessRolePermission`, `RoleUser.customRoleId` (applied with `db push`). Existing data is preserved
+  (checked on a database that already held batches).
+- **API:** `GET/POST /access-roles`, `PUT/DELETE /access-roles/:id`, `PUT /access-roles/:id/permissions` (ADMIN only), `GET /my-permissions` (any user).
+- **UI:** sidebar "Role Access" page (roles list + permission grid), custom roles appear in the user create/edit forms,
+  and `Can` / `usePermissions` hide actions the role does not have.
+- Role and permission changes are written to the activity log.
+
+## Limits
+- A user with a custom role is single-role across companies (the per-company role picker still applies to built-in roles).
+- Deleting a role that still has users is refused; move the users first.
+
+---
+
+# Phase 4: backup, branding, health, audit, updates, validation (final)
+
+## Final status of all 17 sections
+
+| # | Section | Status | Verified how |
+|---|---------|--------|--------------|
+| 1 | Date / time pickers | Done | tsc; native picker + icon in every date/time field |
+| 2 | First-run server configuration | Already existed (`mode-setup.html`) | Code read |
+| 3 | Institute branding (Super Admin only) | Done | 12 checks on real DBs |
+| 4 | Idle logout | Done (now a server-wide setting) | tsc; not exercised in the app |
+| 5 | Subscription security | Done | 27 checks |
+| 6 | System clock protection | Done | in the 27 checks |
+| 7 | Roles & module permissions | Done, edit/hide buttons now hidden too | 22 + 11 checks |
+| 8 | Master dropdown refresh | Done | tsc only |
+| 9 | Direct admission | Done | tsc only |
+| 10 | Batch without lab | Done | migration + DB test |
+| 11 | Lab time slots | Done | 5 validator checks |
+| 12 | Source Config | Reviewed, unchanged | explanation above |
+| 13 | Global mode flag | Done | build-config checks |
+| 14 | Activation key + devices | Done (server PC) | 27 checks |
+| 15 | Two instances | Lock already existed; message added | syntax only |
+| 17 | Extra requirements | See below | see below |
+| 16 | Full testing | **Partly**: see "Test results" and "Not tested" | |
+
+## Section 17 items
+| Item | Status |
+|------|--------|
+| Institute / company hierarchy and isolation | Existing design kept. Found and fixed 3 attendance endpoints that read a batch by id with no company check. Other services already filter by company. A full line-by-line audit of every controller was **not** done. |
+| Signed offline licence | Done (phase 2) |
+| Device management in portal | Done: SaaS admin page `/saas/keys`, institute Super Admin list + deactivate with transfer limit |
+| Automatic backup and restore | Done: schedule (every 12 h / daily / weekly), folder outside app data, optional external copy, retention, log, "last successful backup", failure banner, restore from the list, safety backup before restore. **Closed a hole:** the old `POST /restore` had no login and accepted any file path; it was removed (restore runs only from the desktop app) |
+| Multi-PC LAN stability | Connection indicator, automatic reconnect, warning when a save may not have completed, duplicate-submit guard (identical POST in flight is cancelled). Client PCs already have no database of their own. |
+| Application updates | Super Admin page: check, download, backup, install, version history, rollback request. Auto-download and silent install are off. Checksums verified by electron-updater. |
+| Audit logs | Every successful add/edit/delete is recorded automatically with user, role, module, record id, time and IP; sign-in, sign-out and failed sign-in too. Shown in the Activity page with search by user. |
+| Read-only mode after expiry | Already enforced by `subscriptionGuard` (view, reports, export allowed; add/edit/delete blocked; renewal online). Unchanged. |
+| System health dashboard | Done: server, databases, versions, subscription, licence check, device, backup, internet, online/offline |
+| Validation and duplicates | Server-side mobile (10 digits), email, date checks on enquiry and admission; duplicate student by contact/email; enquiry cannot be admitted twice; overlapping lab slots refused |
+
+## Files changed in this phase (main ones)
+Server: `services/backup.service.ts`, `controllers/system.backup.controller.ts`, `routes/system.backup.routes.ts`,
+`controllers/system.health.controller.ts`, `controllers/branding.controller.ts`, `controllers/session.settings.controller.ts`,
+`middlewares/auditTrail.middleware.ts`, `utils/auditContext.ts`, `utils/activityLogger.ts`, `validators/common.ts`,
+`controllers/auth.controller.ts`, `controllers/attendance.controller.ts`, `controllers/log.controller.ts`,
+`controllers/admission.controller.ts`, `services/enquiry.service.ts`, `app.ts`, tenant schema (both files).
+Desktop: `installer/electron-main.js`, `installer/preload.js`.
+Frontend: master pages `health`, `branding`, `updates`; `UserBackupCard`, `SessionSettingsCard`, `ConnectionStatus`, `BackupAlert`,
+`PermissionStyles`, `IdleLogout`, `useBranding`, `apiClient`, `AppSidebar`, `AppHeader`, `SignInForm`, table components (`data-perm` markers).
+
+## Database changes (all applied by `prisma db push`, existing data preserved)
+- Tenant: `Batch.labTimeSlotId` optional, `Batch.classType`; `AccessRole`, `AccessRolePermission`, `RoleUser.customRoleId`;
+  `ActivityLog.actorId/actorName/actorRole/module/ip`.
+- Central: `ActivationKey`, `ActivationDevice`.
+- New local files in the user-data folder: `activation.json`, `backup-config.json`, `backup-log.json`, `session-settings.json`, `update-history.json`, `uploads/branding/`.
+
+## Test results (automated, scratch databases, throwaway keys)
+| Area | Checks | Result |
+|------|--------|--------|
+| Activation, licence, clock, standalone 364 days, renewal, devices | 27 | all pass |
+| Signed build config (valid, tampered, missing, env key swap) | 3 | all pass |
+| Permission guard (custom + built-in roles) | 22 | all pass |
+| Role controllers on a real DB | 11 | all pass |
+| Backup (encrypted, restore round trip, retention, external copy, schedule, failure/clear) | 24 | all pass |
+| Branding (access, validation, duplicate name, logo replace/remove, public read) | 12 | all pass |
+| Audit trail (who/what/module/record, no duplicates, no GET/failed) | 4 | all pass |
+| Field validators | 10 | all pass |
+| Lab slot validator | 5 | all pass |
+| Batch migration with existing data | manual | pass |
+| TypeScript: server and frontend | - | clean |
+
+## Not tested (needs a person and real PCs)
+- No screen was opened in a browser or the desktop app. Nothing was run as an installed EXE and no EXE was built.
+- Two PCs on a LAN, the connection indicator going red/green, two EXE instances, Windows sleep/lock sign-out.
+- Real online portal (Razorpay payment -> renewal), real GitHub update download and rollback.
+- The device id lookup was only run through Git Bash (it fell back to hostname + MAC); on Windows from Electron it uses the registry MachineGuid.
+- Load / simultaneous writes from many PCs.
+
+## Pending issues and decisions
+1. **LAN client PCs are not separate activations** (only the server PC). Decide whether each client needs its own key.
+2. **Existing customers need activation keys** before upgrading.
+3. `package.json` scripts: run the server build first, then `npm run build:enabled` or `npm run build:standalone` (needs the private key on the build PC).
+4. The native date picker shows the date in the Windows regional format; saved values are consistent.
+5. Rollback relies on the old release being published on GitHub as `vX.Y.Z` with its `latest.yml`; the pre-update backup is the data safety net.
+6. A technically skilled administrator who controls the PC, the executable and the database cannot be fully stopped offline (as the document notes).
+7. Idle timeout, backup settings, branding and updates are in the **Master** (Super Admin) area; the institute `ADMIN` role does not see them.
+8. Remaining audit work: a full line-by-line review of company isolation across all controllers.
+
+---
+
+# Phase 5: one server per company, Server/Client keys, local mode
+
+## Business model implemented
+- Buying creates an **institute**; it has several **companies** (branches). One server PC = one company = its own database.
+- Every company has exactly **two keys**, created automatically on the portal: a **Server key** (1 PC) and a **Client key** (unlimited PCs / laptops).
+- **First server install:** sign in -> choose the company -> the portal registers this PC on that company's Server key and returns both keys. The server stores them in its local database, so nobody types the Server key.
+- **Client PCs / laptops:** type the company's Client key once. It is checked **on the server, offline**, against a hash inside the server's portal-signed licence (so it cannot be edited in the local DB). Each client gets a private token; clients are listed and can be blocked (lost laptop). The server PC itself is exempt.
+- One PC can be the server of only one company; a company has one server (replace it by deactivating the old one on the portal).
+
+## Local mode (SUBSCRIPTION_MODE is anything but ENABLED)
+- **No Server key, no Client key, no portal calls, no client check.** Clients just connect.
+- The app is valid for `LOCAL_LICENSE_MONTHS` (default **6**) from its first start, then view-only. Start date is kept in two places with a PC-bound seal; clock rollback is detected. Renewal = a portal-signed code (one use, one PC) pasted in System Settings; the SaaS admin makes it at `/saas/keys`.
+- In a packaged build the mode and the months are read at BUILD time (`server/.env.prod`) and signed into `build-config.json`, so editing `.env` after install changes nothing. (`npm run build:standalone` for local mode, `npm run build:enabled` for keys.)
+
+## Tests (scratch DBs, throwaway keys)
+| Area | Checks | Result |
+|------|--------|--------|
+| Keyed mode: company keys, claim, one server per company, client key offline, unlimited clients, gate, revoke, deactivate, auto keys | 37 | all pass |
+| Local mode: months (6 and 12), no keys anywhere, two-copy protection, clock, renewal codes | 21 | all pass |
+| Setup wizard, client key screen, setup UI, System Settings cards | - | compile only, **not run in the app** |
+
+## Fixed: login page flicker
+The login page reloaded itself in a loop. My new login branding call hit a backend that did not have that route yet and got a 401; the app's global 401 handler logs out and reloads `/signin`, which repeated. Fixed: public calls use a client without the 401 logout, a 401 with no signed-in session never logs out, and the logout never reloads the sign-in page. Restart the backend so it has the new routes.
+
+## Environment files
+- Loaded by code: `server/.env.dev` or `server/.env.prod` (by `APP_ENV`), then `server/.env`, then `server/.env.portal` (portal only). **`.env.production` is not read by anything** (unused leftover).
+- New variables: `SUBSCRIPTION_MODE` (ENABLED or anything else), `LOCAL_LICENSE_MONTHS`.

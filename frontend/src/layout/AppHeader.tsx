@@ -1,4 +1,5 @@
 "use client";
+import { useBranding } from "@/hooks/useBranding";
 import { ThemeToggleButton } from "@/components/common/ThemeToggleButton";
 import NotificationDropdown from "@/components/header/NotificationDropdown";
 import UserDropdown from "@/components/header/UserDropdown";
@@ -36,8 +37,12 @@ const AppHeader: React.FC = () => {
   }, []);
 
   // Admin: instituteName on the user; role users / faculty: via their clientAdmin.
-  const companyName: string =
+  const branding = useBranding();
+  const ownName: string =
     (user as any)?.instituteName || (user as any)?.clientAdmin?.instituteName || "CRM";
+  // The Super Admin's branding name applies to the primary company; other companies keep their own name.
+  const isPrimary = (user as any)?.isMaster !== false && (user as any)?.clientAdmin?.isMaster !== false;
+  const companyName: string = (isPrimary && branding.instituteName) || ownName;
 
   const activeFinancialYear = user?.financialYears?.find((fy: any) => fy.isActive);
 

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
  * Build-time global parameter: subscription mode of the EXE.
+ *   node scripts/sign-build-config.js                    (mode from SUBSCRIPTION_MODE in server/.env.prod)
  *   node scripts/sign-build-config.js --mode ENABLED     (Mode A: validate subscription online)
- *   node scripts/sign-build-config.js --mode STANDALONE  (Mode B: local only, 364-day licence)
- * Options: --api <portal api url>  --portal <portal web url>  --key-file <private key file>  --out <file>
+ *   node scripts/sign-build-config.js --mode STANDALONE  (Mode B: local only - no keys, valid LOCAL_LICENSE_MONTHS from first run, default 6)
+ * Options: --months <n>  --api <portal api url>  --portal <portal web url>  --key-file <private key file>  --out <file>
  *
  * Writes server/dist/build-config.json, SIGNED with the portal's private key. The app verifies it with
  * the public key compiled into it, so users cannot change the mode by editing files or the database.
@@ -16,12 +17,6 @@ const crypto = require("crypto");
 
 const arg = (n, d) => { const i = process.argv.indexOf("--" + n); return i > -1 ? process.argv[i + 1] : d; };
 const root = path.resolve(__dirname, "..");
-const mode = String(arg("mode", "")).toUpperCase();
-if (mode !== "ENABLED" && mode !== "STANDALONE") {
-  console.error("Usage: --mode ENABLED|STANDALONE");
-  process.exit(1);
-}
-
 function readEnvFile(f) {
   const out = {};
   try {
@@ -32,8 +27,13 @@ function readEnvFile(f) {
   } catch {}
   return out;
 }
-const prodEnv = readEnvFile(path.join(root, "server", ".env.prod"));
+const prodEnv = { ...readEnvFile(path.join(root, "server", ".env")), ...readEnvFile(path.join(root, "server", ".env.prod")) }; // .env.prod wins
 const portalEnv = readEnvFile(path.join(root, "server", ".env.portal"));
+
+// Mode: --mode flag, else SUBSCRIPTION_MODE from server/.env.prod (or .env). Only the exact value ENABLED turns keys on;
+// anything else (including empty) is the local mode, matching how the running app reads it.
+const wanted = String(arg("mode", prodEnv.SUBSCRIPTION_MODE ?? "")).trim().toUpperCase();
+const mode = wanted === "ENABLED" ? "ENABLED" : "STANDALONE";
 
 let keyRaw = process.env.SUBSCRIPTION_PRIVATE_KEY || portalEnv.SUBSCRIPTION_PRIVATE_KEY;
 const keyFile = arg("key-file");
@@ -44,8 +44,13 @@ if (!keyRaw) {
 }
 const pem = keyRaw.includes("BEGIN") ? keyRaw.replace(/\n/g, "\n") : Buffer.from(keyRaw, "base64").toString("utf8");
 
+// Local mode (no keys): months of validity from the first run. --months, else LOCAL_LICENSE_MONTHS in server/.env.prod (or .env), else 6.
+const rawMonths = Number(arg("months", prodEnv.LOCAL_LICENSE_MONTHS ?? 6));
+const localMonths = Number.isInteger(rawMonths) && rawMonths >= 1 && rawMonths <= 120 ? rawMonths : 6;
+
 const payload = {
   mode,
+  localMonths,
   apiUrl: arg("api", prodEnv.SUBSCRIPTION_API_URL),
   portalUrl: arg("portal", prodEnv.SUBSCRIPTION_PORTAL_URL),
   builtAt: new Date().toISOString(),

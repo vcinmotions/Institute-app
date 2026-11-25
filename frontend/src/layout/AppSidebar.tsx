@@ -7,6 +7,8 @@ import { useRouter, usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
+import { usePermissions } from "@/hooks/usePermissions";
+import { useBranding } from "@/hooks/useBranding";
 
 import {
   BoxCubeIcon,
@@ -56,6 +58,16 @@ type NavItem = {
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
   group?: string;
 };
+
+// Sidebar item -> permission module (used for custom, Super-Admin defined roles).
+const MODULE_BY_NAME: Record<string, string> = {
+  Enquiry: "enquiry", Admission: "admission", "Admission Config": "settings", Students: "admission",
+  "Student Course": "admission", Batch: "batch", Course: "course", Lab: "lab", Faculty: "faculty",
+  Test: "test", Attendance: "attendance", Payment: "payment", Expenses: "expense",
+  "Receipt Config": "settings", Master: "source", Roles: "users", Reports: "reports",
+  "Compare Companies": "reports",
+};
+const ALWAYS_VISIBLE = ["Dashboard", "Calendar"];
 
 const navItems: NavItem[] = [
   // --- OVERVIEW ---
@@ -238,6 +250,13 @@ const navItems: NavItem[] = [
   },
   {
     group: "Administration",
+    icon: <LockIcon />,
+    name: "Role Access",
+    path: "/dashboard/access-roles",
+    roles: ["ADMIN"],
+  },
+  {
+    group: "Administration",
     icon: <UserIcon />,
     name: "Reports",
     path: "/dashboard/reports",
@@ -268,6 +287,27 @@ const navItems: NavItem[] = [
     icon: <EnvelopeIcon />,
     name: "Settings",
     path: "/master-dashboard/settings",
+    roles: ["MASTER_ADMIN"],
+  },
+  {
+    group: "System Admin",
+    icon: <GridIcon />,
+    name: "System Health",
+    path: "/master-dashboard/health",
+    roles: ["MASTER_ADMIN"],
+  },
+  {
+    group: "System Admin",
+    icon: <PencilIcon />,
+    name: "Branding",
+    path: "/master-dashboard/branding",
+    roles: ["MASTER_ADMIN"],
+  },
+  {
+    group: "System Admin",
+    icon: <PaperPlaneIcon />,
+    name: "Software Update",
+    path: "/master-dashboard/updates",
     roles: ["MASTER_ADMIN"],
   },
 
@@ -314,11 +354,25 @@ const AppSidebar: React.FC = () => {
   const router = useRouter();
 
   const userRole = user?.role;
+  const perms = usePermissions();
+  const branding = useBranding();
   const isSidebarVisible = isExpanded || isHovered || isMobileOpen;
 
   const filteredNavItems = useMemo(() => {
+    const customUser = perms.custom;
     return navItems
-      .filter((item) => !item.roles || item.roles.includes(userRole))
+      .filter((item) => {
+        if (!customUser) return !item.roles || item.roles.includes(userRole);
+        // Custom role: show only modules the role may View; hide "Create ..." links without Add.
+        if (ALWAYS_VISIBLE.includes(item.name)) return true;
+        const m = MODULE_BY_NAME[item.name];
+        return !!m && perms.can(m, "view");
+      })
+      .map((item) => {
+        if (!customUser || !item.subItems) return item;
+        const m = MODULE_BY_NAME[item.name];
+        return { ...item, subItems: item.subItems.filter((s) => !/^create/i.test(s.name) || (m && perms.can(m, "add"))) };
+      })
       .filter((item) => {
         if (!searchQuery) return true;
         const matchesMainItem = item.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -328,7 +382,7 @@ const AppSidebar: React.FC = () => {
         const matchesGroup = item.group?.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesMainItem || matchesSubItems || matchesGroup;
       });
-  }, [userRole, searchQuery]);
+  }, [userRole, searchQuery, perms.custom, perms.loading]);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
@@ -634,10 +688,17 @@ const AppSidebar: React.FC = () => {
       <div className={`flex h-14 items-center shrink-0 border-b border-transparent ${!isSidebarVisible ? "lg:justify-center" : "justify-start pl-1.5"}`}>
         <Link href="/dashboard" className="flex items-center">
           {isSidebarVisible ? (
-            <>
-              <Image className="dark:hidden object-contain" src="/images/logo/logo.svg" alt="Logo" width={115} height={32} unoptimized />
-              <Image className="hidden dark:block object-contain" src="/images/logo/logo-dark.svg" alt="Logo" width={115} height={32} unoptimized />
-            </>
+            branding.logoSrc ? (
+              // Institute logo set by the Super Admin
+              <img src={branding.logoSrc} alt={branding.instituteName ?? "Logo"} className="h-8 max-w-[115px] object-contain" />
+            ) : (
+              <>
+                <Image className="dark:hidden object-contain" src="/images/logo/logo.svg" alt="Logo" width={115} height={32} unoptimized />
+                <Image className="hidden dark:block object-contain" src="/images/logo/logo-dark.svg" alt="Logo" width={115} height={32} unoptimized />
+              </>
+            )
+          ) : branding.logoSrc ? (
+            <img src={branding.logoSrc} alt="Logo" className="h-6 w-6 object-contain" />
           ) : (
             <Image src="/images/logo/logo-icon.svg" alt="Logo" width={24} height={24} unoptimized />
           )}

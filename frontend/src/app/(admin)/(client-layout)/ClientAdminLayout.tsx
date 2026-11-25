@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import PermissionStyles from "@/components/common/PermissionStyles";
 import IdleLogout from "@/components/common/IdleLogout";
 import SubscriptionGate from "@/components/subscription/SubscriptionGate";
 import SessionKeeper from "@/components/common/SessionKeeper";
@@ -79,6 +80,7 @@ export default function ClientAdminLayout({
           <SubscriptionGate />
           <SessionKeeper />
           <IdleLogout />
+          <PermissionStyles />
           <AppHeader />
           <AppKeyHeader />
 

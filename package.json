@@ -5,9 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "electron .",
-    "build": "node scripts/prepare-server-modules.js && electron-builder",
-    "build:enabled": "node scripts/sign-build-config.js --mode ENABLED && npm run build",
-    "build:standalone": "node scripts/sign-build-config.js --mode STANDALONE && npm run build"
+    "build:app": "node scripts/prepare-server-modules.js && electron-builder",
+    "build": "node scripts/sign-build-config.js && npm run build:app",
+    "build:enabled": "node scripts/sign-build-config.js --mode ENABLED && npm run build:app",
+    "build:standalone": "node scripts/sign-build-config.js --mode STANDALONE && npm run build:app"
   },
   "build": {
     "appId": "com.vcinmotions.app",

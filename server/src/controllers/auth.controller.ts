@@ -68,10 +68,16 @@ export async function loginController(req: Request, res: Response) {
     const tenantInfo = req.tenantInfo;
 
     const found = await findUserByEmail(tenantPrisma, normalizeEmail.email);
-    if (!found) return res.status(404).json({ error: "User not found" });
+    if (!found) {
+      await authLog(req, "LOGIN_FAILED", `Failed sign-in: no user "${normalizeEmail.email}"`);
+      return res.status(404).json({ error: "User not found" });
+    }
 
     const valid = await bcrypt.compare(password, found.user.password);
-    if (!valid) return res.status(401).json({ error: "Invalid password" });
+    if (!valid) {
+      await authLog(req, "LOGIN_FAILED", `Failed sign-in: wrong password for ${normalizeEmail.email}`, { name: found.user.name, role: found.user.role });
+      return res.status(401).json({ error: "Invalid password" });
+    }
 
     // Subscription: refresh from the portal at login (best-effort). The very
     // first activation must be online. Expired subscriptions may still sign in
@@ -182,6 +188,8 @@ async function finishLogin(
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "30d" });
 
+  await authLog(req, "LOGIN", `Signed in to ${company.name ?? "company"}`, { name: user.name, role: company.role, clientAdminId: company.id, id: String(user.id) });
+
   const data = { currentSessionToken: token, lastLoginAt: new Date() };
   if (userType === "ADMIN") await db.clientAdmin.update({ where: { id: String(user.id) }, data });
   if (userType === "ROLE_USER") await db.roleUser.update({ where: { id: String(user.id) }, data });
@@ -259,6 +267,7 @@ export async function logoutController(req: Request, res: Response) {
     if (u.userType === "ROLE_USER") await db.roleUser.update({ where: { id: String(u.id) }, data: clear });
     if (u.userType === "FACULTY") await db.faculty.update({ where: { id: Number(u.id) }, data: clear });
     await releaseSession(db, { userType: u.userType, userId: u.id });
+    await authLog(req, "LOGOUT", "Signed out", { name: u.email, role: u.role, clientAdminId: u.clientAdminId, id: String(u.id) });
     return res.json({ message: "Signed out" });
   } catch (e) {
     console.error("logout error:", e);
@@ -273,4 +282,36 @@ export async function heartbeatController(req: Request, res: Response) {
   const claim = await claimSession(db, { userType: u.userType, userId: u.id, clientAdminId: u.clientAdminId });
   if (!claim.ok) return res.status(403).json({ code: "LOGIN_LIMIT", error: limitMessage(claim.max) });
   return res.json({ ok: true });
+}
+
+
+/** Sign-in / sign-out / failed sign-in are recorded in the activity log (best effort, never blocks login). */
+async function authLog(
+  req: Request,
+  action: "LOGIN" | "LOGOUT" | "LOGIN_FAILED",
+  message: string,
+  who: { name?: string; role?: string; clientAdminId?: string; id?: string } = {}
+) {
+  try {
+    const db = req.tenantPrisma as Db | undefined;
+    if (!db) return;
+    const clientAdminId = who.clientAdminId ?? (await ensureMasterCompany(db));
+    if (!clientAdminId) return;
+    await db.activityLog.create({
+      data: {
+        clientAdminId,
+        entity: "Authentication",
+        entityId: who.id ?? "-",
+        action,
+        message,
+        module: "auth",
+        actorId: who.id ?? null,
+        actorName: who.name ?? null,
+        actorRole: who.role ?? null,
+        ip: req.ip ?? null,
+      },
+    });
+  } catch (e) {
+    console.error("auth log failed:", e);
+  }
 }

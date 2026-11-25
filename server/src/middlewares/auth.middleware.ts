@@ -87,8 +87,10 @@ export const authMiddleware = async (
     } else if (userType === "ROLE_USER") {
       dbUser = await tenantPrisma.roleUser.findUnique({
         where: { id },
-        select: { currentSessionToken: true },
+        select: { currentSessionToken: true, customRoleId: true },
       });
+      // Read from the database on every request so changing a user's role takes effect immediately.
+      (decoded as any).customRoleId = (dbUser as any)?.customRoleId ?? null;
     } else if (userType === "FACULTY") {
       dbUser = await tenantPrisma.faculty.findUnique({
         where: { id: Number(id) },

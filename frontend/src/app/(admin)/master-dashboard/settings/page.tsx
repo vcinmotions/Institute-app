@@ -5,6 +5,8 @@ import { RootState } from "@/store";
 
 const PageBreadcrumb = dynamic(() => import("@/components/common/PageBreadCrumb"));
 const UserBackUpCard = dynamic(() => import("@/components/user-profile/UserBackupCard"));
+const LicenseCard = dynamic(() => import("@/components/user-profile/LicenseCard"));
+const SessionSettingsCard = dynamic(() => import("@/components/user-profile/SessionSettingsCard"));
 
 export default function Profile() {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -17,7 +19,9 @@ export default function Profile() {
 
             {/* High density structural view panel */}
             <div className="space-y-4">
+                <LicenseCard />
                 <UserBackUpCard />
+                <SessionSettingsCard />
             </div>
         </div>
     );
