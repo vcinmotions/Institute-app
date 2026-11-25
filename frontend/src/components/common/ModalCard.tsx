@@ -38,6 +38,8 @@ const ModalCard: React.FC<ComponentCardProps> = ({
   const handleKeys = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        // A time pop-up is open: Esc closes just that (the time field handles it), not the whole modal.
+        if (document.querySelector("[data-time-popover]")) return;
         e.preventDefault();
         e.stopPropagation();
         oncloseModal();
@@ -109,6 +111,8 @@ const ModalCard: React.FC<ComponentCardProps> = ({
   // ✅ Close modal when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      // Pop-ups drawn outside the modal (time picker) are part of it: clicking them must not close it.
+      if ((event.target as HTMLElement | null)?.closest?.("[data-keep-modal-open]")) return;
       if (
         modalRef.current &&
         !modalRef.current.contains(event.target as Node)

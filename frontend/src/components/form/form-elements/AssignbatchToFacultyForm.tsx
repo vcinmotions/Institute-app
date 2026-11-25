@@ -1,4 +1,5 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import { batchLabel } from "@/lib/batchLabel";
 import React, { useEffect, useRef, useState } from "react";
 import Label from "../Label";
@@ -110,7 +111,7 @@ export default function AssignBatchFacultyForm({
       newErrors.facultyId = "Faculty ID is required.";
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -125,7 +126,7 @@ export default function AssignBatchFacultyForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -141,7 +142,7 @@ export default function AssignBatchFacultyForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -191,7 +192,7 @@ export default function AssignBatchFacultyForm({
 
         setTimeout(() => {
           setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 5000);
+        }, MESSAGE_VISIBLE_MS);
       },
     });
   };

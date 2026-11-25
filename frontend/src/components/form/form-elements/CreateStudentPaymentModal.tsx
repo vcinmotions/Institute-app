@@ -1,5 +1,6 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import DateField from "@/components/form/input/DateField";
 import React, { useEffect, useRef, useState } from "react";
 import Label from "../Label";
@@ -106,7 +107,7 @@ export default function CreateStudentPaymentModal({
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -125,7 +126,7 @@ export default function CreateStudentPaymentModal({
         variant: "error",
       });
       scrollToError(validationErrors);
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 3000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -137,7 +138,7 @@ export default function CreateStudentPaymentModal({
         message: "Token not found. Please log in again.",
         variant: "error",
       });
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 3000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       return;
     }
 

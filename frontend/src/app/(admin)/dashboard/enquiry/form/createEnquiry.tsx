@@ -1,4 +1,5 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import DateField from "@/components/form/input/DateField";
 import React, { useState, useEffect, useRef } from "react";
 import { useEnquiryStore } from "@/store/enquiryStore";
@@ -147,7 +148,7 @@ export default function EnquiryForm() {
 
     const timer = setTimeout(() => {
       dispatch(setError(null)); // ✅ Clear error after 3 sec
-    }, 2000);
+    }, MESSAGE_VISIBLE_MS);
 
     return () => clearTimeout(timer);
   }, [error, dispatch]);
@@ -168,7 +169,7 @@ export default function EnquiryForm() {
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -298,7 +299,7 @@ export default function EnquiryForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -318,7 +319,7 @@ export default function EnquiryForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }

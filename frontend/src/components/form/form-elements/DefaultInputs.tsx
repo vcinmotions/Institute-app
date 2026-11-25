@@ -7,10 +7,12 @@ import Select from '../Select';
 import { ChevronDownIcon, EyeCloseIcon, EyeIcon, TimeIcon } from '../../../icons';
 import DatePicker from '@/components/form/date-picker';
 import ModalCard from '@/components/common/ModalCard';
+import TimePicker from '@/components/form/TimePicker';
 
 
 export default function DefaultInputs() {
   const [showPassword, setShowPassword] = useState(false);
+  const [demoTime, setDemoTime] = useState("");
   const options = [
     { value: "marketing", label: "Marketing" },
     { value: "template", label: "Template" },
@@ -79,17 +81,7 @@ export default function DefaultInputs() {
 
         <div>
           <Label htmlFor="tm">Time Picker Input</Label>
-          <div className="relative">
-            <Input
-              type="time"
-              id="tm"
-              name="tm"
-              onChange={(e) => console.log(e.target.value)}
-            />
-            <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <TimeIcon />
-            </span>
-          </div>
+          <TimePicker id="tm" name="tm" value={demoTime} onChange={setDemoTime} />
         </div>
         <div>
           <Label htmlFor="tm">Input with Payment</Label>

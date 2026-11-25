@@ -1,5 +1,6 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useState, useEffect, useRef } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import { useDispatch, useSelector } from "react-redux";
@@ -211,7 +212,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
     if (!newEnquiry.contact.trim()) newErrors.contact = "Contact number is required.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -232,7 +233,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
 
       scrollToError(validationErrors);
 
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 3000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -244,7 +245,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
         message: "Token not found. Please log in again.",
         variant: "error",
       });
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 3000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -287,7 +288,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
       setShowChangeLog(false);
       modalBodyRef.current?.scrollTo({ top: 0, behavior: "smooth" });
       setAlert({ show: true, title: "Update failed", message: getApiErrorMessage(error), variant: "error" });
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
     }
   };
 

@@ -1,4 +1,5 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "@/components/form/Label";
@@ -90,7 +91,7 @@ export default function RolesForm() {
     } else if (!formData.role.trim()) newErrors.role = "Please select a role.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -154,7 +155,7 @@ export default function RolesForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -170,7 +171,7 @@ export default function RolesForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -202,7 +203,7 @@ export default function RolesForm() {
       onError: (error: any) => {
         // Show the server's reason (duplicate name, not allowed, etc.) on screen.
         setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
-        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });

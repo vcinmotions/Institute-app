@@ -1,5 +1,7 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateTimeField from "@/components/form/DateTimeField";
 import { batchLabel } from "@/lib/batchLabel";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
@@ -579,7 +581,7 @@ export default function AdmissionForm() {
       newErrors.admissionDate = "Admission date is required.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     setErrors(newErrors);
 
@@ -772,7 +774,7 @@ export default function AdmissionForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -792,7 +794,7 @@ export default function AdmissionForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -811,7 +813,7 @@ export default function AdmissionForm() {
       });
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -897,7 +899,7 @@ export default function AdmissionForm() {
         });
         setTimeout(() => {
           setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 4000);
+        }, MESSAGE_VISIBLE_MS);
       },
     });
   };
@@ -1598,12 +1600,7 @@ export default function AdmissionForm() {
                 inputRefs.current.admissionDate = el;
               }}>
                 <Label>Admission Date</Label>
-                <Input
-                  type="datetime-local"
-                  placeholder="Enter Admission Date"
-                  value={filledEnquiryData.admissionDate}
-                  onChange={(e) => handleChange("admissionDate", e.target.value)}
-                />
+                <DateTimeField value={filledEnquiryData.admissionDate} onChange={(v) => handleChange("admissionDate", v)} />
                 {errors.admissionDate && (
                   <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>
                 )}

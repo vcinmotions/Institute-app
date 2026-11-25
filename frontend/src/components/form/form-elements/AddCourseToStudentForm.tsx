@@ -1,5 +1,7 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateTimeField from "@/components/form/DateTimeField";
 import React, { useState, useEffect, useRef } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
@@ -122,7 +124,7 @@ export default function CourseForm({
     if (!filledCoursedata.admissionDate) newErrors.admissionDate = "Admission date is required.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -190,7 +192,7 @@ export default function CourseForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -246,7 +248,7 @@ export default function CourseForm({
         onError: (error: any) => {
           // Show the server's reason (duplicate name, not allowed, etc.) on screen.
           setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
-          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           window.scrollTo({ top: 0, behavior: "smooth" });
         },
       }
@@ -318,12 +320,7 @@ export default function CourseForm({
             {/* Admission Date */}
             <div>
               <Label>Admission Date *</Label>
-              <Input
-                type="datetime-local"
-                value={filledCoursedata.admissionDate}
-                onChange={(e) => handleChange("admissionDate", e.target.value)}
-                className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-              />
+              <DateTimeField value={filledCoursedata.admissionDate} onChange={(v) => handleChange("admissionDate", v)} />
               {errors.admissionDate && (
                 <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>
               )}

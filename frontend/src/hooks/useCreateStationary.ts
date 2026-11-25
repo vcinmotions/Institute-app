@@ -1,3 +1,4 @@
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import { createCourseAPI, createEnquiryAPI, createStationaryAPI, getCourse, getStationary } from "@/lib/api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -55,7 +56,7 @@ export const useCreateStationary = () => {
       // ✅ Auto clear after 3 seconds
       setTimeout(() => {
         dispatch(setError(null));
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       },
   });
 };

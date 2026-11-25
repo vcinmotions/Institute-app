@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useCallback, useEffect, useState } from "react";
+import TimePicker from "@/components/form/TimePicker";
 import { apiClient } from "@/lib/apiClient";
 import { getApiErrorMessage } from "@/lib/apiError";
 
@@ -29,7 +31,7 @@ export default function UserBackUpCard() {
   }, []);
   useEffect(() => { load(); const t = setInterval(load, 30_000); return () => clearInterval(t); }, [load]);
 
-  const flash = (ok: boolean, text: string) => { setMsg({ ok, text }); setTimeout(() => setMsg(null), 6000); };
+  const flash = (ok: boolean, text: string) => { setMsg({ ok, text }); setTimeout(() => setMsg(null), MESSAGE_VISIBLE_MS); };
 
   const saveSettings = async () => {
     setBusy("save");
@@ -111,7 +113,7 @@ export default function UserBackUpCard() {
             </select>
           </label>
           <label className="dark:text-white">Time (daily / weekly)
-            <input type="time" className={input} value={cfg.time} onChange={(e) => setCfg({ ...cfg, time: e.target.value })} />
+            <TimePicker size="sm" value={cfg.time} onChange={(v) => setCfg({ ...cfg, time: v || cfg.time })} />
           </label>
           <label className="dark:text-white">Backups to keep
             <input type="number" min={1} max={365} className={input} value={cfg.keep} onChange={(e) => setCfg({ ...cfg, keep: Number(e.target.value) })} />

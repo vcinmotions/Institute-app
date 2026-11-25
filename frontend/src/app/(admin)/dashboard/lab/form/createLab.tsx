@@ -1,4 +1,6 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import TimePicker from "@/components/form/TimePicker";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "@/components/form/Label";
@@ -144,7 +146,7 @@ export default function LabForm({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }) {
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -167,7 +169,7 @@ export default function LabForm({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -185,7 +187,7 @@ export default function LabForm({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -223,7 +225,7 @@ export default function LabForm({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }) {
       onError: (error: any) => {
         // Show the server's reason (duplicate name, not allowed, etc.) on screen.
         setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
-        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });
@@ -348,18 +350,8 @@ export default function LabForm({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }) {
                         onChange={(e) => handleTimeSlotChange(index, "day", e.target.value)}
                         className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                       />
-                      <Input
-                        type="time"
-                        value={slot.startTime}
-                        onChange={(e) => handleTimeSlotChange(index, "startTime", e.target.value)}
-                        className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                      />
-                      <Input
-                        type="time"
-                        value={slot.endTime}
-                        onChange={(e) => handleTimeSlotChange(index, "endTime", e.target.value)}
-                        className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                      />
+                      <TimePicker value={slot.startTime} onChange={(v) => handleTimeSlotChange(index, "startTime", v)} />
+                      <TimePicker value={slot.endTime} onChange={(v) => handleTimeSlotChange(index, "endTime", v)} />
                       {lab.timeSlots.length > 1 && (
                         <Button
                           size="sm"

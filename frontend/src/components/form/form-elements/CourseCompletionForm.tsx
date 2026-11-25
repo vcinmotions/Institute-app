@@ -1,4 +1,5 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
@@ -104,7 +105,7 @@ export default function CourseCompletionForm({
     if (!formData.feedback.trim()) newErrors.feedback = "Feedback is required.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
 
     return {
@@ -211,7 +212,7 @@ export default function CourseCompletionForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -229,7 +230,7 @@ export default function CourseCompletionForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -270,7 +271,7 @@ export default function CourseCompletionForm({
 
         setTimeout(() => {
           setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 6000);
+        }, MESSAGE_VISIBLE_MS);
       },
     });
   };

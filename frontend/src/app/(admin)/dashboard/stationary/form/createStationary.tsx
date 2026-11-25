@@ -1,4 +1,5 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -77,7 +78,7 @@ export default function StationaryForm() {
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -117,7 +118,7 @@ export default function StationaryForm() {
 
       setTimeout(() => {
           setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -133,7 +134,7 @@ export default function StationaryForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }

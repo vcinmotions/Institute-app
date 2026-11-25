@@ -1,3 +1,5 @@
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateTimeField from "@/components/form/DateTimeField";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
@@ -61,7 +63,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
 
     const timer = setTimeout(() => {
       dispatch(setError(null));
-    }, 3000);
+    }, MESSAGE_VISIBLE_MS);
 
     return () => clearTimeout(timer);
   }, [error, dispatch]);
@@ -84,7 +86,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
       setTimeout(() => {
         setErrors({});
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -108,7 +110,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
           },
           onError: (err: any) => {
             setAlert({ show: true, title: "Error", message: getApiErrorMessage(err), variant: "error" });
-            setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
+            setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           }
         }
       );
@@ -152,13 +154,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
             Schedule At
           </label>
           <div className="relative w-full">
-            <input
-              type="datetime-local"
-              value={scheduledAt}
-              disabled={isPending}
-              onChange={(e) => setScheduledAt(e.target.value)}
-              className="w-full appearance-none rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-            />
+            <DateTimeField value={scheduledAt} onChange={(v) => setScheduledAt(v)} disabled={isPending} />
             {errors.scheduledAt && (
               <p className="pt-2 text-sm text-red-500">{errors.scheduledAt}</p>
             )}

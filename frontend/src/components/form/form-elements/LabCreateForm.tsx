@@ -1,4 +1,6 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import TimePicker from "@/components/form/TimePicker";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
@@ -117,7 +119,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
     if (slotMsg) setSlotError(slotMsg);
     setErrors(newErrors);
 
-    setTimeout(() => { setErrors({}); setSlotError(""); }, 4000);
+    setTimeout(() => { setErrors({}); setSlotError(""); }, MESSAGE_VISIBLE_MS);
     return Object.keys(newErrors).length === 0 && !slotMsg;
   };
 
@@ -132,7 +134,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -148,7 +150,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -178,7 +180,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
       onError: (error: any) => {
         // Show the server's reason (duplicate name, not allowed, etc.) on screen.
         setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
-        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         // You already handle error via redux + toast
       },
     });
@@ -250,20 +252,10 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
                   handleTimeSlotChange(index, "day", e.target.value)
                 }
               />
-              <Input
-                type="time"
-                value={slot.startTime}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "startTime", e.target.value)
-                }
-              />
-              <Input
-                type="time"
-                value={slot.endTime}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "endTime", e.target.value)
-                }
-              />
+              <TimePicker value={slot.startTime} onChange={(v) =>
+                  handleTimeSlotChange(index, "startTime", v)} />
+              <TimePicker value={slot.endTime} onChange={(v) =>
+                  handleTimeSlotChange(index, "endTime", v)} />
               {lab.timeSlots.length > 1 && (
                 <Button
                   size="sm"

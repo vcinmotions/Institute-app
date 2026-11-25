@@ -1,4 +1,5 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useState, useEffect, useRef } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
@@ -115,7 +116,7 @@ export default function EditEnquiryForm({
     toast.error(error);
     const timer = setTimeout(() => {
       dispatch(setError(null));
-    }, 3000);
+    }, MESSAGE_VISIBLE_MS);
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
@@ -199,7 +200,7 @@ export default function EditEnquiryForm({
     if (newEnquiry.courseId.length === 0) newErrors.courseId = "Select at least one course.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -225,7 +226,7 @@ export default function EditEnquiryForm({
       scrollToError(validationErrors);
       setTimeout(() => {
         setAlert((prev) => ({ ...prev, show: false }));
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 

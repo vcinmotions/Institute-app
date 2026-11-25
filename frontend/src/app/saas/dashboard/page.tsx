@@ -1,5 +1,6 @@
 "use client";
 
+import DateTimeField from "@/components/form/DateTimeField";
 import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel } from "@/lib/userTiers";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -139,7 +140,7 @@ function ManageInstituteModal({
 
         <label className="mt-5 block text-sm font-medium">
           Expiry date and time
-          <input type="datetime-local" value={expiry} onChange={(e) => setExpiry(e.target.value)} className={input} />
+          <DateTimeField value={expiry} onChange={(v) => setExpiry(v)} />
         </label>
         <div className="mt-2 flex flex-wrap gap-2">
           {[

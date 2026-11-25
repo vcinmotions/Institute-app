@@ -1,3 +1,5 @@
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateTimeField from "@/components/form/DateTimeField";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
@@ -64,7 +66,7 @@ export default function CreateFollowUpModal({
     if (!scheduledAt) newErrors.scheduledAt = "Schedule time is required.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -140,7 +142,7 @@ export default function CreateFollowUpModal({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -237,12 +239,7 @@ export default function CreateFollowUpModal({
         </label>
         <div className="relative w-full">
           <div>
-            <input
-              type="datetime-local"
-              value={scheduledAt}
-              onChange={(e) => setScheduledAt(e.target.value)}
-              className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-400"
-            />
+            <DateTimeField value={scheduledAt} onChange={(v) => setScheduledAt(v)} />
             {errors.scheduledAt && (
               <p className="text-sm text-red-500">{errors.scheduledAt}</p>
             )}

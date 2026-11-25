@@ -1,5 +1,6 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import { useComapnyStore } from "@/store/companyStore";
@@ -154,7 +155,7 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
 
         const timer = setTimeout(() => {
             dispatch(setError(null));
-        }, 3000);
+        }, MESSAGE_VISIBLE_MS);
 
         return () => clearTimeout(timer);
     }, [error, dispatch]);
@@ -237,7 +238,7 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
         }
 
         setErrors(newErrors);
-        setTimeout(() => setErrors({}), 3000);
+        setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
         return {
             isValid: Object.keys(newErrors).length === 0,
@@ -461,7 +462,7 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
 
             setTimeout(() => {
                 setAlert({ show: false, title: "", message: "", variant: "" });
-            }, 2000);
+            }, MESSAGE_VISIBLE_MS);
 
             return;
         }
@@ -479,7 +480,7 @@ export default function CompanyForm({ portal = false, plan = "", trialDefault = 
 
             setTimeout(() => {
                 setAlert({ show: false, title: "", message: "", variant: "" });
-            }, 2000);
+            }, MESSAGE_VISIBLE_MS);
 
             return;
         }

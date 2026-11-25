@@ -1,4 +1,5 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import { useCourseStore } from "@/store/courseStore";
@@ -187,7 +188,7 @@ export default function EditTestForm({
                 onError: (error: any) => {
                   // Show the server's reason (duplicate name, not allowed, etc.) on screen.
                   setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
-                  setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
+                  setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 },
             }

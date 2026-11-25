@@ -1,4 +1,6 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import TimePicker from "@/components/form/TimePicker";
 import React, { useEffect, useRef, useState } from "react";
 import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
@@ -175,7 +177,7 @@ export default function EditLabForm({ onCloseModal, labData, kind = "LAB" }: Lab
     // }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
 
     return {
@@ -199,7 +201,7 @@ export default function EditLabForm({ onCloseModal, labData, kind = "LAB" }: Lab
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -215,7 +217,7 @@ export default function EditLabForm({ onCloseModal, labData, kind = "LAB" }: Lab
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -257,7 +259,7 @@ export default function EditLabForm({ onCloseModal, labData, kind = "LAB" }: Lab
         onError: (error: any) => {
           // Show the server's reason (duplicate name, not allowed, etc.) on screen.
           setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
-          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 6000);
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           // You already handle error via redux + toast
           window.scrollTo({ top: 0, behavior: "smooth" })
         },
@@ -274,7 +276,7 @@ export default function EditLabForm({ onCloseModal, labData, kind = "LAB" }: Lab
         {/* Header & Alerts */}
         <div className="border-b pb-4 dark:border-gray-700">
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Update the details below to modify the lab configuration.
+            Update the details below to modify the {isClass ? "class" : "lab"} configuration.
           </p>
         </div>
 
@@ -363,26 +365,14 @@ export default function EditLabForm({ onCloseModal, labData, kind = "LAB" }: Lab
 
                   <div className="w-full sm:w-1/3">
                     <Label className="sm:hidden">Start Time</Label>
-                    <Input
-                      type="time"
-                      value={slot.startTime}
-                      disabled={isLocked}
-                      onChange={(e) =>
-                        handleTimeSlotChange(index, "startTime", e.target.value)
-                      }
-                    />
+                    <TimePicker value={slot.startTime} onChange={(v) =>
+                        handleTimeSlotChange(index, "startTime", v)} disabled={isLocked} />
                   </div>
 
                   <div className="w-full sm:w-1/3">
                     <Label className="sm:hidden">End Time</Label>
-                    <Input
-                      type="time"
-                      value={slot.endTime}
-                      disabled={isLocked}
-                      onChange={(e) =>
-                        handleTimeSlotChange(index, "endTime", e.target.value)
-                      }
-                    />
+                    <TimePicker value={slot.endTime} onChange={(v) =>
+                        handleTimeSlotChange(index, "endTime", v)} disabled={isLocked} />
                   </div>
 
                   {lab.timeSlots.length > 1 && (
