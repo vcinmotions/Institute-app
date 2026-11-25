@@ -1,4 +1,5 @@
 "use client";
+import { useDialog } from "@/components/common/AppDialog";
 import { useCallback, useEffect, useState } from "react";
 import { apiClient, publicApi } from "@/lib/apiClient";
 import { getApiErrorMessage } from "@/lib/apiError";
@@ -15,6 +16,7 @@ const fmt = (d?: string | null) => (d ? new Date(d).toLocaleString("en-IN") : "-
  *  - local mode (anything else): how long the licence runs and a box for the portal's renewal code
  */
 export default function LicenseCard() {
+  const dialog = useDialog();
   const [sub, setSub] = useState<Sub | null>(null);
   const [keys, setKeys] = useState<Keys | null>(null);
   const [devices, setDevices] = useState<Dev[]>([]);
@@ -44,7 +46,7 @@ export default function LicenseCard() {
     } catch (e) { flash(false, getApiErrorMessage(e)); }
   };
   const setStatus = async (d: Dev, status: "ACTIVE" | "REVOKED") => {
-    if (status === "REVOKED" && !confirm(`Block ${d.deviceName}? It can no longer connect until you restore it.`)) return;
+    if (status === "REVOKED" && !(await dialog.confirm({ title: `Block ${d.deviceName}?`, message: "It can no longer connect until you restore it.", confirmText: "Block", danger: true }))) return;
     await apiClient.put(`/client-devices/${d.id}`, { status }); await load();
   };
   const copy = (v?: string | null) => v && navigator.clipboard?.writeText(v).catch(() => {});

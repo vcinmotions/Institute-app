@@ -1,5 +1,6 @@
 "use client";
 
+import { useDialog } from "@/components/common/AppDialog";
 import { API_BASE_URL } from "@/lib/config";
 import React, { useState } from "react";
 import { useFetchReports } from "@/hooks/queries/useQueryFetchReports";
@@ -12,6 +13,7 @@ type ReportType = "ENQUIRIES" | "FINANCE" | "STUDENTS";
 type FinanceStatus = "ALL" | "PAID" | "OUTSTANDING";
 
 export default function ReportsDashboard() {
+  const dialog = useDialog();
     const [reportType, setReportType] = useState<ReportType>("ENQUIRIES");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -105,7 +107,7 @@ export default function ReportsDashboard() {
             window.URL.revokeObjectURL(url);
         } catch (err) {
             console.error(err);
-            alert(`Failed to download ${format} file.`);
+            dialog.alert({ title: "Download failed", message: `Failed to download the ${format} file. Please try again.`, variant: "error" });
         }
     };
 

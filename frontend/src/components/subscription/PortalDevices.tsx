@@ -1,5 +1,6 @@
 "use client";
 
+import { useDialog } from "@/components/common/AppDialog";
 import { useCallback, useEffect, useState } from "react";
 import { portalApi, portalAuthHeader } from "@/lib/portalApi";
 
@@ -13,6 +14,7 @@ const fmt = (d: string) => new Date(d).toLocaleString("en-IN");
 
 /** Institute Super Admin: see activation keys and PCs, and deactivate an old PC to free its slot. */
 export default function PortalDevices() {
+  const dialog = useDialog();
   const [keys, setKeys] = useState<Key[]>([]);
   const [msg, setMsg] = useState("");
 
@@ -27,7 +29,7 @@ export default function PortalDevices() {
   useEffect(() => { load(); }, [load]);
 
   const deactivate = async (d: Dev) => {
-    if (!confirm(`Deactivate ${d.deviceName}? It will lose access at its next check and this counts as one device transfer.`)) return;
+    if (!(await dialog.confirm({ title: `Deactivate ${d.deviceName}?`, message: "It will lose access at its next check, and this counts as one device transfer.", confirmText: "Deactivate", danger: true }))) return;
     setMsg("");
     try {
       await portalApi.post(`/portal/activation/devices/${d.id}/deactivate`, {}, { headers: portalAuthHeader() });

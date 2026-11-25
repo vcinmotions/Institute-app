@@ -12,6 +12,7 @@ import ReactQueryProvider from "./ReactQueryProvider";
 import GlobalDisableSignin from "./utils/GlobalDisableSignin";
 import GlobalDateYearGuard from "./utils/GlobalDateYearGuard";
 import ClientKeyGate from "@/components/subscription/ClientKeyGate";
+import { DialogProvider } from "@/components/common/AppDialog";
 import ConnectionStatus from "@/components/common/ConnectionStatus";
 import ActivationGate from "@/components/subscription/ActivationGate";
 
@@ -34,7 +35,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <ThemeProvider>
               <SidebarProvider>
-                <NotificationProvider>{children}</NotificationProvider>
+                <NotificationProvider><DialogProvider>{children}</DialogProvider></NotificationProvider>
                 <GlobalDisableSignin />
                 <ActivationGate />
                 <ClientKeyGate />

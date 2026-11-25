@@ -1,5 +1,6 @@
 "use client";
 
+import { useDialog } from "@/components/common/AppDialog";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -20,6 +21,7 @@ const blank = (): Perm => ({ view: false, add: false, update: false, delete: fal
 
 /** Role Management (create / rename / delete roles) + Role Access (module-wise permissions). Super Admin only. */
 export default function AccessRolesPage() {
+  const dialog = useDialog();
   const { data, isLoading } = useAccessRoles();
   const modules = data?.modules ?? [];
   const roles = data?.roles ?? [];
@@ -120,7 +122,7 @@ export default function AccessRolesPage() {
             {roles.map((r) => (
               <li key={r.id}>
                 <button
-                  onClick={() => { if (dirty && !confirm("Discard unsaved permission changes?")) return; setDirty(false); setSelectedId(r.id); }}
+                  onClick={async () => { if (dirty && !(await dialog.confirm({ title: "Discard changes?", message: "You have unsaved permission changes for this role.", confirmText: "Discard", danger: true }))) return; setDirty(false); setSelectedId(r.id); }}
                   className={`flex w-full items-center justify-between rounded px-3 py-2 text-left text-sm ${r.id === selectedId ? "bg-brand-50 font-medium text-brand-700 dark:bg-brand-500/10" : "hover:bg-gray-50 dark:hover:bg-gray-800"} dark:text-white`}
                 >
                   <span>{r.name}{r.isDefault && <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800">Default</span>}</span>
@@ -142,13 +144,13 @@ export default function AccessRolesPage() {
                 <div className="flex gap-3 text-sm">
                   {selected.isDefault ? (
                     <button className="underline" disabled={reset.isPending}
-                      onClick={() => { if (confirm(`Reset "${selected.name}" to its default permissions? Your changes to this role will be lost.`)) reset.mutate(selected.id); }}>
+                      onClick={async () => { if (await dialog.confirm({ title: `Reset "${selected.name}"?`, message: "It goes back to the permissions it shipped with. Your changes to this role will be lost.", confirmText: "Reset to default", danger: true })) reset.mutate(selected.id); }}>
                       Reset to default
                     </button>
                   ) : (
                     <>
-                      <button className="underline" onClick={() => { const n = prompt("Rename role", selected.name); if (n && n.trim()) rename.mutate({ id: selected.id, name: n.trim() }); }}>Rename</button>
-                      <button className="text-red-600 underline" onClick={() => { if (confirm(`Delete role "${selected.name}"?`)) remove.mutate(selected.id); }}>Delete</button>
+                      <button className="underline" onClick={async () => { const n = await dialog.prompt({ title: "Rename role", label: "Role name", defaultValue: selected.name, maxLength: 60, confirmText: "Rename" }); if (n && n !== selected.name) rename.mutate({ id: selected.id, name: n }); }}>Rename</button>
+                      <button className="text-red-600 underline" onClick={async () => { if (await dialog.confirm({ title: `Delete role "${selected.name}"?`, message: "Users must be moved to another role first. This cannot be undone.", confirmText: "Delete", danger: true })) remove.mutate(selected.id); }}>Delete</button>
                     </>
                   )}
                 </div>

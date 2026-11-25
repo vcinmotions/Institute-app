@@ -1,5 +1,6 @@
 "use client";
 
+import { useDialog } from "@/components/common/AppDialog";
 import { useCallback, useEffect, useState } from "react";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { apiClient } from "@/lib/apiClient";
@@ -12,6 +13,7 @@ type UState = {
 
 /** Super Admin: check for a new version, download it, back up the database, then install. */
 export default function SoftwareUpdatePage() {
+  const dialog = useDialog();
   const api = typeof window !== "undefined" ? window.electronAPI?.update : undefined;
   const [st, setSt] = useState<UState | null>(null);
   const [busy, setBusy] = useState("");
@@ -27,9 +29,9 @@ export default function SoftwareUpdatePage() {
   };
 
   const install = () => run("install", async () => {
-    if (!confirm(`Install version ${st?.available}?\n\nA backup of all data is taken first. The application will close and reopen. Your data is not touched by an update.`)) return;
+    if (!(await dialog.confirm({ title: `Install version ${st?.available}?`, message: "A backup of all data is taken first. The application will close and reopen. Your data is not touched by an update.", confirmText: "Back up & install" }))) return;
     try { await apiClient.post("/backup"); } // safety net before any update
-    catch (e) { if (!confirm(`The safety backup failed (${getApiErrorMessage(e)}). Install anyway?`)) return; }
+    catch (e) { if (!(await dialog.confirm({ title: "The safety backup failed", message: `${getApiErrorMessage(e)}\n\nInstall anyway?`, confirmText: "Install anyway", danger: true }))) return; }
     await api!.install(token());
   });
 
@@ -67,7 +69,7 @@ export default function SoftwareUpdatePage() {
           </div>
         ))}
         {prev && (
-          <button onClick={() => { if (confirm(`Go back to version ${prev}?\n\nUse this only if the new version has a problem. Restore the pre-update backup afterwards if data looks wrong.`)) run("rollback", async () => { await api.rollback(token(), prev); }); }}
+          <button onClick={async () => { if (await dialog.confirm({ title: `Go back to version ${prev}?`, message: "Use this only if the new version has a problem. Restore the pre-update backup afterwards if data looks wrong.", confirmText: "Roll back", danger: true })) run("rollback", async () => { await api.rollback(token(), prev); }); }}
             disabled={!!busy} className="mt-3 rounded border border-rose-300 px-3 py-1.5 text-sm text-rose-700">Roll back to {prev}</button>
         )}
       </section>

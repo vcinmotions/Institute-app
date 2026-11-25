@@ -1,4 +1,5 @@
 "use client";
+import { useDialog } from "@/components/common/AppDialog";
 import { SERVER_ORIGIN } from "@/lib/config";
 import { getApiErrorMessage } from "@/lib/apiError";
 import React, { useEffect, useState } from "react";
@@ -30,6 +31,7 @@ export default function AttendanceDataTable({
   batchId,
   selectedDate,
 }: AttendanceDataTableProps) {
+  const dialog = useDialog();
   const [attendance, setAttendance] = useState<Record<number, boolean>>({});
   const [attendanceData, setAttendanceData] = useState<any[]>([]);
 
@@ -74,13 +76,13 @@ export default function AttendanceDataTable({
   // ✅ Mutation for marking attendance
   const { mutate: submitAttendance, isPending } = useMutation({
     mutationFn: async (data: any) => await markAttendance(data),
-    onSuccess: () => alert("✅ Attendance saved!"),
+    onSuccess: () => { dialog.alert({ title: "Attendance saved", message: "The attendance was saved.", variant: "success" }); },
     onError: (err) => {
       const reason = getApiErrorMessage(err, "Failed to save attendance");
       const hint = /faculty not found/i.test(reason)
         ? " Attendance must be marked while signed in as a faculty member."
         : "";
-      alert("❌ " + reason + hint);
+      dialog.alert({ title: "Could not save attendance", message: reason + hint, variant: "error" });
     },
   });
 

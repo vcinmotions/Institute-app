@@ -1,4 +1,5 @@
 "use client";
+import { useDialog } from "@/components/common/AppDialog";
 import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useCallback, useEffect, useState } from "react";
 import TimePicker from "@/components/form/TimePicker";
@@ -15,6 +16,7 @@ const mb = (n?: number) => (n ? `${(n / 1048576).toFixed(1)} MB` : "-");
 
 /** Backup & recovery for the Master (Institute Super) Admin: schedule, destinations, history and restore. */
 export default function UserBackUpCard() {
+  const dialog = useDialog();
   const [st, setSt] = useState<Status | null>(null);
   const [cfg, setCfg] = useState<Config | null>(null);
   const [busy, setBusy] = useState("");
@@ -53,9 +55,9 @@ export default function UserBackUpCard() {
 
   const restore = async (f: FileInfo) => {
     if (!window.electronAPI?.performRestore) return flash(false, "Restore is available in the desktop app only.");
-    if (!confirm(`Restore "${f.name}"?\n\nThis REPLACES all current data with the data in this backup, then restarts the application. Anything entered after ${fmt(f.modifiedAt)} will be lost.`)) return;
+    if (!(await dialog.confirm({ title: `Restore "${f.name}"?`, message: `This REPLACES all current data with the data in this backup, then restarts the application. Anything entered after ${fmt(f.modifiedAt)} will be lost.`, confirmText: "Restore", danger: true }))) return;
     // Take a safety backup first so a wrong restore can be undone.
-    try { await apiClient.post("/backup"); } catch { if (!confirm("A safety backup of the current data could not be made. Restore anyway?")) return; }
+    try { await apiClient.post("/backup"); } catch { if (!(await dialog.confirm({ title: "No safety backup", message: "A safety backup of the current data could not be made. Restore anyway?", confirmText: "Restore anyway", danger: true }))) return; }
     await window.electronAPI.performRestore(f.path);
   };
 

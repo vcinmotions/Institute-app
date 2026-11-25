@@ -1,5 +1,6 @@
 "use client";
 
+import { useDialog } from "@/components/common/AppDialog";
 import React, { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import html2canvas from "html2canvas";
@@ -18,6 +19,7 @@ const StudentForm: React.FC<Props> = ({
     studentData,
     companyDetails,
 }) => {
+  const dialog = useDialog();
     const formRef = useRef<HTMLDivElement>(null);
 
     // States
@@ -106,7 +108,7 @@ const StudentForm: React.FC<Props> = ({
             pdf.save(`AdmissionForm_${(student?.fullName || "Student").replace(/\s+/g, "_")}.pdf`);
         } catch (error) {
             console.error("Error generating PDF:", error);
-            alert("Failed to generate PDF file structural output. Please try again.");
+            dialog.alert({ title: "Could not create the PDF", message: "The admission form could not be turned into a PDF. Please try again.", variant: "error" });
         } finally {
             setPdfLoading(false);
         }

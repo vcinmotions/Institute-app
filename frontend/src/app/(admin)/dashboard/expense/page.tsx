@@ -1,5 +1,6 @@
 "use client";
 
+import { useDialog } from "@/components/common/AppDialog";
 import { useCallback, useEffect, useState } from "react";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import RoleProtected from "@/components/auth/RoleProtected";
@@ -28,6 +29,7 @@ const field =
   "mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white";
 
 export default function ExpensePage() {
+  const dialog = useDialog();
   const [rows, setRows] = useState<Expense[]>([]);
   const [total, setTotal] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -92,7 +94,7 @@ export default function ExpensePage() {
   };
 
   const remove = async (x: Expense) => {
-    if (!window.confirm(`Delete this expense (₹${x.amount})?`)) return;
+    if (!(await dialog.confirm({ title: "Delete this expense?", message: `Amount: ₹${x.amount}. This cannot be undone.`, confirmText: "Delete", danger: true }))) return;
     try {
       await apiClient.delete(`/expense/${x.id}`);
       setMsg({ ok: true, text: "Expense deleted" });

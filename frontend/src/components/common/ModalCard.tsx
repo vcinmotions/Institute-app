@@ -39,13 +39,14 @@ const ModalCard: React.FC<ComponentCardProps> = ({
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         // A time pop-up is open: Esc closes just that (the time field handles it), not the whole modal.
-        if (document.querySelector("[data-time-popover]")) return;
+        if (document.querySelector("[data-time-popover], [data-app-dialog]")) return;
         e.preventDefault();
         e.stopPropagation();
         oncloseModal();
         return;
       }
       if (e.key === "Tab") {
+        if (document.querySelector("[data-app-dialog]")) return; // the dialog keeps its own Tab loop
         const list = focusables();
         if (list.length === 0) return;
         const first = list[0];
