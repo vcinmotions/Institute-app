@@ -549,6 +549,7 @@
 
 
 // utils/createTenant.ts
+import { ensureDefaultRoles } from "../services/permissions.service";
 import { exec } from "child_process";
 import { Client } from "pg";
 import { getCentralPrisma } from "../prisma-client/central-client";
@@ -880,6 +881,9 @@ export async function createTenant(
       clientAdminId: admin.id,
     },
   });
+
+  // A new institute database starts with the default roles (Front Desk, Accountant, View Only) already in place.
+  await ensureDefaultRoles(tenantPrisma, admin.id).catch((e: any) => console.error("default roles not created:", e?.message));
 
   await centralPrisma.tenant.create({ 
     data: {

@@ -347,7 +347,7 @@ import { Metadata } from "next";
 import RolesForm from "../form/createRoles";
 
 export const metadata: Metadata = {
-  title: "Create Roles",
+  title: "Create User",
 };
 
 export default function CreateRoles() {

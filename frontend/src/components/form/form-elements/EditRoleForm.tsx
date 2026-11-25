@@ -84,12 +84,25 @@ export default function EditRolesForm({
   const { mutate: editRolesBasedAdmin } = useEditRoles();
 
   const { data: accessRoles } = useAccessRoles();
-  const roles = [
-    { value: "FRONT_DESK", label: "Front Desk" },
-    { value: "ACCOUNTANT", label: "Accountant" },
-    { value: "VIEW_ONLY", label: "View Only" },
-    ...(accessRoles?.roles ?? []).map((r) => ({ value: `custom:${r.id}`, label: `${r.name} (custom)` })),
-  ];
+  // The roles come from Role Access (Front Desk, Accountant and View Only are there by default).
+  // Until they load, the three classic roles are shown so the list is never empty.
+  const roles = accessRoles
+    ? accessRoles.roles.map((r) => ({ value: `custom:${r.id}`, label: r.name }))
+    : [
+        { value: "FRONT_DESK", label: "Front Desk" },
+        { value: "ACCOUNTANT", label: "Accountant" },
+        { value: "VIEW_ONLY", label: "View Only" },
+      ];
+  // A user made before roles were editable still has the old built-in role: select the matching default role.
+  useEffect(() => {
+    if (!accessRoles) return;
+    const nameOf: Record<string, string> = { FRONT_DESK: "Front Desk", ACCOUNTANT: "Accountant", VIEW_ONLY: "View Only" };
+    const wanted = nameOf[formData.role];
+    if (!wanted) return;
+    const match = accessRoles.roles.find((r) => r.name === wanted);
+    if (match) setFormData((prev) => ({ ...prev, role: `custom:${match.id}` }));
+  }, [accessRoles, formData.role]);
+
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -357,7 +370,7 @@ export default function EditRolesForm({
               }}
             >
               <CompanyAccessPicker value={companies} onChange={setCompanies} onMulti={setMulti} defaultRole={formData.role || "FRONT_DESK"} />
-              {!multi && <Label>Assign Role *</Label>}
+              {!multi && <Label>Role *</Label>}
               <div className={multi ? "hidden" : "relative"}>
                 <Select
                   options={roles}

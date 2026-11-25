@@ -65,7 +65,7 @@ export const masterRoutes: Record<string, AdminRouteItem> = {
     roles: ["ADMIN"],
   },
   roles: {
-    label: "Roles",
+    label: "App Users",
     create: "/dashboard/roles/create",
     list: "/dashboard/roles",
     roles: ["ADMIN"],

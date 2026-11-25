@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/apiClient";
 
 export type Perm = { view: boolean; add: boolean; update: boolean; delete: boolean };
-export type AccessRole = { id: number; name: string; description: string | null; userCount: number; permissions: Record<string, Perm> };
+export type AccessRole = { id: number; name: string; description: string | null; isDefault?: boolean; userCount: number; permissions: Record<string, Perm> };
 export type ModuleInfo = { key: string; label: string };
 
 /** Super Admin: custom roles + the module list (also used to offer them in the user form). */

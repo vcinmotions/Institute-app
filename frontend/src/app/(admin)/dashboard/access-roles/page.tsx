@@ -63,6 +63,11 @@ export default function AccessRolesPage() {
     onSuccess: () => { setDirty(false); flash(true, "Role deleted."); },
     onError: (e) => flash(false, getApiErrorMessage(e)),
   });
+  const reset = useMutation({
+    mutationFn: async (id: number) => (await apiClient.post(`/access-roles/${id}/reset`)).data,
+    onSuccess: () => { setDirty(false); flash(true, "Permissions are back to the default."); },
+    onError: (e) => flash(false, getApiErrorMessage(e)),
+  });
   const save = useMutation({
     mutationFn: async () => (await apiClient.put(`/access-roles/${selectedId}/permissions`, { permissions: matrix })).data,
     onSuccess: () => { setDirty(false); flash(true, "Permissions saved. They apply to users of this role immediately."); },
@@ -109,7 +114,7 @@ export default function AccessRolesPage() {
           </div>
           {isLoading && <p className="text-sm text-gray-500">Loading...</p>}
           {!isLoading && roles.length === 0 && (
-            <p className="text-sm text-gray-500">No custom roles yet. The built-in roles (Admin, Front Desk, Accountant, Faculty, View Only) keep working as before.</p>
+            <p className="text-sm text-gray-500">No roles yet.</p>
           )}
           <ul className="space-y-1">
             {roles.map((r) => (
@@ -118,7 +123,7 @@ export default function AccessRolesPage() {
                   onClick={() => { if (dirty && !confirm("Discard unsaved permission changes?")) return; setDirty(false); setSelectedId(r.id); }}
                   className={`flex w-full items-center justify-between rounded px-3 py-2 text-left text-sm ${r.id === selectedId ? "bg-brand-50 font-medium text-brand-700 dark:bg-brand-500/10" : "hover:bg-gray-50 dark:hover:bg-gray-800"} dark:text-white`}
                 >
-                  <span>{r.name}</span>
+                  <span>{r.name}{r.isDefault && <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800">Default</span>}</span>
                   <span className="text-xs text-gray-400">{r.userCount} user{r.userCount === 1 ? "" : "s"}</span>
                 </button>
               </li>
@@ -135,8 +140,17 @@ export default function AccessRolesPage() {
               <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-lg font-semibold dark:text-white">{selected.name}</h2>
                 <div className="flex gap-3 text-sm">
-                  <button className="underline" onClick={() => { const n = prompt("Rename role", selected.name); if (n && n.trim()) rename.mutate({ id: selected.id, name: n.trim() }); }}>Rename</button>
-                  <button className="text-red-600 underline" onClick={() => { if (confirm(`Delete role "${selected.name}"?`)) remove.mutate(selected.id); }}>Delete</button>
+                  {selected.isDefault ? (
+                    <button className="underline" disabled={reset.isPending}
+                      onClick={() => { if (confirm(`Reset "${selected.name}" to its default permissions? Your changes to this role will be lost.`)) reset.mutate(selected.id); }}>
+                      Reset to default
+                    </button>
+                  ) : (
+                    <>
+                      <button className="underline" onClick={() => { const n = prompt("Rename role", selected.name); if (n && n.trim()) rename.mutate({ id: selected.id, name: n.trim() }); }}>Rename</button>
+                      <button className="text-red-600 underline" onClick={() => { if (confirm(`Delete role "${selected.name}"?`)) remove.mutate(selected.id); }}>Delete</button>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -174,7 +188,7 @@ export default function AccessRolesPage() {
               </div>
 
               <div className="mt-4 flex items-center justify-between gap-3">
-                <p className="text-xs text-gray-500">Add, Update and Delete automatically include View. Assign this role to a user under Roles &gt; Create Roles.</p>
+                <p className="text-xs text-gray-500">Add, Update and Delete automatically include View. Assign this role to a user under App Users &gt; Create User.</p>
                 <button
                   onClick={() => save.mutate()}
                   disabled={!dirty || save.isPending}

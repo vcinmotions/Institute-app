@@ -14,6 +14,9 @@ import { Tooltip } from "@heroui/react";
 
 type FollowUpModalType = "createNew" | "update" | "complete" | null;
 
+// Users made before roles became editable still carry the old built-in role name.
+const ROLE_LABEL: Record<string, string> = { ADMIN: "Admin", FRONT_DESK: "Front Desk", ACCOUNTANT: "Accountant", VIEW_ONLY: "View Only", FACULTY: "Faculty" };
+
 type RolesDataTableProps = {
   roles: any[];
   loading: boolean;
@@ -102,7 +105,7 @@ export default function RolesDataTable({
                     </TableCell>
                     <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400">
                       <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-800 dark:bg-slate-800 dark:text-slate-200">
-                        {item.role}
+                        {item.customRole?.name ?? ROLE_LABEL[item.role] ?? item.role}
                       </span>
                     </TableCell>
                     <TableCell className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
@@ -111,7 +114,7 @@ export default function RolesDataTable({
                     <TableCell className="px-3 py-1.5">
                       <Tooltip
                         className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5"
-                        content="Edit Role"
+                        content="Edit User"
                       >
                         <button
                           className="rounded p-0.5 text-slate-500 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
@@ -142,7 +145,7 @@ export default function RolesDataTable({
                     colSpan={5}
                     className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                   >
-                    No Roles found.
+                    No users found.
                   </TableCell>
                 </TableRow>
               )}

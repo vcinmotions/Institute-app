@@ -2,6 +2,7 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import { getTenantPrisma } from "../prisma-client/tenant-client";
 import { getTenantDbUrl } from "./envLoader";
+import { ensureDefaultRoles } from "../services/permissions.service";
 
 /**
  * One institute = one database. Companies are ClientAdmin rows inside it.
@@ -77,6 +78,8 @@ export async function createCompanyRow(db: Db, masterSlug: string, c: CompanyInp
       clientAdminId: company.id,
     },
   });
+  // Every company starts with the default roles (Front Desk, Accountant, View Only).
+  await ensureDefaultRoles(db, company.id).catch((e: any) => console.error("default roles not created:", e?.message));
   return company;
 }
 

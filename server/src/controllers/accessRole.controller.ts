@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
-import { MODULES, PermMap, clearPermissionCache, loadPermissions, normalizePerm } from "../services/permissions.service";
+import {
+  DEFAULT_ROLES, DEFAULT_ROLE_MARK, DEFAULT_ROLE_NAMES, MODULES, PermMap, clearPermissionCache, defaultRows, ensureDefaultRoles, loadPermissions, normalizePerm,
+} from "../services/permissions.service";
 
 /**
  * Role Management + Role Access (permissions). Super Admin (ADMIN) only - enforced by roleGuard.
@@ -16,10 +18,14 @@ function ctx(req: Request) {
   return { prisma, user, clientAdminId: String(user.clientAdminId) };
 }
 
+const isDefaultRole = (r: { name: string; description?: string | null }) =>
+  r.description === DEFAULT_ROLE_MARK && DEFAULT_ROLE_NAMES.includes(r.name);
+
 const view = (r: any) => ({
   id: r.id,
   name: r.name,
   description: r.description,
+  isDefault: isDefaultRole(r),
   userCount: r._count?.users ?? r.users?.length ?? 0,
   permissions: Object.fromEntries(
     MODULES.map((m) => {
@@ -32,6 +38,7 @@ const view = (r: any) => ({
 export async function listAccessRoles(req: Request, res: Response) {
   const c = ctx(req);
   if (!c) return res.status(401).json({ error: "Unauthorized request" });
+  await ensureDefaultRoles(c.prisma, c.clientAdminId);
   const roles = await c.prisma.accessRole.findMany({
     where: { clientAdminId: c.clientAdminId },
     include: { permissions: true, _count: { select: { users: true } } },
@@ -71,6 +78,7 @@ export async function updateAccessRole(req: Request, res: Response) {
   if (!name || name.length > NAME_MAX) return res.status(400).json({ error: `Role name is required (max ${NAME_MAX} characters).` });
   const existing = await c.prisma.accessRole.findFirst({ where: { id, clientAdminId: c.clientAdminId } });
   if (!existing) return res.status(404).json({ error: "Role not found." });
+  if (isDefaultRole(existing)) return res.status(400).json({ error: "A default role cannot be renamed. You can change what it is allowed to do." });
   try {
     const role = await c.prisma.accessRole.update({
       where: { id },
@@ -91,6 +99,7 @@ export async function deleteAccessRole(req: Request, res: Response) {
   const id = Number(req.params.id);
   const role = await c.prisma.accessRole.findFirst({ where: { id, clientAdminId: c.clientAdminId }, include: { _count: { select: { users: true } } } });
   if (!role) return res.status(404).json({ error: "Role not found." });
+  if (isDefaultRole(role)) return res.status(400).json({ error: "A default role cannot be deleted." });
   if (role._count.users > 0) {
     return res.status(409).json({ error: `${role._count.users} user(s) still use this role. Move them to another role first.` });
   }
@@ -122,6 +131,25 @@ export async function setAccessRolePermissions(req: Request, res: Response) {
   clearPermissionCache();
   await logActivity({ clientAdminId: c.clientAdminId, entity: "AccessRole", entityId: String(id), action: "UPDATE", message: `Permissions changed for role: ${role.name}`, dbUrl: c.user.dbUrl });
   const fresh = await c.prisma.accessRole.findUnique({ where: { id }, include: { permissions: true } });
+  res.json(view(fresh));
+}
+
+/** Puts a default role back to the permissions it shipped with. */
+export async function resetAccessRole(req: Request, res: Response) {
+  const c = ctx(req);
+  if (!c) return res.status(401).json({ error: "Unauthorized request" });
+  const id = Number(req.params.id);
+  const role = await c.prisma.accessRole.findFirst({ where: { id, clientAdminId: c.clientAdminId } });
+  if (!role) return res.status(404).json({ error: "Role not found." });
+  const def = DEFAULT_ROLES.find((d) => d.name === role.name);
+  if (!def || !isDefaultRole(role)) return res.status(400).json({ error: "Only the default roles can be reset." });
+  await c.prisma.$transaction([
+    c.prisma.accessRolePermission.deleteMany({ where: { roleId: id } }),
+    c.prisma.accessRolePermission.createMany({ data: defaultRows(id, def.perms) }),
+  ]);
+  clearPermissionCache();
+  await logActivity({ clientAdminId: c.clientAdminId, entity: "AccessRole", entityId: String(id), action: "UPDATE", message: `Role reset to default: ${role.name}`, dbUrl: c.user.dbUrl });
+  const fresh = await c.prisma.accessRole.findUnique({ where: { id }, include: { permissions: true, _count: { select: { users: true } } } });
   res.json(view(fresh));
 }
 

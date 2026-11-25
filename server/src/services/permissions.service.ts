@@ -11,8 +11,8 @@ export type ModuleDef = { key: string; label: string; test: RegExp };
 
 export const MODULES: ModuleDef[] = [
   { key: "enquiry", label: "Enquiry & Follow-ups", test: /^\/(enquiry|enquiry-new|edit-enquiry|followup|followup-edit|won-enquiry|missed-followups|pending-followups|followup-stats)(\/|$)/ },
-  { key: "admission", label: "Admission & Students", test: /^\/(admission|admission-new|edit-student|student|students|add-course|student-course|course-completion|create-op)(\/|$)/ },
-  { key: "payment", label: "Payments & Fees", test: /^\/(create-student-payment|advance-payment|payment|outstanding)(\/|$)/ },
+  { key: "admission", label: "Admission & Students", test: /^\/(admission|admission-new|edit-student|student|students|add-course|student-course)(\/|$)/ },
+  { key: "payment", label: "Payments & Fees", test: /^\/(create-student-payment|advance-payment|payment|create-op)(\/|$)/ },
   { key: "course", label: "Course", test: /^\/(create-course|edit-course|course)(\/|$)/ },
   { key: "faculty", label: "Faculty", test: /^\/(create-faculty|edit-faculty|faculty|assign-batch)(\/|$)|^\/\d+\/batches/ },
   { key: "batch", label: "Batch", test: /^\/(create-batch|batch)(\/|$)/ },
@@ -20,11 +20,11 @@ export const MODULES: ModuleDef[] = [
   { key: "lab", label: "Lab & Time Slots", test: /^\/(create-lab|edit-lab|all-lab|lab)(\/|$)/ },
   { key: "source", label: "Source Config", test: /^\/(create-source|source)(\/|$)/ },
   { key: "stationary", label: "Stationary", test: /^\/(create-stationary|edit-stationary|stationary)(\/|$)/ },
-  { key: "attendance", label: "Attendance", test: /^\/(attendance|attendance-report)(\/|$)/ },
+  { key: "attendance", label: "Attendance", test: /^\/(attendance|attendance-report|course-completion)(\/|$)/ },
   { key: "task", label: "Tasks", test: /^\/(create-task|edit-task|task|task-publish|task-completion)(\/|$)/ },
   { key: "test", label: "Tests & Marks", test: /^\/(create-test|edit-test|test|test-marks|test-upload)(\/|$)/ },
   { key: "expense", label: "Expenses", test: /^\/expense(\/|$)/ },
-  { key: "reports", label: "Reports & Finance Summary", test: /^\/(reports|profit|financial-summary)(\/|$)/ },
+  { key: "reports", label: "Reports & Finance Summary", test: /^\/(reports|profit|financial-summary|outstanding)(\/|$)/ },
   { key: "users", label: "Users", test: /^\/(role-user|edit-role-user|all-client)(\/|$)/ },
   { key: "settings", label: "Settings (config, branches, backup)", test: /^\/(admission-config|payment-receipt-config|branches|user|backup|restore)(\/|$)/ },
 ];
@@ -50,6 +50,51 @@ export function resolve(method: string, path: string): { module: string; action:
   if (method.toUpperCase() === "POST" && POST_IS_UPDATE.test(path)) action = "update";
   return { module: mod.key, action };
 }
+
+/**
+ * The three roles every company starts with. Their permissions reproduce EXACTLY what the old built-in roles could do
+ * (see the rules in middlewares/roleGuard.middleware.ts), so nothing changes for anyone. The Super Admin can then
+ * adjust them under Role Access; "Reset to default" restores these.
+ */
+export const DEFAULT_ROLE_MARK = "Default role";
+type P = Partial<{ view: boolean; add: boolean; update: boolean; delete: boolean }>;
+const READ_MODULES = ["enquiry", "admission", "payment", "course", "faculty", "batch", "lab", "class", "source", "stationary", "attendance", "task", "test", "settings"];
+
+function build(view: string[], extra: Record<string, P> = {}): Record<string, P> {
+  const out: Record<string, P> = {};
+  for (const m of view) out[m] = { view: true };
+  for (const [m, p] of Object.entries(extra)) out[m] = { ...(out[m] ?? {}), ...p, view: true };
+  return out;
+}
+
+export const DEFAULT_ROLES: { name: string; description: string; perms: Record<string, P> }[] = [
+  {
+    // Reception: handles enquiries, admissions and stationary; can look at everything else teaching/academic.
+    name: "Front Desk",
+    description: DEFAULT_ROLE_MARK,
+    perms: build(READ_MODULES, {
+      enquiry: { add: true, update: true },
+      admission: { add: true, update: true },
+      stationary: { add: true, update: true },
+    }),
+  },
+  {
+    // Accounts: payments, expenses and the financial reports; read-only everywhere else.
+    name: "Accountant",
+    description: DEFAULT_ROLE_MARK,
+    perms: build([...READ_MODULES, "expense", "reports"], {
+      payment: { add: true, update: true },
+      expense: { add: true, update: true, delete: true },
+    }),
+  },
+  {
+    // Can look, cannot change anything. No expenses, financial reports or user management.
+    name: "View Only",
+    description: DEFAULT_ROLE_MARK,
+    perms: build(READ_MODULES),
+  },
+];
+export const DEFAULT_ROLE_NAMES = DEFAULT_ROLES.map((r) => r.name);
 
 export type PermMap = Record<string, { view: boolean; add: boolean; update: boolean; delete: boolean }>;
 
@@ -93,4 +138,28 @@ export function allowed(perms: PermMap, method: string, path: string): boolean {
     return ["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase()) || ALWAYS_OK.test(path);
   }
   return !!perms[r.module]?.[r.action];
+}
+
+/** Rows for one default role's permission table. */
+export const defaultRows = (roleId: number, perms: Record<string, any>) =>
+  MODULES.map((m) => {
+    const p = normalizePerm(perms[m.key] ?? {});
+    return { roleId, module: m.key, canView: p.view, canAdd: p.add, canUpdate: p.update, canDelete: p.delete };
+  }).filter((r) => r.canView || r.canAdd || r.canUpdate || r.canDelete);
+
+/**
+ * Every company starts with the three default roles (Front Desk, Accountant, View Only), created the first time roles are
+ * listed. Their permissions equal what the old built-in roles could do. Safe to call repeatedly.
+ */
+export async function ensureDefaultRoles(prisma: any, clientAdminId: string) {
+  for (const d of DEFAULT_ROLES) {
+    const exists = await prisma.accessRole.findFirst({ where: { clientAdminId, name: d.name } });
+    if (exists) continue;
+    try {
+      const role = await prisma.accessRole.create({ data: { name: d.name, description: d.description, clientAdminId } });
+      await prisma.accessRolePermission.createMany({ data: defaultRows(role.id, d.perms) });
+    } catch (e: any) {
+      if (e?.code !== "P2002") throw e; // another request created it first
+    }
+  }
 }

@@ -7,7 +7,7 @@ import {
 } from "../controllers/roles.controller";
 
 import {
-  listAccessRoles, createAccessRole, updateAccessRole, deleteAccessRole, setAccessRolePermissions, myPermissions,
+  listAccessRoles, createAccessRole, updateAccessRole, deleteAccessRole, setAccessRolePermissions, resetAccessRole, myPermissions,
 } from "../controllers/accessRole.controller";
 
 const router = express.Router();
@@ -18,6 +18,7 @@ router.post("/access-roles", createAccessRole);
 router.put("/access-roles/:id", updateAccessRole);
 router.delete("/access-roles/:id", deleteAccessRole);
 router.put("/access-roles/:id/permissions", setAccessRolePermissions);
+router.post("/access-roles/:id/reset", resetAccessRole);
 router.get("/my-permissions", myPermissions);
 
 router.post("/role-user", createRoleUserController);

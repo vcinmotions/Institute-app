@@ -59,13 +59,15 @@ export default function RolesForm() {
   const { mutate: createRolesBasedAdmin } = useCreateRolest();
 
   const { data: accessRoles } = useAccessRoles();
-  const roles = [
-    { value: "FRONT_DESK", label: "Front Desk" },
-    { value: "ACCOUNTANT", label: "Accountant" },
-    { value: "VIEW_ONLY", label: "View Only" },
-    // Roles made by the Super Admin under Role Access (module-wise View / Add / Update / Delete).
-    ...(accessRoles?.roles ?? []).map((r) => ({ value: `custom:${r.id}`, label: `${r.name} (custom)` })),
-  ];
+  // The roles come from Role Access (Front Desk, Accountant and View Only are there by default).
+  // Until they load, the three classic roles are shown so the list is never empty.
+  const roles = accessRoles
+    ? accessRoles.roles.map((r) => ({ value: `custom:${r.id}`, label: r.name }))
+    : [
+        { value: "FRONT_DESK", label: "Front Desk" },
+        { value: "ACCOUNTANT", label: "Accountant" },
+        { value: "VIEW_ONLY", label: "View Only" },
+      ];
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -189,7 +191,7 @@ export default function RolesForm() {
         setAlert({
           show: true,
           title: "Role Created",
-          message: "New role-based user created successfully ✅",
+          message: "New user created successfully ✅",
           variant: "success",
         });
 
@@ -215,15 +217,15 @@ export default function RolesForm() {
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Create Roles" />
+      <PageBreadcrumb pageTitle="Create User" />
 
       <div className="form-container">
         <div className="flex flex-col gap-6">
 
           {/* Header & Alerts */}
           <div className="border-b pb-4 dark:border-gray-700">
-            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">Roles Information</h2>
-            <p className="mt-1 text-[12px] text-gray-500 dark:text-gray-400">Fill in the details below to add a new role-based user.</p>
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">User Information</h2>
+            <p className="mt-1 text-[12px] text-gray-500 dark:text-gray-400">Fill in the details below to add a new app user.</p>
           </div>
 
           {alert.show && (
@@ -288,7 +290,7 @@ export default function RolesForm() {
 
               <CompanyAccessPicker value={companies} onChange={setCompanies} onMulti={setMulti} />
               <div ref={(el) => { if (inputRefs.current) inputRefs.current.role = el; }}>
-                {!multi && <Label>Assign Role *</Label>}
+                {!multi && <Label>Role *</Label>}
                 <div className={multi ? "hidden" : "relative"}>
                   <Select
                     options={roles}

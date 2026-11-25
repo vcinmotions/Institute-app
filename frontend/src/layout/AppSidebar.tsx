@@ -64,7 +64,7 @@ const MODULE_BY_NAME: Record<string, string> = {
   Enquiry: "enquiry", Admission: "admission", "Admission Config": "settings", Students: "admission",
   "Student Course": "admission", Batch: "batch", Course: "course", Lab: "lab", Class: "class", Faculty: "faculty",
   Test: "test", Attendance: "attendance", Payment: "payment", Expenses: "expense",
-  "Receipt Config": "settings", Master: "source", Roles: "users", Reports: "reports",
+  "Receipt Config": "settings", Master: "source", "App Users": "users", Reports: "reports",
   "Compare Companies": "reports",
 };
 const ALWAYS_VISIBLE = ["Dashboard", "Calendar"];
@@ -251,12 +251,12 @@ const navItems: NavItem[] = [
   {
     group: "Administration",
     icon: <LockIcon />,
-    name: "Roles",
+    name: "App Users",
     path: "/dashboard/roles",
     roles: ["ADMIN", "FRONT_DESK"],
     subItems: [
-      { name: "Roles List", path: "/dashboard/roles" },
-      { name: "Create Roles", path: "/dashboard/roles/create" },
+      { name: "Users List", path: "/dashboard/roles" },
+      { name: "Create User", path: "/dashboard/roles/create" },
     ],
   },
   {
