@@ -20,7 +20,7 @@ const RULES: Rule[] = [
   { test: /^\/all-client/, roles: ADMIN },
   { test: /^\/log/, roles: ADMIN },
   { test: /^\/(admission-config|payment-receipt-config)\/?$/, methods: ["POST", "PUT"], roles: ADMIN },
-  { test: /^\/(create-lab|edit-lab)/, roles: ADMIN },
+  { test: /^\/(create-lab|edit-lab|create-class|edit-class)/, roles: ADMIN },
   { test: /^\/(create-course|edit-course)/, roles: ADMIN },
   { test: /^\/(create-faculty|edit-faculty|assign-batch)/, roles: ADMIN },
   { test: /^\/create-batch/, roles: ADMIN },

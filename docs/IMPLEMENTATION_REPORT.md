@@ -288,3 +288,13 @@ The login page reloaded itself in a loop. My new login branding call hit a backe
 ## Environment files
 - Loaded by code: `server/.env.dev` or `server/.env.prod` (by `APP_ENV`), then `server/.env`, then `server/.env.portal` (portal only). **`.env.production` is not read by anything** (unused leftover).
 - New variables: `SUBSCRIPTION_MODE` (ENABLED or anything else), `LOCAL_LICENSE_MONTHS`.
+
+---
+
+# Class module (for institutes without a computer lab)
+
+- **What it is:** the same screens and rules as Lab, for institutes that have classrooms instead of PC labs. A class has a name, a room/location, a **seat capacity** and time slots. Saving it creates **one batch per time slot automatically**, exactly like a lab. Students admitted to those batches take a seat the same way lab students take a PC; a full class is refused with "the batch is full".
+- **How:** classes are stored in the lab tables with a new `Lab.kind` (`LAB` default, or `CLASS`), so batches, admission, faculty and attendance all work unchanged. Lab and Class lists are separate; classes never appear in the lab list or in the Batch form's lab picker. A class cannot be edited through the lab screen or the other way round.
+- **Where:** sidebar "Class" (Class List / Create Class), routes `/dashboard/class`, `/dashboard/class/create`; API `/all-class`, `/create-class`, `/edit-class/:id`; its own permission module "Class & Time Slots" in Role Access (built-in roles follow the Lab rules: ADMIN creates/edits, others read).
+- **Database change:** `Lab.kind` (both schemas). PostgreSQL dev databases need `npm run db:push:dev -- --apply`, then restart the backend; the installed app adds it on its own.
+- **Tested:** 22 checks on a real database (create class, batch per slot, lab unaffected, separate lists, validation, cross-kind edit refused, add-slot creates a batch, permissions). Screens compile but were not clicked through.

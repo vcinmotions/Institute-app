@@ -62,7 +62,7 @@ type NavItem = {
 // Sidebar item -> permission module (used for custom, Super-Admin defined roles).
 const MODULE_BY_NAME: Record<string, string> = {
   Enquiry: "enquiry", Admission: "admission", "Admission Config": "settings", Students: "admission",
-  "Student Course": "admission", Batch: "batch", Course: "course", Lab: "lab", Faculty: "faculty",
+  "Student Course": "admission", Batch: "batch", Course: "course", Lab: "lab", Class: "class", Faculty: "faculty",
   Test: "test", Attendance: "attendance", Payment: "payment", Expenses: "expense",
   "Receipt Config": "settings", Master: "source", Roles: "users", Reports: "reports",
   "Compare Companies": "reports",
@@ -162,6 +162,17 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Lab List", path: "/dashboard/lab" },
       { name: "Create Lab", path: "/dashboard/lab/create" },
+    ],
+  },
+  {
+    group: "Academics",
+    icon: <LockIcon />,
+    name: "Class",
+    path: "/dashboard/class",
+    roles: ["ADMIN", "FRONT_DESK"],
+    subItems: [
+      { name: "Class List", path: "/dashboard/class" },
+      { name: "Create Class", path: "/dashboard/class/create" },
     ],
   },
   {

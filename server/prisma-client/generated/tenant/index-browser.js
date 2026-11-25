@@ -363,7 +363,8 @@ exports.Prisma.LabScalarFieldEnum = {
   location: 'location',
   totalPCs: 'totalPCs',
   isActive: 'isActive',
-  clientAdminId: 'clientAdminId'
+  clientAdminId: 'clientAdminId',
+  kind: 'kind'
 };
 
 exports.Prisma.LabTimeSlotScalarFieldEnum = {

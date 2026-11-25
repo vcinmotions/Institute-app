@@ -27,6 +27,7 @@ interface GetNotificationParams {
 }
 
 interface GetLabParams {
+  kind?: "LAB" | "CLASS"; // LAB (default) or CLASS
   token: string;
   page?: number;
   limit?: number;
@@ -210,8 +211,9 @@ export const getLab = async ({
   search = "",
   sortField,
   sortOrder,
+  kind,
 }: GetLabParams) => {
-  const response = await apiClient.get("/all-lab", {
+  const response = await apiClient.get(kind === "CLASS" ? "/all-class" : "/all-lab", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -299,7 +301,7 @@ export const editRolesApi = async (token: string, formData: any, id: any) => {
 };
 
 export const createLabApi = async (token: string, newLabData: any) => {
-  const response = await apiClient.post(`/create-lab`, newLabData, {
+  const response = await apiClient.post(newLabData?.kind === "CLASS" ? `/create-class` : `/create-lab`, newLabData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -317,7 +319,7 @@ export const createOpeningBalanceApi = async (token: string, newStudent: any) =>
 };
 
 export const editLabApi = async (token: string, newLabData: any, id: any) => {
-  const response = await apiClient.put(`/edit-lab/${id}`, newLabData, {
+  const response = await apiClient.put(newLabData?.kind === "CLASS" ? `/edit-class/${id}` : `/edit-lab/${id}`, newLabData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -326,7 +326,7 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
         }
 
         if (!nextPcNumber) {
-          throw new Error("No free PCs available in this lab time slot");
+          throw new Error("No free seats/PCs available in this time slot (the batch is full)");
         }
 
         console.log(

@@ -16,6 +16,7 @@ export const MODULES: ModuleDef[] = [
   { key: "course", label: "Course", test: /^\/(create-course|edit-course|course)(\/|$)/ },
   { key: "faculty", label: "Faculty", test: /^\/(create-faculty|edit-faculty|faculty|assign-batch)(\/|$)|^\/\d+\/batches/ },
   { key: "batch", label: "Batch", test: /^\/(create-batch|batch)(\/|$)/ },
+  { key: "class", label: "Class & Time Slots", test: /^\/(create-class|edit-class|all-class)(\/|$)/ },
   { key: "lab", label: "Lab & Time Slots", test: /^\/(create-lab|edit-lab|all-lab|lab)(\/|$)/ },
   { key: "source", label: "Source Config", test: /^\/(create-source|source)(\/|$)/ },
   { key: "stationary", label: "Stationary", test: /^\/(create-stationary|edit-stationary|stationary)(\/|$)/ },

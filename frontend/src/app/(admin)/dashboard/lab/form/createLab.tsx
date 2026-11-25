@@ -29,7 +29,9 @@ interface LabData {
   timeSlots: TimeSlot[];
 }
 
-export default function LabForm() {
+export default function LabForm({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }) {
+  const isClass = kind === "CLASS";
+  const noun = isClass ? "Class" : "Lab";
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: createLab } = useCreateLab();
   const { form, setField, reset } = useLabStore();
@@ -123,10 +125,10 @@ export default function LabForm() {
   // 🔹 Basic validation
   const validate = () => {
     const newErrors: FormErrors = {};
-    if (!lab.name.trim()) newErrors.name = "Lab name is required.";
+    if (!lab.name.trim()) newErrors.name = `${noun} name is required.`;
     // if (!lab.location.trim()) newErrors.location = "Location is required.";
     if (!lab.totalPCs || lab.totalPCs <= 0)
-      newErrors.totalPCs = "Total PCs must be greater than 0." as any;
+      newErrors.totalPCs = (isClass ? "Seats must be greater than 0." : "Total PCs must be greater than 0.") as any;
     if (
       !lab.timeSlots ||
       lab.timeSlots.length === 0 ||
@@ -190,6 +192,7 @@ export default function LabForm() {
 
     const normalizedLab = {
       ...lab,
+      kind,
       name: titleCase(lab.name),
       location: normalizeToLowercase(lab.location),
     }
@@ -207,7 +210,7 @@ export default function LabForm() {
         setAlert({
           show: true,
           title: "Success",
-          message: "Lab created successfully!",
+          message: `${noun} created successfully!`,
           variant: "Success",
         });
 
@@ -235,15 +238,15 @@ export default function LabForm() {
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Create Lab" />
+      <PageBreadcrumb pageTitle={`Create ${noun}`} />
 
       <div className="form-container">
         <div className="flex flex-col gap-6">
 
           {/* Header & Alerts */}
           <div className="border-b pb-4 dark:border-gray-700">
-            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">Lab Information</h2>
-            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new system Lab.</p>
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">{noun} Information</h2>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new {isClass ? "classroom. A batch is created automatically for every time slot" : "system Lab"}.</p>
           </div>
 
           {/* Alert Messages */}
@@ -259,7 +262,7 @@ export default function LabForm() {
           {/* Form Grouping: Lab Details */}
           <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
-              Lab Details
+              {noun} Details
             </h3>
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -268,7 +271,7 @@ export default function LabForm() {
                   if (inputRefs.current) inputRefs.current.name = el;
                 }}
               >
-                <Label>Lab Name *</Label>
+                <Label>{noun} Name *</Label>
                 <Input
                   ref={firstInputRef}
                   type="text"
@@ -305,7 +308,7 @@ export default function LabForm() {
                   if (inputRefs.current) inputRefs.current.totalPCs = el;
                 }}
               >
-                <Label>Total PCs *</Label>
+                <Label>{isClass ? "Seats (student capacity) *" : "Total PCs *"}</Label>
                 <Input
                   type="number"
                   min={0}
@@ -403,7 +406,7 @@ export default function LabForm() {
               onClick={handleSubmit}
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             >
-              Save Lab
+              Save {noun}
             </Button>
           </div>
 

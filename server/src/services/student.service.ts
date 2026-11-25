@@ -838,7 +838,7 @@ export async function createStudentService({
           }
         }
 
-        if (!freePC) throw new Error(`No free PCs available for batch ${batchId}`);
+        if (!freePC) throw new Error(`No free seats/PCs available for batch ${batchId} (the batch is full)`);
 
         const existingAllocation = await tx.labAllocation.findFirst({
           where: { labTimeSlotId: labTimeSlot.id, pcNumber: freePC },

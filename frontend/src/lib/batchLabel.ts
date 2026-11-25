@@ -2,5 +2,5 @@
 export function batchLabel(b: any): string {
   const ts = b?.labTimeSlot;
   if (!ts) return `${b?.name} | ${b?.classType ?? "Regular"}`;
-  return `${b.name} | ${ts.startTime} - ${ts.endTime} | PCs: ${ts.availablePCs}`;
+  return `${b.name} | ${ts.startTime} - ${ts.endTime} | ${b.classType === "CLASS" ? "Seats" : "PCs"}: ${ts.availablePCs}`;
 }

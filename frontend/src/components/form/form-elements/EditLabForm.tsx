@@ -17,6 +17,7 @@ type FormErrors = Partial<Record<keyof LabData, string>>;
 interface LabFormProps {
   onCloseModal: () => void;
   labData: any;
+  kind?: "LAB" | "CLASS";
 }
 
 // interface TimeSlot {
@@ -43,7 +44,9 @@ interface LabData {
   timeSlots: TimeSlot[];
 }
 
-export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
+export default function EditLabForm({ onCloseModal, labData, kind = "LAB" }: LabFormProps) {
+  const isClass = kind === "CLASS";
+  const noun = isClass ? "Class" : "Lab";
   console.log("GET LAB DATA IN EDIT LAB FORM:", labData);
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: editLab } = useEditLab();
@@ -131,10 +134,10 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
   // 🔹 Basic validation
   const validate = () => {
     const newErrors: FormErrors = {};
-    if (!lab.name.trim()) newErrors.name = "Lab name is required.";
+    if (!lab.name.trim()) newErrors.name = `${noun} name is required.`;
     if (!lab.location.trim()) newErrors.location = "Location is required.";
     if (!lab.totalPCs || lab.totalPCs <= 0)
-      newErrors.totalPCs = "Total PCs must be greater than 0." as any;
+      newErrors.totalPCs = (isClass ? "Seats must be greater than 0." : "Total PCs must be greater than 0.") as any;
 
     const isInvalidSlot = lab.timeSlots.some((slot) => {
       // Ignore completely empty slot
@@ -222,6 +225,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
     const normalizedLab = {
       ...lab,
+      kind,
       name: titleCase(lab.name),
       location: normalizeToLowercase(lab.location),
     }
@@ -241,7 +245,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
           setAlert({
             show: true,
             title: "Success",
-            message: "Lab created successfully!",
+            message: `${noun} updated successfully!`,
             variant: "Success",
           });
 
@@ -264,7 +268,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
   console.log("GET UPDATED LAB FORM DATA:", lab);
 
   return (
-    <ModalCard title="Edit Lab" oncloseModal={onCloseModal}>
+    <ModalCard title={`Edit ${noun}`} oncloseModal={onCloseModal}>
       <div className="flex flex-col gap-6">
 
         {/* Header & Alerts */}
@@ -286,11 +290,11 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
         {/* Section 1: Lab Details */}
         <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
-            Lab Details
+            {noun} Details
           </h3>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             <div ref={(el) => { inputRefs.current.name = el; }}>
-              <Label>Lab Name *</Label>
+              <Label>{noun} Name *</Label>
               <Input
                 ref={firstInputRef}
                 type="text"
@@ -315,7 +319,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
             </div>
 
             <div ref={(el) => { inputRefs.current.totalPCs = el; }}>
-              <Label>Total PCs *</Label>
+              <Label>{isClass ? "Seats (student capacity) *" : "Total PCs *"}</Label>
               <Input
                 type="number"
                 placeholder="Ex. 15"

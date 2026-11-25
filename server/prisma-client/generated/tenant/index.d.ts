@@ -27722,6 +27722,7 @@ export namespace Prisma {
     totalPCs: number | null
     isActive: boolean | null
     clientAdminId: string | null
+    kind: string | null
   }
 
   export type LabMaxAggregateOutputType = {
@@ -27732,6 +27733,7 @@ export namespace Prisma {
     totalPCs: number | null
     isActive: boolean | null
     clientAdminId: string | null
+    kind: string | null
   }
 
   export type LabCountAggregateOutputType = {
@@ -27742,6 +27744,7 @@ export namespace Prisma {
     totalPCs: number
     isActive: number
     clientAdminId: number
+    kind: number
     _all: number
   }
 
@@ -27766,6 +27769,7 @@ export namespace Prisma {
     totalPCs?: true
     isActive?: true
     clientAdminId?: true
+    kind?: true
   }
 
   export type LabMaxAggregateInputType = {
@@ -27776,6 +27780,7 @@ export namespace Prisma {
     totalPCs?: true
     isActive?: true
     clientAdminId?: true
+    kind?: true
   }
 
   export type LabCountAggregateInputType = {
@@ -27786,6 +27791,7 @@ export namespace Prisma {
     totalPCs?: true
     isActive?: true
     clientAdminId?: true
+    kind?: true
     _all?: true
   }
 
@@ -27883,6 +27889,7 @@ export namespace Prisma {
     totalPCs: number
     isActive: boolean
     clientAdminId: string
+    kind: string
     _count: LabCountAggregateOutputType | null
     _avg: LabAvgAggregateOutputType | null
     _sum: LabSumAggregateOutputType | null
@@ -27912,6 +27919,7 @@ export namespace Prisma {
     totalPCs?: boolean
     isActive?: boolean
     clientAdminId?: boolean
+    kind?: boolean
     branch?: boolean | Lab$branchArgs<ExtArgs>
     financialRecords?: boolean | Lab$financialRecordsArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
@@ -27927,6 +27935,7 @@ export namespace Prisma {
     totalPCs?: boolean
     isActive?: boolean
     clientAdminId?: boolean
+    kind?: boolean
     branch?: boolean | Lab$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lab"]>
@@ -27939,6 +27948,7 @@ export namespace Prisma {
     totalPCs?: boolean
     isActive?: boolean
     clientAdminId?: boolean
+    kind?: boolean
     branch?: boolean | Lab$branchArgs<ExtArgs>
     clientAdmin?: boolean | ClientAdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lab"]>
@@ -27951,9 +27961,10 @@ export namespace Prisma {
     totalPCs?: boolean
     isActive?: boolean
     clientAdminId?: boolean
+    kind?: boolean
   }
 
-  export type LabOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"branchId" | "id" | "name" | "location" | "totalPCs" | "isActive" | "clientAdminId", ExtArgs["result"]["lab"]>
+  export type LabOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"branchId" | "id" | "name" | "location" | "totalPCs" | "isActive" | "clientAdminId" | "kind", ExtArgs["result"]["lab"]>
   export type LabInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | Lab$branchArgs<ExtArgs>
     financialRecords?: boolean | Lab$financialRecordsArgs<ExtArgs>
@@ -27986,6 +27997,7 @@ export namespace Prisma {
       totalPCs: number
       isActive: boolean
       clientAdminId: string
+      kind: string
     }, ExtArgs["result"]["lab"]>
     composites: {}
   }
@@ -28420,6 +28432,7 @@ export namespace Prisma {
     readonly totalPCs: FieldRef<"Lab", 'Int'>
     readonly isActive: FieldRef<"Lab", 'Boolean'>
     readonly clientAdminId: FieldRef<"Lab", 'String'>
+    readonly kind: FieldRef<"Lab", 'String'>
   }
     
 
@@ -56110,7 +56123,8 @@ export namespace Prisma {
     location: 'location',
     totalPCs: 'totalPCs',
     isActive: 'isActive',
-    clientAdminId: 'clientAdminId'
+    clientAdminId: 'clientAdminId',
+    kind: 'kind'
   };
 
   export type LabScalarFieldEnum = (typeof LabScalarFieldEnum)[keyof typeof LabScalarFieldEnum]
@@ -58376,6 +58390,7 @@ export namespace Prisma {
     totalPCs?: IntFilter<"Lab"> | number
     isActive?: BoolFilter<"Lab"> | boolean
     clientAdminId?: StringFilter<"Lab"> | string
+    kind?: StringFilter<"Lab"> | string
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     financialRecords?: FinancialRecordListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
@@ -58390,6 +58405,7 @@ export namespace Prisma {
     totalPCs?: SortOrder
     isActive?: SortOrder
     clientAdminId?: SortOrder
+    kind?: SortOrder
     branch?: BranchOrderByWithRelationInput
     financialRecords?: FinancialRecordOrderByRelationAggregateInput
     clientAdmin?: ClientAdminOrderByWithRelationInput
@@ -58407,6 +58423,7 @@ export namespace Prisma {
     totalPCs?: IntFilter<"Lab"> | number
     isActive?: BoolFilter<"Lab"> | boolean
     clientAdminId?: StringFilter<"Lab"> | string
+    kind?: StringFilter<"Lab"> | string
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     financialRecords?: FinancialRecordListRelationFilter
     clientAdmin?: XOR<ClientAdminScalarRelationFilter, ClientAdminWhereInput>
@@ -58421,6 +58438,7 @@ export namespace Prisma {
     totalPCs?: SortOrder
     isActive?: SortOrder
     clientAdminId?: SortOrder
+    kind?: SortOrder
     _count?: LabCountOrderByAggregateInput
     _avg?: LabAvgOrderByAggregateInput
     _max?: LabMaxOrderByAggregateInput
@@ -58439,6 +58457,7 @@ export namespace Prisma {
     totalPCs?: IntWithAggregatesFilter<"Lab"> | number
     isActive?: BoolWithAggregatesFilter<"Lab"> | boolean
     clientAdminId?: StringWithAggregatesFilter<"Lab"> | string
+    kind?: StringWithAggregatesFilter<"Lab"> | string
   }
 
   export type LabTimeSlotWhereInput = {
@@ -62117,6 +62136,7 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    kind?: string
     branch?: BranchCreateNestedOneWithoutLabsInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutLabInput
     clientAdmin: ClientAdminCreateNestedOneWithoutLabsInput
@@ -62131,6 +62151,7 @@ export namespace Prisma {
     totalPCs: number
     isActive?: boolean
     clientAdminId: string
+    kind?: string
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutLabInput
     timeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutLabInput
   }
@@ -62140,6 +62161,7 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    kind?: StringFieldUpdateOperationsInput | string
     branch?: BranchUpdateOneWithoutLabsNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutLabNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutLabsNestedInput
@@ -62154,6 +62176,7 @@ export namespace Prisma {
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutLabNestedInput
     timeSlots?: LabTimeSlotUncheckedUpdateManyWithoutLabNestedInput
   }
@@ -62166,6 +62189,7 @@ export namespace Prisma {
     totalPCs: number
     isActive?: boolean
     clientAdminId: string
+    kind?: string
   }
 
   export type LabUpdateManyMutationInput = {
@@ -62173,6 +62197,7 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type LabUncheckedUpdateManyInput = {
@@ -62183,6 +62208,7 @@ export namespace Prisma {
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type LabTimeSlotCreateInput = {
@@ -65451,6 +65477,7 @@ export namespace Prisma {
     totalPCs?: SortOrder
     isActive?: SortOrder
     clientAdminId?: SortOrder
+    kind?: SortOrder
   }
 
   export type LabAvgOrderByAggregateInput = {
@@ -65467,6 +65494,7 @@ export namespace Prisma {
     totalPCs?: SortOrder
     isActive?: SortOrder
     clientAdminId?: SortOrder
+    kind?: SortOrder
   }
 
   export type LabMinOrderByAggregateInput = {
@@ -65477,6 +65505,7 @@ export namespace Prisma {
     totalPCs?: SortOrder
     isActive?: SortOrder
     clientAdminId?: SortOrder
+    kind?: SortOrder
   }
 
   export type LabSumOrderByAggregateInput = {
@@ -72695,6 +72724,7 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    kind?: string
     branch?: BranchCreateNestedOneWithoutLabsInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutLabInput
     timeSlots?: LabTimeSlotCreateNestedManyWithoutLabInput
@@ -72707,6 +72737,7 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    kind?: string
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutLabInput
     timeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutLabInput
   }
@@ -73710,6 +73741,7 @@ export namespace Prisma {
     totalPCs?: IntFilter<"Lab"> | number
     isActive?: BoolFilter<"Lab"> | boolean
     clientAdminId?: StringFilter<"Lab"> | string
+    kind?: StringFilter<"Lab"> | string
   }
 
   export type LabAllocationUpsertWithWhereUniqueWithoutClientAdminInput = {
@@ -80886,6 +80918,7 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    kind?: string
     branch?: BranchCreateNestedOneWithoutLabsInput
     financialRecords?: FinancialRecordCreateNestedManyWithoutLabInput
     clientAdmin: ClientAdminCreateNestedOneWithoutLabsInput
@@ -80899,6 +80932,7 @@ export namespace Prisma {
     totalPCs: number
     isActive?: boolean
     clientAdminId: string
+    kind?: string
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutLabInput
   }
 
@@ -81072,6 +81106,7 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    kind?: StringFieldUpdateOperationsInput | string
     branch?: BranchUpdateOneWithoutLabsNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutLabNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutLabsNestedInput
@@ -81085,6 +81120,7 @@ export namespace Prisma {
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutLabNestedInput
   }
 
@@ -88398,6 +88434,7 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    kind?: string
     branch?: BranchCreateNestedOneWithoutLabsInput
     clientAdmin: ClientAdminCreateNestedOneWithoutLabsInput
     timeSlots?: LabTimeSlotCreateNestedManyWithoutLabInput
@@ -88411,6 +88448,7 @@ export namespace Prisma {
     totalPCs: number
     isActive?: boolean
     clientAdminId: string
+    kind?: string
     timeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutLabInput
   }
 
@@ -88744,6 +88782,7 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    kind?: StringFieldUpdateOperationsInput | string
     branch?: BranchUpdateOneWithoutLabsNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutLabsNestedInput
     timeSlots?: LabTimeSlotUpdateManyWithoutLabNestedInput
@@ -88757,6 +88796,7 @@ export namespace Prisma {
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
     timeSlots?: LabTimeSlotUncheckedUpdateManyWithoutLabNestedInput
   }
 
@@ -88859,6 +88899,7 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    kind?: string
     financialRecords?: FinancialRecordCreateNestedManyWithoutLabInput
     clientAdmin: ClientAdminCreateNestedOneWithoutLabsInput
     timeSlots?: LabTimeSlotCreateNestedManyWithoutLabInput
@@ -88871,6 +88912,7 @@ export namespace Prisma {
     totalPCs: number
     isActive?: boolean
     clientAdminId: string
+    kind?: string
     financialRecords?: FinancialRecordUncheckedCreateNestedManyWithoutLabInput
     timeSlots?: LabTimeSlotUncheckedCreateNestedManyWithoutLabInput
   }
@@ -90019,6 +90061,7 @@ export namespace Prisma {
     location?: string | null
     totalPCs: number
     isActive?: boolean
+    kind?: string
   }
 
   export type LabAllocationCreateManyClientAdminInput = {
@@ -90733,6 +90776,7 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    kind?: StringFieldUpdateOperationsInput | string
     branch?: BranchUpdateOneWithoutLabsNestedInput
     financialRecords?: FinancialRecordUpdateManyWithoutLabNestedInput
     timeSlots?: LabTimeSlotUpdateManyWithoutLabNestedInput
@@ -90745,6 +90789,7 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    kind?: StringFieldUpdateOperationsInput | string
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutLabNestedInput
     timeSlots?: LabTimeSlotUncheckedUpdateManyWithoutLabNestedInput
   }
@@ -90756,6 +90801,7 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type LabAllocationUpdateWithoutClientAdminInput = {
@@ -93376,6 +93422,7 @@ export namespace Prisma {
     totalPCs: number
     isActive?: boolean
     clientAdminId: string
+    kind?: string
   }
 
   export type BatchCreateManyBranchInput = {
@@ -93447,6 +93494,7 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    kind?: StringFieldUpdateOperationsInput | string
     financialRecords?: FinancialRecordUpdateManyWithoutLabNestedInput
     clientAdmin?: ClientAdminUpdateOneRequiredWithoutLabsNestedInput
     timeSlots?: LabTimeSlotUpdateManyWithoutLabNestedInput
@@ -93459,6 +93507,7 @@ export namespace Prisma {
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
     financialRecords?: FinancialRecordUncheckedUpdateManyWithoutLabNestedInput
     timeSlots?: LabTimeSlotUncheckedUpdateManyWithoutLabNestedInput
   }
@@ -93470,6 +93519,7 @@ export namespace Prisma {
     totalPCs?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     clientAdminId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
   }
 
   export type BatchUpdateWithoutBranchInput = {

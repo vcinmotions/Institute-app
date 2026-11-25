@@ -380,6 +380,8 @@ model Lab {
   financialRecords FinancialRecord[]
   clientAdmin      ClientAdmin       @relation(fields: [clientAdminId], references: [id])
   timeSlots        LabTimeSlot[]
+  // LAB = computer lab (PC seats). CLASS = a classroom for institutes without labs (seats = student capacity).
+  kind             String            @default("LAB")
 }
 
 model LabTimeSlot {

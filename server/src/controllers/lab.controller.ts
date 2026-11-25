@@ -80,7 +80,7 @@ import { Request, Response } from "express";
 //     const totalCount = await tenantPrisma.lab.count({ where });
 
 //     return res.status(200).json({
-//       message: "Labs fetched successfully",
+//       message: `${kindOf(req) === "CLASS" ? "Classes" : "Labs"} fetched successfully`,
 //       labs: labsWithPcInfo,
 //       totalPages: Math.ceil(totalCount / limitNum),
 //       page: pageNum,
@@ -100,16 +100,22 @@ import { normalizeToLowercase, titleCase } from "../utils/Normalize";
 // import { verifyToken } from "../utils/jwt"; // custom util for JWT
 // import { activityLogger } from "../utils/activityLogger"; // optional
 
+/** The Class module reuses these handlers: its routes set req.labKind = "CLASS". Everything else is a LAB. */
+const kindOf = (req: Request): "LAB" | "CLASS" => ((req as any).labKind === "CLASS" ? "CLASS" : "LAB");
+const nounOf = (k: "LAB" | "CLASS") => (k === "CLASS" ? "Class" : "Lab");
+
 export const createLab = async (req: Request, res: Response) => {
+  const kind = kindOf(req);
+  const noun = nounOf(kind);
   const { name, location, totalPCs: rawPCs, timeSlots } = req.body;
   const totalPCs = Number(rawPCs); // the form may send it as text
 
   if (!name || !String(name).trim()) {
-    return res.status(400).json({ error: "Lab name is required" });
+    return res.status(400).json({ error: `${noun} name is required` });
   }
   const pcCount = Number(totalPCs);
   if (!Number.isInteger(pcCount) || pcCount < 1) {
-    return res.status(400).json({ error: "Total PCs must be a whole number of 1 or more" });
+    return res.status(400).json({ error: kind === "CLASS" ? "Seats must be a whole number of 1 or more" : "Total PCs must be a whole number of 1 or more" });
   }
 
   const slotError = validateTimeSlots(timeSlots);
@@ -143,6 +149,7 @@ export const createLab = async (req: Request, res: Response) => {
         name: normalizeCourseName,
         location: normalizeCourselocation,
         totalPCs,
+        kind,
         clientAdminId: clientAdmin.id,
       },
     });
@@ -185,6 +192,7 @@ export const createLab = async (req: Request, res: Response) => {
             data: {
               name: `${normalizeCourseName} ${slot.day} ${slot.startTime} - ${slot.endTime}`,
               labTimeSlotId: newSlot.id,
+              classType: kind, // LAB or CLASS - one batch is created automatically for every time slot
               clientAdminId: clientAdmin.id,
             },
           });
@@ -209,13 +217,13 @@ export const createLab = async (req: Request, res: Response) => {
     });
 
     res.status(201).json({
-      message: "Lab created successfully",
+      message: `${noun} created successfully`,
       lab,
       timeSlots: createdSlots,
     });
   } catch (error: any) {
     console.error("❌ Error creating lab:", error);
-    res.status(500).json({ error: "Could not create the lab. Please try again." });
+    res.status(500).json({ error: `Could not create the ${noun.toLowerCase()}. Please try again.` });
   }
 };
 
@@ -228,16 +236,18 @@ async function batchHasStudents(tenantPrisma: any, batchId: number) {
 }
 
 export async function updateLabController(req: Request, res: Response) {
+  const kind = kindOf(req);
+  const noun = nounOf(kind);
   const { id } = req.params;
   const { name, location, totalPCs: rawPCs, timeSlots } = req.body;
   const totalPCs = Number(rawPCs); // the form may send it as text
 
   if (!name || !String(name).trim()) {
-    return res.status(400).json({ error: "Lab name is required" });
+    return res.status(400).json({ error: `${noun} name is required` });
   }
   const pcCount = Number(totalPCs);
   if (!Number.isInteger(pcCount) || pcCount < 1) {
-    return res.status(400).json({ error: "Total PCs must be a whole number of 1 or more" });
+    return res.status(400).json({ error: kind === "CLASS" ? "Seats must be a whole number of 1 or more" : "Total PCs must be a whole number of 1 or more" });
   }
 
   const slotError = validateTimeSlots(timeSlots);
@@ -270,8 +280,9 @@ export async function updateLabController(req: Request, res: Response) {
 
     console.log("GET EXISTING LAB DATA:", existingLab);
 
-    if (!existingLab) {
-      return res.status(404).json({ error: "Lab not found" });
+    // A class cannot be edited through the lab screen (or the other way round).
+    if (!existingLab || existingLab.clientAdminId !== clientAdminId || (existingLab as any).kind !== kind) {
+      return res.status(404).json({ error: `${noun} not found` });
     }
 
     const existingLabTimeSlot = await tenantPrisma.labTimeSlot.findMany({
@@ -418,6 +429,7 @@ export async function updateLabController(req: Request, res: Response) {
           data: {
             name: `${name} ${slot.day} ${slot.startTime} - ${slot.endTime}`,
             labTimeSlotId: newSlot.id,
+            classType: kind,
             clientAdminId,
           },
         });
@@ -446,7 +458,7 @@ export async function updateLabController(req: Request, res: Response) {
     }
 
     res.json({
-      message: "Lab updated successfully with student safety rules.",
+      message: `${noun} updated successfully with student safety rules.`,
     });
   } catch (error) {
     console.error("❌ Error Updating labs:", error);
@@ -472,7 +484,7 @@ export async function getLabController(req: Request, res: Response) {
     const search = req.query.search as string | undefined;
 
     // 🔍 Build filters
-    const where: any = { clientAdminId };
+    const where: any = { clientAdminId, kind: kindOf(req) };
     if (search) {
       const normalizeCourseName = titleCase(search);
       where.name = { contains: normalizeCourseName };
@@ -533,6 +545,7 @@ export async function getLabController(req: Request, res: Response) {
         name: lab.name,
         location: lab.location,
         isActive: lab.isActive,
+        kind: (lab as any).kind ?? "LAB",
         totalPCs: lab.totalPCs,
         totalAllocated,
         totalAvailable,
