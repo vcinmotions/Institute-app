@@ -11,10 +11,16 @@ import dotenv from "dotenv";
 import { generateToken } from "../utils/jwt";
 import { generateLoginEmailTemplate } from "../utils/templates/login-notification";
 
+import { isDesktopApp } from "../middlewares/runtimePaths";
+
 dotenv.config({ path: ".env" });
 
 export async function masterLoginController(req: Request, res: Response) {
   const { email, password } = req.body;
+  // The desktop EXE has one admin: the institute admin holds every system screen.
+  if (isDesktopApp()) {
+    return res.status(403).json({ error: "Sign in with the institute admin account." });
+  }
 
 
   try {

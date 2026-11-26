@@ -8,6 +8,7 @@ import { getActivationState } from "../services/activation.service";
 import { getMode, apiBase } from "../services/buildConfig.service";
 import { backupStatus } from "../services/backup.service";
 import { getDeviceInfo } from "../services/device.service";
+import { isSystemAdmin } from "../middlewares/master.auth.middleware";
 
 /** System Health for the Master (Institute Super) Admin: one screen for troubleshooting. */
 async function probe<T>(fn: () => Promise<T>): Promise<{ ok: boolean; value?: T; error?: string; ms: number }> {
@@ -39,7 +40,7 @@ async function internetReachable(): Promise<boolean> {
 }
 
 export async function systemHealthController(req: Request, res: Response) {
-  if ((req.user as any)?.role !== "MASTER_ADMIN") return res.status(403).json({ error: "Unauthorized" });
+  if (!isSystemAdmin(req)) return res.status(403).json({ error: "Unauthorized" });
 
   const central = await probe(async () => {
     const p = getCentralPrisma();

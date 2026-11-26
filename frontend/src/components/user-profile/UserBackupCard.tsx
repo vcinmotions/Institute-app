@@ -6,15 +6,22 @@ import TimePicker from "@/components/form/TimePicker";
 import { apiClient } from "@/lib/apiClient";
 import { getApiErrorMessage } from "@/lib/apiError";
 
-type Config = { enabled: boolean; frequency: "EVERY_12H" | "DAILY" | "WEEKLY"; time: string; keep: number; directory: string; externalDir: string };
+type Frequency = "DAILY" | "TWICE_DAILY" | "WEEKLY" | "FIFTEEN_DAYS" | "MONTHLY";
+type Config = {
+  enabled: boolean; frequency: Frequency; time: string; time2: string; weekday: number; monthDay: number;
+  directory: string; externalDir: string;
+};
 type Log = { id: string; at: string; type: "AUTO" | "MANUAL"; ok: boolean; file?: string; sizeBytes?: number; error?: string; externalError?: string };
 type FileInfo = { name: string; path: string; sizeBytes: number; modifiedAt: string; location: "primary" | "external" };
-type Status = { config: Config; lastSuccess: Log | null; openFailure: Log | null; files: FileInfo[]; log: Log[]; running: boolean };
+type Status = { config: Config; nextRun: string | null; lastSuccess: Log | null; openFailure: Log | null; files: FileInfo[]; log: Log[]; running: boolean };
 
 const fmt = (d: string) => new Date(d).toLocaleString("en-IN");
 const mb = (n?: number) => (n ? `${(n / 1048576).toFixed(1)} MB` : "-");
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MONTH_DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
+const ordinal = (n: number) => `${n}${n % 10 === 1 && n !== 11 ? "st" : n % 10 === 2 && n !== 12 ? "nd" : n % 10 === 3 && n !== 13 ? "rd" : "th"}`;
 
-/** Backup & recovery for the Master (Institute Super) Admin: schedule, destinations, history and restore. */
+/** Backup & recovery for the admin: schedule, destinations, history and restore. */
 export default function UserBackUpCard() {
   const dialog = useDialog();
   const [st, setSt] = useState<Status | null>(null);
@@ -61,6 +68,17 @@ export default function UserBackUpCard() {
     await window.electronAPI.performRestore(f.path);
   };
 
+  // Desktop app on the server PC: pick a folder with the Windows folder dialog.
+  const canBrowse = typeof window !== "undefined" && !!window.electronAPI?.selectFolder;
+  const browse = async (key: "directory" | "externalDir", title: string) => {
+    if (!cfg || !window.electronAPI?.selectFolder) return;
+    try {
+      const r = await window.electronAPI.selectFolder({ title, defaultPath: cfg[key] || cfg.directory });
+      if (r?.error) return flash(false, r.error);
+      if (r?.path) setCfg({ ...cfg, [key]: r.path });
+    } catch (e) { flash(false, getApiErrorMessage(e, "Could not open the folder picker.")); }
+  };
+
   const saveCopy = async (f: FileInfo) => {
     try { await window.electronAPI?.saveBackupFile(f.path); } catch (e) { flash(false, getApiErrorMessage(e, "Could not save a copy.")); }
   };
@@ -73,7 +91,7 @@ export default function UserBackUpCard() {
         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Backup &amp; Recovery</h4>
         <p className="mt-0.5 text-[11px] text-slate-500">
           Encrypted backups of all institute data. Stored outside the application data folder, with an optional second copy.
-          Only the Super Admin can change these settings; there is no option to delete a backup.
+          Only the admin can change these settings; there is no option to delete a backup.
         </p>
       </div>
 
@@ -92,12 +110,12 @@ export default function UserBackUpCard() {
           <div className="font-semibold">{st?.lastSuccess ? fmt(st.lastSuccess.at) : "Never"}</div>
         </div>
         <div className="rounded border bg-white p-2 dark:border-slate-800 dark:bg-slate-900 dark:text-white">
-          <div className="text-slate-500">Backups kept</div>
+          <div className="text-slate-500">Backups kept (last month)</div>
           <div className="font-semibold">{st?.files.filter((f) => f.location === "primary").length ?? 0}</div>
         </div>
         <div className="rounded border bg-white p-2 dark:border-slate-800 dark:bg-slate-900 dark:text-white">
-          <div className="text-slate-500">Automatic backup</div>
-          <div className="font-semibold">{st?.config.enabled ? "On" : "Off"}</div>
+          <div className="text-slate-500">Next automatic backup</div>
+          <div className="font-semibold">{st?.config.enabled ? (st?.nextRun ? fmt(st.nextRun) : "On") : "Off"}</div>
         </div>
       </div>
 
@@ -108,25 +126,62 @@ export default function UserBackUpCard() {
           </label>
           <div />
           <label className="dark:text-white">Frequency
-            <select className={input} value={cfg.frequency} onChange={(e) => setCfg({ ...cfg, frequency: e.target.value as Config["frequency"] })}>
-              <option value="DAILY">Daily</option>
-              <option value="EVERY_12H">Every 12 hours</option>
-              <option value="WEEKLY">Weekly (Sunday)</option>
+            <select className={input} disabled={!cfg.enabled} value={cfg.frequency} onChange={(e) => setCfg({ ...cfg, frequency: e.target.value as Frequency })}>
+              <option value="DAILY">Daily (once a day)</option>
+              <option value="TWICE_DAILY">Daily (twice a day)</option>
+              <option value="WEEKLY">Weekly</option>
+              <option value="FIFTEEN_DAYS">Every 15 days (1st and 16th)</option>
+              <option value="MONTHLY">Monthly</option>
             </select>
           </label>
-          <label className="dark:text-white">Time (daily / weekly)
-            <TimePicker size="sm" value={cfg.time} onChange={(v) => setCfg({ ...cfg, time: v || cfg.time })} />
+          {cfg.frequency === "WEEKLY" && (
+            <label className="dark:text-white">Day of the week
+              <select className={input} disabled={!cfg.enabled} value={cfg.weekday} onChange={(e) => setCfg({ ...cfg, weekday: Number(e.target.value) })}>
+                {WEEKDAYS.map((d, i) => <option key={d} value={i}>{d}</option>)}
+              </select>
+            </label>
+          )}
+          {cfg.frequency === "MONTHLY" && (
+            <label className="dark:text-white">Day of the month
+              <select className={input} disabled={!cfg.enabled} value={cfg.monthDay} onChange={(e) => setCfg({ ...cfg, monthDay: Number(e.target.value) })}>
+                {MONTH_DAYS.map((d) => <option key={d} value={d}>{ordinal(d)}{d > 28 ? " (or the last day of a shorter month)" : ""}</option>)}
+              </select>
+            </label>
+          )}
+          {(cfg.frequency === "DAILY" || cfg.frequency === "TWICE_DAILY" || cfg.frequency === "FIFTEEN_DAYS") && <div className="hidden sm:block" />}
+          <label className="dark:text-white">{cfg.frequency === "TWICE_DAILY" ? "First backup time" : "Backup time"}
+            <TimePicker size="sm" disabled={!cfg.enabled} value={cfg.time} onChange={(v) => setCfg({ ...cfg, time: v || cfg.time })} />
           </label>
-          <label className="dark:text-white">Backups to keep
-            <input type="number" min={1} max={365} className={input} value={cfg.keep} onChange={(e) => setCfg({ ...cfg, keep: Number(e.target.value) })} />
-          </label>
-          <div />
-          <label className="sm:col-span-2 dark:text-white">Backup folder
-            <input className={input} value={cfg.directory} onChange={(e) => setCfg({ ...cfg, directory: e.target.value })} placeholder="D:\\Backups\\VC-Inmotions" />
-          </label>
-          <label className="sm:col-span-2 dark:text-white">External copy (optional: USB drive or network folder)
-            <input className={input} value={cfg.externalDir} onChange={(e) => setCfg({ ...cfg, externalDir: e.target.value })} placeholder="E:\\VC-Backups  or  \\\\server\\share\\backups" />
-          </label>
+          {cfg.frequency === "TWICE_DAILY" ? (
+            <label className="dark:text-white">Second backup time
+              <TimePicker size="sm" disabled={!cfg.enabled} value={cfg.time2} onChange={(v) => setCfg({ ...cfg, time2: v || cfg.time2 })} />
+            </label>
+          ) : <div className="hidden sm:block" />}
+          <p className="text-[11px] text-slate-500 sm:col-span-2">
+            The backup runs at the set time. If this computer is off then, it runs once when the application starts again.
+            Backups older than one month are deleted automatically (the newest backup is always kept).
+          </p>
+          <div className="sm:col-span-2 dark:text-white">
+            <label htmlFor="backup-dir">Backup folder</label>
+            <div className="flex gap-2">
+              <input id="backup-dir" className={input} value={cfg.directory} onChange={(e) => setCfg({ ...cfg, directory: e.target.value })} placeholder="D:\Backups\VC-Inmotions" />
+              {canBrowse && (
+                <button type="button" onClick={() => browse("directory", "Select the backup folder")} className="h-8 shrink-0 rounded border border-slate-300 px-3 text-[11px] font-semibold dark:border-slate-700">Browse...</button>
+              )}
+            </div>
+          </div>
+          <div className="sm:col-span-2 dark:text-white">
+            <label htmlFor="backup-ext">External copy (optional: USB drive or network folder)</label>
+            <div className="flex gap-2">
+              <input id="backup-ext" className={input} value={cfg.externalDir} onChange={(e) => setCfg({ ...cfg, externalDir: e.target.value })} placeholder="E:\VC-Backups  or  \\server\share\backups" />
+              {canBrowse && (
+                <button type="button" onClick={() => browse("externalDir", "Select the external copy folder")} className="h-8 shrink-0 rounded border border-slate-300 px-3 text-[11px] font-semibold dark:border-slate-700">Browse...</button>
+              )}
+              {cfg.externalDir && (
+                <button type="button" onClick={() => setCfg({ ...cfg, externalDir: "" })} className="h-8 shrink-0 rounded border border-slate-300 px-3 text-[11px] font-semibold dark:border-slate-700">Clear</button>
+              )}
+            </div>
+          </div>
         </div>
       )}
 

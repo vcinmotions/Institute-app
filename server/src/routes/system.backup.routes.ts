@@ -7,6 +7,8 @@ import { masterAuthMiddleware } from "../middlewares/master.auth.middleware";
 
 const router = express.Router();
 
+// Lets the app ask "may this user open the system screens?" (master admin; in the EXE the institute admin).
+router.get("/system/access", masterAuthMiddleware, (_req, res) => res.json({ ok: true }));
 router.post("/backup", masterAuthMiddleware, backupController);
 router.get("/backup/status", masterAuthMiddleware, backupStatusController);
 router.put("/backup/config", masterAuthMiddleware, backupConfigController);

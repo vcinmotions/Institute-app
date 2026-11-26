@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { backupStatus, runBackup, saveConfig } from "../services/backup.service";
+import { isSystemAdmin } from "../middlewares/master.auth.middleware";
 
 /**
  * Backup management. Master (Institute Super) Admin only - enforced by masterAuthMiddleware on the routes.
  * There is deliberately NO delete endpoint and NO HTTP restore: restoring replaces every database, so it is only
  * possible from the desktop app's Restore screen on the server PC (see installer "perform-restore").
  */
-const isMaster = (req: Request) => (req.user as any)?.role === "MASTER_ADMIN";
+const isMaster = isSystemAdmin;
 
 export async function backupController(req: Request, res: Response) {
   if (!isMaster(req)) return res.status(403).json({ error: "Unauthorized" });

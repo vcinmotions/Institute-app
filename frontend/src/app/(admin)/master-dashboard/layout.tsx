@@ -21,6 +21,12 @@ export default function MasterLayout({
       try {
         const token = sessionStorage.getItem("token");
 
+        // Desktop EXE: one admin. The master screens live under /dashboard/system for the institute admin.
+        if ((window as any).electronAPI) {
+          router.replace(token ? "/dashboard" : "/signin");
+          return;
+        }
+
         if (!token) {
           router.replace("/signin");
           return;

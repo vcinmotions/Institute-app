@@ -10,6 +10,7 @@ import { normalizeLoginInput } from "../utils/normalizer/loginNormalizer";
 import { canClaimSession, claimSession, releaseSession, limitMessage } from "../services/sessionLimit.service";
 import { companiesForUser, ensureMasterCompany, CompanyChoice } from "../utils/institute";
 import { isEnforced, syncFromCloud, getState } from "../services/subscription.service";
+import { isDesktopApp } from "../middlewares/runtimePaths";
 
 export async function loginController(req: Request, res: Response) {
 
@@ -30,6 +31,10 @@ export async function loginController(req: Request, res: Response) {
     });
 
     if (master) {
+      // The desktop EXE has one admin: the institute admin holds every system screen.
+      if (isDesktopApp()) {
+        return res.status(403).json({ error: "Sign in with the institute admin account." });
+      }
       const valid = await bcrypt.compare(password, master.password);
       if (!valid) return res.status(401).json({ error: "Invalid password" });
 

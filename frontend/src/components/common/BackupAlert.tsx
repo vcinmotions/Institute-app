@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { apiClient } from "@/lib/apiClient";
+import { useSystemAdmin } from "@/hooks/useSystemAdmin";
 
-/** Master admin: red banner while the last backup attempt has failed (cleared by the next success). */
-export default function BackupAlert() {
+/** System admin: red banner while the last backup attempt has failed (cleared by the next success). */
+export default function BackupAlert({ settingsHref = "/master-dashboard/settings" }: { settingsHref?: string }) {
   const [fail, setFail] = useState<{ at: string; error?: string } | null>(null);
   useEffect(() => {
     const check = () =>
@@ -18,7 +19,13 @@ export default function BackupAlert() {
   return (
     <div className="mb-3 rounded border border-rose-300 bg-rose-50 px-3 py-2 text-sm text-rose-800 dark:border-rose-900 dark:bg-rose-950/30 dark:text-rose-300">
       The last database backup failed ({new Date(fail.at).toLocaleString("en-IN")}): {fail.error}.{" "}
-      <Link href="/master-dashboard/settings" className="underline">Open Backup settings</Link>
+      <Link href={settingsHref} className="underline">Open Backup settings</Link>
     </div>
   );
+}
+
+/** Desktop EXE: the same banner inside the normal dashboard, for the admin who holds the System screens. */
+export function SystemBackupAlert() {
+  const allowed = useSystemAdmin();
+  return allowed ? <BackupAlert settingsHref="/dashboard/system/settings" /> : null;
 }

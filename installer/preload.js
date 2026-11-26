@@ -7,6 +7,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   selectBackupFile: () => ipcRenderer.invoke("select-backup-file"),
 
+  // Folder picker for the backup folders; returns { path } (null when cancelled) or { error }.
+  selectFolder: (opts) => ipcRenderer.invoke("select-folder", opts),
+
   saveBackupFile: (sourcePath) =>
     ipcRenderer.invoke("save-backup-file", sourcePath),
 

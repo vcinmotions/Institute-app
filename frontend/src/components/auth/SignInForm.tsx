@@ -44,6 +44,13 @@ export default function SignInForm() {
     firstInputRef.current?.focus();
   }, []);
 
+  // The desktop EXE (its preload exposes window.electronAPI) has no password reset,
+  // so the "Forgot password?" link shows only in a plain browser. null = not checked yet.
+  const [inExe, setInExe] = useState<boolean | null>(null);
+  useEffect(() => {
+    setInExe(!!window.electronAPI);
+  }, []);
+
   // Handle Input Validation (Supports both Username and Email styles)
   const validateInput = (value: string) => {
     const trimmed = value.trim();
@@ -223,12 +230,14 @@ export default function SignInForm() {
                       Keep me logged in
                     </span>
                   </div>
-                  <Link
-                    href="/reset-password"
-                    className="text-brand-500 hover:text-brand-600 dark:text-brand-400 text-sm font-medium"
-                  >
-                    Forgot password?
-                  </Link>
+                  {inExe === false && (
+                    <Link
+                      href="/reset-password"
+                      className="text-brand-500 hover:text-brand-600 dark:text-brand-400 text-sm font-medium"
+                    >
+                      Forgot password?
+                    </Link>
+                  )}
                 </div>
 
                 <div className="pt-2">

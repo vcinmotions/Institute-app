@@ -14,6 +14,13 @@ export const isElectron = !!electronApp;
 
 export const isPackaged = !!process.env.NODE_ENV && process.env.NODE_ENV === "production";
 
+/**
+ * True when this server was started by the desktop EXE (Electron always passes USER_DATA_PATH).
+ * The EXE has ONE admin: the institute ADMIN also holds every master/system screen, and the
+ * separate master login is not used. The hosted web server keeps both logins.
+ */
+export const isDesktopApp = () => !!process.env.USER_DATA_PATH;
+
 export function getUserDataPath() {
   // if (isElectron && electronApp) {
   //   return electronApp.getPath("userData");

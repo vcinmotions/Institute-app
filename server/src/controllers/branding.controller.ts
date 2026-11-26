@@ -6,6 +6,7 @@ import { getCentralPrisma } from "../prisma-client/central-client";
 import { instituteDb } from "../utils/institute";
 import { getUserDataPath } from "../middlewares/runtimePaths";
 import { logActivity } from "../utils/activityLogger";
+import { isSystemAdmin } from "../middlewares/master.auth.middleware";
 
 /**
  * Institute branding (logo + name), managed by the Master (Institute Super) Admin only.
@@ -53,14 +54,14 @@ export async function publicBranding(_req: Request, res: Response) {
 }
 
 export async function getBranding(req: Request, res: Response) {
-  if ((req.user as any)?.role !== "MASTER_ADMIN") return res.status(403).json({ error: "Unauthorized" });
+  if (!isSystemAdmin(req)) return res.status(403).json({ error: "Unauthorized" });
   const t = await masterInstitute();
   if (!t) return res.status(404).json({ error: "Institute not set up yet." });
   res.json(view(t));
 }
 
 export async function updateBranding(req: Request, res: Response) {
-  if ((req.user as any)?.role !== "MASTER_ADMIN") return res.status(403).json({ error: "Unauthorized" });
+  if (!isSystemAdmin(req)) return res.status(403).json({ error: "Unauthorized" });
   const file = (req as any).file as Express.Multer.File | undefined;
   const cleanup = () => file && fs.rmSync(file.path, { force: true });
   try {

@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Request, Response } from "express";
 import { getUserDataPath } from "../middlewares/runtimePaths";
+import { isSystemAdmin } from "../middlewares/master.auth.middleware";
 
 /**
  * Session (idle timeout) setting for the whole installation. Read by every signed-in PC so the timeout is
@@ -25,7 +26,7 @@ export function getSessionSettings(_req: Request, res: Response) {
 }
 
 export function updateSessionSettings(req: Request, res: Response) {
-  if ((req.user as any)?.role !== "MASTER_ADMIN") return res.status(403).json({ error: "Unauthorized" });
+  if (!isSystemAdmin(req)) return res.status(403).json({ error: "Unauthorized" });
   const v = Number(req.body?.idleTimeoutMinutes);
   if (!Number.isInteger(v) || v < 0 || v > MAX_MINUTES) {
     return res.status(400).json({ error: "Enter a whole number of minutes from 0 (never) to 1440." });

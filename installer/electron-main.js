@@ -881,6 +881,42 @@ async function confirmAndOpenModeSettings(win) {
   (win || BrowserWindow.getAllWindows()[0])?.loadFile(path.join(__dirname, "mode-setup.html"));
 }
 
+// ─── KEYBOARD SHORTCUTS ───────────────────────────────────────────────────────
+// The View menu binds Zoom In to Ctrl+Shift+= only, so Ctrl+= and the numpad
+// + / - / 0 keys did nothing. Handle the browser-style keys here for every page
+// (app, loading screen, mode setup). Zoom is kept within Chromium's 25%-500% range.
+const ZOOM_STEP = 0.5;
+const ZOOM_MIN = -7.6; // ~25%
+const ZOOM_MAX = 8.8; // ~500%
+
+function changeZoom(wc, delta) {
+  const level = delta === 0 ? 0 : Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, wc.getZoomLevel() + delta));
+  wc.setZoomLevel(level);
+}
+
+function attachShortcuts(wc) {
+  wc.on("before-input-event", (event, input) => {
+    if (input.type !== "keyDown") return;
+    const ctrl = input.control || input.meta;
+
+    if (ctrl && !input.alt) {
+      const zoomIn = ["=", "+"].includes(input.key) || input.code === "NumpadAdd";
+      const zoomOut = ["-", "_"].includes(input.key) || input.code === "NumpadSubtract";
+      const reset = (input.key === "0" && !input.shift) || input.code === "Numpad0";
+      if (zoomIn || zoomOut || reset) {
+        event.preventDefault(); // stop the menu accelerator from zooming a second time
+        changeZoom(wc, zoomIn ? ZOOM_STEP : zoomOut ? -ZOOM_STEP : 0);
+        return;
+      }
+    }
+  });
+
+  // Ctrl + mouse wheel zoom, like a browser.
+  wc.on("zoom-changed", (_e, direction) => changeZoom(wc, direction === "in" ? ZOOM_STEP : -ZOOM_STEP));
+}
+
+app.on("web-contents-created", (_e, wc) => attachShortcuts(wc));
+
 function buildMenu() {
   const template = [
     {
@@ -912,6 +948,23 @@ ipcMain.handle("select-backup-file", async () => {
     filters: [{ name: "Backup Files", extensions: ["enc"] }],
   });
   return result.canceled ? null : result.filePaths[0];
+});
+
+// Backup folder picker (System Settings > Backup). Backups are written by the server computer, so a
+// client PC cannot pick a folder: the path would be on the wrong machine.
+ipcMain.handle("select-folder", async (e, opts) => {
+  const cfg = readModeConfig();
+  if (cfg?.mode === "LAN_CLIENT") {
+    return { error: "Choose backup folders on the server computer. Backups are saved there." };
+  }
+  const win = BrowserWindow.fromWebContents(e.sender) || undefined;
+  const defaultPath = opts && typeof opts.defaultPath === "string" && fs.existsSync(opts.defaultPath) ? opts.defaultPath : undefined;
+  const result = await dialog.showOpenDialog(win, {
+    title: (opts && typeof opts.title === "string" && opts.title) || "Select folder",
+    defaultPath,
+    properties: ["openDirectory", "createDirectory", "promptToCreate"],
+  });
+  return { path: result.canceled ? null : result.filePaths[0] };
 });
 
 ipcMain.handle("perform-restore", async (_, filePath) => {

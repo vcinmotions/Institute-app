@@ -13,10 +13,9 @@ const FIELDS: { key: string; label: string; type?: string; section?: string }[] 
     { key: "city", label: "City" },
     { key: "state", label: "State" },
     { key: "zipCode", label: "PIN code" },
-    { key: "email", label: "Institute admin email", type: "email", section: "Institute admin login (daily work)" },
+    // One admin: this login also opens System Settings (backup, branding, updates, licence).
+    { key: "email", label: "Admin email", type: "email", section: "Admin login" },
     { key: "password", label: "Password (min 6 characters)", type: "password" },
-    { key: "masterEmail", label: "Master admin email", type: "email", section: "Master admin login (backup, branding, updates, licence)" },
-    { key: "masterPassword", label: "Password (min 6 characters)", type: "password" },
 ];
 
 export default function SetupLocalPage() {

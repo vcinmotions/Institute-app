@@ -15,7 +15,8 @@ export async function getClientAdmin(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    // In the EXE the institute ADMIN is mapped to the installation's master record (see masterAuthMiddleware).
+    const email = req.superAdmin?.email ?? user.email;
 
     // Get client admin for this user
     const clientAdmin = await centralPrisma.superAdmin.findUnique({
@@ -72,7 +73,8 @@ export async function getTenantAdmin(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    // In the EXE the institute ADMIN is mapped to the installation's master record (see masterAuthMiddleware).
+    const email = req.superAdmin?.email ?? user.email;
 
     // Get client admin for this user
     const clientAdmin = await centralPrisma.superAdmin.findUnique({
@@ -140,7 +142,8 @@ export async function updateMasterAdmin(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    // In the EXE the institute ADMIN is mapped to the installation's master record (see masterAuthMiddleware).
+    const email = req.superAdmin?.email ?? user.email;
 
     // Find SuperAdmin from DB
     const superAdmin = await centralPrisma.superAdmin.findUnique({

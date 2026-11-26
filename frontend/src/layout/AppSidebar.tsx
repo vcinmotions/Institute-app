@@ -9,6 +9,7 @@ import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { usePermissions } from "@/hooks/usePermissions";
 import { useBranding } from "@/hooks/useBranding";
+import { useSystemAdmin } from "@/hooks/useSystemAdmin";
 
 import {
   BoxCubeIcon,
@@ -57,6 +58,8 @@ type NavItem = {
   roles?: string[];
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
   group?: string;
+  /** System screens of the desktop EXE's one admin (shown only when the server confirms access). */
+  systemAdmin?: boolean;
 };
 
 // Sidebar item -> permission module (used for custom, Super-Admin defined roles).
@@ -281,6 +284,40 @@ const navItems: NavItem[] = [
     roles: ["ADMIN", "ACCOUNTANT"],
   },
 
+  // --- SYSTEM (desktop EXE: the institute admin holds the former master screens) ---
+  {
+    group: "System",
+    icon: <EnvelopeIcon />,
+    name: "System Settings",
+    path: "/dashboard/system/settings",
+    roles: ["ADMIN"],
+    systemAdmin: true,
+  },
+  {
+    group: "System",
+    icon: <GridIcon />,
+    name: "System Health",
+    path: "/dashboard/system/health",
+    roles: ["ADMIN"],
+    systemAdmin: true,
+  },
+  {
+    group: "System",
+    icon: <PencilIcon />,
+    name: "Branding",
+    path: "/dashboard/system/branding",
+    roles: ["ADMIN"],
+    systemAdmin: true,
+  },
+  {
+    group: "System",
+    icon: <PaperPlaneIcon />,
+    name: "Software Update",
+    path: "/dashboard/system/updates",
+    roles: ["ADMIN"],
+    systemAdmin: true,
+  },
+
   // --- SYSTEM ADMIN ---
   {
     group: "System Admin",
@@ -366,6 +403,7 @@ const AppSidebar: React.FC = () => {
 
   const userRole = user?.role;
   const perms = usePermissions();
+  const systemAdmin = useSystemAdmin();
   const branding = useBranding();
   const isSidebarVisible = isExpanded || isHovered || isMobileOpen;
 
@@ -373,6 +411,7 @@ const AppSidebar: React.FC = () => {
     const customUser = perms.custom;
     return navItems
       .filter((item) => {
+        if (item.systemAdmin) return systemAdmin;
         if (!customUser) return !item.roles || item.roles.includes(userRole);
         // Custom role: show only modules the role may View; hide "Create ..." links without Add.
         if (ALWAYS_VISIBLE.includes(item.name)) return true;
@@ -393,7 +432,7 @@ const AppSidebar: React.FC = () => {
         const matchesGroup = item.group?.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesMainItem || matchesSubItems || matchesGroup;
       });
-  }, [userRole, searchQuery, perms.custom, perms.loading]);
+  }, [userRole, searchQuery, perms.custom, perms.loading, systemAdmin]);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";

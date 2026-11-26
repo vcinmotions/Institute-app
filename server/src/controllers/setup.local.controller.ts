@@ -15,14 +15,12 @@ import { getMode } from "../services/buildConfig.service";
  */
 
 export const DEMO = {
-  master: { email: "master@demo.com", password: "Master@123" },
   admin: { email: "admin@demo.com", password: "Admin@123" },
   instituteName: "Demo Institute",
 };
 
 type Details = {
   instituteName: string; ownerName: string; email: string; password: string;
-  masterEmail: string; masterPassword: string;
   contact: string; country: string; state: string; city: string; zipCode: string; fullAddress: string;
 };
 
@@ -43,13 +41,16 @@ async function alreadySetUp() {
   return (await readSetupState()) !== "NOT_STARTED";
 }
 
-/** Builds the central database, the master admin and the institute database. Returns the institute id. */
+/** Builds the central database, the installation record and the institute database. Returns the institute id. */
 async function buildInstall(d: Details): Promise<string> {
   const instituteId = crypto.randomUUID();
-  await createCentralDB(instituteId, { password: d.masterPassword, name: `${d.ownerName} (Master)`, email: d.masterEmail });
+  // The EXE has ONE admin: the institute admin (d.email). The central master row only records the
+  // installation; it is not a login, so it gets an internal address and a random password.
+  const internalEmail = `installation@${instituteId}.local`;
+  await createCentralDB(instituteId, { password: crypto.randomBytes(24).toString("hex"), name: d.ownerName, email: internalEmail });
   const central = getCentralPrisma();
   await central.superAdmin.update({
-    where: { email: d.masterEmail },
+    where: { email: internalEmail },
     data: {
       contact: d.contact, country: d.country, state: d.state, city: d.city, zipCode: d.zipCode,
       fullAddress: d.fullAddress, addressComplete: true,
@@ -161,15 +162,13 @@ export async function setupLocalController(req: Request, res: Response) {
   const d: Details = {
     instituteName: clean(b.instituteName), ownerName: clean(b.ownerName),
     email: clean(b.email).toLowerCase(), password: String(b.password ?? ""),
-    masterEmail: clean(b.masterEmail).toLowerCase(), masterPassword: String(b.masterPassword ?? ""),
     contact: clean(b.contact), country: clean(b.country) || "India", state: clean(b.state), city: clean(b.city),
     zipCode: clean(b.zipCode), fullAddress: clean(b.fullAddress),
   };
-  const missing = (["instituteName", "ownerName", "email", "password", "masterEmail", "masterPassword", "contact", "state", "city", "zipCode", "fullAddress"] as const).filter((k) => !d[k]);
+  const missing = (["instituteName", "ownerName", "email", "password", "contact", "state", "city", "zipCode", "fullAddress"] as const).filter((k) => !d[k]);
   if (missing.length) return res.status(400).json({ error: "Please fill in all the fields." });
-  if (!isEmail(d.email) || !isEmail(d.masterEmail)) return res.status(400).json({ error: "Enter valid email addresses." });
-  if (d.email === d.masterEmail) return res.status(400).json({ error: "The master admin and the institute admin need different email addresses." });
-  if (d.password.length < 6 || d.masterPassword.length < 6) return res.status(400).json({ error: "Passwords must be at least 6 characters." });
+  if (!isEmail(d.email)) return res.status(400).json({ error: "Enter a valid email address." });
+  if (d.password.length < 6) return res.status(400).json({ error: "The password must be at least 6 characters." });
   if (!(await guard(res))) return;
 
   try {
@@ -188,7 +187,6 @@ export async function setupDemoController(_req: Request, res: Response) {
     const id = await buildInstall({
       instituteName: DEMO.instituteName, ownerName: "Demo Owner",
       email: DEMO.admin.email, password: DEMO.admin.password,
-      masterEmail: DEMO.master.email, masterPassword: DEMO.master.password,
       contact: "9999999999", country: "India", state: "Gujarat", city: "Ahmedabad", zipCode: "380001",
       fullAddress: "1 Demo Street, Ahmedabad",
     });

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/lib/config";
 import ServerInfo from "@/components/common/ServerInfo";
 
-type Logins = { master: { email: string; password: string }; admin: { email: string; password: string } };
+type Logins = { admin: { email: string; password: string } };
 
 export default function SetupChoice() {
     const router = useRouter();
@@ -79,14 +79,9 @@ export default function SetupChoice() {
                 {demo ? (
                     <div className="space-y-4">
                         <div className="rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700 dark:text-gray-200">
-                            <p className="font-semibold">Institute login (daily work)</p>
+                            <p className="font-semibold">Admin login</p>
                             <p>Email: <span className="font-mono">{demo.admin.email}</span></p>
                             <p>Password: <span className="font-mono">{demo.admin.password}</span></p>
-                        </div>
-                        <div className="rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700 dark:text-gray-200">
-                            <p className="font-semibold">Master login (backup, branding, updates, licence)</p>
-                            <p>Email: <span className="font-mono">{demo.master.email}</span></p>
-                            <p>Password: <span className="font-mono">{demo.master.password}</span></p>
                         </div>
                         <ServerInfo />
                         <button onClick={() => router.push("/signin")} className={primary}>Go to sign in</button>
