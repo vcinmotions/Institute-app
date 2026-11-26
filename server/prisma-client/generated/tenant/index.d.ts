@@ -17394,6 +17394,7 @@ export namespace Prisma {
     separator: string | null
     currentNumber: number | null
     numberLength: number | null
+    includeYear: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17406,6 +17407,7 @@ export namespace Prisma {
     separator: string | null
     currentNumber: number | null
     numberLength: number | null
+    includeYear: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17418,6 +17420,7 @@ export namespace Prisma {
     separator: number
     currentNumber: number
     numberLength: number
+    includeYear: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -17442,6 +17445,7 @@ export namespace Prisma {
     separator?: true
     currentNumber?: true
     numberLength?: true
+    includeYear?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17454,6 +17458,7 @@ export namespace Prisma {
     separator?: true
     currentNumber?: true
     numberLength?: true
+    includeYear?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17466,6 +17471,7 @@ export namespace Prisma {
     separator?: true
     currentNumber?: true
     numberLength?: true
+    includeYear?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -17565,6 +17571,7 @@ export namespace Prisma {
     separator: string
     currentNumber: number
     numberLength: number
+    includeYear: boolean
     createdAt: Date
     updatedAt: Date
     _count: AdmissionNumberConfigCountAggregateOutputType | null
@@ -17596,6 +17603,7 @@ export namespace Prisma {
     separator?: boolean
     currentNumber?: boolean
     numberLength?: boolean
+    includeYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["admissionNumberConfig"]>
@@ -17608,6 +17616,7 @@ export namespace Prisma {
     separator?: boolean
     currentNumber?: boolean
     numberLength?: boolean
+    includeYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["admissionNumberConfig"]>
@@ -17620,6 +17629,7 @@ export namespace Prisma {
     separator?: boolean
     currentNumber?: boolean
     numberLength?: boolean
+    includeYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["admissionNumberConfig"]>
@@ -17632,11 +17642,12 @@ export namespace Prisma {
     separator?: boolean
     currentNumber?: boolean
     numberLength?: boolean
+    includeYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AdmissionNumberConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientAdminId" | "prefix" | "suffix" | "separator" | "currentNumber" | "numberLength" | "createdAt" | "updatedAt", ExtArgs["result"]["admissionNumberConfig"]>
+  export type AdmissionNumberConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientAdminId" | "prefix" | "suffix" | "separator" | "currentNumber" | "numberLength" | "includeYear" | "createdAt" | "updatedAt", ExtArgs["result"]["admissionNumberConfig"]>
 
   export type $AdmissionNumberConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AdmissionNumberConfig"
@@ -17649,6 +17660,7 @@ export namespace Prisma {
       separator: string
       currentNumber: number
       numberLength: number
+      includeYear: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["admissionNumberConfig"]>
@@ -18081,6 +18093,7 @@ export namespace Prisma {
     readonly separator: FieldRef<"AdmissionNumberConfig", 'String'>
     readonly currentNumber: FieldRef<"AdmissionNumberConfig", 'Int'>
     readonly numberLength: FieldRef<"AdmissionNumberConfig", 'Int'>
+    readonly includeYear: FieldRef<"AdmissionNumberConfig", 'Boolean'>
     readonly createdAt: FieldRef<"AdmissionNumberConfig", 'DateTime'>
     readonly updatedAt: FieldRef<"AdmissionNumberConfig", 'DateTime'>
   }
@@ -18477,6 +18490,7 @@ export namespace Prisma {
     separator: string | null
     currentNumber: number | null
     numberLength: number | null
+    includeYear: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18489,6 +18503,7 @@ export namespace Prisma {
     separator: string | null
     currentNumber: number | null
     numberLength: number | null
+    includeYear: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18501,6 +18516,7 @@ export namespace Prisma {
     separator: number
     currentNumber: number
     numberLength: number
+    includeYear: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -18525,6 +18541,7 @@ export namespace Prisma {
     separator?: true
     currentNumber?: true
     numberLength?: true
+    includeYear?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18537,6 +18554,7 @@ export namespace Prisma {
     separator?: true
     currentNumber?: true
     numberLength?: true
+    includeYear?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18549,6 +18567,7 @@ export namespace Prisma {
     separator?: true
     currentNumber?: true
     numberLength?: true
+    includeYear?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -18648,6 +18667,7 @@ export namespace Prisma {
     separator: string
     currentNumber: number
     numberLength: number
+    includeYear: boolean
     createdAt: Date
     updatedAt: Date
     _count: PaymentReceiptConfigCountAggregateOutputType | null
@@ -18679,6 +18699,7 @@ export namespace Prisma {
     separator?: boolean
     currentNumber?: boolean
     numberLength?: boolean
+    includeYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["paymentReceiptConfig"]>
@@ -18691,6 +18712,7 @@ export namespace Prisma {
     separator?: boolean
     currentNumber?: boolean
     numberLength?: boolean
+    includeYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["paymentReceiptConfig"]>
@@ -18703,6 +18725,7 @@ export namespace Prisma {
     separator?: boolean
     currentNumber?: boolean
     numberLength?: boolean
+    includeYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["paymentReceiptConfig"]>
@@ -18715,11 +18738,12 @@ export namespace Prisma {
     separator?: boolean
     currentNumber?: boolean
     numberLength?: boolean
+    includeYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PaymentReceiptConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientAdminId" | "prefix" | "suffix" | "separator" | "currentNumber" | "numberLength" | "createdAt" | "updatedAt", ExtArgs["result"]["paymentReceiptConfig"]>
+  export type PaymentReceiptConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientAdminId" | "prefix" | "suffix" | "separator" | "currentNumber" | "numberLength" | "includeYear" | "createdAt" | "updatedAt", ExtArgs["result"]["paymentReceiptConfig"]>
 
   export type $PaymentReceiptConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PaymentReceiptConfig"
@@ -18732,6 +18756,7 @@ export namespace Prisma {
       separator: string
       currentNumber: number
       numberLength: number
+      includeYear: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["paymentReceiptConfig"]>
@@ -19164,6 +19189,7 @@ export namespace Prisma {
     readonly separator: FieldRef<"PaymentReceiptConfig", 'String'>
     readonly currentNumber: FieldRef<"PaymentReceiptConfig", 'Int'>
     readonly numberLength: FieldRef<"PaymentReceiptConfig", 'Int'>
+    readonly includeYear: FieldRef<"PaymentReceiptConfig", 'Boolean'>
     readonly createdAt: FieldRef<"PaymentReceiptConfig", 'DateTime'>
     readonly updatedAt: FieldRef<"PaymentReceiptConfig", 'DateTime'>
   }
@@ -55909,6 +55935,7 @@ export namespace Prisma {
     separator: 'separator',
     currentNumber: 'currentNumber',
     numberLength: 'numberLength',
+    includeYear: 'includeYear',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -55924,6 +55951,7 @@ export namespace Prisma {
     separator: 'separator',
     currentNumber: 'currentNumber',
     numberLength: 'numberLength',
+    includeYear: 'includeYear',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -57456,6 +57484,7 @@ export namespace Prisma {
     separator?: StringFilter<"AdmissionNumberConfig"> | string
     currentNumber?: IntFilter<"AdmissionNumberConfig"> | number
     numberLength?: IntFilter<"AdmissionNumberConfig"> | number
+    includeYear?: BoolFilter<"AdmissionNumberConfig"> | boolean
     createdAt?: DateTimeFilter<"AdmissionNumberConfig"> | Date | string
     updatedAt?: DateTimeFilter<"AdmissionNumberConfig"> | Date | string
   }
@@ -57468,6 +57497,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -57483,6 +57513,7 @@ export namespace Prisma {
     separator?: StringFilter<"AdmissionNumberConfig"> | string
     currentNumber?: IntFilter<"AdmissionNumberConfig"> | number
     numberLength?: IntFilter<"AdmissionNumberConfig"> | number
+    includeYear?: BoolFilter<"AdmissionNumberConfig"> | boolean
     createdAt?: DateTimeFilter<"AdmissionNumberConfig"> | Date | string
     updatedAt?: DateTimeFilter<"AdmissionNumberConfig"> | Date | string
   }, "id" | "clientAdminId">
@@ -57495,6 +57526,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AdmissionNumberConfigCountOrderByAggregateInput
@@ -57515,6 +57547,7 @@ export namespace Prisma {
     separator?: StringWithAggregatesFilter<"AdmissionNumberConfig"> | string
     currentNumber?: IntWithAggregatesFilter<"AdmissionNumberConfig"> | number
     numberLength?: IntWithAggregatesFilter<"AdmissionNumberConfig"> | number
+    includeYear?: BoolWithAggregatesFilter<"AdmissionNumberConfig"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"AdmissionNumberConfig"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AdmissionNumberConfig"> | Date | string
   }
@@ -57530,6 +57563,7 @@ export namespace Prisma {
     separator?: StringFilter<"PaymentReceiptConfig"> | string
     currentNumber?: IntFilter<"PaymentReceiptConfig"> | number
     numberLength?: IntFilter<"PaymentReceiptConfig"> | number
+    includeYear?: BoolFilter<"PaymentReceiptConfig"> | boolean
     createdAt?: DateTimeFilter<"PaymentReceiptConfig"> | Date | string
     updatedAt?: DateTimeFilter<"PaymentReceiptConfig"> | Date | string
   }
@@ -57542,6 +57576,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -57557,6 +57592,7 @@ export namespace Prisma {
     separator?: StringFilter<"PaymentReceiptConfig"> | string
     currentNumber?: IntFilter<"PaymentReceiptConfig"> | number
     numberLength?: IntFilter<"PaymentReceiptConfig"> | number
+    includeYear?: BoolFilter<"PaymentReceiptConfig"> | boolean
     createdAt?: DateTimeFilter<"PaymentReceiptConfig"> | Date | string
     updatedAt?: DateTimeFilter<"PaymentReceiptConfig"> | Date | string
   }, "id" | "clientAdminId">
@@ -57569,6 +57605,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PaymentReceiptConfigCountOrderByAggregateInput
@@ -57589,6 +57626,7 @@ export namespace Prisma {
     separator?: StringWithAggregatesFilter<"PaymentReceiptConfig"> | string
     currentNumber?: IntWithAggregatesFilter<"PaymentReceiptConfig"> | number
     numberLength?: IntWithAggregatesFilter<"PaymentReceiptConfig"> | number
+    includeYear?: BoolWithAggregatesFilter<"PaymentReceiptConfig"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"PaymentReceiptConfig"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PaymentReceiptConfig"> | Date | string
   }
@@ -61141,6 +61179,7 @@ export namespace Prisma {
     separator?: string
     currentNumber: number
     numberLength?: number
+    includeYear?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -61153,6 +61192,7 @@ export namespace Prisma {
     separator?: string
     currentNumber: number
     numberLength?: number
+    includeYear?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -61165,6 +61205,7 @@ export namespace Prisma {
     separator?: StringFieldUpdateOperationsInput | string
     currentNumber?: IntFieldUpdateOperationsInput | number
     numberLength?: IntFieldUpdateOperationsInput | number
+    includeYear?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61177,6 +61218,7 @@ export namespace Prisma {
     separator?: StringFieldUpdateOperationsInput | string
     currentNumber?: IntFieldUpdateOperationsInput | number
     numberLength?: IntFieldUpdateOperationsInput | number
+    includeYear?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61189,6 +61231,7 @@ export namespace Prisma {
     separator?: string
     currentNumber: number
     numberLength?: number
+    includeYear?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -61201,6 +61244,7 @@ export namespace Prisma {
     separator?: StringFieldUpdateOperationsInput | string
     currentNumber?: IntFieldUpdateOperationsInput | number
     numberLength?: IntFieldUpdateOperationsInput | number
+    includeYear?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61213,6 +61257,7 @@ export namespace Prisma {
     separator?: StringFieldUpdateOperationsInput | string
     currentNumber?: IntFieldUpdateOperationsInput | number
     numberLength?: IntFieldUpdateOperationsInput | number
+    includeYear?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61225,6 +61270,7 @@ export namespace Prisma {
     separator?: string
     currentNumber: number
     numberLength?: number
+    includeYear?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -61237,6 +61283,7 @@ export namespace Prisma {
     separator?: string
     currentNumber: number
     numberLength?: number
+    includeYear?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -61249,6 +61296,7 @@ export namespace Prisma {
     separator?: StringFieldUpdateOperationsInput | string
     currentNumber?: IntFieldUpdateOperationsInput | number
     numberLength?: IntFieldUpdateOperationsInput | number
+    includeYear?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61261,6 +61309,7 @@ export namespace Prisma {
     separator?: StringFieldUpdateOperationsInput | string
     currentNumber?: IntFieldUpdateOperationsInput | number
     numberLength?: IntFieldUpdateOperationsInput | number
+    includeYear?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61273,6 +61322,7 @@ export namespace Prisma {
     separator?: string
     currentNumber: number
     numberLength?: number
+    includeYear?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -61285,6 +61335,7 @@ export namespace Prisma {
     separator?: StringFieldUpdateOperationsInput | string
     currentNumber?: IntFieldUpdateOperationsInput | number
     numberLength?: IntFieldUpdateOperationsInput | number
+    includeYear?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61297,6 +61348,7 @@ export namespace Prisma {
     separator?: StringFieldUpdateOperationsInput | string
     currentNumber?: IntFieldUpdateOperationsInput | number
     numberLength?: IntFieldUpdateOperationsInput | number
+    includeYear?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64821,6 +64873,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -64838,6 +64891,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -64850,6 +64904,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -64867,6 +64922,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -64884,6 +64940,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -64896,6 +64953,7 @@ export namespace Prisma {
     separator?: SortOrder
     currentNumber?: SortOrder
     numberLength?: SortOrder
+    includeYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }

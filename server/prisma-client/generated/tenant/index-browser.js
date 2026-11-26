@@ -255,6 +255,7 @@ exports.Prisma.AdmissionNumberConfigScalarFieldEnum = {
   separator: 'separator',
   currentNumber: 'currentNumber',
   numberLength: 'numberLength',
+  includeYear: 'includeYear',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -267,6 +268,7 @@ exports.Prisma.PaymentReceiptConfigScalarFieldEnum = {
   separator: 'separator',
   currentNumber: 'currentNumber',
   numberLength: 'numberLength',
+  includeYear: 'includeYear',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

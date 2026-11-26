@@ -6,6 +6,12 @@ export async function upsertPaymentReceiptConfig(req: any, res: any) {
     const user = req.user;
 
     const { prefix, suffix, separator, numberLength } = req.body;
+    const includeYear = req.body?.includeYear === true || req.body?.includeYear === "true";
+
+    const len = Number(numberLength);
+    if (!Number.isInteger(len) || len < 1 || len > 10) {
+      return res.status(400).json({ error: "Number length must be a whole number from 1 to 10" });
+    }
 
     const config = await prisma.paymentReceiptConfig.upsert({
       where: { clientAdminId: user.clientAdminId },
@@ -14,7 +20,8 @@ export async function upsertPaymentReceiptConfig(req: any, res: any) {
         prefix,
         suffix,
         separator,
-        numberLength: Number(numberLength),
+        numberLength: len,
+        includeYear,
       },
 
       create: {
@@ -22,7 +29,8 @@ export async function upsertPaymentReceiptConfig(req: any, res: any) {
         prefix,
         suffix,
         separator,
-        numberLength: Number(numberLength),
+        numberLength: len,
+        includeYear,
         currentNumber: 1,
       },
     });

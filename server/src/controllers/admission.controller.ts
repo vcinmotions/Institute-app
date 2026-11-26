@@ -194,6 +194,7 @@ export async function upsertAdmissionConfig(req: any, res: any) {
     const user = req.user;
 
     const { prefix, suffix, separator, numberLength } = req.body;
+    const includeYear = req.body?.includeYear === true || req.body?.includeYear === "true";
 
     const len = Number(numberLength);
     if (!Number.isInteger(len) || len < 1 || len > 10) {
@@ -208,6 +209,7 @@ export async function upsertAdmissionConfig(req: any, res: any) {
         suffix,
         separator,
         numberLength: Number(numberLength),
+        includeYear,
       },
 
       create: {
@@ -216,6 +218,7 @@ export async function upsertAdmissionConfig(req: any, res: any) {
         suffix,
         separator,
         numberLength: Number(numberLength),
+        includeYear,
         currentNumber: 1,
       },
     });
