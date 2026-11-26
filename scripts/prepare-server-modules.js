@@ -9,6 +9,20 @@ const root = path.resolve(__dirname, "..");
 const serverDir = path.join(root, "server");
 const stage = path.join(root, "build", "server-modules");
 
+// The EXE stores its data in SQLite. If the Prisma clients in server/dist were generated for PostgreSQL
+// (local development), setup fails with "the URL must start with the protocol postgresql://". Stop the build.
+for (const db of ["central", "tenant"]) {
+  const schema = path.join(serverDir, "dist", "prisma-client", "generated", db, "schema.prisma");
+  const text = fs.existsSync(schema) ? fs.readFileSync(schema, "utf8") : "";
+  if (!/provider\s*=\s*"sqlite"/.test(text)) {
+    console.error(
+      `\nBUILD STOPPED: server/dist/prisma-client/generated/${db} is not the SQLite client.\n` +
+        "Run in server/:  npm run generate:central-prod && npm run generate:tenant-prod && npm run build\n"
+    );
+    process.exit(1);
+  }
+}
+
 fs.rmSync(stage, { recursive: true, force: true });
 fs.mkdirSync(stage, { recursive: true });
 for (const f of ["package.json", "package-lock.json"]) {
