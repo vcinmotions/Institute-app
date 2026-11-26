@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import PortalCompanies from "./PortalCompanies";
 import PortalDevices from "./PortalDevices";
+import PortalBranding from "./PortalBranding";
 import PortalProfileCard from "./PortalProfileCard";
 import { USER_TIERS, DEFAULT_TIER_MULTIPLIERS, tierLabel, planPrice, Plan } from "@/lib/userTiers";
 import { portalApi, getPortalToken, setPortalToken, portalAuthHeader } from "@/lib/portalApi";
@@ -48,13 +49,14 @@ type Payment = {
   createdAt: string;
 };
 
-type Tab = "overview" | "plans" | "billing" | "companies" | "account";
+type Tab = "overview" | "plans" | "billing" | "companies" | "branding" | "account";
 
 const NAV: { id: Tab; label: string; icon: string }[] = [
   { id: "overview", label: "Overview", icon: "🏠" },
   { id: "plans", label: "Plans & Payment", icon: "💳" },
   { id: "billing", label: "Billing History", icon: "🧾" },
   { id: "companies", label: "Companies", icon: "🏢" },
+  { id: "branding", label: "Branding", icon: "🎨" },
   { id: "account", label: "My Institute", icon: "🏫" },
 ];
 
@@ -262,7 +264,7 @@ export default function PortalSubscription() {
           <p className="mb-1 hidden px-3 pt-2 text-xs font-medium uppercase tracking-wider text-gray-400 md:block">
             Menu
           </p>
-          {NAV.filter((n) => !(me?.isCompany && (n.id === "plans" || n.id === "companies"))).map((n) => (
+          {NAV.filter((n) => !(me?.isCompany && (n.id === "plans" || n.id === "companies" || n.id === "branding"))).map((n) => (
             <button
               key={n.id}
               onClick={() => {
@@ -509,6 +511,9 @@ export default function PortalSubscription() {
             />
           )}
           {tab === "companies" && !me?.isCompany && <PortalDevices />}
+
+          {/* ---------- Branding (name + logo used by the desktop application) ---------- */}
+          {tab === "branding" && !me?.isCompany && <PortalBranding />}
 
           {/* ---------- Account ---------- */}
           {tab === "account" && me && (

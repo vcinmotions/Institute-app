@@ -1,7 +1,7 @@
 import express from "express";
 import { backupController, backupStatusController, backupConfigController } from "../controllers/system.backup.controller";
 import { systemHealthController } from "../controllers/system.health.controller";
-import { publicBranding, getBranding, updateBranding, brandingUpload, brandingUploadErrors } from "../controllers/branding.controller";
+import { publicBranding, getBranding } from "../controllers/branding.controller";
 import { getSessionSettings, updateSessionSettings } from "../controllers/session.settings.controller";
 import { masterAuthMiddleware } from "../middlewares/master.auth.middleware";
 
@@ -13,10 +13,10 @@ router.post("/backup", masterAuthMiddleware, backupController);
 router.get("/backup/status", masterAuthMiddleware, backupStatusController);
 router.put("/backup/config", masterAuthMiddleware, backupConfigController);
 router.get("/system/health", masterAuthMiddleware, systemHealthController);
-// Institute branding: public read (login screen), master-admin-only write.
+// Institute branding: read only here. It is changed in the subscription portal (PUT /portal/branding)
+// and reaches every installation with the portal sync.
 router.get("/branding/public", publicBranding);
 router.get("/branding", masterAuthMiddleware, getBranding);
-router.put("/branding", masterAuthMiddleware, brandingUpload.single("logo"), brandingUploadErrors, updateBranding);
 // Idle sign-out timeout (read by every PC, changed by the master admin only).
 router.get("/session-settings", getSessionSettings);
 router.put("/session-settings", masterAuthMiddleware, updateSessionSettings);

@@ -7,7 +7,7 @@ import { SERVER_ORIGIN } from "@/lib/config";
 export type Branding = { instituteName: string | null; logoUrl: string | null };
 
 /**
- * Institute name + logo set by the Super Admin (Master > Branding).
+ * Institute name + logo, set in the subscription portal (Branding tab) and synced to this installation.
  * Public read, so the login screen can show it too. Refetched automatically after any save.
  */
 export function useBranding() {

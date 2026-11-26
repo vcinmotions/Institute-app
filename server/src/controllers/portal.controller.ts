@@ -1,4 +1,5 @@
 import { ensureInstituteKey } from "./activation.controller";
+import { brandingForSync } from "./branding.controller";
 import { readTierPrices, resolvePlanPrice } from "./plan.controller";
 import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
@@ -496,7 +497,10 @@ export async function syncSubscription(req: Request, res: Response) {
       issuedAt: new Date().toISOString(),
       nonce: req.body?.nonce ? String(req.body.nonce).slice(0, 64) : undefined,
     };
-    res.json({ ...signPayload(payload), syncToken: newToken });
+    // Branding set in the portal (not signed: display only). The EXE downloads the logo when the version changes.
+    const brandMaster = master ?? (await prisma.tenant.findUnique({ where: { email } }));
+    const branding = brandMaster ? await brandingForSync(brandMaster) : undefined;
+    res.json({ ...signPayload(payload), syncToken: newToken, branding });
   } catch (e) {
     console.error("sync failed:", e);
     res.status(500).json({ error: "Sync failed" });

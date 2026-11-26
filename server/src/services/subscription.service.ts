@@ -421,6 +421,13 @@ export async function syncFromCloud(credentials?: {
       settings: (await fetchGlobalSettings(api)) ?? rec?.settings,
     });
     if (!clockOk) return { ok: false, error: CLOCK_MESSAGE };
+    // Name + logo are managed in the subscription portal only; apply any change (best effort).
+    try {
+      const { applyPortalBranding } = await import("../controllers/branding.controller");
+      await applyPortalBranding(api, body?.branding);
+    } catch (e) {
+      console.error("Could not apply the portal branding:", e);
+    }
     return { ok: true };
   } catch (e: any) {
     return { ok: false, error: e?.name === "AbortError" ? "Portal timed out" : "Offline" };

@@ -23,6 +23,7 @@ import {
   activateDevice, claimServer, verifyDevice, saasListKeys, saasCreateKey, saasUpdateKey, saasSetDeviceStatus,
   portalListKeys, portalDeactivateDevice, saasIssueLocalRenewal,
 } from "../controllers/activation.controller";
+import { portalGetBranding, portalUpdateBranding, portalBrandingUpload, brandingUploadErrors } from "../controllers/branding.controller";
 const router = express.Router();
 
 // Tiny in-memory throttle for the public activation endpoints (brute-force protection for keys).
@@ -62,6 +63,9 @@ router.get("/portal/companies", portalAuth, masterOnly, listCompanies);
 router.post("/portal/companies", portalAuth, masterOnly, createCompany);
 router.put("/portal/companies/:id", portalAuth, masterOnly, updateCompany);
 router.post("/portal/razorpay-webhook", razorpayWebhook);
+// Institute branding (name + logo): set here only; installations receive it with /subscription/sync.
+router.get("/portal/branding", portalAuth, masterOnly, portalGetBranding);
+router.put("/portal/branding", portalAuth, masterOnly, portalBrandingUpload.single("logo"), brandingUploadErrors, portalUpdateBranding);
 router.post("/subscription/sync", syncSubscription); // called by the EXE
 
 // ---- EXE activation keys & devices ----

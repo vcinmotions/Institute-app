@@ -303,14 +303,6 @@ const navItems: NavItem[] = [
   },
   {
     group: "System",
-    icon: <PencilIcon />,
-    name: "Branding",
-    path: "/dashboard/system/branding",
-    roles: ["ADMIN"],
-    systemAdmin: true,
-  },
-  {
-    group: "System",
     icon: <PaperPlaneIcon />,
     name: "Software Update",
     path: "/dashboard/system/updates",
@@ -342,13 +334,6 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "System Health",
     path: "/master-dashboard/health",
-    roles: ["MASTER_ADMIN"],
-  },
-  {
-    group: "System Admin",
-    icon: <PencilIcon />,
-    name: "Branding",
-    path: "/master-dashboard/branding",
     roles: ["MASTER_ADMIN"],
   },
   {
