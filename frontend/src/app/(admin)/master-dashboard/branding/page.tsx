@@ -57,23 +57,22 @@ export default function BrandingPage() {
     <div>
       <PageBreadcrumb pageTitle="Institute Branding" />
       <div className="grid gap-6 md:grid-cols-2">
-        <section className="space-y-4 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-500">Institute name</label>
+        <div className="space-y-6">
+          <section className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-gray-500">Institute name</h3>
             <input value={name} onChange={(e) => setName(e.target.value)} maxLength={120}
               className="h-10 w-full rounded border border-gray-300 px-3 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white" />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-500">Institute logo (PNG, JPG or WEBP, up to 1 MB)</label>
-            <div
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => { e.preventDefault(); pick(e.dataTransfer.files?.[0] ?? null); }}
-              className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-5 text-center dark:border-gray-700"
-            >
-              <p className="text-sm text-gray-600 dark:text-gray-300">{file ? file.name : "Drag and drop your logo here"}</p>
+          </section>
+
+          <section className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <h3 className="mb-1 text-xs font-bold uppercase tracking-wide text-gray-500">Institute logo</h3>
+            <p className="mb-3 text-xs text-gray-500">PNG, JPG or WEBP, up to 1 MB.</p>
+            <div className="flex items-center gap-2">
+              <input readOnly value={file ? file.name : "No file selected"} aria-label="Selected logo file"
+                className="h-10 min-w-0 flex-1 rounded border border-gray-300 bg-gray-50 px-3 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-white" />
               <button type="button" onClick={() => fileRef.current?.click()}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 dark:bg-white dark:text-gray-900">
-                {file ? "Choose a different logo" : "Choose logo"}
+                className="h-10 rounded border border-gray-300 bg-gray-100 px-5 text-sm font-medium text-gray-900 hover:bg-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">
+                Browse...
               </button>
               <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => pick(e.target.files?.[0] ?? null)} className="sr-only" aria-label="Upload logo" />
             </div>
@@ -82,14 +81,15 @@ export default function BrandingPage() {
                 Remove logo
               </button>
             )}
-          </div>
+          </section>
+
           {msg && <p className={`text-sm ${msg.ok ? "text-green-600" : "text-red-600"}`}>{msg.text}</p>}
           <button onClick={() => save.mutate()} disabled={!changed || save.isPending || !name.trim()}
             className="rounded bg-brand-500 px-4 py-2 text-sm font-medium text-white disabled:opacity-50">
             {save.isPending ? "Saving..." : "Save & apply"}
           </button>
           <p className="text-xs text-gray-500">Only the Super Admin can open this page. The change appears in the header, sidebar, login screen and printouts.</p>
-        </section>
+        </div>
 
         <section className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
           <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-gray-500">Preview</h3>
