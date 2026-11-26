@@ -216,7 +216,8 @@ export async function verifyWithPortal(): Promise<{ ok: boolean; error?: string 
   const lic = rec ? openSigned<ActivationLicense>("ACTIVATION", rec.payloadJson, rec.signature) : null;
   if (!rec || !lic) return { ok: false, error: "Not activated" };
   const nonce = crypto.randomBytes(16).toString("hex");
-  const r = await post("/api/activation/verify", { keyId: lic.keyId, deviceId: lic.deviceId, nonce });
+  // The institute key serves several companies: tell the portal which one this server is for (kept in the licence).
+  const r = await post("/api/activation/verify", { keyId: lic.keyId, deviceId: lic.deviceId, nonce, company: lic.company, companyId: lic.companyId ?? null });
   if (r.ok) return storeLicense(r.data.payloadJson, r.data.signature, nonce);
   if (r.status === 403 || r.status === 404) {
     const at = new Date().toISOString();
@@ -240,8 +241,8 @@ export type ClaimResult = {
 };
 
 /**
- * First-time server setup: the portal registers THIS PC on the chosen company's Server key and returns the signed
- * licence together with the company's Server key and Client key.
+ * First-time server setup: the portal registers THIS PC on the institute's activation key (for the chosen company)
+ * and returns the signed licence together with the key (serverKey and clientKey are the same institute key).
  */
 export async function claimServerFromPortal(args: { email: string; password: string; companyId: string }): Promise<ClaimResult> {
   const nonce = crypto.randomBytes(16).toString("hex");

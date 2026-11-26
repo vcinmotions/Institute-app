@@ -531,56 +531,18 @@ const LOADING_HTML = `data:text/html;charset=utf-8,${encodeURIComponent(`<!DOCTY
 // ─── WINDOW ──────────────────────────────────────────────────────────────────
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/**
- * Signs the user out when the window closes:
- *  1. tells the server to end the session (frees the concurrent-login seat, kills the token), and
- *  2. wipes the saved session in the page, so the next launch shows the login screen instead of
- *     restoring the old user. Step 2 runs even when step 1 cannot reach the server.
- * Never blocks closing for more than a few seconds.
- */
-async function logoutBeforeClose(win) {
-  let token = null;
+/** Keeps the signed-in session for the next start (same as preload.js does every few seconds). */
+async function saveSessionBeforeClose(win) {
   try {
     if (win.isDestroyed()) return;
-    token = await Promise.race([
-      win.webContents.executeJavaScript('window.sessionStorage.getItem("token")'),
+    await Promise.race([
+      win.webContents.executeJavaScript(
+        'try { var t = window.sessionStorage.getItem("token"); if (t) window.localStorage.setItem("vc_saved_token", t); else window.localStorage.removeItem("vc_saved_token"); } catch (e) {}'
+      ),
       delay(1000),
     ]);
   } catch (err) {
-    log.warn(`logout on close: could not read the session: ${err.message}`);
-  }
-
-  if (token && typeof token === "string") {
-    try {
-      const cfg = readModeConfig();
-      const host = cfg && cfg.mode === "LAN_CLIENT" ? cfg.host : "127.0.0.1";
-      const port = cfg && cfg.mode === "LAN_CLIENT" ? cfg.port : BACKEND_PORT;
-      const res = await Promise.race([
-        fetch(`http://${host}:${port}/api/auth/logout`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-        }).catch((e) => ({ status: `error: ${e.message}` })),
-        delay(2500).then(() => ({ status: "timed out" })),
-      ]);
-      log.info(`logout on close: server answered ${res && res.status}`);
-    } catch (err) {
-      log.warn(`logout on close failed: ${err.message}`);
-    }
-  } else {
-    log.info("logout on close: nobody was signed in");
-  }
-
-  try {
-    if (!win.isDestroyed()) {
-      await Promise.race([
-        win.webContents.executeJavaScript(
-          'try { window.sessionStorage.removeItem("token"); window.localStorage.removeItem("auth"); } catch (e) {}'
-        ),
-        delay(1000),
-      ]);
-    }
-  } catch (err) {
-    log.warn(`logout on close: could not clear the saved session: ${err.message}`);
+    log.warn(`save session on close failed: ${err.message}`);
   }
 }
 
@@ -600,15 +562,15 @@ async function createWindow() {
 
   win.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
 
-  // Closing the EXE signs the user out first, so the login seat is released at once.
-  // (A crash or power cut is covered by the server's heartbeat timeout.)
+  // Closing the EXE does NOT sign the user out: the session is kept (see preload.js) and the server signs
+  // everyone out once a week (Sunday 11:59 PM). The login seat is freed by the server's heartbeat timeout.
   mainWindow = win;
   let closing = false;
   win.on("close", async (e) => {
     if (closing) return;
     e.preventDefault();
     closing = true;
-    await logoutBeforeClose(win);
+    await saveSessionBeforeClose(win);
     // LAN server PC: closing the window must NOT stop the server, or every client PC loses
     // its connection. Hide to the system tray instead; the tray "Quit" really exits.
     const c = readModeConfig();

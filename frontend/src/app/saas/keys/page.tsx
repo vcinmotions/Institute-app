@@ -6,7 +6,7 @@ import { saasApi, getSaasToken } from "@/lib/saasApi";
 
 type Dev = { id: string; deviceId: string; deviceName: string; os: string; status: string; activatedAt: string; lastVerifiedAt: string };
 type Key = {
-  id: string; key: string; kind?: "SERVER" | "CLIENT"; unlimited?: boolean; instituteName: string; companyName: string; maxActivations: number; activatedPCs: number;
+  id: string; key: string; kind?: "SERVER" | "CLIENT" | "INSTITUTE"; unlimited?: boolean; instituteName: string; companyName: string; maxActivations: number; activatedPCs: number;
   transferLimit: number; transfersUsed: number; status: string; devices: Dev[];
 };
 type Inst = { tenantId: string; instituteName: string; name: string; isCompany?: boolean };
@@ -85,7 +85,7 @@ export default function ActivationKeysPage() {
             <input type="number" min={0} className="rounded border p-2 text-sm dark:bg-gray-800" title="PC transfer limit" value={form.transferLimit} onChange={(e) => setForm({ ...form, transferLimit: Number(e.target.value) })} />
             <button onClick={create} disabled={!form.tenantId} className="rounded bg-brand-500 px-3 py-2 text-sm text-white disabled:opacity-50">Create / show keys</button>
           </div>
-          <p className="mt-2 text-xs text-gray-500">Every company gets exactly two keys, created automatically: a Server key (1 PC) and a Client key (unlimited PCs / laptops). This button makes any that are missing.</p>
+          <p className="mt-2 text-xs text-gray-500">Every institute gets ONE activation key, created automatically. It activates the server PC of every company and is typed on every client PC / laptop. PCs are unlimited unless you use &quot;Set PC limit&quot; on the key. This button makes the key if it is missing.</p>
         </section>
 
         <section className="rounded-xl bg-white p-4 shadow-sm dark:bg-gray-900">
@@ -103,13 +103,23 @@ export default function ActivationKeysPage() {
           <section key={k.id} className="rounded-xl bg-white p-4 shadow-sm dark:bg-gray-900">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <p className="font-mono text-base font-semibold"><span className="mr-2 rounded bg-gray-100 px-1.5 py-0.5 font-sans text-[10px] dark:bg-gray-800">{k.kind === "CLIENT" ? "CLIENT" : "SERVER"}</span>{k.key} {k.status !== "ACTIVE" && <span className="text-red-600">({k.status})</span>}</p>
+                <p className="font-mono text-base font-semibold"><span className="mr-2 rounded bg-gray-100 px-1.5 py-0.5 font-sans text-[10px] dark:bg-gray-800">{k.kind === "INSTITUTE" ? "INSTITUTE" : k.kind === "CLIENT" ? "CLIENT (old)" : "SERVER (old)"}</span>{k.key} {k.status !== "ACTIVE" && <span className="text-red-600">({k.status})</span>}</p>
                 <p className="text-sm text-gray-500">{k.instituteName} / {k.companyName}</p>
               </div>
               <div className="text-right text-sm">
-                <p>{k.kind === "CLIENT" ? "Unlimited client PCs (checked by each company server)" : `${k.activatedPCs} / ${k.maxActivations} server PC activated, transfers ${k.transfersUsed}/${k.transferLimit}`}</p>
+                <p>{k.kind === "CLIENT" ? "Unlimited client PCs (checked by each company server)" : k.kind === "INSTITUTE" ? `${k.activatedPCs} server PC(s) / ${k.maxActivations ? k.maxActivations : "unlimited"}; client PCs unlimited; transfers ${k.transfersUsed}/${k.transferLimit}` : `${k.activatedPCs} / ${k.maxActivations} server PC activated, transfers ${k.transfersUsed}/${k.transferLimit}`}</p>
                 <div className="mt-1 flex justify-end gap-3">
-                  
+                  {k.kind === "INSTITUTE" && (
+                    <button
+                      className="underline"
+                      onClick={() => {
+                        const v = window.prompt("Maximum server PCs for this key (0 = unlimited):", String(k.maxActivations ?? 0));
+                        if (v !== null && /^\d+$/.test(v.trim())) patchKey(k.id, { maxActivations: Number(v.trim()) });
+                      }}
+                    >
+                      Set PC limit
+                    </button>
+                  )}
                   <button className="underline" onClick={() => patchKey(k.id, { status: k.status === "ACTIVE" ? "REVOKED" : "ACTIVE" })}>{k.status === "ACTIVE" ? "Revoke key" : "Restore key"}</button>
                 </div>
               </div>

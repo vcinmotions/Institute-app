@@ -6,6 +6,7 @@ import { getTenantPrisma } from "../prisma-client/tenant-client";
 import { getTenantDbUrlById } from "../utils/tenantDbUrl";
 import dotenv from "dotenv";
 import { claimSession, limitMessage } from "../services/sessionLimit.service";
+import { isDesktopApp } from "./runtimePaths";
 dotenv.config({ path: ".env" });
 
 declare global {
@@ -16,6 +17,15 @@ declare global {
       tenantInfo?: any;
     }
   }
+}
+
+/** The most recent Sunday 23:59 (local time) at or before `now`: the weekly sign-out moment in the EXE. */
+export function lastWeeklySignOut(now: Date): Date {
+  const d = new Date(now);
+  d.setDate(d.getDate() - d.getDay()); // this week's Sunday (getDay: 0 = Sunday)
+  d.setHours(23, 59, 0, 0);
+  if (d > now) d.setDate(d.getDate() - 7);
+  return d;
 }
 
 // Refresh a user's seat at most this often (the app also sends a heartbeat every minute).
@@ -39,6 +49,12 @@ export const authMiddleware = async (
     // Master (super-admin) tokens are not valid on institute routes.
     if (decoded.role === "MASTER_ADMIN") {
       return res.status(403).json({ error: "Master admin cannot use institute routes" });
+    }
+
+    // Desktop EXE: closing the app keeps users signed in, so everyone is signed out once a week instead
+    // (Sunday 11:59 PM, this server's local time). A sign-in from before that moment is no longer valid.
+    if (isDesktopApp() && typeof decoded.iat === "number" && decoded.iat * 1000 < lastWeeklySignOut(new Date()).getTime()) {
+      return res.status(401).json({ code: "SESSION_ENDED", error: "Weekly sign-out: please sign in again." });
     }
 
     const id = decoded.id;

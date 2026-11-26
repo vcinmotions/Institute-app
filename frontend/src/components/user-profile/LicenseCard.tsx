@@ -12,7 +12,7 @@ const fmt = (d?: string | null) => (d ? new Date(d).toLocaleString("en-IN") : "-
 
 /**
  * Master admin, System Settings:
- *  - keys in use (build with SUBSCRIPTION_MODE=ENABLED): this company's Server key, Client key and the client PCs that confirmed it
+ *  - keys in use (build with SUBSCRIPTION_MODE=ENABLED): the institute's activation key and the client PCs that confirmed it
  *  - local mode (anything else): how long the licence runs and a box for the portal's renewal code
  */
 export default function LicenseCard() {
@@ -59,6 +59,12 @@ export default function LicenseCard() {
       <div className={box}>
         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Keys &amp; client PCs{keys?.company ? ` - ${keys.company}` : ""}</h4>
         {msg && <p className={`mt-1 text-xs ${msg.ok ? "text-emerald-600" : "text-rose-600"}`}>{msg.text}</p>}
+        {keys?.serverKey && keys.serverKey === keys.clientKey ? (
+          <div className="mt-3 rounded border bg-white p-2 text-xs dark:border-slate-800 dark:bg-slate-900 dark:text-white">
+            <div className="text-slate-500">Activation key (one key for every PC and laptop of the institute)</div>
+            <div className="flex items-center justify-between gap-2"><span className="font-mono">{keys.serverKey}</span><button className="underline" onClick={() => copy(keys.serverKey)}>Copy</button></div>
+          </div>
+        ) : (
         <div className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
           <div className="rounded border bg-white p-2 dark:border-slate-800 dark:bg-slate-900 dark:text-white">
             <div className="text-slate-500">Server key (this computer)</div>
@@ -69,6 +75,7 @@ export default function LicenseCard() {
             <div className="flex items-center justify-between gap-2"><span className="font-mono">{keys?.clientKey ?? "-"}</span>{keys?.clientKey && <button className="underline" onClick={() => copy(keys.clientKey)}>Copy</button>}</div>
           </div>
         </div>
+        )}
         <h5 className="mb-1 mt-4 text-[11px] font-bold uppercase text-slate-600 dark:text-slate-400">Client PCs connected ({devices.filter((d) => d.status === "ACTIVE").length})</h5>
         <div className="max-h-52 overflow-auto rounded border bg-white dark:border-slate-800 dark:bg-slate-900">
           <table className="w-full text-left text-[11px] dark:text-white">
@@ -89,7 +96,7 @@ export default function LicenseCard() {
             </tbody>
           </table>
         </div>
-        <p className="mt-2 text-[11px] text-slate-500">Any number of PCs and laptops can use the Client key. Block a lost laptop here.</p>
+        <p className="mt-2 text-[11px] text-slate-500">Any number of PCs and laptops can use the activation key. Block a lost laptop here.</p>
       </div>
     );
   }

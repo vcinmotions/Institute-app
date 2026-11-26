@@ -133,7 +133,19 @@ export default function SetupPage() {
         {step === 3 && done && (
           <>
             <Alert variant="success" title="Server ready" message={`${done.company} is set up on this computer.${done.sub ? " " + done.sub : ""}`} showLink={false} />
-            {done.serverKey && (
+            {done.serverKey && done.serverKey === done.clientKey && (
+              <div className="space-y-3 rounded border p-3 text-sm dark:border-gray-700 dark:text-white">
+                <div>
+                  <div className="text-xs text-gray-500">Your institute&apos;s activation key (this computer is already activated)</div>
+                  <div className="flex items-center justify-between gap-2"><span className="font-mono">{done.serverKey}</span><button className="text-xs underline" onClick={() => copy(done.serverKey)}>Copy</button></div>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Use this one key on every other PC and laptop, for every company of your institute. It is also shown later under
+                  System Settings and in the portal. Keep it private to your staff.
+                </p>
+              </div>
+            )}
+            {done.serverKey && done.serverKey !== done.clientKey && (
               <div className="space-y-3 rounded border p-3 text-sm dark:border-gray-700 dark:text-white">
                 <div>
                   <div className="text-xs text-gray-500">Server key (this computer - already activated)</div>

@@ -1,4 +1,4 @@
-import { ensureCompanyKeys } from "./activation.controller";
+import { ensureInstituteKey } from "./activation.controller";
 import { readTierPrices, resolvePlanPrice } from "./plan.controller";
 import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
@@ -567,7 +567,8 @@ export async function createCompany(req: Request, res: Response) {
       certificateName: n.certificateName,
     });
     // Every company gets its Server key and Client key automatically.
-    try { await ensureCompanyKeys(ctx.prisma, ctx.master, created.id, created.instituteName || created.name); } catch (e) { console.error("company keys failed:", e); }
+    // A new company uses the institute's one activation key (no per-company keys).
+    try { await ensureInstituteKey(ctx.prisma, ctx.master); } catch (e) { console.error("institute key failed:", e); }
     res.status(201).json(companyView(created));
   } catch (e: any) {
     console.error("create company failed:", e);

@@ -17,7 +17,17 @@ const ACTIVITY = ["mousemove", "mousedown", "keydown", "scroll", "touchstart", "
 
 let serverMinutes = 30; // set from the server (Master > System Settings); the same on every PC
 
+/**
+ * The desktop EXE has no idle sign-out: a PC left unused stays signed in (the server signs everyone out
+ * once a week instead). Only the web version uses the idle timeout.
+ */
 export default function IdleLogout() {
+  const [web, setWeb] = useState(false);
+  useEffect(() => setWeb(!window.electronAPI), []);
+  return web ? <WebIdleLogout /> : null;
+}
+
+function WebIdleLogout() {
   const { data: settings } = useQuery<{ idleTimeoutMinutes: number }>({
     queryKey: ["session-settings"],
     queryFn: async () => (await publicApi.get("/session-settings")).data,

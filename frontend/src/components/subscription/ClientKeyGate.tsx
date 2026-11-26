@@ -30,7 +30,7 @@ async function thisDevice(): Promise<{ deviceId: string; deviceName: string; os:
 }
 
 /**
- * Client PCs / laptops: confirm the company's Client key once, before the login screen.
+ * Client PCs / laptops: confirm the institute's activation key once, before the login screen.
  * Not shown on the server computer itself, and not shown at all unless the build uses keys (ENABLED mode).
  */
 export default function ClientKeyGate() {
@@ -83,7 +83,7 @@ export default function ClientKeyGate() {
         ) : (
           <>
             <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
-              Enter your company&apos;s <b>Client key</b> once. You can use the same key on every PC and laptop of this company. The Super Admin finds it under System Settings on the server.
+              Enter your institute&apos;s <b>activation key</b> once. The same key works on every PC and laptop, for every company. The admin finds it under System Settings on the server, or in the portal.
             </p>
             <input
               value={key}

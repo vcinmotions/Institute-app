@@ -9,12 +9,13 @@ import { instituteDb } from "../utils/institute";
 /**
  * HOSTED PORTAL side of activation.
  *
- * Every company (branch) of an institute has exactly TWO keys, created automatically:
- *   SERVER key  - activates the one local server PC of that company (1 PC; replaceable by the Super Admin).
- *   CLIENT key  - typed once on every client PC / laptop that connects to that server (unlimited PCs).
- *                 Client PCs are checked by the local server against a hash inside the server's signed licence,
- *                 so they work offline; the portal never counts them.
- * The server obtains both keys when it is set up (see claimServer) - nobody has to type the Server key.
+ * ONE activation key per institute (kind INSTITUTE), created automatically. The same key:
+ *   - activates the server PC of every company of the institute (unlimited PCs unless the SaaS admin sets a limit),
+ *   - is typed once on every client PC / laptop that connects to a server. Client PCs are checked by the local
+ *     server against a hash inside the server's signed licence, so they work offline; the portal never counts them.
+ * The server obtains the key when it is set up (see claimServer) - nobody has to type it there.
+ * Older installs still hold per-company SERVER keys; they keep working, and their licences now accept the
+ * institute key on client PCs. Old per-company CLIENT keys are no longer issued.
  */
 const STANDALONE_DAYS = 364;
 const DAY = 24 * 60 * 60 * 1000;
@@ -30,6 +31,29 @@ export function generateKey(): string {
 
 /** Legacy keys (made by hand, not tied to a company) share one pseudo company for their Client key. */
 const LEGACY_COMPANY = "legacy";
+/** companyId marker of the one institute-wide key (kind INSTITUTE). */
+const INSTITUTE_SCOPE = "INSTITUTE";
+
+/** The institute's one activation key. Created on first use; safe to call repeatedly. */
+export async function ensureInstituteKey(prisma: any, master: { id: string; instituteName: string }): Promise<any> {
+  const where = { tenantId: master.id, companyId: INSTITUTE_SCOPE, kind: "INSTITUTE" };
+  const found = await prisma.activationKey.findFirst({ where });
+  if (found) return found;
+  try {
+    return await prisma.activationKey.create({
+      data: {
+        ...where, key: generateKey(), instituteName: master.instituteName, companyName: master.instituteName,
+        maxActivations: 0, // 0 = unlimited PCs
+        transferLimit: 3,
+      },
+    });
+  } catch (e: any) {
+    if (e?.code === "P2002") return prisma.activationKey.findFirst({ where }); // raced
+    throw e;
+  }
+}
+
+const unlimited = (k: any) => k.kind === "CLIENT" || (k.kind === "INSTITUTE" && !k.maxActivations);
 
 /** Creates the company's Server + Client keys if they do not exist yet. Safe to call repeatedly. */
 export async function ensureCompanyKeys(
@@ -85,14 +109,24 @@ async function clientKeyFor(prisma: any, serverKey: any) {
   });
 }
 
-async function issueLicense(prisma: any, key: any, device: any, nonce?: string) {
+type CompanyRef = { id?: string | null; name?: string | null };
+
+async function issueLicense(prisma: any, key: any, device: any, nonce?: string, company?: CompanyRef) {
   const validUntil = await licenseValidUntil(prisma, key);
-  const client = key.kind === "SERVER" ? await clientKeyFor(prisma, key) : null;
+  // Client PCs confirm with the institute key. (A legacy server without a company id keeps its own Client key.)
+  const instituteKey = key.kind === "INSTITUTE"
+    ? key
+    : key.kind === "SERVER" && key.companyId
+      ? await ensureInstituteKey(prisma, { id: key.tenantId, instituteName: key.instituteName })
+      : null;
+  const client = instituteKey ?? (key.kind === "SERVER" ? await clientKeyFor(prisma, key) : null);
+  const institute = key.kind === "INSTITUTE";
   return signJson("ACTIVATION", {
     keyId: key.id,
     institute: key.instituteName,
-    company: key.companyName,
-    companyId: key.companyId ?? null,
+    // The institute key is not tied to one company: the server PC tells which company it serves.
+    company: institute ? String(company?.name || key.companyName).slice(0, 120) : key.companyName,
+    companyId: institute ? (company?.id ? String(company.id).slice(0, 64) : null) : key.companyId ?? null,
     role: "SERVER",
     // Only a hash: the server can check a typed Client key but cannot be edited into accepting another one.
     clientKeyId: client?.id ?? null,
@@ -111,22 +145,23 @@ type Registered =
   | { code: 200; key: any; device: any }
   | { code: number; error: string; reason?: string };
 
-/** Registers a PC on a SERVER key (one PC per key). Atomic. */
+/** Registers a server PC on the institute key (or a legacy per-company SERVER key). Atomic. */
 async function registerServerDevice(prisma: any, where: any, deviceId: string, deviceName: string, os: string): Promise<Registered> {
   return prisma.$transaction(async (tx: any) => {
     const row = await tx.activationKey.findFirst({ where });
     if (!row || row.status !== "ACTIVE") return { code: 403, error: "Invalid or revoked activation key." };
     if (row.kind === "CLIENT") {
-      return { code: 403, error: "This is a Client key. Enter it on a client PC or laptop that connects to your server, not on the server itself.", reason: "CLIENT_KEY" };
+      return { code: 403, error: "This is an old Client key. Use your institute's activation key (shown in the portal).", reason: "CLIENT_KEY" };
     }
+    const instituteKey = row.kind === "INSTITUTE";
     let device = await tx.activationDevice.findUnique({
       where: { activationKeyId_deviceId: { activationKeyId: row.id, deviceId } },
     });
     if (device?.status === "INACTIVE") {
       return { code: 403, error: "This PC was deactivated. Ask your Super Admin to reassign the activation.", reason: "DEVICE_DEACTIVATED" };
     }
-    if (!device) {
-      // One PC can be the server of only ONE company of an institute.
+    if (!device && !instituteKey) {
+      // Legacy per-company key: one PC can be the server of only ONE company of an institute.
       const other = await tx.activationDevice.findFirst({
         where: { deviceId, status: "ACTIVE", NOT: { activationKeyId: row.id }, activationKey: { tenantId: row.tenantId, kind: "SERVER" } },
         include: { activationKey: true },
@@ -138,8 +173,17 @@ async function registerServerDevice(prisma: any, where: any, deviceId: string, d
           reason: "ALREADY_SERVER",
         };
       }
+    }
+    if (!device) {
       const active = await tx.activationDevice.findMany({ where: { activationKeyId: row.id, status: "ACTIVE" } });
-      if (active.length >= row.maxActivations) {
+      if (instituteKey && row.maxActivations > 0 && active.length >= row.maxActivations) {
+        return {
+          code: 409,
+          error: `This activation key is already used on ${active.length} PC(s), the limit for your institute. Deactivate an old PC in the portal first.`,
+          reason: "LIMIT",
+        };
+      }
+      if (!instituteKey && active.length >= row.maxActivations) {
         const who = active[0]?.deviceName ? ` (${active[0].deviceName})` : "";
         return {
           code: 409,
@@ -206,14 +250,16 @@ export async function claimServer(req: Request, res: Response) {
     const company = await instituteDb(tenant).clientAdmin.findUnique({ where: { id: companyId } });
     if (!company) return res.status(404).json({ error: "That company was not found." });
 
-    const keys = await ensureCompanyKeys(prisma, tenant, company.id, company.instituteName || company.name);
-    const out = await registerServerDevice(prisma, { id: keys.server.id }, deviceId, deviceName, os);
+    const instKey = await ensureInstituteKey(prisma, tenant);
+    const out = await registerServerDevice(prisma, { id: instKey.id }, deviceId, deviceName, os);
     if (out.code !== 200) return res.status(out.code).json({ error: (out as any).error, reason: (out as any).reason });
-    const signed = await issueLicense(prisma, (out as any).key, (out as any).device, req.body?.nonce);
+    const companyName = company.instituteName || company.name;
+    const signed = await issueLicense(prisma, (out as any).key, (out as any).device, req.body?.nonce, { id: company.id, name: companyName });
     res.json({
       ...signed,
-      serverKey: keys.server.key,
-      clientKey: keys.client.key,
+      // One key for everything: the server holds it, and client PCs type the same key.
+      serverKey: instKey.key,
+      clientKey: instKey.key,
       company: { id: company.id, name: company.name, instituteName: company.instituteName },
     });
   } catch (e) {
@@ -238,7 +284,7 @@ export async function verifyDevice(req: Request, res: Response) {
       return res.status(403).json({ error: "This PC's activation is no longer active.", reason: "DEVICE_DEACTIVATED" });
     }
     const updated = await prisma.activationDevice.update({ where: { id: device.id }, data: { lastVerifiedAt: new Date() } });
-    res.json(await issueLicense(prisma, key, updated, req.body?.nonce));
+    res.json(await issueLicense(prisma, key, updated, req.body?.nonce, { id: req.body?.companyId, name: req.body?.company }));
   } catch (e) {
     console.error("verify failed:", e);
     res.status(500).json({ error: "Verification failed." });
@@ -254,7 +300,7 @@ const deviceView = (d: any) => ({
 const keyView = (k: any) => ({
   id: k.id, key: k.key, kind: k.kind ?? "SERVER", companyId: k.companyId ?? null,
   instituteName: k.instituteName, companyName: k.companyName,
-  maxActivations: k.maxActivations, unlimited: k.kind === "CLIENT" || k.maxActivations === 0,
+  maxActivations: k.maxActivations, unlimited: unlimited(k),
   activatedPCs: (k.devices ?? []).filter((d: any) => d.status === "ACTIVE").length,
   transferLimit: k.transferLimit, transfersUsed: k.transfersUsed, status: k.status,
   firstActivatedAt: k.firstActivatedAt, createdAt: k.createdAt, devices: (k.devices ?? []).map(deviceView),
@@ -267,7 +313,7 @@ export async function saasListKeys(_req: Request, res: Response) {
   res.json({ keys: keys.map(keyView) });
 }
 
-/** SaaS admin: creates (or returns) the Server + Client keys of every company of an institute. */
+/** SaaS admin: creates (or returns) the institute's activation key. */
 export async function saasCreateKey(req: Request, res: Response) {
   const prisma = getCentralPrisma();
   const tenant = await prisma.tenant.findUnique({ where: { tenantId: String(req.body?.tenantId ?? "") } });
@@ -283,12 +329,17 @@ export async function saasCreateKey(req: Request, res: Response) {
   }
 }
 
-/** Ensures every company of the institute has both keys; returns all of the institute's keys. */
+/**
+ * Ensures the institute has its activation key; returns the keys to show: the institute key first, then
+ * legacy per-company server keys that still have PCs (so old servers can be seen and deactivated).
+ * Old per-company Client keys are not shown any more.
+ */
 export async function ensureInstituteKeys(prisma: any, master: any) {
-  const db = instituteDb(master);
-  const companies = await db.clientAdmin.findMany({ select: { id: true, name: true, instituteName: true }, orderBy: { createdAt: "asc" } });
-  for (const c of companies) await ensureCompanyKeys(prisma, master, c.id, c.instituteName || c.name);
-  return prisma.activationKey.findMany({ where: { tenantId: master.id }, include: { devices: true }, orderBy: [{ companyName: "asc" }, { kind: "asc" }] });
+  await ensureInstituteKey(prisma, master);
+  const all = await prisma.activationKey.findMany({ where: { tenantId: master.id }, include: { devices: true }, orderBy: [{ companyName: "asc" }, { kind: "asc" }] });
+  const inst = all.filter((k: any) => k.kind === "INSTITUTE");
+  const legacy = all.filter((k: any) => k.kind === "SERVER" && k.devices.length > 0);
+  return [...inst, ...legacy];
 }
 
 export async function saasUpdateKey(req: Request, res: Response) {
@@ -297,7 +348,9 @@ export async function saasUpdateKey(req: Request, res: Response) {
   const existing = await prisma.activationKey.findUnique({ where: { id: String(req.params.id) } });
   if (!existing) return res.status(404).json({ error: "Key not found." });
   if (req.body?.maxActivations !== undefined && existing.kind !== "CLIENT") {
-    data.maxActivations = Math.max(1, Math.min(500, Number(req.body.maxActivations) || 1));
+    // Institute key: 0 = unlimited PCs. Legacy server key: at least 1.
+    const min = existing.kind === "INSTITUTE" ? 0 : 1;
+    data.maxActivations = Math.max(min, Math.min(500, Number(req.body.maxActivations) || min));
   }
   if (req.body?.transferLimit !== undefined) data.transferLimit = Math.max(0, Math.min(100, Number(req.body.transferLimit) || 0));
   if (req.body?.status === "ACTIVE" || req.body?.status === "REVOKED") data.status = req.body.status;
@@ -313,7 +366,10 @@ export async function saasSetDeviceStatus(req: Request, res: Response) {
   if (!d) return res.status(404).json({ error: "Device not found." });
   if (status === "ACTIVE") {
     const active = await prisma.activationDevice.count({ where: { activationKeyId: d.activationKeyId, status: "ACTIVE" } });
-    if (active >= d.activationKey.maxActivations) return res.status(409).json({ error: "This company's server is already active on another PC." });
+    const limit = d.activationKey.maxActivations;
+    if (!unlimited(d.activationKey) && active >= limit) {
+      return res.status(409).json({ error: d.activationKey.kind === "INSTITUTE" ? `The key's PC limit (${limit}) is reached.` : "This company's server is already active on another PC." });
+    }
   }
   const u = await prisma.activationDevice.update({
     where: { id: d.id },
@@ -339,7 +395,7 @@ export async function portalListKeys(req: Request, res: Response) {
   res.json({ keys: keys.map(keyView) });
 }
 
-/** Deactivate an old server PC so its company can set up a new one. Counts against the key's transfer limit. */
+/** Deactivate an old PC (e.g. replaced or lost). Counts against the key's transfer limit. */
 export async function portalDeactivateDevice(req: Request, res: Response) {
   const { prisma, keys } = await ownKeys((req as any).portalEmail);
   const key = keys.find((k: any) => k.devices.some((d: any) => d.id === req.params.id));
