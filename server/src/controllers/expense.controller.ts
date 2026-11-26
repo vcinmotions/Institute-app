@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { validateAmount } from "../validators/common";
 
 const MODES = ["CASH", "UPI", "CARD", "BANK_TRANSFER", "CHEQUE"];
 
@@ -9,8 +10,9 @@ function parseDay(v: unknown): Date | null {
 }
 
 function readBody(body: any) {
+  const amountErr = validateAmount(body?.amount, "Amount", { positive: true }) ?? (body?.amount === undefined || body?.amount === "" ? "Amount is required" : null);
+  if (amountErr) return { error: amountErr };
   const amount = Number(body?.amount);
-  if (!Number.isFinite(amount) || amount <= 0) return { error: "Amount must be greater than 0" };
   const description = String(body?.description ?? "").trim();
   if (!description) return { error: "Description is required" };
   const mode = body?.paymentMode ? String(body.paymentMode).toUpperCase() : "CASH";

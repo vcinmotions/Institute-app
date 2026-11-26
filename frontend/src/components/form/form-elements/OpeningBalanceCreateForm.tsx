@@ -16,6 +16,7 @@ import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { useCreateOpeningBalance } from "@/hooks/useCreateOpeningBalance";
 import { normalizePhone, titleCase } from "@/app/utils/Normalize";
+import { personNameError, mobileError, amountError } from "@/lib/validation";
 
 interface OpeningBalanceFormProps {
   onCloseModal: () => void;
@@ -142,10 +143,12 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
   // 🔹 Basic validation
   const validate = () => {
     const newErrors: Partial<OpeningBalanceData> = {};
-    if (!student.name.trim()) newErrors.name = "Student name is required.";
-    if (!student.contact.trim()) newErrors.contact = "Contact is required.";
-    if (!student.dueAmount || student.dueAmount <= 0)
-      newErrors.dueAmount = "Amount must be greater than 0." as any;
+    const nameErr = personNameError(student.name, "Student name");
+    if (nameErr) newErrors.name = nameErr;
+    const contactErr = mobileError(student.contact, "Contact", true);
+    if (contactErr) newErrors.contact = contactErr;
+    const dueErr = amountError(student.dueAmount, "Amount", { required: true, positive: true });
+    if (dueErr) newErrors.dueAmount = dueErr as any;
     setErrors(newErrors);
 
     setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);

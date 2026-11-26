@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import RoleProtected from "@/components/auth/RoleProtected";
 import { apiClient } from "@/lib/apiClient";
+import { textError, amountError } from "@/lib/validation";
 
 type Expense = {
   id: string;
@@ -63,8 +64,10 @@ export default function ExpensePage() {
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setMsg(null);
-    if (!form.description.trim()) return setMsg({ ok: false, text: "Description is required" });
-    if (!(Number(form.amount) > 0)) return setMsg({ ok: false, text: "Amount must be greater than 0" });
+    const err =
+      textError(form.description, "Description", { required: true, max: 300 }) ||
+      amountError(form.amount, "Amount", { required: true, positive: true });
+    if (err) return setMsg({ ok: false, text: err });
     setBusy(true);
     try {
       const body = { ...form, amount: Number(form.amount) };

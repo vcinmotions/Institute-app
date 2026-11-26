@@ -15,6 +15,7 @@ import { useLabStore } from "@/store/labStore";
 import { useRouter } from "next/navigation";
 import { normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { textError, integerError } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof LabData, string>>;
 
@@ -127,10 +128,12 @@ export default function LabForm({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }) {
   // 🔹 Basic validation
   const validate = () => {
     const newErrors: FormErrors = {};
-    if (!lab.name.trim()) newErrors.name = `${noun} name is required.`;
-    // if (!lab.location.trim()) newErrors.location = "Location is required.";
-    if (!lab.totalPCs || lab.totalPCs <= 0)
-      newErrors.totalPCs = (isClass ? "Seats must be greater than 0." : "Total PCs must be greater than 0.") as any;
+    {
+      const nameErr = textError(lab.name, `${noun} name`, { required: true, max: 60 });
+      if (nameErr) newErrors.name = nameErr;
+      const pcsErr = integerError(lab.totalPCs, isClass ? "Seats" : "Total PCs", { required: true, min: 1, max: 1000 });
+      if (pcsErr) newErrors.totalPCs = pcsErr as any;
+    }
     if (
       !lab.timeSlots ||
       lab.timeSlots.length === 0 ||

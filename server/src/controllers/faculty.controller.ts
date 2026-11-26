@@ -4,6 +4,7 @@ import { normalizeEmail, normalizePhone, titleCase } from "../utils/Normalize";
 import { startsWith } from "zod";
 import { parseDate, parseDateISO } from "../helpers/date";
 import { checkLoginEmailDomain } from "../utils/tenantDbUrl";
+import { validateMobile, validateAmount, validateInteger, validatePassword, validateDate, firstError } from "../validators/common";
 
 export async function addFacultyController(req: Request, res: Response) {
   const { name, email, password, contact, joiningDate, batchId, courseId } =
@@ -11,6 +12,14 @@ export async function addFacultyController(req: Request, res: Response) {
 
   if (!name || !email || !contact || !joiningDate || !batchId) {
     return res.status(400).json({ error: "Missing required fields" });
+  }
+  {
+    const invalid = firstError(
+      validateMobile(contact, "Contact"),
+      validatePassword(password),
+      validateDate(joiningDate, "Joining date")
+    );
+    if (invalid) return res.status(400).json({ error: invalid });
   }
 
 
@@ -96,6 +105,10 @@ export async function updateFacultyController(req: Request, res: Response) {
 
   if (!name || !email || !contact) {
     return res.status(400).json({ error: "Missing required fields" });
+  }
+  {
+    const invalid = validateMobile(contact, "Contact");
+    if (invalid) return res.status(400).json({ error: invalid });
   }
 
   // Optional: admin may set a new password while editing.

@@ -11,6 +11,7 @@ import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import TextArea from "../input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { textError } from "@/lib/validation";
 
 interface EditFollowUpModalProps {
   onClose: () => void;
@@ -72,7 +73,10 @@ export default function EditFollowUpModal({
 
   const validate = () => {
   const newErrors: Partial<FollowUpData> = {};
-  if (!remark.trim()) newErrors.remark = "Remark is required.";
+  {
+    const remarkErr = textError(remark, "Remark", { required: true, max: 500 });
+    if (remarkErr) newErrors.remark = remarkErr;
+  }
   if (!scheduledAt) newErrors.scheduledAt = "Schedule time is required.";
 
   

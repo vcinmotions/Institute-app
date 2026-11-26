@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { titleCase } from "../utils/Normalize";
 import { checkLoginEmailDomain } from "../utils/tenantDbUrl";
 import { companiesForUser, ensureMasterCompany } from "../utils/institute";
+import { validatePassword } from "../validators/common";
 
 const ALLOWED_ROLES = ["ADMIN", "FRONT_DESK", "ACCOUNTANT", "VIEW_ONLY", "FACULTY"];
 
@@ -64,6 +65,11 @@ export async function createRoleUserController(req: Request, res: Response) {
     return res.status(400).json({
       error: "name, email, password, and role are required",
     });
+  }
+
+  {
+    const invalid = validatePassword(password);
+    if (invalid) return res.status(400).json({ error: invalid });
   }
 
   if (!ALLOWED_ROLES.includes(role)) {

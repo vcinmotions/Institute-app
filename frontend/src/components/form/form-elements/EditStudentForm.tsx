@@ -24,6 +24,7 @@ import { useFetchEnquiryById } from "@/hooks/queries/useQueryFetchEnquiry";
 import { setBatches } from "@/store/slices/batchSlice";
 import { getBatch } from "@/lib/api";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { mobileError, emailError, personNameError, dateError, onlyErrors } from "@/lib/validation";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -202,14 +203,21 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
 
     setErrors((prev) => ({
       ...prev,
-      [field]: digitsOnly.length === 0 || digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+      [field]: mobileError(digitsOnly, field === "contact" ? "Contact number" : "Parent's contact number", field === "contact"),
     }));
   };
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!newEnquiry.name.trim()) newErrors.name = "Student name is required.";
-    if (!newEnquiry.contact.trim()) newErrors.contact = "Contact number is required.";
+    // Same rules as the server, so nothing is rejected after saving.
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newEnquiry.name, "Student name"),
+      contact: mobileError(newEnquiry.contact, "Contact number", true),
+      email: emailError(newEnquiry.email),
+      parentsContact: mobileError(filledEnquiryData.parentsContact, "Parent's contact number"),
+      fatherName: personNameError(filledEnquiryData.fatherName, "Father's name", false),
+      dob: dateError(filledEnquiryData.dob, "Date of birth", { notFuture: true }),
+    }));
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);

@@ -18,6 +18,7 @@ import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { EyeIcon, EyeCloseIcon } from "@/icons";
 import MultiSelect from "../MultiSelect";
+import { mobileError, loginIdError, personNameError, passwordError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof FacultyData, string>>;
 
@@ -123,21 +124,13 @@ export default function EditFacultyForm({
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newFaculty.name.trim()) {
-      newErrors.name = "Name is required.";
-    }
-
-    if (!newFaculty.email.trim()) {
-      newErrors.email = "Email is required.";
-    }
-
-    if (!newFaculty.contact.trim()) {
-      newErrors.contact = "Contact is required.";
-    }
-
-    if (resetPassword && newFaculty.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters.";
-    }
+    // Same rules everywhere in the app (see lib/validation).
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newFaculty.name),
+      email: loginIdError(newFaculty.email, "Email / username"),
+      contact: mobileError(newFaculty.contact, "Contact", true),
+      password: resetPassword ? passwordError(newFaculty.password, "New password") : "",
+    }));
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
@@ -201,7 +194,7 @@ export default function EditFacultyForm({
 
     setErrors((prev) => ({
       ...prev,
-      contact: digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+      contact: mobileError(digitsOnly, "Contact", true),
     }));
   };
 

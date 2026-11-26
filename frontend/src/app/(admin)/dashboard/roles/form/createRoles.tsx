@@ -18,6 +18,7 @@ import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { useAccessRoles } from "@/hooks/useAccessRoles";
 import CompanyAccessPicker, { CompanyAssignment } from "@/components/form/CompanyAccessPicker";
+import { loginIdError, personNameError, passwordError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
@@ -85,9 +86,11 @@ export default function RolesForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
-    if (!formData.email.trim()) newErrors.email = "Email is required.";
-    if (!formData.password.trim()) newErrors.password = "Password is required.";
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(formData.name),
+      email: loginIdError(formData.email, "Email / username"),
+      password: passwordError(formData.password),
+    }));
     if (multi) {
       if (companies.length === 0) newErrors.role = "Tick at least one company.";
     } else if (!formData.role.trim()) newErrors.role = "Please select a role.";

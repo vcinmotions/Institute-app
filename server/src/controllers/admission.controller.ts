@@ -149,6 +149,10 @@ export async function createstudentOpeningBalanceController(req: any, res: any) 
     console.log("STUDENTADMISSION:", req.body);
       // ✅ Validate input
       const data = studentOpeningBalanceSchema.parse({ ...req.body });
+      {
+        const invalid = validateMobile(data.contact, "Contact");
+        if (invalid) return res.status(400).json({ error: invalid });
+      }
 
       console.log("SUCCESSSSSSSS")
 
@@ -264,6 +268,16 @@ export async function editStudentController(req: any, res: any) {
         id: Number(req.params.id),
       ...req.body
     });
+    {
+      const d: any = data;
+      const invalid = firstError(
+        validateMobile(d.contact, "Contact number"),
+        validateMobile(d.parentsContact, "Parent's contact number"),
+        validateEmailAddress(d.email),
+        validateDate(d.dob, "Date of birth", { notFuture: true })
+      );
+      if (invalid) return res.status(400).json({ error: invalid });
+    }
 
     // ✅ Call Service Layer
     const result = await editStudentService({

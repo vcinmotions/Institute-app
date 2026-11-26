@@ -16,6 +16,7 @@ import { useScrollToError } from "@/app/utils/ScrollToError";
 import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useCreateTest } from "@/hooks/useCreateTest";
+import { dateError, integerError } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof TestData, string>>;
 
@@ -97,10 +98,10 @@ export default function TestForm() {
 
     // Strict evaluation parameters checks run ONLY on direct assignment launches
     if (actionType === "PUBLISH") {
-      if (!newTest.testDate.trim()) newErrors.testDate = "Test execution date is required.";
-      if (!newTest.totalMarks.trim() || isNaN(Number(newTest.totalMarks))) {
-        newErrors.totalMarks = "Valid numerical marks are required.";
-      }
+      const dateErr = dateError(newTest.testDate, "Test date", { required: true });
+      if (dateErr) newErrors.testDate = dateErr;
+      const marksErr = integerError(newTest.totalMarks, "Total marks", { required: true, min: 1, max: 1000 });
+      if (marksErr) newErrors.totalMarks = marksErr;
     }
 
     setErrors(newErrors);

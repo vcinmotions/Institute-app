@@ -799,17 +799,27 @@ export async function updateStudentPaymentController(
     }
 
     const clientAdminId = user.clientAdminId;
+    // A plain number with up to 2 decimals ("12abc" used to be accepted as 12).
+    if (!/^\d+(\.\d{1,2})?$/.test(String(amountPaid ?? "").trim())) {
+      return res.status(400).json({ error: "Amount must be a number with up to 2 decimals." });
+    }
     const paidAmount = parseFloat(amountPaid);
 
     if (!paidAmount || paidAmount <= 0) {
-      return res.status(400).json({ error: "Invalid payment amount" });
+      return res.status(400).json({ error: "Amount must be more than 0." });
     }
 
     const parsedPaymentDate = parseDate(paymentDate);
     if (paymentDate && !parsedPaymentDate) {
-      return res.status(400).json({ error: "paymentDate must be DD-MM-YYYY or YYYY-MM-DD" });
+      return res.status(400).json({ error: "Payment date is not a valid date." });
+    }
+    if (parsedPaymentDate && new Date(parsedPaymentDate).getTime() > Date.now() + 24 * 3600 * 1000) {
+      return res.status(400).json({ error: "Payment date cannot be in the future." });
     }
     const targetMode = paymentMode || "CASH";
+    if (targetMode !== "CASH" && !String(transactionNo ?? "").trim()) {
+      return res.status(400).json({ error: targetMode === "CHEQUE" ? "Cheque number is required." : "Transaction reference ID is required." });
+    }
     const targetTxNo = targetMode !== "CASH" ? transactionNo : null;
     const targetBank = targetMode !== "CASH" ? bankName : null;
 

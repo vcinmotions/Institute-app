@@ -13,6 +13,7 @@ import Alert from "@/components/ui/alert/Alert";
 import { useCreateStudentPayment } from "@/hooks/useCreateStudentPayment";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { paymentModeOptions } from "@/components/common/Options";
+import { amountError, dateError } from "@/lib/validation";
 
 interface CreateStudentPaymentModalProps {
   onCloseModal: () => void;
@@ -94,8 +95,13 @@ export default function CreateStudentPaymentModal({
   const validate = () => {
     const newErrors: Partial<PaymentData> = {};
 
-    if (!amountPaid.trim()) newErrors.amountPaid = "Amount is required.";
-    if (!paymentDate.trim()) newErrors.paymentDate = "Date is required.";
+    const due = Number(payment?.amountDue);
+    const amountErr =
+      amountError(amountPaid, "Amount", { required: true, positive: true }) ||
+      (Number.isFinite(due) && due >= 0 && Number(amountPaid) > due ? `Amount cannot be more than the amount due (₹${due}).` : "");
+    if (amountErr) newErrors.amountPaid = amountErr;
+    const dateErr = dateError(paymentDate, "Payment date", { required: true, notFuture: true });
+    if (dateErr) newErrors.paymentDate = dateErr;
     if (!paymentMode.trim()) newErrors.paymentMode = "Mode is required.";
 
     // 👇 Ensure extra information is captured when using non-cash options

@@ -35,6 +35,7 @@ import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from 
 import { useFetchAllSource, useFetchSource } from "@/hooks/queries/useQueryFetchSource";
 import { setSources } from "@/store/slices/sourceSlice";
 import PhoneNumberInput from "@/components/form/PhoneNumberInput";
+import { mobileError, mobileDigits, emailError, personNameError, dateError, requiredError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
@@ -156,17 +157,20 @@ export default function EnquiryForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newEnquiry.name) {
-      newErrors.name = "Name is required.";
-    }
-
-    if (!newEnquiry.contact.trim()) {
-      newErrors.contact = "Contact no. is required.";
-    }
-
-    if (newEnquiry.courseId.length === 0) {
-      newErrors.courseId = "Select at least one course.";
-    }
+    // Same rules as the server, so nothing is rejected after saving.
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newEnquiry.name),
+      contact: mobileError(newEnquiry.contact, "Contact no.", true),
+      alternateContact:
+        mobileError(newEnquiry.alternateContact, "Alternate contact no.") ||
+        (newEnquiry.alternateContact && mobileDigits(newEnquiry.alternateContact) === mobileDigits(newEnquiry.contact)
+          ? "Alternate contact no. must differ from the contact no."
+          : ""),
+      email: emailError(newEnquiry.email),
+      dob: dateError(newEnquiry.dob, "Date of birth", { notFuture: true }),
+      enquiryDate: dateError(newEnquiry.enquiryDate, "Enquiry date", { notFuture: true }),
+      courseId: requiredError(newEnquiry.courseId, "Course"),
+    }));
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
@@ -188,15 +192,8 @@ export default function EnquiryForm() {
     }));
 
     setField("contact", formattedNumber);
-
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, contact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        contact: "Phone number must be 10 digits",
-      }));
-    }
+    // Checked on the digits (not the raw text); shown while typing, cleared once valid.
+    setErrors((prev) => ({ ...prev, contact: mobileError(formattedNumber, "Contact no.", true) }));
   };
 
   const handleAlternatePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -210,15 +207,8 @@ export default function EnquiryForm() {
     }));
 
     setField("alternateContact", formattedNumber);
-
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, alternateContact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        alternateContact: "Phone number must be 10 digits",
-      }));
-    }
+    // Optional: empty is fine.
+    setErrors((prev) => ({ ...prev, alternateContact: mobileError(formattedNumber, "Alternate contact no.") }));
   };
 
   const handleChange = (field: keyof EnquiryData, value: string | string[]) => {
@@ -238,7 +228,6 @@ export default function EnquiryForm() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
       !/[0-9]/.test(e.key) &&
-      e.key !== "+" &&
       e.key !== "Backspace" &&
       e.key !== "Delete" &&
       e.key !== "ArrowLeft" &&
@@ -267,16 +256,10 @@ export default function EnquiryForm() {
 
     setField(field as string, formattedValue);
 
-    let error = "";
-    if (digits.length === 8) {
-      const day = parseInt(digits.slice(0, 2), 10);
-      const month = parseInt(digits.slice(2, 4), 10);
-      const year = parseInt(digits.slice(4, 8), 10);
-      const isValidDate = !isNaN(new Date(`${year}-${month}-${day}`).getTime());
-      if (!isValidDate || day > 31 || month > 12) {
-        error = "Invalid date";
-      }
-    }
+    const error =
+      digits.length === 8
+        ? dateError(formattedValue, field === "dob" ? "Date of birth" : "Enquiry date", { notFuture: true })
+        : "";
 
     setErrors((prev) => ({
       ...prev,
@@ -291,7 +274,7 @@ export default function EnquiryForm() {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter required inputs.",
+        message: "Please correct the highlighted fields.",
         variant: "error",
       });
 

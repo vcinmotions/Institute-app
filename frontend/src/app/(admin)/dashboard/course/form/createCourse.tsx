@@ -13,6 +13,7 @@ import Button from "@/components/ui/button/Button";
 import Checkbox from "@/components/form/input/Checkbox";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { textError, integerError, amountError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof CourseData, string>>;
 
@@ -116,9 +117,12 @@ export default function CourseForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newCourse.name.trim()) newErrors.name = "Course name is required.";
-    if (!newCourse.durationMonths.trim()) newErrors.durationMonths = "Duration is required.";
-    if (!newCourse.totalAmount.trim()) newErrors.totalAmount = "Course amount is required.";
+    // Same rules everywhere in the app (see lib/validation).
+    Object.assign(newErrors, onlyErrors({
+      name: textError(newCourse.name, "Course name", { required: true, min: 2, max: 100 }),
+      durationMonths: integerError(newCourse.durationMonths, "Duration (months)", { required: true, min: 1, max: 120 }),
+      totalAmount: amountError(newCourse.totalAmount, "Course amount", { required: true, positive: true }),
+    }));
     if (!newCourse.paymentType || newCourse.paymentType.length === 0) {
       newErrors.paymentType = "Please select at least one payment type.";
     }

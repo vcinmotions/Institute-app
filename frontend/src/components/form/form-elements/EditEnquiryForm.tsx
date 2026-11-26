@@ -23,6 +23,7 @@ import { capitalizeWords } from "@/components/common/ToCapitalize";
 import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { useFetchSource } from "@/hooks/queries/useQueryFetchSource";
+import { mobileError, emailError, personNameError, dateError, requiredError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
@@ -172,7 +173,7 @@ export default function EditEnquiryForm({
     setNewEnquiry((prev) => ({ ...prev, contact: formattedNumber }));
     setErrors((prev) => ({
       ...prev,
-      contact: digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+      contact: mobileError(digitsOnly, "Contact number", true),
     }));
   };
 
@@ -189,15 +190,22 @@ export default function EditEnquiryForm({
     setNewEnquiry((prev) => ({ ...prev, alternateContact: formattedNumber }));
     setErrors((prev) => ({
       ...prev,
-      alternateContact: digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+      alternateContact: mobileError(digitsOnly, "Alternate contact number"),
     }));
   };
 
   const validate = () => {
     const newErrors: FormErrors = {};
-    if (!newEnquiry.name.trim()) newErrors.name = "Name is required.";
-    if (!newEnquiry.contact.trim()) newErrors.contact = "Contact number is required.";
-    if (newEnquiry.courseId.length === 0) newErrors.courseId = "Select at least one course.";
+    // Same rules as the server, so nothing is rejected after saving.
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newEnquiry.name),
+      contact: mobileError(newEnquiry.contact, "Contact number", true),
+      alternateContact: mobileError(newEnquiry.alternateContact, "Alternate contact number"),
+      email: emailError(newEnquiry.email),
+      dob: dateError(newEnquiry.dob, "Date of birth", { notFuture: true }),
+      enquiryDate: dateError(newEnquiry.enquiryDate, "Enquiry date", { notFuture: true }),
+      courseId: requiredError(newEnquiry.courseId, "Course"),
+    }));
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import Avatar from "../common/Avatar";
 import { capitalizeWords } from "../common/ToCapitalize";
+import { useIsAdmin } from "@/components/auth/AdminOnly";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function UserDropdown() {
 
   const role = user?.role?.replace('_', ' ') || 'SYSTEM USER';
   const isMaster = user?.role === "MASTER_ADMIN";
+  const { isAdmin } = useIsAdmin();
   const area = isMaster ? "/master-dashboard" : "/dashboard";
   const profileHref = `${area}/profile`;
   const ICONS: Record<string, React.ReactNode> = {
@@ -88,8 +90,13 @@ export default function UserDropdown() {
         <ul className="flex flex-col gap-0.5 p-1.5 border-b border-gray-100 dark:border-gray-800">
           {[
             { label: "Account settings", href: profileHref, icon: "settings" },
-            { label: "Support center", href: `${area}/support`, icon: "support" },
-            { label: "Check API Status", href: `${area}/api-status`, icon: "status" },
+            // Support and API status are for the admin only.
+            ...(isAdmin
+              ? [
+                  { label: "Support center", href: `${area}/support`, icon: "support" },
+                  { label: "Check API Status", href: `${area}/api-status`, icon: "status" },
+                ]
+              : []),
           ].map((item, i) => (
             <li key={i}>
               <DropdownItem

@@ -25,6 +25,7 @@ import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useCreateFaculty } from "@/hooks/useCreateFaculty";
 import PhoneInput from "@/components/form/group-input/PhoneInput";
 import { ChevronDownIcon } from "@/icons";
+import { mobileError, loginIdError, personNameError, passwordError, dateError, requiredError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof FacultyData, string>>;
 
@@ -175,12 +176,15 @@ export default function FacultyForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newFaculty.name.trim()) newErrors.name = "Name is required.";
-    if (!newFaculty.email.trim()) newErrors.email = "Email is required.";
-    if (!newFaculty.password.trim()) newErrors.password = "Password is required.";
-    if (!newFaculty.contact.trim()) newErrors.contact = "Contact is required.";
-    if (!newFaculty.batchId.trim()) newErrors.batchId = "Batch is required.";
-    if (!newFaculty.joiningDate.trim()) newErrors.joiningDate = "Joining Date is required.";
+    // Same rules everywhere in the app (see lib/validation).
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newFaculty.name),
+      email: loginIdError(newFaculty.email, "Email / username"),
+      password: passwordError(newFaculty.password),
+      contact: mobileError(newFaculty.contact, "Contact", true),
+      batchId: requiredError(newFaculty.batchId, "Batch"),
+      joiningDate: dateError(newFaculty.joiningDate, "Joining date", { required: true }),
+    }));
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
@@ -201,14 +205,7 @@ export default function FacultyForm() {
 
     setField("contact", formattedNumber);
 
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, contact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        contact: "Phone number must be 10 digits",
-      }));
-    }
+    setErrors((prev) => ({ ...prev, contact: mobileError(phoneNumber, "Contact", true) }));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

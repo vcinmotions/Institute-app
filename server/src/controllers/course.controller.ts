@@ -7,6 +7,7 @@ import { getCourses } from "../services/course.service";
 import { titleCase } from "../utils/Normalize";
 import { parseDate } from "../helpers/date";
 import { generatePaymentReceiptNumber } from "../utils/paymentReceiptConfig";
+import { validateAmount, validateInteger, firstError } from "../validators/common";
 
 function calculateTimePerDay(schedule: { startTime: string; endTime: string }) {
   const [startH, startM] = schedule.startTime.split(":").map(Number);
@@ -422,6 +423,13 @@ export async function addCourseController(req: Request, res: Response) {
       error: "name, durationMonths, totalAmount & paymentType are required",
     });
   }
+  {
+    const invalid = firstError(
+      validateInteger(durationMonths, "Duration (months)", 1, 120),
+      validateAmount(totalAmount, "Course amount", { positive: true })
+    );
+    if (invalid) return res.status(400).json({ error: invalid });
+  }
 
   try {
     const tenantPrisma = req.tenantPrisma;
@@ -526,6 +534,13 @@ export async function updateCourseController(req: Request, res: Response) {
     return res.status(400).json({
       error: "name, durationMonths, totalAmount & paymentType are required",
     });
+  }
+  {
+    const invalid = firstError(
+      validateInteger(durationMonths, "Duration (months)", 1, 120),
+      validateAmount(totalAmount, "Course amount", { positive: true })
+    );
+    if (invalid) return res.status(400).json({ error: invalid });
   }
   console.log("GET UPDATE COURSE DATA In UPDATE COURSE CONTROLLER:", req.body);
 

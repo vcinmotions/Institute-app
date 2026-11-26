@@ -29,6 +29,7 @@ import { genders, options, paymentModeOptions } from "@/components/common/Option
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { titleCase } from "@/app/utils/Normalize";
 import PhoneNumberInput from "@/components/form/PhoneNumberInput";
+import { mobileError, emailError, personNameError, dateError, textError, amountError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof NewEnquiryDataAll, string>>;
 
@@ -475,14 +476,8 @@ export default function AdmissionForm() {
       contact: formattedNumber,
     }));
 
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, contact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        contact: "Phone number must be 10 digits",
-      }));
-    }
+    // Checked on the digits (not the raw text); same rule as the server.
+    setErrors((prev) => ({ ...prev, contact: mobileError(formattedNumber, "Contact number", true) }));
   };
 
   // Alternate Contact input: updates ONLY the alternate number (it used to share the Student Contact handler,
@@ -491,10 +486,7 @@ export default function AdmissionForm() {
     const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 10);
     setFilledEnquiryData((prev) => ({ ...prev, parentsContact: digitsOnly }));
     // Optional field: empty or a full 10 digits is fine, anything in between is not.
-    setErrors((prev) => ({
-      ...prev,
-      parentsContact: digitsOnly.length === 0 || digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
-    }));
+    setErrors((prev) => ({ ...prev, parentsContact: mobileError(digitsOnly, "Parent's contact number") }));
   };
 
   const handleAlternatePhoneNumberChange = (phoneNumber: string, code: string) => {
@@ -509,15 +501,8 @@ export default function AdmissionForm() {
       parentsContact: formattedNumber,
     }));
 
-    // Validation
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, parentsContact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        parentsContact: "Phone number must be 10 digits",
-      }));
-    }
+    // Validation (optional field; same rule as the server)
+    setErrors((prev) => ({ ...prev, parentsContact: mobileError(digitsOnly, "Parent's contact number") }));
   };
 
   if (loading === true) return null;
@@ -526,14 +511,21 @@ export default function AdmissionForm() {
     const newErrors: Record<string, string> = {};
 
     // 🔹 Basic Enquiry Info
-    if (!newEnquiry.name.trim()) newErrors.name = "Student name is required.";
+    // Same rules as the server, so nothing is rejected after saving.
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newEnquiry.name, "Student name"),
+      contact: mobileError(newEnquiry.contact, "Contact number", true),
+      email: emailError(newEnquiry.email),
+      parentsContact: mobileError(filledEnquiryData.parentsContact, "Parent's contact number"),
+      fatherName: personNameError(filledEnquiryData.fatherName, "Father's name", false),
+      dob: dateError(filledEnquiryData.dob, "Date of birth", { notFuture: true }),
+      admissionDate: dateError(filledEnquiryData.admissionDate, "Admission date", { required: true }),
+      idProofNumber: textError(filledEnquiryData.idProofNumber, "ID proof number", { max: 30 }),
+    }));
 
     // if (!newEnquiry.email.trim()) newErrors.email = "Email is required.";
     // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEnquiry.email))
     //   newErrors.email = "Please enter a valid email address.";
-
-    if (!newEnquiry.contact.trim())
-      newErrors.contact = "Contact number is required.";
 
     if (!newEnquiry.courseId.length) newErrors.courseId = "Please select a course.";
 
@@ -577,13 +569,8 @@ export default function AdmissionForm() {
     // if (!filledEnquiryData.installmentTypeId)
     //   newErrors.installmentType = "Installment Type is required.";
 
-    if (!filledEnquiryData.admissionDate)
-      newErrors.admissionDate = "Admission date is required.";
-
     setErrors(newErrors);
     setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
-
-    setErrors(newErrors);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -803,6 +790,27 @@ export default function AdmissionForm() {
     const incompleteCourse = courseRows.some(
       (row: any) => row.courseId && (!row.paymentType || !row.batchId || !row.feeAmount)
     );
+    // Amounts: valid numbers, and an advance can never be more than the fee.
+    const badAmount = courseRows
+      .filter((row: any) => row.courseId)
+      .map((row: any) => {
+        const fee = amountError(row.feeAmount, "Fee amount", { positive: true });
+        if (fee) return fee;
+        const adv = amountError(row.advanceAmount, "Advance amount");
+        if (adv) return adv;
+        if (row.advanceAmount && Number(row.advanceAmount) > Number(row.feeAmount)) return "Advance amount cannot be more than the fee amount.";
+        if (Number(row.advanceAmount) > 0 && row.paymentMode && row.paymentMode !== "CASH" && !String(row.transactionNo ?? "").trim()) {
+          return "Enter the transaction / reference number for a non-cash advance payment.";
+        }
+        return "";
+      })
+      .find(Boolean);
+    if (!incompleteCourse && badAmount) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setAlert({ show: true, title: "Check the course amounts", message: badAmount, variant: "error" });
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
+      return;
+    }
     if (incompleteCourse) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       setAlert({
