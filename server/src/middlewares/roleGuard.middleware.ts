@@ -37,6 +37,8 @@ const RULES: Rule[] = [
 
   // --- front office: ADMIN + FRONT_DESK ---
   { test: /^\/(admission-new|edit-student|add-course|student-course)/, methods: ["POST", "PUT"], roles: ["ADMIN", "FRONT_DESK"] },
+  { test: /^\/students\/\d+\/documents/, methods: ["POST"], roles: ["ADMIN", "FRONT_DESK"] },
+  { test: /^\/students\/\d+\/documents/, methods: ["DELETE"], roles: ADMIN },
   { test: /^\/(enquiry|enquiry-new|edit-enquiry|followup|followup-edit|followup\/complete)/, methods: ["POST", "PUT", "DELETE"], roles: ["ADMIN", "FRONT_DESK"] },
 
   // --- teaching: ADMIN + FACULTY ---

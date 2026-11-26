@@ -269,6 +269,7 @@ model Student {
   enquiry            Enquiry?           @relation("EnquiryToStudent")
   feeStructures      FeeStructure[]
   financialRecords   FinancialRecord[]
+  documents     StudentDocument[]
   labAllocations     LabAllocation[]
   stationery         StationeryIssue[]
   clientAdmin        ClientAdmin        @relation(fields: [clientAdminId], references: [id])
@@ -797,4 +798,20 @@ model AccessRolePermission {
   role      AccessRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
   @@unique([roleId, module])
+}
+
+/// Documents attached to a student (ID proof, marksheets, certificates...). Files live in the data folder
+/// (uploads/students) and are included in backups.
+model StudentDocument {
+  id           Int      @id @default(autoincrement())
+  studentId    Int
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fileName     String   // original file name shown to the user
+  url          String   // /uploads/students/<stored name>
+  mimeType     String
+  sizeBytes    Int
+  uploadedBy   String?
+  createdAt    DateTime @default(now())
+
+  @@index([studentId])
 }

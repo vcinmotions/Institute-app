@@ -153,6 +153,15 @@ export async function restoreBackup(encFilePath: string) {
 
     console.log("✅ Restore completed");
 
+    /* ---------------- UPLOADS ---------------- */
+    // Backups made by older versions have no uploads folder: then the current files are left as they are.
+    const uploadsSrc = path.join(extractDir, "uploads");
+    if (fs.existsSync(uploadsSrc)) {
+      const uploadsDest = path.join(userDataPath, "uploads");
+      fs.rmSync(uploadsDest, { recursive: true, force: true });
+      fs.cpSync(uploadsSrc, uploadsDest, { recursive: true });
+    }
+
     /* ---------------- CLEANUP ---------------- */
     fs.rmSync(tempZip, { force: true });
     fs.rmSync(extractDir, { recursive: true, force: true });

@@ -88,6 +88,9 @@ app.use(
 
 // Serve static files from the 'uploads' directory
 //app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Uploaded files live in the data folder (kept on update, included in backups). The old program-folder
+// location is still served as a fallback for files uploaded by older versions.
+app.use("/uploads", express.static(path.join(getUserDataPath(), "uploads")));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // Institute logo uploaded from the Branding screen (kept in the user-data folder, so it survives reinstall).
 app.use("/branding-files", express.static(path.join(getUserDataPath(), "uploads", "branding")));

@@ -25,6 +25,7 @@ import { setBatches } from "@/store/slices/batchSlice";
 import { getBatch } from "@/lib/api";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { mobileError, emailError, personNameError, dateError, onlyErrors } from "@/lib/validation";
+import StudentDocuments from "@/components/student/StudentDocuments";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -488,6 +489,14 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             </div>
           </div>
         </div>
+
+        {/* Documents: saved right away (not with "Save Changes") */}
+        {newEnquiry.id && (
+          <div className="mt-2">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Documents</h3>
+            <StudentDocuments studentId={newEnquiry.id} />
+          </div>
+        )}
 
         {/* Action Bar */}
         <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">

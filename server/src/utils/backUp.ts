@@ -170,6 +170,12 @@ export async function backupFullSystem() {
 
     console.log("🎉 FULL SYSTEM BACKUP COMPLETED");
 
+    /* ---------------- UPLOADS (student photos & documents, branding logo) ---------------- */
+    const uploadsDir = path.join(userDataPath, "uploads");
+    if (fs.existsSync(uploadsDir)) {
+      fs.cpSync(uploadsDir, path.join(backupRoot, "uploads"), { recursive: true });
+    }
+
     /* ---------------- ZIP ---------------- */
     const zipPath = backupRoot + ".zip";
     await zipFolder(backupRoot, zipPath);

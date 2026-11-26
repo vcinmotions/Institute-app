@@ -616,6 +616,17 @@ exports.Prisma.AccessRolePermissionScalarFieldEnum = {
   canDelete: 'canDelete'
 };
 
+exports.Prisma.StudentDocumentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  fileName: 'fileName',
+  url: 'url',
+  mimeType: 'mimeType',
+  sizeBytes: 'sizeBytes',
+  uploadedBy: 'uploadedBy',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -739,7 +750,8 @@ exports.Prisma.ModelName = {
   UserCompanyAccess: 'UserCompanyAccess',
   ActiveSession: 'ActiveSession',
   AccessRole: 'AccessRole',
-  AccessRolePermission: 'AccessRolePermission'
+  AccessRolePermission: 'AccessRolePermission',
+  StudentDocument: 'StudentDocument'
 };
 
 /**

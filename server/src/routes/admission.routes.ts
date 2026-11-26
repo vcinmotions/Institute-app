@@ -1,3 +1,5 @@
+import { studentUpload, studentUploadErrors, MAX_DOCUMENTS } from "../utils/studentUpload";
+import { listStudentDocuments, addStudentDocuments, deleteStudentDocument } from "../controllers/studentDocument.controller";
 // routes/tenantRoutes.ts
 import { Router, Request } from "express";
 import multer, { FileFilterCallback } from "multer";
@@ -77,9 +79,15 @@ const upload = multer({
 // );
 router.post(
   "/admission-new",
-  upload.single("profilePicture"),
+  // One student photo + up to 10 documents, stored in the data folder (see utils/studentUpload).
+  studentUpload.fields([{ name: "profilePicture", maxCount: 1 }, { name: "documents", maxCount: MAX_DOCUMENTS }]),
+  studentUploadErrors,
   addStudentControllerNew
 );
+// Student documents (ID proof, marksheets, certificates...)
+router.get("/students/:id/documents", listStudentDocuments);
+router.post("/students/:id/documents", studentUpload.array("documents", MAX_DOCUMENTS), studentUploadErrors, addStudentDocuments);
+router.delete("/students/:id/documents/:docId", deleteStudentDocument);
 router.get("/student", getStudentController);
 router.get("/students/:id/courses", getStudentCourseController);
 router.put("/edit-student/:id", editStudentController);

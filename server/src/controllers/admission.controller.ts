@@ -1,3 +1,5 @@
+import { filesOf, studentFileUrl, discardFiles } from "../utils/studentUpload";
+import { saveStudentDocuments } from "./studentDocument.controller";
 import { validateMobile, validateEmailAddress, validateDate, firstError } from "../validators/common";
 import { formatZodError } from "../utils/httpErrors";
 // controllers/studentController.ts
@@ -16,7 +18,12 @@ export async function addStudentControllerNew(req: any, res: any) {
 
 
     console.log("STUDENTADMISSION:", req.body);
-    console.log("STUDENTADMISSION FILE:", req.file);
+    const photoFile = filesOf(req, "profilePicture")[0];
+    const documentFiles = filesOf(req, "documents");
+    // Admission refused (validation, duplicate, error): do not keep the uploaded files.
+    res.on("finish", () => {
+      if (res.statusCode >= 400) discardFiles([...(photoFile ? [photoFile] : []), ...documentFiles]);
+    });
       // ✅ Validate input
       const data = studentCreateSchema.parse({
       ...req.body,
@@ -24,7 +31,7 @@ export async function addStudentControllerNew(req: any, res: any) {
        idCard: req.body.idCard === "true",
        bag: req.body.bag === "true",
 
-      photoUrl: req.file ? `/uploads/students/${req.file.filename}` : null,
+      photoUrl: photoFile ? studentFileUrl(photoFile.filename) : null,
       courseData: (typeof req.body.courseData === "string" 
         ? JSON.parse(req.body.courseData) 
         : req.body.courseData ?? []
@@ -99,6 +106,12 @@ export async function addStudentControllerNew(req: any, res: any) {
       clientAdminId: user.clientAdminId,
       data,
     });
+
+    // Documents uploaded with the admission form.
+    if (documentFiles.length) {
+      const docErr = await saveStudentDocuments(prisma, user, result.student.id, documentFiles);
+      if (docErr) console.error("admission documents not saved:", docErr);
+    }
 
     // ✅ Update enquiry if student is converted
     if (data.id) {

@@ -30,6 +30,7 @@ import { useScrollToError } from "@/app/utils/ScrollToError";
 import { titleCase } from "@/app/utils/Normalize";
 import PhoneNumberInput from "@/components/form/PhoneNumberInput";
 import { mobileError, emailError, personNameError, dateError, textError, amountError, onlyErrors } from "@/lib/validation";
+import DocumentsDrop from "@/components/form/form-elements/DocumentsDrop";
 
 type FormErrors = Partial<Record<keyof NewEnquiryDataAll, string>>;
 
@@ -188,6 +189,8 @@ export default function AdmissionForm() {
   const { data, isLoading } = useFetchEnquiryById(id as string);
   const [selectedProfilePicture, setSelectedProfilePicture] =
     useState<File | null>(null);
+  // Documents (ID proof, marksheets...) sent with the admission; up to 10 files.
+  const [documents, setDocuments] = useState<File[]>([]);
   const dispatch = useDispatch();
 
   // New state for alert
@@ -870,6 +873,7 @@ export default function AdmissionForm() {
       bag: filledEnquiryData.bag,
 
       profilePicture: selectedProfilePicture, // you'll need to track this in state
+      documents,
       advancePayments: advancePaymentData, // Add advance payment data
     };
 
@@ -1652,12 +1656,17 @@ export default function AdmissionForm() {
                   title="Student Photo"
                   selectedFile={selectedProfilePicture}
                   setSelectedFile={setSelectedProfilePicture}
+                  allowSvg={false}
                 />
                 {errors.selectedProfilePicture && (
                   <p className="mt-1 text-sm text-red-500">
                     {errors.selectedProfilePicture}
                   </p>
                 )}
+              </div>
+
+              <div className="lg:col-span-3">
+                <DocumentsDrop files={documents} setFiles={setDocuments} />
               </div>
 
             </div>

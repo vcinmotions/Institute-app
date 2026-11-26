@@ -10,6 +10,8 @@ interface DropzonBoxComponentProps {
   tabIndex?: number;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>;
   title: string;
+  /** false for the student photo (the server accepts PNG, JPG and WEBP only). */
+  allowSvg?: boolean;
 }
 
 // ✅ Pass props to the component
@@ -18,6 +20,7 @@ const DropzonBoxComponent: React.FC<DropzonBoxComponentProps> = ({
   tabIndex,
   setSelectedFile,
   title,
+  allowSvg = true,
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -37,7 +40,7 @@ const DropzonBoxComponent: React.FC<DropzonBoxComponentProps> = ({
       "image/png": [],
       "image/jpeg": [],
       "image/webp": [],
-      "image/svg+xml": [],
+      ...(allowSvg ? { "image/svg+xml": [] } : {}),
     },
     multiple: false, // only single file
   });
@@ -109,7 +112,7 @@ const DropzonBoxComponent: React.FC<DropzonBoxComponentProps> = ({
             </h4>
 
             <span className="mb-5 block w-full max-w-[290px] text-center text-sm text-gray-700 dark:text-gray-400">
-              Drag and drop your PNG, JPG, WebP, SVG images here or browse
+              Drag and drop your PNG, JPG, WebP{allowSvg ? ", SVG" : ""} image here or browse
             </span>
 
             <span
