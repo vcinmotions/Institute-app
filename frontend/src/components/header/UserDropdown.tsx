@@ -24,7 +24,6 @@ export default function UserDropdown() {
     setIsOpen(false);
   }
 
-  const role = user?.role?.replace('_', ' ') || 'SYSTEM USER';
   const isMaster = user?.role === "MASTER_ADMIN";
   const { isAdmin } = useIsAdmin();
   const area = isMaster ? "/master-dashboard" : "/dashboard";
@@ -46,13 +45,10 @@ export default function UserDropdown() {
           <Avatar name={user?.name} size={30} />
         </span>
 
-        {/* Shortened username, more professional role placeholder */}
-        <div className="hidden text-left md:block">
-          {/* <span className="block text-xs font-semibold text-gray-950 dark:text-gray-100">
+        {/* The user's name only (no role / access level) */}
+        <div className="hidden max-w-[140px] text-left md:block">
+          <span className="block truncate text-xs font-semibold text-gray-950 dark:text-gray-100">
             {capitalizeWords(user?.name)}
-          </span> */}
-          <span className="block font-mono text-[10px] font-semibold text-brand-600 uppercase tracking-wide dark:text-brand-400">
-            {role}
           </span>
         </div>
 
@@ -75,9 +71,6 @@ export default function UserDropdown() {
             <div className="flex gap-2 items-center">
               <span className="block text-sm font-semibold text-gray-950 dark:text-gray-100">
                 {capitalizeWords(user?.name)}
-              </span>
-              <span className="font-mono text-xs font-semibold tracking-wide text-brand-600 uppercase dark:text-brand-400">
-                {role}
               </span>
             </div>
             <span className="mt-1 block text-xs text-gray-500 dark:text-gray-500 truncate">

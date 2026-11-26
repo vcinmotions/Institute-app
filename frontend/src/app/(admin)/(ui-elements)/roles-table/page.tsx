@@ -108,6 +108,7 @@ export default function RolesTable() {
 
           <Can module="users" action="add"><Link
             href="/dashboard/roles/create"
+            data-perm="add:users"
             className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             + Create Record

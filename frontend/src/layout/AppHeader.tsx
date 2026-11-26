@@ -10,6 +10,7 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import CompanySwitcher from "@/components/common/CompanySwitcher";
+import { ConnectionBadge } from "@/components/common/ConnectionStatus";
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -93,6 +94,10 @@ const AppHeader: React.FC = () => {
           </button>
 
           <CompanySwitcher fallbackName={companyName} />
+          {/* Server connection status (moved here from the bottom-left corner, where it covered the sidebar) */}
+          <span className="hidden sm:block">
+            <ConnectionBadge />
+          </span>
 
           <Link href="/dashboard" className="block lg:hidden transition-opacity hover:opacity-90">
             <Image width={120} height={28} className="dark:hidden" src="/images/logo/logo.svg" alt="ERP Logo" unoptimized />

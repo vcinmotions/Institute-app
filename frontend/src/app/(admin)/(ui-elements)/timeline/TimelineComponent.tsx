@@ -177,6 +177,7 @@ export default function TimelineDatatable({ enquiryId }: TimelineDatatableProps)
                 {isEnquiryWarm && (
                   <div className="mt-8 flex justify-end border-t border-gray-100 pt-6 dark:border-gray-800">
                     <button
+                      data-perm="add:followup"
                       className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 shadow-sm"
                       onClick={() => setShowInitialCreateModal(true)}
                     >
@@ -228,6 +229,7 @@ export default function TimelineDatatable({ enquiryId }: TimelineDatatableProps)
 
                         {!isEnquiryClosed && canEditFollowUp(fineEnquiryById?.leadStatus) && (
                           <button
+                            data-perm="update:followup"
                             onClick={() => handleEditFollowUpForFollowUp(item.id)}
                             className="rounded-md p-2 text-gray-400 opacity-0 transition-all hover:bg-white hover:text-blue-600 hover:shadow-sm group-hover:opacity-100 dark:hover:bg-gray-700"
                             title="Edit Follow-up"
@@ -246,6 +248,7 @@ export default function TimelineDatatable({ enquiryId }: TimelineDatatableProps)
             {followups.length > 0 && !isEnquiryClosed && lastItem?.followUpStatus !== "COMPLETED" && (
               <div className="mt-8 flex justify-end border-t border-gray-100 pt-6 dark:border-gray-800">
                 <button
+                  data-perm="add:followup"
                   className="inline-flex items-center justify-center rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 shadow-sm"
                   onClick={() => handleCreateFollowUpForFollowUp(lastItem.id)}
                 >

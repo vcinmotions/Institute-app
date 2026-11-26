@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
 import {
   DEFAULT_ROLES, DEFAULT_ROLE_MARK, DEFAULT_ROLE_NAMES, MODULES, PermMap, clearPermissionCache, defaultRows, ensureDefaultRoles, loadPermissions, normalizePerm,
+  builtinPermissions,
 } from "../services/permissions.service";
 
 /**
@@ -157,7 +158,8 @@ export async function myPermissions(req: Request, res: Response) {
   const c = ctx(req);
   if (!c) return res.status(401).json({ error: "Unauthorized request" });
   const roleId = (c.user as any).customRoleId;
-  if (!roleId) return res.json({ custom: false, role: c.user.role, permissions: null });
+  // Built-in role: its fixed permissions (null for ADMIN = everything), so the app hides what it cannot do.
+  if (!roleId) return res.json({ custom: false, role: c.user.role, permissions: builtinPermissions(String(c.user.role)) });
   const [perms, role] = await Promise.all([
     loadPermissions(c.prisma, Number(roleId)) as Promise<PermMap>,
     c.prisma.accessRole.findUnique({ where: { id: Number(roleId) }, select: { name: true } }),

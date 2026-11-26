@@ -105,6 +105,7 @@ export default function LabListView({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }
 
           <Can module={isClass ? "class" : "lab"} action="add"><Link
             href={isClass ? "/dashboard/class/create" : "/dashboard/lab/create"}
+            data-perm={isClass ? "add:class" : "add:lab"}
             className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             + Create Record

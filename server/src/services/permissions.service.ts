@@ -10,7 +10,9 @@ export type Action = "view" | "add" | "update" | "delete";
 export type ModuleDef = { key: string; label: string; test: RegExp };
 
 export const MODULES: ModuleDef[] = [
-  { key: "enquiry", label: "Enquiry & Follow-ups", test: /^\/(enquiry|enquiry-new|edit-enquiry|followup|followup-edit|won-enquiry|missed-followups|pending-followups|followup-stats)(\/|$)/ },
+  { key: "enquiry", label: "Enquiry", test: /^\/(enquiry|enquiry-new|edit-enquiry|won-enquiry)(\/|$)/ },
+  // Separate from Enquiry so a role can e.g. see enquiries but not add / change follow-ups.
+  { key: "followup", label: "Follow-ups", test: /^\/(followup|followup-edit|missed-followups|pending-followups|followup-stats)(\/|$)/ },
   { key: "admission", label: "Admission & Students", test: /^\/(admission|admission-new|edit-student|student|students|add-course|student-course)(\/|$)/ },
   { key: "payment", label: "Payments & Fees", test: /^\/(create-student-payment|advance-payment|payment|create-op)(\/|$)/ },
   { key: "course", label: "Course", test: /^\/(create-course|edit-course|course)(\/|$)/ },
@@ -58,7 +60,7 @@ export function resolve(method: string, path: string): { module: string; action:
  */
 export const DEFAULT_ROLE_MARK = "Default role";
 type P = Partial<{ view: boolean; add: boolean; update: boolean; delete: boolean }>;
-const READ_MODULES = ["enquiry", "admission", "payment", "course", "faculty", "batch", "lab", "class", "source", "stationary", "attendance", "task", "test", "settings"];
+const READ_MODULES = ["enquiry", "followup", "admission", "payment", "course", "faculty", "batch", "lab", "class", "source", "stationary", "attendance", "task", "test", "settings"];
 
 function build(view: string[], extra: Record<string, P> = {}): Record<string, P> {
   const out: Record<string, P> = {};
@@ -74,6 +76,7 @@ export const DEFAULT_ROLES: { name: string; description: string; perms: Record<s
     description: DEFAULT_ROLE_MARK,
     perms: build(READ_MODULES, {
       enquiry: { add: true, update: true },
+      followup: { add: true, update: true },
       admission: { add: true, update: true },
       stationary: { add: true, update: true },
     }),
@@ -95,6 +98,26 @@ export const DEFAULT_ROLES: { name: string; description: string; perms: Record<s
   },
 ];
 export const DEFAULT_ROLE_NAMES = DEFAULT_ROLES.map((r) => r.name);
+
+/**
+ * Effective permissions of a BUILT-IN role, so the app can hide what the server would refuse
+ * (create / edit / delete buttons, "Create ..." menu items, create pages). They match roleGuard's rules:
+ * FRONT_DESK / ACCOUNTANT / VIEW_ONLY are the default roles above; FACULTY can mark attendance and run tests and tasks.
+ * ADMIN (and unknown roles) -> null = everything allowed.
+ */
+const BUILTIN_ROLE: Record<string, string> = { FRONT_DESK: "Front Desk", ACCOUNTANT: "Accountant", VIEW_ONLY: "View Only" };
+const FACULTY_PERMS = build(["admission", "course", "batch", "attendance", "task", "test"], {
+  attendance: { add: true, update: true },
+  task: { add: true, update: true },
+  test: { add: true, update: true },
+});
+export function builtinPermissions(role: string): PermMap | null {
+  const def = BUILTIN_ROLE[role] ? DEFAULT_ROLES.find((r) => r.name === BUILTIN_ROLE[role])?.perms : role === "FACULTY" ? FACULTY_PERMS : null;
+  if (!def) return null;
+  const out: PermMap = {};
+  for (const m of MODULES) out[m.key] = normalizePerm(def[m.key] ?? {});
+  return out;
+}
 
 export type PermMap = Record<string, { view: boolean; add: boolean; update: boolean; delete: boolean }>;
 
@@ -121,6 +144,8 @@ export async function loadPermissions(prisma: any, roleId: number): Promise<Perm
   for (const r of rows) {
     if (perms[r.module]) perms[r.module] = normalizePerm({ view: r.canView, add: r.canAdd, update: r.canUpdate, delete: r.canDelete });
   }
+  // Roles saved before "Follow-ups" was its own module keep exactly what "Enquiry & Follow-ups" allowed.
+  if (!rows.some((r: any) => r.module === "followup")) perms.followup = { ...perms.enquiry };
   cache.set(key, { at: Date.now(), perms });
   return perms;
 }

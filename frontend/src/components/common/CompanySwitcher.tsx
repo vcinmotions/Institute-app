@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchMyCompanies, switchCompanyApi } from "@/lib/api";
 import { persistLogin } from "@/lib/session";
+import { usePermissions } from "@/hooks/usePermissions";
 
 /**
  * Header pill showing the company the user is working in. With several companies it
@@ -10,6 +11,8 @@ import { persistLogin } from "@/lib/session";
  * and reloads so every screen shows that company's data.
  */
 export default function CompanySwitcher({ fallbackName }: { fallbackName: string }) {
+  // A custom role (e.g. "Front Desk") is stored on the base role VIEW_ONLY: show its own name.
+  const perms = usePermissions();
   const [current, setCurrent] = useState<string | null>(null);
   const [companies, setCompanies] = useState<{ id: string; name: string; role: string }[]>([]);
   const [open, setOpen] = useState(false);
@@ -83,7 +86,7 @@ export default function CompanySwitcher({ fallbackName }: { fallbackName: string
               }`}
             >
               {c.name}
-              <span className="ml-2 text-xs text-gray-400">{c.role.replace("_", " ").toLowerCase()}</span>
+              <span className="ml-2 text-xs text-gray-400">{(perms.custom && perms.roleName ? perms.roleName : c.role.replace(/_/g, " ")).toLowerCase()}</span>
             </li>
           ))}
         </ul>

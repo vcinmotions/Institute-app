@@ -404,9 +404,11 @@ const AppSidebar: React.FC = () => {
         return !!m && perms.can(m, "view");
       })
       .map((item) => {
-        if (!customUser || !item.subItems) return item;
+        // "Create ..." links only for users who may add in that module (every role, not only custom ones).
+        if (!item.subItems) return item;
         const m = MODULE_BY_NAME[item.name];
-        return { ...item, subItems: item.subItems.filter((s) => !/^create/i.test(s.name) || (m && perms.can(m, "add"))) };
+        if (!m) return item;
+        return { ...item, subItems: item.subItems.filter((s) => !/^create\b/i.test(s.name) || perms.can(m, "add")) };
       })
       .filter((item) => {
         if (!searchQuery) return true;
@@ -417,7 +419,7 @@ const AppSidebar: React.FC = () => {
         const matchesGroup = item.group?.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesMainItem || matchesSubItems || matchesGroup;
       });
-  }, [userRole, searchQuery, perms.custom, perms.loading, systemAdmin]);
+  }, [userRole, searchQuery, perms.custom, perms.restricted, perms.loading, systemAdmin]);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";

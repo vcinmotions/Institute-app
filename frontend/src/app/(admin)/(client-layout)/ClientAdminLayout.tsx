@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import PermissionStyles from "@/components/common/PermissionStyles";
 import IdleLogout from "@/components/common/IdleLogout";
+import CreatePageGuard from "@/components/auth/CreatePageGuard";
 import SubscriptionGate from "@/components/subscription/SubscriptionGate";
 import SessionKeeper from "@/components/common/SessionKeeper";
 import { useSidebar } from "@/context/SidebarContext";
@@ -86,7 +87,7 @@ export default function ClientAdminLayout({
 
           <JumpHotkeys userRole={user?.role}>
             <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
-              {children}
+              <CreatePageGuard>{children}</CreatePageGuard>
             </div>
           </JumpHotkeys>
         </div>
