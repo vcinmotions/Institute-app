@@ -34,19 +34,45 @@ export async function getTenantSlugById(tenantId: string): Promise<string | null
 }
 
 /**
- * Faculty and role users sign in by email, and the institute is found from the
- * email domain, so the domain must equal the institute slug.
- * Returns an error message, or null when the email is acceptable.
+ * The institute's short login code (4 digits, e.g. "2026"), created on first use.
+ * Staff usernames are name@code; the code tells sign-in which institute to open.
+ * It prefers the year the institute was created, otherwise a free random 4-digit number.
+ */
+export async function ensureLoginCode(tenantId: string): Promise<string | null> {
+  const prisma = getCentralPrisma();
+  const tenant = await prisma.tenant.findUnique({ where: { id: tenantId }, select: { loginCode: true, createdAt: true } });
+  if (!tenant) return null;
+  if (tenant.loginCode) return tenant.loginCode;
+  const candidates = [String(tenant.createdAt.getFullYear())];
+  for (let i = 0; i < 40; i++) candidates.push(String(1000 + Math.floor(Math.random() * 9000)));
+  for (const code of candidates) {
+    try {
+      // updateMany + loginCode:null so two parallel calls cannot overwrite each other's code
+      const r = await prisma.tenant.updateMany({ where: { id: tenantId, loginCode: null }, data: { loginCode: code } });
+      if (r.count === 0) break; // someone else just set it
+      return code;
+    } catch (e: any) {
+      if (e?.code !== "P2002") throw e; // code used by another institute: try the next one
+    }
+  }
+  const again = await prisma.tenant.findUnique({ where: { id: tenantId }, select: { loginCode: true } });
+  return again?.loginCode ?? null;
+}
+
+/**
+ * Faculty and role users sign in by username, and the institute is found from the
+ * part after @, so it must be this institute's login code (name@2026) or, for older
+ * usernames, its slug (name@sky-institute).
+ * Returns an error message, or null when the username is acceptable.
  */
 export async function checkLoginEmailDomain(
   user: any,
   email: string
 ): Promise<string | null> {
-  const slug = user?.tenantId ? await getTenantSlugById(user.tenantId) : null;
-  if (!slug) return null; // cannot verify (e.g. older token) - do not block
+  if (!user?.tenantId) return null; // cannot verify (e.g. older token) - do not block
+  const [slug, code] = await Promise.all([getTenantSlugById(user.tenantId), ensureLoginCode(user.tenantId)]);
+  if (!slug && !code) return null;
   const domain = String(email).split("@")[1]?.toLowerCase();
-  if (domain !== slug.toLowerCase()) {
-    return `Email must end with @${slug} so this user can sign in to this institute`;
-  }
-  return null;
+  if (domain === code || (slug && domain === slug.toLowerCase())) return null;
+  return `Username must end with @${code ?? slug} so this user can sign in to this institute`;
 }

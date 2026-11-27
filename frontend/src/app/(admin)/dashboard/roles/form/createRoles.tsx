@@ -18,7 +18,7 @@ import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { useAccessRoles } from "@/hooks/useAccessRoles";
 import CompanyAccessPicker, { CompanyAssignment } from "@/components/form/CompanyAccessPicker";
-import { loginIdError, personNameError, passwordError, onlyErrors } from "@/lib/validation";
+import { loginIdError, staffLoginId, personNameError, passwordError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
@@ -108,11 +108,9 @@ export default function RolesForm() {
     let updatedValue = value;
 
     // 🧠 Auto-generate email when name changes
-    if (field === "name" && user?.slug) {
-      const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
-      const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-
-      const email = `${formattedName}@${institute}`;
+    const loginId = field === "name" ? staffLoginId(value, user) : null;
+    if (loginId) {
+      const email = loginId; // e.g. google@2026
 
       // Update local state
       setFormData((prev) => ({

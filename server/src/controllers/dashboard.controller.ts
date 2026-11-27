@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 // import { centralPrisma } from "../prisma-client/central-client";
 
 import { getCentralPrisma } from "../prisma-client/central-client";
+import { ensureLoginCode } from "../utils/tenantDbUrl";
 
 export async function getClientAdmin(req: Request, res: Response) {
   try {
@@ -55,7 +56,10 @@ export async function getClientAdmin(req: Request, res: Response) {
       clientAdminData
     );
 
-    return res.status(200).json({ userdata: clientAdminData });
+    // Institute login code: the forms build staff usernames as name@code (e.g. google@2026).
+    const loginCode = user.tenantId ? await ensureLoginCode(String(user.tenantId)).catch(() => null) : null;
+
+    return res.status(200).json({ userdata: { ...clientAdminData, loginCode } });
   } catch (err) {
     console.error("Error fetching follow-up stats:", err);
     return res.status(500).json({ error: "Internal server error" });

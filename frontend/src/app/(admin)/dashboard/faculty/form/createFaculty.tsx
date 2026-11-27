@@ -25,7 +25,7 @@ import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useCreateFaculty } from "@/hooks/useCreateFaculty";
 import PhoneInput from "@/components/form/group-input/PhoneInput";
 import { ChevronDownIcon } from "@/icons";
-import { mobileError, loginIdError, personNameError, passwordError, dateError, requiredError, onlyErrors } from "@/lib/validation";
+import { mobileError, loginIdError, staffLoginId, personNameError, passwordError, dateError, requiredError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof FacultyData, string>>;
 
@@ -228,11 +228,8 @@ export default function FacultyForm() {
     setNewFaculty((prev) => {
       const updated = { ...prev, [field]: value };
 
-      if (field === "name" && user?.slug) {
-        const formattedName = processedValue.trim().replace(/\s+/g, "");
-        const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-        updated.email = `${formattedName}@${institute}`;
-      }
+      const loginId = field === "name" ? staffLoginId(processedValue, user) : null;
+      if (loginId) updated.email = loginId; // e.g. google@2026
       return updated;
     });
 

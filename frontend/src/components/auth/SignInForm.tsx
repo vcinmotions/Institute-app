@@ -66,7 +66,7 @@ export default function SignInForm() {
       const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/.test(trimmed);
       if (!isValidEmail) {
         setInputError(true);
-        setErrorMessage("Enter your username (for staff: name@institute-id) or a valid email.");
+        setErrorMessage("Enter your username (for staff: name@code, e.g. rahul@2026) or a valid email.");
         return false;
       }
     }

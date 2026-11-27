@@ -201,8 +201,9 @@ export async function tenantResolverMiddleware(
     // });
 
     // 4️⃣ Find tenant by slug
+    // name@2026 (institute login code) or the older name@institute-slug
     const domainTenant = await centralPrisma.tenant.findFirst({
-      where: { slug },
+      where: { OR: [{ slug }, { loginCode: slug }] },
     });
 
     if (domainTenant) {

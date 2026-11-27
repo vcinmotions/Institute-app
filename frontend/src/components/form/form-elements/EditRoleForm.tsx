@@ -18,7 +18,7 @@ import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { EyeIcon, EyeCloseIcon } from "@/icons";
 import CompanyAccessPicker, { CompanyAssignment } from "../CompanyAccessPicker";
-import { loginIdError, personNameError, passwordError, onlyErrors } from "@/lib/validation";
+import { loginIdError, staffLoginId, personNameError, passwordError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
@@ -143,12 +143,8 @@ export default function EditRolesForm({
       let updated = { ...prev, [field]: value };
 
       // 🧠 Auto-generate email if faculty name changes
-      if (field === "name" && user?.slug) {
-        const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
-        const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-
-        updated.email = `${formattedName}@${institute}`;
-      }
+      const loginId = field === "name" ? staffLoginId(value, user) : null;
+      if (loginId) updated.email = loginId; // e.g. google@2026
 
       return updated;
     });

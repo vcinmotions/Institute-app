@@ -39,6 +39,17 @@ export function loginIdError(value: unknown, label = "Username", required = true
   return "";
 }
 
+/**
+ * Staff username built from a name and the institute's short login code: "Google Ltd" -> "googleltd@2026".
+ * Falls back to the older long institute slug if the code is not known yet. null = cannot build one.
+ */
+export function staffLoginId(name: string, user: { loginCode?: string | null; slug?: string | null } | null | undefined): string | null {
+  const suffix = String(user?.loginCode || user?.slug || "").trim().toLowerCase().replace(/\s+/g, "");
+  if (!suffix) return null;
+  const local = String(name ?? "").toLowerCase().replace(/[^a-z0-9._-]/g, "");
+  return `${local}@${suffix}`;
+}
+
 export function requiredError(value: unknown, label: string): string {
   if (Array.isArray(value)) return value.length ? "" : `Select at least one ${label.toLowerCase()}.`;
   return empty(value) ? `${label} is required.` : "";

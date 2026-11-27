@@ -2908,6 +2908,7 @@ export namespace Prisma {
     encryptedPassword: string | null
     dbUrl: string | null
     parentTenantId: string | null
+    loginCode: string | null
     createdAt: Date | null
   }
 
@@ -2934,6 +2935,7 @@ export namespace Prisma {
     encryptedPassword: string | null
     dbUrl: string | null
     parentTenantId: string | null
+    loginCode: string | null
     createdAt: Date | null
   }
 
@@ -2960,6 +2962,7 @@ export namespace Prisma {
     encryptedPassword: number
     dbUrl: number
     parentTenantId: number
+    loginCode: number
     createdAt: number
     _all: number
   }
@@ -2988,6 +2991,7 @@ export namespace Prisma {
     encryptedPassword?: true
     dbUrl?: true
     parentTenantId?: true
+    loginCode?: true
     createdAt?: true
   }
 
@@ -3014,6 +3018,7 @@ export namespace Prisma {
     encryptedPassword?: true
     dbUrl?: true
     parentTenantId?: true
+    loginCode?: true
     createdAt?: true
   }
 
@@ -3040,6 +3045,7 @@ export namespace Prisma {
     encryptedPassword?: true
     dbUrl?: true
     parentTenantId?: true
+    loginCode?: true
     createdAt?: true
     _all?: true
   }
@@ -3139,6 +3145,7 @@ export namespace Prisma {
     encryptedPassword: string
     dbUrl: string
     parentTenantId: string | null
+    loginCode: string | null
     createdAt: Date
     _count: TenantCountAggregateOutputType | null
     _min: TenantMinAggregateOutputType | null
@@ -3182,6 +3189,7 @@ export namespace Prisma {
     encryptedPassword?: boolean
     dbUrl?: boolean
     parentTenantId?: boolean
+    loginCode?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["tenant"]>
 
@@ -3208,6 +3216,7 @@ export namespace Prisma {
     encryptedPassword?: boolean
     dbUrl?: boolean
     parentTenantId?: boolean
+    loginCode?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["tenant"]>
 
@@ -3234,6 +3243,7 @@ export namespace Prisma {
     encryptedPassword?: boolean
     dbUrl?: boolean
     parentTenantId?: boolean
+    loginCode?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["tenant"]>
 
@@ -3260,10 +3270,11 @@ export namespace Prisma {
     encryptedPassword?: boolean
     dbUrl?: boolean
     parentTenantId?: boolean
+    loginCode?: boolean
     createdAt?: boolean
   }
 
-  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "position" | "country" | "state" | "city" | "zipCode" | "instituteName" | "tenantId" | "slug" | "email" | "businessEmail" | "password" | "encryptedPassword" | "dbUrl" | "parentTenantId" | "createdAt", ExtArgs["result"]["tenant"]>
+  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contact" | "fullAddress" | "logo" | "certificateName" | "stamp" | "sign" | "position" | "country" | "state" | "city" | "zipCode" | "instituteName" | "tenantId" | "slug" | "email" | "businessEmail" | "password" | "encryptedPassword" | "dbUrl" | "parentTenantId" | "loginCode" | "createdAt", ExtArgs["result"]["tenant"]>
 
   export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Tenant"
@@ -3291,6 +3302,7 @@ export namespace Prisma {
       encryptedPassword: string
       dbUrl: string
       parentTenantId: string | null
+      loginCode: string | null
       createdAt: Date
     }, ExtArgs["result"]["tenant"]>
     composites: {}
@@ -3737,6 +3749,7 @@ export namespace Prisma {
     readonly encryptedPassword: FieldRef<"Tenant", 'String'>
     readonly dbUrl: FieldRef<"Tenant", 'String'>
     readonly parentTenantId: FieldRef<"Tenant", 'String'>
+    readonly loginCode: FieldRef<"Tenant", 'String'>
     readonly createdAt: FieldRef<"Tenant", 'DateTime'>
   }
     
@@ -12744,6 +12757,7 @@ export namespace Prisma {
     encryptedPassword: 'encryptedPassword',
     dbUrl: 'dbUrl',
     parentTenantId: 'parentTenantId',
+    loginCode: 'loginCode',
     createdAt: 'createdAt'
   };
 
@@ -13069,6 +13083,7 @@ export namespace Prisma {
     encryptedPassword?: StringFilter<"Tenant"> | string
     dbUrl?: StringFilter<"Tenant"> | string
     parentTenantId?: StringNullableFilter<"Tenant"> | string | null
+    loginCode?: StringNullableFilter<"Tenant"> | string | null
     createdAt?: DateTimeFilter<"Tenant"> | Date | string
   }
 
@@ -13095,6 +13110,7 @@ export namespace Prisma {
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
     parentTenantId?: SortOrderInput | SortOrder
+    loginCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
   }
 
@@ -13104,6 +13120,7 @@ export namespace Prisma {
     tenantId?: string
     slug?: string
     email?: string
+    loginCode?: string
     AND?: TenantWhereInput | TenantWhereInput[]
     OR?: TenantWhereInput[]
     NOT?: TenantWhereInput | TenantWhereInput[]
@@ -13125,7 +13142,7 @@ export namespace Prisma {
     dbUrl?: StringFilter<"Tenant"> | string
     parentTenantId?: StringNullableFilter<"Tenant"> | string | null
     createdAt?: DateTimeFilter<"Tenant"> | Date | string
-  }, "id" | "instituteName" | "tenantId" | "slug" | "email">
+  }, "id" | "instituteName" | "tenantId" | "slug" | "email" | "loginCode">
 
   export type TenantOrderByWithAggregationInput = {
     id?: SortOrder
@@ -13150,6 +13167,7 @@ export namespace Prisma {
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
     parentTenantId?: SortOrderInput | SortOrder
+    loginCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: TenantCountOrderByAggregateInput
     _max?: TenantMaxOrderByAggregateInput
@@ -13182,6 +13200,7 @@ export namespace Prisma {
     encryptedPassword?: StringWithAggregatesFilter<"Tenant"> | string
     dbUrl?: StringWithAggregatesFilter<"Tenant"> | string
     parentTenantId?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
+    loginCode?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
   }
 
@@ -13915,6 +13934,7 @@ export namespace Prisma {
     encryptedPassword: string
     dbUrl: string
     parentTenantId?: string | null
+    loginCode?: string | null
     createdAt?: Date | string
   }
 
@@ -13941,6 +13961,7 @@ export namespace Prisma {
     encryptedPassword: string
     dbUrl: string
     parentTenantId?: string | null
+    loginCode?: string | null
     createdAt?: Date | string
   }
 
@@ -13967,6 +13988,7 @@ export namespace Prisma {
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
     parentTenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    loginCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -13993,6 +14015,7 @@ export namespace Prisma {
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
     parentTenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    loginCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -14019,6 +14042,7 @@ export namespace Prisma {
     encryptedPassword: string
     dbUrl: string
     parentTenantId?: string | null
+    loginCode?: string | null
     createdAt?: Date | string
   }
 
@@ -14045,6 +14069,7 @@ export namespace Prisma {
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
     parentTenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    loginCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -14071,6 +14096,7 @@ export namespace Prisma {
     encryptedPassword?: StringFieldUpdateOperationsInput | string
     dbUrl?: StringFieldUpdateOperationsInput | string
     parentTenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    loginCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -14944,6 +14970,7 @@ export namespace Prisma {
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
     parentTenantId?: SortOrder
+    loginCode?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -14970,6 +14997,7 @@ export namespace Prisma {
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
     parentTenantId?: SortOrder
+    loginCode?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -14996,6 +15024,7 @@ export namespace Prisma {
     encryptedPassword?: SortOrder
     dbUrl?: SortOrder
     parentTenantId?: SortOrder
+    loginCode?: SortOrder
     createdAt?: SortOrder
   }
 

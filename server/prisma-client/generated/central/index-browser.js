@@ -161,6 +161,7 @@ exports.Prisma.TenantScalarFieldEnum = {
   encryptedPassword: 'encryptedPassword',
   dbUrl: 'dbUrl',
   parentTenantId: 'parentTenantId',
+  loginCode: 'loginCode',
   createdAt: 'createdAt'
 };
 

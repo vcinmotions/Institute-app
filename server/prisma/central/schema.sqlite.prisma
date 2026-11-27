@@ -57,6 +57,7 @@ model Tenant {
   encryptedPassword  String
   dbUrl     String
   parentTenantId String? // set when this tenant is a company under a master institute
+  loginCode String? @unique // short institute code staff type after @ when signing in, e.g. google@2026
   createdAt DateTime @default(now())
 }
 

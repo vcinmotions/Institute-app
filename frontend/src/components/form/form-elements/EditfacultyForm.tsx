@@ -18,7 +18,7 @@ import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { EyeIcon, EyeCloseIcon } from "@/icons";
 import MultiSelect from "../MultiSelect";
-import { mobileError, loginIdError, personNameError, passwordError, onlyErrors } from "@/lib/validation";
+import { mobileError, loginIdError, staffLoginId, personNameError, passwordError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof FacultyData, string>>;
 
@@ -146,11 +146,8 @@ export default function EditFacultyForm({
       let updated = { ...prev, [field]: value };
 
       // Auto-generate email if faculty name changes
-      if (field === "name" && typeof value === "string" && user?.instituteName) {
-        const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
-        const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-        updated.email = `${formattedName}@${institute}`;
-      }
+      const loginId = field === "name" && typeof value === "string" ? staffLoginId(value, user) : null;
+      if (loginId) updated.email = loginId; // e.g. google@2026
 
       return updated;
     });
