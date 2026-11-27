@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
 import {
   DEFAULT_ROLES, DEFAULT_ROLE_MARK, DEFAULT_ROLE_NAMES, MODULES, PermMap, clearPermissionCache, defaultRows, ensureDefaultRoles, loadPermissions, normalizePerm,
-  builtinPermissions,
+  builtinPermissions, permissionRows,
 } from "../services/permissions.service";
 
 /**
@@ -45,7 +45,7 @@ export async function listAccessRoles(req: Request, res: Response) {
     include: { permissions: true, _count: { select: { users: true } } },
     orderBy: { name: "asc" },
   });
-  res.json({ modules: MODULES.map((m) => ({ key: m.key, label: m.label })), roles: roles.map(view) });
+  res.json({ modules: MODULES.map((m) => ({ key: m.key, label: m.label, actions: m.actions })), roles: roles.map(view) });
 }
 
 export async function createAccessRole(req: Request, res: Response) {
@@ -120,10 +120,13 @@ export async function setAccessRolePermissions(req: Request, res: Response) {
   const input = req.body?.permissions;
   if (!input || typeof input !== "object") return res.status(400).json({ error: "permissions are required." });
 
-  const rows = MODULES.map((m) => {
-    const p = normalizePerm(input[m.key] ?? {});
-    return { roleId: id, module: m.key, canView: p.view, canAdd: p.add, canUpdate: p.update, canDelete: p.delete };
-  }).filter((r) => r.canView || r.canAdd || r.canUpdate || r.canDelete);
+  // Only the actions a module supports can be granted (e.g. Won / Hold / Lost has just "update").
+  const clean = (key: string, p: any) => {
+    const acts = MODULES.find((m) => m.key === key)?.actions;
+    if (!acts || !p) return p ?? {};
+    return Object.fromEntries((["view", "add", "update", "delete"] as const).map((a) => [a, acts.includes(a) && !!p[a]]));
+  };
+  const rows = permissionRows(id, Object.fromEntries(MODULES.map((m) => [m.key, clean(m.key, input[m.key])])));
 
   await c.prisma.$transaction([
     c.prisma.accessRolePermission.deleteMany({ where: { roleId: id } }),

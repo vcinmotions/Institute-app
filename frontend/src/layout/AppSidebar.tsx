@@ -63,11 +63,12 @@ type NavItem = {
 };
 
 // Sidebar item -> permission module (used for custom, Super-Admin defined roles).
+// Admission Config and Receipt Config are deliberately missing: only the Super Admin sees them.
 const MODULE_BY_NAME: Record<string, string> = {
-  Enquiry: "enquiry", Admission: "admission", "Admission Config": "settings", Students: "admission",
+  Enquiry: "enquiry", Admission: "admission", Students: "admission",
   "Student Course": "admission", Batch: "batch", Course: "course", Lab: "lab", Class: "class", Faculty: "faculty",
   Test: "test", Attendance: "attendance", Payment: "payment", Expenses: "expense",
-  "Receipt Config": "settings", Master: "source", "App Users": "users", Reports: "reports",
+  Master: "source", "App Users": "users", Reports: "reports",
   "Compare Companies": "reports",
 };
 const ALWAYS_VISIBLE = ["Dashboard", "Calendar"];
@@ -120,7 +121,7 @@ const navItems: NavItem[] = [
     icon: <LockIcon />,
     name: "Admission Config",
     path: "/dashboard/admission-config",
-    roles: ["ADMIN", "FRONT_DESK"],
+    roles: ["ADMIN"], // Super Admin only (custom roles never: not in MODULE_BY_NAME)
   },
 
   // --- ACADEMICS ---
@@ -239,7 +240,7 @@ const navItems: NavItem[] = [
     icon: <FileIcon />,
     name: "Receipt Config",
     path: "/dashboard/payment-receipt-config",
-    roles: ["ADMIN", "FRONT_DESK"],
+    roles: ["ADMIN"], // Super Admin only (custom roles never: not in MODULE_BY_NAME)
   },
 
   // --- ADMINISTRATION ---

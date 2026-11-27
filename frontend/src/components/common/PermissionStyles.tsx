@@ -2,7 +2,7 @@
 
 import { usePermissions } from "@/hooks/usePermissions";
 
-const MODULES = ["enquiry", "followup", "admission", "payment", "course", "faculty", "batch", "lab", "class", "source", "stationary", "attendance", "task", "test", "expense", "reports", "users", "settings"];
+const MODULES = ["enquiry", "followup", "leadstatus", "admission", "payment", "course", "faculty", "batch", "lab", "class", "source", "stationary", "attendance", "task", "test", "expense", "reports", "users", "settings"];
 const ACTIONS = ["view", "add", "update", "delete"] as const;
 
 /**

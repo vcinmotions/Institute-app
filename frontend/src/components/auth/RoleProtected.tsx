@@ -9,17 +9,22 @@ import { usePermissions } from "@/hooks/usePermissions";
 type RoleProtectedProps = {
   allowedRoles: string[];
   children: React.ReactNode;
+  /** Super Admin only: custom-role users are refused too, whatever their module permissions. */
+  adminOnly?: boolean;
 };
 
 export default function RoleProtected({
   allowedRoles,
   children,
+  adminOnly = false,
 }: RoleProtectedProps) {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   // Custom-role users are gated by module permissions (sidebar + server), not by built-in role names.
   const { custom, loading } = usePermissions();
-  const allowed = !!user && (allowedRoles.includes(user?.role) || custom);
+  const allowed = !!user && (adminOnly
+    ? user?.role === "ADMIN" && !custom
+    : allowedRoles.includes(user?.role) || custom);
 
   useEffect(() => {
     if (user && !loading && !allowed) {

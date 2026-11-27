@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PaymentReceiptConfig() {
   return (
-    <RoleProtected allowedRoles={["ADMIN", "FRONT_DESK"]}>
+    <RoleProtected allowedRoles={["ADMIN"]} adminOnly>
       <PaymentReceiptConfigPage />
     </RoleProtected>
   );

@@ -88,7 +88,9 @@ export default function AccessRolesPage() {
   };
   const setAll = (module: string, on: boolean) => {
     setDirty(true);
-    setMatrix((m) => ({ ...m, [module]: { view: on, add: on, update: on, delete: on } }));
+    const acts = modules.find((x) => x.key === module)?.actions;
+    const has = (a: keyof Perm) => on && (!acts || acts.includes(a));
+    setMatrix((m) => ({ ...m, [module]: { view: on, add: has("add"), update: has("update"), delete: has("delete") } }));
   };
 
   return (
@@ -170,13 +172,19 @@ export default function AccessRolesPage() {
                   <tbody>
                     {modules.map((m) => {
                       const p = matrix[m.key] ?? blank();
-                      const all = p.view && p.add && p.update && p.delete;
+                      // Modules with a fixed action list (e.g. Won / Hold / Lost = Update only) show just those boxes.
+                      const offers = (a: keyof Perm) => !m.actions || m.actions.includes(a);
+                      const all = ACTIONS.every((a) => !offers(a.key) || p[a.key]);
                       return (
                         <tr key={m.key} className="border-b last:border-0 dark:border-gray-800 dark:text-white">
                           <td className="py-2 pr-4">{m.label}</td>
                           {ACTIONS.map((a) => (
                             <td key={a.key} className="px-3 py-2 text-center">
-                              <input type="checkbox" checked={!!p[a.key]} onChange={() => toggle(m.key, a.key)} aria-label={`${m.label} ${a.label}`} className="h-4 w-4 cursor-pointer" />
+                              {offers(a.key) ? (
+                                <input type="checkbox" checked={!!p[a.key]} onChange={() => toggle(m.key, a.key)} aria-label={`${m.label} ${a.label}`} className="h-4 w-4 cursor-pointer" />
+                              ) : (
+                                <span className="text-gray-300 dark:text-gray-600" title="Not used by this module">—</span>
+                              )}
                             </td>
                           ))}
                           <td className="px-3 py-2 text-center">

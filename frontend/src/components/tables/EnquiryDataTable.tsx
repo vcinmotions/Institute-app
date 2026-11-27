@@ -15,7 +15,6 @@ import EditEnquiryForm from "../form/form-elements/EditEnquiryForm";
 // Hooks & Redux Actions
 import { useFetchFollowUps } from "@/hooks/useFetchFollowUps";
 import { addFollowUpsForEnquiry } from "@/store/slices/followUpSlice";
-import ShowForRoles from "@/app/utils/ShowForRoles";
 import { STATUS_COLOR_MAP } from "../common/BadgeStatus";
 import { canEditEnquiry, canHoldEnquiry, canMarkLost, canMarkWon } from "@/domain/enquiry/rules";
 import { formatDate } from "../common/Formatdate";
@@ -170,10 +169,8 @@ export default function EnquiryDataTable({
                     </Tooltip>
                   </span>
                 </TableCell>
-                <ShowForRoles allowedRoles={["ADMIN", "FACULTY"]}>
-                  <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Follow-Up</TableCell>
-                </ShowForRoles>
-                <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Actions</TableCell>
+                <TableCell isHeader data-perm="view:followup" className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Follow-Up</TableCell>
+                <TableCell isHeader data-perm="update:leadstatus" className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Actions</TableCell>
                 <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Edit</TableCell>
               </TableRow>
             </TableHeader>
@@ -211,8 +208,7 @@ export default function EnquiryDataTable({
                       <TableCell className="px-3 py-1.5">
                         <Badge size="sm" color={STATUS_COLOR_MAP[item.leadStatus] ?? "error"}>{item.leadStatus}</Badge>
                       </TableCell>
-                      <ShowForRoles allowedRoles={["ADMIN", "FACULTY"]}>
-                        <TableCell className="px-3 py-1.5">
+                      <TableCell data-perm="view:followup" className="px-3 py-1.5">
                           <Button
                             data-perm="view:followup" onClick={() => handleFollowUp(item.id)}
                             disabled={isFetching && selectedId === item.id}
@@ -221,25 +217,25 @@ export default function EnquiryDataTable({
                           >
                             {isFetching && selectedId === item.id ? "Loading..." : "Follow-up"}
                           </Button>
-                        </TableCell>
-                      </ShowForRoles>
+                      </TableCell>
 
-                      <TableCell className="px-3 py-1.5">
+                      {/* Won / Hold / Lost: their own permission ("Enquiry Won / Hold / Lost" in Role Access) */}
+                      <TableCell data-perm="update:leadstatus" className="px-3 py-1.5">
                         <div className="flex items-center gap-2">
                           <Tooltip isDisabled={!canWon} className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5" content="WON">
-                            <button data-perm="update:enquiry" disabled={!canWon} className={`rounded p-0.5 transition ${!canWon ? "opacity-30 cursor-not-allowed text-slate-400" : "text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400"}`} onClick={() => canWon && handleCompleteFollowUpHandler(item.id)}>
+                            <button disabled={!canWon} className={`rounded p-0.5 transition ${!canWon ? "opacity-30 cursor-not-allowed text-slate-400" : "text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400"}`} onClick={() => canWon && handleCompleteFollowUpHandler(item.id)}>
                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                             </button>
                           </Tooltip>
 
                           <Tooltip isDisabled={!canHold} className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5" content="HOLD">
-                            <button data-perm="update:enquiry" disabled={!canHold} className={`rounded p-0.5 transition ${!canHold ? "opacity-30 cursor-not-allowed text-slate-400" : "text-amber-500 hover:bg-amber-50 dark:text-amber-400"}`} onClick={() => canHold && handleHoldEnquiryHandler(item.id)}>
+                            <button disabled={!canHold} className={`rounded p-0.5 transition ${!canHold ? "opacity-30 cursor-not-allowed text-slate-400" : "text-amber-500 hover:bg-amber-50 dark:text-amber-400"}`} onClick={() => canHold && handleHoldEnquiryHandler(item.id)}>
                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                             </button>
                           </Tooltip>
 
                           <Tooltip isDisabled={!canLost} className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5" content="LOST">
-                            <button data-perm="update:enquiry" disabled={!canLost} className={`rounded p-0.5 transition ${!canLost ? "opacity-30 cursor-not-allowed text-slate-400" : "text-rose-600 hover:bg-rose-50 dark:text-rose-400"}`} onClick={() => canLost && handleLostEnquiryHandler(item.id)}>
+                            <button disabled={!canLost} className={`rounded p-0.5 transition ${!canLost ? "opacity-30 cursor-not-allowed text-slate-400" : "text-rose-600 hover:bg-rose-50 dark:text-rose-400"}`} onClick={() => canLost && handleLostEnquiryHandler(item.id)}>
                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                             </button>
                           </Tooltip>

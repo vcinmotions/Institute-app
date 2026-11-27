@@ -7,9 +7,14 @@
  */
 export type Action = "view" | "add" | "update" | "delete";
 
-export type ModuleDef = { key: string; label: string; test: RegExp };
+/** `actions` limits which permissions make sense for a module (Role Access shows only those); omitted = all four. */
+export type ModuleDef = { key: string; label: string; test: RegExp; actions?: Action[] };
 
 export const MODULES: ModuleDef[] = [
+  // Must stay ABOVE "enquiry" and "followup": these paths would otherwise match them (first match wins).
+  // Marking an enquiry Won (completing its follow-up), Hold or Lost is its own permission so a role can work on
+  // enquiries and follow-ups without being allowed to close them.
+  { key: "leadstatus", label: "Enquiry Won / Hold / Lost", test: /^\/(followup\/complete|enquiry\/(hold|lost))(\/|$)/, actions: ["update"] },
   { key: "enquiry", label: "Enquiry", test: /^\/(enquiry|enquiry-new|edit-enquiry|won-enquiry)(\/|$)/ },
   // Separate from Enquiry so a role can e.g. see enquiries but not add / change follow-ups.
   { key: "followup", label: "Follow-ups", test: /^\/(followup|followup-edit|missed-followups|pending-followups|followup-stats)(\/|$)/ },
@@ -77,6 +82,7 @@ export const DEFAULT_ROLES: { name: string; description: string; perms: Record<s
     perms: build(READ_MODULES, {
       enquiry: { add: true, update: true },
       followup: { add: true, update: true },
+      leadstatus: { update: true },
       admission: { add: true, update: true },
       stationary: { add: true, update: true },
     }),
@@ -146,6 +152,10 @@ export async function loadPermissions(prisma: any, roleId: number): Promise<Perm
   }
   // Roles saved before "Follow-ups" was its own module keep exactly what "Enquiry & Follow-ups" allowed.
   if (!rows.some((r: any) => r.module === "followup")) perms.followup = { ...perms.enquiry };
+  // Roles saved before "Won / Hold / Lost" was its own module keep what "Update" on Enquiry allowed.
+  if (!rows.some((r: any) => r.module === "leadstatus")) {
+    perms.leadstatus = normalizePerm({ update: perms.enquiry.update && perms.followup.update });
+  }
   cache.set(key, { at: Date.now(), perms });
   return perms;
 }
@@ -155,8 +165,12 @@ const ADMIN_ONLY = /^\/(log|access-roles|tenants)(\/|$)/;
 /** Non-GET endpoints every signed-in user needs regardless of module. */
 const ALWAYS_OK = /^\/(notification|heartbeat|logout|my-permissions|my-companies|switch-company|select-company|subscription|device-activation|followup-stats)(\/|$)/;
 
+/** Readable by everyone (admission numbers and receipts need them) but only the Super Admin may change them. */
+const ADMIN_ONLY_WRITE = /^\/(admission-config|payment-receipt-config)(\/|$)/;
+
 export function allowed(perms: PermMap, method: string, path: string): boolean {
   if (ADMIN_ONLY.test(path)) return false;
+  if (ADMIN_ONLY_WRITE.test(path) && !["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase())) return false;
   const r = resolve(method, path);
   if (!r) {
     // Not a module endpoint (dashboard, analytics, own profile...): reading is fine, changing needs the safe list.
@@ -165,12 +179,18 @@ export function allowed(perms: PermMap, method: string, path: string): boolean {
   return !!perms[r.module]?.[r.action];
 }
 
-/** Rows for one default role's permission table. */
-export const defaultRows = (roleId: number, perms: Record<string, any>) =>
+/**
+ * Permission rows for a role: one per module, including all-false ones. Keeping the "nothing allowed" rows matters:
+ * a missing row means "saved before this module existed" and makes loadPermissions fall back to the old rule.
+ */
+export const permissionRows = (roleId: number, perms: Record<string, any>) =>
   MODULES.map((m) => {
     const p = normalizePerm(perms[m.key] ?? {});
     return { roleId, module: m.key, canView: p.view, canAdd: p.add, canUpdate: p.update, canDelete: p.delete };
-  }).filter((r) => r.canView || r.canAdd || r.canUpdate || r.canDelete);
+  });
+
+/** Rows for one default role's permission table. */
+export const defaultRows = permissionRows;
 
 /**
  * Every company starts with the three default roles (Front Desk, Accountant, View Only), created the first time roles are

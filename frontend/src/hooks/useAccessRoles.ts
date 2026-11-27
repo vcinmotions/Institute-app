@@ -5,7 +5,8 @@ import { apiClient } from "@/lib/apiClient";
 
 export type Perm = { view: boolean; add: boolean; update: boolean; delete: boolean };
 export type AccessRole = { id: number; name: string; description: string | null; isDefault?: boolean; userCount: number; permissions: Record<string, Perm> };
-export type ModuleInfo = { key: string; label: string };
+/** `actions`: the only permissions this module offers (e.g. just "update"); omitted = all four. */
+export type ModuleInfo = { key: string; label: string; actions?: (keyof Perm)[] };
 
 /** Super Admin: custom roles + the module list (also used to offer them in the user form). */
 export function useAccessRoles(enabled = true) {
