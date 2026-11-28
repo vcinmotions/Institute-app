@@ -1,5 +1,6 @@
 "use client";
 
+import { SERVER_ORIGIN } from "@/lib/config";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -168,7 +169,7 @@ export default function StudentDataTable({
                         <div className="h-7 w-7 flex-shrink-0 overflow-hidden rounded-full border border-slate-100 dark:border-slate-800">
                           {item?.photoUrl ? (
                             <img
-                              src={item.photoUrl.startsWith("http") ? item.photoUrl : `http://localhost:5001${item.photoUrl}`}
+                              src={item.photoUrl.startsWith("http") ? item.photoUrl : `${SERVER_ORIGIN}${item.photoUrl}`}
                               alt="student"
                               className="h-full w-full object-cover"
                               onError={(e) => {
@@ -196,7 +197,7 @@ export default function StudentDataTable({
 
                     <TableCell className="px-3 py-1.5">
                       <Button
-                        onClick={() => handleCourseForm(item.id)}
+                        data-perm="add:admission" onClick={() => handleCourseForm(item.id)}
                         variant="nobg"
                         className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 dark:text-slate-50 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 hover:text-slate-900"
                       >
@@ -206,7 +207,7 @@ export default function StudentDataTable({
 
                     <TableCell className="px-3 py-1.5">
                       <Link
-                        href={(`/dashboard/student/admission-form/${item.id}`)}
+                        data-perm="update:admission" href={(`/dashboard/student/admission-form/${item.id}`)}
                         className="h-6 rounded-[8px] border border-slate-200  bg-white py-1.5 px-4 text-[11px] font-medium text-slate-700 dark:text-white hover:text-slate-900 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
                       >
                         View
@@ -216,7 +217,7 @@ export default function StudentDataTable({
                     <TableCell className="px-3 py-1.5">
                       <Button
                         variant="nobg"
-                        onClick={() => handleEditForm(item.id)}
+                        data-perm="update:admission" onClick={() => handleEditForm(item.id)}
                         className="h-6 rounded-[4px] border border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 dark:text-slate-50 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 hover:text-slate-900"
                       >
                         Edit

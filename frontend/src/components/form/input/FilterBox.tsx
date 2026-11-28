@@ -164,7 +164,15 @@ const FilterBox: FC<FilterBoxProps> = ({ className, onFilterChange, filterFields
                 ) : (
                   <input
                     type="date"
-                    className="h-8 w-full rounded border border-slate-200 bg-slate-50 px-2 text-[11px] font-medium text-slate-700 outline-none transition focus:border-slate-300 focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:focus:border-slate-700"
+                    // globals.css hides the native calendar icon, so open the picker on click
+                    onClick={(e) => {
+                      try {
+                        e.currentTarget.showPicker?.();
+                      } catch {
+                        /* picker already open or unsupported - typing still works */
+                      }
+                    }}
+                    className="h-8 w-full cursor-pointer rounded border border-slate-200 bg-slate-50 px-2 text-[11px] font-medium text-slate-700 outline-none transition focus:border-slate-300 focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:focus:border-slate-700"
                     value={filters[field.key] || ""}
                     onChange={(e) =>
                       handleFilterChange(field.key, e.target.value || null)

@@ -1,4 +1,7 @@
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateTimeField from "@/components/form/DateTimeField";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateInitialFollowUp } from "@/hooks/useCreateInitialFollowUp";
@@ -60,7 +63,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
 
     const timer = setTimeout(() => {
       dispatch(setError(null));
-    }, 3000);
+    }, MESSAGE_VISIBLE_MS);
 
     return () => clearTimeout(timer);
   }, [error, dispatch]);
@@ -83,7 +86,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
       setTimeout(() => {
         setErrors({});
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -106,7 +109,8 @@ export default function CreateNewFollowUpOnEnquiryModal({
             onClose();
           },
           onError: (err: any) => {
-            console.error("Mutation save tracking error failure:", err);
+            setAlert({ show: true, title: "Error", message: getApiErrorMessage(err), variant: "error" });
+            setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           }
         }
       );
@@ -133,7 +137,6 @@ export default function CreateNewFollowUpOnEnquiryModal({
           </label>
           <TextArea
             ref={firstInputRef}
-            tabIndex={1}
             value={remark}
             disabled={isPending}
             className="w-full rounded capitalize border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -151,14 +154,7 @@ export default function CreateNewFollowUpOnEnquiryModal({
             Schedule At
           </label>
           <div className="relative w-full">
-            <input
-              tabIndex={2}
-              type="datetime-local"
-              value={scheduledAt}
-              disabled={isPending}
-              onChange={(e) => setScheduledAt(e.target.value)}
-              className="w-full appearance-none rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-            />
+            <DateTimeField value={scheduledAt} onChange={(v) => setScheduledAt(v)} disabled={isPending} />
             {errors.scheduledAt && (
               <p className="pt-2 text-sm text-red-500">{errors.scheduledAt}</p>
             )}
@@ -166,14 +162,13 @@ export default function CreateNewFollowUpOnEnquiryModal({
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <Button size="sm" variant="outline" tabIndex={3} disabled={isPending} onClick={onClose}>
+          <Button size="sm" variant="outline" disabled={isPending} onClick={onClose}>
             Cancel
           </Button>
           <Button
             size="sm"
             variant="primary"
             className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900 disabled:opacity-50"
-            tabIndex={4}
             disabled={isPending}
             onClick={handleSubmit}
           >

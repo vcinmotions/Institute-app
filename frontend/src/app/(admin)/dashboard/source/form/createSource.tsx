@@ -1,6 +1,8 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import { useRouter } from "next/navigation";
@@ -69,7 +71,7 @@ export default function SourceForm() {
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -111,7 +113,7 @@ export default function SourceForm() {
           message: "",
           variant: "",
         });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -137,6 +139,11 @@ export default function SourceForm() {
         setTimeout(() => {
           router.back();
         }, 1000);
+      },
+      onError: (error: any) => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       },
     });
   };
@@ -186,7 +193,6 @@ export default function SourceForm() {
                 <Label>Source Name *</Label>
                 <Input
                   ref={firstInputRef}
-                  tabIndex={1}
                   type="text"
                   placeholder="Ex. Google Ads, Referral"
                   value={titleCase(newSource.name)}
@@ -212,7 +218,6 @@ export default function SourceForm() {
             </Button>
             <Button
               size="sm"
-              tabIndex={2}
               variant="primary"
               onClick={handleSubmit}
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"

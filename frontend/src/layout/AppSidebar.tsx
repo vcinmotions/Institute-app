@@ -7,6 +7,9 @@ import { useRouter, usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
+import { usePermissions } from "@/hooks/usePermissions";
+import { useBranding } from "@/hooks/useBranding";
+import { useSystemAdmin } from "@/hooks/useSystemAdmin";
 
 import {
   BoxCubeIcon,
@@ -55,7 +58,20 @@ type NavItem = {
   roles?: string[];
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
   group?: string;
+  /** System screens of the desktop EXE's one admin (shown only when the server confirms access). */
+  systemAdmin?: boolean;
 };
+
+// Sidebar item -> permission module (used for custom, Super-Admin defined roles).
+// Admission Config and Receipt Config are deliberately missing: only the Super Admin sees them.
+const MODULE_BY_NAME: Record<string, string> = {
+  Enquiry: "enquiry", Admission: "admission", Students: "admission",
+  "Student Course": "admission", Batch: "batch", Course: "course", Lab: "lab", Class: "class", Faculty: "faculty",
+  Test: "test", Attendance: "attendance", Payment: "payment", Expenses: "expense",
+  Master: "source", "App Users": "users", Reports: "reports",
+  "Compare Companies": "reports",
+};
+const ALWAYS_VISIBLE = ["Dashboard", "Calendar"];
 
 const navItems: NavItem[] = [
   // --- OVERVIEW ---
@@ -105,7 +121,7 @@ const navItems: NavItem[] = [
     icon: <LockIcon />,
     name: "Admission Config",
     path: "/dashboard/admission-config",
-    roles: ["ADMIN", "FRONT_DESK"],
+    roles: ["ADMIN"], // Super Admin only (custom roles never: not in MODULE_BY_NAME)
   },
 
   // --- ACADEMICS ---
@@ -150,6 +166,17 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Lab List", path: "/dashboard/lab" },
       { name: "Create Lab", path: "/dashboard/lab/create" },
+    ],
+  },
+  {
+    group: "Academics",
+    icon: <LockIcon />,
+    name: "Class",
+    path: "/dashboard/class",
+    roles: ["ADMIN", "FRONT_DESK"],
+    subItems: [
+      { name: "Class List", path: "/dashboard/class" },
+      { name: "Create Class", path: "/dashboard/class/create" },
     ],
   },
   {
@@ -203,10 +230,17 @@ const navItems: NavItem[] = [
   },
   {
     group: "Finance & Inventory",
+    icon: <BoltIcon />,
+    name: "Expenses",
+    path: "/dashboard/expense",
+    roles: ["ADMIN", "ACCOUNTANT"],
+  },
+  {
+    group: "Finance & Inventory",
     icon: <FileIcon />,
     name: "Receipt Config",
     path: "/dashboard/payment-receipt-config",
-    roles: ["ADMIN", "FRONT_DESK"],
+    roles: ["ADMIN"], // Super Admin only (custom roles never: not in MODULE_BY_NAME)
   },
 
   // --- ADMINISTRATION ---
@@ -221,13 +255,20 @@ const navItems: NavItem[] = [
   {
     group: "Administration",
     icon: <LockIcon />,
-    name: "Roles",
+    name: "App Users",
     path: "/dashboard/roles",
     roles: ["ADMIN", "FRONT_DESK"],
     subItems: [
-      { name: "Roles List", path: "/dashboard/roles" },
-      { name: "Create Roles", path: "/dashboard/roles/create" },
+      { name: "Users List", path: "/dashboard/roles" },
+      { name: "Create User", path: "/dashboard/roles/create" },
     ],
+  },
+  {
+    group: "Administration",
+    icon: <LockIcon />,
+    name: "Role Access",
+    path: "/dashboard/access-roles",
+    roles: ["ADMIN"],
   },
   {
     group: "Administration",
@@ -235,6 +276,39 @@ const navItems: NavItem[] = [
     name: "Reports",
     path: "/dashboard/reports",
     roles: ["ADMIN"],
+  },
+  {
+    group: "Administration",
+    icon: <UserIcon />,
+    name: "Compare Companies",
+    path: "/dashboard/reports/compare",
+    roles: ["ADMIN", "ACCOUNTANT"],
+  },
+
+  // --- SYSTEM (desktop EXE: the institute admin holds the former master screens) ---
+  {
+    group: "System",
+    icon: <EnvelopeIcon />,
+    name: "System Settings",
+    path: "/dashboard/system/settings",
+    roles: ["ADMIN"],
+    systemAdmin: true,
+  },
+  {
+    group: "System",
+    icon: <GridIcon />,
+    name: "System Health",
+    path: "/dashboard/system/health",
+    roles: ["ADMIN"],
+    systemAdmin: true,
+  },
+  {
+    group: "System",
+    icon: <PaperPlaneIcon />,
+    name: "Software Update",
+    path: "/dashboard/system/updates",
+    roles: ["ADMIN"],
+    systemAdmin: true,
   },
 
   // --- SYSTEM ADMIN ---
@@ -254,6 +328,20 @@ const navItems: NavItem[] = [
     icon: <EnvelopeIcon />,
     name: "Settings",
     path: "/master-dashboard/settings",
+    roles: ["MASTER_ADMIN"],
+  },
+  {
+    group: "System Admin",
+    icon: <GridIcon />,
+    name: "System Health",
+    path: "/master-dashboard/health",
+    roles: ["MASTER_ADMIN"],
+  },
+  {
+    group: "System Admin",
+    icon: <PaperPlaneIcon />,
+    name: "Software Update",
+    path: "/master-dashboard/updates",
     roles: ["MASTER_ADMIN"],
   },
 
@@ -300,11 +388,29 @@ const AppSidebar: React.FC = () => {
   const router = useRouter();
 
   const userRole = user?.role;
+  const perms = usePermissions();
+  const systemAdmin = useSystemAdmin();
+  const branding = useBranding();
   const isSidebarVisible = isExpanded || isHovered || isMobileOpen;
 
   const filteredNavItems = useMemo(() => {
+    const customUser = perms.custom;
     return navItems
-      .filter((item) => !item.roles || item.roles.includes(userRole))
+      .filter((item) => {
+        if (item.systemAdmin) return systemAdmin;
+        if (!customUser) return !item.roles || item.roles.includes(userRole);
+        // Custom role: show only modules the role may View; hide "Create ..." links without Add.
+        if (ALWAYS_VISIBLE.includes(item.name)) return true;
+        const m = MODULE_BY_NAME[item.name];
+        return !!m && perms.can(m, "view");
+      })
+      .map((item) => {
+        // "Create ..." links only for users who may add in that module (every role, not only custom ones).
+        if (!item.subItems) return item;
+        const m = MODULE_BY_NAME[item.name];
+        if (!m) return item;
+        return { ...item, subItems: item.subItems.filter((s) => !/^create\b/i.test(s.name) || perms.can(m, "add")) };
+      })
       .filter((item) => {
         if (!searchQuery) return true;
         const matchesMainItem = item.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -314,7 +420,7 @@ const AppSidebar: React.FC = () => {
         const matchesGroup = item.group?.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesMainItem || matchesSubItems || matchesGroup;
       });
-  }, [userRole, searchQuery]);
+  }, [userRole, searchQuery, perms.custom, perms.restricted, perms.loading, systemAdmin]);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
@@ -620,10 +726,17 @@ const AppSidebar: React.FC = () => {
       <div className={`flex h-14 items-center shrink-0 border-b border-transparent ${!isSidebarVisible ? "lg:justify-center" : "justify-start pl-1.5"}`}>
         <Link href="/dashboard" className="flex items-center">
           {isSidebarVisible ? (
-            <>
-              <Image className="dark:hidden object-contain" src="/images/logo/logo.svg" alt="Logo" width={115} height={32} unoptimized />
-              <Image className="hidden dark:block object-contain" src="/images/logo/logo-dark.svg" alt="Logo" width={115} height={32} unoptimized />
-            </>
+            branding.logoSrc ? (
+              // Institute logo set by the Super Admin
+              <img src={branding.logoSrc} alt={branding.instituteName ?? "Logo"} className="h-8 max-w-[115px] object-contain" />
+            ) : (
+              <>
+                <Image className="dark:hidden object-contain" src="/images/logo/logo.svg" alt="Logo" width={115} height={32} unoptimized />
+                <Image className="hidden dark:block object-contain" src="/images/logo/logo-dark.svg" alt="Logo" width={115} height={32} unoptimized />
+              </>
+            )
+          ) : branding.logoSrc ? (
+            <img src={branding.logoSrc} alt="Logo" className="h-6 w-6 object-contain" />
           ) : (
             <Image src="/images/logo/logo-icon.svg" alt="Logo" width={24} height={24} unoptimized />
           )}

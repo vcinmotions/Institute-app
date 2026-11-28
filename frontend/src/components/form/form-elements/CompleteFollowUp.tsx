@@ -1,6 +1,8 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateCompleteFollowUp } from "@/hooks/useCompleteFollowUp";
@@ -62,7 +64,7 @@ export default function CompleteFollowUpModal({
     if (!remark.trim()) newErrors.remark = "Remark is required.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -85,7 +87,7 @@ export default function CompleteFollowUpModal({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -103,7 +105,7 @@ export default function CompleteFollowUpModal({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -122,11 +124,11 @@ export default function CompleteFollowUpModal({
 
           onClose();
         },
-        onError: () => {
-          console.error("Failed to create follow-up");
-          setErrors({
-            remark: "Failed to create follow-up. Please try again.",
-          });
+        onError: (error: any) => {
+          const message = getApiErrorMessage(error, "Failed to complete the follow-up. Please try again.");
+          setErrors({ remark: message });
+          setAlert({ show: true, title: "Error", message, variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         },
       }
     );
@@ -155,7 +157,6 @@ export default function CompleteFollowUpModal({
           </label>
           <TextArea
             ref={firstInputRef}
-            tabIndex={1}
             value={remark}
             rows={6}
             placeholder="e.g., Interview Follow-Up Schedule..."
@@ -175,8 +176,7 @@ export default function CompleteFollowUpModal({
         <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-100 pt-6 dark:border-gray-800">
           <Button 
             size="sm" 
-            variant="outline" 
-            tabIndex={2} 
+            variant="outline"  
             onClick={onClose}
             className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
           >
@@ -185,7 +185,6 @@ export default function CompleteFollowUpModal({
           <Button
             size="sm"
             variant="primary"  
-            tabIndex={3}
             onClick={handleSubmit}
             className="rounded-lg bg-gray-900 px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-gray-800 dark:bg-gray-700 dark:text-gray-900 dark:hover:bg-gray-800"
           >

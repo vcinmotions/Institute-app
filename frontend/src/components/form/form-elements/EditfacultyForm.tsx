@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import ModalCard from "@/components/common/ModalCard";
@@ -14,7 +16,9 @@ import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { setBatches } from "@/store/slices/batchSlice";
 import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { EyeIcon, EyeCloseIcon } from "@/icons";
 import MultiSelect from "../MultiSelect";
+import { mobileError, loginIdError, staffLoginId, personNameError, passwordError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof FacultyData, string>>;
 
@@ -70,6 +74,8 @@ export default function EditFacultyForm({
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [resetPassword, setResetPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { mutate: editFaculty } = useEditFaculty();
 
   useEffect(() => {
@@ -109,28 +115,25 @@ export default function EditFacultyForm({
         contact: facultyData.contact || "",
         courseId: facultyData.courseId || "",
         batchId: facultyData.batches?.map((b: any) => b.id.toString()) || [],
-        password: facultyData.password || "",
+        password: "",
       });
+      setResetPassword(false);
     }
   }, [facultyData]);
 
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newFaculty.name.trim()) {
-      newErrors.name = "Name is required.";
-    }
-
-    if (!newFaculty.email.trim()) {
-      newErrors.email = "Email is required.";
-    }
-
-    if (!newFaculty.contact.trim()) {
-      newErrors.contact = "Contact is required.";
-    }
+    // Same rules everywhere in the app (see lib/validation).
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newFaculty.name),
+      email: loginIdError(newFaculty.email, "Email / username"),
+      contact: mobileError(newFaculty.contact, "Contact", true),
+      password: resetPassword ? passwordError(newFaculty.password, "New password") : "",
+    }));
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -143,11 +146,8 @@ export default function EditFacultyForm({
       let updated = { ...prev, [field]: value };
 
       // Auto-generate email if faculty name changes
-      if (field === "name" && typeof value === "string" && user?.instituteName) {
-        const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
-        const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-        updated.email = `${formattedName}@${institute}`;
-      }
+      const loginId = field === "name" && typeof value === "string" ? staffLoginId(value, user) : null;
+      if (loginId) updated.email = loginId; // e.g. google@2026
 
       return updated;
     });
@@ -191,7 +191,7 @@ export default function EditFacultyForm({
 
     setErrors((prev) => ({
       ...prev,
-      contact: digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+      contact: mobileError(digitsOnly, "Contact", true),
     }));
   };
 
@@ -210,7 +210,7 @@ export default function EditFacultyForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -228,17 +228,20 @@ export default function EditFacultyForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
 
     const id = facultyData.id;
 
+    const { password: _pw, ...rest } = newFaculty;
     const normalizedFaculty = {
-      ...newFaculty,
+      ...rest,
       name: titleCase(newFaculty.name),
       contact: normalizePhone(newFaculty.contact),
+      // Only send a password when the admin chose to reset it.
+      ...(resetPassword && newFaculty.password ? { password: newFaculty.password } : {}),
     };
 
     editFaculty(
@@ -269,7 +272,10 @@ export default function EditFacultyForm({
           }, 500);
         },
 
-        onError: () => {
+        onError: (error: any) => {
+          // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+          setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           scrollModalToTop();
         },
       },
@@ -311,7 +317,6 @@ export default function EditFacultyForm({
               <Input
                 ref={firstInputRef}
                 type="text"
-                tabIndex={1}
                 placeholder="Ex. Full Stack Developer"
                 value={newFaculty.name}
                 onChange={(e) => handleChange("name", e.target.value)}
@@ -319,11 +324,56 @@ export default function EditFacultyForm({
               {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
             </div>
 
+            <div className="order-last md:col-span-2 lg:col-span-3" ref={(el) => { inputRefs.current.password = el; }}>
+              <Label>Password</Label>
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+<Input
+                  type={showPassword ? "text" : "password"}
+                  tabIndex={resetPassword ? 0 : -1}
+                  disabled={!resetPassword}
+                  placeholder={resetPassword ? "Enter new password" : "••••••••"}
+                  value={newFaculty.password}
+                  onChange={(e) => handleChange("password", e.target.value)}
+                />
+{resetPassword && (
+<button
+ type="button"
+ tabIndex={-1}
+ onClick={() => setShowPassword((v) => !v)}
+ aria-label={showPassword ? "Hide password" : "Show password"}
+ className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+>
+{showPassword ? (
+<EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+) : (
+<EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+)}
+</button>
+)}
+</div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    if (resetPassword) {
+                      setResetPassword(false); setShowPassword(false);
+                      handleChange("password", "");
+                    } else {
+                      setResetPassword(true);
+                    }
+                  }}
+                >
+                  {resetPassword ? "Cancel" : "Reset Password"}
+                </Button>
+              </div>
+              {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+            </div>
+
             <div ref={(el) => { inputRefs.current.email = el; }}>
               <Label>Email</Label>
               <Input
                 type="text"
-                tabIndex={2}
                 readOnly
                 placeholder="Ex. Full Stack Developer"
                 value={newFaculty.email}
@@ -345,7 +395,6 @@ export default function EditFacultyForm({
               <PhoneInput
                 selectPosition="start"
                 countries={countries}
-                tabIndex={3}
                 value={newFaculty.contact}
                 onKeyDown={handleKeyDown}
                 placeholder="Enter Contact"
@@ -357,7 +406,6 @@ export default function EditFacultyForm({
             <div className="lg:col-span-2" ref={(el) => { inputRefs.current.courseId = el; }}>
               <div className="relative">
                 <MultiSelect
-                  tabIndex={4}
                   label="Select Courses"
                   options={batchOptions.map((b) => ({
                     value: String(b.value),
@@ -379,14 +427,12 @@ export default function EditFacultyForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={5}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={6}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

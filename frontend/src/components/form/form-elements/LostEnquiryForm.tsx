@@ -1,4 +1,6 @@
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateLostEnquiry } from "@/hooks/useCompleteFollowUp";
@@ -26,7 +28,7 @@ export default function LostEnquiryModal({
   const [scheduledAt, setScheduledAt] = useState<string>("");
   const [errors, setErrors] = useState<Partial<FollowUpData>>({});
   const { refetch } = useFollowUp(enquiryId);
-  const { mutate: createLostEnquiry } = useCreateLostEnquiry(); // Destructure the function
+  const { mutateAsync: createLostEnquiry } = useCreateLostEnquiry(); // Destructure the function
 
     const [alert, setAlert] = useState<{
           show: boolean;
@@ -66,7 +68,7 @@ setAlert({
     setTimeout(() => {
       setErrors({});
       setAlert({ show: false, title: "", message: "", variant: "" });
-    }, 2000);
+    }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -85,8 +87,10 @@ setAlert({
       setErrors({});
       onClose();
     } catch (error) {
-      console.error("Failed to create follow-up:", error);
-      setErrors({ remark: "Failed to create follow-up. Please try again." });
+      const message = getApiErrorMessage(error, "Could not save. Please try again.");
+      setErrors({ remark: message });
+      setAlert({ show: true, title: "Error", message, variant: "error" });
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
     }
   };
 
@@ -107,7 +111,6 @@ setAlert({
           </label>
           <TextArea
             ref={firstInputRef}
-            tabIndex={1}
             value={remark}
             className="w-full capitalize rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
             onChange={(value) => setRemark(value)}
@@ -119,14 +122,13 @@ setAlert({
           )}
         </div>
         <div className="mt-6 flex justify-end gap-3">
-          <Button size="sm" variant="outline" tabIndex={2} onClick={onClose}>
+          <Button size="sm" variant="outline" onClick={onClose}>
             Cancel
           </Button>
           <Button
             size="sm"
             variant="primary"  
             className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
-            tabIndex={3}
             onClick={handleSubmit}
           >
             Save Follow-Up

@@ -21,15 +21,24 @@ let loaded = false;
 //   loaded = true;
 // }
 
+/**
+ * The env file for this run:
+ *   APP_ENV=prod   -> .env.prod   (desktop EXE)
+ *   APP_ENV=portal -> .env.portal (live web portal; .env.dev / .env.prod are never read)
+ *   anything else  -> .env.dev    (developer PC)
+ */
+export function activeEnvFile(): string {
+  if (process.env.APP_ENV === "prod") return ".env.prod";
+  if (process.env.APP_ENV === "portal") return ".env.portal";
+  return ".env.dev";
+}
+
 export function loadEnv() {
   if (loaded) return;
 
   const rootDir = path.resolve(__dirname, "../../");
 
-  const envFile =
-    process.env.APP_ENV === "prod"
-      ? ".env.prod"
-      : ".env.dev";
+  const envFile = activeEnvFile();
 
   console.log("=================================");
   console.log("APP_ENV:", process.env.APP_ENV);
@@ -46,6 +55,19 @@ export function loadEnv() {
     override: false,
   });
 
+  // Portal-only secrets (e.g. SUBSCRIPTION_PRIVATE_KEY). Not committed, not shipped in the EXE.
+  // In portal mode it was already loaded above.
+  if (envFile !== ".env.portal") {
+    dotenv.config({
+      path: path.join(rootDir, ".env.portal"),
+      override: false,
+    });
+  }
+
+  if (envFile === ".env.portal" && !fs.existsSync(path.join(rootDir, ".env.portal"))) {
+    console.error(`APP_ENV=portal but ${path.join(rootDir, ".env.portal")} was not found.`);
+  }
+
   loaded = true;
 }
 
@@ -60,7 +82,6 @@ export function getCentralDbUrl(): string | undefined {
     return `file:${dbPath.replace(/\\/g, "/")}`;
   }
 
-  console.log("URL IN ENVLOADER:", process.env.CENTRAL_DATABASE_URL);
 
   return process.env.CENTRAL_DATABASE_URL; // fallback for Postgres/dev
 }

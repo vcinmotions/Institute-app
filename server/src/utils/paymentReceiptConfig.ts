@@ -1,3 +1,4 @@
+import { formatSequenceNumber } from "./sequenceNumber";
 export async function generatePaymentReceiptNumber(
   prisma: any,
   clientAdminId: string
@@ -28,16 +29,5 @@ export async function generatePaymentReceiptNumber(
     });
   }
 
-  const paddedNumber = String(config.currentNumber).padStart(
-    config.numberLength,
-    "0"
-  );
-
-  const parts = [];
-
-  if (config.prefix) parts.push(config.prefix);
-  parts.push(paddedNumber);
-  if (config.suffix) parts.push(config.suffix);
-
-  return parts.join(config.separator);
+  return formatSequenceNumber(config);
 }

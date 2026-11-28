@@ -128,10 +128,10 @@ export const NotificationProvider = ({
 
     socket.connect();
 
-    const handleNotification = (data: any, type: "FOLLOWUP" | "PAYMENT") => {
+    const handleNotification = (data: any, type: "FOLLOWUP" | "PAYMENT" | "ENQUIRY") => {
       if (isMasterAdmin) return; // ⛔ master admin sees NO notifications
 
-      if (type === "FOLLOWUP" && !canSeeFollowUp) return;
+      if ((type === "FOLLOWUP" || type === "ENQUIRY") && !canSeeFollowUp) return;
       if (type === "PAYMENT" && !canSeePayments) return;
 
       const newNotification = {
@@ -152,6 +152,11 @@ export const NotificationProvider = ({
     // socket.on("new-followup-notification", (data) =>
     //   handleNotification(data, "FOLLOWUP"),
     // );
+
+    // NEW ENQUIRY ALERTS → only Frontdesk + Admin
+    socket.on("enquiry-notification", (data) =>
+      handleNotification(data, "ENQUIRY"),
+    );
 
     // PAYMENT NOTIFICATIONS → only Accountant + Admin
     socket.on("payments-notification", (data) =>

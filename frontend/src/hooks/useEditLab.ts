@@ -21,10 +21,10 @@ export const useEditLab = () => {
       console.log("GET EDIT LAB DATA FOR UPDATION:", lab);
 
       // Return token for onSuccess
-      return { token };
+      return { token, kind: lab?.kind };
     },
 
-    onSuccess: async ({ token }) => {
+    onSuccess: async ({ token, kind }) => {
       try {
         // Refetch latest enquiries
         const updated = await getLab({
@@ -32,6 +32,7 @@ export const useEditLab = () => {
           page: 1,
           limit: 5,
           sortField: "createdAt",
+          kind,
         });
 
         dispatch(setLab(updated.labs));

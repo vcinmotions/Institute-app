@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
@@ -103,7 +105,7 @@ export default function CourseCompletionForm({
     if (!formData.feedback.trim()) newErrors.feedback = "Feedback is required.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
 
     return {
@@ -210,7 +212,7 @@ export default function CourseCompletionForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -228,7 +230,7 @@ export default function CourseCompletionForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -257,19 +259,19 @@ export default function CourseCompletionForm({
         }, 2000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
         window.scrollTo({ top: 0, behavior: "smooth" });
 
         setAlert({
           show: true,
           title: "Error",
-          message: "Something went wrong while completing the course.",
+          message: getApiErrorMessage(error, "Something went wrong while completing the course."),
           variant: "error",
         });
 
         setTimeout(() => {
           setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        }, MESSAGE_VISIBLE_MS);
       },
     });
   };
@@ -294,7 +296,6 @@ export default function CourseCompletionForm({
         <TextArea
           value={formData.feedback}
           ref={firstInputRef}
-          tabIndex={1}
           className="w-full capitalize rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           onChange={(value) => handleChange("feedback", value)}
           rows={4}
@@ -318,7 +319,6 @@ export default function CourseCompletionForm({
         /> */}
 
         <TextArea
-          tabIndex={2}
           value={formData.remark}
           className="w-full capitalize rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           onChange={(value) => handleChange("remark", value)}
@@ -333,14 +333,12 @@ export default function CourseCompletionForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={3}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={4}
             variant="primary"  
             className="rounded bg-gray-300 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
             onClick={handleSubmit}

@@ -124,8 +124,8 @@ export async function processDuePayments(dbUrl: string) {
 
   const now = dayjs();
 
-  // 🔥 Only consider payments that are 21 days overdue
-  const overdueThreshold = now.subtract(21, "day").startOf("day").toDate();
+  // Remind for fees that are due within the next day or already overdue.
+  const overdueThreshold = now.add(1, "day").endOf("day").toDate();
 
   const duePayments = await prisma.studentFee.findMany({
     where: {
@@ -145,11 +145,12 @@ export async function processDuePayments(dbUrl: string) {
     });
     if (exists) continue;
 
-    const message = `Payment overdue for ${payment.student.fullName}
+    const overdueDays = dayjs().startOf("day").diff(dayjs(payment.dueDate).startOf("day"), "day");
+    const message = `Fee ${overdueDays > 0 ? "overdue" : "due"} for ${payment.student.fullName}
 Course: ${payment.course?.name ?? "N/A"}
 Amount: ₹${payment.amountDue}
-Due Date: ${dayjs(payment.dueDate).format("DD MMM YYYY")}
-Overdue by: ${dayjs().diff(dayjs(payment.dueDate), "day")} days`;
+Due Date: ${dayjs(payment.dueDate).format("DD MMM YYYY")}${overdueDays > 0 ? `
+Overdue by: ${overdueDays} days` : ""}`;
 
     // 🔥 Create notification
     await prisma.notification.create({
@@ -161,7 +162,9 @@ Overdue by: ${dayjs().diff(dayjs(payment.dueDate), "day")} days`;
     });
 
     // 🔔 Emit via Socket.IO
-    io.to(payment.clientAdminId).emit("payment-notification", {
+    // The app listens for "payments-notification" with notificationMessage.
+    io?.to(payment.clientAdminId).emit("payments-notification", {
+      notificationMessage: message,
       message,
       createdAt: new Date().toISOString(),
     });

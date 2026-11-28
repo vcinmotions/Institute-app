@@ -1,4 +1,6 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useEffect, useRef, useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
@@ -92,7 +94,7 @@ export default function AssignBatchFacultyForm({
     .filter((b: any) => !assignedBatchIds.includes(b.id)) // exclude assigned batches
     .map((b: any) => ({
       value: b.id.toString(),
-      label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+      label: batchLabel(b),
     }));
 
   const handleChange = (field: keyof FacultyBatchData, value: string) => {
@@ -109,7 +111,7 @@ export default function AssignBatchFacultyForm({
       newErrors.facultyId = "Faculty ID is required.";
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -124,7 +126,7 @@ export default function AssignBatchFacultyForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -140,7 +142,7 @@ export default function AssignBatchFacultyForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -171,8 +173,26 @@ export default function AssignBatchFacultyForm({
         }, 3000);
       },
 
-      onError: () => {
-        // You already handle error via redux + toast
+      onError: (error: any) => {
+        // Show the server's reason (e.g. "This batch is already assigned to another faculty")
+        const reason =
+          error?.response?.data?.error ||
+          error?.response?.data?.message ||
+          error?.message ||
+          "Could not assign the batch. Please try again.";
+
+        setAlert({
+          show: true,
+          title: "Could not assign batch",
+          message: reason,
+          variant: "error",
+        });
+
+        modalBodyRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+
+        setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, MESSAGE_VISIBLE_MS);
       },
     });
   };
@@ -214,7 +234,6 @@ export default function AssignBatchFacultyForm({
               <Label>Faculty Name</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Faculty Name"
                 value={newFaculty.name}
@@ -227,7 +246,6 @@ export default function AssignBatchFacultyForm({
             <div>
               <Label>Username (Email)</Label>
               <Input
-                tabIndex={2}
                 type="email"
                 placeholder="Faculty Email"
                 value={newFaculty.email}
@@ -251,7 +269,6 @@ export default function AssignBatchFacultyForm({
               <Label>Select Batch *</Label>
               <div className="relative">
                 <Select
-                  tabIndex={3}
                   options={filteredBatchOptions}
                   placeholder={
                     filteredBatchOptions.length > 0
@@ -277,14 +294,12 @@ export default function AssignBatchFacultyForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={4}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={5}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

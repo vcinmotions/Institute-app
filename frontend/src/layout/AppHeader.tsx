@@ -1,4 +1,5 @@
 "use client";
+import { useBranding } from "@/hooks/useBranding";
 import { ThemeToggleButton } from "@/components/common/ThemeToggleButton";
 import NotificationDropdown from "@/components/header/NotificationDropdown";
 import UserDropdown from "@/components/header/UserDropdown";
@@ -8,6 +9,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import CompanySwitcher from "@/components/common/CompanySwitcher";
+import { ConnectionBadge } from "@/components/common/ConnectionStatus";
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -33,6 +36,14 @@ const AppHeader: React.FC = () => {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  // Admin: instituteName on the user; role users / faculty: via their clientAdmin.
+  const branding = useBranding();
+  const ownName: string =
+    (user as any)?.instituteName || (user as any)?.clientAdmin?.instituteName || "CRM";
+  // The Super Admin's branding name applies to the primary company; other companies keep their own name.
+  const isPrimary = (user as any)?.isMaster !== false && (user as any)?.clientAdmin?.isMaster !== false;
+  const companyName: string = (isPrimary && branding.instituteName) || ownName;
 
   const activeFinancialYear = user?.financialYears?.find((fy: any) => fy.isActive);
 
@@ -82,9 +93,11 @@ const AppHeader: React.FC = () => {
             )}
           </button>
 
-          <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200">
-            <span className="text-[10px] text-blue-600">CRM</span>
-          </div>
+          <CompanySwitcher fallbackName={companyName} />
+          {/* Server connection status (moved here from the bottom-left corner, where it covered the sidebar) */}
+          <span className="hidden sm:block">
+            <ConnectionBadge />
+          </span>
 
           <Link href="/dashboard" className="block lg:hidden transition-opacity hover:opacity-90">
             <Image width={120} height={28} className="dark:hidden" src="/images/logo/logo.svg" alt="ERP Logo" unoptimized />

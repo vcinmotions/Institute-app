@@ -30,14 +30,20 @@ export async function createAdvancePaymentController(req: any, res: any) {
       // Generate receipt number
       const receiptNo = await generatePaymentReceiptNumber(prisma, clientAdminId);
 
-      // Use a temporary placeholder studentId (0) for advance payments
-      // This will be updated to the actual studentId when the student is created
-      const tempStudentId = 0;
+      // The advance must belong to a real student (a placeholder id 0 violates the FK).
+      const studentId = Number(payment.studentId ?? req.body.studentId);
+      if (!studentId) {
+        return res.status(400).json({ error: "studentId is required for an advance payment" });
+      }
+      const student = await prisma.student.findUnique({ where: { id: studentId } });
+      if (!student) {
+        return res.status(404).json({ error: "Student not found" });
+      }
 
       // Create student fee record for advance payment
       const studentFee = await prisma.studentFee.create({
         data: {
-          studentId: tempStudentId, // Temporary placeholder, will be updated when student is created
+          studentId,
           courseId: Number(courseId),
           dueDate: new Date(paymentDate || Date.now()),
           amountDue: parseFloat(advanceAmount),
@@ -59,7 +65,7 @@ export async function createAdvancePaymentController(req: any, res: any) {
           paymentMode: paymentMode || "CASH",
           date: new Date(paymentDate || Date.now()),
           description: `Advance payment of ₹${advanceAmount} for ${courseName}`,
-          studentId: tempStudentId, // Temporary placeholder, will be updated when student is created
+          studentId,
           courseId: Number(courseId),
         },
       });

@@ -18,6 +18,7 @@ export function normalizeTenantInput(data: any) {
       : null,
 
     email: data.email ? normalizeEmail(data.email) : null,
+    businessEmail: data.businessEmail ? normalizeEmail(data.businessEmail) : null,
     password: data.password ?? null,
 
     contact: data.contact ? normalizePhone(data.contact) : null,

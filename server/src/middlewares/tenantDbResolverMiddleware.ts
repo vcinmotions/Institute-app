@@ -10,10 +10,8 @@ export async function tenantDbUrlMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  console.log("Raw Jwt Token:", req.headers.authorization);
   const token = req.headers.authorization?.split(" ")[1];
   //const token = req.headers.authorization
-  console.log("Jwt Token:", token);
 
   if (!token) return res.status(401).json({ error: "No token provided" });
 
@@ -21,7 +19,6 @@ export async function tenantDbUrlMiddleware(
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     req.user = decoded;
 
-    console.log("GET TOKEN IN TENANT DB URL MIDDLEWARE;", decoded);
 
     console.log("req.user", req.user);
     console.log("decoded", decoded);

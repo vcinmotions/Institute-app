@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { getUser } from "@/lib/api";
 import ClientAdminLayout from "../(client-layout)/ClientAdminLayout";
+import { SystemBackupAlert } from "@/components/common/BackupAlert";
 
 export default function AdminLayout({
   children,
@@ -52,6 +53,9 @@ export default function AdminLayout({
   if (loading) return null;
 
   return (
-    <ClientAdminLayout user={userData?.userdata}>{children}</ClientAdminLayout>
+    <ClientAdminLayout user={userData?.userdata}>
+      <SystemBackupAlert />
+      {children}
+    </ClientAdminLayout>
   );
 }

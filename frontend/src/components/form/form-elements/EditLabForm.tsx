@@ -1,5 +1,8 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import TimePicker from "@/components/form/TimePicker";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Button from "@/components/ui/button/Button";
@@ -10,12 +13,14 @@ import { RootState } from "@/store";
 import { useEditLab } from "@/hooks/useEditLab";
 import { normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { textError, integerError } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof LabData, string>>;
 
 interface LabFormProps {
   onCloseModal: () => void;
   labData: any;
+  kind?: "LAB" | "CLASS";
 }
 
 // interface TimeSlot {
@@ -42,7 +47,9 @@ interface LabData {
   timeSlots: TimeSlot[];
 }
 
-export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
+export default function EditLabForm({ onCloseModal, labData, kind = "LAB" }: LabFormProps) {
+  const isClass = kind === "CLASS";
+  const noun = isClass ? "Class" : "Lab";
   console.log("GET LAB DATA IN EDIT LAB FORM:", labData);
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: editLab } = useEditLab();
@@ -130,10 +137,12 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
   // 🔹 Basic validation
   const validate = () => {
     const newErrors: FormErrors = {};
-    if (!lab.name.trim()) newErrors.name = "Lab name is required.";
-    if (!lab.location.trim()) newErrors.location = "Location is required.";
-    if (!lab.totalPCs || lab.totalPCs <= 0)
-      newErrors.totalPCs = "Total PCs must be greater than 0." as any;
+    {
+      const nameErr = textError(lab.name, `${noun} name`, { required: true, max: 60 });
+      if (nameErr) newErrors.name = nameErr;
+      const pcsErr = integerError(lab.totalPCs, isClass ? "Seats" : "Total PCs", { required: true, min: 1, max: 1000 });
+      if (pcsErr) newErrors.totalPCs = pcsErr as any;
+    }
 
     const isInvalidSlot = lab.timeSlots.some((slot) => {
       // Ignore completely empty slot
@@ -171,7 +180,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
     // }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
 
     return {
@@ -195,7 +204,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -211,7 +220,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -221,6 +230,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
     const normalizedLab = {
       ...lab,
+      kind,
       name: titleCase(lab.name),
       location: normalizeToLowercase(lab.location),
     }
@@ -240,7 +250,7 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
           setAlert({
             show: true,
             title: "Success",
-            message: "Lab created successfully!",
+            message: `${noun} updated successfully!`,
             variant: "Success",
           });
 
@@ -249,7 +259,10 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
           }, 3000);
         },
 
-        onError: () => {
+        onError: (error: any) => {
+          // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+          setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           // You already handle error via redux + toast
           window.scrollTo({ top: 0, behavior: "smooth" })
         },
@@ -260,13 +273,13 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
   console.log("GET UPDATED LAB FORM DATA:", lab);
 
   return (
-    <ModalCard title="Edit Lab" oncloseModal={onCloseModal}>
+    <ModalCard title={`Edit ${noun}`} oncloseModal={onCloseModal}>
       <div className="flex flex-col gap-6">
 
         {/* Header & Alerts */}
         <div className="border-b pb-4 dark:border-gray-700">
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Update the details below to modify the lab configuration.
+            Update the details below to modify the {isClass ? "class" : "lab"} configuration.
           </p>
         </div>
 
@@ -282,14 +295,13 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
         {/* Section 1: Lab Details */}
         <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-gray-900/50">
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
-            Lab Details
+            {noun} Details
           </h3>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             <div ref={(el) => { inputRefs.current.name = el; }}>
-              <Label>Lab Name *</Label>
+              <Label>{noun} Name *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Ex. LAB-06"
                 value={titleCase(lab.name)}
@@ -302,7 +314,6 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
               <Label>Location *</Label>
               <Input
                 type="text"
-                tabIndex={2}
                 placeholder="Ex. Building D - Floor 1"
                 value={titleCase(lab.location)}
                 onChange={(e) => handleChange("location", e.target.value)}
@@ -313,9 +324,8 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
             </div>
 
             <div ref={(el) => { inputRefs.current.totalPCs = el; }}>
-              <Label>Total PCs *</Label>
+              <Label>{isClass ? "Seats (student capacity) *" : "Total PCs *"}</Label>
               <Input
-                tabIndex={3}
                 type="number"
                 placeholder="Ex. 15"
                 value={lab.totalPCs}
@@ -358,26 +368,14 @@ export default function EditLabForm({ onCloseModal, labData }: LabFormProps) {
 
                   <div className="w-full sm:w-1/3">
                     <Label className="sm:hidden">Start Time</Label>
-                    <Input
-                      type="time"
-                      value={slot.startTime}
-                      disabled={isLocked}
-                      onChange={(e) =>
-                        handleTimeSlotChange(index, "startTime", e.target.value)
-                      }
-                    />
+                    <TimePicker value={slot.startTime} onChange={(v) =>
+                        handleTimeSlotChange(index, "startTime", v)} disabled={isLocked} />
                   </div>
 
                   <div className="w-full sm:w-1/3">
                     <Label className="sm:hidden">End Time</Label>
-                    <Input
-                      type="time"
-                      value={slot.endTime}
-                      disabled={isLocked}
-                      onChange={(e) =>
-                        handleTimeSlotChange(index, "endTime", e.target.value)
-                      }
-                    />
+                    <TimePicker value={slot.endTime} onChange={(v) =>
+                        handleTimeSlotChange(index, "endTime", v)} disabled={isLocked} />
                   </div>
 
                   {lab.timeSlots.length > 1 && (

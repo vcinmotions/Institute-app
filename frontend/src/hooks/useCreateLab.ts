@@ -20,10 +20,10 @@ export const useCreateLab = () => {
       console.log("GET LAB DATA FOR CREATION:", newLabData);
 
       // Return token for onSuccess
-      return { token };
+      return { token, kind: newLabData?.kind };
     },
 
-    onSuccess: async ({ token }) => {
+    onSuccess: async ({ token, kind }) => {
       try {
         // Refetch latest enquiries
         const updated = await getLab({
@@ -31,6 +31,7 @@ export const useCreateLab = () => {
           page: 1,
           limit: 5,
           sortField: "createdAt",
+          kind,
         });
 
         dispatch(setLab(updated.labs));

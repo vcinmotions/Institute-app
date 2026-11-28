@@ -143,9 +143,10 @@ export async function getAttendanceByBatch(req: Request, res: Response) {
       ? new Date(date as string)
       : new Date(new Date().setHours(0, 0, 0, 0));
 
-      const getBatch = await tenantPrisma.batch.findUnique({
+      const getBatch = await tenantPrisma.batch.findFirst({
         where: {
           id: Number(batchId),
+          clientAdminId: (user as any).clientAdminId, // never read another company's batch
         },
         include: {
           studentCourses: {
@@ -168,7 +169,7 @@ export async function getAttendanceByBatch(req: Request, res: Response) {
         },
       });
 
-      console.log("GET BATCH DETAIL IN ATTENDANCE SYDENT BY BATCH :", getBatch);
+      if (!getBatch) return res.status(404).json({ error: "Batch not found" });
 
     // ✅ Step 1: Get all ACTIVE students in this batch
     const activeStudentCourses = await tenantPrisma.studentCourse.findMany({
@@ -268,6 +269,7 @@ export async function getAttendanceByCourse(req: Request, res: Response) {
     const activeStudentCourses = await tenantPrisma.studentCourse.findMany({
       where: {
         courseId: Number(courseId),
+        clientAdminId: (user as any).clientAdminId,
         status: "ACTIVE", // only active students
       },
       include: {
@@ -469,6 +471,13 @@ export async function exportMonthlyAttendance(req: Request, res: Response) {
     const [year, monthNum] = (month as string).split("-").map(Number);
     const startDate = new Date(year, monthNum - 1, 1);
     const endDate = new Date(year, monthNum, 0);
+
+    // ✅ The batch must belong to the signed-in company
+    const ownBatch = await tenantPrisma.batch.findFirst({
+      where: { id: Number(batchId), clientAdminId: (req.user as any)?.clientAdminId },
+      select: { id: true },
+    });
+    if (!ownBatch) return res.status(404).json({ error: "Batch not found" });
 
     // ✅ Fetch active students in batch
     const activeStudents = await tenantPrisma.studentCourse.findMany({

@@ -58,7 +58,6 @@ export function runCentralMigrations() {
 
   const dbUrl = getCentralDbUrl();
 
-  console.log("📦 Running CENTRAL migrations:", dbUrl);
   console.log("basePath:", basePath);
   console.log("nodePath:", nodePath);
   console.log("prismaCLI:", prismaCLI);
@@ -96,7 +95,6 @@ export function runTenantMigrations() {
     const dbPath = path.join(tenantsDir, file);
     const dbUrl = `file:${dbPath.replace(/\\/g, "/")}`;
 
-    console.log("📦 Migrating tenant DB:", dbUrl);
 
     execSync(`"${nodePath}" "${prismaCLI}" db push --accept-data-loss --schema="${tenantSchema}"`, {
       env: {

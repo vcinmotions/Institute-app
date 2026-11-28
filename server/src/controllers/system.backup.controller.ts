@@ -1,70 +1,32 @@
 import { Request, Response } from "express";
-import { backupFullSystem } from "../utils/backUp";
-import { restoreBackup } from "../utils/restoreBackUp";
+import { backupStatus, runBackup, saveConfig } from "../services/backup.service";
+import { isSystemAdmin } from "../middlewares/master.auth.middleware";
+
+/**
+ * Backup management. Master (Institute Super) Admin only - enforced by masterAuthMiddleware on the routes.
+ * There is deliberately NO delete endpoint and NO HTTP restore: restoring replaces every database, so it is only
+ * possible from the desktop app's Restore screen on the server PC (see installer "perform-restore").
+ */
+const isMaster = isSystemAdmin;
 
 export async function backupController(req: Request, res: Response) {
-  try {
-    // ✅ USER FROM JWT (set by authMiddleware)
-    const user = req.user as any;
-
-    // 🔒 Only MASTER ADMIN allowed
-    if (!user || user.role !== "MASTER_ADMIN") {
-      return res.status(403).json({ error: "Unauthorized" });
-    }
-
-    console.log("📦 Backup requested by:", user.email);
-
-    const filePath = await backupFullSystem();
-
-    return res.status(200).json({
-      success: true,
-      filePath,
-    });
-
-  } catch (err) {
-    console.error("❌ Backup failed:", err);
-    return res.status(500).json({
-      success: false,
-      message: "Backup failed",
-    });
-  }
+  if (!isMaster(req)) return res.status(403).json({ error: "Unauthorized" });
+  const r = await runBackup("MANUAL");
+  if (!r.ok) return res.status(500).json({ success: false, message: r.error || "Backup failed", error: r.error });
+  return res.status(200).json({ success: true, filePath: r.file, externalError: r.externalError });
 }
 
-export async function restoreController(req: Request, res: Response) {
+export async function backupStatusController(req: Request, res: Response) {
+  if (!isMaster(req)) return res.status(403).json({ error: "Unauthorized" });
+  res.json(backupStatus());
+}
+
+export async function backupConfigController(req: Request, res: Response) {
+  if (!isMaster(req)) return res.status(403).json({ error: "Unauthorized" });
   try {
-    // const user = req.user as any;
-
-    // // 🔒 Only MASTER ADMIN allowed
-    // if (!user || user.role !== "MASTER_ADMIN") {
-    //   return res.status(403).json({ error: "Unauthorized" });
-    // }
-
-    const { filePath } = req.body;
-
-    if (!filePath || !filePath.endsWith(".enc")) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid file",
-      });
-    }
-
-    console.log("🔄 Restore requested");
-
-    await restoreBackup(filePath);
-
-    // ✅ give response first
-    res.status(200).json({ success: true });
-
-    // ⚠️ Important: kill server after restore
-    setTimeout(() => {
-      process.exit(0);
-    }, 500);
-
-  } catch (err) {
-    console.error("❌ Restore failed:", err);
-    return res.status(500).json({
-      success: false,
-      message: "Restore failed",
-    });
+    saveConfig(req.body ?? {});
+    res.json(backupStatus());
+  } catch (e: any) {
+    res.status(400).json({ error: e?.message || "Invalid settings" });
   }
 }

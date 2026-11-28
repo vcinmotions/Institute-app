@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import ModalCard from "@/components/common/ModalCard";
@@ -9,6 +11,7 @@ import { useEditCourse } from "@/hooks/useEditCourse";
 import Checkbox from "../input/Checkbox";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { textError, integerError, amountError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof CourseData, string>>;
 
@@ -126,24 +129,19 @@ export default function EditCourseForm({
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newCourse.name.trim()) {
-      newErrors.name = "Course name is required.";
-    }
-
-    if (!newCourse.durationMonths.trim()) {
-      newErrors.durationMonths = "Duration is required.";
-    }
-
-    if (!newCourse.totalAmount.trim()) {
-      newErrors.totalAmount = "Total course amount is required.";
-    }
+    // Same rules everywhere in the app (see lib/validation).
+    Object.assign(newErrors, onlyErrors({
+      name: textError(newCourse.name, "Course name", { required: true, min: 2, max: 100 }),
+      durationMonths: integerError(newCourse.durationMonths, "Duration (months)", { required: true, min: 1, max: 120 }),
+      totalAmount: amountError(newCourse.totalAmount, "Course amount", { required: true, positive: true }),
+    }));
 
     if (!newCourse.paymentType || newCourse.paymentType.length === 0) {
       newErrors.paymentType = "Please select at least one payment type.";
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -255,7 +253,7 @@ export default function EditCourseForm({
       scrollToError(validationErrors);
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -270,7 +268,7 @@ export default function EditCourseForm({
       scrollModalToTop();
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -305,7 +303,10 @@ export default function EditCourseForm({
             onCloseModal();
           }, 1000);
         },
-        onError: () => {
+        onError: (error: any) => {
+          // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+          setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           scrollModalToTop();
         },
       },
@@ -347,7 +348,6 @@ export default function EditCourseForm({
               <Label>Course Name *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Ex. Full Stack Developer"
                 value={titleCase(newCourse.name)}
@@ -360,7 +360,6 @@ export default function EditCourseForm({
               <Label>Duration (Months) *</Label>
               <Input
                 type="number"
-                tabIndex={2}
                 min={0}
                 placeholder="12"
                 value={newCourse.durationMonths}
@@ -374,7 +373,6 @@ export default function EditCourseForm({
               <Input
                 type="number"
                 min={0}
-                tabIndex={3}
                 placeholder="12000"
                 value={newCourse.totalAmount}
                 onChange={(e) => handleChange("totalAmount", e.target.value)}
@@ -463,14 +461,12 @@ export default function EditCourseForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={4}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={5}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

@@ -1,4 +1,7 @@
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateTimeField from "@/components/form/DateTimeField";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import ModalCard from "@/components/common/ModalCard";
 import Button from "@/components/ui/button/Button";
 import { useCreateNextFollowUp, useEditNextFollowUp } from "@/hooks/useCreateNextFollowUp";
@@ -8,6 +11,7 @@ import { useFollowUp } from "@/hooks/queries/useQueryFetchFollow";
 import TextArea from "../input/TextArea";
 import Alert from "@/components/ui/alert/Alert";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { textError } from "@/lib/validation";
 
 interface EditFollowUpModalProps {
   onClose: () => void;
@@ -69,12 +73,15 @@ export default function EditFollowUpModal({
 
   const validate = () => {
   const newErrors: Partial<FollowUpData> = {};
-  if (!remark.trim()) newErrors.remark = "Remark is required.";
+  {
+    const remarkErr = textError(remark, "Remark", { required: true, max: 500 });
+    if (remarkErr) newErrors.remark = remarkErr;
+  }
   if (!scheduledAt) newErrors.scheduledAt = "Schedule time is required.";
 
   
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -100,7 +107,7 @@ const handleSubmit = async () => {
 
       setTimeout(() => {
           setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -139,19 +146,18 @@ const handleSubmit = async () => {
       },
 
       onError: (error: any) => {
-        console.error("Failed to create follow-up:", error);
-        setErrors({ remark: "Failed to create follow-up. Please try again." });
+                setErrors({ remark: getApiErrorMessage(error, "Failed to save the follow-up. Please try again.") });
         // Optional: show error alert
         setAlert({
           show: true,
           title: "Error",
-          message: "Failed to create follow-up. Please try again.",
+          message: getApiErrorMessage(error, "Failed to save the follow-up. Please try again."),
           variant: "error",
         });
 
         setTimeout(
           () => setAlert({ show: false, title: "", message: "", variant: "" }),
-          2000,
+          6000,
         );
       },
     },
@@ -182,7 +188,6 @@ const handleSubmit = async () => {
 
           <TextArea
             ref={firstInputRef}
-            tabIndex={1}
             value={remark}
             className="w-full capitalize rounded border border-gray-300 px-3 py-2 pb-0 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
             onChange={(value) => setRemark(value)}
@@ -199,26 +204,19 @@ const handleSubmit = async () => {
         </label>
         <div className="relative w-full">
           <div>
-            <input
-              tabIndex={2}
-              type="datetime-local"
-              value={scheduledAt}
-              onChange={(e) => setScheduledAt(e.target.value)}
-              className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-400"
-            />
+            <DateTimeField value={scheduledAt} onChange={(v) => setScheduledAt(v)} />
             {errors.scheduledAt && (
               <p className="text-sm text-red-500">{errors.scheduledAt}</p>
             )}
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-3">
-          <Button size="sm" variant="outline" tabIndex={3} onClick={onClose}>
+          <Button size="sm" variant="outline" onClick={onClose}>
             Cancel
           </Button>
           <Button
             size="sm" 
             className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900"
-            tabIndex={4}
             onClick={handleSubmit}
           >
             Save Follow-Up

@@ -1,5 +1,8 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import TimePicker from "@/components/form/TimePicker";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import Button from "@/components/ui/button/Button";
@@ -12,6 +15,7 @@ import { useLabStore } from "@/store/labStore";
 import { useRouter } from "next/navigation";
 import { normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { textError, integerError } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof LabData, string>>;
 
@@ -28,7 +32,9 @@ interface LabData {
   timeSlots: TimeSlot[];
 }
 
-export default function LabForm() {
+export default function LabForm({ kind = "LAB" }: { kind?: "LAB" | "CLASS" }) {
+  const isClass = kind === "CLASS";
+  const noun = isClass ? "Class" : "Lab";
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: createLab } = useCreateLab();
   const { form, setField, reset } = useLabStore();
@@ -122,10 +128,12 @@ export default function LabForm() {
   // 🔹 Basic validation
   const validate = () => {
     const newErrors: FormErrors = {};
-    if (!lab.name.trim()) newErrors.name = "Lab name is required.";
-    // if (!lab.location.trim()) newErrors.location = "Location is required.";
-    if (!lab.totalPCs || lab.totalPCs <= 0)
-      newErrors.totalPCs = "Total PCs must be greater than 0." as any;
+    {
+      const nameErr = textError(lab.name, `${noun} name`, { required: true, max: 60 });
+      if (nameErr) newErrors.name = nameErr;
+      const pcsErr = integerError(lab.totalPCs, isClass ? "Seats" : "Total PCs", { required: true, min: 1, max: 1000 });
+      if (pcsErr) newErrors.totalPCs = pcsErr as any;
+    }
     if (
       !lab.timeSlots ||
       lab.timeSlots.length === 0 ||
@@ -141,7 +149,7 @@ export default function LabForm() {
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -164,7 +172,7 @@ export default function LabForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -182,13 +190,14 @@ export default function LabForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
 
     const normalizedLab = {
       ...lab,
+      kind,
       name: titleCase(lab.name),
       location: normalizeToLowercase(lab.location),
     }
@@ -206,7 +215,7 @@ export default function LabForm() {
         setAlert({
           show: true,
           title: "Success",
-          message: "Lab created successfully!",
+          message: `${noun} created successfully!`,
           variant: "Success",
         });
 
@@ -216,7 +225,10 @@ export default function LabForm() {
           router.back();
         }, 1000);
       },
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });
@@ -231,15 +243,15 @@ export default function LabForm() {
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Create Lab" />
+      <PageBreadcrumb pageTitle={`Create ${noun}`} />
 
       <div className="form-container">
         <div className="flex flex-col gap-6">
 
           {/* Header & Alerts */}
           <div className="border-b pb-4 dark:border-gray-700">
-            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">Lab Information</h2>
-            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new system Lab.</p>
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">{noun} Information</h2>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to log a new {isClass ? "classroom. A batch is created automatically for every time slot" : "system Lab"}.</p>
           </div>
 
           {/* Alert Messages */}
@@ -255,7 +267,7 @@ export default function LabForm() {
           {/* Form Grouping: Lab Details */}
           <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-5 dark:border-gray-800 dark:bg-slate-950">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
-              Lab Details
+              {noun} Details
             </h3>
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -264,7 +276,7 @@ export default function LabForm() {
                   if (inputRefs.current) inputRefs.current.name = el;
                 }}
               >
-                <Label>Lab Name *</Label>
+                <Label>{noun} Name *</Label>
                 <Input
                   ref={firstInputRef}
                   type="text"
@@ -301,7 +313,7 @@ export default function LabForm() {
                   if (inputRefs.current) inputRefs.current.totalPCs = el;
                 }}
               >
-                <Label>Total PCs *</Label>
+                <Label>{isClass ? "Seats (student capacity) *" : "Total PCs *"}</Label>
                 <Input
                   type="number"
                   min={0}
@@ -336,24 +348,13 @@ export default function LabForm() {
                     <div key={index} className="flex flex-wrap md:flex-nowrap items-center gap-3">
                       <Input
                         type="text"
-                        tabIndex={4}
                         placeholder="Day (e.g., Daily)"
                         value={slot.day}
                         onChange={(e) => handleTimeSlotChange(index, "day", e.target.value)}
                         className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                       />
-                      <Input
-                        type="time"
-                        value={slot.startTime}
-                        onChange={(e) => handleTimeSlotChange(index, "startTime", e.target.value)}
-                        className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                      />
-                      <Input
-                        type="time"
-                        value={slot.endTime}
-                        onChange={(e) => handleTimeSlotChange(index, "endTime", e.target.value)}
-                        className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                      />
+                      <TimePicker value={slot.startTime} onChange={(v) => handleTimeSlotChange(index, "startTime", v)} />
+                      <TimePicker value={slot.endTime} onChange={(v) => handleTimeSlotChange(index, "endTime", v)} />
                       {lab.timeSlots.length > 1 && (
                         <Button
                           size="sm"
@@ -400,7 +401,7 @@ export default function LabForm() {
               onClick={handleSubmit}
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             >
-              Save Lab
+              Save {noun}
             </Button>
           </div>
 

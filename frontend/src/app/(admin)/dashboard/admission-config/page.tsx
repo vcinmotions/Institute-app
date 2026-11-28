@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Enquiry() {
   return (
-    <RoleProtected allowedRoles={["ADMIN", "FRONT_DESK"]}>
+    <RoleProtected allowedRoles={["ADMIN"]} adminOnly>
       <AdmissionConfigPage />
     </RoleProtected>
   );

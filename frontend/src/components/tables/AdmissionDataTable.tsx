@@ -167,7 +167,7 @@ export default function AdmissionDataTable({
 
                     <TableCell className="px-3 py-1.5">
                       <Link
-                        href={`/dashboard/admission/edit?id=${(item.id)}`}
+                        data-perm="add:admission" href={`/dashboard/admission/edit?id=${(item.id)}`}
                         className="h-6 rounded-[4px] border border-slate-200 bg-white py-1 px-2.5 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Admission

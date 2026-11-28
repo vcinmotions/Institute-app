@@ -1,3 +1,4 @@
+import { SERVER_ORIGIN } from "@/lib/config";
 import React, { useState } from "react";
 import {
   Table,
@@ -113,7 +114,7 @@ export default function PaymentDataTable({
                                 src={
                                   item.student.photoUrl.startsWith("http")
                                     ? item.student.photoUrl
-                                    : `http://localhost:5001${item.student.photoUrl}`
+                                    : `${SERVER_ORIGIN}${item.student.photoUrl}`
                                 }
                                 alt="student"
                                 className="h-7 w-7 rounded-full object-cover"
@@ -178,7 +179,7 @@ export default function PaymentDataTable({
                       <TableCell className="px-3 py-1.5 text-center">
                         <button
                           type="button"
-                          onClick={() => handleEditClick(item)}
+                          data-perm="update:payment" onClick={() => handleEditClick(item)}
                           disabled={item.paymentStatus === "SUCCESS"}
                           className={`h-6 rounded-[4px] border px-2 text-[11px] font-medium shadow-sm transition ${item.paymentStatus === "SUCCESS"
                             ? "border-slate-100 bg-slate-50 text-slate-400 cursor-not-allowed dark:border-slate-900 dark:bg-slate-900/50"

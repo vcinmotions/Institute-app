@@ -31,6 +31,7 @@ type FollowUpModalType =
   | null;
 
 type LabDataTableProps = {
+  kind?: "LAB" | "CLASS";
   lab: any[];
   courses: any[];
   loading: boolean;
@@ -40,6 +41,7 @@ type LabDataTableProps = {
 };
 
 export default function LabDataTable({
+  kind = "LAB",
   lab,
   courses,
   loading,
@@ -95,10 +97,10 @@ export default function LabDataTable({
             <TableHeader className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90">
               <TableRow>
                 <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Labs
+                  {kind === "CLASS" ? "Classes" : "Labs"}
                 </TableCell>
                 <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Total Pcs
+                  {kind === "CLASS" ? "Seats" : "Total Pcs"}
                 </TableCell>
                 <TableCell isHeader className="h-9 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   <button
@@ -168,10 +170,10 @@ export default function LabDataTable({
                         </TableCell>
 
                         <TableCell className="px-3 py-1.5">
-                          <Tooltip className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5" content="Edit Lab">
+                          <Tooltip className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5" content={kind === "CLASS" ? "Edit Class" : "Edit Lab"}>
                             <button
                               className="rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition"
-                              onClick={() => handleEditLab(item)}
+                              data-perm={kind === "CLASS" ? "update:class" : "update:lab"} onClick={() => handleEditLab(item)}
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -196,7 +198,7 @@ export default function LabDataTable({
                                     🧪 {item.name}
                                   </h3>
                                   <p className="text-[10px] text-slate-400 dark:text-slate-500">
-                                    📍 {item.location} • {item.totalPCs} PCs total
+                                    📍 {item.location} • {item.totalPCs} {kind === "CLASS" ? "seats" : "PCs"} total
                                   </p>
                                 </div>
                                 {item.isActive ? (
@@ -238,7 +240,7 @@ export default function LabDataTable({
                                           <span className="text-[9px] opacity-70">{slot.day}</span>
                                         </div>
                                         <div className="mt-0.5 font-semibold">
-                                          {isFull ? "No PCs available ❌" : `${free}/${total} Available`}
+                                          {isFull ? (kind === "CLASS" ? "Class full ❌" : "No PCs available ❌") : `${free}/${total} Available`}
                                         </div>
                                       </div>
                                     </div>
@@ -257,7 +259,7 @@ export default function LabDataTable({
                       className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                       colSpan={5}
                     >
-                      No Lab found.
+                      {kind === "CLASS" ? "No Class found." : "No Lab found."}
                     </TableCell>
                   </TableRow>
                 )}
@@ -271,7 +273,7 @@ export default function LabDataTable({
       )}
 
       {selectedLabId !== null && labDetail === true && (
-        <EditLabForm onCloseModal={handleCloseModal} labData={labData} />
+        <EditLabForm onCloseModal={handleCloseModal} labData={labData} kind={kind} />
       )}
     </div>
   );

@@ -25,16 +25,15 @@ if (isProd) {
 
 console.log("APP_ENV IN SERVER:", process.env.APP_ENV);
 console.log("DB_PROVIDER IN SERVER:", process.env.DB_PROVIDER);
-console.log("CENTRAL_DATABASE_URL  IN SERVER:", process.env.CENTRAL_DATABASE_URL);
-console.log("TENANT_DATABASE_URL  IN SERVER:", process.env.TENANT_DATABASE_URL);
 
 // 🔥 GET CENTRAL SQLITE DB URL
     const centralDbUrl = getCentralDbUrl();
-    console.log("📀 CENTRAL SQLITE DB URL IN SERVER:", centralDbUrl);
 
 const PORT = process.env.PORT || 5001;
-const server = app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// HOST: "127.0.0.1" = this PC only (standalone), "0.0.0.0" = reachable on the LAN (server PC).
+const HOST = process.env.HOST || "0.0.0.0";
+const server = app.listen(Number(PORT), HOST, () => {
+  console.log(`Server running on http://${HOST}:${PORT}`);
 });
 
 // Start socket server

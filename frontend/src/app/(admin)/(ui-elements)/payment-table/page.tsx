@@ -1,4 +1,5 @@
 "use client";
+import Can from "@/components/common/Can";
 import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
@@ -135,13 +136,13 @@ export default function PaymentTable() {
               ]}
             />
 
-            <button
+            <Can module="payment" action="add"><button
               type="button"
               onClick={handleCreateClick}
               className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
             >
               + Create Record
-            </button>
+            </button></Can>
           </div>
         </div>
 

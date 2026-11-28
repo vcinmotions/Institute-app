@@ -64,6 +64,9 @@ export default function TestDataTable({
                                 {/* <TableCell isHeader className="h-9 w-[16%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Action
                                 </TableCell> */}
+                                <TableCell isHeader className="h-9 w-[12%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Marks
+                                </TableCell>
                                 <TableCell isHeader className="h-9 w-[10%] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Edit
                                 </TableCell>
@@ -110,7 +113,7 @@ export default function TestDataTable({
 
                                                 {/* <TableCell className="px-3 py-1.5">
                                                 <Button
-                                                    onClick={() => handlePublish(item)}
+                                                    data-perm="update:test" onClick={() => handlePublish(item)}
                                                     // Dynamic disabling state rule: lock out if already published
                                                     disabled={!isDraft}
                                                     size="sm"
@@ -125,13 +128,23 @@ export default function TestDataTable({
                                             </TableCell> */}
 
                                                 <TableCell className="px-3 py-1.5">
+                                                    <button
+                                                        className={item.status === "PUBLISHED" ? "rounded border border-brand-500 px-2 py-0.5 text-[11px] font-medium text-brand-600 hover:bg-brand-50 dark:text-brand-400" : "cursor-not-allowed rounded border border-slate-200 px-2 py-0.5 text-[11px] text-slate-400 opacity-50"}
+                                                        disabled={item.status !== "PUBLISHED"}
+                                                        data-perm="update:test" onClick={() => router.push(`/dashboard/test/marks?id=${item.id}`)}
+                                                    >
+                                                        Enter marks
+                                                    </button>
+                                                </TableCell>
+
+                                                <TableCell className="px-3 py-1.5">
                                                     <Tooltip
                                                         className="rounded bg-slate-800 text-[10px] text-white px-1.5 py-0.5"
                                                         content="Edit Test"
                                                     >
                                                         <button
                                                             className={item.status === "PUBLISHED" ? "opacity-30 cursor-not-allowed text-slate-600 dark:text-slate-400" : "rounded p-0.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"}
-                                                            onClick={() => handleEditLab(item)}
+                                                            data-perm="update:test" onClick={() => handleEditLab(item)}
                                                             disabled={item.status === "PUBLISHED"}
                                                         >
                                                             <svg
@@ -156,7 +169,7 @@ export default function TestDataTable({
                                 ) : (
                                     <TableRow>
                                         <TableCell
-                                            colSpan={6}
+                                            colSpan={7}
                                             className="py-8 text-center text-xs text-slate-400 dark:text-slate-500"
                                         >
                                             No Test found.

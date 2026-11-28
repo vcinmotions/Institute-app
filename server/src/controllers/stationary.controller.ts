@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 import { Request, Response } from "express";
 import { titleCase } from "../utils/Normalize";
 import { stationaryQuerySchema } from "../validators/stationary.query";
@@ -149,7 +150,9 @@ export async function editStationeryItemController(
   req: Request,
   res: Response
 ) {
-  const { id, name, quantityAvailable } = req.body;
+  const { name, quantityAvailable } = req.body;
+  // id may come from the URL (/edit-stationary/:id) or the body
+  const id = req.body.id ?? req.params.id;
 
   console.log("EDIT STATIONERY DATA:", req.body);
 
@@ -269,7 +272,7 @@ export async function getStationaryController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);

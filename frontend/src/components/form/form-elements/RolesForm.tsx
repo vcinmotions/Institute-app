@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
@@ -68,7 +70,7 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
 
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -109,7 +111,7 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -125,7 +127,7 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -144,7 +146,10 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
         }, 3000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         // You already handle error via redux + toast
       },
     });
@@ -166,7 +171,6 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
           <Label>Name</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="Ex. John Doe"
             value={formData.name}
@@ -179,7 +183,6 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
           <Label>Email</Label>
           <Input
             type="text"
-            tabIndex={2}
             placeholder="user@example.com"
             value={formData.email}
             onChange={(e) => handleChange("email", e.target.value)}
@@ -193,7 +196,6 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
           <Label>Password</Label>
           <Input
             type="text"
-            tabIndex={3}
             placeholder="••••••••"
             value={formData.password}
             onChange={(e) => handleChange("password", e.target.value)}
@@ -207,7 +209,6 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
           <Label>Assign Role</Label>
           <div className="relative">
             <Select
-              tabIndex={4}
               options={roles}
               placeholder="Select Role"
               onChange={(value) => handleChange("role", value)}
@@ -223,13 +224,12 @@ export default function RolesForm({ onCloseModal }: DefaultInputsProps) {
         <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
           <Button
             size="sm"
-            tabIndex={5}
             variant="outline"
             onClick={onCloseModal}
           >
             Close
           </Button>
-          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={6} onClick={handleSubmit}>
+          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

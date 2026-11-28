@@ -30,6 +30,7 @@ type AdmissionPayload = {
   gender: string;
   religion?: string;
   profilePicture?: File | null;
+  documents?: File[];
 };
 
 export const useCreateAdmission = () => {
@@ -38,7 +39,7 @@ export const useCreateAdmission = () => {
 
   return useMutation({
     mutationFn: async (payload: AdmissionPayload) => {
-      const { token, profilePicture, advancePayments, courseData, ...rest } = payload;
+      const { token, profilePicture, documents, advancePayments, courseData, ...rest } = payload;
 
       console.log("🔥 Received Payload inside Mutation:", payload);
 
@@ -55,6 +56,8 @@ export const useCreateAdmission = () => {
       if (payload.profilePicture) {
         formData.append("profilePicture", payload.profilePicture);
       }
+      // Several documents under one field name (the server takes up to 10).
+      (documents ?? []).forEach((f) => formData.append("documents", f));
 
       // ✅ Stringify nested structural collections cleanly
       if (payload.courseData) {
@@ -75,7 +78,9 @@ export const useCreateAdmission = () => {
       // This tells TanStack Query to immediately trigger a background refetch for the table grid.
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["won-admissions"] }),
-        queryClient.invalidateQueries({ queryKey: ["enquiry"] }) // Invalidates the master enquiries view too since a lead was converted
+        queryClient.invalidateQueries({ queryKey: ["enquiry"] }), // Invalidates the master enquiries view too since a lead was converted
+        queryClient.invalidateQueries({ queryKey: ["student"] }), // New admission creates a student
+        queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] }),
       ]);
 
       // ✅ 2. Reset local filter fields cleanly 

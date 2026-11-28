@@ -1,5 +1,8 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateField from "@/components/form/input/DateField";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Button from "@/components/ui/button/Button";
@@ -13,6 +16,7 @@ import { countries } from "@/components/common/CountriesCode";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { useCreateOpeningBalance } from "@/hooks/useCreateOpeningBalance";
 import { normalizePhone, titleCase } from "@/app/utils/Normalize";
+import { personNameError, mobileError, amountError } from "@/lib/validation";
 
 interface OpeningBalanceFormProps {
   onCloseModal: () => void;
@@ -139,13 +143,15 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
   // 🔹 Basic validation
   const validate = () => {
     const newErrors: Partial<OpeningBalanceData> = {};
-    if (!student.name.trim()) newErrors.name = "Student name is required.";
-    if (!student.contact.trim()) newErrors.contact = "Contact is required.";
-    if (!student.dueAmount || student.dueAmount <= 0)
-      newErrors.dueAmount = "Amount must be greater than 0." as any;
+    const nameErr = personNameError(student.name, "Student name");
+    if (nameErr) newErrors.name = nameErr;
+    const contactErr = mobileError(student.contact, "Contact", true);
+    if (contactErr) newErrors.contact = contactErr;
+    const dueErr = amountError(student.dueAmount, "Amount", { required: true, positive: true });
+    if (dueErr) newErrors.dueAmount = dueErr as any;
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -160,7 +166,7 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -176,7 +182,7 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -209,7 +215,10 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
         }, 3000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         // You already handle error via redux + toast
       },
     });
@@ -250,7 +259,6 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
               <Label>Student Name *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Enter Student Name"
                 value={student.name}
@@ -265,7 +273,6 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
                 <PhoneInput
                   selectPosition="start"
                   countries={countries}
-                  tabIndex={2}
                   onKeyDown={handleKeyDown}
                   placeholder="Enter Contact"
                   onChange={handlePhoneNumberChange}
@@ -279,7 +286,6 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
             <div>
               <Label>Due Amount *</Label>
               <Input
-                tabIndex={3}
                 type="number"
                 min={0}
                 placeholder="Ex. 1500"
@@ -293,13 +299,9 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
 
             <div>
               <Label>Admission Date</Label>
-              <Input
-                type="text"
-                tabIndex={4}
-                placeholder="DD-MM-YYYY"
+              <DateField
                 className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                value={student.admissionDate}
-                onChange={(e) => handleDateChange("admissionDate", e.target.value)}
+                value={student.admissionDate} onChange={(v) => handleDateChange("admissionDate", v)}
               />
               {errors.admissionDate && (
                 <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>
@@ -314,14 +316,12 @@ export default function OpeningBalanceForm({ onCloseModal }: OpeningBalanceFormP
           <Button
             size="sm"
             variant="outline"
-            tabIndex={5}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={6}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

@@ -32,3 +32,9 @@ Thumbs.db
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Editor local-history snapshots (contain copies of .env secrets)
+.history/
+
+# Prisma temp engine files left by an interrupted generate
+*.dll.node.tmp*

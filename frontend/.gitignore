@@ -37,3 +37,8 @@ yarn-error.log*
 next-env.d.ts
 
 .env
+# Release build output (built separately from the dev .next)
+/.next-build/
+
+# live portal build env (server only)
+.env.production

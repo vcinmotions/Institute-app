@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 import { Request, Response } from "express";
 import {
   getReportDataService,
@@ -39,7 +40,7 @@ export async function getDashboardReportController(req: Request, res: Response) 
     });
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
     console.error("Error fetching report data:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -84,7 +85,7 @@ export async function downloadExcelReportController(req: Request, res: Response)
     return res.send(buffer);
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
     console.error("Error generating Excel report:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -126,7 +127,7 @@ export async function downloadPdfReportController(req: Request, res: Response) {
     return res.send(buffer);
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
     console.error("Error generating PDF report:", err);
     return res.status(500).json({ error: "Internal server error" });

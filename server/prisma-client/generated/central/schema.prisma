@@ -4,10 +4,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("CENTRAL_DATABASE_URL")
 }
 
+// ✅ Copy all models from Postgres schema here
 model SuperAdmin {
   id          String   @id @default(uuid())
   name        String
@@ -27,7 +28,7 @@ model SuperAdmin {
 
   role Role @default(MASTER_ADMIN)
 
-  // 🆕 ADD THESE
+  // 🆕 ADD THESE (MUST MATCH POSTGRES)
   basicComplete   Boolean @default(false)
   addressComplete Boolean @default(false)
 }
@@ -48,14 +49,123 @@ model Tenant {
   zipCode           String
   instituteName     String   @unique
   tenantId          String   @unique
-  slug              String   @unique // 👈 REQUIRED
-  email             String?  @unique // add this line
+  slug              String   @unique
+  email             String?  @unique
+  businessEmail     String?
   password          String?
   encryptedPassword String
   dbUrl             String
+  parentTenantId    String? // set when this tenant is a company under a master institute
+  loginCode         String?  @unique // short institute code staff type after @ when signing in, e.g. google@2026
   createdAt         DateTime @default(now())
 }
 
 enum Role {
   MASTER_ADMIN
+}
+
+// Subscription price list, managed by the master admin on the web portal.
+model SubscriptionPlan {
+  id        String   @id @default(uuid())
+  code      String   @unique // SIX_MONTH | ONE_YEAR
+  name      String
+  months    Int
+  price     Float
+  currency  String   @default("INR")
+  active    Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+// One subscription per institute, written by the web portal after payment.
+model PortalSubscription {
+  id            String   @id @default(uuid())
+  email         String   @unique // tenant login email
+  clientId      String // tenant.tenantId
+  plan          String   @default("NONE")
+  startDate     DateTime @default(now())
+  expiryDate    DateTime @default(now())
+  status        String   @default("EXPIRED") // ACTIVE | EXPIRED | SUSPENDED | REVOKED
+  syncTokenHash String?
+  maxUsers      Int      @default(1) // max simultaneous logins bought
+  updatedAt     DateTime @updatedAt
+}
+
+model PortalPayment {
+  id        String   @id @default(uuid())
+  email     String
+  planCode  String
+  amount    Float
+  currency  String   @default("INR")
+  maxUsers  Int      @default(1)
+  orderId   String   @unique
+  paymentId String?  @unique
+  status    String   @default("CREATED") // CREATED | PAID | FAILED
+  createdAt DateTime @default(now())
+}
+
+// SaaS owner account for the hosted portal (/saas/login). Separate from the
+// per-install MASTER_ADMIN used inside the EXE.
+model SaasAdmin {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+// Global settings shared by every EXE client (key -> JSON string).
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+// ---- EXE activation keys & device tracking (hosted portal) ----
+// One key belongs to one institute + company and allows `maxActivations` PCs.
+model ActivationKey {
+  id               String             @id @default(uuid())
+  key              String             @unique // VCIN-XXXX-XXXX-XXXX-XXXX
+  tenantId         String // master institute Tenant.id
+  instituteName    String
+  companyName      String
+  maxActivations   Int                @default(1)
+  transferLimit    Int                @default(3) // how many times a PC may be deactivated/replaced
+  transfersUsed    Int                @default(0)
+  status           String             @default("ACTIVE") // ACTIVE | REVOKED
+  firstActivatedAt DateTime?
+  createdAt        DateTime           @default(now())
+  // One company has exactly two keys: SERVER (1 PC, the local server) and CLIENT (unlimited client PCs).
+  companyId        String? // ClientAdmin.id inside the institute database
+  kind             String             @default("SERVER") // SERVER | CLIENT
+  devices          ActivationDevice[]
+
+  @@unique([tenantId, companyId, kind])
+}
+
+model ActivationDevice {
+  id              String        @id @default(uuid())
+  activationKeyId String
+  deviceId        String
+  deviceName      String
+  os              String        @default("")
+  status          String        @default("ACTIVE") // ACTIVE | INACTIVE
+  activatedAt     DateTime      @default(now())
+  lastVerifiedAt  DateTime      @default(now())
+  deactivatedAt   DateTime?
+  activationKey   ActivationKey @relation(fields: [activationKeyId], references: [id], onDelete: Cascade)
+
+  @@unique([activationKeyId, deviceId])
+}
+
+// ---- Local server only: client PCs (laptops / desktops) that confirmed the company's Client key ----
+model ClientDevice {
+  id          String   @id @default(uuid())
+  deviceId    String   @unique
+  deviceName  String
+  os          String   @default("")
+  tokenHash   String
+  status      String   @default("ACTIVE") // ACTIVE | REVOKED
+  confirmedAt DateTime @default(now())
+  lastSeenAt  DateTime @default(now())
+  lastIp      String?
 }

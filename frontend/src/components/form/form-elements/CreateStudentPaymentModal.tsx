@@ -1,5 +1,7 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateField from "@/components/form/input/DateField";
 import React, { useEffect, useRef, useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
@@ -11,6 +13,7 @@ import Alert from "@/components/ui/alert/Alert";
 import { useCreateStudentPayment } from "@/hooks/useCreateStudentPayment";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { paymentModeOptions } from "@/components/common/Options";
+import { amountError, dateError } from "@/lib/validation";
 
 interface CreateStudentPaymentModalProps {
   onCloseModal: () => void;
@@ -92,8 +95,13 @@ export default function CreateStudentPaymentModal({
   const validate = () => {
     const newErrors: Partial<PaymentData> = {};
 
-    if (!amountPaid.trim()) newErrors.amountPaid = "Amount is required.";
-    if (!paymentDate.trim()) newErrors.paymentDate = "Date is required.";
+    const due = Number(payment?.amountDue);
+    const amountErr =
+      amountError(amountPaid, "Amount", { required: true, positive: true }) ||
+      (Number.isFinite(due) && due >= 0 && Number(amountPaid) > due ? `Amount cannot be more than the amount due (₹${due}).` : "");
+    if (amountErr) newErrors.amountPaid = amountErr;
+    const dateErr = dateError(paymentDate, "Payment date", { required: true, notFuture: true });
+    if (dateErr) newErrors.paymentDate = dateErr;
     if (!paymentMode.trim()) newErrors.paymentMode = "Mode is required.";
 
     // 👇 Ensure extra information is captured when using non-cash options
@@ -105,7 +113,7 @@ export default function CreateStudentPaymentModal({
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -124,7 +132,7 @@ export default function CreateStudentPaymentModal({
         variant: "error",
       });
       scrollToError(validationErrors);
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 3000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -136,7 +144,7 @@ export default function CreateStudentPaymentModal({
         message: "Token not found. Please log in again.",
         variant: "error",
       });
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 3000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -221,7 +229,6 @@ export default function CreateStudentPaymentModal({
               <Label>Amount Paid *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="number"
                 placeholder="Enter amount"
                 value={amountPaid}
@@ -238,12 +245,7 @@ export default function CreateStudentPaymentModal({
             {/* Payment Date Field */}
             <div>
               <Label>Payment Date (DD-MM-YYYY) *</Label>
-              <Input
-                tabIndex={2}
-                type="text"
-                placeholder="DD-MM-YYYY"
-                value={paymentDate}
-                onChange={(e) => handleDateChange(e.target.value)}
+              <DateField value={paymentDate} onChange={(v) => handleDateChange(v)}
               />
               {errors.paymentDate && (
                 <p className="mt-1 text-sm text-red-500">{errors.paymentDate}</p>
@@ -265,7 +267,6 @@ export default function CreateStudentPaymentModal({
               <Label>Select Mode *</Label>
               <div className="relative">
                 <Select
-                  tabIndex={3}
                   options={paymentModeOptions}
                   placeholder="Select payment mechanism"
                   value={paymentMode}
@@ -333,14 +334,12 @@ export default function CreateStudentPaymentModal({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={4}
             onClick={onCloseModal}
           >
             Cancel
           </Button>
           <Button
             size="sm"
-            tabIndex={5}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >

@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import ModalCard from "@/components/common/ModalCard";
@@ -77,7 +79,7 @@ export default function CompanyForm({ onCloseModal }: DefaultInputsProps) {
     });
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return Object.keys(newErrors).length === 0;
   };
@@ -187,7 +189,10 @@ export default function CompanyForm({ onCloseModal }: DefaultInputsProps) {
       }, 3000);
     },
 
-    onError: () => {
+    onError: (error: any) => {
+      // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+      setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       // You already handle error via redux + toast
     },
   });
@@ -320,12 +325,10 @@ export default function CompanyForm({ onCloseModal }: DefaultInputsProps) {
                 value: s.isoCode,
               }))}
               placeholder="Select State"
+              searchable
               onChange={(value) => handleChange("state", value)}
               defaultValue={newCompany.state}
             />
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
           </div>
           {errors.country && (
             <p className="text-sm text-red-500">{errors.country}</p>
@@ -341,6 +344,7 @@ export default function CompanyForm({ onCloseModal }: DefaultInputsProps) {
               value: c.name, // city name is fine
             }))}
             placeholder="Select City"
+            searchable
             onChange={(value) => handleChange("city", value)}
             defaultValue={newCompany.city}
           />

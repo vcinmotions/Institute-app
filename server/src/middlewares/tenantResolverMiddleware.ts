@@ -86,12 +86,11 @@ import { getTenantPrisma } from "../prisma-client/tenant-client";
 import path from "path";
 import dotenv from "dotenv";
 import { getUserDataPath, isPackaged } from "./runtimePaths";
-import { getTenantDbUrl } from "../utils/envLoader";
+import { getTenantDbUrl, activeEnvFile } from "../utils/envLoader";
 import { normalizeEmailInput, normalizeLoginInput } from "../utils/normalizer/loginNormalizer";
 
 // Decide environment
-const envFile =
-  process.env.APP_ENV === "prod" ? ".env.prod" : ".env.dev";
+const envFile = activeEnvFile();
 
   
   const rootDir = isPackaged
@@ -112,7 +111,6 @@ export async function tenantResolverMiddleware(
   try {
     const { email } = req.body;
 
-    console.log("login data:", email,);
     
       const normalizeEmail = normalizeEmailInput({ email });
 
@@ -193,7 +191,6 @@ export async function tenantResolverMiddleware(
 
     const getALlTenant = await centralPrisma.tenant.findMany({});
 
-    console.log("GET ALL TENANT IN CENTRL DB;", getALlTenant);
 
     // 4️⃣ Try to find tenant by domain or name
     // const domainTenant = await centralPrisma.tenant.findFirst({
@@ -203,8 +200,9 @@ export async function tenantResolverMiddleware(
     // });
 
     // 4️⃣ Find tenant by slug
+    // name@2026 (institute login code) or the older name@institute-slug
     const domainTenant = await centralPrisma.tenant.findFirst({
-      where: { slug },
+      where: { OR: [{ slug }, { loginCode: slug }] },
     });
 
     if (domainTenant) {

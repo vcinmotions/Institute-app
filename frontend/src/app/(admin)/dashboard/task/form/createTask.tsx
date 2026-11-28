@@ -1,5 +1,8 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useCourseStore } from "@/store/courseStore";
 import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -73,7 +76,7 @@ export default function TaskForm() {
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: batchLabel(b),
   }));
 
   const courseOptions = course.map((course: any) => ({
@@ -106,7 +109,7 @@ export default function TaskForm() {
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -137,7 +140,7 @@ export default function TaskForm() {
       scrollToError(validationErrors);
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -177,7 +180,10 @@ export default function TaskForm() {
           router.back();
         }, 1000);
       },
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });
@@ -243,7 +249,6 @@ export default function TaskForm() {
                 <Label>Select Course *</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={2}
                     options={courseOptions}
                     placeholder="Choose course option"
                     onChange={(value) => handleChange("courseId", value)}
@@ -263,7 +268,6 @@ export default function TaskForm() {
                 <Label>Select Batch *</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={3}
                     options={batchOptions}
                     placeholder="Choose batch timetable"
                     onChange={(value) => handleChange("batchId", value)}

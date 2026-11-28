@@ -897,11 +897,11 @@ export async function financialSummaryController(req: Request, res: Response) {
   const [income, expense] = await Promise.all([
     tenantPrisma.financialRecord.aggregate({
       _sum: { amount: true },
-      where: { clientAdminId, recordType: "INCOME" },
+      where: { clientAdminId, recordType: "INCOME", ...dateFilter },
     }),
     tenantPrisma.financialRecord.aggregate({
       _sum: { amount: true },
-      where: { clientAdminId, recordType: "EXPENSE" },
+      where: { clientAdminId, recordType: "EXPENSE", ...dateFilter },
     }),
   ]);
 
@@ -915,7 +915,7 @@ export async function financialSummaryController(req: Request, res: Response) {
   const breakdown = await tenantPrisma.financialRecord.groupBy({
     by: ["recordType"],
     _sum: { amount: true },
-    where: { clientAdminId },
+    where: { clientAdminId, ...dateFilter },
   });
 
   console.log("get finanicial breakdown", breakdown);
@@ -1016,17 +1016,18 @@ export async function outstandingReportController(req: Request, res: Response) {
   // Optional query filters: ?from=2025-01-01&to=2025-12-31&export=excel
   const { from, to, export: exportType } = req.query;
 
+  // StudentFee has no "date" field; the date range applies to the due date.
   const dateFilter: any = {};
   if (from || to) {
-    dateFilter.date = {};
-    if (from) dateFilter.date.gte = new Date(from as string);
-    if (to) dateFilter.date.lte = new Date(to as string);
+    dateFilter.dueDate = {};
+    if (from) dateFilter.dueDate.gte = new Date(from as string);
+    if (to) dateFilter.dueDate.lte = new Date(to as string);
   }
 
   const [income] = await Promise.all([
     tenantPrisma.studentFee.aggregate({
       _sum: { amountDue: true },
-      where: { clientAdminId, paymentStatus: "PENDING" },
+      where: { clientAdminId, paymentStatus: "PENDING", ...dateFilter },
     }),
   ]);
 

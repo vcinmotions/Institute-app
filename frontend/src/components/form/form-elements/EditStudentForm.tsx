@@ -1,6 +1,8 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useState, useEffect, useRef } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
 import { RootState } from "@/store";
@@ -22,6 +24,8 @@ import { useFetchEnquiryById } from "@/hooks/queries/useQueryFetchEnquiry";
 import { setBatches } from "@/store/slices/batchSlice";
 import { getBatch } from "@/lib/api";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { mobileError, emailError, personNameError, dateError, onlyErrors } from "@/lib/validation";
+import StudentDocuments from "@/components/student/StudentDocuments";
 
 interface DefaultInputsProps {
   onCloseModal: () => void;
@@ -95,7 +99,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
   const modalBodyRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
   const { inputRefs, scrollToError } = useScrollToError();
-  const { mutate: editStudent } = useEditStudent();
+  const { mutateAsync: editStudent } = useEditStudent();
 
   // Constants
   const countries = [
@@ -200,17 +204,24 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
 
     setErrors((prev) => ({
       ...prev,
-      [field]: digitsOnly.length === 0 || digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+      [field]: mobileError(digitsOnly, field === "contact" ? "Contact number" : "Parent's contact number", field === "contact"),
     }));
   };
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!newEnquiry.name.trim()) newErrors.name = "Student name is required.";
-    if (!newEnquiry.contact.trim()) newErrors.contact = "Contact number is required.";
+    // Same rules as the server, so nothing is rejected after saving.
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newEnquiry.name, "Student name"),
+      contact: mobileError(newEnquiry.contact, "Contact number", true),
+      email: emailError(newEnquiry.email),
+      parentsContact: mobileError(filledEnquiryData.parentsContact, "Parent's contact number"),
+      fatherName: personNameError(filledEnquiryData.fatherName, "Father's name", false),
+      dob: dateError(filledEnquiryData.dob, "Date of birth", { notFuture: true }),
+    }));
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -231,7 +242,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
 
       scrollToError(validationErrors);
 
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 3000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -243,7 +254,7 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
         message: "Token not found. Please log in again.",
         variant: "error",
       });
-      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), 3000);
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -283,7 +294,10 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
       });
       setTimeout(() => onCloseModal(), 1500);
     } catch (error) {
-      console.error(error);
+      setShowChangeLog(false);
+      modalBodyRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+      setAlert({ show: true, title: "Update failed", message: getApiErrorMessage(error), variant: "error" });
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
     }
   };
 
@@ -313,7 +327,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Input
                 type="text"
                 ref={firstInputRef}
-                tabIndex={1}
                 placeholder="e.g. John Doe"
                 value={newEnquiry.name}
                 onChange={(e) => handleBasicChange("name", e.target.value)}
@@ -326,7 +339,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Email</Label>
               <div className="relative">
                 <Input
-                  tabIndex={2}
                   placeholder="info@gmail.com"
                   type="email"
                   className="w-full rounded border border-gray-300 bg-white pl-[45px] pr-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -343,7 +355,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="contact">
               <Label>Student Contact <span className="text-red-500">*</span></Label>
               <PhoneInput
-                tabIndex={3}
                 selectPosition="start"
                 countries={countries}
                 placeholder="+91 00000 00000"
@@ -356,7 +367,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="parentsContact">
               <Label>Alternate Contact (Parents)</Label>
               <PhoneInput
-                tabIndex={4}
                 selectPosition="start"
                 countries={countries}
                 placeholder="+91 55555 00000"
@@ -370,7 +380,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Father's Name</Label>
               <Input
                 type="text"
-                tabIndex={5}
                 placeholder="e.g. Robert Doe"
                 value={filledEnquiryData.fatherName}
                 onChange={(e) => handleExtendedChange("fatherName", e.target.value)}
@@ -381,7 +390,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="dob">
               <Label>Date Of Birth</Label>
               <Input
-                tabIndex={6}
                 type="date"
                 value={filledEnquiryData.dob}
                 onChange={(e) => handleExtendedChange("dob", e.target.value)}
@@ -394,7 +402,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Gender</Label>
               <div className="relative">
                 <Select
-                  tabIndex={7}
                   options={genders}
                   placeholder="Select Gender"
                   onChange={(value) => handleExtendedChange("gender", value)}
@@ -411,7 +418,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Qualification</Label>
               <Input
                 type="text"
-                tabIndex={8}
                 placeholder="e.g. B.Tech"
                 value={filledEnquiryData.qualification}
                 onChange={(e) => handleExtendedChange("qualification", e.target.value)}
@@ -432,7 +438,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
               <Label>Select ID Proof</Label>
               <div className="relative">
                 <Select
-                  tabIndex={9}
                   options={options}
                   placeholder="Select an option"
                   value={filledEnquiryData.idProofType}
@@ -453,7 +458,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
                 Number
               </Label>
               <Input
-                tabIndex={10}
                 type="text"
                 placeholder="Enter ID Number"
                 onChange={(e) => handleExtendedChange("idProofNumber", e.target.value)}
@@ -465,7 +469,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="residentialAddress">
               <Label>Residential Address</Label>
               <Input
-                tabIndex={11}
                 type="text"
                 placeholder="e.g. Mumbai, Maharashtra"
                 value={filledEnquiryData.residentialAddress}
@@ -477,7 +480,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
             <div data-master="permenantAddress">
               <Label>Permanent Address</Label>
               <Input
-                tabIndex={12}
                 type="text"
                 placeholder="e.g. Pune, Maharashtra"
                 value={filledEnquiryData.permenantAddress}
@@ -488,12 +490,19 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
           </div>
         </div>
 
+        {/* Documents: saved right away (not with "Save Changes") */}
+        {newEnquiry.id && (
+          <div className="mt-2">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">Documents</h3>
+            <StudentDocuments studentId={newEnquiry.id} />
+          </div>
+        )}
+
         {/* Action Bar */}
         <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
           <Button
             size="sm"
             variant="outline"
-            tabIndex={13}
             onClick={onCloseModal}
             className="min-w-[100px] rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           >
@@ -502,7 +511,6 @@ export default function EditStudentForm({ onCloseModal, student }: DefaultInputs
           <Button
             size="sm"
             variant="primary"
-            tabIndex={14}
             onClick={handleSubmit}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
           >

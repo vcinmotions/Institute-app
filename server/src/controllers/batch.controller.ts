@@ -1,12 +1,21 @@
+import { formatZodError } from "../utils/httpErrors";
 import { Request, Response } from "express";
 import { batchQuerySchema } from "../validators/batch.query";
 import { getBatches } from "../services/batch.service";
 
 export async function addBatchController(req: Request, res: Response) {
-  const { name, labTimeSlotId, facultyId } = req.body;
+  const { name, facultyId } = req.body;
+  // Lab is optional: a batch can be a regular / IELTS / custom class with no lab.
+  const labTimeSlotId = req.body.labTimeSlotId ? Number(req.body.labTimeSlotId) : null;
+  const classType: string = String(
+    req.body.classType || (labTimeSlotId ? "LAB" : "REGULAR")
+  ).trim().toUpperCase().slice(0, 40);
 
-  if (!name || !labTimeSlotId) {
-    return res.status(400).json({ error: "name & labTimeSlotId are required" });
+  if (!name || !String(name).trim()) {
+    return res.status(400).json({ error: "Batch name is required" });
+  }
+  if (req.body.labTimeSlotId && !Number.isInteger(labTimeSlotId)) {
+    return res.status(400).json({ error: "Invalid lab time slot" });
   }
 
   try {
@@ -26,12 +35,11 @@ export async function addBatchController(req: Request, res: Response) {
     }
 
     // ✅ Check existing batch for same timeslot
-    const existing = await tenantPrisma.batch.findFirst({
-      where: {
-        labTimeSlotId,
-        clientAdminId: clientAdmin.id,
-      },
-    });
+    const existing = labTimeSlotId
+      ? await tenantPrisma.batch.findFirst({
+          where: { labTimeSlotId, clientAdminId: clientAdmin.id },
+        })
+      : null;
 
     if (existing) {
       return res.status(409).json({
@@ -41,8 +49,9 @@ export async function addBatchController(req: Request, res: Response) {
 
     const batch = await tenantPrisma.batch.create({
       data: {
-        name,
-        labTimeSlot: { connect: { id: labTimeSlotId } },
+        name: String(name).trim(),
+        classType,
+        labTimeSlot: labTimeSlotId ? { connect: { id: labTimeSlotId } } : undefined,
         faculty: facultyId ? { connect: { id: facultyId } } : undefined,
         clientAdmin: { connect: { id: clientAdmin.id } },
       },
@@ -249,7 +258,7 @@ export async function getBatchController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);

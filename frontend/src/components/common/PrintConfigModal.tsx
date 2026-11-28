@@ -42,7 +42,6 @@ const PrintConfigModal: React.FC<Props> = ({
               .replace(/^./, (str) => str.toUpperCase())}
             {/* <input
               type="checkbox"
-              tabIndex={1}
               checked={value}
               onChange={(e) =>
                 setConfig((prev) => ({ ...prev, [key]: e.target.checked }))

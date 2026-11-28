@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { normalizeEmail, normalizePhone, titleCase } from "../utils/Normalize";
 import { startsWith } from "zod";
 import { parseDate, parseDateISO } from "../helpers/date";
+import { checkLoginEmailDomain } from "../utils/tenantDbUrl";
+import { validateMobile, validateAmount, validateInteger, validatePassword, validateDate, firstError } from "../validators/common";
 
 export async function addFacultyController(req: Request, res: Response) {
   const { name, email, password, contact, joiningDate, batchId, courseId } =
@@ -11,8 +13,15 @@ export async function addFacultyController(req: Request, res: Response) {
   if (!name || !email || !contact || !joiningDate || !batchId) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+  {
+    const invalid = firstError(
+      validateMobile(contact, "Contact"),
+      validatePassword(password),
+      validateDate(joiningDate, "Joining date")
+    );
+    if (invalid) return res.status(400).json({ error: invalid });
+  }
 
-  console.log("GET FACULTY CREATE DETAILS:", req.body);
 
   try {
     const tenantPrisma = req.tenantPrisma;
@@ -30,9 +39,10 @@ export async function addFacultyController(req: Request, res: Response) {
       return res.status(404).json({ error: "Client admin not found" });
     }
 
-    const clientAdminId = user.clientAdminId;
+    const domainError = await checkLoginEmailDomain(user, email);
+    if (domainError) return res.status(400).json({ error: domainError });
 
-    console.log("Checking faculty parsed Joinindate")
+    const clientAdminId = user.clientAdminId;
 
     const parsedJoiningDate = parseDate(joiningDate); 
 
@@ -40,7 +50,13 @@ export async function addFacultyController(req: Request, res: Response) {
       return res.status(400).json({ error: "Invalid joining date" });
     }
 
-    console.log("Passed faculty parsed Joinindate")
+    // The batch must exist before anything is created.
+    const targetBatch = await tenantPrisma.batch.findUnique({
+      where: { id: Number(batchId) },
+    });
+    if (!targetBatch) {
+      return res.status(404).json({ error: "Batch not found" });
+    }
 
     // ✅ Create Faculty
     const faculty = await tenantPrisma.faculty.create({
@@ -65,9 +81,10 @@ export async function addFacultyController(req: Request, res: Response) {
       data: { facultyId: faculty.id },
     });
 
+    const { password: _pw, currentSessionToken: _t, ...safeFaculty } = faculty as any;
     return res.status(201).json({
       message: "Faculty created and assigned to batch ✅",
-      faculty,
+      faculty: safeFaculty,
     });
   } catch (err: any) {
     console.error("Error:", err);
@@ -83,14 +100,24 @@ export async function addFacultyController(req: Request, res: Response) {
 }
 
 export async function updateFacultyController(req: Request, res: Response) {
-  const { name, email, contact, batchId } = req.body;
+  const { name, email, contact, batchId, password } = req.body;
   const { id } = req.params;
 
   if (!name || !email || !contact) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+  {
+    const invalid = validateMobile(contact, "Contact");
+    if (invalid) return res.status(400).json({ error: invalid });
+  }
 
-  console.log("GET FACULTY UPDATE DETAILS:", req.body);
+  // Optional: admin may set a new password while editing.
+  if (password !== undefined && password !== null && password !== "") {
+    if (typeof password !== "string" || password.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters." });
+    }
+  }
+
 
   try {
     const tenantPrisma = req.tenantPrisma;
@@ -119,23 +146,29 @@ export async function updateFacultyController(req: Request, res: Response) {
         name,
         email,
         contact,
+        ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
         role: "FACULTY",
         country: clientAdmin.country,
         state: clientAdmin.state,
         city: clientAdmin.city,
         zipCode: clientAdmin.zipCode,
         clientAdminId: clientAdminId,
-        batches: batchId
-        ? {
-            set: batchId.map((batch: string) => ({ id: Number(batch) })), // 🔥 update batches
-          }
-        : undefined,
+        batches:
+          batchId !== undefined && batchId !== null && batchId !== ""
+            ? {
+                // accept a single id or a list of ids
+                set: (Array.isArray(batchId) ? batchId : [batchId]).map(
+                  (batch: string | number) => ({ id: Number(batch) })
+                ),
+              }
+            : undefined,
       },
     });
 
+    const { password: _pw, currentSessionToken: _t, ...safeFaculty } = faculty as any;
     return res.status(201).json({
       message: "Faculty created and assigned to batch ✅",
-      faculty,
+      faculty: safeFaculty,
     });
   } catch (err: any) {
     console.error("Error:", err);

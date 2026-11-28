@@ -15,7 +15,8 @@ export async function getClientAdmin(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    // In the EXE the institute ADMIN is mapped to the installation's master record (see masterAuthMiddleware).
+    const email = req.superAdmin?.email ?? user.email;
 
     // Get client admin for this user
     const clientAdmin = await centralPrisma.superAdmin.findUnique({
@@ -54,7 +55,6 @@ export async function getClientAdmin(req: Request, res: Response) {
       };
     });
 
-    console.log("GET ALL TENANTS IN MASTER USER CONTROLLER:", tenant);
 
     return res.status(200).json({ userdata: clientAdmin, tenant: safeTenants });
   } catch (err) {
@@ -73,7 +73,8 @@ export async function getTenantAdmin(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    // In the EXE the institute ADMIN is mapped to the installation's master record (see masterAuthMiddleware).
+    const email = req.superAdmin?.email ?? user.email;
 
     // Get client admin for this user
     const clientAdmin = await centralPrisma.superAdmin.findUnique({
@@ -91,11 +92,9 @@ export async function getTenantAdmin(req: Request, res: Response) {
       search,
     } = req.query;
 
-    const pageNum = parseInt(page as string, 10);
-    const limitNum = parseInt(limit as string, 10);
+    const pageNum = Math.max(parseInt(page as string, 10) || 1, 1);
+    const limitNum = Math.min(Math.max(parseInt(limit as string, 10) || 10, 1), 100);
     const skip = (pageNum - 1) * limitNum;
-
-    console.log("GET MASTER TENANT PARAMS:", req.params);
 
      // ✅ Build search filter
     const where: any = {};
@@ -109,7 +108,12 @@ export async function getTenantAdmin(req: Request, res: Response) {
 
     // Stats
 
-    const tenant = await centralPrisma.tenant.findMany({where, skip, take: limitNum});
+    const tenant = await centralPrisma.tenant.findMany({
+      where,
+      skip,
+      take: limitNum,
+      omit: { password: true, dbUrl: true },
+    });
     //const originalPassword = decrypt(tenant.encryptedPassword);
 
     console.log("GET ALL TENANTS IN MASTER USER CONTROLLER:", tenant);
@@ -138,7 +142,8 @@ export async function updateMasterAdmin(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
 
-    const email = user.email;
+    // In the EXE the institute ADMIN is mapped to the installation's master record (see masterAuthMiddleware).
+    const email = req.superAdmin?.email ?? user.email;
 
     // Find SuperAdmin from DB
     const superAdmin = await centralPrisma.superAdmin.findUnique({

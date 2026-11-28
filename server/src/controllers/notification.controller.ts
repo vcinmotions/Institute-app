@@ -123,7 +123,7 @@ export async function getNotificationController(req: Request, res: Response) {
 }
 
 export async function clearNotification(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   console.log("GET Notification id in params:", id);
   try {
     const tenantPrisma = req.tenantPrisma;  

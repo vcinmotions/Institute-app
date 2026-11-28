@@ -13,6 +13,8 @@ import enquiryRoutes from "../src/routes/enquiry.routes";
 import enquiryFollowUpRoutes from "../src/routes/enquiry.followup.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import { authMiddleware } from "./middlewares/auth.middleware";
+import { roleGuard } from "./middlewares/roleGuard.middleware";
+import { stripSecrets } from "./middlewares/stripSecrets.middleware";
 import { tenantResolverMiddleware } from "./middlewares/tenantResolverMiddleware";
 import { runAllTenantFollowUps } from "./cronJobs/cron-job-runner";
 import notification from "../src/routes/notification.routes";
@@ -23,6 +25,8 @@ import CourseRoute from "../src/routes/course.routes";
 import FacultyRoute from "../src/routes/faculty.routes";
 import BatchRoute from "../src/routes/batch.routes";
 import LabRoute from "../src/routes/lab.routes";
+import CompanyCompareRoute from "../src/routes/companyCompare.routes";
+import BranchRoute from "../src/routes/branch.routes";
 import AnalyticsRoute from "../src/routes/analytics.routes";
 import MasterRoute from "../src/routes/master.dashboard.routes";
 import LogRoute from "../src/routes/log.routes";
@@ -34,15 +38,47 @@ import attendanceRoute from "./routes/attendance.routes";
 import taskRoute from "./routes/task.routes";
 import testRoute from "./routes/test.routes";
 import systemRoute from "./routes/system.backup.routes";
+import subscriptionRoute from "./routes/subscription.routes";
+import activationRoute from "./routes/activation.routes";
+import { startBackupScheduler } from "./services/backup.service";
+import { getUserDataPath } from "./middlewares/runtimePaths";
+import { auditTrail } from "./middlewares/auditTrail.middleware";
+import { clientDeviceGate } from "./middlewares/clientDeviceGate.middleware";
+import { activationGate } from "./middlewares/activationGate.middleware";
+import expenseRoute from "./routes/expense.routes";
+import { subscriptionGuard } from "./middlewares/subscriptionGuard.middleware";
+import { syncFromCloud, isEnforced, syncIntervalMs, getState } from "./services/subscription.service";
+import { isAllowedOrigin } from "./utils/allowedOrigins";
 
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+
+// Allowed: localhost, the institute's LAN, and the sites listed in CORS_ALLOWED_ORIGINS
+// (see utils/allowedOrigins.ts).
+app.use(
+  cors({
+    origin: (origin, cb) => cb(null, isAllowedOrigin(origin)),
+    credentials: true,
+    exposedHeaders: ["Content-Disposition"],
+  })
+);
+app.use(
+  express.json({
+    // Razorpay webhook signatures are computed over the raw bytes.
+    verify: (req: any, _res, buf) => {
+      if (req.originalUrl?.includes("/portal/razorpay-webhook")) req.rawBody = buf;
+    },
+  })
+);
 
 // Serve static files from the 'uploads' directory
 //app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Uploaded files live in the data folder (kept on update, included in backups). The old program-folder
+// location is still served as a fallback for files uploaded by older versions.
+app.use("/uploads", express.static(path.join(getUserDataPath(), "uploads")));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+// Institute logo uploaded from the Branding screen (kept in the user-data folder, so it survives reinstall).
+app.use("/branding-files", express.static(path.join(getUserDataPath(), "uploads", "branding")));
 
 // // 🔥 Dynamic CORS Middleware
 // const dynamicCors = async (req: any, callback: any) => {
@@ -81,7 +117,6 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // // Attach CORS middleware with dynamic logic
 // app.use(cors(dynamicCors));
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true, exposedHeaders: ["Content-Disposition"] })); // Or whatever port your React app runs on
 
 // // Core middleware
 // app.use(express.json());
@@ -92,8 +127,26 @@ cron.schedule("*/15 * * * *", async () => {
   await runAllTenantFollowUps();
 });
 
+// Re-validate the subscription with the portal every 5 minutes (no-op when offline).
+if (isEnforced()) {
+  setInterval(() => {
+    syncFromCloud().catch(() => {});
+  }, syncIntervalMs());
+  syncFromCloud().catch(() => {});
+}
+
+startBackupScheduler(); // automatic backups (configurable under System Settings)
+
+// Minimal, non-sensitive flag so the desktop shell can refuse a restore while View-Only.
+app.get("/api/subscription/locked", (_req, res) => res.json({ locked: getState().locked }));
+
+app.use("/api", activationRoute); // public activation screen endpoints
+app.use("/api", clientDeviceGate); // client PCs must have confirmed the company Client key
+app.use("/api", activationGate); // nothing else works until this PC is activated
 app.use("/api", tenantRoutes);
 app.use("/api", MasterRoute);
+// Restoring a backup overwrites the database, so it is blocked in View-Only Mode too.
+app.use("/api/restore", subscriptionGuard);
 app.use("/api", systemRoute);
 
 //app.use(tenantResolverMiddleware);
@@ -103,6 +156,11 @@ app.use("/api/auth", tenantResolverMiddleware);
 app.use("/api/auth", authRoute);
 
 app.use(authMiddleware);
+app.use(auditTrail); // who changed what (see middlewares/auditTrail.middleware.ts)
+app.use(roleGuard);
+app.use(subscriptionGuard);
+app.use(stripSecrets);
+app.use("/api", subscriptionRoute);
 app.use("/api", dashboardRoutes);
 app.use("/api", AdmissionRoute);
 app.use("/api", attendanceRoute);
@@ -116,6 +174,8 @@ app.use("/api", CourseRoute);
 app.use("/api", FacultyRoute);
 app.use("/api", BatchRoute);
 app.use("/api", LabRoute);
+app.use("/api", CompanyCompareRoute);
+app.use("/api", BranchRoute);
 app.use("/api", AnalyticsRoute);
 app.use("/api", LogRoute);
 app.use("/api", rolesRoute);
@@ -124,5 +184,6 @@ app.use("/api", testRoute);
 app.use("/api", stationaryRoute);
 app.use("/api", sourceRoute);
 app.use("/api", reportRoute);
+app.use("/api", expenseRoute);
 
 export default app;

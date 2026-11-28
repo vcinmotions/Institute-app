@@ -133,7 +133,8 @@ export async function createTenantController(req: Request, res: Response) {
       logo ?? "", // logo is required
       stamp ?? "", // convert null → ""
       sign ?? "",
-      certificateName ?? "" // or certificate ?? ""
+      certificateName ?? "", // or certificate ?? ""
+      normalized.businessEmail
     );
     return res.status(201).json({
       message: `Tenant "${instituteName}" created successfully.`,
@@ -185,11 +186,12 @@ export async function getTenantController(req: Request, res: Response) {
     const centralPrisma = getCentralPrisma();
 
     //const tenantPrisma = getTenantPrisma(dbUrl);
-    const getTenant = await centralPrisma.tenant.findMany();
-    console.log("Get All Tenant from Master Admin:", getTenant);
+    const getTenant = await centralPrisma.tenant.findMany({
+      omit: { password: true, dbUrl: true },
+    });
 
     return res
-      .status(201)
+      .status(200)
       .json({ message: "All Tenants Fetched successfully", getTenant });
   } catch (err: any) {
     if (err.message.includes("A tenant with email")) {

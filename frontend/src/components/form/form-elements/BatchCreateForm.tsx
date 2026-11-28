@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
@@ -24,6 +26,8 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
   const [timeSlots, setTimeSlots] = useState<any[]>([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<number | null>(null);
   const [selectedFaculty, setSelectedFaculty] = useState<number | null>(null);
+  const [classType, setClassType] = useState("REGULAR");
+  const [customClassType, setCustomClassType] = useState("");
 
   const [errors, setErrors] = useState<any>({});
   const [alert, setAlert] = useState({
@@ -56,12 +60,15 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
   const validate = () => {
     const newErrors: any = {};
     if (!name.trim()) newErrors.name = "Batch name is required.";
-    if (!selectedLab) newErrors.lab = "Please select a lab.";
-    if (!selectedTimeSlot) newErrors.timeslot = "Please select a time slot.";
+    // Lab is optional. It is required only for Lab-based classes; if a lab is
+    // chosen for any class type, its time slot must be chosen too.
+    if (classType === "LAB" && !selectedLab) newErrors.lab = "Please select a lab for a lab-based class.";
+    if (selectedLab && !selectedTimeSlot) newErrors.timeslot = "Please select a time slot.";
+    if (classType === "OTHER" && !customClassType.trim()) newErrors.classType = "Enter the class type.";
 
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -77,7 +84,7 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -93,14 +100,15 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
 
     const payload = {
       name,
-      labTimeSlotId: Number(selectedTimeSlot),
+      classType: classType === "OTHER" ? customClassType.trim() : classType,
+      labTimeSlotId: selectedLab && selectedTimeSlot ? Number(selectedTimeSlot) : undefined,
       facultyId: selectedFaculty ? Number(selectedFaculty) : undefined,
     };
 
@@ -118,7 +126,10 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
         }, 3000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         // You already handle error via redux + toast
       },
     });
@@ -141,7 +152,6 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
           <Label>Batch Name</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="LAB-01 Morning Batch"
             value={name}
@@ -150,9 +160,35 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
           {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
         </div>
 
+        {/* ✅ Class Type */}
+        <div>
+          <Label>Class Type</Label>
+          <Select
+            options={[
+              { label: "Regular", value: "REGULAR" },
+              { label: "IELTS", value: "IELTS" },
+              { label: "Lab-based", value: "LAB" },
+              { label: "Other", value: "OTHER" },
+            ]}
+            defaultValue="REGULAR"
+            onChange={(val) => setClassType(String(val))}
+            placeholder="Choose Class Type"
+            className="dark:bg-dark-900"
+          />
+          {classType === "OTHER" && (
+            <Input
+              type="text"
+              placeholder="e.g. Spoken English"
+              value={customClassType}
+              onChange={(e) => setCustomClassType(e.target.value)}
+            />
+          )}
+          {errors.classType && <p className="text-sm text-red-500">{errors.classType}</p>}
+        </div>
+
         {/* ✅ Select Lab */}
         <div>
-          <Label>Select Lab</Label>
+          <Label>Select Lab{classType === "LAB" ? "" : " (Optional)"}</Label>
           <div className="relative">
             <Select
               options={labs.map((l) => ({ label: l.name, value: l.id }))}
@@ -164,7 +200,6 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
               }}
               placeholder="Choose Lab"
               className="dark:bg-dark-900"
-              tabIndex={2}
             />
             <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <ChevronDownIcon />
@@ -185,7 +220,6 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
               onChange={(val) => setSelectedTimeSlot(Number(val))}
               placeholder="Choose Time Slot"
               className="dark:bg-dark-900"
-              tabIndex={3}
             />
             <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <ChevronDownIcon />
@@ -208,7 +242,6 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
               onChange={(val) => setSelectedFaculty(Number(val))}
               placeholder="Select Faculty"
               className="dark:bg-dark-900"
-              tabIndex={4}
             />
             <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <ChevronDownIcon />
@@ -221,12 +254,11 @@ export default function BatchForm({ onCloseModal, labs }: DefaultInputsProps) {
           <Button
             size="sm"
             variant="outline"
-            tabIndex={5}
             onClick={onCloseModal}
           >
             Close
           </Button>
-          <Button size="sm" tabIndex={6} onClick={handleSubmit}>
+          <Button size="sm" onClick={handleSubmit}>
             Save
           </Button>
         </div>

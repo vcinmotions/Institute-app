@@ -1,5 +1,6 @@
 "use client";
 
+import Can from "@/components/common/Can";
 import Search from "@/components/form/input/Search";
 import Pagination from "@/components/tables/Pagination";
 import { useDispatch, useSelector } from "react-redux";
@@ -87,12 +88,13 @@ export default function SourceTable() {
               onSubmit={handleSearchSubmit}
             />
 
-            <Link
+            <Can module="source" action="add"><Link
               href="/dashboard/source/create"
+            data-perm="add:source"
               className="inline-flex h-7 items-center justify-center rounded border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
             >
               + Create Record
-            </Link>
+            </Link></Can>
           </div>
 
           <SourceDataTable

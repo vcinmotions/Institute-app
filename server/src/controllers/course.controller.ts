@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 import { Request, Response } from "express";
 import { generateCertificate } from "../utils/templates/certificatesGenerate";
 import path from "path";
@@ -6,6 +7,7 @@ import { getCourses } from "../services/course.service";
 import { titleCase } from "../utils/Normalize";
 import { parseDate } from "../helpers/date";
 import { generatePaymentReceiptNumber } from "../utils/paymentReceiptConfig";
+import { validateAmount, validateInteger, firstError } from "../validators/common";
 
 function calculateTimePerDay(schedule: { startTime: string; endTime: string }) {
   const [startH, startM] = schedule.startTime.split(":").map(Number);
@@ -293,11 +295,18 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
     // 🖥️ 8. Allocate PC in Lab Time Slot
     // 🖥️ Allocate PC if batch has lab time slot
     // 🧩 Inside addStudentController, replace allocation section with:
-    if (batchExists.labTimeSlotId) {
+    const alreadySeated = batchExists.labTimeSlotId
+      ? await tenantPrisma.labAllocation.findFirst({
+          where: { labTimeSlotId: batchExists.labTimeSlotId, studentId: student.id },
+        })
+      : null;
+
+    const batchLabSlotId = batchExists.labTimeSlotId;
+    if (batchLabSlotId && !alreadySeated) {
       await tenantPrisma.$transaction(async (tx) => {
         // 🧠 Step 1: Get the timeslot + its lab + current allocations
         const labTimeSlot = await tx.labTimeSlot.findUnique({
-          where: { id: batchExists.labTimeSlotId },
+          where: { id: batchLabSlotId },
           include: { allocations: true, lab: true },
         });
 
@@ -320,7 +329,7 @@ export async function addCourseToExistingStudent(req: Request, res: Response) {
         }
 
         if (!nextPcNumber) {
-          throw new Error("No free PCs available in this lab time slot");
+          throw new Error("No free seats/PCs available in this time slot (the batch is full)");
         }
 
         console.log(
@@ -416,6 +425,13 @@ export async function addCourseController(req: Request, res: Response) {
       error: "name, durationMonths, totalAmount & paymentType are required",
     });
   }
+  {
+    const invalid = firstError(
+      validateInteger(durationMonths, "Duration (months)", 1, 120),
+      validateAmount(totalAmount, "Course amount", { positive: true })
+    );
+    if (invalid) return res.status(400).json({ error: invalid });
+  }
 
   try {
     const tenantPrisma = req.tenantPrisma;
@@ -427,30 +443,51 @@ export async function addCourseController(req: Request, res: Response) {
 
     const normalizeCourseName = titleCase(name);
 
-    // ✅ Step 1: Create Course
-    const course = await tenantPrisma.course.create({
-      data: {
-        name: normalizeCourseName,
-        durationMonths: parseInt(durationMonths),
-        description,
-        clientAdminId: user.clientAdminId,
-      },
+    // paymentType is stored as a list; accept a single string too.
+    const paymentTypes: string[] = Array.isArray(paymentType)
+      ? paymentType
+      : paymentType
+      ? [String(paymentType)]
+      : [];
+
+    // Reject duplicate course names (case-insensitive) within this institute.
+    // (done in JS because "mode: insensitive" is not available on SQLite)
+    const existing = await tenantPrisma.course.findMany({
+      where: { clientAdminId: user.clientAdminId },
+      select: { name: true },
     });
+    const duplicate = existing.some(
+      (c) => c.name.toLowerCase() === normalizeCourseName.toLowerCase()
+    );
+    if (duplicate) {
+      return res.status(409).json({ error: "Course already exists ❌" });
+    }
 
-    console.log("COURSE IS CREATED:", course);
+    if (paymentTypes.includes("INSTALLMENT") && !Array.isArray(installments)) {
+      return res.status(400).json({ error: "installments are required for INSTALLMENT payment type" });
+    }
 
-    // ✅ Step 2: Create Fee Structure
-    const feeStructure = await tenantPrisma.courseFeeStructure.create({
-      data: {
-        courseId: course.id,
-        clientAdminId: user.clientAdminId,
-        totalAmount: parseFloat(totalAmount),
-        paymentType: paymentType || null,
-      },
-    });
+    // Course, fee structure and installments are saved together or not at all.
+    const { course, feeStructure } = await tenantPrisma.$transaction(async (tx) => {
+      const course = await tx.course.create({
+        data: {
+          name: normalizeCourseName,
+          durationMonths: parseInt(durationMonths),
+          description,
+          clientAdminId: user.clientAdminId,
+        },
+      });
 
-    await tenantPrisma.$transaction(async (tx) => {
-      if (paymentType.includes("INSTALLMENT")) {
+      const feeStructure = await tx.courseFeeStructure.create({
+        data: {
+          courseId: course.id,
+          clientAdminId: user.clientAdminId,
+          totalAmount: parseFloat(totalAmount),
+          paymentType: paymentTypes as any,
+        },
+      });
+
+      if (paymentTypes.includes("INSTALLMENT")) {
         await tx.installmentDetail.createMany({
           data: installments.map(
             (i: { installment: Number; addAmount: Number }) => ({
@@ -461,6 +498,8 @@ export async function addCourseController(req: Request, res: Response) {
           ),
         });
       }
+
+      return { course, feeStructure };
     });
 
     return res.status(201).json({
@@ -497,6 +536,13 @@ export async function updateCourseController(req: Request, res: Response) {
     return res.status(400).json({
       error: "name, durationMonths, totalAmount & paymentType are required",
     });
+  }
+  {
+    const invalid = firstError(
+      validateInteger(durationMonths, "Duration (months)", 1, 120),
+      validateAmount(totalAmount, "Course amount", { positive: true })
+    );
+    if (invalid) return res.status(400).json({ error: invalid });
   }
   console.log("GET UPDATE COURSE DATA In UPDATE COURSE CONTROLLER:", req.body);
 
@@ -781,7 +827,7 @@ export async function getCourseController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);

@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from 'react';
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from '../Label';
 import Input from '../input/InputField';
 import Select from '../Select';
@@ -101,7 +103,7 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
 
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -144,7 +146,7 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -160,7 +162,7 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -181,7 +183,10 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
         }, 3000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         // You already handle error via redux + toast
       },
     });
@@ -202,7 +207,6 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
           <Label>Course</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="Ex. Full Stack Developer"
             value={newCourse.name}
@@ -217,7 +221,6 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
           <Label>Duration Weeks</Label>
           <Input
             type="text"
-            tabIndex={2}
             placeholder="12"
             value={newCourse.durationMonths}
             onChange={(e) => handleChange("durationMonths", e.target.value)} />
@@ -229,7 +232,6 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
           <Label>Description</Label>
           <Input
             type="text"
-            tabIndex={3}
             placeholder="Course..."
             value={newCourse.description}
             onChange={(e) => handleChange("description", e.target.value)} />
@@ -242,7 +244,6 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
           <Label>Course Amount</Label>
           <Input
             type="text"
-            tabIndex={4}
             placeholder="12000"
             value={newCourse.totalAmount}
             onChange={(e) => handleChange("totalAmount", e.target.value)} />
@@ -257,7 +258,6 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
               placeholder="Select an option"
               onChange={(value) => handleChange("paymentType", value)}
               className="dark:bg-dark-900"
-              tabIndex={5}
             />
             <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
               <ChevronDownIcon />
@@ -271,7 +271,6 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
           <Input
             type="text"
             placeholder="3"
-            tabIndex={6}
             disabled={newCourse.paymentType !== "INSTALLMENT"}
             value={newCourse.installmentCount}
             onChange={(e) => handleChange("installmentCount", e.target.value)}
@@ -282,10 +281,10 @@ export default function CourseForm({ onCloseModal }: DefaultInputsProps) {
         </div>
 
         <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-          <Button size="sm" variant="outline" tabIndex={7} onClick={onCloseModal}>
+          <Button size="sm" variant="outline" onClick={onCloseModal}>
             Close
           </Button>
-          <Button size="sm" tabIndex={8} onClick={handleSubmit}>
+          <Button size="sm" onClick={handleSubmit}>
             Save
           </Button>
         </div>

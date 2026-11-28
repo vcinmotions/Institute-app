@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useCourseStore } from "@/store/courseStore";
 import { useRouter } from "next/navigation";
 import { useCreateCourse } from "@/hooks/useCreateCourseData";
@@ -11,6 +13,7 @@ import Button from "@/components/ui/button/Button";
 import Checkbox from "@/components/form/input/Checkbox";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { textError, integerError, amountError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof CourseData, string>>;
 
@@ -114,15 +117,18 @@ export default function CourseForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newCourse.name.trim()) newErrors.name = "Course name is required.";
-    if (!newCourse.durationMonths.trim()) newErrors.durationMonths = "Duration is required.";
-    if (!newCourse.totalAmount.trim()) newErrors.totalAmount = "Course amount is required.";
+    // Same rules everywhere in the app (see lib/validation).
+    Object.assign(newErrors, onlyErrors({
+      name: textError(newCourse.name, "Course name", { required: true, min: 2, max: 100 }),
+      durationMonths: integerError(newCourse.durationMonths, "Duration (months)", { required: true, min: 1, max: 120 }),
+      totalAmount: amountError(newCourse.totalAmount, "Course amount", { required: true, positive: true }),
+    }));
     if (!newCourse.paymentType || newCourse.paymentType.length === 0) {
       newErrors.paymentType = "Please select at least one payment type.";
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -198,7 +204,7 @@ export default function CourseForm() {
       scrollToError(validationErrors);
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -212,7 +218,7 @@ export default function CourseForm() {
       });
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -248,7 +254,10 @@ export default function CourseForm() {
           router.replace("/dashboard/course");
         }, 300);
       },
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });

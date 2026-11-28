@@ -1,3 +1,5 @@
+import { useDialog } from "@/components/common/AppDialog";
+import { SERVER_ORIGIN } from "@/lib/config";
 import React from "react";
 import {
   Table,
@@ -31,6 +33,7 @@ export default function StudentCourseDataTable({
   sortField,
   sortOrder,
 }: StudentCourseDataTableProps) {
+  const dialog = useDialog();
   const [modalType, setModalType] = useState<FollowUpModalType>(null);
   const [selectedStudentCourseId, setSelectedStudentCourseId] =
     useState<string>("");
@@ -59,7 +62,7 @@ export default function StudentCourseDataTable({
 
   const handleDownload = async (url: string) => {
     if (!url) {
-      alert("No certificate available to download.");
+      dialog.alert({ title: "No certificate", message: "No certificate is available to download.", variant: "info" });
       return;
     }
 
@@ -80,7 +83,7 @@ export default function StudentCourseDataTable({
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("Error downloading file:", error);
-      alert("Failed to download the certificate.");
+      dialog.alert({ title: "Download failed", message: "Failed to download the certificate. Please try again.", variant: "error" });
     }
   };
 
@@ -183,7 +186,7 @@ export default function StudentCourseDataTable({
                                 src={
                                   item?.studentCourse?.student?.photoUrl?.startsWith("http")
                                     ? item.photoUrl
-                                    : `http://localhost:5001${item?.studentCourse?.student?.photoUrl}`
+                                    : `${SERVER_ORIGIN}${item?.studentCourse?.student?.photoUrl}`
                                 }
                                 alt="student"
                                 className="h-7 w-7 rounded-full object-cover"

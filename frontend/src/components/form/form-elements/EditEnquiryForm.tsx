@@ -1,4 +1,5 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useState, useEffect, useRef } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
@@ -22,6 +23,7 @@ import { capitalizeWords } from "@/components/common/ToCapitalize";
 import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { useFetchSource } from "@/hooks/queries/useQueryFetchSource";
+import { mobileError, emailError, personNameError, dateError, requiredError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
@@ -115,7 +117,7 @@ export default function EditEnquiryForm({
     toast.error(error);
     const timer = setTimeout(() => {
       dispatch(setError(null));
-    }, 3000);
+    }, MESSAGE_VISIBLE_MS);
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
@@ -171,7 +173,7 @@ export default function EditEnquiryForm({
     setNewEnquiry((prev) => ({ ...prev, contact: formattedNumber }));
     setErrors((prev) => ({
       ...prev,
-      contact: digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+      contact: mobileError(digitsOnly, "Contact number", true),
     }));
   };
 
@@ -188,18 +190,25 @@ export default function EditEnquiryForm({
     setNewEnquiry((prev) => ({ ...prev, alternateContact: formattedNumber }));
     setErrors((prev) => ({
       ...prev,
-      alternateContact: digitsOnly.length === 10 ? "" : "Phone number must be 10 digits",
+      alternateContact: mobileError(digitsOnly, "Alternate contact number"),
     }));
   };
 
   const validate = () => {
     const newErrors: FormErrors = {};
-    if (!newEnquiry.name.trim()) newErrors.name = "Name is required.";
-    if (!newEnquiry.contact.trim()) newErrors.contact = "Contact number is required.";
-    if (newEnquiry.courseId.length === 0) newErrors.courseId = "Select at least one course.";
+    // Same rules as the server, so nothing is rejected after saving.
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newEnquiry.name),
+      contact: mobileError(newEnquiry.contact, "Contact number", true),
+      alternateContact: mobileError(newEnquiry.alternateContact, "Alternate contact number"),
+      email: emailError(newEnquiry.email),
+      dob: dateError(newEnquiry.dob, "Date of birth", { notFuture: true }),
+      enquiryDate: dateError(newEnquiry.enquiryDate, "Enquiry date", { notFuture: true }),
+      courseId: requiredError(newEnquiry.courseId, "Course"),
+    }));
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -225,7 +234,7 @@ export default function EditEnquiryForm({
       scrollToError(validationErrors);
       setTimeout(() => {
         setAlert((prev) => ({ ...prev, show: false }));
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -311,7 +320,6 @@ export default function EditEnquiryForm({
                 type="text"
                 placeholder="Enter Name"
                 value={titleCase(newEnquiry.name)}
-                tabIndex={1}
                 onChange={(e) => handleChange("name", e.target.value)}
               />
               {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
@@ -321,7 +329,6 @@ export default function EditEnquiryForm({
               <Label>Gender</Label>
               <div className="relative">
                 <Select
-                  tabIndex={2}
                   options={genders}
                   placeholder="Select Gender"
                   onChange={(value) => handleChange("gender", value)}
@@ -336,7 +343,6 @@ export default function EditEnquiryForm({
             <div>
               <Label>Date Of Birth</Label>
               <Input
-                tabIndex={3}
                 type="date"
                 value={newEnquiry.dob}
                 onChange={(e) => handleChange("dob", e.target.value)}
@@ -356,7 +362,6 @@ export default function EditEnquiryForm({
               <PhoneInput
                 selectPosition="start"
                 countries={countries}
-                tabIndex={4}
                 value={newEnquiry.contact}
                 placeholder="Enter Contact"
                 onChange={handlePhoneNumberChange}
@@ -367,7 +372,6 @@ export default function EditEnquiryForm({
             <div>
               <Label>Alternate Contact No.</Label>
               <PhoneInput
-                tabIndex={5}
                 countries={countries}
                 value={newEnquiry.alternateContact}
                 placeholder="Enter alternate Contact"
@@ -382,7 +386,6 @@ export default function EditEnquiryForm({
                   placeholder="Enter Email"
                   type="text"
                   className="pl-[60px]"
-                  tabIndex={6}
                   value={newEnquiry.email}
                   onChange={(e) => handleChange("email", e.target.value)}
                 />
@@ -396,8 +399,8 @@ export default function EditEnquiryForm({
               <Label>City</Label>
               <Select
                 options={city.map((c) => ({ label: c.name, value: c.name }))}
-                tabIndex={7}
                 placeholder="Select City"
+                searchable
                 onChange={(value) => handleChange("city", value)}
                 value={newEnquiry.city}
               />
@@ -409,7 +412,6 @@ export default function EditEnquiryForm({
                 type="text"
                 placeholder="Enter Location"
                 value={newEnquiry.location}
-                tabIndex={8}
                 onChange={(e) => handleChange("location", e.target.value)}
               />
             </div>
@@ -425,7 +427,6 @@ export default function EditEnquiryForm({
             <div className="lg:col-span-2" ref={(el) => { inputRefs.current.courseId = el; }}>
               <div className="relative">
                 <MultiSelect
-                  tabIndex={9}
                   label="Select Courses *"
                   options={courseLoading ? [] : courseList?.map((course: Course) => ({
                     value: String(course.id),
@@ -442,7 +443,6 @@ export default function EditEnquiryForm({
             <div>
               <Label>Enquiry Date</Label>
               <Input
-                tabIndex={10}
                 type="date"
                 value={newEnquiry.enquiryDate}
                 onChange={(e) => handleChange("enquiryDate", e.target.value)}
@@ -453,7 +453,6 @@ export default function EditEnquiryForm({
               <Label>Source</Label>
               <div className="relative">
                 <Select
-                  tabIndex={11}
                   options={sourceList.map((item) => ({ label: item.name, value: item.slug }))}
                   placeholder="Select Source"
                   onChange={(value) => handleChange("source", value)}
@@ -472,7 +471,6 @@ export default function EditEnquiryForm({
               <Input
                 type="text"
                 value={newEnquiry.referedBy}
-                tabIndex={12}
                 onChange={(e) => handleChange("referedBy", e.target.value)}
               />
             </div>
@@ -482,7 +480,6 @@ export default function EditEnquiryForm({
               <Input
                 type="text"
                 value={newEnquiry.takenBy}
-                tabIndex={13}
                 onChange={(e) => handleChange("takenBy", e.target.value)}
               />
             </div>
@@ -491,12 +488,11 @@ export default function EditEnquiryForm({
 
         {/* Action Bar */}
         <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
-          <Button size="sm" variant="outline" tabIndex={14} onClick={onCloseModal}>
+          <Button size="sm" variant="outline" onClick={onCloseModal}>
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={15}
             disabled={isPending}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 dark:bg-brand-600"
             onClick={handleSubmit}

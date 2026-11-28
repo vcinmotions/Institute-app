@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
@@ -78,7 +80,7 @@ export default function EditStationaryForm({
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
 
     return {
@@ -127,7 +129,7 @@ export default function EditStationaryForm({
 
       setTimeout(() => {
           setAlert({ show: false, title: "", message: "", variant: "" });
-        }, 2000);
+        }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -147,7 +149,7 @@ export default function EditStationaryForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -188,7 +190,10 @@ export default function EditStationaryForm({
           }, 1000);
         },
 
-        onError: () => {
+        onError: (error: any) => {
+          // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+          setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           // You already handle error via redux + toast
           window.scrollTo({
             top: 0, behavior: "smooth"
@@ -216,7 +221,6 @@ export default function EditStationaryForm({
           <Label>Course</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="Ex. Full Stack Developer"
             value={titleCase(newStationary.name)}
@@ -229,7 +233,6 @@ export default function EditStationaryForm({
           <Label>Duration Weeks</Label>
           <Input
             type="number"
-            tabIndex={2}
             min={0}
             placeholder="12"
             value={newStationary.quantityAvailable}
@@ -244,12 +247,11 @@ export default function EditStationaryForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={7}
             onClick={onCloseModal}
           >
             Close
           </Button>
-          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" tabIndex={8} onClick={handleSubmit}>
+          <Button size="sm" className="rounded bg-gray-200 px-4 py-2 text-sm text-black transition hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-900" onClick={handleSubmit}>
             Save
           </Button>
         </div>

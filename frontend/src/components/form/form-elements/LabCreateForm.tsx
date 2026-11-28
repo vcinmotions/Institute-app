@@ -1,5 +1,8 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import TimePicker from "@/components/form/TimePicker";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Button from "@/components/ui/button/Button";
@@ -26,6 +29,21 @@ interface LabData {
   timeSlots: TimeSlot[];
 }
 
+const toMin = (t: string) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+function validateSlots(slots: TimeSlot[]): string {
+  for (const s of slots) {
+    if (!s.startTime || !s.endTime) return "Select a start and end time for every time slot.";
+    if (toMin(s.startTime) >= toMin(s.endTime)) return `End time must be after start time (${s.startTime} - ${s.endTime}).`;
+  }
+  for (let i = 0; i < slots.length; i++) for (let j = i + 1; j < slots.length; j++) {
+    const a = slots[i], b = slots[j];
+    const da = (a.day || "daily").trim().toLowerCase(), db = (b.day || "daily").trim().toLowerCase();
+    if ((da === db || da === "daily" || db === "daily") && toMin(a.startTime) < toMin(b.endTime) && toMin(b.startTime) < toMin(a.endTime))
+      return `Time slots ${a.startTime}-${a.endTime} and ${b.startTime}-${b.endTime} overlap.`;
+  }
+  return "";
+}
+
 export default function LabForm({ onCloseModal }: LabFormProps) {
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: createLab } = useCreateLab();
@@ -49,6 +67,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
     message: "",
     variant: "",
   });
+  const [slotError, setSlotError] = useState("");
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -96,10 +115,12 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
     if (!lab.location.trim()) newErrors.location = "Location is required.";
     if (!lab.totalPCs || lab.totalPCs <= 0)
       newErrors.totalPCs = "Total PCs must be greater than 0." as any;
+    const slotMsg = validateSlots(lab.timeSlots);
+    if (slotMsg) setSlotError(slotMsg);
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
-    return Object.keys(newErrors).length === 0;
+    setTimeout(() => { setErrors({}); setSlotError(""); }, MESSAGE_VISIBLE_MS);
+    return Object.keys(newErrors).length === 0 && !slotMsg;
   };
 
   const handleSubmit = () => {
@@ -113,7 +134,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -129,7 +150,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -156,7 +177,10 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
         }, 3000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         // You already handle error via redux + toast
       },
     });
@@ -179,7 +203,6 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
           <Label>Lab Name</Label>
           <Input
             ref={firstInputRef}
-            tabIndex={1}
             type="text"
             placeholder="Ex. LAB-06"
             value={lab.name}
@@ -193,7 +216,6 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
           <Label>Location</Label>
           <Input
             type="text"
-            tabIndex={2}
             placeholder="Ex. Building D - Floor 1"
             value={lab.location}
             onChange={(e) => handleChange("location", e.target.value)}
@@ -207,7 +229,6 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
         <div>
           <Label>Total PCs</Label>
           <Input
-            tabIndex={3}
             type="number"
             placeholder="Ex. 15"
             value={lab.totalPCs}
@@ -225,27 +246,16 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
             <div key={index} className="mb-3 flex gap-3">
               <Input
                 type="text"
-                tabIndex={4}
                 placeholder="Day (e.g., Daily)"
                 value={slot.day}
                 onChange={(e) =>
                   handleTimeSlotChange(index, "day", e.target.value)
                 }
               />
-              <Input
-                type="time"
-                value={slot.startTime}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "startTime", e.target.value)
-                }
-              />
-              <Input
-                type="time"
-                value={slot.endTime}
-                onChange={(e) =>
-                  handleTimeSlotChange(index, "endTime", e.target.value)
-                }
-              />
+              <TimePicker value={slot.startTime} onChange={(v) =>
+                  handleTimeSlotChange(index, "startTime", v)} />
+              <TimePicker value={slot.endTime} onChange={(v) =>
+                  handleTimeSlotChange(index, "endTime", v)} />
               {lab.timeSlots.length > 1 && (
                 <Button
                   size="sm"
@@ -258,6 +268,7 @@ export default function LabForm({ onCloseModal }: LabFormProps) {
             </div>
           ))}
 
+          {slotError && <p className="mb-2 text-sm text-red-500">{slotError}</p>}
           <Button size="sm" variant="outline" onClick={addTimeSlot}>
             + Add Time Slot
           </Button>

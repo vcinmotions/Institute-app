@@ -3,6 +3,7 @@ import { create } from "zustand";
 interface CompanyFormData {
   name: string;
   instituteName: string;
+  businessEmail: string;
   email: string;
   password: string;
   contact: string;

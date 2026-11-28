@@ -52,6 +52,12 @@ export const masterRoutes: Record<string, AdminRouteItem> = {
     list: "/dashboard/lab",
     roles: ["ADMIN"],
   },
+  class: {
+    label: "Class",
+    create: "/dashboard/class/create",
+    list: "/dashboard/class",
+    roles: ["ADMIN"],
+  },
   faculty: {
     label: "Faculty",
     create: "/dashboard/faculty/create",
@@ -59,7 +65,7 @@ export const masterRoutes: Record<string, AdminRouteItem> = {
     roles: ["ADMIN"],
   },
   roles: {
-    label: "Roles",
+    label: "App Users",
     create: "/dashboard/roles/create",
     list: "/dashboard/roles",
     roles: ["ADMIN"],

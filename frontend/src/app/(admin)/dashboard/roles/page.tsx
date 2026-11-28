@@ -4,13 +4,13 @@ import RoleProtected from "@/components/auth/RoleProtected";
 import RolesTable from "../../(ui-elements)/roles-table/page";
 
 export const metadata: Metadata = {
-  title: "Roles",
+  title: "App Users",
 };
 
 export default function Roles() {
   return (
     <RoleProtected allowedRoles={["ADMIN", "FRONT_DESK"]}>
-        <PageBreadcrumb pageTitle="Role User" />
+        <PageBreadcrumb pageTitle="App Users" />
         <RolesTable />
     </RoleProtected>
   );

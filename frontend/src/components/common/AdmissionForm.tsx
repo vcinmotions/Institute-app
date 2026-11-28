@@ -1,5 +1,7 @@
 "use client";
 
+import { useDialog } from "@/components/common/AppDialog";
+import { API_BASE_URL } from "@/lib/config";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
@@ -26,6 +28,7 @@ const AdmissionForm: React.FC<Props> = ({
   onCloseModal,
   companyDetails,
 }) => {
+  const dialog = useDialog();
   const formRef = useRef<HTMLDivElement>(null);
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -45,7 +48,7 @@ const AdmissionForm: React.FC<Props> = ({
   const studentId = student?.id;
 
   const apiClient = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5001/api",
+    baseURL: API_BASE_URL,
     headers: {
       "Content-Type": "application/json",
     },
@@ -145,7 +148,7 @@ const AdmissionForm: React.FC<Props> = ({
       pdf.save(`AdmissionForm_${student.fullName.replace(/\s+/g, "_")}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert("Failed to generate PDF file structural output due to styling compilation issues. Please try again.");
+      dialog.alert({ title: "Could not create the PDF", message: "The admission form could not be turned into a PDF. Please try again.", variant: "error" });
     } finally {
       setPdfLoading(false);
     }

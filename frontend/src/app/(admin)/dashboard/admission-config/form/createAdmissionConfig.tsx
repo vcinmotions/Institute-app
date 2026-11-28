@@ -105,9 +105,8 @@ export default function AdmissionConfigForm() {
 
               <div>
                 <Label>Prefix</Label>
-                <Input
+                <Input autoFocus
                   value={form.prefix}
-                  tabIndex={1}
                   onChange={(e) => handleChange("prefix", e.target.value)}
                   placeholder="e.g. ABI"
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -119,7 +118,6 @@ export default function AdmissionConfigForm() {
                 <Input
                   type="number"
                   value={form.numberLength}
-                  tabIndex={2}
                   onChange={(e) => handleChange("numberLength", e.target.value)}
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 />
@@ -129,7 +127,6 @@ export default function AdmissionConfigForm() {
                 <Label>Suffix</Label>
                 <Input
                   value={form.suffix}
-                  tabIndex={3}
                   onChange={(e) => handleChange("suffix", e.target.value)}
                   placeholder="e.g. 2627"
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -140,7 +137,6 @@ export default function AdmissionConfigForm() {
                 <Label>Separator</Label>
                 <Input
                   value={form.separator}
-                  tabIndex={4}
                   onChange={(e) => handleChange("separator", e.target.value)}
                   placeholder="e.g. -"
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -166,7 +162,6 @@ export default function AdmissionConfigForm() {
           <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
             <Button
               size="sm"
-              tabIndex={5}
               variant="primary"
               className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
               onClick={handleSubmit}

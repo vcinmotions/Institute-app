@@ -1,9 +1,11 @@
 const { autoUpdater } = require("electron-updater");
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog, shell, Menu, Tray, Notification } = require("electron");
 const { spawn, spawnSync } = require("child_process");
 const path = require("path");
 const net = require("net");
 const fs = require("fs");
+const os = require("os");
+const http = require("http");
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const isDev = !app.isPackaged;
@@ -44,6 +46,144 @@ process.on("unhandledRejection", (reason) => log.error("Unhandled Rejection:", r
 // ─── PROCESS HANDLES ─────────────────────────────────────────────────────────
 let backendProcess = null;
 let frontendProcess = null;
+let mainWindow = null;
+let tray = null;
+let isQuitting = false; // true only when the user really exits (tray Quit / File > Exit / relaunch)
+
+// ─── RUN MODE (Standalone / LAN Server / LAN Client) ─────────────────────────
+// Chosen once by the administrator and kept in mode-config.json. The app never
+// switches mode on its own; changing it needs File > Connection & Mode Settings.
+const MODE_CONFIG_PATH = path.join(app.getPath("userData"), "mode-config.json");
+const MODES = ["STANDALONE", "LAN_SERVER", "LAN_CLIENT"];
+
+function readModeConfig() {
+  try {
+    const c = JSON.parse(fs.readFileSync(MODE_CONFIG_PATH, "utf8"));
+    if (!MODES.includes(c.mode)) return null;
+    if (c.mode === "LAN_CLIENT" && !c.host) return null;
+    return c;
+  } catch {
+    return null;
+  }
+}
+
+function writeModeConfig(cfg) {
+  fs.mkdirSync(path.dirname(MODE_CONFIG_PATH), { recursive: true });
+  fs.writeFileSync(MODE_CONFIG_PATH, JSON.stringify(cfg, null, 2), "utf8");
+}
+
+function normalizeModeConfig(raw) {
+  if (!raw || !MODES.includes(raw.mode)) throw new Error("Invalid mode");
+  if (raw.mode !== "LAN_CLIENT") return { mode: raw.mode };
+  const host = String(raw.host || "").trim();
+  // Only a plain IPv4 address or host name - no URL, path or credentials.
+  if (!/^[A-Za-z0-9]([A-Za-z0-9.-]{0,251}[A-Za-z0-9])?$/.test(host)) throw new Error("Invalid server address");
+  const port = Number(raw.port) || 5001;
+  const frontendPort = Number(raw.frontendPort) || 3000;
+  for (const p of [port, frontendPort]) {
+    if (!Number.isInteger(p) || p < 1 || p > 65535) throw new Error("Invalid port");
+  }
+  return { mode: "LAN_CLIENT", host, port, frontendPort };
+}
+
+function localIPv4s() {
+  const out = [];
+  for (const list of Object.values(os.networkInterfaces())) {
+    for (const i of list || []) {
+      if (i.family === "IPv4" && !i.internal) out.push(i.address);
+    }
+  }
+  return out;
+}
+
+function httpProbe(url, timeoutMs = 4000) {
+  return new Promise((resolve) => {
+    const req = http.get(url, { timeout: timeoutMs }, (res) => {
+      res.resume();
+      resolve({ ok: res.statusCode >= 200 && res.statusCode < 500, message: `reachable (HTTP ${res.statusCode})` });
+    });
+    req.on("timeout", () => { req.destroy(); resolve({ ok: false, message: "timed out - check the IP and that the server is running" }); });
+    req.on("error", (e) => resolve({ ok: false, message: e.code === "ECONNREFUSED" ? "refused - server not running or blocked by firewall" : (e.code || e.message) }));
+  });
+}
+
+function httpProbeJson(url, timeoutMs = 4000) {
+  return new Promise((resolve) => {
+    const req = http.get(url, { timeout: timeoutMs }, (res) => {
+      let body = "";
+      res.on("data", (d) => (body += d));
+      res.on("end", () => {
+        try { resolve(JSON.parse(body)); } catch { resolve(null); }
+      });
+    });
+    req.on("timeout", () => { req.destroy(); resolve(null); });
+    req.on("error", () => resolve(null));
+  });
+}
+
+/**
+ * Is the server computer set up, and is it the institute this PC belongs to?
+ * Works with every server version: the server's setup STATUS is the source of truth for "set up",
+ * because older servers wrongly report "not initialized" on /setup/identity after an older setup.
+ */
+async function checkServerIdentity(cfg) {
+  const base = `http://${cfg.host}:${cfg.port}/api/setup`;
+  let identity = await httpProbeJson(`${base}/identity`);
+  const hasIdentity = identity && typeof identity.initialized === "boolean";
+  const st = await httpProbeJson(`${base}/status`);
+  const statusKnown = st && typeof st.setupComplete === "string";
+  const setUp = statusKnown ? st.setupComplete === "FULL_DONE" : hasIdentity ? identity.initialized : null;
+
+  if (setUp === null) {
+    return { identity: null, error: `The server at ${cfg.host} did not answer. Check the server computer is on and the app is running there.` };
+  }
+  if (!setUp) {
+    return {
+      identity,
+      error: "The server computer has not been set up yet. Ask the Master Super Admin to open the app on the server computer and complete the Institute Setup first.",
+    };
+  }
+  identity = {
+    initialized: true,
+    instituteId: hasIdentity ? identity.instituteId : null,
+    instituteName: hasIdentity ? identity.instituteName : null,
+  };
+  if (cfg.instituteId && identity.instituteId && cfg.instituteId !== identity.instituteId) {
+    return {
+      identity,
+      error: `This computer was connected to a different institute. The server at ${cfg.host} now belongs to "${identity.instituteName}". Switching institute is not allowed from a client computer.`,
+    };
+  }
+  return { identity, error: "" };
+}
+
+async function testServerConnection(cfg) {
+  const host = cfg.host;
+  const [backend, frontend] = await Promise.all([
+    httpProbe(`http://${host}:${cfg.port}/api/setup/status`),
+    httpProbe(`http://${host}:${cfg.frontendPort}/`),
+  ]);
+  return { backend, frontend };
+}
+
+// LAN server: try to open the two ports in Windows Firewall (needs admin; failure is non-fatal).
+function ensureFirewallRules() {
+  if (!isWin) return { ok: true };
+  let allOk = true;
+  for (const [name, port] of [["VC Inmotions Backend", BACKEND_PORT], ["VC Inmotions App", FRONTEND_PORT]]) {
+    const check = spawnSync("netsh", ["advfirewall", "firewall", "show", "rule", `name=${name}`], { windowsHide: true });
+    if (check.status === 0) continue; // rule already exists
+    const add = spawnSync(
+      "netsh",
+      ["advfirewall", "firewall", "add", "rule", `name=${name}`, "dir=in", "action=allow", "protocol=TCP", `localport=${port}`, "profile=private,domain"],
+      { windowsHide: true }
+    );
+    if (add.status !== 0) allOk = false;
+  }
+  return { ok: allOk };
+}
+
+let modeSetupContext = { isChange: false, error: "" };
 
 // ─── ENV LOADING ──────────────────────────────────────────────────────────────
 function loadEnvFile(filePath) {
@@ -73,8 +213,10 @@ function loadGlobalEnv() {
     ? path.join(__dirname, "../server")
     : path.join(RESOURCES_PATH, "server", "dist");
 
-  loadEnvFile(path.join(basePath, ".env"));
+  // .env.prod first: the first file to set a key wins, and production settings must beat the
+  // generic .env (which may carry development values such as a localhost licence-server address).
   loadEnvFile(path.join(basePath, ".env.prod"));
+  loadEnvFile(path.join(basePath, ".env"));
 
   if (!process.env.BACKUP_SECRET) {
     throw new Error("BACKUP_SECRET not loaded — check .env / .env.prod");
@@ -126,7 +268,7 @@ function waitForPort(port, timeout = STARTUP_TIMEOUT) {
 }
 
 // ─── BACKEND ─────────────────────────────────────────────────────────────────
-function startBackend() {
+function startBackend(lanServer = false) {
   const backendDir = isDev
     ? path.join(__dirname, "../server")
     : path.join(RESOURCES_PATH, "server");
@@ -142,10 +284,13 @@ function startBackend() {
       env: {
         ...process.env,
         PORT: String(BACKEND_PORT),
+        // Standalone: reachable from this PC only. LAN server: reachable from the network.
+        HOST: lanServer ? "0.0.0.0" : "127.0.0.1",
         APP_ENV: "prod",
         NODE_ENV: isDev ? "development" : "production",
         USER_DATA_PATH,
         BACKUP_SECRET: process.env.BACKUP_SECRET,
+        APP_VERSION: app.getVersion(),
         RESOURCES_PATH,
       },
       windowsHide: !isDev,
@@ -177,7 +322,7 @@ function startBackend() {
 }
 
 // ─── FRONTEND ────────────────────────────────────────────────────────────────
-function startFrontend() {
+function startFrontend(lanServer = false) {
   if (isDev) return waitForPort(FRONTEND_PORT, STARTUP_TIMEOUT);
 
   const frontendDir = path.join(RESOURCES_PATH, "frontend", "standalone", "frontend");
@@ -194,7 +339,12 @@ function startFrontend() {
   return new Promise((resolve, reject) => {
     frontendProcess = spawn(NODE_PATH, [frontendServerPath], {
       cwd: frontendDir,
-      env: { ...process.env, NODE_ENV: "production", PORT: String(FRONTEND_PORT) },
+      env: {
+        ...process.env,
+        NODE_ENV: "production",
+        PORT: String(FRONTEND_PORT),
+        HOSTNAME: lanServer ? "0.0.0.0" : "127.0.0.1",
+      },
       windowsHide: true,
     });
 
@@ -223,35 +373,126 @@ function startFrontend() {
   });
 }
 
+// ─── THIS PC'S ID ─────────────────────────────────────────────────────────────
+// Same recipe as the server (server/src/services/device.service.ts) so the id matches everywhere.
+let cachedDeviceId = null;
+function thisDeviceId() {
+  if (cachedDeviceId) return cachedDeviceId;
+  let raw = "";
+  if (process.platform === "win32") {
+    try {
+      const out = require("child_process").execFileSync(
+        "reg", ["query", "HKLM\\SOFTWARE\\Microsoft\\Cryptography", "/v", "MachineGuid"],
+        { encoding: "utf8", windowsHide: true, timeout: 4000 }
+      );
+      const m = /MachineGuid\s+REG_SZ\s+(\S+)/i.exec(out);
+      if (m) raw = m[1];
+    } catch { /* fall back below */ }
+  }
+  if (!raw) {
+    const macs = Object.values(require("os").networkInterfaces()).flat()
+      .filter((i) => i && !i.internal && i.mac && i.mac !== "00:00:00:00:00:00").map((i) => i.mac).sort();
+    raw = `${require("os").hostname()}|${macs[0] || ""}`;
+  }
+  cachedDeviceId = require("crypto").createHash("sha256").update("vc-device:" + raw).digest("hex").slice(0, 32);
+  return cachedDeviceId;
+}
+ipcMain.handle("device:get", () => ({
+  deviceId: thisDeviceId(),
+  deviceName: require("os").hostname(),
+  os: `${require("os").type()} ${require("os").release()} (${require("os").arch()})`,
+}));
+
 // ─── AUTO UPDATER ─────────────────────────────────────────────────────────────
+// The Super Admin decides: the app only CHECKS and shows the available version. Downloading and installing
+// are started from Master > Software Update (which makes a database backup first). Installers come from the
+// signed GitHub release; electron-updater verifies each download against the sha512 in latest.yml.
+// Data lives in the user-data folder, which an update never touches.
+const UPDATE_HISTORY_FILE = path.join(USER_DATA_PATH, "update-history.json");
+const updateState = { current: app.getVersion(), status: "idle", available: null, progress: 0, error: null, checkedAt: null };
+
+function readUpdateHistory() {
+  try { return JSON.parse(fs.readFileSync(UPDATE_HISTORY_FILE, "utf8")); } catch { return []; }
+}
+function addUpdateHistory(entry) {
+  try {
+    fs.mkdirSync(USER_DATA_PATH, { recursive: true });
+    fs.writeFileSync(UPDATE_HISTORY_FILE, JSON.stringify([{ at: new Date().toISOString(), ...entry }, ...readUpdateHistory()].slice(0, 50)));
+  } catch (e) { log.warn("could not write update history:", e.message); }
+}
+
 function setupAutoUpdater() {
-  autoUpdater.autoDownload = true;
-  autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.autoDownload = false;          // never download without the Super Admin asking
+  autoUpdater.autoInstallOnAppQuit = false;  // never install silently when the app is closed
 
-  autoUpdater.on("checking-for-update", () => log.info("Checking for updates..."));
-  autoUpdater.on("update-available", (info) => log.info("Update available:", info.version));
-  autoUpdater.on("update-not-available", () => log.info("No updates available"));
-  autoUpdater.on("download-progress", (progress) => log.info(`Downloading update: ${progress.percent.toFixed(1)}%`));
-  
-  // Explicitly log channel communication errors
-  autoUpdater.on("error", (err) => log.error("Auto-updater failure caught:", err));
-
-  autoUpdater.on("update-downloaded", async () => {
-    log.info("Update downloaded — prompting user");
-    const { response } = await dialog.showMessageBox({
-      type: "info",
-      title: "Update Ready",
-      message: "A new version has been downloaded. Restart now to apply it?",
-      buttons: ["Restart Now", "Later"],
-    });
-    if (response === 0) {
-      killChildren();
-      autoUpdater.quitAndInstall();
-    }
+  autoUpdater.on("checking-for-update", () => { updateState.status = "checking"; });
+  autoUpdater.on("update-available", (info) => {
+    log.info("Update available:", info.version);
+    Object.assign(updateState, { status: "available", available: info.version, error: null, checkedAt: new Date().toISOString() });
+  });
+  autoUpdater.on("update-not-available", () => {
+    Object.assign(updateState, { status: "idle", available: null, checkedAt: new Date().toISOString() });
+  });
+  autoUpdater.on("download-progress", (p) => { updateState.status = "downloading"; updateState.progress = Math.round(p.percent); });
+  autoUpdater.on("update-downloaded", (info) => {
+    Object.assign(updateState, { status: "downloaded", available: info.version, progress: 100 });
+  });
+  autoUpdater.on("error", (err) => {
+    log.error("Auto-updater failure caught:", err);
+    Object.assign(updateState, { status: "error", error: String(err && err.message ? err.message : err).slice(0, 200) });
   });
 
-  setTimeout(() => autoUpdater.checkForUpdates(), 10_000);
+  setTimeout(() => autoUpdater.checkForUpdates().catch(() => {}), 10_000);
+  setInterval(() => { if (updateState.status === "idle") autoUpdater.checkForUpdates().catch(() => {}); }, 6 * 3600 * 1000);
 }
+
+/** Only the Master (Super) Admin may run updates: verify the token against the local server. */
+async function assertMasterToken(token) {
+  if (!token || typeof token !== "string") throw new Error("Sign in as the Super Admin to update the application.");
+  const cfg = readModeConfig();
+  const host = cfg && cfg.mode === "LAN_CLIENT" ? cfg.host : "127.0.0.1";
+  const port = cfg && cfg.mode === "LAN_CLIENT" ? cfg.port : BACKEND_PORT;
+  const res = await fetch(`http://${host}:${port}/api/master-user`, { headers: { Authorization: `Bearer ${token}` } });
+  if (!res.ok) throw new Error("Only the Super Admin can update the application.");
+}
+
+ipcMain.handle("update:status", () => ({ ...updateState, packaged: app.isPackaged && !isDev, history: readUpdateHistory() }));
+
+ipcMain.handle("update:check", async (_e, token) => {
+  await assertMasterToken(token);
+  if (!app.isPackaged || isDev) throw new Error("Updates are only available in the installed application.");
+  try { await autoUpdater.checkForUpdates(); } catch (e) { updateState.status = "error"; updateState.error = String(e.message || e).slice(0, 200); }
+  return { ...updateState, history: readUpdateHistory() };
+});
+
+ipcMain.handle("update:download", async (_e, token) => {
+  await assertMasterToken(token);
+  if (updateState.status !== "available") throw new Error("There is no update to download.");
+  autoUpdater.downloadUpdate().catch((e) => { updateState.status = "error"; updateState.error = String(e.message || e).slice(0, 200); });
+  updateState.status = "downloading";
+  return { ...updateState };
+});
+
+// The renderer takes a database backup BEFORE calling this (see the Software Update page).
+ipcMain.handle("update:install", async (_e, token) => {
+  await assertMasterToken(token);
+  if (updateState.status !== "downloaded") throw new Error("Download the update first.");
+  addUpdateHistory({ from: app.getVersion(), to: updateState.available, result: "installing" });
+  killChildren();
+  autoUpdater.quitAndInstall();
+});
+
+// Roll back: fetch the installer of an earlier release from the same GitHub project and install it.
+ipcMain.handle("update:rollback", async (_e, token, version) => {
+  await assertMasterToken(token);
+  if (!/^\d+\.\d+\.\d+$/.test(String(version))) throw new Error("Invalid version.");
+  if (!app.isPackaged || isDev) throw new Error("Rollback is only available in the installed application.");
+  autoUpdater.allowDowngrade = true;
+  autoUpdater.setFeedURL({ provider: "generic", url: `https://github.com/vcinmotions/Institute-app/releases/download/v${version}` });
+  addUpdateHistory({ from: app.getVersion(), to: String(version), result: "rollback requested" });
+  await autoUpdater.checkForUpdates();
+  return { ...updateState };
+});
 
 // ─── LOADING SCREEN ──────────────────────────────────────────────────────────
 const LOADING_HTML = `data:text/html;charset=utf-8,${encodeURIComponent(`<!DOCTYPE html>
@@ -288,6 +529,23 @@ const LOADING_HTML = `data:text/html;charset=utf-8,${encodeURIComponent(`<!DOCTY
 </html>`)}`;
 
 // ─── WINDOW ──────────────────────────────────────────────────────────────────
+const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/** Keeps the signed-in session for the next start (same as preload.js does every few seconds). */
+async function saveSessionBeforeClose(win) {
+  try {
+    if (win.isDestroyed()) return;
+    await Promise.race([
+      win.webContents.executeJavaScript(
+        'try { var t = window.sessionStorage.getItem("token"); if (t) window.localStorage.setItem("vc_saved_token", t); else window.localStorage.removeItem("vc_saved_token"); } catch (e) {}'
+      ),
+      delay(1000),
+    ]);
+  } catch (err) {
+    log.warn(`save session on close failed: ${err.message}`);
+  }
+}
+
 async function createWindow() {
   const win = new BrowserWindow({
     width: 1400,
@@ -304,13 +562,87 @@ async function createWindow() {
 
   win.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
 
+  // Closing the EXE does NOT sign the user out: the session is kept (see preload.js) and the server signs
+  // everyone out once a week (Sunday 11:59 PM). The login seat is freed by the server's heartbeat timeout.
+  mainWindow = win;
+  let closing = false;
+  win.on("close", async (e) => {
+    if (closing) return;
+    e.preventDefault();
+    closing = true;
+    await saveSessionBeforeClose(win);
+    // LAN server PC: closing the window must NOT stop the server, or every client PC loses
+    // its connection. Hide to the system tray instead; the tray "Quit" really exits.
+    const c = readModeConfig();
+    if (c && c.mode === "LAN_SERVER" && !isQuitting) {
+      if (!win.isDestroyed()) win.hide();
+      createTray();
+      closing = false;
+      return;
+    }
+    if (!win.isDestroyed()) win.close();
+  });
+
   await win.loadURL(LOADING_HTML);
   win.show();
 
+  const cfg = readModeConfig();
+
+  // First run (or settings requested): ask the administrator how this PC should run.
+  if (!cfg || modeSetupContext.isChange) {
+    await win.loadFile(path.join(__dirname, "mode-setup.html"));
+    return;
+  }
+
+  // LAN client: no local database or services - use the server computer.
+  if (cfg.mode === "LAN_CLIENT") {
+    const probe = await testServerConnection(cfg);
+    if (!probe.backend.ok || !probe.frontend.ok) {
+      modeSetupContext = {
+        isChange: true,
+        error: `Cannot reach the server at ${cfg.host}. Backend: ${probe.backend.message}. App: ${probe.frontend.message}. Check the server computer is on, then Test connection / Save again.`,
+      };
+      await win.loadFile(path.join(__dirname, "mode-setup.html"));
+      return;
+    }
+    // The server must already be set up, and must be the same institute this PC connected to before.
+    // A client PC never runs first-time setup and never creates its own database.
+    const { identity, error: identityError } = await checkServerIdentity(cfg);
+    if (identityError) {
+      modeSetupContext = { isChange: true, error: identityError };
+      await win.loadFile(path.join(__dirname, "mode-setup.html"));
+      return;
+    }
+    if (!cfg.instituteId && identity.instituteId) {
+      // Remember which institute this client belongs to.
+      writeModeConfig({ ...cfg, instituteId: identity.instituteId, instituteName: identity.instituteName });
+    }
+    await win.loadURL(`http://${cfg.host}:${cfg.frontendPort}`);
+    if (!isDev && app.isPackaged) setupAutoUpdater();
+    return;
+  }
+
+  const lanServer = cfg.mode === "LAN_SERVER";
+
   try {
     prepareUserDataFolders();
-    await startBackend();
-    await startFrontend();
+    await startBackend(lanServer);
+    await startFrontend(lanServer);
+    if (lanServer) {
+      const fw = ensureFirewallRules();
+      if (!fw.ok) {
+        dialog.showMessageBox({
+          type: "warning",
+          title: "Allow other computers to connect",
+          message: "Windows Firewall may block other computers from connecting.",
+          detail:
+            "Run these two commands once in an Administrator Command Prompt on this computer:\n\n" +
+            `netsh advfirewall firewall add rule name="VC Inmotions Backend" dir=in action=allow protocol=TCP localport=${BACKEND_PORT}\n` +
+            `netsh advfirewall firewall add rule name="VC Inmotions App" dir=in action=allow protocol=TCP localport=${FRONTEND_PORT}\n\n` +
+            `Other computers connect to: ${localIPv4s().join(", ") || "(no network found)"}`,
+        });
+      }
+    }
   } catch (err) {
     log.error("Startup failed:", err);
     
@@ -332,6 +664,37 @@ async function createWindow() {
 
   if (isDev) win.webContents.openDevTools();
   if (!isDev && app.isPackaged) setupAutoUpdater();
+}
+
+// ─── SYSTEM TRAY (LAN server keeps running when the window is closed) ────────
+function showMainWindow() {
+  const win = mainWindow;
+  if (!win || win.isDestroyed()) {
+    createWindow();
+    return;
+  }
+  // The session was cleared on close, so reload to land on the login screen.
+  win.loadURL(`http://localhost:${FRONTEND_PORT}`).catch(() => {});
+  win.show();
+  win.focus();
+}
+
+function createTray() {
+  if (tray) return;
+  tray = new Tray(path.join(__dirname, "icons", isWin ? "app.ico" : "app.png"));
+  tray.setToolTip("VC Inmotions Server - running (other computers can connect)");
+  tray.setContextMenu(
+    Menu.buildFromTemplate([
+      { label: "Open VC Inmotions", click: showMainWindow },
+      { type: "separator" },
+      { label: "Quit (stops the server for all computers)", click: () => app.quit() },
+    ])
+  );
+  tray.on("double-click", showMainWindow);
+  new Notification({
+    title: "VC Inmotions Server is still running",
+    body: "Other computers stay connected. Use the tray icon to open or quit.",
+  }).show();
 }
 
 // ─── PROCESS TREE TERMINATION ────────────────────────────────────────────────
@@ -356,16 +719,37 @@ function killChildren() {
 
 // ─── APP LIFECYCLE ────────────────────────────────────────────────────────────
 app.whenReady().then(() => {
+  if (!gotLock) return;
   try {
     verifyProductionRuntime();
     loadGlobalEnv();
   } catch (err) {
     log.error(err.message);
     dialog.showErrorBox("Configuration Error", String(err.message));
-    app.exit(1); 
+    app.exit(1);
     return;
   }
+  buildMenu();
   createWindow();
+});
+
+// Only one copy per PC: opening the EXE again just brings the running one forward.
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  // A second copy must not open: it would share the same local database and session.
+  try {
+    require("electron").dialog.showErrorBox(
+      "VC-Inmotions is already running",
+      "Only one copy can run on this PC. The running window will be brought to the front."
+    );
+  } catch { /* dialog unavailable */ }
+  app.quit();
+} else {
+  app.on("second-instance", () => showMainWindow());
+}
+
+app.on("before-quit", () => {
+  isQuitting = true;
 });
 
 app.on("window-all-closed", () => {
@@ -388,6 +772,131 @@ process.on("SIGTERM", () => {
 });
 
 // ─── IPC HANDLERS ────────────────────────────────────────────────────────────
+// Opens the subscription portal in the default browser (https + allowlisted host only).
+function isAllowedExternal(url) {
+  try {
+    const u = new URL(url);
+    const portal = process.env.SUBSCRIPTION_PORTAL_URL;
+    if (!portal) return false;
+    const isLocal = ["localhost", "127.0.0.1"].includes(u.hostname);
+    // https always; plain http only for a local test portal.
+    if (u.protocol !== "https:" && !(u.protocol === "http:" && isLocal)) return false;
+    return u.hostname === new URL(portal).hostname;
+  } catch {
+    return false;
+  }
+}
+
+ipcMain.handle("open-external", async (_e, url) => {
+  if (!isAllowedExternal(url)) return false;
+  await shell.openExternal(url);
+  return true;
+});
+
+// ── Mode setup (Standalone / LAN) ──
+ipcMain.handle("mode:get", () => ({
+  config: readModeConfig(),
+  ips: localIPv4s(),
+  isChange: modeSetupContext.isChange,
+  error: modeSetupContext.error,
+}));
+
+ipcMain.handle("mode:test", async (_e, raw) => {
+  try {
+    const cfg = normalizeModeConfig({ mode: "LAN_CLIENT", ...raw });
+    return await testServerConnection(cfg);
+  } catch (err) {
+    const bad = { ok: false, message: err.message };
+    return { backend: bad, frontend: bad };
+  }
+});
+
+ipcMain.handle("mode:save", (_e, raw) => {
+  const cfg = normalizeModeConfig(raw);
+  writeModeConfig(cfg);
+  log.info("Run mode saved:", cfg.mode);
+  killChildren();
+  app.relaunch();
+  app.quit();
+});
+
+ipcMain.handle("mode:cancel", () => {
+  killChildren();
+  app.relaunch();
+  app.quit();
+});
+
+async function confirmAndOpenModeSettings(win) {
+  const { response } = await dialog.showMessageBox(win, {
+    type: "warning",
+    title: "Change connection mode",
+    message: "Change how this computer runs VC Inmotions?",
+    detail:
+      "Only an administrator should do this. Your data is not deleted, but this computer will use a different database location after you save: " +
+      "Standalone and Server use this computer's data; Client uses the server computer's data.",
+    buttons: ["Continue", "Cancel"],
+    defaultId: 1,
+    cancelId: 1,
+  });
+  if (response !== 0) return;
+  modeSetupContext = { isChange: true, error: "" };
+  (win || BrowserWindow.getAllWindows()[0])?.loadFile(path.join(__dirname, "mode-setup.html"));
+}
+
+// ─── KEYBOARD SHORTCUTS ───────────────────────────────────────────────────────
+// The View menu binds Zoom In to Ctrl+Shift+= only, so Ctrl+= and the numpad
+// + / - / 0 keys did nothing. Handle the browser-style keys here for every page
+// (app, loading screen, mode setup). Zoom is kept within Chromium's 25%-500% range.
+const ZOOM_STEP = 0.5;
+const ZOOM_MIN = -7.6; // ~25%
+const ZOOM_MAX = 8.8; // ~500%
+
+function changeZoom(wc, delta) {
+  const level = delta === 0 ? 0 : Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, wc.getZoomLevel() + delta));
+  wc.setZoomLevel(level);
+}
+
+function attachShortcuts(wc) {
+  wc.on("before-input-event", (event, input) => {
+    if (input.type !== "keyDown") return;
+    const ctrl = input.control || input.meta;
+
+    if (ctrl && !input.alt) {
+      const zoomIn = ["=", "+"].includes(input.key) || input.code === "NumpadAdd";
+      const zoomOut = ["-", "_"].includes(input.key) || input.code === "NumpadSubtract";
+      const reset = (input.key === "0" && !input.shift) || input.code === "Numpad0";
+      if (zoomIn || zoomOut || reset) {
+        event.preventDefault(); // stop the menu accelerator from zooming a second time
+        changeZoom(wc, zoomIn ? ZOOM_STEP : zoomOut ? -ZOOM_STEP : 0);
+        return;
+      }
+    }
+  });
+
+  // Ctrl + mouse wheel zoom, like a browser.
+  wc.on("zoom-changed", (_e, direction) => changeZoom(wc, direction === "in" ? ZOOM_STEP : -ZOOM_STEP));
+}
+
+app.on("web-contents-created", (_e, wc) => attachShortcuts(wc));
+
+function buildMenu() {
+  const template = [
+    {
+      label: "File",
+      submenu: [
+        { label: "Connection & Mode Settings…", click: (_i, win) => confirmAndOpenModeSettings(win) },
+        { type: "separator" },
+        { role: "quit" },
+      ],
+    },
+    { role: "editMenu" },
+    { role: "viewMenu" },
+    { role: "windowMenu" },
+    { role: "help", submenu: [{ label: "About", click: () => dialog.showMessageBox({ message: `VC Inmotions ${app.getVersion()}` }) }] },
+  ];
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+
 ipcMain.on("restart-app", () => {
   killChildren();
   app.relaunch();
@@ -403,8 +912,40 @@ ipcMain.handle("select-backup-file", async () => {
   return result.canceled ? null : result.filePaths[0];
 });
 
+// Backup folder picker (System Settings > Backup). Backups are written by the server computer, so a
+// client PC cannot pick a folder: the path would be on the wrong machine.
+ipcMain.handle("select-folder", async (e, opts) => {
+  const cfg = readModeConfig();
+  if (cfg?.mode === "LAN_CLIENT") {
+    return { error: "Choose backup folders on the server computer. Backups are saved there." };
+  }
+  const win = BrowserWindow.fromWebContents(e.sender) || undefined;
+  const defaultPath = opts && typeof opts.defaultPath === "string" && fs.existsSync(opts.defaultPath) ? opts.defaultPath : undefined;
+  const result = await dialog.showOpenDialog(win, {
+    title: (opts && typeof opts.title === "string" && opts.title) || "Select folder",
+    defaultPath,
+    properties: ["openDirectory", "createDirectory", "promptToCreate"],
+  });
+  return { path: result.canceled ? null : result.filePaths[0] };
+});
+
 ipcMain.handle("perform-restore", async (_, filePath) => {
   log.info("Restore triggered from UI:", filePath);
+
+  // A client PC has no local database, and a restore overwrites data - refuse in View-Only Mode.
+  const cfg = readModeConfig();
+  if (cfg?.mode === "LAN_CLIENT") {
+    dialog.showErrorBox("Restore not available", "Restore must be done on the server computer.");
+    return;
+  }
+  const lock = await httpProbeJson(`http://127.0.0.1:${BACKEND_PORT}/api/subscription/locked`);
+  if (lock?.locked) {
+    dialog.showErrorBox(
+      "View-Only Mode",
+      "Your software subscription has expired. The application is currently in View-Only Mode. Please renew your subscription through the web portal to restore full access."
+    );
+    return;
+  }
 
   const restoreModulePath = isDev
     ? path.join(__dirname, "../server/dist/src/utils/restoreBackUp.js")

@@ -59,7 +59,6 @@ export function getCentralPrisma(url?: string): PrismaClient {
   const dbUrl = url || getCentralDbUrl();
   if (!dbUrl) throw new Error("CENTRAL_DATABASE_URL is not set");
 
-  console.log("DbURL IN CENTRAL_CLIENT:", dbUrl);
   if (!centralPrisma || currentUrl !== dbUrl) {
     centralPrisma = new PrismaClient({
       datasources: {

@@ -1,4 +1,6 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import { batchLabel } from "@/lib/batchLabel";
 import Pagination from "@/components/tables/Pagination";
 import {
   downloadAttendanceExcel,
@@ -67,7 +69,7 @@ export default function AttendanceTable() {
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: batchLabel(b),
   }));
 
   console.log("get Course Info In Faculty Create Form Modal;", course);
@@ -133,7 +135,7 @@ export default function AttendanceTable() {
           message: "",
           variant: "",
         });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ STOP execution
     }
@@ -178,7 +180,7 @@ export default function AttendanceTable() {
           message: "",
           variant: "",
         });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
     }
   };
 

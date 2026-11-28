@@ -1,5 +1,6 @@
 "use client";
 
+import { API_BASE_URL } from "@/lib/config";
 import { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/button/Button";
 import ModalCard from "@/components/common/ModalCard";
@@ -152,7 +153,7 @@ export default function AddressSetupPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:5001/api/setup/address", {
+      const res = await fetch(`${API_BASE_URL}/setup/address`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -166,6 +167,9 @@ export default function AddressSetupPage() {
         if (typeof window !== "undefined" && "electronAPI" in window) {
           // @ts-ignore
           window.electronAPI.restartApp();
+        } else if (typeof window !== "undefined") {
+          // Plain browser (no Electron shell to restart): go to the sign-in page.
+          (globalThis as any).location.replace("/signin");
         }
       }, 1000);
     } catch (err: any) {
@@ -238,12 +242,10 @@ export default function AddressSetupPage() {
                   value: s.isoCode,
                 }))}
                 placeholder="Select State"
+                searchable
                 onChange={(value) => handleChange("state", value)}
                 value={newCompany.state}
               />
-              <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                <ChevronDownIcon />
-              </span>
             </div>
             {errors.state && (
               <p className="text-sm text-red-500">{errors.state}</p>
@@ -259,6 +261,7 @@ export default function AddressSetupPage() {
                 value: c.name, // city name is fine
               }))}
               placeholder="Select City"
+              searchable
               onChange={(value) => handleChange("city", value)}
               value={newCompany.city}
             />

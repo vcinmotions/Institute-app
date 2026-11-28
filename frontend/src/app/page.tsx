@@ -5,12 +5,26 @@ import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/apiClient";
 import { setToken, setUser } from "@/store/slices/authSlice";
 import { useDispatch } from "react-redux";
+import { useState } from "react";
+import SubscriptionLanding from "@/components/subscription/SubscriptionLanding";
 
 export default function Home() {
   const router = useRouter();
   const dispatch = useDispatch();
+  // null = not decided yet, true = hosted website, false = Windows EXE
+  const [isWeb, setIsWeb] = useState<boolean | null>(null);
 
   useEffect(() => {
+    // The EXE preload exposes window.electronAPI; the public website does not.
+    // Website root -> subscription page. EXE -> normal boot (login).
+    // A browser visitor who is already signed in to the app (token saved) also
+    // takes the normal boot path; otherwise /signin would bounce to the plans page.
+    const hasAppSession =
+      !!window.sessionStorage.getItem("token") || !!window.localStorage.getItem("auth");
+    const inExe = typeof window !== "undefined" && (!!window.electronAPI || hasAppSession);
+    setIsWeb(!inExe);
+    if (!inExe) return;
+
     async function boot() {
       try {
 
@@ -71,6 +85,7 @@ export default function Home() {
     boot();
   }, []);
 
+  if (isWeb) return <SubscriptionLanding />;
   return null;
 }
 

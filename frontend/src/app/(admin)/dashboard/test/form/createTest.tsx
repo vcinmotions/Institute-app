@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useCourseStore } from "@/store/courseStore";
 import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -14,6 +16,7 @@ import { useScrollToError } from "@/app/utils/ScrollToError";
 import { useFetchAllCourses } from "@/hooks/queries/useQueryFetchCourseData";
 import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useCreateTest } from "@/hooks/useCreateTest";
+import { dateError, integerError } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof TestData, string>>;
 
@@ -95,10 +98,10 @@ export default function TestForm() {
 
     // Strict evaluation parameters checks run ONLY on direct assignment launches
     if (actionType === "PUBLISH") {
-      if (!newTest.testDate.trim()) newErrors.testDate = "Test execution date is required.";
-      if (!newTest.totalMarks.trim() || isNaN(Number(newTest.totalMarks))) {
-        newErrors.totalMarks = "Valid numerical marks are required.";
-      }
+      const dateErr = dateError(newTest.testDate, "Test date", { required: true });
+      if (dateErr) newErrors.testDate = dateErr;
+      const marksErr = integerError(newTest.totalMarks, "Total marks", { required: true, min: 1, max: 1000 });
+      if (marksErr) newErrors.totalMarks = marksErr;
     }
 
     setErrors(newErrors);
@@ -136,6 +139,11 @@ export default function TestForm() {
         });
         reset();
         setTimeout(() => router.back(), 1200);
+      },
+      onError: (error: any) => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
       },
     });
   };

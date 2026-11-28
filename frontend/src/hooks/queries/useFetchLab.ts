@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getLab } from '@/lib/api';
 
 interface FetchLabParams {
+    kind?: "LAB" | "CLASS";
     page: number;
     limit: number;
     search: string;

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import Avatar from "../common/Avatar";
 import { capitalizeWords } from "../common/ToCapitalize";
+import { useIsAdmin } from "@/components/auth/AdminOnly";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,8 +24,15 @@ export default function UserDropdown() {
     setIsOpen(false);
   }
 
-  const role = user?.role?.replace('_', ' ') || 'SYSTEM USER';
-  const profileHref = user?.role === "MASTER_ADMIN" ? "/master-dashboard/profile" : "/dashboard/profile";
+  const isMaster = user?.role === "MASTER_ADMIN";
+  const { isAdmin } = useIsAdmin();
+  const area = isMaster ? "/master-dashboard" : "/dashboard";
+  const profileHref = `${area}/profile`;
+  const ICONS: Record<string, React.ReactNode> = {
+    settings: (<><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z" /></>),
+    support: (<><circle cx="12" cy="12" r="9.5" /><path d="M9.1 9a3 3 0 015.8 1c0 2-3 2.5-3 4M12 17.5h.01" /></>),
+    status: (<path d="M3 12h4l3-8 4 16 3-8h4" />),
+  };
 
   return (
     <div className="relative flex items-center">
@@ -37,13 +45,10 @@ export default function UserDropdown() {
           <Avatar name={user?.name} size={30} />
         </span>
 
-        {/* Shortened username, more professional role placeholder */}
-        <div className="hidden text-left md:block">
-          {/* <span className="block text-xs font-semibold text-gray-950 dark:text-gray-100">
+        {/* The user's name only (no role / access level) */}
+        <div className="hidden max-w-[140px] text-left md:block">
+          <span className="block truncate text-xs font-semibold text-gray-950 dark:text-gray-100">
             {capitalizeWords(user?.name)}
-          </span> */}
-          <span className="block font-mono text-[10px] font-semibold text-brand-600 uppercase tracking-wide dark:text-brand-400">
-            {role}
           </span>
         </div>
 
@@ -67,9 +72,6 @@ export default function UserDropdown() {
               <span className="block text-sm font-semibold text-gray-950 dark:text-gray-100">
                 {capitalizeWords(user?.name)}
               </span>
-              <span className="font-mono text-xs font-semibold tracking-wide text-brand-600 uppercase dark:text-brand-400">
-                {role}
-              </span>
             </div>
             <span className="mt-1 block text-xs text-gray-500 dark:text-gray-500 truncate">
               {user?.email}
@@ -80,9 +82,14 @@ export default function UserDropdown() {
         {/* Links */}
         <ul className="flex flex-col gap-0.5 p-1.5 border-b border-gray-100 dark:border-gray-800">
           {[
-            { label: "Account settings", href: profileHref, icon: "/icons/settings.svg" },
-            { label: "Support center", href: "/dashboard/support", icon: "/icons/help.svg" },
-            { label: "Check API Status", href: "/dashboard/api-status", icon: "/icons/api.svg" },
+            { label: "Account settings", href: profileHref, icon: "settings" },
+            // Support and API status are for the admin only.
+            ...(isAdmin
+              ? [
+                  { label: "Support center", href: `${area}/support`, icon: "support" },
+                  { label: "Check API Status", href: `${area}/api-status`, icon: "status" },
+                ]
+              : []),
           ].map((item, i) => (
             <li key={i}>
               <DropdownItem
@@ -91,8 +98,9 @@ export default function UserDropdown() {
                 href={item.href}
                 className="group flex items-center h-8 gap-3 rounded-lg px-2 text-[11px] font-semibold text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
               >
-                {/* SVG/Icon Placeholder */}
-                <div className="w-4 h-4 rounded border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 group-hover:border-brand-300 dark:group-hover:border-brand-700" />
+                <svg className="h-4 w-4 shrink-0 text-gray-400 group-hover:text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  {ICONS[item.icon]}
+                </svg>
                 {item.label}
               </DropdownItem>
             </li>

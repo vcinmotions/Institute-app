@@ -16,7 +16,6 @@ function getKey() {
   return crypto.createHash("sha256").update(getSecret()).digest();
 }
 
-console.log("CRYPTO SECRET:", process.env.BACKUP_SECRET);
 
 export function encryptFile(inputPath: string, outputPath: string) {
   return new Promise<void>((resolve, reject) => {

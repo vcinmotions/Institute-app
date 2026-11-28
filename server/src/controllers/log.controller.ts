@@ -59,6 +59,9 @@ export async function getLogController(req: Request, res: Response) {
         { action: { contains: search } },
         { entity: { contains: search } },
         { message: { contains: search } },
+        { actorName: { contains: search } },
+        { actorRole: { contains: search } },
+        { module: { contains: search } },
         // Add more searchable fields as needed
       ];
     }
@@ -71,7 +74,10 @@ export async function getLogController(req: Request, res: Response) {
     const log = await tenantPrisma.activityLog.findMany({
       where,
       orderBy: {
-        [sortField as string]: sortOrder === "asc" ? "asc" : "desc",
+        // only sort by real columns; default to newest first
+      [["createdAt", "entity", "action"].includes(String(sortField))
+        ? String(sortField)
+        : "createdAt"]: sortOrder === "asc" ? "asc" : "desc",
       },
       skip,
       take: limitNum,

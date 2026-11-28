@@ -9,9 +9,12 @@ import { EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { useLoginUser } from "@/hooks/useLoginUser";
+import { useLoginUser, useSelectCompany, CompanyPrompt } from "@/hooks/useLoginUser";
+import Select from "@/components/form/Select";
+import { useBranding } from "@/hooks/useBranding";
 
 export default function SignInForm() {
+  const branding = useBranding();
   const [password, setPassword] = useState("");
   const [identifier, setIdentifier] = useState(""); // Can be email or username
   const [showPassword, setShowPassword] = useState(false);
@@ -19,13 +22,18 @@ export default function SignInForm() {
   const [inputError, setInputError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { mutate, error, isPending } = useLoginUser();
+  const [prompt, setPrompt] = useState<CompanyPrompt | null>(null);
+  const [companyId, setCompanyId] = useState("");
+  const { mutate, error, isPending } = useLoginUser({ onNeedsCompany: setPrompt });
+  const pick = useSelectCompany();
   const firstInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   // Safely check for token on client mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    // The app stores its session token in sessionStorage (see authSlice);
+    // checking localStorage here caused a "/" <-> "/signin" redirect loop.
+    const token = sessionStorage.getItem("token");
     if (token) {
       router.push("/");
     }
@@ -34,6 +42,13 @@ export default function SignInForm() {
   // Autofocus first input on mount
   useEffect(() => {
     firstInputRef.current?.focus();
+  }, []);
+
+  // The desktop EXE (its preload exposes window.electronAPI) has no password reset,
+  // so the "Forgot password?" link shows only in a plain browser. null = not checked yet.
+  const [inExe, setInExe] = useState<boolean | null>(null);
+  useEffect(() => {
+    setInExe(!!window.electronAPI);
   }, []);
 
   // Handle Input Validation (Supports both Username and Email styles)
@@ -48,10 +63,10 @@ export default function SignInForm() {
 
     // If it looks like an email address (contains '@'), validate the structure
     if (trimmed.includes("@")) {
-      const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(trimmed);
+      const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/.test(trimmed);
       if (!isValidEmail) {
         setInputError(true);
-        setErrorMessage("Please enter a valid email address.");
+        setErrorMessage("Enter your username (for staff: name@code, e.g. rahul@2026) or a valid email.");
         return false;
       }
     }
@@ -69,7 +84,7 @@ export default function SignInForm() {
       // Clear or adjust validation state dynamically as they type
       if (value.trim()) {
         if (value.includes("@")) {
-          const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value.trim());
+          const isValidEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/.test(value.trim());
           if (isValidEmail) setInputError(false);
         } else {
           setInputError(false);
@@ -89,6 +104,51 @@ export default function SignInForm() {
     mutate({ email: identifier.trim().toLowerCase(), password });
   };
 
+  // Step 2: a user with several companies picks the one to work in.
+  if (prompt) {
+    const err = (pick.error as Error | null)?.message;
+    return (
+      <div className="flex w-full flex-1 flex-col lg:w-full">
+        <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
+          <h1 className="mb-2 text-2xl font-semibold text-gray-800 sm:text-3xl dark:text-white/90">Select company</h1>
+          <p className="mb-5 text-sm text-gray-500 dark:text-gray-400">
+            You have access to more than one company. Choose the one you want to work in.
+          </p>
+          {err && (
+            <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-500 dark:bg-red-950/30 dark:text-red-400">{err}</div>
+          )}
+          <Label>Company <span className="text-red-500">*</span></Label>
+          <Select
+            searchable
+            options={prompt.companies.map((c) => ({ label: c.name, value: c.id }))}
+            placeholder="Select company"
+            value={companyId}
+            onChange={setCompanyId}
+          />
+          <div className="mt-6 flex gap-3">
+            <Button
+              className="w-full disabled:cursor-not-allowed disabled:opacity-60"
+              size="sm"
+              disabled={!companyId || pick.isPending}
+              onClick={() =>
+                pick.mutate({ email: prompt.email, selectionToken: prompt.selectionToken, companyId })
+              }
+            >
+              {pick.isPending ? "Opening..." : "Continue"}
+            </Button>
+            <button
+              type="button"
+              onClick={() => { setPrompt(null); setCompanyId(""); setPassword(""); pick.reset(); }}
+              className="rounded-lg px-4 text-sm text-gray-500 hover:text-gray-700"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex w-full flex-1 flex-col lg:w-full">
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
@@ -101,6 +161,12 @@ export default function SignInForm() {
                   : error instanceof Error
                     ? error.message
                     : ((error as any)?.error ?? "Something went wrong.")}
+              </div>
+            )}
+            {(branding.logoSrc || branding.instituteName) && (
+              <div className="mb-4 flex items-center gap-3">
+                {branding.logoSrc && <img src={branding.logoSrc} alt="" className="h-12 w-auto max-w-[160px] object-contain" />}
+                {branding.instituteName && <span className="text-lg font-semibold text-gray-700 dark:text-white/80">{branding.instituteName}</span>}
               </div>
             )}
             <h1 className="text-2xl sm:text-3xl mb-2 font-semibold text-gray-800 dark:text-white/90">
@@ -164,12 +230,14 @@ export default function SignInForm() {
                       Keep me logged in
                     </span>
                   </div>
-                  <Link
-                    href="/reset-password"
-                    className="text-brand-500 hover:text-brand-600 dark:text-brand-400 text-sm font-medium"
-                  >
-                    Forgot password?
-                  </Link>
+                  {inExe === false && (
+                    <Link
+                      href="/reset-password"
+                      className="text-brand-500 hover:text-brand-600 dark:text-brand-400 text-sm font-medium"
+                    >
+                      Forgot password?
+                    </Link>
+                  )}
                 </div>
 
                 <div className="pt-2">

@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 // controllers/studentController.ts
 import { Request, Response } from 'express';
 import { studentCourseQuerySchema } from '../validators/student.course.query';
@@ -93,6 +94,7 @@ export async function addStudentCourseController(req: Request, res: Response) {
 
     // 🎓 3. Generate unique student code
     const lastStudent = await tenantPrisma.student.findFirst({
+      where: { clientAdminId }, // numbering is per company
       orderBy: { id: 'desc' },
       select: { studentCode: true, serialNumber: true },
     });
@@ -545,7 +547,7 @@ export async function getStudentCourseController(
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error("Error fetching student course:", err);
@@ -554,7 +556,7 @@ export async function getStudentCourseController(
 }
 
 export async function getStudentCoursebyIdController(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   console.log("Get Stiudent Id in GetStudentCourseControlle:", id);
 

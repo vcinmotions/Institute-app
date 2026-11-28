@@ -1,6 +1,10 @@
 "use client";
 
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateTimeField from "@/components/form/DateTimeField";
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Button from "@/components/ui/button/Button";
 import Alert from "@/components/ui/alert/Alert";
 import { ChevronDownIcon, EnvelopeIcon } from "@/icons";
@@ -25,6 +29,8 @@ import { genders, options, paymentModeOptions } from "@/components/common/Option
 import { useScrollToError } from "@/app/utils/ScrollToError";
 import { titleCase } from "@/app/utils/Normalize";
 import PhoneNumberInput from "@/components/form/PhoneNumberInput";
+import { mobileError, emailError, personNameError, dateError, textError, amountError, onlyErrors } from "@/lib/validation";
+import DocumentsDrop from "@/components/form/form-elements/DocumentsDrop";
 
 type FormErrors = Partial<Record<keyof NewEnquiryDataAll, string>>;
 
@@ -139,9 +145,8 @@ export default function AdmissionForm() {
   ]);
 
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-
-  if (!id) return <p>Invalid admission</p>;
+  // No ?id= means a DIRECT admission (no enquiry); with ?id= it converts that enquiry.
+  const id = searchParams.get("id") ?? "";
 
   const [newEnquiry, setNewEnquiry] = useState<EnquiryData>({
     id: "",
@@ -184,6 +189,8 @@ export default function AdmissionForm() {
   const { data, isLoading } = useFetchEnquiryById(id as string);
   const [selectedProfilePicture, setSelectedProfilePicture] =
     useState<File | null>(null);
+  // Documents (ID proof, marksheets...) sent with the admission; up to 10 files.
+  const [documents, setDocuments] = useState<File[]>([]);
   const dispatch = useDispatch();
 
   // New state for alert
@@ -457,7 +464,7 @@ export default function AdmissionForm() {
     () =>
       batch.map((b: any) => ({
         value: b.id.toString(),
-        label: `${(b.name)} | PCs: ${b.labTimeSlot.availablePCs}`,
+        label: batchLabel(b),
       })),
     [batch]
   );
@@ -472,14 +479,17 @@ export default function AdmissionForm() {
       contact: formattedNumber,
     }));
 
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, contact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        contact: "Phone number must be 10 digits",
-      }));
-    }
+    // Checked on the digits (not the raw text); same rule as the server.
+    setErrors((prev) => ({ ...prev, contact: mobileError(formattedNumber, "Contact number", true) }));
+  };
+
+  // Alternate Contact input: updates ONLY the alternate number (it used to share the Student Contact handler,
+  // so typing here overwrote the Student Contact and never saved the alternate number).
+  const handleParentsContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 10);
+    setFilledEnquiryData((prev) => ({ ...prev, parentsContact: digitsOnly }));
+    // Optional field: empty or a full 10 digits is fine, anything in between is not.
+    setErrors((prev) => ({ ...prev, parentsContact: mobileError(digitsOnly, "Parent's contact number") }));
   };
 
   const handleAlternatePhoneNumberChange = (phoneNumber: string, code: string) => {
@@ -494,15 +504,8 @@ export default function AdmissionForm() {
       parentsContact: formattedNumber,
     }));
 
-    // Validation
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, parentsContact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        parentsContact: "Phone number must be 10 digits",
-      }));
-    }
+    // Validation (optional field; same rule as the server)
+    setErrors((prev) => ({ ...prev, parentsContact: mobileError(digitsOnly, "Parent's contact number") }));
   };
 
   if (loading === true) return null;
@@ -511,16 +514,23 @@ export default function AdmissionForm() {
     const newErrors: Record<string, string> = {};
 
     // 🔹 Basic Enquiry Info
-    if (!newEnquiry.name.trim()) newErrors.name = "Student name is required.";
+    // Same rules as the server, so nothing is rejected after saving.
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newEnquiry.name, "Student name"),
+      contact: mobileError(newEnquiry.contact, "Contact number", true),
+      email: emailError(newEnquiry.email),
+      parentsContact: mobileError(filledEnquiryData.parentsContact, "Parent's contact number"),
+      fatherName: personNameError(filledEnquiryData.fatherName, "Father's name", false),
+      dob: dateError(filledEnquiryData.dob, "Date of birth", { notFuture: true }),
+      admissionDate: dateError(filledEnquiryData.admissionDate, "Admission date", { required: true }),
+      idProofNumber: textError(filledEnquiryData.idProofNumber, "ID proof number", { max: 30 }),
+    }));
 
     // if (!newEnquiry.email.trim()) newErrors.email = "Email is required.";
     // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEnquiry.email))
     //   newErrors.email = "Please enter a valid email address.";
 
-    if (!newEnquiry.contact.trim())
-      newErrors.contact = "Contact number is required.";
-
-    if (!newEnquiry.courseId) newErrors.courseId = "Please select a course.";
+    if (!newEnquiry.courseId.length) newErrors.courseId = "Please select a course.";
 
     // 🔹 Extended Admission Details
     // if (!filledEnquiryData.fatherName.trim())
@@ -562,13 +572,8 @@ export default function AdmissionForm() {
     // if (!filledEnquiryData.installmentTypeId)
     //   newErrors.installmentType = "Installment Type is required.";
 
-    if (!filledEnquiryData.admissionDate)
-      newErrors.admissionDate = "Admission date is required.";
-
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
-
-    setErrors(newErrors);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -724,11 +729,10 @@ export default function AdmissionForm() {
           }, 3000);
         },
         onError: (error: any) => {
-          console.error("Advance payment error:", error);
           setAlert({
             show: true,
             title: "Error",
-            message: error.message || "Failed to process advance payment. Please try again.",
+            message: getApiErrorMessage(error, "Failed to process advance payment. Please try again."),
             variant: "error",
           });
         }
@@ -760,7 +764,7 @@ export default function AdmissionForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -780,8 +784,47 @@ export default function AdmissionForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
+      return;
+    }
+
+    // Every selected course needs a payment type, a batch and a fee amount.
+    const incompleteCourse = courseRows.some(
+      (row: any) => row.courseId && (!row.paymentType || !row.batchId || !row.feeAmount)
+    );
+    // Amounts: valid numbers, and an advance can never be more than the fee.
+    const badAmount = courseRows
+      .filter((row: any) => row.courseId)
+      .map((row: any) => {
+        const fee = amountError(row.feeAmount, "Fee amount", { positive: true });
+        if (fee) return fee;
+        const adv = amountError(row.advanceAmount, "Advance amount");
+        if (adv) return adv;
+        if (row.advanceAmount && Number(row.advanceAmount) > Number(row.feeAmount)) return "Advance amount cannot be more than the fee amount.";
+        if (Number(row.advanceAmount) > 0 && row.paymentMode && row.paymentMode !== "CASH" && !String(row.transactionNo ?? "").trim()) {
+          return "Enter the transaction / reference number for a non-cash advance payment.";
+        }
+        return "";
+      })
+      .find(Boolean);
+    if (!incompleteCourse && badAmount) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setAlert({ show: true, title: "Check the course amounts", message: badAmount, variant: "error" });
+      setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
+      return;
+    }
+    if (incompleteCourse) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setAlert({
+        show: true,
+        title: "Course details missing",
+        message: "For every course, please select the payment type, batch and fee amount.",
+        variant: "error",
+      });
+      setTimeout(() => {
+        setAlert({ show: false, title: "", message: "", variant: "" });
+      }, MESSAGE_VISIBLE_MS);
       return;
     }
 
@@ -830,6 +873,7 @@ export default function AdmissionForm() {
       bag: filledEnquiryData.bag,
 
       profilePicture: selectedProfilePicture, // you'll need to track this in state
+      documents,
       advancePayments: advancePaymentData, // Add advance payment data
     };
 
@@ -854,11 +898,20 @@ export default function AdmissionForm() {
       },
 
       onError: (error: any) => {
-        console.error("Error creating admission:", error);
-        // You already handle error via redux + toast
+        // Shown to the user below (not console.error: that opens the Next.js error overlay).
+        const reason = getApiErrorMessage(error, "");
         window.scrollTo({
           top: 0, behavior: "smooth"
         })
+        setAlert({
+          show: true,
+          title: "Admission Failed",
+          message: typeof reason === "string" ? reason : "Could not save the admission. Please check the form.",
+          variant: "error",
+        });
+        setTimeout(() => {
+          setAlert({ show: false, title: "", message: "", variant: "" });
+        }, MESSAGE_VISIBLE_MS);
       },
     });
   };
@@ -902,7 +955,6 @@ export default function AdmissionForm() {
                   type="text"
                   autoFocus
                   ref={firstInputRef}
-                  tabIndex={1}
                   placeholder="Enter Student Name"
                   value={titleCase(newEnquiry.name)}
                   onChange={(e) => handleChangeNew("name", e.target.value)}
@@ -920,7 +972,6 @@ export default function AdmissionForm() {
                 <Label>Father's Name</Label>
                 <Input
                   type="text"
-                  tabIndex={2}
                   placeholder="Enter Father Name"
                   value={titleCase(filledEnquiryData.fatherName)}
                   onChange={(e) => handleChange("fatherName", e.target.value)}
@@ -938,7 +989,6 @@ export default function AdmissionForm() {
                 <Label>Qualification</Label>
                 <Input
                   type="text"
-                  tabIndex={3}
                   placeholder="Enter Qualification"
                   value={titleCase(filledEnquiryData.qualification)}
                   onChange={(e) => handleChange("qualification", e.target.value)}
@@ -954,7 +1004,6 @@ export default function AdmissionForm() {
                 <Label>Gender</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={8}
                     options={genders.map((item) => ({
                       label: item.label,
                       value: item.value,
@@ -978,7 +1027,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Date Of Birth</Label>
                 <Input
-                  tabIndex={7}
                   type="date"
                   placeholder="Enter DoB"
                   value={filledEnquiryData.dob}
@@ -1002,7 +1050,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Student Contact</Label>
                 {/* <PhoneInput
-                  tabIndex={5}
                   selectPosition="start"
                   countries={countries}
                   placeholder="Enter Student Contact"
@@ -1015,7 +1062,6 @@ export default function AdmissionForm() {
 
                 <div className="relative">
                   <PhoneNumberInput
-                    tabIndex={4}
                     placeholder="Enter Contact"
                     value={newEnquiry.contact}
                     onChange={handlePhoneNumberChange}
@@ -1033,7 +1079,6 @@ export default function AdmissionForm() {
                 <Label>Alternate Contact</Label>
 
                 {/* <PhoneInput
-                  tabIndex={6}
                   selectPosition="start"
                   countries={countries}
                   value={stripCountryCode(filledEnquiryData.parentsContact)}
@@ -1046,10 +1091,9 @@ export default function AdmissionForm() {
 
                 <div className="relative">
                   <PhoneNumberInput
-                    tabIndex={4}
                     placeholder="Enter Alternate Contact"
                     value={filledEnquiryData.parentsContact}
-                    onChange={handlePhoneNumberChange}
+                    onChange={handleParentsContactChange}
                   />
                   {errors.parentsContact && <p className="mt-1 text-sm text-red-500">{errors.parentsContact}</p>}
                   <span className="absolute top-5.5 left-0 -translate-y-1/2 border-r border-gray-200 px-3 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
@@ -1066,7 +1110,6 @@ export default function AdmissionForm() {
                 <Label>Email</Label>
                 <div className="relative">
                   <Input
-                    tabIndex={4}
                     placeholder="Enter Student Email"
                     type="text"
                     className="pl-[55px]"
@@ -1090,7 +1133,6 @@ export default function AdmissionForm() {
                 <Label>Reference Name</Label>
                 <Input
                   type="text"
-                  tabIndex={2}
                   placeholder="Enter Reference"
                   value={titleCase(newEnquiry.referedBy)}
                   onChange={(e) => handleChangeNew("referedBy", e.target.value)}
@@ -1112,7 +1154,6 @@ export default function AdmissionForm() {
             }}>
               <div className="relative" data-master="course">
                 <MultiSelect
-                  tabIndex={10}
                   options={courses.map((course) => ({
                     value: String(course.id),
                     text: course.name,
@@ -1388,7 +1429,6 @@ export default function AdmissionForm() {
                     <Label>Select Id Proof</Label>
                     <div className="relative">
                       <Select
-                        tabIndex={12}
                         options={options}
                         placeholder="Select Id Proof"
                         onChange={(value) => handleChange("idProofType", value)}
@@ -1415,7 +1455,6 @@ export default function AdmissionForm() {
                       Number
                     </Label>
                     <Input
-                      tabIndex={13}
                       type="text"
                       placeholder="Enter Id No."
                       onChange={(e) => handleChange("idProofNumber", e.target.value)}
@@ -1438,7 +1477,6 @@ export default function AdmissionForm() {
                     <Label>Select Local Add. Proof</Label>
                     <div className="relative">
                       <Select
-                        tabIndex={12}
                         options={options}
                         placeholder="Select Id Proof"
                         onChange={(value) => handleChange("localAddressProofType", value)}
@@ -1466,7 +1504,6 @@ export default function AdmissionForm() {
                       Number
                     </Label>
                     <Input
-                      tabIndex={13}
                       type="text"
                       placeholder="Enter Id No."
                       onChange={(e) => handleChange("localAddressProofNumber", e.target.value)}
@@ -1513,7 +1550,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Residential Address</Label>
                 <TextArea
-                  tabIndex={14}
                   placeholder="Enter Student Residential Address"
                   value={filledEnquiryData.residentialAddress}
                   onChange={(value) =>
@@ -1533,7 +1569,6 @@ export default function AdmissionForm() {
               }}>
                 <Label>Permenant Address</Label>
                 <TextArea
-                  tabIndex={15}
                   placeholder="Enter Student Permenant Address"
                   value={filledEnquiryData.permenantAddress}
                   onChange={(value) =>
@@ -1577,13 +1612,7 @@ export default function AdmissionForm() {
                 inputRefs.current.admissionDate = el;
               }}>
                 <Label>Admission Date</Label>
-                <Input
-                  tabIndex={16}
-                  type="datetime-local"
-                  placeholder="Enter Admission Date"
-                  value={filledEnquiryData.admissionDate}
-                  onChange={(e) => handleChange("admissionDate", e.target.value)}
-                />
+                <DateTimeField value={filledEnquiryData.admissionDate} onChange={(v) => handleChange("admissionDate", v)} />
                 {errors.admissionDate && (
                   <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>
                 )}
@@ -1624,10 +1653,10 @@ export default function AdmissionForm() {
 
               <div className="lg:col-span-3">
                 <DropzonBoxComponent
-                  tabIndex={17}
                   title="Student Photo"
                   selectedFile={selectedProfilePicture}
                   setSelectedFile={setSelectedProfilePicture}
+                  allowSvg={false}
                 />
                 {errors.selectedProfilePicture && (
                   <p className="mt-1 text-sm text-red-500">
@@ -1636,17 +1665,20 @@ export default function AdmissionForm() {
                 )}
               </div>
 
+              <div className="lg:col-span-3">
+                <DocumentsDrop files={documents} setFiles={setDocuments} />
+              </div>
+
             </div>
           </div>
 
           {/* Action Bar */}
           <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
-            <Button size="sm" variant="outline" tabIndex={19}>
+            <Button size="sm" variant="outline">
               Clear
             </Button>
             <Button
               size="sm"
-              tabIndex={18}
               variant="primary"
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
               onClick={handleSubmit}

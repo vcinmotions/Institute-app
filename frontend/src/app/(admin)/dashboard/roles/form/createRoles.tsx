@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "@/components/form/Label";
 import Select from "@/components/form/Select";
 import Input from "@/components/form/input/InputField";
@@ -14,6 +16,9 @@ import { useRoleStore } from "@/store/roleStore";
 import { useRouter } from "next/navigation";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { useAccessRoles } from "@/hooks/useAccessRoles";
+import CompanyAccessPicker, { CompanyAssignment } from "@/components/form/CompanyAccessPicker";
+import { loginIdError, staffLoginId, personNameError, passwordError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
@@ -37,6 +42,8 @@ export default function RolesForm() {
   const { inputRefs, scrollToError } = useScrollToError();
   const router = useRouter();
   const [errors, setErrors] = useState<FormErrors>({});
+  const [companies, setCompanies] = useState<CompanyAssignment[]>([]);
+  const [multi, setMulti] = useState(false);
 
   const [alert, setAlert] = useState<{
     show: boolean;
@@ -52,10 +59,16 @@ export default function RolesForm() {
 
   const { mutate: createRolesBasedAdmin } = useCreateRolest();
 
-  const roles = [
-    { value: "FRONT_DESK", label: "Front Desk" },
-    { value: "ACCOUNTANT", label: "Accountant" },
-  ];
+  const { data: accessRoles } = useAccessRoles();
+  // The roles come from Role Access (Front Desk, Accountant and View Only are there by default).
+  // Until they load, the three classic roles are shown so the list is never empty.
+  const roles = accessRoles
+    ? accessRoles.roles.map((r) => ({ value: `custom:${r.id}`, label: r.name }))
+    : [
+        { value: "FRONT_DESK", label: "Front Desk" },
+        { value: "ACCOUNTANT", label: "Accountant" },
+        { value: "VIEW_ONLY", label: "View Only" },
+      ];
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -73,13 +86,17 @@ export default function RolesForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
-    if (!formData.email.trim()) newErrors.email = "Email is required.";
-    if (!formData.password.trim()) newErrors.password = "Password is required.";
-    if (!formData.role.trim()) newErrors.role = "Please select a role.";
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(formData.name),
+      email: loginIdError(formData.email, "Email / username"),
+      password: passwordError(formData.password),
+    }));
+    if (multi) {
+      if (companies.length === 0) newErrors.role = "Tick at least one company.";
+    } else if (!formData.role.trim()) newErrors.role = "Please select a role.";
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -91,11 +108,9 @@ export default function RolesForm() {
     let updatedValue = value;
 
     // 🧠 Auto-generate email when name changes
-    if (field === "name" && user?.slug) {
-      const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
-      const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-
-      const email = `${formattedName}@${institute}`;
+    const loginId = field === "name" ? staffLoginId(value, user) : null;
+    if (loginId) {
+      const email = loginId; // e.g. google@2026
 
       // Update local state
       setFormData((prev) => ({
@@ -143,7 +158,7 @@ export default function RolesForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -159,14 +174,17 @@ export default function RolesForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
 
+    const isCustom = !multi && formData.role.startsWith("custom:");
     const normalizeRole = {
       ...formData,
-      name: titleCase(formData.name)
+      name: titleCase(formData.name),
+      ...(multi ? { role: companies[0].role, companies } : {}),
+      ...(isCustom ? { role: "VIEW_ONLY", customRoleId: Number(formData.role.split(":")[1]) } : {}),
     };
 
     createRolesBasedAdmin(normalizeRole, {
@@ -174,7 +192,7 @@ export default function RolesForm() {
         setAlert({
           show: true,
           title: "Role Created",
-          message: "New role-based user created successfully ✅",
+          message: "New user created successfully ✅",
           variant: "success",
         });
 
@@ -185,7 +203,10 @@ export default function RolesForm() {
         }, 1000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         window.scrollTo({ top: 0, behavior: "smooth" });
       },
     });
@@ -197,15 +218,15 @@ export default function RolesForm() {
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Create Roles" />
+      <PageBreadcrumb pageTitle="Create User" />
 
       <div className="form-container">
         <div className="flex flex-col gap-6">
 
           {/* Header & Alerts */}
           <div className="border-b pb-4 dark:border-gray-700">
-            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">Roles Information</h2>
-            <p className="mt-1 text-[12px] text-gray-500 dark:text-gray-400">Fill in the details below to add a new role-based user.</p>
+            <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-50 uppercase">User Information</h2>
+            <p className="mt-1 text-[12px] text-gray-500 dark:text-gray-400">Fill in the details below to add a new app user.</p>
           </div>
 
           {alert.show && (
@@ -228,7 +249,6 @@ export default function RolesForm() {
                 <Label>Name *</Label>
                 <Input
                   ref={firstInputRef}
-                  tabIndex={1}
                   type="text"
                   placeholder="Ex. John Doe"
                   value={titleCase(formData.name)}
@@ -245,7 +265,6 @@ export default function RolesForm() {
                 <Input
                   type="text"
                   readOnly
-                  tabIndex={2}
                   placeholder="user@example.com"
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
@@ -260,7 +279,6 @@ export default function RolesForm() {
                 <Label>Password *</Label>
                 <Input
                   type="text"
-                  tabIndex={3}
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) => handleChange("password", e.target.value)}
@@ -271,11 +289,11 @@ export default function RolesForm() {
                 )}
               </div>
 
+              <CompanyAccessPicker value={companies} onChange={setCompanies} onMulti={setMulti} />
               <div ref={(el) => { if (inputRefs.current) inputRefs.current.role = el; }}>
-                <Label>Assign Role *</Label>
-                <div className="relative">
+                {!multi && <Label>Role *</Label>}
+                <div className={multi ? "hidden" : "relative"}>
                   <Select
-                    tabIndex={4}
                     options={roles}
                     placeholder="Select Role"
                     onChange={(value) => handleChange("role", value)}
@@ -296,7 +314,6 @@ export default function RolesForm() {
           <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
             <Button
               size="sm"
-              tabIndex={5}
               variant="outline"
               onClick={handleCancel}
               className="min-w-[100px] rounded border border-gray-300 bg-white py-1 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -305,7 +322,6 @@ export default function RolesForm() {
             </Button>
             <Button
               size="sm"
-              tabIndex={6}
               variant="primary"
               onClick={handleSubmit}
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"

@@ -1,4 +1,6 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateField from "@/components/form/input/DateField";
 import React, { useState, useEffect, useRef } from "react";
 import { useEnquiryStore } from "@/store/enquiryStore";
 import Button from "@/components/ui/button/Button";
@@ -33,6 +35,7 @@ import { normalizeEmail, normalizePhone, normalizeToLowercase, titleCase } from 
 import { useFetchAllSource, useFetchSource } from "@/hooks/queries/useQueryFetchSource";
 import { setSources } from "@/store/slices/sourceSlice";
 import PhoneNumberInput from "@/components/form/PhoneNumberInput";
+import { mobileError, mobileDigits, emailError, personNameError, dateError, requiredError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof EnquiryData, string>>;
 
@@ -146,7 +149,7 @@ export default function EnquiryForm() {
 
     const timer = setTimeout(() => {
       dispatch(setError(null)); // ✅ Clear error after 3 sec
-    }, 2000);
+    }, MESSAGE_VISIBLE_MS);
 
     return () => clearTimeout(timer);
   }, [error, dispatch]);
@@ -154,20 +157,23 @@ export default function EnquiryForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newEnquiry.name) {
-      newErrors.name = "Name is required.";
-    }
-
-    if (!newEnquiry.contact.trim()) {
-      newErrors.contact = "Contact no. is required.";
-    }
-
-    if (newEnquiry.courseId.length === 0) {
-      newErrors.courseId = "Select at least one course.";
-    }
+    // Same rules as the server, so nothing is rejected after saving.
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newEnquiry.name),
+      contact: mobileError(newEnquiry.contact, "Contact no.", true),
+      alternateContact:
+        mobileError(newEnquiry.alternateContact, "Alternate contact no.") ||
+        (newEnquiry.alternateContact && mobileDigits(newEnquiry.alternateContact) === mobileDigits(newEnquiry.contact)
+          ? "Alternate contact no. must differ from the contact no."
+          : ""),
+      email: emailError(newEnquiry.email),
+      dob: dateError(newEnquiry.dob, "Date of birth", { notFuture: true }),
+      enquiryDate: dateError(newEnquiry.enquiryDate, "Enquiry date", { notFuture: true }),
+      courseId: requiredError(newEnquiry.courseId, "Course"),
+    }));
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -186,15 +192,8 @@ export default function EnquiryForm() {
     }));
 
     setField("contact", formattedNumber);
-
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, contact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        contact: "Phone number must be 10 digits",
-      }));
-    }
+    // Checked on the digits (not the raw text); shown while typing, cleared once valid.
+    setErrors((prev) => ({ ...prev, contact: mobileError(formattedNumber, "Contact no.", true) }));
   };
 
   const handleAlternatePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,15 +207,8 @@ export default function EnquiryForm() {
     }));
 
     setField("alternateContact", formattedNumber);
-
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, alternateContact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        alternateContact: "Phone number must be 10 digits",
-      }));
-    }
+    // Optional: empty is fine.
+    setErrors((prev) => ({ ...prev, alternateContact: mobileError(formattedNumber, "Alternate contact no.") }));
   };
 
   const handleChange = (field: keyof EnquiryData, value: string | string[]) => {
@@ -236,7 +228,6 @@ export default function EnquiryForm() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
       !/[0-9]/.test(e.key) &&
-      e.key !== "+" &&
       e.key !== "Backspace" &&
       e.key !== "Delete" &&
       e.key !== "ArrowLeft" &&
@@ -265,16 +256,10 @@ export default function EnquiryForm() {
 
     setField(field as string, formattedValue);
 
-    let error = "";
-    if (digits.length === 8) {
-      const day = parseInt(digits.slice(0, 2), 10);
-      const month = parseInt(digits.slice(2, 4), 10);
-      const year = parseInt(digits.slice(4, 8), 10);
-      const isValidDate = !isNaN(new Date(`${year}-${month}-${day}`).getTime());
-      if (!isValidDate || day > 31 || month > 12) {
-        error = "Invalid date";
-      }
-    }
+    const error =
+      digits.length === 8
+        ? dateError(formattedValue, field === "dob" ? "Date of birth" : "Enquiry date", { notFuture: true })
+        : "";
 
     setErrors((prev) => ({
       ...prev,
@@ -289,7 +274,7 @@ export default function EnquiryForm() {
       setAlert({
         show: true,
         title: "Validation Error",
-        message: "Please enter required inputs.",
+        message: "Please correct the highlighted fields.",
         variant: "error",
       });
 
@@ -297,7 +282,7 @@ export default function EnquiryForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -317,7 +302,7 @@ export default function EnquiryForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -388,7 +373,6 @@ export default function EnquiryForm() {
                   type="text"
                   placeholder="Enter Name"
                   value={titleCase(newEnquiry.name)}
-                  tabIndex={1}
                   onChange={(e) => handleChange("name", e.target.value)}
                 />
                 {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
@@ -398,7 +382,6 @@ export default function EnquiryForm() {
                 <Label>Gender</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={2}
                     options={genders.map((item) => ({ label: item.label, value: item.value }))}
                     placeholder="Select Gender"
                     onChange={(value) => handleChange("gender", value)}
@@ -414,13 +397,9 @@ export default function EnquiryForm() {
 
               <div>
                 <Label>Date Of Birth</Label>
-                <Input
-                  type="text"
-                  tabIndex={3}
-                  placeholder="DD-MM-YYYY"
+                <DateField
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                  value={newEnquiry.dob}
-                  onChange={(e) => handleDateChange("dob", e.target.value)}
+                  value={newEnquiry.dob} onChange={(v) => handleDateChange("dob", v)}
                 />
                 {errors.dob && <p className="mt-1 text-sm text-red-500">{errors.dob}</p>}
               </div>
@@ -435,7 +414,6 @@ export default function EnquiryForm() {
                 <Label>Contact No. *</Label>
                 <div className="relative">
                   <PhoneNumberInput
-                    tabIndex={4}
                     placeholder="Enter Contact"
                     value={newEnquiry.contact}
                     onChange={handlePhoneNumberChange}
@@ -451,7 +429,6 @@ export default function EnquiryForm() {
                 <Label>Alternate Contact No.</Label>
                 <div className="relative">
                   <PhoneNumberInput
-                    tabIndex={5}
                     placeholder="Enter Alternate"
                     value={newEnquiry.alternateContact}
                     onChange={handleAlternatePhoneNumberChange}
@@ -470,7 +447,6 @@ export default function EnquiryForm() {
                     placeholder="Enter Email"
                     type="text"
                     className="pl-[55px]"
-                    tabIndex={6}
                     value={normalizeEmail(newEnquiry.email)}
                     onChange={(e) => handleChange("email", e.target.value)}
                   />
@@ -485,8 +461,8 @@ export default function EnquiryForm() {
                 <Label>City</Label>
                 <Select
                   options={city.map((c) => ({ label: c.name, value: c.name }))}
-                  tabIndex={7}
                   placeholder="Select City"
+                  searchable
                   onChange={(value) => handleChange("city", value)}
                   value={newEnquiry.city}
                 />
@@ -498,8 +474,7 @@ export default function EnquiryForm() {
                 <Input
                   type="text"
                   placeholder="Enter Locality"
-                  value={newEnquiry.location}
-                  tabIndex={8}
+                  value={normalizeToLowercase(newEnquiry.location)}
                   onChange={(e) => handleChange("location", e.target.value)}
                 />
                 {errors.location && <p className="mt-1 text-sm text-red-500">{errors.location}</p>}
@@ -516,7 +491,6 @@ export default function EnquiryForm() {
                 <div className="relative" data-master="course">
                   <MultiSelect
                     ref={jumpInputRef}
-                    tabIndex={9}
                     tooltip={true}
                     content="Create Course if not in list."
                     label="Select Courses *"
@@ -534,13 +508,9 @@ export default function EnquiryForm() {
 
               <div>
                 <Label>Enquiry Date</Label>
-                <Input
-                  type="text"
-                  tabIndex={10}
-                  placeholder="DD-MM-YYYY"
+                <DateField
                   className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                  value={newEnquiry.enquiryDate}
-                  onChange={(e) => handleDateChange("enquiryDate", e.target.value)}
+                  value={newEnquiry.enquiryDate} onChange={(v) => handleDateChange("enquiryDate", v)}
                 />
                 {errors.enquiryDate && <p className="mt-1 text-sm text-red-500">{errors.enquiryDate}</p>}
               </div>
@@ -549,7 +519,6 @@ export default function EnquiryForm() {
                 <Label>Source</Label>
                 <div className="relative">
                   <Select
-                    tabIndex={11}
                     options={sourceList.map((item) => ({ label: item.name, value: item.slug }))}
                     placeholder="Select Source"
                     onChange={(value) => handleChange("source", value)}
@@ -569,7 +538,6 @@ export default function EnquiryForm() {
                   type="text"
                   placeholder="Enter Reference"
                   value={newEnquiry.referedBy}
-                  tabIndex={12}
                   onChange={(e) => handleChange("referedBy", e.target.value)}
                 />
                 {errors.referedBy && <p className="mt-1 text-sm text-red-500">{errors.referedBy}</p>}
@@ -581,7 +549,6 @@ export default function EnquiryForm() {
                   type="text"
                   placeholder="Taken By"
                   value={newEnquiry.takenBy}
-                  tabIndex={13}
                   onChange={(e) => handleChange("takenBy", e.target.value)}
                 />
                 {errors.takenBy && <p className="mt-1 text-sm text-red-500">{errors.takenBy}</p>}
@@ -594,7 +561,6 @@ export default function EnquiryForm() {
           <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
             <Button
               size="sm"
-              tabIndex={14}
               variant="primary"
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
               onClick={handleSubmit}

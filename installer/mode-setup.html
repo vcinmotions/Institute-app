@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>VC Inmotions - Setup</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f3f4f6;color:#111827;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .wrap{width:100%;max-width:760px}
+  h1{font-size:1.5rem;margin-bottom:4px}
+  .sub{color:#6b7280;font-size:.9rem;margin-bottom:20px}
+  .card{display:block;background:#fff;border:2px solid #e5e7eb;border-radius:14px;padding:16px 18px;margin-bottom:12px;cursor:pointer}
+  .card.sel{border-color:#465fff;box-shadow:0 0 0 3px rgba(70,95,255,.15)}
+  .card input[type=radio]{margin-right:10px}
+  .card b{font-size:1rem}
+  .card p{margin:6px 0 0 26px;color:#6b7280;font-size:.85rem;line-height:1.4}
+  .panel{margin:12px 0 0 26px;padding:12px;background:#f9fafb;border-radius:10px;font-size:.85rem}
+  .row{display:flex;gap:10px;margin-top:8px}
+  .row label{flex:1;font-size:.75rem;color:#6b7280}
+  input[type=text],input[type=number]{width:100%;margin-top:3px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:.9rem}
+  button{border:0;border-radius:9px;padding:10px 18px;font-size:.9rem;font-weight:600;cursor:pointer}
+  .primary{background:#465fff;color:#fff}
+  .ghost{background:#fff;border:1px solid #d1d5db;color:#374151}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+  .err{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:10px;padding:10px 12px;font-size:.85rem;margin-bottom:14px}
+  .ok{color:#15803d}.bad{color:#b91c1c}
+  .hidden{display:none}
+  code{background:#eef2ff;border-radius:5px;padding:1px 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title">Choose how this computer will run VC Inmotions</h1>
+  <p class="sub" id="sub">This is asked once. You can change it later from File &rarr; Connection &amp; Mode Settings (it will ask for confirmation).</p>
+  <div id="error" class="err hidden"></div>
+
+  <div class="card" data-mode="STANDALONE">
+    <b><input type="radio" name="mode" value="STANDALONE"/>Standalone Mode (single computer)</b>
+    <p>Everything runs on this computer and the database is stored here. No network or internet is needed for normal work.</p>
+  </div>
+
+  <div class="card" data-mode="LAN_SERVER">
+    <b><input type="radio" name="mode" value="LAN_SERVER"/>Centralized LAN Mode - this computer is the Server</b>
+    <p>This computer hosts the database and services. Other computers in the institute connect to it, so everyone shares the same data.</p>
+    <div class="panel hidden" id="serverPanel">
+      Other computers should connect to:
+      <div id="ips" style="margin-top:6px"></div>
+      <div style="margin-top:6px;color:#6b7280">Ports used: <code>5001</code> (backend) and <code>3000</code> (app). Keep this computer on while others work.</div>
+    </div>
+  </div>
+
+  <div class="card" data-mode="LAN_CLIENT">
+    <b><input type="radio" name="mode" value="LAN_CLIENT"/>Centralized LAN Mode - connect to a Server</b>
+    <p>This computer has no database of its own. It uses the server computer's data (Desk Manager, Faculty and other staff PCs).</p>
+    <div class="panel hidden" id="clientPanel">
+      <div class="row">
+        <label>Server IP / name<input type="text" id="host" placeholder="e.g. 192.168.1.10"/></label>
+        <label>Backend port<input type="number" id="port" value="5001"/></label>
+        <label>App port<input type="number" id="fport" value="3000"/></label>
+      </div>
+      <div style="margin-top:10px"><button class="ghost" id="testBtn" type="button">Test connection</button></div>
+      <div id="testResult" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="ghost hidden" id="cancelBtn" type="button">Cancel</button>
+    <button class="primary" id="saveBtn" type="button" disabled>Save &amp; continue</button>
+  </div>
+</div>
+
+<script>
+const api = window.electronAPI.mode;
+let mode = null;
+const $ = (id) => document.getElementById(id);
+
+function select(m) {
+  mode = m;
+  document.querySelectorAll('.card').forEach(c => {
+    const on = c.dataset.mode === m;
+    c.classList.toggle('sel', on);
+    c.querySelector('input[type=radio]').checked = on;
+  });
+  $('serverPanel').classList.toggle('hidden', m !== 'LAN_SERVER');
+  $('clientPanel').classList.toggle('hidden', m !== 'LAN_CLIENT');
+  $('saveBtn').disabled = false;
+}
+document.querySelectorAll('.card').forEach(c => c.addEventListener('click', (e) => {
+  if (e.target.closest('input[type=text],input[type=number],button')) return;
+  select(c.dataset.mode);
+}));
+
+function clientCfg() {
+  return { host: $('host').value.trim(), port: Number($('port').value) || 5001, frontendPort: Number($('fport').value) || 3000 };
+}
+
+$('testBtn').addEventListener('click', async () => {
+  const c = clientCfg();
+  if (!c.host) { $('testResult').innerHTML = '<span class="bad">Enter the server IP first.</span>'; return; }
+  $('testResult').textContent = 'Testing...';
+  const r = await api.test(c);
+  const line = (n, x) => '<div class="' + (x.ok ? 'ok' : 'bad') + '">' + (x.ok ? '&#10003;' : '&#10007;') + ' ' + n + ': ' + x.message + '</div>';
+  $('testResult').innerHTML = line('Server (backend)', r.backend) + line('Application (frontend)', r.frontend);
+});
+
+$('saveBtn').addEventListener('click', async () => {
+  if (!mode) return;
+  const cfg = { mode: mode };
+  if (mode === 'LAN_CLIENT') {
+    Object.assign(cfg, clientCfg());
+    if (!cfg.host) { $('testResult').innerHTML = '<span class="bad">Enter the server IP.</span>'; return; }
+  }
+  $('saveBtn').disabled = true;
+  await api.save(cfg);
+});
+$('cancelBtn').addEventListener('click', () => api.cancel());
+
+(async () => {
+  const s = await api.get();
+  $('ips').innerHTML = s.ips.length
+    ? s.ips.map(ip => '<code>' + ip + '</code>').join(' ')
+    : '<span class="bad">No network address found - connect this computer to the LAN.</span>';
+  if (s.error) { $('error').textContent = s.error; $('error').classList.remove('hidden'); }
+  if (s.isChange) {
+    $('title').textContent = 'Connection & Mode Settings';
+    $('sub').textContent = 'Changing the mode only changes how this computer connects. Your data is never deleted.';
+    $('cancelBtn').classList.remove('hidden');
+  }
+  if (s.config) {
+    if (s.config.host) $('host').value = s.config.host;
+    if (s.config.port) $('port').value = s.config.port;
+    if (s.config.frontendPort) $('fport').value = s.config.frontendPort;
+    select(s.config.mode);
+  }
+})();
+</script>
+</body>
+</html>

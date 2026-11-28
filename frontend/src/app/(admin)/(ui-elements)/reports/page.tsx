@@ -1,5 +1,7 @@
 "use client";
 
+import { useDialog } from "@/components/common/AppDialog";
+import { API_BASE_URL } from "@/lib/config";
 import React, { useState } from "react";
 import { useFetchReports } from "@/hooks/queries/useQueryFetchReports";
 import StudentCard from "@/components/common/StudentCard";
@@ -11,6 +13,7 @@ type ReportType = "ENQUIRIES" | "FINANCE" | "STUDENTS";
 type FinanceStatus = "ALL" | "PAID" | "OUTSTANDING";
 
 export default function ReportsDashboard() {
+  const dialog = useDialog();
     const [reportType, setReportType] = useState<ReportType>("ENQUIRIES");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -83,7 +86,7 @@ export default function ReportsDashboard() {
             if (batchId) params.append("batchId", batchId);
             if (reportType === "FINANCE") params.append("financeStatus", financeStatus);
 
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+            const baseUrl = API_BASE_URL;
 
             const response = await fetch(`${baseUrl}/reports/${format}?${params.toString()}`, {
                 method: "GET",
@@ -104,7 +107,7 @@ export default function ReportsDashboard() {
             window.URL.revokeObjectURL(url);
         } catch (err) {
             console.error(err);
-            alert(`Failed to download ${format} file.`);
+            dialog.alert({ title: "Download failed", message: `Failed to download the ${format} file. Please try again.`, variant: "error" });
         }
     };
 

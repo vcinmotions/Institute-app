@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import PermissionStyles from "@/components/common/PermissionStyles";
+import IdleLogout from "@/components/common/IdleLogout";
+import CreatePageGuard from "@/components/auth/CreatePageGuard";
+import SubscriptionGate from "@/components/subscription/SubscriptionGate";
+import SessionKeeper from "@/components/common/SessionKeeper";
 import { useSidebar } from "@/context/SidebarContext";
 import { useDispatch } from "react-redux";
 import { setCountry, setStateLocation, setUser } from "@/store/slices/authSlice";
@@ -73,12 +78,16 @@ export default function ClientAdminLayout({
         <Backdrop />
 
         <div className={`flex-1 transition-all duration-300 ${margin}`}>
+          <SubscriptionGate />
+          <SessionKeeper />
+          <IdleLogout />
+          <PermissionStyles />
           <AppHeader />
           <AppKeyHeader />
 
           <JumpHotkeys userRole={user?.role}>
             <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
-              {children}
+              <CreatePageGuard>{children}</CreatePageGuard>
             </div>
           </JumpHotkeys>
         </div>

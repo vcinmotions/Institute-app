@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getMasterUser } from "@/lib/api";
+import BackupAlert from "@/components/common/BackupAlert";
 import MasterAdminLayout from "../(client-layout)/MasterAdminLayout";
 
 export default function MasterLayout({
@@ -19,6 +20,12 @@ export default function MasterLayout({
     async function fetchUser() {
       try {
         const token = sessionStorage.getItem("token");
+
+        // Desktop EXE: one admin. The master screens live under /dashboard/system for the institute admin.
+        if ((window as any).electronAPI) {
+          router.replace(token ? "/dashboard" : "/signin");
+          return;
+        }
 
         if (!token) {
           router.replace("/signin");
@@ -47,6 +54,9 @@ export default function MasterLayout({
   if (loading) return null;
 
   return (
-    <MasterAdminLayout user={userData?.userdata}>{children}</MasterAdminLayout>
+    <MasterAdminLayout user={userData?.userdata}>
+      <BackupAlert />
+      {children}
+    </MasterAdminLayout>
   );
 }

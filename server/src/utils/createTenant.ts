@@ -549,6 +549,7 @@
 
 
 // utils/createTenant.ts
+import { ensureDefaultRoles } from "../services/permissions.service";
 import { exec } from "child_process";
 import { Client } from "pg";
 import { getCentralPrisma } from "../prisma-client/central-client";
@@ -560,6 +561,7 @@ import fs from "fs";
 import { generateTenantSlug } from "./generateSlug";
 import { encrypt } from "./encryption";
 import {  getResourcePath, getUserDataPath, isPackaged } from "../middlewares/runtimePaths";
+import { activeEnvFile } from "./envLoader";
 
 
 /* -------------------------------------------------------
@@ -591,8 +593,7 @@ const prismaCLI = isProd
   ? path.join(basePath, "server", "dist", "node_modules", "prisma", "build", "index.js")
   : path.join(basePath, "node_modules", "prisma", "build", "index.js");
 
-const envFile =
-  process.env.APP_ENV === "prod" ? ".env.prod" : ".env.dev";
+const envFile = activeEnvFile();
 
 dotenv.config({ path: path.join(rootDir, envFile) });
 
@@ -701,7 +702,10 @@ export async function createTenant(
   logo: string,
   stamp: string,
   sign: string,
-  certificateName: string
+  certificateName: string,
+  businessEmail?: string | null,
+  parentTenantId?: string | null,
+  centralId?: string | null // keep the same institute id as the central web server
 ) {
   if (
     !name ||
@@ -878,11 +882,16 @@ export async function createTenant(
     },
   });
 
+  // A new institute database starts with the default roles (Front Desk, Accountant, View Only) already in place.
+  await ensureDefaultRoles(tenantPrisma, admin.id).catch((e: any) => console.error("default roles not created:", e?.message));
+
   await centralPrisma.tenant.create({ 
     data: {
+      ...(centralId ? { id: centralId } : {}),
       tenantId: tenantId.toString(),
       name,
       email,
+      businessEmail: businessEmail || null,
       contact,
       country,
       state,
@@ -895,6 +904,7 @@ export async function createTenant(
       password: hashedPassword,
       encryptedPassword: encryptedPass,
       dbUrl,
+      parentTenantId: parentTenantId || null,
     },
   });
   

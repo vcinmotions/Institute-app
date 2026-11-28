@@ -1,3 +1,7 @@
+import { filesOf, studentFileUrl, discardFiles } from "../utils/studentUpload";
+import { saveStudentDocuments } from "./studentDocument.controller";
+import { validateMobile, validateEmailAddress, validateDate, firstError } from "../validators/common";
+import { formatZodError } from "../utils/httpErrors";
 // controllers/studentController.ts
 import { Request, Response } from "express";
 import { logActivity } from "../utils/activityLogger";
@@ -14,7 +18,12 @@ export async function addStudentControllerNew(req: any, res: any) {
 
 
     console.log("STUDENTADMISSION:", req.body);
-    console.log("STUDENTADMISSION FILE:", req.file);
+    const photoFile = filesOf(req, "profilePicture")[0];
+    const documentFiles = filesOf(req, "documents");
+    // Admission refused (validation, duplicate, error): do not keep the uploaded files.
+    res.on("finish", () => {
+      if (res.statusCode >= 400) discardFiles([...(photoFile ? [photoFile] : []), ...documentFiles]);
+    });
       // ✅ Validate input
       const data = studentCreateSchema.parse({
       ...req.body,
@@ -22,10 +31,10 @@ export async function addStudentControllerNew(req: any, res: any) {
        idCard: req.body.idCard === "true",
        bag: req.body.bag === "true",
 
-      photoUrl: req.file ? `/uploads/students/${req.file.filename}` : null,
+      photoUrl: photoFile ? studentFileUrl(photoFile.filename) : null,
       courseData: (typeof req.body.courseData === "string" 
         ? JSON.parse(req.body.courseData) 
-        : req.body.courseData
+        : req.body.courseData ?? []
       ).map((c: any) => ({
         ...c,
         courseId: Number(c.courseId),
@@ -48,7 +57,48 @@ export async function addStudentControllerNew(req: any, res: any) {
         })) : undefined,
     });
 
-    console.log("PARSED DATA:", data);
+    if (data.admissionDate && isNaN(new Date(data.admissionDate).getTime())) {
+      return res.status(400).json({ error: "admissionDate is not a valid date" });
+    }
+    const invalid = firstError(
+      validateMobile(data.contact, "Contact number"),
+      validateMobile(data.parentsContact, "Parent's contact number"),
+      validateEmailAddress(data.email),
+      validateDate(data.dob, "Date of birth", { notFuture: true }),
+      validateDate(data.admissionDate, "Admission date")
+    );
+    if (invalid) return res.status(400).json({ error: invalid });
+    if (!Array.isArray(data.courseData) || data.courseData.length === 0) {
+      return res.status(400).json({ error: "At least one course is required for admission" });
+    }
+
+
+    // ✅ Duplicate protection (inquiry conversion AND direct admission)
+    if (data.id) {
+      const enq = await prisma.enquiry.findUnique({ where: { id: data.id } });
+      if (!enq) return res.status(404).json({ error: "Enquiry not found" });
+      if (enq.studentId || enq.isConverted) {
+        return res.status(409).json({ error: "This enquiry has already been admitted as a student." });
+      }
+    }
+    {
+      const contact = String(data.contact ?? "").trim();
+      const email = String(data.email ?? "").trim();
+      const dup = await prisma.student.findFirst({
+        where: {
+          OR: [
+            ...(contact ? [{ contact }] : []),
+            ...(email ? [{ email }] : []),
+          ],
+        },
+        select: { fullName: true, admissionNumber: true },
+      });
+      if (dup) {
+        return res.status(409).json({
+          error: `A student with this contact/email already exists (${dup.fullName}, ${dup.admissionNumber}). Add the new course to that student instead of admitting again.`,
+        });
+      }
+    }
 
     // ✅ Call Service Layer
     const result = await createStudentService({
@@ -56,6 +106,12 @@ export async function addStudentControllerNew(req: any, res: any) {
       clientAdminId: user.clientAdminId,
       data,
     });
+
+    // Documents uploaded with the admission form.
+    if (documentFiles.length) {
+      const docErr = await saveStudentDocuments(prisma, user, result.student.id, documentFiles);
+      if (docErr) console.error("admission documents not saved:", docErr);
+    }
 
     // ✅ Update enquiry if student is converted
     if (data.id) {
@@ -83,10 +139,10 @@ export async function addStudentControllerNew(req: any, res: any) {
     console.error("FULL ERROR:", err);
 
   if (err.name === "ZodError") {
-    console.log(JSON.stringify(err.errors, null, 2));
+    console.log(JSON.stringify((err.issues ?? err.errors), null, 2));
 
     return res.status(400).json({
-      error: err.errors,
+      error: formatZodError(err), details: (err.issues ?? err.errors),
     });
   }
     console.error("❌ Admission Error:", err);
@@ -106,6 +162,10 @@ export async function createstudentOpeningBalanceController(req: any, res: any) 
     console.log("STUDENTADMISSION:", req.body);
       // ✅ Validate input
       const data = studentOpeningBalanceSchema.parse({ ...req.body });
+      {
+        const invalid = validateMobile(data.contact, "Contact");
+        if (invalid) return res.status(400).json({ error: invalid });
+      }
 
       console.log("SUCCESSSSSSSS")
 
@@ -134,7 +194,7 @@ export async function createstudentOpeningBalanceController(req: any, res: any) 
     });
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
     console.error("❌ Admission Error:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -147,6 +207,12 @@ export async function upsertAdmissionConfig(req: any, res: any) {
     const user = req.user;
 
     const { prefix, suffix, separator, numberLength } = req.body;
+    const includeYear = req.body?.includeYear === true || req.body?.includeYear === "true";
+
+    const len = Number(numberLength);
+    if (!Number.isInteger(len) || len < 1 || len > 10) {
+      return res.status(400).json({ error: "Number length must be a whole number from 1 to 10" });
+    }
 
     const config = await prisma.admissionNumberConfig.upsert({
       where: { clientAdminId: user.clientAdminId },
@@ -156,6 +222,7 @@ export async function upsertAdmissionConfig(req: any, res: any) {
         suffix,
         separator,
         numberLength: Number(numberLength),
+        includeYear,
       },
 
       create: {
@@ -164,6 +231,7 @@ export async function upsertAdmissionConfig(req: any, res: any) {
         suffix,
         separator,
         numberLength: Number(numberLength),
+        includeYear,
         currentNumber: 1,
       },
     });
@@ -216,6 +284,16 @@ export async function editStudentController(req: any, res: any) {
         id: Number(req.params.id),
       ...req.body
     });
+    {
+      const d: any = data;
+      const invalid = firstError(
+        validateMobile(d.contact, "Contact number"),
+        validateMobile(d.parentsContact, "Parent's contact number"),
+        validateEmailAddress(d.email),
+        validateDate(d.dob, "Date of birth", { notFuture: true })
+      );
+      if (invalid) return res.status(400).json({ error: invalid });
+    }
 
     // ✅ Call Service Layer
     const result = await editStudentService({
@@ -240,7 +318,7 @@ export async function editStudentController(req: any, res: any) {
     });
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
     console.error("❌ Admission Error:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -473,7 +551,7 @@ export async function getStudentController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);
@@ -541,7 +619,7 @@ export async function getStudentController(req: Request, res: Response) {
 // }
 
 export async function getStudentCourseController(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   console.log("Get Stiudent Id in GetStudentCourseControlle:", id);
 

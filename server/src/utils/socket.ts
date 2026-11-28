@@ -1,15 +1,19 @@
 import { Server } from "socket.io";
 import { Server as HTTPServer } from "http";
+import { isAllowedOrigin } from "./allowedOrigins";
 
 let io: Server;
 
 export function initSocket(server: HTTPServer) {
   io = new Server(server, {
+    // Same rule as the API (utils/allowedOrigins.ts). The cors option only covers HTTP polling;
+    // browsers don't apply CORS to WebSocket upgrades, so allowRequest checks the Origin as well.
     cors: {
-      origin: "*", // Or your frontend URL in production
+      origin: (origin, cb) => cb(null, isAllowedOrigin(origin)),
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,
     },
+    allowRequest: (req, cb) => cb(null, isAllowedOrigin(req.headers.origin)),
     transports: ["websocket"], // Important to avoid polling issues
   });
 

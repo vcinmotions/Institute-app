@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 import { Request, Response } from "express";
 import { titleCase } from "../utils/Normalize";
 import { testQuerySchema } from "../validators/test.query";
@@ -100,8 +101,23 @@ import { getTests } from "../services/test.service";
 //   }
 // }
 
+function isBadTestInput(testDate: any, totalMarks: any): string | null {
+  if (testDate) {
+    const d = new Date(testDate);
+    const y = d.getFullYear();
+    if (isNaN(d.getTime()) || y < 1900 || y > 2200) return "Test execution date is invalid.";
+  }
+  if (totalMarks && (!Number.isInteger(Number(totalMarks)) || Number(totalMarks) < 0 || Number(totalMarks) > 1000000)) {
+    return "Total marks must be a whole number.";
+  }
+  return null;
+}
+
 export async function createDraftTestController(req: Request, res: Response) {
   const { name, batchId, courseId } = req.body;
+
+  const badInput = isBadTestInput(req.body.testDate, req.body.totalMarks);
+  if (badInput) return res.status(400).json({ error: badInput });
 
   // Base validations
   if (!name || !batchId || !courseId) {
@@ -152,6 +168,9 @@ export async function createDraftTestController(req: Request, res: Response) {
         batchId: parsedBatchId,
         courseId: parsedCourseId,
         status: "DRAFT",
+        testDate: req.body.testDate ? new Date(req.body.testDate) : null,
+        totalMarks: req.body.totalMarks ? Number(req.body.totalMarks) : null,
+        description: req.body.description || null,
         clientAdminId: user.clientAdminId,
       },
     });
@@ -171,6 +190,9 @@ export async function publishAndAssignTestController(req: Request, res: Response
   const { id, name, batchId, courseId, testDate, totalMarks, description } = req.body;
 
   console.log("GET PUBLISH TEST DATA IN CONTROLLER:", req.body);
+
+  const badInput = isBadTestInput(testDate, totalMarks);
+  if (badInput) return res.status(400).json({ error: badInput });
 
   // 1. Enforced structural schema checks (Requiring id since the master draft must exist)
   if (!id || !name || !batchId || !courseId || !testDate || !totalMarks) {
@@ -230,7 +252,12 @@ export async function publishAndAssignTestController(req: Request, res: Response
       // ✅ Step A: DO NOT CREATE. Instead, update the master test status from DRAFT to PUBLISHED
       const updatedMasterTest = await tx.test.update({
         where: { id: parsedTestId },
-        data: { status: "PUBLISHED" },
+        data: {
+          status: "PUBLISHED",
+          testDate: new Date(testDate),
+          totalMarks: Number(totalMarks),
+          description: description || null,
+        },
       });
 
       // ✅ Step B: Prepare payload to map against StudentTest schema relations using master ID
@@ -277,6 +304,8 @@ export async function editTestController(
       error: "id is required",
     });
   }
+  const badInput = isBadTestInput(req.body.testDate, req.body.totalMarks);
+  if (badInput) return res.status(400).json({ error: badInput });
 
   try {
     const tenantPrisma = req.tenantPrisma;
@@ -376,6 +405,9 @@ export async function editTestController(
         name: normalizedTestName ?? existingTest.name,
         batchId: finalBatchId,
         courseId: finalCourseId,
+        testDate: req.body.testDate ? new Date(req.body.testDate) : null,
+        totalMarks: req.body.totalMarks ? Number(req.body.totalMarks) : null,
+        description: req.body.description || null,
       },
     });
 
@@ -536,7 +568,7 @@ export async function getTestController(req: Request, res: Response) {
 
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error(err);
@@ -548,7 +580,7 @@ export async function getTestByIdController(req: Request, res: Response) {
   try {
     const prisma = req.tenantPrisma;
     const user = req.user;
-    const { id } = req.params;
+    const id = String(req.params.id);
 
     if (!prisma || !user || typeof user === "string") {
       return res.status(401).json({ error: "Unauthorized" });

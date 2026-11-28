@@ -1,3 +1,4 @@
+import { formatZodError } from "../utils/httpErrors";
 // controllers/studentController.ts
 import { Request, Response } from "express";
 import { getPayment } from "../services/payment.service";
@@ -105,6 +106,7 @@ export async function addStudentPaymentController(req: Request, res: Response) {
 
     // 🎓 3. Generate unique student code
     const lastStudent = await tenantPrisma.student.findFirst({
+      where: { clientAdminId }, // numbering is per company
       orderBy: { id: "desc" },
       select: { studentCode: true, serialNumber: true },
     });
@@ -424,7 +426,7 @@ export async function getStudentPaymentController(
     });
   } catch (err: any) {
     if (err.name === "ZodError") {
-      return res.status(400).json({ error: err.errors });
+      return res.status(400).json({ error: formatZodError(err), details: (err.issues ?? err.errors) });
     }
 
     console.error("Error fetching payments:", err);
@@ -436,7 +438,7 @@ export async function getStudentPaymenbyIdController(
   req: Request,
   res: Response
 ) {
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   console.log("Get Stiudent Id in GetStudentCourseControlle:", id);
 
@@ -516,7 +518,7 @@ export async function getStudentPaymenbyIdController(
 
 // PUT /api/student/payment/:id
 // export async function updateStudentPaymentController(req: Request, res: Response) {
-//   const { id } = req.params;
+//   const id = String(req.params.id);
 //   const {
 //     amountPaid,
 //     paymentDate,
@@ -564,7 +566,7 @@ export async function getStudentPaymenbyIdController(
 
 // PUT /api/student/payment/:id
 // export async function updateStudentPaymentController(req: Request, res: Response) {
-//   const { id } = req.params;
+//   const id = String(req.params.id);
 //   const {
 //     amountPaid,
 //     paymentDate,
@@ -647,7 +649,7 @@ export async function getStudentPaymenbyIdController(
 //   req: Request,
 //   res: Response
 // ) {
-//   const { id } = req.params;
+//   const id = String(req.params.id);
 //   const { amountPaid, paymentDate, paymentMode } = req.body;
 
 //   console.log(
@@ -782,7 +784,7 @@ export async function updateStudentPaymentController(
   req: Request,
   res: Response
 ) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   // 👇 EXTRACT THE NEW FIELDS SENT BY YOUR PAYMENT MODAL FRONTEND
   const { amountPaid, paymentDate, paymentMode, transactionNo, bankName } = req.body;
 
@@ -797,14 +799,27 @@ export async function updateStudentPaymentController(
     }
 
     const clientAdminId = user.clientAdminId;
+    // A plain number with up to 2 decimals ("12abc" used to be accepted as 12).
+    if (!/^\d+(\.\d{1,2})?$/.test(String(amountPaid ?? "").trim())) {
+      return res.status(400).json({ error: "Amount must be a number with up to 2 decimals." });
+    }
     const paidAmount = parseFloat(amountPaid);
 
     if (!paidAmount || paidAmount <= 0) {
-      return res.status(400).json({ error: "Invalid payment amount" });
+      return res.status(400).json({ error: "Amount must be more than 0." });
     }
 
     const parsedPaymentDate = parseDate(paymentDate);
+    if (paymentDate && !parsedPaymentDate) {
+      return res.status(400).json({ error: "Payment date is not a valid date." });
+    }
+    if (parsedPaymentDate && new Date(parsedPaymentDate).getTime() > Date.now() + 24 * 3600 * 1000) {
+      return res.status(400).json({ error: "Payment date cannot be in the future." });
+    }
     const targetMode = paymentMode || "CASH";
+    if (targetMode !== "CASH" && !String(transactionNo ?? "").trim()) {
+      return res.status(400).json({ error: targetMode === "CHEQUE" ? "Cheque number is required." : "Transaction reference ID is required." });
+    }
     const targetTxNo = targetMode !== "CASH" ? transactionNo : null;
     const targetBank = targetMode !== "CASH" ? bankName : null;
 
@@ -885,7 +900,7 @@ export async function updateStudentPaymentController(
             connect: { id: studentFee.id },
           },
           amountPaid: paidAmount,
-          paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : null,
+          paymentDate: parsedPaymentDate ? new Date(parsedPaymentDate) : new Date(),
           paymentMode: targetMode,
           receiptNo,
           // 👇 NEW FIELDS REGISTERED FOR LOGS
@@ -942,6 +957,10 @@ export async function updateStudentPaymentController(
     });
   } catch (error: any) {
     console.error("Payment update error:", error.message);
+    // Database/driver errors must not be shown to the client.
+    if (String(error?.name || "").startsWith("PrismaClient")) {
+      return res.status(500).json({ error: "Could not record the payment" });
+    }
     return res.status(400).json({
       error: error.message || "Internal server error",
     });
@@ -952,7 +971,7 @@ export async function updateStudentPaymentController(
 //   req: Request,
 //   res: Response
 // ) {
-//   const { id } = req.params;
+//   const id = String(req.params.id);
 //   const { amountPaid, paymentDate, paymentMode } = req.body;
 
 //   console.log("UPDTAE PAYMENT REQ>BOSY:", req.body);

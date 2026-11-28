@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useCourseStore } from "@/store/courseStore";
 import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -143,7 +145,7 @@ export default function EditTaskForm({
     }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -182,7 +184,7 @@ export default function EditTaskForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -198,7 +200,7 @@ export default function EditTaskForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -234,7 +236,10 @@ export default function EditTaskForm({
           }, 1000);
         },
 
-        onError: () => {
+        onError: (error: any) => {
+          // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+          setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           // You already handle error via redux + toast
           window.scrollTo({ top: 0, behavior: "smooth" });
         },
@@ -279,7 +284,6 @@ export default function EditTaskForm({
           </Label>
           <div className="relative" data-master="course">
             <Select
-              tabIndex={5}
               options={courseOptions}
               value={newTask.courseId}
               placeholder="Select an option"
@@ -301,7 +305,6 @@ export default function EditTaskForm({
           <Label>Select Batch *</Label>
           <div className="relative" data-master="batch">
             <Select
-              tabIndex={6}
               options={batchOptions}
               value={newTask.batchId}
               placeholder="Select an option"
@@ -321,7 +324,6 @@ export default function EditTaskForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={8}
             onClick={onCloseModal}
           >
             Cancel

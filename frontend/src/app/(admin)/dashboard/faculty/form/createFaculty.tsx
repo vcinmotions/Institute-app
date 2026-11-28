@@ -1,5 +1,9 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import DateField from "@/components/form/input/DateField";
+import { batchLabel } from "@/lib/batchLabel";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 // Assuming these are your standard imports based on your code:
@@ -21,6 +25,7 @@ import { useFetchAllBatches } from "@/hooks/queries/useQueryFetchBatchData";
 import { useCreateFaculty } from "@/hooks/useCreateFaculty";
 import PhoneInput from "@/components/form/group-input/PhoneInput";
 import { ChevronDownIcon } from "@/icons";
+import { mobileError, loginIdError, staffLoginId, personNameError, passwordError, dateError, requiredError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof FacultyData, string>>;
 
@@ -94,7 +99,7 @@ export default function FacultyForm() {
 
   const batchOptions = batch.map((b: any) => ({
     value: b.id.toString(),
-    label: `${b.name} | ${b.labTimeSlot.startTime} - ${b.labTimeSlot.endTime} | PCs: ${b.labTimeSlot.availablePCs}`,
+    label: batchLabel(b),
   }));
 
   const courseOptions = course.map((course: any) => ({
@@ -171,15 +176,18 @@ export default function FacultyForm() {
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!newFaculty.name.trim()) newErrors.name = "Name is required.";
-    if (!newFaculty.email.trim()) newErrors.email = "Email is required.";
-    if (!newFaculty.password.trim()) newErrors.password = "Password is required.";
-    if (!newFaculty.contact.trim()) newErrors.contact = "Contact is required.";
-    if (!newFaculty.batchId.trim()) newErrors.batchId = "Batch is required.";
-    if (!newFaculty.joiningDate.trim()) newErrors.joiningDate = "Joining Date is required.";
+    // Same rules everywhere in the app (see lib/validation).
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(newFaculty.name),
+      email: loginIdError(newFaculty.email, "Email / username"),
+      password: passwordError(newFaculty.password),
+      contact: mobileError(newFaculty.contact, "Contact", true),
+      batchId: requiredError(newFaculty.batchId, "Batch"),
+      joiningDate: dateError(newFaculty.joiningDate, "Joining date", { required: true }),
+    }));
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -197,14 +205,7 @@ export default function FacultyForm() {
 
     setField("contact", formattedNumber);
 
-    if (phoneNumber.length === 10) {
-      setErrors((prev) => ({ ...prev, contact: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        contact: "Phone number must be 10 digits",
-      }));
-    }
+    setErrors((prev) => ({ ...prev, contact: mobileError(phoneNumber, "Contact", true) }));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -227,11 +228,8 @@ export default function FacultyForm() {
     setNewFaculty((prev) => {
       const updated = { ...prev, [field]: value };
 
-      if (field === "name" && user?.slug) {
-        const formattedName = processedValue.trim().replace(/\s+/g, "");
-        const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-        updated.email = `${formattedName}@${institute}`;
-      }
+      const loginId = field === "name" ? staffLoginId(processedValue, user) : null;
+      if (loginId) updated.email = loginId; // e.g. google@2026
       return updated;
     });
 
@@ -258,7 +256,7 @@ export default function FacultyForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -274,7 +272,7 @@ export default function FacultyForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -313,7 +311,10 @@ export default function FacultyForm() {
           router.back();
         }, 1000);
       },
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         // Handle error natively via redux/toast
       },
     });
@@ -356,7 +357,6 @@ export default function FacultyForm() {
                 <Label>Faculty Name *</Label>
                 <Input
                   ref={firstInputRef}
-                  tabIndex={1}
                   type="text"
                   placeholder="Ex. Full Stack Developer"
                   value={titleCase(newFaculty.name)}
@@ -371,7 +371,6 @@ export default function FacultyForm() {
                 <Input
                   type="text"
                   readOnly
-                  tabIndex={2}
                   placeholder="Generated Automatically"
                   value={newFaculty.email}
                   onChange={(e) => handleChange("email", e.target.value)}
@@ -384,7 +383,6 @@ export default function FacultyForm() {
                 <Label>Password *</Label>
                 <Input
                   type="text"
-                  tabIndex={3}
                   placeholder="Enter Password"
                   value={newFaculty.password}
                   onChange={(e) => handleChange("password", e.target.value)}
@@ -399,7 +397,6 @@ export default function FacultyForm() {
                   <PhoneInput
                     selectPosition="start"
                     countries={countries}
-                    tabIndex={4}
                     onKeyDown={handleKeyDown}
                     placeholder="Enter Contact"
                     onChange={handlePhoneNumberChange}
@@ -423,7 +420,6 @@ export default function FacultyForm() {
                 </Label>
                 <div className="relative" data-master="course">
                   <Select
-                    tabIndex={5}
                     options={courseOptions}
                     placeholder="Select an option"
                     onChange={(value: string) => handleChange("courseId", value)}
@@ -439,7 +435,6 @@ export default function FacultyForm() {
                 <Label>Select Batch *</Label>
                 <div className="relative" data-master="batch">
                   <Select
-                    tabIndex={6}
                     options={batchOptions}
                     placeholder="Select an option"
                     onChange={(value: string) => handleChange("batchId", value)}
@@ -454,12 +449,7 @@ export default function FacultyForm() {
 
               <div ref={(el) => { if (inputRefs.current) inputRefs.current.joiningDate = el; }}>
                 <Label>Joining Date *</Label>
-                <Input
-                  type="text"
-                  tabIndex={7}
-                  placeholder="DD-MM-YYYY"
-                  value={newFaculty.joiningDate}
-                  onChange={(e) => handleDateChange("joiningDate", e.target.value)}
+                <DateField value={newFaculty.joiningDate} onChange={(v) => handleDateChange("joiningDate", v)}
                   className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                 />
                 {errors.joiningDate && <p className="mt-1 text-sm text-red-500">{errors.joiningDate}</p>}
@@ -479,7 +469,6 @@ export default function FacultyForm() {
             </Button>
             <Button
               size="sm"
-              tabIndex={8}
               variant="primary"
               onClick={handleSubmit}
               className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"

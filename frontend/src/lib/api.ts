@@ -27,6 +27,7 @@ interface GetNotificationParams {
 }
 
 interface GetLabParams {
+  kind?: "LAB" | "CLASS"; // LAB (default) or CLASS
   token: string;
   page?: number;
   limit?: number;
@@ -85,7 +86,9 @@ export const loginUser = async (userData: {
     return response.data;
   } catch (err: any) {
     // Optional: You can handle or rethrow the API error here
-    console.error("❌ Login API failed:", err.response?.data || err.message);
+    // A wrong username/password is an expected result, not a crash: warn instead of
+    // console.error so the Next.js dev overlay does not pop up. The form shows the message.
+    console.warn("Login failed:", err.response?.data?.error || err.message);
     throw new Error(
       err.response?.data?.error ||
       err.response?.data ||
@@ -208,8 +211,9 @@ export const getLab = async ({
   search = "",
   sortField,
   sortOrder,
+  kind,
 }: GetLabParams) => {
-  const response = await apiClient.get("/all-lab", {
+  const response = await apiClient.get(kind === "CLASS" ? "/all-class" : "/all-lab", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -297,7 +301,7 @@ export const editRolesApi = async (token: string, formData: any, id: any) => {
 };
 
 export const createLabApi = async (token: string, newLabData: any) => {
-  const response = await apiClient.post(`/create-lab`, newLabData, {
+  const response = await apiClient.post(newLabData?.kind === "CLASS" ? `/create-class` : `/create-lab`, newLabData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -315,7 +319,7 @@ export const createOpeningBalanceApi = async (token: string, newStudent: any) =>
 };
 
 export const editLabApi = async (token: string, newLabData: any, id: any) => {
-  const response = await apiClient.put(`/edit-lab/${id}`, newLabData, {
+  const response = await apiClient.put(newLabData?.kind === "CLASS" ? `/edit-class/${id}` : `/edit-lab/${id}`, newLabData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -1212,3 +1216,29 @@ export const deletedEnquiry = async (token: string, id: any) => {
 //   });
 //   return response.data;
 // };
+
+
+// ---- Company selection / session ----
+export const selectCompany = async (body: { email: string; selectionToken: string; companyId: string }) => {
+  try {
+    const response = await apiClient.post("/auth/select-company", body);
+    return response.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.error || "Could not open the company.");
+  }
+};
+
+export const switchCompanyApi = async (companyId: string) => {
+  const response = await apiClient.post("/auth/switch-company", { companyId });
+  return response.data;
+};
+
+export const fetchMyCompanies = async () => {
+  const response = await apiClient.get("/my-companies");
+  return response.data as { currentCompanyId: string; companies: { id: string; name: string; role: string }[] };
+};
+
+export const sendHeartbeat = async () => {
+  const response = await apiClient.post("/auth/heartbeat");
+  return response.data;
+};

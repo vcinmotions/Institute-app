@@ -1,5 +1,7 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
@@ -108,7 +110,7 @@ export default function BatchForm() {
 
     setErrors(newErrors);
 
-    setTimeout(() => setErrors({}), 3000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
     return Object.keys(newErrors).length === 0;
   };
   const hanldeDeselectLab = () => {
@@ -142,7 +144,7 @@ export default function BatchForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -158,7 +160,7 @@ export default function BatchForm() {
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -186,7 +188,10 @@ export default function BatchForm() {
         }, 1000);
       },
 
-      onError: () => {
+      onError: (error: any) => {
+        // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+        setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+        setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
         // You already handle error via redux + toast
       },
     });
@@ -219,7 +224,6 @@ export default function BatchForm() {
             <Label>Batch Name *</Label>
             <Input
               ref={firstInputRef}
-              tabIndex={1}
               type="text"
               placeholder="LAB-01 Morning Batch"
               value={name}
@@ -274,7 +278,6 @@ export default function BatchForm() {
                 value={selectedLab ? selectedLab.toString() : ""} // ⭐ brings back placeholder
                 placeholder={selectedLab === null ? "Choose Lab" : ""}
                 className="dark:bg-dark-900"
-                tabIndex={2}
               />
               <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 {selectedLab !== null ? (
@@ -310,7 +313,6 @@ export default function BatchForm() {
                   selectedTimeSlot === null ? "Choose Time Slot" : ""
                 }
                 className="dark:bg-dark-900"
-                tabIndex={3}
               />
               <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 {selectedTimeSlot !== null ? (
@@ -345,7 +347,6 @@ export default function BatchForm() {
                 }}
                 placeholder="Select Faculty"
                 className="dark:bg-dark-900"
-                tabIndex={4}
               />
               <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 <ChevronDownIcon />
@@ -358,12 +359,11 @@ export default function BatchForm() {
             <Button
               size="sm"
               variant="outline"
-              tabIndex={5}
               onClick={handleResetForm}
             >
               Close
             </Button>
-            <Button size="sm" tabIndex={6} onClick={handleSubmit}>
+            <Button size="sm" onClick={handleSubmit}>
               Save
             </Button>
           </div>

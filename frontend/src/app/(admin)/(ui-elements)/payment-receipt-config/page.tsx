@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
@@ -77,8 +78,8 @@ export default function PaymentReceiptConfigPage() {
                 setAlert(true);
                 setTimeout(() => setAlert(false), 2000);
             },
-            onError: () => {
-                toast.error("Failed to save payment receipt config");
+            onError: (error: any) => {
+                toast.error(getApiErrorMessage(error, "Failed to save payment receipt config"));
             },
         });
     };
@@ -120,9 +121,8 @@ export default function PaymentReceiptConfigPage() {
                         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                             <div>
                                 <Label>Prefix</Label>
-                                <Input
+                                <Input autoFocus
                                     value={form.prefix}
-                                    tabIndex={1}
                                     onChange={(e) => handleChange("prefix", e.target.value)}
                                     placeholder="RCP"
                                     className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -134,7 +134,6 @@ export default function PaymentReceiptConfigPage() {
                                 <Input
                                     type="number"
                                     value={form.numberLength}
-                                    tabIndex={2}
                                     onChange={(e) => handleChange("numberLength", Number(e.target.value))}
                                     className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 />
@@ -144,7 +143,6 @@ export default function PaymentReceiptConfigPage() {
                                 <Label>Separator</Label>
                                 <Input
                                     value={form.separator}
-                                    tabIndex={3}
                                     onChange={(e) => handleChange("separator", e.target.value)}
                                     placeholder="-"
                                     className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -155,7 +153,6 @@ export default function PaymentReceiptConfigPage() {
                                 <Label>Suffix</Label>
                                 <Input
                                     value={form.suffix}
-                                    tabIndex={4}
                                     onChange={(e) => handleChange("suffix", e.target.value)}
                                     placeholder="Optional"
                                     className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -167,7 +164,6 @@ export default function PaymentReceiptConfigPage() {
                                 <Input
                                     type="number"
                                     value={form.currentNumber}
-                                    tabIndex={5}
                                     onChange={(e) => handleChange("currentNumber", Number(e.target.value))}
                                     className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 />
@@ -179,7 +175,6 @@ export default function PaymentReceiptConfigPage() {
                                     <input
                                         type="checkbox"
                                         id="includeYear"
-                                        tabIndex={6}
                                         checked={form.includeYear}
                                         onChange={(e) => handleChange("includeYear", e.target.checked)}
                                         className="h-5 w-5 rounded border-gray-300 text-brand-600 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-900 dark:ring-offset-gray-900 cursor-pointer"
@@ -209,7 +204,6 @@ export default function PaymentReceiptConfigPage() {
                     <div className="mt-4 flex items-center justify-end gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
                         <Button
                             size="sm"
-                            tabIndex={7}
                             variant="primary"
                             disabled={isPending}
                             className="min-w-[120px] rounded bg-gray-900 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 dark:bg-brand-600 dark:hover:bg-brand-500"

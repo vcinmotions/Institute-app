@@ -1,4 +1,7 @@
 "use client";
+import { useDialog } from "@/components/common/AppDialog";
+import { SERVER_ORIGIN } from "@/lib/config";
+import { getApiErrorMessage } from "@/lib/apiError";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -28,6 +31,7 @@ export default function AttendanceDataTable({
   batchId,
   selectedDate,
 }: AttendanceDataTableProps) {
+  const dialog = useDialog();
   const [attendance, setAttendance] = useState<Record<number, boolean>>({});
   const [attendanceData, setAttendanceData] = useState<any[]>([]);
 
@@ -72,10 +76,13 @@ export default function AttendanceDataTable({
   // ✅ Mutation for marking attendance
   const { mutate: submitAttendance, isPending } = useMutation({
     mutationFn: async (data: any) => await markAttendance(data),
-    onSuccess: () => alert("✅ Attendance saved!"),
+    onSuccess: () => { dialog.alert({ title: "Attendance saved", message: "The attendance was saved.", variant: "success" }); },
     onError: (err) => {
-      console.error("Error saving attendance:", err);
-      alert("❌ Failed to save attendance");
+      const reason = getApiErrorMessage(err, "Failed to save attendance");
+      const hint = /faculty not found/i.test(reason)
+        ? " Attendance must be marked while signed in as a faculty member."
+        : "";
+      dialog.alert({ title: "Could not save attendance", message: reason + hint, variant: "error" });
     },
   });
 
@@ -178,7 +185,7 @@ export default function AttendanceDataTable({
                             src={
                               record.student?.photoUrl?.startsWith("http")
                                 ? record.student.photoUrl
-                                : `http://localhost:5001${record.student?.photoUrl || ""}`
+                                : `${SERVER_ORIGIN}${record.student?.photoUrl || ""}`
                             }
                             alt="student"
                             className="h-7 w-7 rounded-full object-cover border border-slate-100 dark:border-slate-800"

@@ -1,5 +1,8 @@
 "use client";
+import { MESSAGE_VISIBLE_MS } from "@/lib/uiTimings";
+import { useAccessRoles } from "@/hooks/useAccessRoles";
 import React, { useEffect, useRef, useState } from "react";
+import { getApiErrorMessage } from "@/lib/apiError";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
@@ -13,6 +16,9 @@ import { RootState } from "@/store";
 import { useEditRoles } from "@/hooks/useEditRoles";
 import { titleCase } from "@/app/utils/Normalize";
 import { useScrollToError } from "@/app/utils/ScrollToError";
+import { EyeIcon, EyeCloseIcon } from "@/icons";
+import CompanyAccessPicker, { CompanyAssignment } from "../CompanyAccessPicker";
+import { loginIdError, staffLoginId, personNameError, passwordError, onlyErrors } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof RoleUserData, string>>;
 
@@ -39,6 +45,11 @@ export default function EditRolesForm({
     role: "",
   });
   const user = useSelector((state: RootState) => state.auth.user);
+  const canResetPassword = user?.role === "ADMIN";
+  const [resetPassword, setResetPassword] = useState(false);
+  const [companies, setCompanies] = useState<CompanyAssignment[]>([]);
+  const [multi, setMulti] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { inputRefs, scrollToError } = useScrollToError();
   const [errors, setErrors] = useState<FormErrors>({});
   const [alert, setAlert] = useState<{
@@ -59,18 +70,40 @@ export default function EditRolesForm({
     setFormData({
       name: roleData.name || "",
       email: roleData.email || "",
-      password: roleData.password || "",
-      role: roleData.role || "",
+      password: "",
+      role: roleData.customRoleId ? `custom:${roleData.customRoleId}` : roleData.role || "",
     });
+    setResetPassword(false);
+    // Companies this user can already work in (older users: just their own company).
+    const existing: CompanyAssignment[] = (roleData.companyAccess ?? []).map((a: any) => ({
+      companyId: a.clientAdminId,
+      role: a.role,
+    }));
+    setCompanies(existing);
   }, [roleData]);
 
   const { mutate: editRolesBasedAdmin } = useEditRoles();
 
-  const roles = [
-    { value: "FRONT_DESK", label: "Front Desk" },
-    { value: "ACCOUNTANT", label: "Accountant" },
-    { value: "VIEW_ONLY", label: "View Only" },
-  ];
+  const { data: accessRoles } = useAccessRoles();
+  // The roles come from Role Access (Front Desk, Accountant and View Only are there by default).
+  // Until they load, the three classic roles are shown so the list is never empty.
+  const roles = accessRoles
+    ? accessRoles.roles.map((r) => ({ value: `custom:${r.id}`, label: r.name }))
+    : [
+        { value: "FRONT_DESK", label: "Front Desk" },
+        { value: "ACCOUNTANT", label: "Accountant" },
+        { value: "VIEW_ONLY", label: "View Only" },
+      ];
+  // A user made before roles were editable still has the old built-in role: select the matching default role.
+  useEffect(() => {
+    if (!accessRoles) return;
+    const nameOf: Record<string, string> = { FRONT_DESK: "Front Desk", ACCOUNTANT: "Accountant", VIEW_ONLY: "View Only" };
+    const wanted = nameOf[formData.role];
+    if (!wanted) return;
+    const match = accessRoles.roles.find((r) => r.name === wanted);
+    if (match) setFormData((prev) => ({ ...prev, role: `custom:${match.id}` }));
+  }, [accessRoles, formData.role]);
+
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -83,12 +116,21 @@ export default function EditRolesForm({
   const validate = () => {
     const newErrors: FormErrors = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
-    if (!formData.email.trim()) newErrors.email = "Email is required.";
-    if (!formData.role.trim()) newErrors.role = "Please select a role.";
+    Object.assign(newErrors, onlyErrors({
+      name: personNameError(formData.name),
+      email: loginIdError(formData.email, "Email / username"),
+    }));
+    if (multi) {
+      if (companies.length === 0) newErrors.role = "Tick at least one company.";
+    } else if (!formData.role.trim()) newErrors.role = "Please select a role.";
+
+    if (resetPassword) {
+      const pw = passwordError(formData.password, "New password");
+      if (pw) newErrors.password = pw;
+    }
 
     setErrors(newErrors);
-    setTimeout(() => setErrors({}), 2000);
+    setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
 
     return {
       isValid: Object.keys(newErrors).length === 0,
@@ -101,12 +143,8 @@ export default function EditRolesForm({
       let updated = { ...prev, [field]: value };
 
       // 🧠 Auto-generate email if faculty name changes
-      if (field === "name" && user?.slug) {
-        const formattedName = value.trim().toLowerCase().replace(/\s+/g, "");
-        const institute = user.slug.trim().toLowerCase().replace(/\s+/g, "");
-
-        updated.email = `${formattedName}@${institute}`;
-      }
+      const loginId = field === "name" ? staffLoginId(value, user) : null;
+      if (loginId) updated.email = loginId; // e.g. google@2026
 
       return updated;
     });
@@ -133,7 +171,7 @@ export default function EditRolesForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 2000);
+      }, MESSAGE_VISIBLE_MS);
 
       return; // ⛔ mutation never runs
     }
@@ -149,7 +187,7 @@ export default function EditRolesForm({
 
       setTimeout(() => {
         setAlert({ show: false, title: "", message: "", variant: "" });
-      }, 3000);
+      }, MESSAGE_VISIBLE_MS);
 
       return;
     }
@@ -157,9 +195,19 @@ export default function EditRolesForm({
     const id = roleData.id;
     console.log("GET roleData ID IN HABDLE SUBMIT:", id);
 
+    const { password: _pw, ...rest } = formData;
     const normalizeRole = {
-      ...formData,
+      ...rest,
       name: titleCase(formData.name),
+      ...(multi ? { role: companies[0].role, companies } : {}),
+      // Custom role (Role Access) or built-in role. null clears a previously assigned custom role.
+      ...(!multi && formData.role.startsWith("custom:")
+        ? { role: "VIEW_ONLY", customRoleId: Number(formData.role.split(":")[1]) }
+        : { customRoleId: null }),
+      // Only send a password when the admin chose to reset it.
+      ...(canResetPassword && resetPassword && formData.password
+        ? { password: formData.password }
+        : {}),
     };
 
     editRolesBasedAdmin(
@@ -178,7 +226,10 @@ export default function EditRolesForm({
           }, 2000);
         },
 
-        onError: () => {
+        onError: (error: any) => {
+          // Show the server's reason (duplicate name, not allowed, etc.) on screen.
+          setAlert({ show: true, title: "Error", message: getApiErrorMessage(error), variant: "error" });
+          setTimeout(() => setAlert({ show: false, title: "", message: "", variant: "" }), MESSAGE_VISIBLE_MS);
           // You already handle error via redux + toast
         },
       }
@@ -221,7 +272,6 @@ export default function EditRolesForm({
               <Label>Name *</Label>
               <Input
                 ref={firstInputRef}
-                tabIndex={1}
                 type="text"
                 placeholder="Ex. John Doe"
                 value={titleCase(formData.name)}
@@ -240,7 +290,6 @@ export default function EditRolesForm({
               <Label>Username *</Label>
               <Input
                 type="text"
-                tabIndex={2}
                 readOnly
                 placeholder="user@example.com"
                 value={formData.email}
@@ -251,6 +300,61 @@ export default function EditRolesForm({
                 <p className="mt-1 text-sm text-red-500">{errors.email}</p>
               )}
             </div>
+
+            {canResetPassword && (
+              <div
+                className="md:col-span-2"
+                ref={(el) => {
+                  if (inputRefs.current) inputRefs.current.password = el;
+                }}
+              >
+                <Label>Password</Label>
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+<Input
+                    type={showPassword ? "text" : "password"}
+                    tabIndex={resetPassword ? 0 : -1}
+                    disabled={!resetPassword}
+                    placeholder={resetPassword ? "Enter new password" : "••••••••"}
+                    value={formData.password}
+                    onChange={(e) => handleChange("password", e.target.value)}
+                  />
+{resetPassword && (
+<button
+ type="button"
+ tabIndex={-1}
+ onClick={() => setShowPassword((v) => !v)}
+ aria-label={showPassword ? "Hide password" : "Show password"}
+ className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+>
+{showPassword ? (
+<EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+) : (
+<EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+)}
+</button>
+)}
+</div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      if (resetPassword) {
+                        setResetPassword(false); setShowPassword(false);
+                        handleChange("password", "");
+                      } else {
+                        setResetPassword(true);
+                      }
+                    }}
+                  >
+                    {resetPassword ? "Cancel" : "Reset Password"}
+                  </Button>
+                </div>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -265,10 +369,10 @@ export default function EditRolesForm({
                 if (inputRefs.current) inputRefs.current.role = el;
               }}
             >
-              <Label>Assign Role *</Label>
-              <div className="relative">
+              <CompanyAccessPicker value={companies} onChange={setCompanies} onMulti={setMulti} defaultRole={formData.role || "FRONT_DESK"} />
+              {!multi && <Label>Role *</Label>}
+              <div className={multi ? "hidden" : "relative"}>
                 <Select
-                  tabIndex={3}
                   options={roles}
                   placeholder="Select Role"
                   value={formData.role}
@@ -291,14 +395,12 @@ export default function EditRolesForm({
           <Button
             size="sm"
             variant="outline"
-            tabIndex={4}
             onClick={onCloseModal}
           >
             Close
           </Button>
           <Button
             size="sm"
-            tabIndex={5}
             className="min-w-[120px] rounded bg-gray-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-600 dark:hover:bg-brand-500"
             onClick={handleSubmit}
           >
