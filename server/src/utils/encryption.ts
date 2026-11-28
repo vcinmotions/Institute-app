@@ -7,7 +7,18 @@ const key = process.env.ENCRYPTION_KEY!;
 //const key = Buffer.from(process.env.ENCRYPTION_KEY!, "hex");
 const ivLength = 16;
 
+// aes-256 needs a 32-byte key, and the key is used as text: ENCRYPTION_KEY must be exactly
+// 32 characters (e.g. `openssl rand -hex 16`). Fail with a clear message instead of
+// "Invalid key length". The key itself is not changed, so existing encrypted values still work.
+function checkKey() {
+  const len = Buffer.byteLength(key ?? "", "utf8");
+  if (len !== 32) {
+    throw new Error(`ENCRYPTION_KEY must be exactly 32 characters (it has ${len}). Generate one with: openssl rand -hex 16`);
+  }
+}
+
 export function encrypt(text: string) {
+  checkKey();
   const iv = crypto.randomBytes(ivLength);
   const cipher = crypto.createCipheriv(algorithm, key, iv);
   let encrypted = cipher.update(text, "utf8", "hex");
@@ -16,6 +27,7 @@ export function encrypt(text: string) {
 }
 
 export function decrypt(text: string) {
+  checkKey();
   const [ivHex, encryptedText] = text.split(":");
   const iv = Buffer.from(ivHex, "hex");
   const decipher = crypto.createDecipheriv(algorithm, key, iv);
