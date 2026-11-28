@@ -99,7 +99,7 @@ export default function SubscriptionLanding() {
             <a href="#faq" className="hover:text-brand-500">FAQ</a>
           </nav>
           <div className="flex items-center gap-2">
-            <DownloadAppButton />
+            <DownloadAppButton mode="public" />
             <Link href="/subscription" className="rounded-lg px-3 py-2 text-sm font-medium hover:text-brand-500">
               Sign in
             </Link>

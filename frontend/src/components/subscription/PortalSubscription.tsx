@@ -303,7 +303,12 @@ export default function PortalSubscription() {
         <header className="flex items-center justify-between border-b border-gray-200 bg-white px-5 py-4 dark:border-gray-800 dark:bg-gray-900 md:px-8">
           <h1 className="text-lg font-semibold">{NAV.find((n) => n.id === tab)?.label}</h1>
           <div className="flex items-center gap-3">
-            <DownloadAppButton />
+            <DownloadAppButton
+              mode="portal"
+              active={active}
+              // companies cannot open Plans & Payment: their master institute pays
+              onInactive={me?.isCompany ? undefined : () => setTab("plans")}
+            />
             <span className={`rounded-full px-3 py-1 text-xs font-medium ${badge[1]}`}>{badge[0]}</span>
             <span className="hidden h-9 w-9 items-center justify-center rounded-full bg-brand-500 text-sm font-semibold text-white sm:flex">
               {(displayName || "?").charAt(0).toUpperCase()}
