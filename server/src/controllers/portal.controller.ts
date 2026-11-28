@@ -532,6 +532,24 @@ async function masterContext(req: Request) {
   return { prisma, master, db: instituteDb(master) };
 }
 
+/** Labels of the required company fields that are empty, in form order. */
+function missingCompanyFields(n: Record<string, any>, withFinancialYear: boolean): string[] {
+  const fields: [string, string][] = [
+    ["instituteName", "Company name"],
+    ["name", "Contact person"],
+    ["contact", "Contact number"],
+    ["country", "Country"],
+    ["state", "State"],
+    ["city", "City"],
+    ["zipCode", "Zip code"],
+    ...(withFinancialYear
+      ? ([["financialStartDate", "Financial year start"], ["financialEndDate", "Financial year end"]] as [string, string][])
+      : []),
+    ["fullAddress", "Full address"],
+  ];
+  return fields.filter(([k]) => !n[k]).map(([, label]) => label);
+}
+
 export async function listCompanies(req: Request, res: Response) {
   const ctx = await masterContext(req);
   if (!ctx) return res.status(404).json({ error: "Account not found" });
@@ -542,11 +560,15 @@ export async function listCompanies(req: Request, res: Response) {
 
 export async function createCompany(req: Request, res: Response) {
   const n = normalizeTenantInput(req.body);
-  const required = [
-    n.name, n.instituteName, n.contact, n.country,
-    n.state, n.city, n.zipCode, n.fullAddress, n.financialStartDate, n.financialEndDate,
-  ];
-  if (required.some((v) => !v)) return res.status(400).json({ error: "Missing required fields." });
+  const missing = missingCompanyFields(n, true);
+  if (missing.length) return res.status(400).json({ error: `Please fill in: ${missing.join(", ")}.` });
+  const contactDigits = String(n.contact).replace(/\D/g, "");
+  if (contactDigits.length < 8 || contactDigits.length > 15) {
+    return res.status(400).json({ error: "Please enter a valid contact number (8 to 15 digits)." });
+  }
+  if (new Date(n.financialEndDate!) <= new Date(n.financialStartDate!)) {
+    return res.status(400).json({ error: "Financial year end must be after the financial year start." });
+  }
 
   try {
     const ctx = await masterContext(req);
@@ -588,8 +610,8 @@ export async function updateCompany(req: Request, res: Response) {
   if (!company) return res.status(404).json({ error: "Company not found" });
 
   const n = normalizeTenantInput(req.body);
-  const required = [n.name, n.instituteName, n.contact, n.country, n.state, n.city, n.zipCode, n.fullAddress];
-  if (required.some((v) => !v)) return res.status(400).json({ error: "Please fill in all required fields." });
+  const missing = missingCompanyFields(n, false);
+  if (missing.length) return res.status(400).json({ error: `Please fill in: ${missing.join(", ")}.` });
   const digits = String(n.contact).replace(/\D/g, "");
   if (digits.length < 8 || digits.length > 15) {
     return res.status(400).json({ error: "Please enter a valid contact number." });

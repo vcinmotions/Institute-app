@@ -57,6 +57,19 @@ export default function PortalCompanies({ active }: { active: boolean; onSwitch?
   const [editingId, setEditingId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [errors, setErrors] = useState<Partial<Record<keyof typeof EMPTY, string>>>({});
+
+  /** Update a field and clear its error (plus dependent location fields). */
+  const setField = (key: keyof typeof EMPTY, value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      [key]: value,
+      // changing a parent clears the dependent fields
+      ...(key === "country" ? { state: "", city: "" } : {}),
+      ...(key === "state" ? { city: "" } : {}),
+    }));
+    setErrors((prev) => ({ ...prev, [key]: undefined }));
+  };
 
   // Country -> State -> City chain: each list depends on the one before it.
   const countries = useMemo(() => Country.getAllCountries(), []);
@@ -81,9 +94,39 @@ export default function PortalCompanies({ active }: { active: boolean; onSwitch?
     load();
   }, [load]);
 
+  const validate = () => {
+    const errs: Partial<Record<keyof typeof EMPTY, string>> = {};
+    for (const f of FIELDS) {
+      if (editingId && (f.key === "financialStartDate" || f.key === "financialEndDate")) continue;
+      if (!String(form[f.key] ?? "").trim()) {
+        const isPick = f.key === "country" || f.key === "state" || f.key === "city";
+        errs[f.key] = `${isPick ? "Please select" : "Please enter"} ${f.label.toLowerCase()}.`;
+      }
+    }
+    const digits = form.contact.replace(/\D/g, "");
+    if (!errs.contact && (digits.length < 8 || digits.length > 15)) {
+      errs.contact = "Enter a valid contact number (8 to 15 digits).";
+    }
+    if (
+      !editingId &&
+      !errs.financialStartDate &&
+      !errs.financialEndDate &&
+      new Date(form.financialEndDate) <= new Date(form.financialStartDate)
+    ) {
+      errs.financialEndDate = "Financial year end must be after the start date.";
+    }
+    return errs;
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMsg(null);
+    const errs = validate();
+    setErrors(errs);
+    if (Object.keys(errs).length) {
+      setMsg({ ok: false, text: "Please fix the highlighted fields." });
+      return;
+    }
     setBusy(true);
     try {
       if (editingId) {
@@ -98,7 +141,10 @@ export default function PortalCompanies({ active }: { active: boolean; onSwitch?
       setEditingId(null);
       await load();
     } catch (err: any) {
-      setMsg({ ok: false, text: err?.response?.data?.error || editingId ? "Could not update the company" : "Could not create the company" });
+      setMsg({
+        ok: false,
+        text: err?.response?.data?.error || (editingId ? "Could not update the company." : "Could not create the company."),
+      });
     } finally {
       setBusy(false);
     }
@@ -119,9 +165,11 @@ export default function PortalCompanies({ active }: { active: boolean; onSwitch?
     setEditingId(c.id);
     setAdding(true);
     setMsg(null);
+    setErrors({});
   };
 
   const toggleForm = () => {
+    setErrors({});
     if (adding) setEditingId(null);
     else setForm(EMPTY);
     setAdding((v) => !v);
@@ -161,7 +209,7 @@ export default function PortalCompanies({ active }: { active: boolean; onSwitch?
       )}
 
       {adding && (
-        <form onSubmit={submit} className={`${card} grid gap-4 sm:grid-cols-2`}>
+        <form noValidate onSubmit={submit} className={`${card} grid gap-4 sm:grid-cols-2`}>
           {editingId && (
             <p className="text-sm text-gray-500 sm:col-span-2">
               Editing <b>{form.instituteName}</b>. The financial year is set when the company is created.
@@ -194,16 +242,9 @@ export default function PortalCompanies({ active }: { active: boolean; onSwitch?
                     placeholder={placeholder}
                     value={form[f.key]}
                     disabled={(f.key === "state" && !countryIso) || (f.key === "city" && !stateIso)}
-                    onChange={(v) =>
-                      setForm({
-                        ...form,
-                        [f.key]: v,
-                        // changing a parent clears the dependent fields
-                        ...(f.key === "country" ? { state: "", city: "" } : {}),
-                        ...(f.key === "state" ? { city: "" } : {}),
-                      })
-                    }
+                    onChange={(v) => setField(f.key, v)}
                   />
+                  {errors[f.key] && <span className="mt-1 block text-xs text-red-600">{errors[f.key]}</span>}
                 </div>
               );
             }
@@ -211,14 +252,14 @@ export default function PortalCompanies({ active }: { active: boolean; onSwitch?
             <label key={f.key} className={f.wide ? "sm:col-span-2" : ""}>
               <span className="mb-1 block text-xs text-gray-500">{f.label} *</span>
               <input
-                required
-                type={f.type ?? "text"}
-                autoComplete={f.type === "password" ? "new-password" : "off"}
-                minLength={f.type === "password" ? 6 : undefined}
+                type={f.key === "contact" ? "tel" : (f.type ?? "text")}
+                autoComplete="off"
                 value={form[f.key]}
-                onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-                className={input}
+                onChange={(e) => setField(f.key, e.target.value)}
+                aria-invalid={!!errors[f.key]}
+                className={`${input} ${errors[f.key] ? "border-red-500 dark:border-red-500" : ""}`}
               />
+              {errors[f.key] && <span className="mt-1 block text-xs text-red-600">{errors[f.key]}</span>}
             </label>
             );
           })}
