@@ -48,28 +48,13 @@ import { activationGate } from "./middlewares/activationGate.middleware";
 import expenseRoute from "./routes/expense.routes";
 import { subscriptionGuard } from "./middlewares/subscriptionGuard.middleware";
 import { syncFromCloud, isEnforced, syncIntervalMs, getState } from "./services/subscription.service";
+import { isAllowedOrigin } from "./utils/allowedOrigins";
 
 
 const app = express();
 
-// Allow this PC (localhost) and other computers on the institute's private network
-// (LAN mode: the app is opened from http://<server-ip>:3000). Public sites are not allowed.
-const isAllowedOrigin = (origin?: string) => {
-  if (!origin) return true; // same-origin / non-browser clients
-  try {
-    const h = new URL(origin).hostname;
-    return (
-      h === "localhost" ||
-      h === "127.0.0.1" ||
-      /^10\./.test(h) ||
-      /^192\.168\./.test(h) ||
-      /^172\.(1[6-9]|2\d|3[01])\./.test(h) ||
-      /^169\.254\./.test(h)
-    );
-  } catch {
-    return false;
-  }
-};
+// Allowed: localhost, the institute's LAN, and the sites listed in CORS_ALLOWED_ORIGINS
+// (see utils/allowedOrigins.ts).
 app.use(
   cors({
     origin: (origin, cb) => cb(null, isAllowedOrigin(origin)),
