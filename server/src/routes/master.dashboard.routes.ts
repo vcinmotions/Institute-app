@@ -24,6 +24,7 @@ import {
   portalListKeys, portalDeactivateDevice, saasIssueLocalRenewal,
 } from "../controllers/activation.controller";
 import { portalGetBranding, portalUpdateBranding, portalBrandingUpload, brandingUploadErrors } from "../controllers/branding.controller";
+import { latestAppInfo, downloadLatestApp } from "../controllers/download.controller";
 const router = express.Router();
 
 // Tiny in-memory throttle for the public activation endpoints (brute-force protection for keys).
@@ -49,6 +50,10 @@ router.post("/setup/demo", setupDemoController);
 router.get("/setup/identity", setupIdentityController);
 router.post("/setup/resync", setupResyncController);
 router.post("/setup/address", createMasterAddressController);
+
+// ---- Windows app download (public) ----
+router.get("/app/latest", latestAppInfo);
+router.get("/app/download", downloadLatestApp);
 
 // ---- Web portal (public / portal-token) ----
 router.post("/portal/register", registerInstitute);
