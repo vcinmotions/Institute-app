@@ -43,6 +43,13 @@ if (!keyRaw) {
   process.exit(1);
 }
 const pem = keyRaw.includes("BEGIN") ? keyRaw.replace(/\n/g, "\n") : Buffer.from(keyRaw, "base64").toString("utf8");
+if (!pem.includes("PRIVATE KEY")) {
+  console.error(
+    "SUBSCRIPTION_PRIVATE_KEY is not a real key (still a placeholder?).\n" +
+      "Copy the SUBSCRIPTION_PRIVATE_KEY line from the live server's ~/iapp/server/.env.portal into server/.env.portal.",
+  );
+  process.exit(1);
+}
 
 // Local mode (no keys): months of validity from the first run. --months, else LOCAL_LICENSE_MONTHS in server/.env.prod (or .env), else 6.
 const rawMonths = Number(arg("months", prodEnv.LOCAL_LICENSE_MONTHS ?? 6));
