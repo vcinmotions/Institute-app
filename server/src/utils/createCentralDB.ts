@@ -194,7 +194,8 @@ export async function createCentralDB(clientId: string, options?: any) {
       password: process.env.DB_PASS,
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
-      database: "postgres",
+      // cPanel users may not open "postgres": set PG_ADMIN_DATABASE to one of your own databases.
+      database: process.env.PG_ADMIN_DATABASE || "postgres",
     });
 
     await admin.connect();

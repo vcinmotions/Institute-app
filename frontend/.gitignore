@@ -39,6 +39,10 @@ next-env.d.ts
 .env
 # Release build output (built separately from the dev .next)
 /.next-build/
+# Live portal builds made by deploy.sh (two folders, switched on each deploy)
+/.next-a/
+/.next-b/
+/.live-dist
 
 # live portal build env (server only)
 .env.production

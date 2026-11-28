@@ -86,7 +86,8 @@ export async function createTenantOnServer(params: {
     password: DB_PASSWORD,
     host: DB_HOST,
     port: Number(DB_PORT),
-    database: "postgres",
+    // cPanel users may not open "postgres": set PG_ADMIN_DATABASE to one of your own databases.
+    database: process.env.PG_ADMIN_DATABASE || "postgres",
   });
 
   try {
