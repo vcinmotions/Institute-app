@@ -73,7 +73,10 @@ command -v node >/dev/null || die "node not found"
 if grep -q $'\r' "$SERVER/.env.portal"; then
   sed -i 's/\r$//' "$SERVER/.env.portal"; ok "removed Windows line endings from server/.env.portal"
 fi
-grep -q 'CHANGE_ME' "$SERVER/.env.portal" && die "server/.env.portal still contains CHANGE_ME values"
+if grep -q '^[^#]*CHANGE_ME' "$SERVER/.env.portal"; then
+  echo "    Still to fill in:"; grep -n '^[^#]*CHANGE_ME' "$SERVER/.env.portal" | cut -d= -f1 | sed 's/^/      /'
+  die "server/.env.portal still contains CHANGE_ME values"
+fi
 grep -q '^PG_ADMIN_DATABASE=' "$SERVER/.env.portal" || warn "PG_ADMIN_DATABASE is not set in server/.env.portal (new institute sign-up needs it on cPanel)"
 ok "node $(node -v), pm2 $(pm2 -v)"
 
