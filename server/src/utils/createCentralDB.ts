@@ -253,6 +253,7 @@ import bcrypt from "bcryptjs";
 import fs from "fs";
 import { getCentralPrisma } from "../prisma-client/central-client";
 import { getResourcePath, getUserDataPath, isPackaged } from "../middlewares/runtimePaths";
+import { activeEnvFile } from "./envLoader";
 
 /* -------------------------------------------------------
    SAFE ELECTRON DETECTION
@@ -297,8 +298,7 @@ const rootDir = isPackaged
 //   : path.resolve(__dirname, "../../");
 
 // Decide environment
-const envFile =
-  process.env.APP_ENV === "prod" ? ".env.prod" : ".env.dev";
+const envFile = activeEnvFile();
 
 
   console.log("envFile in CREATE CENTRAL CONTROLLER:", envFile);

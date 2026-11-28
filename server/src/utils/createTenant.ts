@@ -561,6 +561,7 @@ import fs from "fs";
 import { generateTenantSlug } from "./generateSlug";
 import { encrypt } from "./encryption";
 import {  getResourcePath, getUserDataPath, isPackaged } from "../middlewares/runtimePaths";
+import { activeEnvFile } from "./envLoader";
 
 
 /* -------------------------------------------------------
@@ -592,8 +593,7 @@ const prismaCLI = isProd
   ? path.join(basePath, "server", "dist", "node_modules", "prisma", "build", "index.js")
   : path.join(basePath, "node_modules", "prisma", "build", "index.js");
 
-const envFile =
-  process.env.APP_ENV === "prod" ? ".env.prod" : ".env.dev";
+const envFile = activeEnvFile();
 
 dotenv.config({ path: path.join(rootDir, envFile) });
 

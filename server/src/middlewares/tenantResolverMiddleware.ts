@@ -86,12 +86,11 @@ import { getTenantPrisma } from "../prisma-client/tenant-client";
 import path from "path";
 import dotenv from "dotenv";
 import { getUserDataPath, isPackaged } from "./runtimePaths";
-import { getTenantDbUrl } from "../utils/envLoader";
+import { getTenantDbUrl, activeEnvFile } from "../utils/envLoader";
 import { normalizeEmailInput, normalizeLoginInput } from "../utils/normalizer/loginNormalizer";
 
 // Decide environment
-const envFile =
-  process.env.APP_ENV === "prod" ? ".env.prod" : ".env.dev";
+const envFile = activeEnvFile();
 
   
   const rootDir = isPackaged
