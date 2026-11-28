@@ -57,6 +57,7 @@ export const useFetchStudent = ({
     },
     enabled: !!token,
     staleTime: 30 * 1000,   // ⭐ caching (30s)
+    refetchInterval: 60 * 1000,
   });
 };
 

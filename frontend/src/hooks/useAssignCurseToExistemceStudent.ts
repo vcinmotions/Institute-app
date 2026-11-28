@@ -10,6 +10,7 @@ type AdmissionPayload = {
   studentId: string;
   courseId: string;
   admissionDate: string;
+  durationMonths: string;
   feeAmount: string;
   paymentType: string;
 };

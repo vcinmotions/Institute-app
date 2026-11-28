@@ -47,8 +47,8 @@ export async function getStudents({
   );
 
   const today = new Date();
-  const todayMonth = today.getMonth(); // 0-based
-  const todayDate = today.getDate();
+  const todayMonth = today.getUTCMonth(); // 0-based; DOB is stored as a date-only UTC value
+  const todayDate = today.getUTCDate();
 
   const [data, total, allStudentsForBirthday] = await prisma.$transaction([
     prisma.student.findMany({
@@ -71,6 +71,7 @@ export async function getStudents({
         select: {
           id: true,
           fullName: true,
+          studentCode: true,
           dob: true,
         },
       }),
@@ -80,8 +81,8 @@ export async function getStudents({
   const birthday = allStudentsForBirthday.filter((student: { dob: string | number | Date; }) => {
     const dob = new Date(student.dob);
     return (
-      dob.getMonth() === todayMonth &&
-      dob.getDate() === todayDate
+      dob.getUTCMonth() === todayMonth &&
+      dob.getUTCDate() === todayDate
     );
   });
 

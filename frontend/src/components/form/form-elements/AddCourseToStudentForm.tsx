@@ -28,6 +28,7 @@ interface NewCourseData {
   courseId: string;
   batchId: string;
   admissionDate: any;
+  durationMonths: string;
   feeAmount: string;
   paymentType: string;
   installmentTypeId: string;
@@ -42,6 +43,7 @@ export default function CourseForm({
     courseId: "",
     batchId: "",
     admissionDate: "",
+    durationMonths: "",
     feeAmount: "",
     paymentType: "",
     installmentTypeId: "",
@@ -122,6 +124,9 @@ export default function CourseForm({
     if (!filledCoursedata.feeAmount) newErrors.feeAmount = "Fee amount is required.";
     if (!filledCoursedata.paymentType) newErrors.paymentType = "Payment type is required.";
     if (!filledCoursedata.admissionDate) newErrors.admissionDate = "Admission date is required.";
+    if (!filledCoursedata.durationMonths || Number(filledCoursedata.durationMonths) < 1) {
+      newErrors.durationMonths = "Enter a duration of at least 1 month.";
+    }
 
     setErrors(newErrors);
     setTimeout(() => setErrors({}), MESSAGE_VISIBLE_MS);
@@ -140,6 +145,10 @@ export default function CourseForm({
 
     if (field === "courseId") {
       const selectedCourse = courseList.find((c) => c.id.toString() === value);
+      setFilledCourseData((prev) => ({
+        ...prev,
+        durationMonths: selectedCourse?.durationMonths?.toString() || "",
+      }));
 
       if (selectedCourse?.courseFeeStructure) {
         const fee = selectedCourse.courseFeeStructure.totalAmount;
@@ -214,6 +223,7 @@ export default function CourseForm({
       courseId: filledCoursedata.courseId,
       batchId: filledCoursedata.batchId,
       admissionDate: filledCoursedata.admissionDate,
+      durationMonths: filledCoursedata.durationMonths,
       feeAmount: filledCoursedata.feeAmount,
       paymentType: filledCoursedata.paymentType,
       installmentTypeId: filledCoursedata.installmentTypeId,
@@ -227,6 +237,7 @@ export default function CourseForm({
             courseId: "",
             batchId: "",
             admissionDate: "",
+            durationMonths: "",
             feeAmount: "",
             paymentType: "",
             installmentTypeId: "",
@@ -323,6 +334,20 @@ export default function CourseForm({
               <DateTimeField value={filledCoursedata.admissionDate} onChange={(v) => handleChange("admissionDate", v)} />
               {errors.admissionDate && (
                 <p className="mt-1 text-sm text-red-500">{errors.admissionDate}</p>
+              )}
+            </div>
+
+            <div>
+              <Label>Course Duration (Months) *</Label>
+              <Input
+                type="number"
+                min="1"
+                value={filledCoursedata.durationMonths}
+                onChange={(e) => handleChange("durationMonths", e.target.value)}
+                placeholder="Enter duration in months"
+              />
+              {errors.durationMonths && (
+                <p className="mt-1 text-sm text-red-500">{errors.durationMonths}</p>
               )}
             </div>
 
