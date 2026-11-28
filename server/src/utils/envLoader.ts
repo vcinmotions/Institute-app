@@ -48,6 +48,9 @@ export function loadEnv() {
 
   dotenv.config({
     path: path.join(rootDir, envFile),
+    // On the live portal .env.portal is the only source of truth: it must win over values a
+    // process manager (pm2) kept from an old shell, e.g. JWT_SECRET=CHANGE_ME from a first start.
+    override: envFile === ".env.portal",
   });
 
   dotenv.config({

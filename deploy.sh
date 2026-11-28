@@ -108,11 +108,11 @@ if (( DO_SERVER )); then
   fi
 
   step "API: (re)starting $API_NAME"
-  if pm2 describe "$API_NAME" >/dev/null 2>&1; then
-    APP_ENV=portal pm2 restart "$API_NAME" --update-env
-  else
-    APP_ENV=portal pm2 start "npx ts-node --transpile-only server.ts" --name "$API_NAME" --cwd "$SERVER"
-  fi
+  # Always start fresh with a clean environment. pm2 otherwise keeps the variables of the shell
+  # the app was FIRST started from (e.g. JWT_SECRET=CHANGE_ME), and they would win over .env.portal.
+  pm2 delete "$API_NAME" >/dev/null 2>&1 || true
+  env -i HOME="$HOME" USER="${USER:-}" PATH="$PATH" APP_ENV=portal \
+    pm2 start "npx ts-node --transpile-only server.ts" --name "$API_NAME" --cwd "$SERVER"
   wait_http "http://127.0.0.1:$API_PORT/api/subscription/locked" "200" 60 \
     || die "API does not answer on port $API_PORT. See: pm2 logs $API_NAME --lines 80 --nostream"
   ok "API answers on port $API_PORT"
@@ -158,8 +158,8 @@ if (( DO_FRONTEND )); then
   start_web() { # dist folder
     local dir; dir="$(app_dir "$1")" || return 1
     pm2 delete "$WEB_NAME" >/dev/null 2>&1 || true
-    PORT="$WEB_PORT" HOSTNAME=127.0.0.1 pm2 start "$dir/server.js" \
-      --name "$WEB_NAME" --cwd "$dir" --update-env
+    env -i HOME="$HOME" USER="${USER:-}" PATH="$PATH" NODE_ENV=production PORT="$WEB_PORT" HOSTNAME=127.0.0.1 \
+      pm2 start "$dir/server.js" --name "$WEB_NAME" --cwd "$dir"
   }
 
   step "Website: switching $WEB_NAME to $NEW"
