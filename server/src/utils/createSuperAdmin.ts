@@ -1,36 +1,15 @@
+// Creates the master (super) admin login in the central database.
+//
+//   Developer PC:  npm run create-superadmin                    (admin@master.com / master123)
+//   Live portal:   APP_ENV=portal SUPERADMIN_EMAIL=you@example.com SUPERADMIN_PASSWORD='...' npm run create-superadmin
+//                  On the portal both values are required: the dev login is never created there.
+import { loadEnv } from "./envLoader";
+loadEnv(); // same env files as the server (APP_ENV=portal -> .env.portal only)
+
 import { getCentralPrisma } from "../prisma-client/central-client";
-
 import bcrypt from "bcryptjs";
-import dotenv from "dotenv";
-import path from "path";
-import fs from "fs";
 
-const rootDir = path.resolve(__dirname, "../../");
-const envFile = process.env.APP_ENV === "prod"
-  ? ".env.prod"
-  : ".env.dev";
-
-const envPath = path.join(rootDir, envFile);
-
-console.log("=================================");
-console.log("APP_ENV before loading:", process.env.APP_ENV);
-console.log("Loading ENV FILE:", envFile);
-console.log("ENV PATH:", envPath);
-console.log("Root Dir:", rootDir);
-console.log("=================================");
-
-if (!fs.existsSync(envPath)) {
-  throw new Error(`❌ ENV file not found: ${envPath}`);
-}
-
-dotenv.config({
-  path: envPath,
-  override: true,
-});
-
-console.log("APP_ENV:", process.env.APP_ENV);
-console.log("DB_PROVIDER:", process.env.DB_PROVIDER);
-console.log("CENTRAL_DATABASE_URL:", process.env.CENTRAL_DATABASE_URL);
+const isPortal = process.env.APP_ENV === "portal";
 
 const databaseUrl = process.env.CENTRAL_DATABASE_URL;
 
@@ -39,17 +18,22 @@ if (!databaseUrl) {
 }
 
 if (!databaseUrl.startsWith("postgresql://")) {
-  throw new Error(
-    `❌ Expected PostgreSQL CENTRAL_DATABASE_URL, received: ${databaseUrl}`
-  );
+  throw new Error("❌ Expected a PostgreSQL CENTRAL_DATABASE_URL (postgresql://...)");
 }
+
+const email = process.env.SUPERADMIN_EMAIL || (isPortal ? "" : "admin@master.com");
+const password = process.env.SUPERADMIN_PASSWORD || (isPortal ? "" : "master123");
+
+if (isPortal && (!email || password.length < 12)) {
+  throw new Error("❌ On the live portal set SUPERADMIN_EMAIL and SUPERADMIN_PASSWORD (at least 12 characters).");
+}
+
+console.log(`Creating SuperAdmin ${email} (APP_ENV=${process.env.APP_ENV || "dev"})`);
 
 const centralPrisma = getCentralPrisma(databaseUrl);
 
 async function createSuperAdmin() {
   const name = "Master Admin";
-  const email = "admin@master.com";
-  const password = "master123";
   const role = "MASTER_ADMIN";
   const contact = "9819234567";
   const position = "Super Admin";
@@ -76,7 +60,7 @@ async function createSuperAdmin() {
       },
     });
 
-    console.log("✅ SuperAdmin created:", admin);
+    console.log("✅ SuperAdmin created:", admin.email);
   } catch (error: any) {
     if (error.code === "P2002") {
       console.error("❌ SuperAdmin with this email already exists.");

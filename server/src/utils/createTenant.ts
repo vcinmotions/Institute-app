@@ -768,12 +768,12 @@ export async function createTenant(
   /* ---------- DEV (Postgres) ---------- */
   else {
     dbUrl =
-      `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}` +
+      `postgresql://${encodeURIComponent(process.env.DB_USER ?? "")}:${encodeURIComponent(process.env.DB_PASS ?? "")}` +
       `@${process.env.DB_HOST}:${process.env.DB_PORT}/${dbName}`;
 
     const backupDbName = `${dbName}_backup`;
     backupDbUrl =
-      `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}` +
+      `postgresql://${encodeURIComponent(process.env.DB_USER ?? "")}:${encodeURIComponent(process.env.DB_PASS ?? "")}` +
       `@${process.env.DB_HOST}:${process.env.DB_PORT}/${backupDbName}`;
 
     const admin = new Client({

@@ -185,7 +185,7 @@ export async function createCentralDB(clientId: string, options?: any) {
 
     console.log("DEV DB CREATION CALLED", envFile);
     dbUrl =
-      `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}` +
+      `postgresql://${encodeURIComponent(process.env.DB_USER ?? "")}:${encodeURIComponent(process.env.DB_PASS ?? "")}` +
       `@${process.env.DB_HOST}:${process.env.DB_PORT}/${dbName}`;
 
 

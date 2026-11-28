@@ -78,8 +78,8 @@ export async function createTenantOnServer(params: {
   const DB_HOST = process.env.PG_HOST || "localhost";
   const DB_PORT = process.env.PG_PORT || "5432";
 
-  const dbUrl = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${dbName}`;
-  const backupDbUrl = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${backupDbName}`;
+  const dbUrl = `postgresql://${encodeURIComponent(DB_USER ?? "")}:${encodeURIComponent(DB_PASSWORD ?? "")}@${DB_HOST}:${DB_PORT}/${dbName}`;
+  const backupDbUrl = `postgresql://${encodeURIComponent(DB_USER ?? "")}:${encodeURIComponent(DB_PASSWORD ?? "")}@${DB_HOST}:${DB_PORT}/${backupDbName}`;
 
   const admin = new PGClient({
     user: DB_USER,
