@@ -35,7 +35,11 @@ export function getBuildConfig(): BuildConfigResult {
   if (cache) return cache;
   const prod = process.env.APP_ENV === "prod";
   // The hosted portal itself (holds the private signing key, never shipped in the EXE) is not licensed.
-  if (process.env.SUBSCRIPTION_PRIVATE_KEY) return (cache = { ok: false, reason: "UNMANAGED" });
+  // APP_ENV=portal is set only by the live server's start command, so it alone also marks the portal:
+  // the website must never show the EXE's "Activate this PC" screen.
+  if (process.env.SUBSCRIPTION_PRIVATE_KEY || process.env.APP_ENV === "portal") {
+    return (cache = { ok: false, reason: "UNMANAGED" });
+  }
   if (!prod) {
     // Development: ONLY SUBSCRIPTION_MODE=ENABLED turns on keys + portal subscription checks.
     // Anything else is the local mode: no Server key, no Client key, just a time-limited licence.

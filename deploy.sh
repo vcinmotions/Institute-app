@@ -77,6 +77,13 @@ if grep -q '^[^#]*CHANGE_ME' "$SERVER/.env.portal"; then
   echo "    Still to fill in:"; grep -n '^[^#]*CHANGE_ME' "$SERVER/.env.portal" | cut -d= -f1 | sed 's/^/      /'
   die "server/.env.portal still contains CHANGE_ME values"
 fi
+for k in SUBSCRIPTION_PRIVATE_KEY SUBSCRIPTION_PUBLIC_KEY JWT_SECRET ENCRYPTION_KEY BACKUP_SECRET; do
+  v="$(grep -m1 "^$k=" "$SERVER/.env.portal" | cut -d= -f2- || true)"
+  [[ -n "$v" ]] || die "$k is empty or missing in server/.env.portal"
+done
+v="$(grep -m1 '^ENCRYPTION_KEY=' "$SERVER/.env.portal" | cut -d= -f2-)"
+[[ ${#v} -eq 32 ]] || die "ENCRYPTION_KEY must be exactly 32 characters (it has ${#v}). Use: openssl rand -hex 16"
+unset v
 grep -q '^PG_ADMIN_DATABASE=' "$SERVER/.env.portal" || warn "PG_ADMIN_DATABASE is not set in server/.env.portal (new institute sign-up needs it on cPanel)"
 ok "node $(node -v), pm2 $(pm2 -v)"
 
